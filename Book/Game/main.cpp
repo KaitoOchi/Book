@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "system/system.h"
 
+//TEST
+
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
