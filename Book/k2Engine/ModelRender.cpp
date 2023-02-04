@@ -86,4 +86,15 @@ namespace k2Engine {
 			return;
 		}
 	}
+
+	void ModelRender::Draw(RenderContext& rc) {
+
+		if (m_isEnableInstancingDraw) {
+
+		}
+		else {
+			//’Êí•`‰æ
+
+		}
+	}
 }
