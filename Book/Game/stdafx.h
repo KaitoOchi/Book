@@ -1,7 +1,10 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "k2EngineLowPreCompile.h"
+#include "PreCompile.h"
 using namespace nsK2EngineLow;
+using namespace nsK2Engine;
+/*
 // K2EngineLowのグローバルアクセスポイント
 extern K2EngineLow* g_k2EngineLow;
+*/

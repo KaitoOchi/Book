@@ -1,8 +1,9 @@
 #include "PreCompile.h"
 #include "ModelRender.h"
+#include "RenderingEngine.h"
 
 
-namespace k2Engine {
+namespace nsK2Engine {
 
 	ModelRender::ModelRender()
 	{
@@ -30,7 +31,7 @@ namespace k2Engine {
 		//アニメーションを初期化。
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
-		
+
 
 	}
 
@@ -80,11 +81,42 @@ namespace k2Engine {
 	}
 	*/
 
+	void ModelRender::UpdateWorldMatrixInModes()
+	{
+		m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		/*
+		if (m_renderToGBufferModel.IsInited()) {
+			m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		if (m_forwardRenderModel.IsInited()) {
+			m_forwardRenderModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		if (m_translucentModel.IsInited()) {
+			m_translucentModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		for (auto& models : m_shadowModels) {
+			for (auto& model : models) {
+				if (model.IsInited()) {
+					model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+				}
+			}
+		}
+		*/
+	}
+
 	void ModelRender::Update()
 	{
 		if (m_isEnableInstancingDraw) {
 			return;
 		}
+
+		UpdateWorldMatrixInModes();
+
+		if (m_skeleton.IsInited()) {
+			m_skeleton.Update(m_zprepassModel.GetWorldMatrix());
+		}
+
+		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 	}
 
 	void ModelRender::Draw(RenderContext& rc) {
@@ -94,7 +126,10 @@ namespace k2Engine {
 		}
 		else {
 			//通常描画
-
+			if (m_geometryDatas[0].IsInViewFrustum()) {
+				//ビューフラスタムに含まれている。
+				g_renderingEngine->AddRenderObject(this);
+			}
 		}
 	}
 }

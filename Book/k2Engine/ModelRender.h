@@ -1,12 +1,14 @@
 #pragma once
-
 //Programmer : KaitoOchi
 
+#include "../k2EngineLow/geometry/AABB.h"
+#include "geometryData.h"
 
 
-namespace k2Engine {
 
-	class ModelRender
+namespace nsK2Engine {
+
+	class ModelRender : public IRenderer
 	{
 	public:
 		ModelRender();
@@ -59,6 +61,28 @@ namespace k2Engine {
 		bool IsPlayingAniamtion()
 		{
 			return m_animation.IsPlaying();
+		}
+
+		/// <summary>
+		/// モデルを取得。
+		/// </summary>
+		/// <returns></returns>
+		Model& GetModel()
+		{
+			/*
+			if (m_renderToGBufferModel.IsInited()) {
+				return m_renderToGBufferModel;
+			}
+			else if (m_forwardRenderModel.IsInited()) {
+				return m_forwardRenderModel;
+			}
+			else if (m_translucentModel.IsInited())
+			{
+				return m_translucentModel;
+			}
+			*/
+			// ここまで来るのはおかしい。
+			return m_zprepassModel;
 		}
 
 		/// <summary>
@@ -136,7 +160,7 @@ namespace k2Engine {
 		}
 
 		/// <summary>
-		/// インスタンスすうを取得。
+		/// インスタンス数を取得。
 		/// </summary>
 		/// <returns></returns>
 		int GetNumInstance()
@@ -148,6 +172,14 @@ namespace k2Engine {
 		bool IsInstancingDraw()
 		{
 			return m_isEnableInstancingDraw;
+		}
+
+		const Matrix& GetWorldMatrix(int instanceId)
+		{
+			if (IsInstancingDraw()) {
+				return m_worldMatrixArray[instanceId];
+			}
+			return m_zprepassModel.GetWorldMatrix();
 		}
 
 	private:
@@ -174,6 +206,10 @@ namespace k2Engine {
 		/// <param name="maxinstance">最大インスタンス数</param>
 		void InitInstancingDraw(int maxinstance);
 
+		/// <summary>
+		/// 各種モデルのワールド行列を更新する。
+		/// </summary>
+		void UpdateWorldMatrixInModes();
 
 	private:
 		AnimationClip* m_animationClips = nullptr;
@@ -184,6 +220,7 @@ namespace k2Engine {
 		Vector3 m_scale = Vector3::Zero;
 		EnModelUpAxis m_enFbxUpAxis = enModelUpAxisZ;
 		Animation m_animation;
+		Model m_zprepassModel;					// ZPrepassで描画されるモデル
 		bool m_isUpdateAnimation = true;
 		Skeleton m_skeleton;
 		bool m_isShadowCaster = true;
@@ -191,8 +228,10 @@ namespace k2Engine {
 		int m_numInstance = 0;
 		int m_maxInstance = 0;
 		bool m_isEnableInstancingDraw = false;
-		
-	
+		std::unique_ptr<Matrix[]> m_worldMatrixArray;	//ワールド行列の配列
+		std::vector<GeometryData> m_geometryDatas;		//ジオメトリデータ
+
+
 	};
 
 }
