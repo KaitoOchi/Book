@@ -3,7 +3,7 @@
 #include "RenderingEngine.h"
 
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	ModelRender::ModelRender()
 	{

@@ -2,7 +2,7 @@
 
 
 #include "MyRenderer.h"
-#include "SceneGeometryData.h"
+#include "../geometry/SceneGeometryData.h"
 
 namespace nsBookEngine {
 

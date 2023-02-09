@@ -1,12 +1,12 @@
 #pragma once
 //Programmer : KaitoOchi
 
-#include "../k2EngineLow/geometry/AABB.h"
-#include "geometryData.h"
+#include "../../k2EngineLow/geometry/AABB.h"
+#include "../geometry/geometryData.h"
 
 
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	class ModelRender : public IRenderer
 	{

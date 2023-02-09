@@ -127,30 +127,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Game\BookEngine.h" />
-    <ClInclude Include="..\Game\CollisionObject.h" />
-    <ClInclude Include="..\Game\IRenderer.h" />
-    <ClInclude Include="..\Game\ModelRender.h" />
-    <ClInclude Include="..\Game\MyRenderer.h" />
-    <ClInclude Include="..\Game\PreCompile.h" />
-    <ClInclude Include="..\Game\RenderingEngine.h" />
-    <ClInclude Include="GeometryData.h" />
-    <ClInclude Include="LevelRender.h" />
-    <ClInclude Include="MapChipRender.h" />
-    <ClInclude Include="SceneGeometryData.h" />
-    <ClInclude Include="SpriteRender.h" />
+    <ClInclude Include="BookEngine.h" />
+    <ClInclude Include="collision\CollisionObject.h" />
+    <ClInclude Include="geometry\GeometryData.h" />
+    <ClInclude Include="geometry\SceneGeometryData.h" />
+    <ClInclude Include="graphics\IRenderer.h" />
+    <ClInclude Include="graphics\ModelRender.h" />
+    <ClInclude Include="graphics\MyRenderer.h" />
+    <ClInclude Include="graphics\RenderingEngine.h" />
+    <ClInclude Include="graphics\SpriteRender.h" />
+    <ClInclude Include="level3DRender\LevelRender.h" />
+    <ClInclude Include="level3DRender\MapChipRender.h" />
+    <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Game\BookEngine.cpp" />
-    <ClCompile Include="..\Game\CollisionObject.cpp" />
-    <ClCompile Include="..\Game\ModelRender.cpp" />
-    <ClCompile Include="..\Game\PreCompile.cpp" />
-    <ClCompile Include="..\Game\RenderingEngine.cpp" />
-    <ClCompile Include="GeometryData.cpp" />
-    <ClCompile Include="LevelRender.cpp" />
-    <ClCompile Include="MapChipRender.cpp" />
-    <ClCompile Include="SceneGeometryData.cpp" />
-    <ClCompile Include="SpriteRender.cpp" />
+    <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="collision\CollisionObject.cpp" />
+    <ClCompile Include="geometry\GeometryData.cpp" />
+    <ClCompile Include="geometry\SceneGeometryData.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\RenderingEngine.cpp" />
+    <ClCompile Include="graphics\SpriteRender.cpp" />
+    <ClCompile Include="level3DRender\LevelRender.cpp" />
+    <ClCompile Include="level3DRender\MapChipRender.cpp" />
+    <ClCompile Include="PreCompile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

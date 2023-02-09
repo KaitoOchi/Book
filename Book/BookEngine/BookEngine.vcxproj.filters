@@ -15,65 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Game\IRenderer.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Game\ModelRender.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Game\MyRenderer.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Game\RenderingEngine.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Game\CollisionObject.h">
+    <ClInclude Include="BookEngine.h" />
+    <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="collision\CollisionObject.h">
       <Filter>collision</Filter>
     </ClInclude>
-    <ClInclude Include="..\Game\PreCompile.h" />
-    <ClInclude Include="..\Game\BookEngine.h" />
-    <ClInclude Include="GeometryData.h">
+    <ClInclude Include="geometry\GeometryData.h">
       <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="LevelRender.h">
-      <Filter>level3DRender</Filter>
+    <ClInclude Include="geometry\SceneGeometryData.h">
+      <Filter>geometry</Filter>
     </ClInclude>
-    <ClInclude Include="MapChipRender.h">
-      <Filter>level3DRender</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteRender.h">
+    <ClInclude Include="graphics\IRenderer.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGeometryData.h">
-      <Filter>geometry</Filter>
+    <ClInclude Include="graphics\ModelRender.h">
+      <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\MyRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SpriteRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderingEngine.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="level3DRender\LevelRender.h" />
+    <ClInclude Include="level3DRender\MapChipRender.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Game\ModelRender.cpp">
-      <Filter>graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Game\RenderingEngine.cpp">
-      <Filter>graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Game\CollisionObject.cpp">
+    <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="PreCompile.cpp" />
+    <ClCompile Include="collision\CollisionObject.cpp">
       <Filter>collision</Filter>
     </ClCompile>
-    <ClCompile Include="..\Game\BookEngine.cpp" />
-    <ClCompile Include="..\Game\PreCompile.cpp" />
-    <ClCompile Include="GeometryData.cpp">
+    <ClCompile Include="geometry\GeometryData.cpp">
       <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="LevelRender.cpp">
-      <Filter>level3DRender</Filter>
+    <ClCompile Include="geometry\SceneGeometryData.cpp">
+      <Filter>geometry</Filter>
     </ClCompile>
-    <ClCompile Include="MapChipRender.cpp">
-      <Filter>level3DRender</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteRender.cpp">
+    <ClCompile Include="graphics\ModelRender.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
-    <ClCompile Include="SceneGeometryData.cpp">
-      <Filter>geometry</Filter>
+    <ClCompile Include="graphics\RenderingEngine.cpp">
+      <Filter>graphics</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\SpriteRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="level3DRender\LevelRender.cpp" />
+    <ClCompile Include="level3DRender\MapChipRender.cpp" />
   </ItemGroup>
 </Project>

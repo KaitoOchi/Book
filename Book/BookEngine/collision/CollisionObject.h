@@ -2,7 +2,7 @@
 #include "../../k2EngineLow/physics/PhysicsGhostObject.h"
 
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	/// <summary>
 	/// コリジョンの当たり判定を行うクラス。

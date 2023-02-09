@@ -23,7 +23,7 @@ namespace nsBookEngine {
 		/// <param name="initData"></param>
 		static void CreateInstance(const InitData& initData)
 		{
-			m_instance = new bookEngine;
+			m_instance = new BookEngine;
 			m_instance->Init(initData);
 		}
 
@@ -39,7 +39,7 @@ namespace nsBookEngine {
 		/// インスタンスの取得。
 		/// </summary>
 		/// <returns></returns>
-		static bookEngine* GetInstance()
+		static BookEngine* GetInstance()
 		{
 			return m_instance;
 		}
@@ -59,7 +59,7 @@ namespace nsBookEngine {
 		CollisionObjectManager m_collisionObjectManager;
 		RenderingEngine m_renderingEngine;		//レンダリングエンジン
 
-		static bookEngine* m_instance;			//インスタンス
+		static BookEngine* m_instance;			//インスタンス
 	};
 
 	//グローバルアクセスポイント
