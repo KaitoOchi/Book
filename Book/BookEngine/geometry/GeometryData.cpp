@@ -1,8 +1,8 @@
-#include "PreCompile.h"
+#include "../PreCompile.h"
 #include "GeometryData.h"
-#include "ModelRender.h"
+#include "../graphics/ModelRender.h"
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	void GeometryData::Update()
 	{
@@ -48,6 +48,11 @@ namespace nsK2Engine {
 		}
 	}
 
+	bool GeometryData::IsShadowCaster()
+	{
+		return m_modelRender->IsShadowCaster();
+	}
+
 	void GeometryData::Init(ModelRender* modelRender, int instanceId)
 	{
 		m_modelRender = modelRender;
@@ -63,7 +68,7 @@ namespace nsK2Engine {
 				vMax.Max(vertext.pos);
 				vMin.Min(vertext.pos);
 			}
-		});
+			});
 		m_aabb.Init(vMax, vMin);
 	}
 }

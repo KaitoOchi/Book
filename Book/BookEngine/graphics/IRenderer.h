@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	/// <summary>
 	/// レンダラーの基底クラス。

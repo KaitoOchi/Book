@@ -2,7 +2,7 @@
 
 #include "../k2EngineLow/geometry/AABB.h"
 
-namespace nsK2Engine {
+namespace nsBookEngine {
 
 	class ModelRender;
 
@@ -37,6 +37,12 @@ namespace nsK2Engine {
 		{
 			return m_aabbMin;
 		}
+
+		/// <summary>
+		/// シャドウキャスターの幾何学データ。
+		/// </summary>
+		/// <returns></returns>
+		bool IsShadowCaster();
 
 		/// <summary>
 		/// ジオメトリ情報を更新。

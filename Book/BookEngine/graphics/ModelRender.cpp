@@ -1,4 +1,4 @@
-#include "PreCompile.h"
+#include "../PreCompile.h"
 #include "ModelRender.h"
 #include "RenderingEngine.h"
 
@@ -80,6 +80,37 @@ namespace nsK2Engine {
 		}
 	}
 	*/
+
+	void ModelRender::UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+	{
+		K2_ASSERT(instanceNo < m_maxInstance, "インスタンス番号が不正です。");
+		if (!m_isEnableInstancingDraw) {
+			return;
+		}
+		Matrix worldMatrix;
+		if (m_translucentModel.IsInited()) {
+			// 半透明モデルはZPrepassモデルを初期化していないので、こちらを使う。
+			worldMatrix = m_translucentModel.CalcWorldMatrix(pos, rot, scale);
+		}
+		else {
+			worldMatrix = m_zprepassModel.CalcWorldMatrix(pos, rot, scale);
+		}
+		// インスタンス番号から行列のインデックスを取得する。
+		int matrixArrayIndex = m_instanceNoToWorldMatrixArrayIndexTable[instanceNo];
+		// インスタンシング描画を行う。
+		m_worldMatrixArray[matrixArrayIndex] = worldMatrix;
+		if (m_numInstance == 0) {
+			//インスタンス数が0の場合のみアニメーション関係の更新を行う。
+			// スケルトンを更新。
+			// 各インスタンスのワールド空間への変換は、
+			// インスタンスごとに行う必要があるので、頂点シェーダーで行う。
+			// なので、単位行列を渡して、モデル空間でボーン行列を構築する。
+			m_skeleton.Update(g_matIdentity);
+			//アニメーションを進める。
+			m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
+		}
+		m_numInstance++;
+	}
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{

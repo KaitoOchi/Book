@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4fb581de-594a-403d-8566-616b36819451}</ProjectGuid>
-    <RootNamespace>k2Engine</RootNamespace>
+    <ProjectGuid>{881bba7a-8339-4e2f-b4fa-9a47ea396fa3}</ProjectGuid>
+    <RootNamespace>BookEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,20 +127,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Game\BookEngine.h" />
+    <ClInclude Include="..\Game\CollisionObject.h" />
+    <ClInclude Include="..\Game\IRenderer.h" />
+    <ClInclude Include="..\Game\ModelRender.h" />
+    <ClInclude Include="..\Game\MyRenderer.h" />
+    <ClInclude Include="..\Game\PreCompile.h" />
+    <ClInclude Include="..\Game\RenderingEngine.h" />
     <ClInclude Include="GeometryData.h" />
-    <ClInclude Include="IRenderer.h" />
-    <ClInclude Include="k2Engine.h" />
-    <ClInclude Include="ModelRender.h" />
-    <ClInclude Include="MyRenderer.h" />
-    <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="RenderingEngine.h" />
+    <ClInclude Include="LevelRender.h" />
+    <ClInclude Include="MapChipRender.h" />
+    <ClInclude Include="SceneGeometryData.h" />
+    <ClInclude Include="SpriteRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Game\BookEngine.cpp" />
+    <ClCompile Include="..\Game\CollisionObject.cpp" />
+    <ClCompile Include="..\Game\ModelRender.cpp" />
+    <ClCompile Include="..\Game\PreCompile.cpp" />
+    <ClCompile Include="..\Game\RenderingEngine.cpp" />
     <ClCompile Include="GeometryData.cpp" />
-    <ClCompile Include="k2Engine.cpp" />
-    <ClCompile Include="ModelRender.cpp" />
-    <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="LevelRender.cpp" />
+    <ClCompile Include="MapChipRender.cpp" />
+    <ClCompile Include="SceneGeometryData.cpp" />
+    <ClCompile Include="SpriteRender.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
