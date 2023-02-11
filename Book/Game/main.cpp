@@ -27,6 +27,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	BookEngine::DeleteInstance();
 
 	//enemy1
+	//player
 	return 0;
 }
 
