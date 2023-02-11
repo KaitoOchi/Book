@@ -3,7 +3,6 @@
 
 namespace nsBookEngine {
 
-
 	// ソフトシャドウで利用するカラーバッファのフォーマット。
 	// レンダリングターゲットのフォーマット。
 	struct RenderTargetFormat {

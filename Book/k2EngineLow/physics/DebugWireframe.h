@@ -1,5 +1,5 @@
 #pragma once
-//#include "LinearMath/btIDebugDraw.h"
+#include "LinearMath/btIDebugDraw.h"
 #include "graphics/Shader.h"
 
 namespace nsK2EngineLow {

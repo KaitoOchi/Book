@@ -1,12 +1,13 @@
 #pragma once
 //Programmer : KaitoOchi
 
-#include "../../k2EngineLow/geometry/AABB.h"
-#include "../geometry/geometryData.h"
+#include "geometry/AABB.h"
+//#include "geometry/geometryData.h"
 
 
 
 namespace nsBookEngine {
+	class RenderingEngine;
 
 	class ModelRender : public IRenderer
 	{
@@ -37,6 +38,15 @@ namespace nsBookEngine {
 		/// 更新処理。
 		/// </summary>
 		void Update();
+
+		/// <summary>
+		/// インスタンシングデータの更新。
+		/// </summary>
+		/// <param name="instanceNo">インスタンス番号</param>
+		/// <param name="pos">座標</param>
+		/// <param name="rot">回転</param>
+		/// <param name="scale">拡大率</param>
+		void UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 		/// <summary>
 		/// 描画処理。
@@ -221,6 +231,7 @@ namespace nsBookEngine {
 		EnModelUpAxis m_enFbxUpAxis = enModelUpAxisZ;
 		Animation m_animation;
 		Model m_zprepassModel;					// ZPrepassで描画されるモデル
+		Model m_translucentModel;				// 半透明モデル。
 		bool m_isUpdateAnimation = true;
 		Skeleton m_skeleton;
 		bool m_isShadowCaster = true;
@@ -229,9 +240,7 @@ namespace nsBookEngine {
 		int m_maxInstance = 0;
 		bool m_isEnableInstancingDraw = false;
 		std::unique_ptr<Matrix[]> m_worldMatrixArray;	//ワールド行列の配列
-		std::vector<GeometryData> m_geometryDatas;		//ジオメトリデータ
-
-
+		//std::vector<GeometryData> m_geometryDatas;		//ジオメトリデータ
+		std::unique_ptr<int[]>		m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
 	};
-
 }

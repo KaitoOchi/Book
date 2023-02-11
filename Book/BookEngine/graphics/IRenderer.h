@@ -6,7 +6,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// レンダラーの基底クラス。
 	/// </summary>
-	class IRenderer {
+	class IRenderer{
 	public:
 		/// <summary>
 		/// 頂点計算パスから呼ばれる処理。

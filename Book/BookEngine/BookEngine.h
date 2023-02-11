@@ -10,6 +10,9 @@ namespace nsBookEngine {
 		~BookEngine();
 
 	public:
+		/// <summary>
+		/// 初期化データ。
+		/// </summary>
 		struct InitData {
 			HWND hwnd;					//ウィンドウハンドル。
 			UINT frameBufferWidth;		//フレームバッファの幅。
@@ -45,7 +48,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// k2Engineを初期化。
+		/// bookEngineを初期化。
 		/// </summary>
 		void Init(const InitData& initData);
 
@@ -57,14 +60,14 @@ namespace nsBookEngine {
 	private:
 		K2EngineLow m_k2EngineLow;
 		//CollisionObjectManager m_collisionObjectManager;
-		RenderingEngine m_renderingEngine;		//レンダリングエンジン
+		//RenderingEngine m_renderingEngine;		//レンダリングエンジン
 
 		static BookEngine* m_instance;			//インスタンス
 	};
 
 	//グローバルアクセスポイント
 	extern BookEngine* g_bookEngine;
-	extern RenderingEngine* g_renderingEngine;
+	//extern RenderingEngine* g_renderingEngine;
 	//extern CollisionObjectManager* g_collisionObjectManager;
 }
 

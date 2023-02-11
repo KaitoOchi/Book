@@ -2,7 +2,8 @@
 
 
 #include "MyRenderer.h"
-#include "../geometry/SceneGeometryData.h"
+//#include "geometry/SceneGeometryData.h"
+#include "IRenderer.h"
 
 namespace nsBookEngine {
 
@@ -178,9 +179,9 @@ namespace nsBookEngine {
 		Sprite m_copyMainRtToFrameBufferSprite;                         // メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 		RenderTarget m_mainRTSnapshots[(int)EnMainRTSnapshot::enNum];   // メインレンダリングターゲットのスナップショット
 		RenderTarget m_gBuffer[enGBufferNum];                           // G-Buffer
-		std::vector<IRenderer*> m_renderObjects;						//描画オブジェクトのリスト
+		std::vector< IRenderer* > m_renderObjects;                      //描画オブジェクトのリスト
 		Matrix m_viewProjMatrixForViewCulling;
-		SceneGeometryData m_sceneGeometryData;							//シーンジオメトリ情報
+		//SceneGeometryData m_sceneGeometryData;							//シーンジオメトリ情報
 		static RenderingEngine* m_instance;		                        // 唯一のインスタンスのアドレスを記録する変数。
 		RenderTarget m_2DRenderTarget;                                  // 2D描画用のレンダ―ターゲット。
 		Sprite m_2DSprite;												//2D合成用のスプライト
