@@ -3,7 +3,7 @@
 
 #include "../k2EngineLow/k2EngineLowPreCompile.h"
 using namespace nsK2EngineLow;
-#include "collision/CollisionObject.h"
+//#include "collision/CollisionObject.h"
 #include "graphics/RenderingEngine.h"
 #include "BookEngine.h"
 #include "../k2EngineLow/geometry/AABB.h"

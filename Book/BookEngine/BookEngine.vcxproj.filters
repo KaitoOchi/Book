@@ -17,9 +17,6 @@
   <ItemGroup>
     <ClInclude Include="BookEngine.h" />
     <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="collision\CollisionObject.h">
-      <Filter>collision</Filter>
-    </ClInclude>
     <ClInclude Include="geometry\GeometryData.h">
       <Filter>geometry</Filter>
     </ClInclude>
@@ -41,15 +38,16 @@
     <ClInclude Include="graphics\RenderingEngine.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="level3DRender\LevelRender.h" />
-    <ClInclude Include="level3DRender\MapChipRender.h" />
+    <ClInclude Include="level3DRender\LevelRender.h">
+      <Filter>level3DRender</Filter>
+    </ClInclude>
+    <ClInclude Include="level3DRender\MapChipRender.h">
+      <Filter>level3DRender</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
     <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="collision\CollisionObject.cpp">
-      <Filter>collision</Filter>
-    </ClCompile>
     <ClCompile Include="geometry\GeometryData.cpp">
       <Filter>geometry</Filter>
     </ClCompile>
@@ -65,7 +63,11 @@
     <ClCompile Include="graphics\SpriteRender.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
-    <ClCompile Include="level3DRender\LevelRender.cpp" />
-    <ClCompile Include="level3DRender\MapChipRender.cpp" />
+    <ClCompile Include="level3DRender\LevelRender.cpp">
+      <Filter>level3DRender</Filter>
+    </ClCompile>
+    <ClCompile Include="level3DRender\MapChipRender.cpp">
+      <Filter>level3DRender</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
