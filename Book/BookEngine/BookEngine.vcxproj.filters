@@ -3,9 +3,32 @@
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
     <ClCompile Include="PreCompile.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\RenderingEngine.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BookEngine.h" />
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="graphics\IRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ModelRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\MyRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderingEngine.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="graphics">
+      <UniqueIdentifier>{0a9e3eb4-43ec-40a6-97de-7160f910b724}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

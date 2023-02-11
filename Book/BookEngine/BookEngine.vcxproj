@@ -134,10 +134,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="PreCompile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BookEngine.h" />
+    <ClInclude Include="graphics\IRenderer.h" />
+    <ClInclude Include="graphics\ModelRender.h" />
+    <ClInclude Include="graphics\MyRenderer.h" />
+    <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

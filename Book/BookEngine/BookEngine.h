@@ -6,10 +6,13 @@ namespace nsBookEngine {
 	class BookEngine
 	{
 	private:
-		BookEngine() {}
+		BookEngine() {};
 		~BookEngine();
 
 	public:
+		/// <summary>
+		/// 初期化データ。
+		/// </summary>
 		struct InitData {
 			HWND hwnd;					//ウィンドウハンドル。
 			UINT frameBufferWidth;		//フレームバッファの幅。

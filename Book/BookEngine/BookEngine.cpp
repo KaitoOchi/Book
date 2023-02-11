@@ -44,6 +44,9 @@ namespace nsBookEngine {
 		// ゲームオブジェクトマネージャーの更新処理を呼び出す。
 		g_engine->ExecuteUpdate();
 
+		// レンダリングエンジンの更新。
+		//m_renderingEngine.Update();
+
 		// ゲームオブジェクトマネージャーの描画処理を呼び出す。
 		g_engine->ExecuteRender();
 
