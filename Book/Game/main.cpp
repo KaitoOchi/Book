@@ -27,6 +27,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//enemy1
 
+	//test
+
 	return 0;
 }
 
