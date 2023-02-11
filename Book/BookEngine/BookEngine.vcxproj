@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{881bba7a-8339-4e2f-b4fa-9a47ea396fa3}</ProjectGuid>
+    <ProjectGuid>{bcba7920-dc68-428c-b38f-864c8e6a66ba}</ProjectGuid>
     <RootNamespace>BookEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\KaitoOchi\Book\Book\k2EngineLow;C:\Users\KaitoOchi\Book\Book\BookEngine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\KaitoOchi\Book\Book\k2EngineLow;C:\Users\KaitoOchi\Book\Book\BookEngine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -133,28 +133,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BookEngine.h" />
-    <ClInclude Include="geometry\GeometryData.h" />
-    <ClInclude Include="geometry\SceneGeometryData.h" />
-    <ClInclude Include="graphics\IRenderer.h" />
-    <ClInclude Include="graphics\ModelRender.h" />
-    <ClInclude Include="graphics\MyRenderer.h" />
-    <ClInclude Include="graphics\RenderingEngine.h" />
-    <ClInclude Include="graphics\SpriteRender.h" />
-    <ClInclude Include="level3DRender\LevelRender.h" />
-    <ClInclude Include="level3DRender\MapChipRender.h" />
-    <ClInclude Include="PreCompile.h" />
+    <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="PreCompile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BookEngine.cpp" />
-    <ClCompile Include="geometry\GeometryData.cpp" />
-    <ClCompile Include="geometry\SceneGeometryData.cpp" />
-    <ClCompile Include="graphics\ModelRender.cpp" />
-    <ClCompile Include="graphics\RenderingEngine.cpp" />
-    <ClCompile Include="graphics\SpriteRender.cpp" />
-    <ClCompile Include="level3DRender\LevelRender.cpp" />
-    <ClCompile Include="level3DRender\MapChipRender.cpp" />
-    <ClCompile Include="PreCompile.cpp" />
+    <ClInclude Include="BookEngine.h" />
+    <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
