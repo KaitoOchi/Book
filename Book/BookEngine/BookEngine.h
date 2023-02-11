@@ -56,7 +56,7 @@ namespace nsBookEngine {
 
 	private:
 		K2EngineLow m_k2EngineLow;
-		CollisionObjectManager m_collisionObjectManager;
+		//CollisionObjectManager m_collisionObjectManager;
 		RenderingEngine m_renderingEngine;		//レンダリングエンジン
 
 		static BookEngine* m_instance;			//インスタンス
@@ -65,6 +65,6 @@ namespace nsBookEngine {
 	//グローバルアクセスポイント
 	extern BookEngine* g_bookEngine;
 	extern RenderingEngine* g_renderingEngine;
-	extern CollisionObjectManager* g_collisionObjectManager;
+	//extern CollisionObjectManager* g_collisionObjectManager;
 }
 
