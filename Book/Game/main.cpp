@@ -18,7 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	while (DispatchWindowMessage())
 	{
 		BookEngine::GetInstance()->Execute();
-		printf("a4");
+		printf("a8");
 	}
 
 	BookEngine::DeleteInstance();
