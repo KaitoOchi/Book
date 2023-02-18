@@ -99,11 +99,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\MiniEngine;$(ProjectDir);$(ProjectDir)\ExEngine;$(IncludePath);C:\Users\KaitoOchi\Book\Book\k2EngineLow\ExEngine\effekseer\Effekseer</IncludePath>
+    <IncludePath>$(ProjectDir)\MiniEngine;$(ProjectDir);$(ProjectDir)\ExEngine;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)/ExEngine/bulletPhysics/src/;$(ProjectDir)/ExEngine/;$(ProjectDir)/;$(ProjectDir)/MiniEngine/;$(ProjectDir)/ExEngine/effekseer/install_msvc2019/include/Effekseer;$(ProjectDir)/ExEngine/effekseer/install_msvc2019/include/EffekseerRendererDX12;$(ProjectDir)\ExEngine\Photon;$(IncludePath);C:\Users\KaitoOchi\Book\Book\k2EngineLow\ExEngine\effekseer\Effekseer</IncludePath>
+    <IncludePath>$(ProjectDir)/ExEngine/bulletPhysics/src/;$(ProjectDir)/ExEngine/;$(ProjectDir)/;$(ProjectDir)/MiniEngine/;$(ProjectDir)/ExEngine/effekseer/install_msvc2019/include/Effekseer;$(ProjectDir)/ExEngine/effekseer/install_msvc2019/include/EffekseerRendererDX12;$(ProjectDir)\ExEngine\Photon;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\..\exlib\$(Platform)\$(Configuration)\;$(ProjectDir)\ExEngine\DirectXTK\Bin\Desktop_2019_Win10\$(Platform)\$(Configuration)\;$(ProjectDir)\ExEngine\effekseer/install_msvc2019/lib;$(ProjectDir)..\k2EngineLow\ExEngine\Photon\Photon-cpp\lib;$(ProjectDir)..\k2EngineLow\ExEngine\Photon\LoadBalancing-cpp\lib;$(ProjectDir)..\k2EngineLow\ExEngine\Photon\Common-cpp\lib;$(LibraryPath)</LibraryPath>
     <OutDir>..\exlib\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>

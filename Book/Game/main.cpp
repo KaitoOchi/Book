@@ -2,32 +2,21 @@
 #include "system/system.h"
 
 
-///////////////////////////////////////////////////////////////////
-// ウィンドウプログラムのメイン関数。
-///////////////////////////////////////////////////////////////////
+/// <summary>
+/// メイン関数
+/// </summary>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	//ゲームの初期化。
+	// ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
-	//////////////////////////////////////
-	// ここから初期化を行うコードを記述する。
-	//////////////////////////////////////
-
-	//////////////////////////////////////
-	// 初期化を行うコードを書くのはここまで！！！
-	//////////////////////////////////////
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
-		BookEngine::GetInstance()->Execute();
+		nsBookEngine::BookEngine::GetInstance()->Execute();
 	}
 
-	BookEngine::DeleteInstance();
-
-	//enemy1
-
-	//test
+	nsBookEngine::BookEngine::DeleteInstance();
 
 	return 0;
 }
