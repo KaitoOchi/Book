@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game.vcxproj", "{282445E9-421F-46C0-9165-6C90D7C7EFC4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1C9EE634-E3A8-49DD-B602-E04BB8931BF3} = {1C9EE634-E3A8-49DD-B602-E04BB8931BF3}
-		{23A5590A-18F2-4B56-B270-079C4F787FE8} = {23A5590A-18F2-4B56-B270-079C4F787FE8}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BulletCollision", "..\k2EngineLow\ExEngine\bulletPhysics\src\BulletCollision\BulletCollision.vcxproj", "{28EF574A-84DB-3CB0-9B45-DB3545B2D05C}"
@@ -28,6 +27,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExEngine", "ExEngine", "{39F110FE-715C-4903-B346-0AB13535AA2F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BookEngine", "..\BookEngine\BookEngine.vcxproj", "{1C9EE634-E3A8-49DD-B602-E04BB8931BF3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23A5590A-18F2-4B56-B270-079C4F787FE8} = {23A5590A-18F2-4B56-B270-079C4F787FE8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

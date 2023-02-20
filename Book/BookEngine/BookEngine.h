@@ -69,5 +69,4 @@ namespace nsBookEngine {
 	extern BookEngine* g_bookEngine;
 	//extern RenderingEngine* g_renderingEngine;
 	//extern CollisionObjectManager* g_collisionObjectManager;
-
 }
