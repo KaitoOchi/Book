@@ -13,10 +13,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
-		nsBookEngine::BookEngine::GetInstance()->Execute();
+		BookEngine::GetInstance()->Execute();
 	}
 
-	nsBookEngine::BookEngine::DeleteInstance();
+	BookEngine::DeleteInstance();
 
 	return 0;
 }

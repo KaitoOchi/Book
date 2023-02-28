@@ -8,7 +8,7 @@ namespace nsBookEngine {
 		/// <summary>
 		/// コンストラクタ。
 		/// </summary>
-		BookEngine();
+		BookEngine(){};
 
 		/// <summary>
 		/// デストラクタ。

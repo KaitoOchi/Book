@@ -25,10 +25,6 @@ namespace nsBookEngine {
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
 	}
 
-	nsBookEngine::BookEngine::BookEngine()
-	{
-	}
-
 	nsBookEngine::BookEngine::~BookEngine()
 	{
 		//g_renderingEngine = nullptr;
