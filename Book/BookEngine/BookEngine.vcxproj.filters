@@ -3,9 +3,38 @@
   <ItemGroup>
     <ClInclude Include="BookEngine.h" />
     <ClInclude Include="BookEnginePreCompile.h" />
+    <ClInclude Include="graphics\ModelRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SpriteRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\FontRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
     <ClCompile Include="BookEnginePreCompile.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SpriteRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\FontRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="graphics">
+      <UniqueIdentifier>{9a2b131b-fa59-45c2-ad75-4565fa6927a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geometry">
+      <UniqueIdentifier>{56103c67-a932-4d99-9301-55d7626719f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{40b8de1e-54a4-4bdd-adef-d5953bb71a52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

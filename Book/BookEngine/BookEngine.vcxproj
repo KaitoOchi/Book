@@ -161,6 +161,9 @@
   <ItemGroup>
     <ClInclude Include="BookEngine.h" />
     <ClInclude Include="BookEnginePreCompile.h" />
+    <ClInclude Include="graphics\FontRender.h" />
+    <ClInclude Include="graphics\ModelRender.h" />
+    <ClInclude Include="graphics\SpriteRender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
@@ -168,6 +171,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="graphics\FontRender.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\SpriteRender.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

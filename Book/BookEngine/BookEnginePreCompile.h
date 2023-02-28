@@ -8,4 +8,6 @@ using namespace nsK2EngineLow;
 #include "BookEngine.h"
 #include "geometry/AABB.h"
 //#include "graphics/IRenderer.h"
-//#include "graphics/ModelRender.h"
+#include "graphics/ModelRender.h"
+#include "graphics/SpriteRender.h"
+#include "graphics/FontRender.h"

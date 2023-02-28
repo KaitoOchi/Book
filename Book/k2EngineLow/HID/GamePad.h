@@ -93,6 +93,16 @@ namespace nsK2EngineLow {
 		}
 
 		/// <summary>
+		/// ボタンを離しているか判定
+		/// </summary>
+		/// <param name="button"></param>
+		/// <returns></returns>
+		bool GetKeyUp(EnButton button) const
+		{
+			return m_keyUp[button] != 0;
+		}
+
+		/// <summary>
 		/// 何かのボタンが押されているか判定。
 		/// </summary>
 		/// <returns>trueが返ってきたら押されている。</returns>
@@ -186,6 +196,8 @@ namespace nsK2EngineLow {
 		int m_padNo = 0;			// パッド番号。
 		int m_trigger[enButtonNum];	// トリガー入力のフラグ。
 		int m_press[enButtonNum];	// press入力のフラグ。
+		int m_keyUp[enButtonNum];	// keyUp入力のフラグ。
+		int m_oldKeyUp[enButtonNum];// 1フレーム前のキー入力
 		float m_lStickX = 0.0f;		// 左スティックのX軸の入力量。
 		float m_lStickY = 0.0f;		// 左スティックのY軸の入力量。
 		float m_rStickX = 0.0f;		// 右スティックのX軸の入力量。
