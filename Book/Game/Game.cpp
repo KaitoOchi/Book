@@ -78,10 +78,10 @@ bool Game::Start()
 		}
 	);
 
-	m_pointLight.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	/*m_pointLight.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_pointLight.SetColor(Vector3(0.0f, 0.0f, 0.0f));
 	m_pointLight.SetRange(100.0f);
-	g_bookEngine->GetRenderingEngine()->GetLightCB().pointLig = m_pointLight.GetPointLig();
+	g_bookEngine->GetRenderingEngine()->GetLightCB().pointLig = m_pointLight.GetPointLig();*/
 
 	return true;
 }
