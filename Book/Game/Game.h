@@ -17,6 +17,7 @@ private:
 	ModelRender m_modelRender;
 	ModelRender m_animModelRender;
 	FontRender m_fontRender;
+	PhysicsStaticObject m_demobg;
 
 	CollisionObject* m_playerCollision = nullptr;
 

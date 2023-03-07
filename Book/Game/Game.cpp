@@ -2,13 +2,14 @@
 #include "Game.h"
 
 #include "Player.h"
+#include "Player3D.h"
 #include "level3DRender/LevelRender.h"
 
 
 Game::Game()
 {
 	//当たり判定を有効化
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
 	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
@@ -42,6 +43,8 @@ bool Game::Start()
 	m_stageModelRender.SetRotation(Quaternion::Identity);
 	m_stageModelRender.SetScale(Vector3::One);
 	m_stageModelRender.Update();
+	m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());
+
 
 	m_animModelRender.Init("Assets/modelData/unityChan.tkm", animationClips, enAnimationClip_Num, enModelUpAxisY);
 	m_animModelRender.SetPosition(Vector3(100.0f, 0.0f, 0.0f));
@@ -65,7 +68,7 @@ bool Game::Start()
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"unityChan") == true) {
-			m_player = NewGO<Player>(0, "player");
+			m_player = NewGO<Player3D>(0, "player3d");
 			return true;
 		}
 
