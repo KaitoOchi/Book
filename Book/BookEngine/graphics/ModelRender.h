@@ -2,9 +2,9 @@
 //Programmer : KaitoOchi
 
 #include "geometry/AABB.h"
+#include "graphics/light/DirectionLight.h"
+#include "graphics/light/PointLight.h"
 //#include "geometry/geometryData.h"
-
-
 
 namespace nsBookEngine {
 
@@ -69,20 +69,7 @@ namespace nsBookEngine {
 		/// <returns></returns>
 		Model& GetModel()
 		{
-			/*
-			if (m_renderToGBufferModel.IsInited()) {
-				return m_renderToGBufferModel;
-			}
-			else if (m_forwardRenderModel.IsInited()) {
-				return m_forwardRenderModel;
-			}
-			else if (m_translucentModel.IsInited())
-			{
-				return m_translucentModel;
-			}
-			*/
-			// ここまで来るのはおかしい。
-			return m_zprepassModel;
+			return m_model;
 		}
 
 		/// <summary>
@@ -110,6 +97,11 @@ namespace nsBookEngine {
 		void SetScale(const Vector3& scale)
 		{
 			m_scale = scale;
+		}
+
+		void AddAnimationEvent(AnimationEventListener eventListener)
+		{
+			m_animation.AddAnimationEventListener(eventListener);
 		}
 
 		/// <summary>
@@ -183,11 +175,11 @@ namespace nsBookEngine {
 		void UpdateWorldMatrixInModes();
 
 		/// <summary>
-		/// ZPrepass描画用のモデルを初期化。
+		/// モデルを初期化。
 		/// </summary>
 		/// <param name="renderingEngine"></param>
 		/// <param name="tkmFilePath"></param>
-		void InitModelOnZprepass(
+		void InitModel(
 			//RenderingEngine& renderingEngine,
 			const char* tkmFilePath,
 			EnModelUpAxis modelUpAxis
@@ -207,7 +199,7 @@ namespace nsBookEngine {
 		Vector3			m_scale = Vector3::Zero;
 		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
 		Animation		m_animation;
-		Model			m_zprepassModel;					// ZPrepassで描画されるモデル
+		Model			m_model;
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
 		bool			m_isShadowCaster = true;

@@ -1,6 +1,8 @@
 #pragma once
 
 
+class Player;
+
 class Game : public IGameObject
 {
 public:
@@ -11,10 +13,26 @@ public:
 	void Render(RenderContext& rc);
 
 private:
+	ModelRender m_stageModelRender;
 	ModelRender m_modelRender;
-	SpriteRender m_spriteRender;
+	ModelRender m_animModelRender;
 	FontRender m_fontRender;
 
-	Vector3 m_position = Vector3(500.0f, 0.0f, 0.0f);
+	CollisionObject* m_playerCollision = nullptr;
+
+	enum EnAnimationClip {
+		enAnimationClip_Idle,
+		enAnimationClip_Run,
+		enAnimationClip_Jump,
+		enAnimationClip_Num,
+	};
+
+	AnimationClip			animationClips[enAnimationClip_Num];
+
+	LevelRender* m_levelRender = nullptr;
+
+	Player* m_player = nullptr;
+
+	PointLight m_pointLight;
 };
 

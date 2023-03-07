@@ -1,5 +1,7 @@
 #include "BookEnginePreCompile.h"
 #include "ModelRender.h"
+
+#include "graphics/light/DirectionLight.h"
 //#include "RenderingEngine.h"
 
 
@@ -16,13 +18,14 @@ namespace nsBookEngine {
 
 	void ModelRender::SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData)
 	{
-		//modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
-		//modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+		
+		modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		modelInitData.m_vsEntryPointFunc = "VSMain";
 
-		if (m_animationClips != nullptr) {
-			// アニメーションあり。
-			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-		}
+		//if (m_animationClips != nullptr) {
+		//	 //アニメーションあり。
+		//	modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		//}
 	}
 
 	void ModelRender::Init(const char* filePath,
@@ -33,17 +36,17 @@ namespace nsBookEngine {
 		int maxInstance,
 		bool isFrontCullingOnDrawShadowMap)
 	{
-		// ZPrepass描画用のモデルを初期化。
-		InitModelOnZprepass(filePath, enModelUpAxis);
-
-		// 各種ワールド行列を更新する。
-		UpdateWorldMatrixInModes();
-
 		//スケルトンを初期化。
 		InitSkeleton(filePath);
 
 		//アニメーションを初期化。
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
+
+		// モデルを初期化。
+		InitModel(filePath, enModelUpAxis);
+
+		// 各種ワールド行列を更新する。
+		UpdateWorldMatrixInModes();
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
@@ -67,7 +70,7 @@ namespace nsBookEngine {
 		}
 	}
 
-	void ModelRender::InitModelOnZprepass(
+	void ModelRender::InitModel(
 		//RenderingEngine& renderingEngine,
 		const char* tkmFilePath,
 		EnModelUpAxis modelUpAxis
@@ -77,24 +80,24 @@ namespace nsBookEngine {
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_modelUpAxis = modelUpAxis;
+		modelInitData.m_expandConstantBuffer = &g_bookEngine->GetRenderingEngine()->GetLightCB();
+		modelInitData.m_expandConstantBufferSize = sizeof(g_bookEngine->GetRenderingEngine()->GetLightCB());
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
 		SetupVertexShaderEntryPointFunc(modelInitData);
-		// 頂点の事前計算処理を使う。
-		//modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
 
-		if (m_animationClips != nullptr) {
+		if (m_skeleton.IsInited()) {
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
 		}
 
-		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		m_zprepassModel.Init(modelInitData);
+		//modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		m_model.Init(modelInitData);
 	}
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
-		m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	}
 
 	void ModelRender::Update()
@@ -102,7 +105,7 @@ namespace nsBookEngine {
 		UpdateWorldMatrixInModes();
 		
 		if (m_skeleton.IsInited()) {
-			m_skeleton.Update(m_zprepassModel.GetWorldMatrix());
+			m_skeleton.Update(m_model.GetWorldMatrix());
 		}
 
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
@@ -110,6 +113,6 @@ namespace nsBookEngine {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		m_zprepassModel.Draw(rc, 1);
+		m_model.Draw(rc);
 	}
 }

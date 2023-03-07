@@ -49,7 +49,7 @@ namespace nsBookEngine {
 			return m_instance;
 		}
 		/// <summary>
-		/// K2Engineを初期化
+		/// BookEngineを初期化
 		/// </summary>
 		void Init(const InitData& initData);
 		/// <summary>
@@ -57,10 +57,20 @@ namespace nsBookEngine {
 		/// </summary>
 		void Execute();
 
+		CollisionObjectManager* GetCollisionObjectManager()
+		{
+			return m_collisionObjectManager;
+		}
+
+		RenderingEngine* GetRenderingEngine()
+		{
+			return m_renderingEngine;
+		}
+
 	private:
 		K2EngineLow m_k2EngineLow;
-		//CollisionObjectManager m_collisionObjectManager;
-		//RenderingEngine m_renderingEngine;
+		CollisionObjectManager* m_collisionObjectManager = nullptr;
+		RenderingEngine* m_renderingEngine = nullptr;
 
 		static BookEngine* m_instance;
 	};
@@ -68,5 +78,6 @@ namespace nsBookEngine {
 	// グローバルなアクセスポイント。
 	extern BookEngine* g_bookEngine;
 	//extern RenderingEngine* g_renderingEngine;
+	//extern SceneLight* g_sceneLight;
 	//extern CollisionObjectManager* g_collisionObjectManager;
 }
