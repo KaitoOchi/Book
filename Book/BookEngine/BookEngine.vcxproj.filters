@@ -1,34 +1,88 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BookEngine.cpp" />
-    <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="graphics\ModelRender.cpp">
-      <Filter>graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\RenderingEngine.cpp">
-      <Filter>graphics</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BookEngine.h" />
-    <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="graphics\IRenderer.h">
-      <Filter>graphics</Filter>
-    </ClInclude>
+    <ClInclude Include="BookEnginePreCompile.h" />
     <ClInclude Include="graphics\ModelRender.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\MyRenderer.h">
+    <ClInclude Include="graphics\SpriteRender.h">
       <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\FontRender.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionObject.h">
+      <Filter>collision</Filter>
+    </ClInclude>
+    <ClInclude Include="level3DRender\LevelRender.h">
+      <Filter>level3DRender</Filter>
+    </ClInclude>
+    <ClInclude Include="level3DRender\MapChipRender.h">
+      <Filter>level3DRender</Filter>
     </ClInclude>
     <ClInclude Include="graphics\RenderingEngine.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\light\DirectionLight.h">
+      <Filter>graphics\light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\light\PointLight.h">
+      <Filter>graphics\light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\light\SceneLight.h">
+      <Filter>graphics\light</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="BookEnginePreCompile.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SpriteRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\FontRender.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionObject.cpp">
+      <Filter>collision</Filter>
+    </ClCompile>
+    <ClCompile Include="level3DRender\LevelRender.cpp">
+      <Filter>level3DRender</Filter>
+    </ClCompile>
+    <ClCompile Include="level3DRender\MapChipRender.cpp">
+      <Filter>level3DRender</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\RenderingEngine.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\light\DirectionLight.cpp">
+      <Filter>graphics\light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\light\PointLight.cpp">
+      <Filter>graphics\light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\light\SceneLight.cpp">
+      <Filter>graphics\light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
-      <UniqueIdentifier>{0a9e3eb4-43ec-40a6-97de-7160f910b724}</UniqueIdentifier>
+      <UniqueIdentifier>{9a2b131b-fa59-45c2-ad75-4565fa6927a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geometry">
+      <UniqueIdentifier>{56103c67-a932-4d99-9301-55d7626719f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="collision">
+      <UniqueIdentifier>{40b8de1e-54a4-4bdd-adef-d5953bb71a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="level3DRender">
+      <UniqueIdentifier>{f001c3df-d7f4-4cd4-a18a-5f088248b858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graphics\light">
+      <UniqueIdentifier>{12fb39c8-08c6-4d1b-b8bd-e9e24b67062b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

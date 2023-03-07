@@ -21,13 +21,13 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{bcba7920-dc68-428c-b38f-864c8e6a66ba}</ProjectGuid>
+    <ProjectGuid>{1c9ee634-e3a8-49dd-b602-e04bb8931bf3}</ProjectGuid>
     <RootNamespace>BookEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -71,10 +71,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\KaitoOchi\Book\Book\k2EngineLow;C:\Users\KaitoOchi\Book\Book\BookEngine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\KaitoOchi\Book\Book\BookEngine;C:\Users\KaitoOchi\Book\Book\k2EngineLow</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\KaitoOchi\Book\Book\k2EngineLow;C:\Users\KaitoOchi\Book\Book\BookEngine;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDIr);$(ProjectDir)../k2EngineLow/;$(ProjectDir)..\k2EngineLow\ExEngine\Photon;$(ProjectDir)../k2EngineLow/MiniEngine/;$(ProjectDir)../k2EngineLow/ExEngine/;$(ProjectDir)../k2EngineLow/ExEngine/bulletPhysics/src;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/Effekseer;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/EffekseerRendererDX12</IncludePath>
+    <LibraryPath>$(ProjectDir)\..\exlib\$(Platform)\$(Configuration)\;$(ProjectDir)..\k2EngineLow\$(Platform)\$(Configuration)\;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/EffeseerRendererDX12</LibraryPath>
+    <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
+    <OutDir>..\exlib\$(Platform)\$(Configuration)\</OutDir>
+    <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,11 +86,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>BookEnginePreCompile.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -110,11 +121,26 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>BookEnginePreCompile.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(Platform)\$(Configuration)\$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>k2EngineLow.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -133,18 +159,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BookEngine.cpp" />
-    <ClCompile Include="graphics\ModelRender.cpp" />
-    <ClCompile Include="graphics\RenderingEngine.cpp" />
-    <ClCompile Include="PreCompile.cpp" />
+    <ClInclude Include="BookEngine.h" />
+    <ClInclude Include="BookEnginePreCompile.h" />
+    <ClInclude Include="collision\CollisionObject.h" />
+    <ClInclude Include="graphics\FontRender.h" />
+    <ClInclude Include="graphics\light\DirectionLight.h" />
+    <ClInclude Include="graphics\light\PointLight.h" />
+    <ClInclude Include="graphics\light\SceneLight.h" />
+    <ClInclude Include="graphics\ModelRender.h" />
+    <ClInclude Include="graphics\RenderingEngine.h" />
+    <ClInclude Include="graphics\SpriteRender.h" />
+    <ClInclude Include="level3DRender\LevelRender.h" />
+    <ClInclude Include="level3DRender\MapChipRender.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BookEngine.h" />
-    <ClInclude Include="graphics\IRenderer.h" />
-    <ClInclude Include="graphics\ModelRender.h" />
-    <ClInclude Include="graphics\MyRenderer.h" />
-    <ClInclude Include="graphics\RenderingEngine.h" />
-    <ClInclude Include="PreCompile.h" />
+    <ClCompile Include="BookEngine.cpp" />
+    <ClCompile Include="BookEnginePreCompile.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="collision\CollisionObject.cpp" />
+    <ClCompile Include="graphics\FontRender.cpp" />
+    <ClCompile Include="graphics\light\DirectionLight.cpp" />
+    <ClCompile Include="graphics\light\PointLight.cpp" />
+    <ClCompile Include="graphics\light\SceneLight.cpp" />
+    <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\RenderingEngine.cpp" />
+    <ClCompile Include="graphics\SpriteRender.cpp" />
+    <ClCompile Include="level3DRender\LevelRender.cpp" />
+    <ClCompile Include="level3DRender\MapChipRender.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

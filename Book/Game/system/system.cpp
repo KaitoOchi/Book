@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system.h"
 #include "graphics/GraphicsEngine.h"
+//#include "graphics/RenderingEngine.h"
 #include "sound/SoundEngine.h"
 
 HWND			g_hWnd = NULL;				//ウィンドウハンドル。
@@ -17,10 +18,9 @@ LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_DESTROY:
-		//エンジンの破棄。
-		// ゲームオブジェクトマネージャーの更新処理を呼び出す。
+		//スエンジンの破棄。
 		PostQuitMessage(0);
-		break;	
+		break;
 	default:
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
@@ -43,7 +43,7 @@ void InitWindow(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, 
 		0,						//0でいい。
 		0,						//0でいい。
 		GetModuleHandle(NULL),	//このクラスのためのウインドウプロシージャがあるインスタンスハンドル。
-								//何も気にしなくてよい。
+		//何も気にしなくてよい。
 		NULL,					//アイコンのハンドル。アイコンを変えたい場合ここを変更する。とりあえずこれでいい。
 		NULL,					//マウスカーソルのハンドル。NULLの場合はデフォルト。
 		NULL,					//ウィンドウの背景色。NULLの場合はデフォルト。
@@ -57,7 +57,7 @@ void InitWindow(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, 
 	// ウィンドウの作成。
 	g_hWnd = CreateWindow(
 		appName,				//使用するウィンドウクラスの名前。
-								//先ほど作成したウィンドウクラスと同じ名前にする。
+		//先ほど作成したウィンドウクラスと同じ名前にする。
 		appName,				//ウィンドウの名前。ウィンドウクラスの名前と別名でもよい。
 		WS_OVERLAPPEDWINDOW,	//ウィンドウスタイル。ゲームでは基本的にWS_OVERLAPPEDWINDOWでいい、
 		0,						//ウィンドウの初期X座標。
@@ -80,8 +80,13 @@ void InitGame(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, in
 {
 	//ウィンドウを初期化。
 	InitWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow, appName);
-
-	
+	//Bookエンジンの初期化。
+	BookEngine::InitData initData;
+	initData.isSoftShadow = true;
+	initData.frameBufferWidth = FRAME_BUFFER_W;
+	initData.frameBufferHeight = FRAME_BUFFER_H;
+	initData.hwnd = g_hWnd;
+	BookEngine::CreateInstance(initData);
 }
 //ウィンドウメッセージをディスパッチ。falseが返ってきたら、ゲーム終了。
 bool DispatchWindowMessage()

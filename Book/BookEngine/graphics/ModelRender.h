@@ -2,14 +2,13 @@
 //Programmer : KaitoOchi
 
 #include "geometry/AABB.h"
+#include "graphics/light/DirectionLight.h"
+#include "graphics/light/PointLight.h"
 //#include "geometry/geometryData.h"
 
-
-
 namespace nsBookEngine {
-	class RenderingEngine;
 
-	class ModelRender : public IRenderer
+	class ModelRender
 	{
 	public:
 		ModelRender();
@@ -38,15 +37,6 @@ namespace nsBookEngine {
 		/// 更新処理。
 		/// </summary>
 		void Update();
-
-		/// <summary>
-		/// インスタンシングデータの更新。
-		/// </summary>
-		/// <param name="instanceNo">インスタンス番号</param>
-		/// <param name="pos">座標</param>
-		/// <param name="rot">回転</param>
-		/// <param name="scale">拡大率</param>
-		void UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 		/// <summary>
 		/// 描画処理。
@@ -79,20 +69,7 @@ namespace nsBookEngine {
 		/// <returns></returns>
 		Model& GetModel()
 		{
-			/*
-			if (m_renderToGBufferModel.IsInited()) {
-				return m_renderToGBufferModel;
-			}
-			else if (m_forwardRenderModel.IsInited()) {
-				return m_forwardRenderModel;
-			}
-			else if (m_translucentModel.IsInited())
-			{
-				return m_translucentModel;
-			}
-			*/
-			// ここまで来るのはおかしい。
-			return m_zprepassModel;
+			return m_model;
 		}
 
 		/// <summary>
@@ -120,6 +97,11 @@ namespace nsBookEngine {
 		void SetScale(const Vector3& scale)
 		{
 			m_scale = scale;
+		}
+
+		void AddAnimationEvent(AnimationEventListener eventListener)
+		{
+			m_animation.AddAnimationEventListener(eventListener);
 		}
 
 		/// <summary>
@@ -169,29 +151,6 @@ namespace nsBookEngine {
 			return m_isShadowCaster;
 		}
 
-		/// <summary>
-		/// インスタンス数を取得。
-		/// </summary>
-		/// <returns></returns>
-		int GetNumInstance()
-		{
-			return m_numInstance;
-		}
-
-		//インスタンシング描画を行うかどうか。
-		bool IsInstancingDraw()
-		{
-			return m_isEnableInstancingDraw;
-		}
-
-		const Matrix& GetWorldMatrix(int instanceId)
-		{
-			if (IsInstancingDraw()) {
-				return m_worldMatrixArray[instanceId];
-			}
-			return m_zprepassModel.GetWorldMatrix();
-		}
-
 	private:
 		/// <summary>
 		/// スケルトンの初期化。
@@ -211,36 +170,42 @@ namespace nsBookEngine {
 			EnModelUpAxis enModelUpAxis);
 
 		/// <summary>
-		/// インスタンシング描画用の初期化処理。
-		/// </summary>
-		/// <param name="maxinstance">最大インスタンス数</param>
-		void InitInstancingDraw(int maxinstance);
-
-		/// <summary>
 		/// 各種モデルのワールド行列を更新する。
 		/// </summary>
 		void UpdateWorldMatrixInModes();
 
-	private:
-		AnimationClip* m_animationClips = nullptr;
-		int m_numAnimationClips = 0;
+		/// <summary>
+		/// モデルを初期化。
+		/// </summary>
+		/// <param name="renderingEngine"></param>
+		/// <param name="tkmFilePath"></param>
+		void InitModel(
+			//RenderingEngine& renderingEngine,
+			const char* tkmFilePath,
+			EnModelUpAxis modelUpAxis
+		);
 
-		Vector3 m_position = Vector3::Zero;
-		Quaternion m_rotation = Quaternion::Identity;
-		Vector3 m_scale = Vector3::Zero;
-		EnModelUpAxis m_enFbxUpAxis = enModelUpAxisZ;
-		Animation m_animation;
-		Model m_zprepassModel;					// ZPrepassで描画されるモデル
-		Model m_translucentModel;				// 半透明モデル。
-		bool m_isUpdateAnimation = true;
-		Skeleton m_skeleton;
-		bool m_isShadowCaster = true;
-		float m_animationSpeed = 1.0f;
-		int m_numInstance = 0;
-		int m_maxInstance = 0;
-		bool m_isEnableInstancingDraw = false;
-		std::unique_ptr<Matrix[]> m_worldMatrixArray;	//ワールド行列の配列
-		//std::vector<GeometryData> m_geometryDatas;		//ジオメトリデータ
-		std::unique_ptr<int[]>		m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
+		/// <summary>
+		/// 各種モデルの頂点シェーダーのエントリーポイントを設定。
+		/// </summary>
+		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
+
+	private:
+		AnimationClip*	m_animationClips = nullptr;
+		int				m_numAnimationClips = 0;
+
+		Vector3			m_position = Vector3::Zero;
+		Quaternion		m_rotation = Quaternion::Identity;
+		Vector3			m_scale = Vector3::Zero;
+		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
+		Animation		m_animation;
+		Model			m_model;
+		bool			m_isUpdateAnimation = true;
+		Skeleton		m_skeleton;
+		bool			m_isShadowCaster = true;
+		float			m_animationSpeed = 1.0f;
+
+
 	};
+
 }
