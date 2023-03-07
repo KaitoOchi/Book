@@ -54,6 +54,7 @@ struct SPSIn{
 	float3 biNormal		: BINORMAL;		//従ベクトル
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド座標
+	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
 };
 
 
@@ -72,6 +73,7 @@ sampler g_sampler : register(s0);	//サンプラステート。
 ///////////////////////////////////////////
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
+float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 float3 CalcSpecular(float3 specLig, float2 uv);
 
@@ -119,6 +121,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
 	psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));
 
+	//カメラ空間の法線を求める
+	psIn.normalInView = mul(mView, psIn.normal);
+
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -148,6 +153,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//ディフューズマップをサンプリング
 	float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
 
+	//法線マップを求める
 	float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 
 	//拡散反射光を求める
@@ -155,6 +161,9 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	//鏡面反射光を求める
 	float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, psIn.worldPos, psIn.normal);
+
+	//リムライトを求める
+	float limPower = CalcLim(dirDirection, psIn.normal, psIn.normalInView);
 
 
 	//サーフェイスに入射するポイントライトの光の向きを計算
@@ -200,10 +209,15 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 diffuseLig = diffPoint + diffDirection;
 	float3 specularLig = specPoint + specDirection;
 
+	//スペキュラマップを求める
 	specularLig = CalcSpecular(specularLig, psIn.uv);
 
 	//拡散反射と鏡面反射と環境光を足して、最終的な光を求める
 	float3 lig = diffuseLig + specularLig + ambient;
+
+	//最終的な反射光にリムライトの反射光を合算する
+	float3 limColor = limPower * dirColor;
+	lig += limColor;
 
 
 
@@ -260,6 +274,24 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 
 	//鏡面反射光を求める
 	 return lightColor * t;
+}
+
+/// <summary>
+/// リムライトを計算する
+/// </summary>
+float CalcLim(float3 dirDirection, float3 normal, float3 normalInView)
+{
+	//サーフェイスの法線と光の入射方向に依存するリムの強さを求める
+	float power1 = 1.0f - max(0.0f, dot(dirDirection, normal));
+
+	//サーフェイスの法線と視線の方向に依存するリムの強さを求める
+	float power2 = 1.0f - max(0.0f, normalInView * -1.0f);
+
+	//最終的なリムの強さを求める
+	float limPow = power1 * power2;
+	limPow = pow(limPow, 1.3f);
+
+	return limPow;
 }
 
 /// <summary>
