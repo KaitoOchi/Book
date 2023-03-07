@@ -49,7 +49,7 @@ bool Debug::Start()
 	m_animModelRender.SetScale(Vector3::One);
 	m_animModelRender.Update();
 
-	m_fontRender.SetText(L"‚³‚µ‚·‚¹‚»");
+	m_fontRender.SetText(L"‚½‚¿‚Â‚Ä‚Æ");
 	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
 	m_playerCollision = NewGO<CollisionObject>(0);
