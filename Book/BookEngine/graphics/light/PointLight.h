@@ -14,7 +14,7 @@ namespace nsBookEngine {
 		struct pointLight
 		{
 			Vector3 ptPosition = Vector3::Zero;		//座標
-			float pointNum = 0.0f;					//ポイントライトの数
+			float pad0 = 0.0f;						//ポイントライトの数
 			Vector3 ptColor = Vector3::Zero;		//カラー
 			float ptRange = 0.0f;					//影響範囲
 		};

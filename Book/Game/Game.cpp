@@ -53,7 +53,7 @@ bool Game::Start()
 	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
 	m_playerCollision = NewGO<CollisionObject>(0);
-	m_playerCollision->CreateBox(Vector3(30.0f, 50.0f, 100.0f), Quaternion::Identity, Vector3(50.0f, 50.0f, 50.0f));
+	m_playerCollision->CreateBox(Vector3(0.0f, 0.0f, 0.0f), Quaternion::Identity, Vector3(50.0f, 50.0f, 50.0f));
 	m_playerCollision->SetName("collision1");
 	m_playerCollision->SetIsEnableAutoDelete(false);
 	m_playerCollision->SetIsEnable(true);
@@ -78,9 +78,10 @@ bool Game::Start()
 		}
 	);
 
-	//m_pointLight.SetPosition(Vector3(50.0f, 0.0f, 0.0f));
-	//m_pointLight.SetRange(50.0f);
-	//g_bookEngine->GetRenderingEngine()->GetLightCB().pointLig = m_pointLight.GetPointLig();
+	m_pointLight.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	m_pointLight.SetColor(Vector3(0.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(100.0f);
+	g_bookEngine->GetRenderingEngine()->GetLightCB().pointLig = m_pointLight.GetPointLig();
 
 	return true;
 }
