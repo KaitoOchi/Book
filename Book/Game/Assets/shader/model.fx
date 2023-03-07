@@ -41,6 +41,8 @@ struct SSkinVSIn{
 struct SVSIn{
 	float4 pos 		: POSITION;		//モデルの頂点座標。
 	float3 normal	: NORMAL;		//法線
+	float3 tangent	: TANGENT;		//接ベクトル
+	float3 biNormal : BINORMAL;		//従ベクトル
 	float2 uv 		: TEXCOORD0;	//UV座標。
 	SSkinVSIn skinVert;				//スキン用のデータ。
 };
@@ -48,6 +50,8 @@ struct SVSIn{
 struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float3 normal		: NORMAL;		//法線
+	float3 tangent		: TANGENT;		//接ベクトル
+	float3 biNormal		: BINORMAL;		//従ベクトル
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド座標
 };
@@ -57,6 +61,7 @@ struct SPSIn{
 // グローバル変数。
 ////////////////////////////////////////////////
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
+Texture2D<float4> g_normalMap : register(t1);			//法線マップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
@@ -106,6 +111,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//頂点法線をピクセルシェーダーにわたす
 	psIn.normal = mul(m, vsIn.normal);
 
+	//ワールド空間に変換
+	psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
+	psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));
+
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -132,6 +141,18 @@ SPSIn VSSkinMain( SVSIn vsIn )
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+	//ディフューズマップをサンプリング
+	float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
+
+	float3 normal = psIn.normal;
+
+	//法線マップからタンジェントスペースの法線をサンプリングする
+	float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+	localNormal = (localNormal - 0.5f) * 2.0f;
+
+	//タンジェントスペースの法線をワールドスペースに変換する
+	normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + normal * localNormal.z;
+
 	//拡散反射光を求める
 	float3 diffDirection = CalcLambertDiffuse(dirDirection, dirColor, psIn.normal);
 
@@ -189,7 +210,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 
 
-	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
+	float4 albedoColor = diffuseMap;
 
 	albedoColor.xyz *= lig;
 
