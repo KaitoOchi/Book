@@ -62,6 +62,8 @@ struct SPSIn{
 ////////////////////////////////////////////////
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);			//法線マップ
+Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ
+
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
 
@@ -70,6 +72,8 @@ sampler g_sampler : register(s0);	//サンプラステート。
 ///////////////////////////////////////////
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
+float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
+float3 CalcSpecular(float3 specLig, float2 uv);
 
 /// <summary>
 //スキン行列を計算する。
@@ -144,14 +148,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//ディフューズマップをサンプリング
 	float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
 
-	float3 normal = psIn.normal;
-
-	//法線マップからタンジェントスペースの法線をサンプリングする
-	float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
-	localNormal = (localNormal - 0.5f) * 2.0f;
-
-	//タンジェントスペースの法線をワールドスペースに変換する
-	normal = psIn.tangent * localNormal.x + psIn.biNormal * localNormal.y + normal * localNormal.z;
+	float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 
 	//拡散反射光を求める
 	float3 diffDirection = CalcLambertDiffuse(dirDirection, dirColor, psIn.normal);
@@ -203,7 +200,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 diffuseLig = diffPoint + diffDirection;
 	float3 specularLig = specPoint + specDirection;
 
-
+	specularLig = CalcSpecular(specularLig, psIn.uv);
 
 	//拡散反射と鏡面反射と環境光を足して、最終的な光を求める
 	float3 lig = diffuseLig + specularLig + ambient;
@@ -263,4 +260,33 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 
 	//鏡面反射光を求める
 	 return lightColor * t;
+}
+
+/// <summary>
+/// 法線を計算する
+/// </summary>
+float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
+{
+	//法線マップからタンジェントスペースの法線をサンプリングする
+	float3 binSpcaeNormal = g_normalMap.Sample(g_sampler, uv).xyz;
+	binSpcaeNormal = (binSpcaeNormal - 0.5f) * 2.0f;
+
+	//タンジェントスペースの法線をワールドスペースに変換する
+	float3 newNormal = tangent * binSpcaeNormal.x + biNormal * binSpcaeNormal.y + normal * binSpcaeNormal.z;
+
+	return newNormal;
+}
+
+/// <summary>
+/// スペキュラを計算
+/// </summary>
+float3 CalcSpecular(float3 specLig, float2 uv)
+{
+	//スペキュラマップからスペキュラ反射の強さをサンプリング
+	float specPower = g_specularMap.Sample(g_sampler, uv).r;
+
+	//鏡面反射の強さを鏡面反射光に乗算する
+	specLig *= specPower * 10.0f;
+
+	return specLig;
 }
