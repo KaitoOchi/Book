@@ -76,7 +76,7 @@ protected:
 	
 	float angle=0;//回転角度
 	
-	ModelRender *m_modelRender;//モデル
+	ModelRender *m_modelRender=nullptr;//モデル
 	Quaternion m_rotation;//回転
 	CharacterController m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態

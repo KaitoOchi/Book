@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "Player3D.h"
+namespace
+{
+	const char *MODEL = "Assets/modelData/player/player.tkm";
+}
 Player3D::Player3D()
 {
 
@@ -11,6 +15,7 @@ Player3D::~Player3D()
 bool Player3D::Start()
 {
 	Player::Start();
+	m_modelRender = new ModelRender;
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
@@ -27,7 +32,7 @@ bool Player3D::Start()
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	//モデルを読み込む
-	m_modelRender->Init("Assets/modelData/player/player.tkm",m_animationClips,m_enAnimationClip_Num);
+	m_modelRender->Init(MODEL,m_animationClips,m_enAnimationClip_Num);
 	//キャラコンを初期化する。
 	/*m_3Dcharacon.Init(25.0f, 75.0f, m_position);*/
 	m_modelRender->SetPosition(m_position);
