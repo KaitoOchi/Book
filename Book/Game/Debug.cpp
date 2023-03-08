@@ -82,10 +82,10 @@ bool Debug::Start()
 		}
 	);
 
-	m_pointLight.SetPosition(Vector3(0.0f, 30.0f, 0.0f));
-	m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(100.0f);
-	g_bookEngine->GetRenderingEngine()->SetPointLight(m_pointLight);
+	//m_pointLight.SetPosition(Vector3(0.0f, 30.0f, 0.0f));
+	//m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
+	//m_pointLight.SetRange(100.0f);
+	//g_bookEngine->GetRenderingEngine()->SetPointLight(m_pointLight);
 
 	return true;
 }
