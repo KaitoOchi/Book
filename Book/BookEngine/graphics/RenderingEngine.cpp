@@ -23,8 +23,8 @@ namespace nsBookEngine {
 
 		//”¼‹…ƒ‰ƒCƒg‚ğİ’è
 		SetHemiSphereLight(
-			Vector3(0.7f, 0.5f, 0.3f),
-			Vector3(0.15f, 0.7f, 0.85f),
+			Vector3(1.0f, 0.5f, 0.2f),
+			Vector3(0.3f, 0.5f, 0.1f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 

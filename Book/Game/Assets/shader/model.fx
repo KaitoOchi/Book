@@ -23,7 +23,6 @@ cbuffer LightCb : register(b1) {
 
 	//ポイントライト用の定数バッファ
 	float3 ptPosition;		//ポイントライトの位置
-	float ptNum;			//ポイントライトの数
 	float3 ptColor;			//ポイントライトのカラー
 	float ptRange;			//ポイントライトの影響範囲
 

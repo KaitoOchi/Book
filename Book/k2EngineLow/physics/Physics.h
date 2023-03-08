@@ -1,5 +1,7 @@
 #pragma once
 
+#define _DEBUG
+
 #include <memory>
 #include "DebugWireframe.h"
 
@@ -51,6 +53,7 @@ namespace nsK2EngineLow {
 		{
 #ifdef _DEBUG
 			m_isDrawDebugWireFrame = true;
+			m_dynamicWorld->debugDrawWorld();
 #endif
 		}
 

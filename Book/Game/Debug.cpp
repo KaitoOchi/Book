@@ -32,10 +32,10 @@ bool Debug::Start()
 	animationClips[enAnimationClip_Jump].Load("Assets/animData/jump.tka");
 	animationClips[enAnimationClip_Jump].SetLoopFlag(false);
 
-	m_modelRender.Init("Assets/modelData/unityChan.tkm");
+	m_modelRender.Init("Assets/modelData/player/player.tkm");
 	m_modelRender.SetPosition(Vector3(-20.0f, 100.0f, -300.0f));
 	Quaternion rotation;
-	rotation.AddRotationDegY(180.0f);
+	rotation.AddRotationDegY(220.0f);
 	m_modelRender.SetRotation(rotation);
 	m_modelRender.SetScale(Vector3::One);
 	m_modelRender.Update();
@@ -82,11 +82,10 @@ bool Debug::Start()
 		}
 	);
 
-	//m_pointLight.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-	//m_pointLight.SetColor(Vector3(50.0f, 0.0f, 0.0f));
+	//m_pointLight.SetPosition(Vector3(0.0f, 30.0f, 0.0f));
+	//m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
 	//m_pointLight.SetRange(100.0f);
-	////g_bookEngine->GetRenderingEngine()->Init();
-	//g_bookEngine->GetRenderingEngine()->GetLightCB().pointLig = m_pointLight.GetPointLig();
+	//g_bookEngine->GetRenderingEngine()->SetPointLight(m_pointLight);
 
 	return true;
 }

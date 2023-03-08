@@ -41,6 +41,18 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// ポイントライトを設定
+		/// </summary>
+		/// <param name="ptlig"></param>
+		void SetPointLight(PointLight& ptlig)
+		{
+			//GetLightCB().pointLig = ptlig.GetPointLig();
+			GetLightCB().pointLig.ptPosition = ptlig.GetPosition();
+			GetLightCB().pointLig.ptColor = ptlig.GetColor();
+			GetLightCB().pointLig.ptRange = ptlig.GetRange();
+		}
+
+		/// <summary>
 		/// 半球ライトを設定。
 		/// </summary>
 		/// <param name="grdColor">照り返しのライトRGB。0.0f～1.0fの間</param>

@@ -58,6 +58,9 @@ namespace nsBookEngine {
 		//レンダリングエンジンを実行。		
 		//m_renderingEngine.Execute(renderContext);
 
+		//当たり判定描画。
+		g_engine->DebubDrawWorld();
+
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
