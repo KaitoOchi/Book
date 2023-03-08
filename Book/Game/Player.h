@@ -9,7 +9,7 @@ public:
 		m_enPlayer_walk,//歩く
 		m_enPlayer_Run,//走る
 		m_enPlayer_Jump,//ジャンプ
-		m_enPlayer_Jumping,//ジャンプ中
+		m_enPlayer_Jumpend,//ジャンプ終わり
 		m_enPlayer_Change,//切替
 	};
 	Player();
@@ -45,9 +45,9 @@ protected:
 	/// </summary>
 	void ProcessJumpStateTransition();
 	/// <summary>
-	/// ジャンプ中ステートの遷移処理
+	/// ジャンプ終わりステートの遷移処理
 	/// </summary>
-	void ProcessJumpingStateTransition();
+	void ProcessJumpendStateTransition();
 	/// <summary>
 	/// 変更ステートの遷移処理
 	/// </summary>

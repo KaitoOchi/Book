@@ -164,6 +164,7 @@
     <ClInclude Include="collision\CollisionObject.h" />
     <ClInclude Include="graphics\FontRender.h" />
     <ClInclude Include="graphics\light\DirectionLight.h" />
+    <ClInclude Include="graphics\light\HemiSphereLight.h" />
     <ClInclude Include="graphics\light\PointLight.h" />
     <ClInclude Include="graphics\light\SceneLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="collision\CollisionObject.cpp" />
     <ClCompile Include="graphics\FontRender.cpp" />
     <ClCompile Include="graphics\light\DirectionLight.cpp" />
+    <ClCompile Include="graphics\light\HemiSphereLight.cpp" />
     <ClCompile Include="graphics\light\PointLight.cpp" />
     <ClCompile Include="graphics\light\SceneLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />

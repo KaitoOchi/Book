@@ -14,11 +14,6 @@ namespace nsBookEngine {
 
 	}
 
-	void PointLight::Init()
-	{
-
-	}
-
 	void PointLight::Update()
 	{
 

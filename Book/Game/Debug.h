@@ -1,6 +1,7 @@
 #pragma once
 
 class Player;
+class Mirror;
 
 class Debug : public IGameObject
 {
@@ -31,6 +32,7 @@ private:
 	LevelRender* m_levelRender = nullptr;
 
 	Player* m_player = nullptr;
+	Mirror* m_mirror = nullptr;
 
 	PointLight m_pointLight;
 };

@@ -13,19 +13,14 @@ namespace nsBookEngine {
 		/// </summary>
 		struct pointLight
 		{
-			Vector3 ptPosition = Vector3::Zero;		//座標
-			float pad0 = 0.0f;						//ポイントライトの数
-			Vector3 ptColor = Vector3::Zero;		//カラー
-			float ptRange = 0.0f;					//影響範囲
+			Vector3 ptPosition;		//座標
+			float pad0 = 0.0f;
+			Vector3 ptColor;		//カラー
+			float ptRange = 0.0f;	//影響範囲
 		};
 
 		PointLight();
 		~PointLight();
-
-		/// <summary>
-		/// 初期化処理。
-		/// </summary>
-		void Init();
 
 		/// <summary>
 		/// 座標を設定。
@@ -33,6 +28,15 @@ namespace nsBookEngine {
 		void SetPosition(const Vector3& pos)
 		{
 			m_pointLig.ptPosition = pos;
+		}
+
+		/// <summary>
+		/// 座標を取得。
+		/// </summary>
+		/// <returns></returns>
+		const Vector3& GetPosition()
+		{
+			return m_pointLig.ptPosition;
 		}
 
 		/// <summary>
@@ -44,11 +48,28 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// カラーを取得。
+		/// </summary>
+		/// <param name="range"></param>
+		const Vector3& GetColor()
+		{
+			return m_pointLig.ptColor;
+		}
+
+		/// <summary>
 		/// 影響範囲を設定。
 		/// </summary>
 		void SetRange(float range)
 		{
 			m_pointLig.ptRange = range;
+		}
+
+		/// <summary>
+		/// 影響範囲を取得。
+		/// </summary>
+		const float& GetRange()
+		{
+			return m_pointLig.ptRange;
 		}
 
 		/// <summary>

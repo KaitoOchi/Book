@@ -72,7 +72,7 @@ void Player3D::Animation()
 	case Player::m_enPlayer_Jump:
 		m_model3DRender.PlayAnimation(m_enAnimationClip_Jump, 0.5f);
 		break;
-	case Player::m_enPlayer_Jumping:
+	case Player::m_enPlayer_Jumpend:
 		break;
 	case Player::m_enPlayer_Change:
 		break;
