@@ -119,7 +119,7 @@ void Player::ProcessCommonStateTransition()
 	else
 	{
 		//‘Ò‹@’†‚É‚·‚é
-		m_playerState = m_enPlayer_Idle;
+		m_playerState = m_enPlayer_Jump;
 	}
 
 }
