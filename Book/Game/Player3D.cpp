@@ -27,7 +27,7 @@ bool Player3D::Start()
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	//モデルを読み込む
-	m_modelRender.Init("Assets/modelData/player/player.tkm",m_animationClips,m_enAnimationClip_Num);
+	//m_modelRender.Init("Assets/modelData/player/player.tkm",m_animationClips,m_enAnimationClip_Num);
 	//キャラコンを初期化する。
 	/*m_3Dcharacon.Init(25.0f, 75.0f, m_position);*/
 	m_modelRender.SetPosition(m_position);
