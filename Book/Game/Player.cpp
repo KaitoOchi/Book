@@ -5,6 +5,8 @@ namespace
 	const float WALK = 20.0f;//歩き時の乗算量
 	const float RUN = 40.0f;//走り時の乗算量
 	const float JUMPVOLUM = 200.0f;//ジャンプ量
+	const float GRAVITY = 400.0f;//重力
+	const float SPEEDDOWN = 0.8;//速度減速率
 }
 
 Player::Player()
@@ -41,8 +43,8 @@ void Player::Move()
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//速度を初期化
-	m_moveSpeed.x *= 0.8f;
-	m_moveSpeed.z *= 0.8f;
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
 	//左ステックの情報を取得
 	m_Lstic.x = g_pad[0]->GetLStickXF();
 	m_Lstic.z = g_pad[0]->GetLStickYF();
@@ -81,7 +83,7 @@ void Player::Jump()
 	else
 	{
 		//重力を発生させる
-		m_moveSpeed.y -= 400.0f * g_gameTime->GetFrameDeltaTime();
+		m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
 	}
 }
 void Player::Rotation()
@@ -156,8 +158,8 @@ void Player::ProcessChangeStateTransition()
 void Player::ProcessThrowStateTransition()
 {
 	//速度を初期化
-	m_moveSpeed.x *= 0.8f;
-	m_moveSpeed.z *= 0.8f;
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
 	if (m_modelRender.IsPlayingAniamtion() == false)
 	{
 		//ステートを遷移する。
