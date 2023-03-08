@@ -74,7 +74,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Run, 0.1f);
 		break;
 	case Player::m_enPlayer_Jump:
-		m_modelRender->PlayAnimation(m_enAnimationClip_Jump, 0.5f);
+		m_modelRender->PlayAnimation(m_enAnimationClip_Jump, 0.8f);
 		break;
 	case Player::m_enPlayer_Jumpend:
 		break;
