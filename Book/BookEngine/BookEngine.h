@@ -25,6 +25,7 @@ namespace nsBookEngine {
 			UINT frameBufferHeight;		// フレームバッファの高さ。
 			bool isSoftShadow;			// ソフトシャドウを行う？
 		};
+
 		/// <summary>
 		/// インスタンスの作成。
 		/// </summary>
@@ -48,36 +49,24 @@ namespace nsBookEngine {
 		{
 			return m_instance;
 		}
+
 		/// <summary>
 		/// BookEngineを初期化
 		/// </summary>
 		void Init(const InitData& initData);
+
 		/// <summary>
 		/// エンジンの処理を実行。
 		/// </summary>
 		void Execute();
 
-		CollisionObjectManager* GetCollisionObjectManager()
-		{
-			return m_collisionObjectManager;
-		}
-
-		RenderingEngine* GetRenderingEngine()
-		{
-			return m_renderingEngine;
-		}
-
 	private:
 		K2EngineLow m_k2EngineLow;
-		CollisionObjectManager* m_collisionObjectManager = nullptr;
-		RenderingEngine* m_renderingEngine = nullptr;
 
 		static BookEngine* m_instance;
 	};
 
 	// グローバルなアクセスポイント。
 	extern BookEngine* g_bookEngine;
-	//extern RenderingEngine* g_renderingEngine;
 	//extern SceneLight* g_sceneLight;
-	//extern CollisionObjectManager* g_collisionObjectManager;
 }

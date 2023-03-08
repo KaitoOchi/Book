@@ -17,8 +17,34 @@ namespace nsBookEngine {
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 		};
 
+	private:
 		RenderingEngine();
 		~RenderingEngine();
+
+	public:
+		/// <summary>
+		/// インスタンスの作成。
+		/// </summary>
+		static void CreateInstance()
+		{
+			m_instance = new RenderingEngine;
+			m_instance->Init();
+		}
+		/// <summary>
+		/// インスタンスの破棄。
+		/// </summary>
+		static void DeleteInstance()
+		{
+			delete m_instance;
+		}
+		/// <summary>
+		/// インスタンスを取得。
+		/// </summary>
+		/// <returns></returns>
+		static RenderingEngine* GetInstance()
+		{
+			return m_instance;
+		}
 
 		/// <summary>
 		/// ディレクションライトを設定。
@@ -77,6 +103,8 @@ namespace nsBookEngine {
 		void Update();
 
 	private:
+		static RenderingEngine* m_instance;
+
 		LightCB m_lightCB;
 
 		DirectionLight m_directionLig;

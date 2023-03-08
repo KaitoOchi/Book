@@ -9,7 +9,7 @@
 Debug::Debug()
 {
 	//当たり判定を有効化
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
 	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
@@ -82,10 +82,10 @@ bool Debug::Start()
 		}
 	);
 
-	//m_pointLight.SetPosition(Vector3(0.0f, 30.0f, 0.0f));
-	//m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
-	//m_pointLight.SetRange(100.0f);
-	//g_bookEngine->GetRenderingEngine()->SetPointLight(m_pointLight);
+	m_pointLight.SetPosition(Vector3(0.0f, 10.0f, 0.0f));
+	m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(100.0f);
+	RenderingEngine::GetInstance()->SetPointLight(m_pointLight);
 
 	return true;
 }
