@@ -8,8 +8,11 @@ public:
 	~Game();
 	bool Start();
 	void Update();
-
+	void Render(RenderContext& rc);
 private:
+	ModelRender m_stageModelRender;
+	PhysicsStaticObject m_demobg;
+
 
 };
 
