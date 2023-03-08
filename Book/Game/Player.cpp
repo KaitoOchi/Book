@@ -14,18 +14,19 @@ Player::~Player()
 
 bool Player::Start()
 {
-
+	//キャラコンを初期化する。
+	m_characon.Init(25.0f, 75.0f, m_position);
 	return true;
 }
 
 void Player::Update()
 {
+	
 	Move();
-	if (g_pad[0]->IsTrigger(enButtonB))
-	{
-		Jump();
-	}
+	Jump();
+	Rotation();
 	ManageState();
+	
 }
 
 void Player::Move()
@@ -34,9 +35,8 @@ void Player::Move()
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//移動速度も初期化
-	m_moveSpeed.x = 0.0f;
-	m_moveSpeed.z = 0.0f;
-	m_moveSpeed.y = 0.0f;
+	m_moveSpeed.x*=0.8f;
+	m_moveSpeed.z *= 0.8f;
 	//左ステックの入力量を取得1
 	m_Lstic.x = g_pad[0]->GetLStickXF();
 	m_Lstic.z = g_pad[0]->GetLStickYF();
@@ -58,17 +58,42 @@ void Player::Move()
 }
 void Player::Jump()
 {
-	m_moveSpeed.y = 0.0f;
-	if (m_playerState != m_enPlayer_Jump)
+	//地面に付いていたら。
+	if (m_characon.IsOnGround()==true)
 	{
-		m_moveSpeed.y += m_jumpvolume;
-		m_playerState = m_enPlayer_Jumping;
+		//重力を無くす。
+		m_moveSpeed.y = 0.0f;
+		//Bボタンが押されたら。
+		if (g_pad[0]->IsTrigger(enButtonB))
+		{
+			//ジャンプさせる。
+			m_moveSpeed.y = m_jumpvolume;
+			
+		}
 	}
-	m_position.y += m_moveSpeed.y;
+	//地面に付いていなかったら。
+	else
+	{
+		//重力を発生させる。
+		m_moveSpeed.y -= 400.0f * g_gameTime->GetFrameDeltaTime();
+	}
+}
+
+void Player::Rotation()
+{
+	//動いていないため回転しない
+	if (fabsf(m_moveSpeed.x) < 0.001f
+		&& fabsf(m_moveSpeed.z) < 0.001f) {
+		return;
+	}
+	//atan2で角度を求めて、これを回転角度にしている
+	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+	//ラジアン単位のためSetRotaitionを使用する
+	m_rotation.SetRotationY(-angle);
 }
 void Player::ProcessCommonStateTransition()
 {
-	if (m_moveSpeed.y!=0.0f)
+	if (m_characon.IsOnGround() == false)
 	{
 		//ステートをジャンプ中にする
 		m_playerState = m_enPlayer_Jump;

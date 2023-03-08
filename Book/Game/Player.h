@@ -19,6 +19,7 @@ protected:
 	void Update();
 	void Move();
 	void Jump();
+	void Rotation();
 	/// <summary>
 	/// 各ステートの遷移処理
 	/// </summary>
@@ -51,12 +52,18 @@ protected:
 	/// 変更ステートの遷移処理
 	/// </summary>
 	void ProcessChangeStateTransition();
+	
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
-	float m_walk = 120.0f;//歩き時の乗算量
-	float m_run = 240.0f;//走り時の乗算量
-	float m_jumpvolume = 240.0f;//ジャンプ量
-	Vector3 m_Lstic=Vector3::Zero;//左ステック
+	Vector3 m_Lstic = Vector3::Zero;//左ステック
 	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
-	Quaternion m_rotation;
+	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
+	
+	float m_walk = 20.0f;//歩き時の乗算量
+	float m_run = 40.0f;//走り時の乗算量
+	float m_jumpvolume = 150.0f;//ジャンプ量
+	float angle=0;//回転角度
+	
+	Quaternion m_rotation;//回転
+	CharacterController m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
 };
