@@ -23,7 +23,7 @@ namespace nsBookEngine {
 			initData.frameBufferHeight
 		);
 		//m_renderingEngine.Init(initData.isSoftShadow);
-		g_camera3D->SetPosition({ 0.0f, 100.0f, -200.0f });
+		g_camera3D->SetPosition({ 0.0f, 200.0f, -400.0f });
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
 
 		m_renderingEngine = new RenderingEngine;

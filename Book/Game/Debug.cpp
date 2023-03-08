@@ -2,13 +2,14 @@
 #include "Debug.h"
 
 #include "Player.h"
+#include "Mirror.h"
 #include "level3DRender/LevelRender.h"
 
 
 Debug::Debug()
 {
 	//当たり判定を有効化
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
 	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
@@ -32,8 +33,10 @@ bool Debug::Start()
 	animationClips[enAnimationClip_Jump].SetLoopFlag(false);
 
 	m_modelRender.Init("Assets/modelData/unityChan.tkm");
-	m_modelRender.SetPosition(Vector3(-100.0f, 0.0f, 0.0f));
-	m_modelRender.SetRotation(Quaternion::Identity);
+	m_modelRender.SetPosition(Vector3(-20.0f, 100.0f, -300.0f));
+	Quaternion rotation;
+	rotation.AddRotationDegY(180.0f);
+	m_modelRender.SetRotation(rotation);
 	m_modelRender.SetScale(Vector3::One);
 	m_modelRender.Update();
 
@@ -66,6 +69,7 @@ bool Debug::Start()
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"unityChan") == true) {
 			m_player = NewGO<Player>(0, "player");
+			m_mirror = NewGO<Mirror>(0, "mirror");
 			return true;
 		}
 

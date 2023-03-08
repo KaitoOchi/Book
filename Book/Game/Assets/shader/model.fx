@@ -26,6 +26,11 @@ cbuffer LightCb : register(b1) {
 	float ptNum;			//ポイントライトの数
 	float3 ptColor;			//ポイントライトのカラー
 	float ptRange;			//ポイントライトの影響範囲
+
+	//半球ライト用の定数バッファ
+	float3 groundColor;		//照り返しのライト
+	float3 skyColor;		//天球ライト
+	float3 groundNormal;	//地面の法線
 }
 
 
@@ -74,6 +79,7 @@ sampler g_sampler : register(s0);	//サンプラステート。
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
 float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
+float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
 float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 float3 CalcSpecular(float3 specLig, float2 uv);
 
@@ -156,11 +162,15 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//法線マップを求める
 	float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 
+
 	//拡散反射光を求める
 	float3 diffDirection = CalcLambertDiffuse(dirDirection, dirColor, psIn.normal);
 
 	//鏡面反射光を求める
 	float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, psIn.worldPos, psIn.normal);
+
+	//半球ライトを求める
+	float3 hemiLight = CalcHemiSphereLight(psIn.normal, groundColor, skyColor, groundNormal);
 
 	//リムライトを求める
 	float limPower = CalcLim(dirDirection, psIn.normal, psIn.normalInView);
@@ -219,6 +229,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 limColor = limPower * dirColor;
 	lig += limColor;
 
+	//半球ライトを最終的な反射光に加算する
+	lig += hemiLight;
 
 
 	float4 albedoColor = diffuseMap;
@@ -292,6 +304,23 @@ float CalcLim(float3 dirDirection, float3 normal, float3 normalInView)
 	limPow = pow(limPow, 1.3f);
 
 	return limPow;
+}
+
+/// <summary>
+/// 半球ライトを計算する
+/// </summary>
+float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal)
+{
+	//サーフェイスの法線と地面の法線との内積を計算する
+	float t = dot(normal, groundNormal);
+
+	//内積の結果を0～1の範囲に変換する
+	t = (t + 1.0f) / 2.0f;
+
+	//地面色と天球色を補完率tで線形補間する
+	float3 hemiLig = lerp(groundColor, skyColor, t);
+
+	return hemiLig;
 }
 
 /// <summary>

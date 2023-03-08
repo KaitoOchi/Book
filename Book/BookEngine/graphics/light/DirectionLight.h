@@ -14,7 +14,8 @@ namespace nsBookEngine {
 			float pad2 = 0.0f;
 			Vector3 eyePos = Vector3::Zero;			//Ž‹“_‚ÌˆÊ’u
 			float pad3 = 0.0f;
-			Vector3 ambient = Vector3::Zero;
+			Vector3 ambient = Vector3::Zero;		//ŠÂ‹«Œõ
+			float pad4 = 0.0f;
 		};
 
 		DirectionLight();
