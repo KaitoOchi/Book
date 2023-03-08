@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Debug.h"
 
-#include "Player.h"
 #include "Mirror.h"
 #include "level3DRender/LevelRender.h"
 
@@ -9,7 +8,7 @@
 Debug::Debug()
 {
 	//当たり判定を有効化
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
 	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
@@ -56,7 +55,7 @@ bool Debug::Start()
 	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
 	m_playerCollision = NewGO<CollisionObject>(0);
-	m_playerCollision->CreateBox(Vector3(0.0f, 0.0f, 0.0f), Quaternion::Identity, Vector3(50.0f, 50.0f, 50.0f));
+	m_playerCollision->CreateBox(Vector3(0.0f, 50.0f, 0.0f), Quaternion::Identity, Vector3(5.0f, 5.0f, 5.0f));
 	m_playerCollision->SetName("collision1");
 	m_playerCollision->SetIsEnableAutoDelete(false);
 	m_playerCollision->SetIsEnable(true);
@@ -68,7 +67,6 @@ bool Debug::Start()
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"unityChan") == true) {
-			m_player = NewGO<Player>(0, "player");
 			m_mirror = NewGO<Mirror>(0, "mirror");
 			return true;
 		}
@@ -82,16 +80,24 @@ bool Debug::Start()
 		}
 	);
 
-	m_pointLight.SetPosition(Vector3(0.0f, 10.0f, 0.0f));
-	m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(100.0f);
-	RenderingEngine::GetInstance()->SetPointLight(m_pointLight);
+	m_position.y = 50.0f;
+
+	m_pointLight.SetPosition(m_position);
+	m_pointLight.SetColor(Vector3(5.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(150.0f);
+	m_pointLight.Update();
 
 	return true;
 }
 
 void Debug::Update()
 {
+	m_position.x += g_pad[0]->GetLStickXF();
+	m_position.z += g_pad[0]->GetLStickYF();
+
+	m_pointLight.SetPosition(m_position);
+	m_pointLight.Update();
+
 	m_animModelRender.PlayAnimation(enAnimationClip_Run);
 	m_animModelRender.Update();
 }

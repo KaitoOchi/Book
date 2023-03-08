@@ -31,8 +31,9 @@ private:
 
 	LevelRender* m_levelRender = nullptr;
 
-	Player* m_player = nullptr;
 	Mirror* m_mirror = nullptr;
 
 	PointLight m_pointLight;
+
+	Vector3 m_position;
 };

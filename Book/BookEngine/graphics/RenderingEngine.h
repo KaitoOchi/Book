@@ -70,12 +70,12 @@ namespace nsBookEngine {
 		/// ポイントライトを設定
 		/// </summary>
 		/// <param name="ptlig"></param>
-		void SetPointLight(PointLight& ptlig)
+		void SetPointLight(PointLight::pointLight& ptlig)
 		{
 			//GetLightCB().pointLig = ptlig.GetPointLig();
-			GetLightCB().pointLig.ptPosition = ptlig.GetPosition();
-			GetLightCB().pointLig.ptColor = ptlig.GetColor();
-			GetLightCB().pointLig.ptRange = ptlig.GetRange();
+			GetLightCB().pointLig.ptPosition = ptlig.ptPosition;
+			GetLightCB().pointLig.ptColor = ptlig.ptColor;
+			GetLightCB().pointLig.ptRange = ptlig.ptRange;
 		}
 
 		/// <summary>
