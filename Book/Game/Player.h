@@ -73,9 +73,7 @@ protected:
 	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
 	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
 	
-	float m_walk = 20.0f;//歩き時の乗算量
-	float m_run = 40.0f;//走り時の乗算量
-	float m_jumpvolume = 150.0f;//ジャンプ量
+	
 	float angle=0;//回転角度
 	
 	ModelRender m_modelRender;//モデル

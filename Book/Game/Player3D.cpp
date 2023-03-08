@@ -49,7 +49,6 @@ void Player3D::Update()
 	//キャラコンで座標を移動させる。
 	m_position = m_characon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender.SetPosition(m_position);
-	m_characon.SetPosition(m_position);
 	m_modelRender.SetRotation(m_rotation);
 	m_modelRender.Update();
 

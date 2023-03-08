@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "Player.h"
-
+namespace
+{
+	const float WALK = 20.0f;//歩き時の乗算量
+	const float RUN = 40.0f;//走り時の乗算量
+	const float JUMPVOLUM = 150.0f;//ジャンプ量
+}
 
 Player::Player()
 {
@@ -46,14 +51,14 @@ void Player::Move()
 	{
 		//ダッシュをさせる
 		//左ステックと走る速度を乗算する
-		m_moveSpeed.x += m_Lstic.x * m_run;
-		m_moveSpeed.z += m_Lstic.z * m_run;
+		m_moveSpeed.x += m_Lstic.x * RUN;
+		m_moveSpeed.z += m_Lstic.z * RUN;
 	}
 	else
 	{
 		//左ステックと歩く速度を乗算させる
-		m_moveSpeed.x += m_Lstic.x * m_walk;
-		m_moveSpeed.z += m_Lstic.z * m_walk;
+		m_moveSpeed.x += m_Lstic.x * WALK;
+		m_moveSpeed.z += m_Lstic.z * WALK;
 	}
 
 }
@@ -68,7 +73,7 @@ void Player::Jump()
 		if (g_pad[0]->IsTrigger(enButtonB))
 		{
 			//ジャンプをする
-			m_moveSpeed.y = m_jumpvolume;
+			m_moveSpeed.y = JUMPVOLUM;
 
 		}
 	}
