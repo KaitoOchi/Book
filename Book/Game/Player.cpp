@@ -4,7 +4,7 @@ namespace
 {
 	const float WALK = 20.0f;//歩き時の乗算量
 	const float RUN = 40.0f;//走り時の乗算量
-	const float JUMPVOLUM = 150.0f;//ジャンプ量
+	const float JUMPVOLUM = 200.0f;//ジャンプ量
 }
 
 Player::Player()
@@ -119,7 +119,7 @@ void Player::ProcessCommonStateTransition()
 	else
 	{
 		//待機中にする
-		m_playerState = m_enPlayer_Jump;
+		m_playerState = m_enPlayer_Idle;
 	}
 
 }
