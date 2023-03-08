@@ -7,18 +7,12 @@ public:
 	~Player3D();
 	bool Start();
 	void Update();
+protected:
 	void Animation();
 	void Throw();
 	void Render(RenderContext& rc);
-	enum EnPlayer3DState {
-		m_enPlayer3D_Throw,//投げる
-		m_enPlayer3D_Steal,//盗む
-		m_enPlayer3D_Push,//押す
-	};
-
-
-	CharacterController m_3Dcharacon;//キャラコン
-	ModelRender m_model3DRender;//3Dモデル
+	
+	
 	//アニメーション
 	enum EnAnimationClip {
 		m_enAnimationClip_Idle,//待機アニメーション

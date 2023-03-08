@@ -20,10 +20,13 @@ bool Player::Start()
 
 void Player::Update()
 {
-
-	Move();
-	Jump();
-	Rotation();
+	if (m_playerState!=m_enPlayer3D_Throw) {
+		Move();
+		Jump();
+		Rotation();
+	}
+	
+	
 	ManageState();
 
 }
@@ -145,6 +148,17 @@ void Player::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
+void Player::ProcessThrowStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= 0.8f;
+	m_moveSpeed.z *= 0.8f;
+	if (m_modelRender.IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+}
 void Player::ManageState()
 {
 	switch (m_playerState)
@@ -178,6 +192,10 @@ void Player::ManageState()
 	case m_enPlayer_Change:
 		//切替ステートのステート遷移処理。
 		ProcessChangeStateTransition();
+		break;
+		//投げるとき
+	case m_enPlayer3D_Throw:
+		ProcessThrowStateTransition();
 		break;
 	default:
 		break;

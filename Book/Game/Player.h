@@ -11,6 +11,9 @@ public:
 		m_enPlayer_Jump,//ジャンプ
 		m_enPlayer_Jumpend,//ジャンプ終わり
 		m_enPlayer_Change,//切替
+		m_enPlayer3D_Throw,//投げる
+		m_enPlayer3D_Steal,//盗む
+		m_enPlayer3D_Push,//押す
 	};
 	Player();
 	~Player();
@@ -52,6 +55,18 @@ protected:
 	/// 変更ステートの遷移処理
 	/// </summary>
 	void ProcessChangeStateTransition();
+	/// <summary>
+	/// 投げるステートの遷移処理
+	/// </summary>
+	void ProcessThrowStateTransition();
+	/// <summary>
+	/// 盗むステートの遷移処理
+	/// </summary>
+	void ProcessStealStateTransition();
+	/// <summary>
+	/// 押すステートの遷移処理
+	/// </summary>
+	void ProcessPushStateTransition();
 	
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック
@@ -63,6 +78,7 @@ protected:
 	float m_jumpvolume = 150.0f;//ジャンプ量
 	float angle=0;//回転角度
 	
+	ModelRender m_modelRender;//モデル
 	Quaternion m_rotation;//回転
 	CharacterController m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
