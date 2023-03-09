@@ -14,7 +14,7 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_characon.Init(25.0f, 75.0f, m_position);
+	m_characon.Init(Vector3{50.0f,120.0f,50.0f}, m_position);
 	return true;
 }
 

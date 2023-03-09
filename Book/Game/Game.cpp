@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include"Player3D.h"
+#include"GameCamera.h"
 
 
 Game::Game()
@@ -11,12 +12,13 @@ Game::Game()
 
 Game::~Game()
 {
-	//b
+	
 }
 
 bool Game::Start()
 {
 	NewGO<Player3D>(0,"player3d");
+	//NewGO<GameCamera>(0, "gamecamera");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);
