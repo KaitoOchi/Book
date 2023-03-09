@@ -187,21 +187,17 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float limPower = CalcLim(dirDirection, psIn.normal, psIn.normalInView);
 
 
-	//2つの反射光を合算して最終的な反射光を求める
-	//float3 diffuseLig = diffPoint + diffDirection;
-	//float3 specularLig = specPoint + specDirection;
-
-
-	//拡散反射と鏡面反射と環境光を足して、最終的な光を求める
-	float3 lig = directionLight + pointLight + spotLight + ambient;
 
 	//最終的な反射光にリムライトの反射光を合算する
 	float3 limColor = limPower * dirColor;
-	lig += limColor;
 
-	//半球ライトを最終的な反射光に加算する
-	lig += hemiLight;
-
+	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
+	float3 lig = directionLight 
+				+ pointLight
+				+ spotLight
+				+ ambient
+				+ limColor
+				+ hemiLight;
 
 	float4 albedoColor = diffuseMap;
 

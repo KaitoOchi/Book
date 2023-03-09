@@ -3,6 +3,8 @@
 class Player;
 class Mirror;
 
+class nsK2EngineLow::Texture;
+
 class Debug : public IGameObject
 {
 public:
@@ -37,4 +39,7 @@ private:
 	SpotLight m_spotLight;
 
 	Vector3 m_position;
+
+	nsK2EngineLow::Texture texture[3];
+	int i = 0;
 };

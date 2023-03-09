@@ -3,6 +3,7 @@
 
 #include "Mirror.h"
 #include "level3DRender/LevelRender.h"
+#include "graphics/Texture.h"
 
 
 Debug::Debug()
@@ -31,11 +32,8 @@ bool Debug::Start()
 	animationClips[enAnimationClip_Jump].Load("Assets/animData/jump.tka");
 	animationClips[enAnimationClip_Jump].SetLoopFlag(false);
 
-	m_modelRender.Init("Assets/modelData/player/player.tkm");
-	m_modelRender.SetPosition(Vector3(-20.0f, 100.0f, -300.0f));
-	Quaternion rotation;
-	rotation.AddRotationDegY(220.0f);
-	m_modelRender.SetRotation(rotation);
+	m_modelRender.Init("Assets/modelData/player/player2D.tkm");
+	m_modelRender.SetPosition(Vector3(-20.0f, 190.0f, -370.0f));
 	m_modelRender.SetScale(Vector3::One);
 	m_modelRender.Update();
 
@@ -89,10 +87,14 @@ bool Debug::Start()
 
 	m_spotLight.SetPosition(m_position);
 	m_spotLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
-	m_spotLight.SetRange(300.0f);
+	m_spotLight.SetRange(500.0f);
 	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
 	m_spotLight.SetAngle(25.0f);
 	m_spotLight.Update();
+
+	texture[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.dds");
+	texture[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.dds");
+	texture[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.dds");
 
 	return true;
 }
@@ -128,6 +130,17 @@ void Debug::Update()
 
 	m_animModelRender.PlayAnimation(enAnimationClip_Run);
 	m_animModelRender.Update();
+
+
+	//2Dアニメーションをモデルで表示する処理
+	int j = i / 10;
+	i++;
+	if (i >= 30) {
+		i = 0;
+	}
+	m_modelRender.GetModel().ChangeAlbedoMap("", texture[j]);
+	m_modelRender.SetPosition(m_position);
+	m_modelRender.Update();
 }
 
 void Debug::Render(RenderContext& rc)
