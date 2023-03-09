@@ -23,7 +23,7 @@ public:
 	{
 		return m_position;
 	}
-	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
+	
 protected:
 	void Update();
 	void Move();
@@ -78,7 +78,7 @@ protected:
 
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック
-	
+	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
 	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
 	
 	
