@@ -107,7 +107,7 @@ namespace nsK2EngineLow {
 	}
 
 
-	void CharacterController::Init(float radius, float height, const Vector3& position)
+	/*void CharacterController::Init(float radius, float height, const Vector3& position)
 	{
 		m_position = position;
 		//コリジョン作成。
@@ -128,7 +128,46 @@ namespace nsK2EngineLow {
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
 		m_isInited = true;
+	}*/
+
+
+	void CharacterController::Init(const Vector3& size, const Vector3& position)
+	{
+		m_position = position;
+
+
+		//---------------------------------
+		// 変更：ボックスコライダーのCreate関数で、コライダーを作成する。
+		// コリジョン作成。
+		m_collider.Create(size);
+		m_size = size;
+		//---------------------------------
+
+
+		//剛体を初期化。
+		RigidBodyInitData rbInfo;
+		rbInfo.collider = &m_collider;
+		rbInfo.mass = 0.0f;
+		m_rigidBody.Init(rbInfo);
+		btTransform& trans = m_rigidBody.GetBody()->getWorldTransform();
+
+
+		//------------------------------------------------------------
+		// 変更：カプセルコライダーのyの中心座標は半径＋高さ(円柱の上下に半球が付いているから)
+		//		 だけどボックスコライダーは違うから
+		// 剛体の位置を更新。
+		trans.setOrigin(btVector3(position.x, position.y + size.y * 0.5f, position.z));
+		//------------------------------------------------------------
+
+
+
+		// @todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+
+		m_isInited = true;
 	}
+
 	const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime)
 	{
 		if (moveSpeed.y > 0.0f) {
@@ -160,9 +199,19 @@ namespace nsK2EngineLow {
 					//とても小さい値のことです。
 					break;
 				}
+
+
 				//カプセルコライダーの中心座標 + 高さ*0.1の座標をposTmpに求める。
+				//Vector3 posTmp = m_position;
+				//posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
+
+				//------------------------------------------------------------
+				// 変更：
+				// ボックスコライダーの中心座標 + 高さ*0.1の座標をposTmpに求める。
 				Vector3 posTmp = m_position;
-				posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
+				posTmp.y += m_size.y * 0.5f + m_size.y * 0.1f;
+				//------------------------------------------------------------
+
 				//レイを作成。
 				btTransform start, end;
 				start.setIdentity();
@@ -198,7 +247,12 @@ namespace nsK2EngineLow {
 					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
 					Vector3 vOffset;
 					vOffset = hitNormalXZ;
-					vOffset.Scale(-fT0 + m_radius);
+
+					//---------------------------------------------
+					// 変更
+					//vOffset.Scale(-fT0 + m_radius);
+					vOffset.Scale(-fT0 + m_size.x * 0.5f);
+					//---------------------------------------------
 					nextPosition.Add(vOffset);
 
 					Vector3 currentDir;
@@ -236,8 +290,18 @@ namespace nsK2EngineLow {
 			btTransform start, end;
 			start.setIdentity();
 			end.setIdentity();
+
+
+			//-----------------------------------------------------------
 			//始点はカプセルコライダーの中心。
-			start.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+			//start.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+
+			// 変更：中心座標の求め方をボックスコライダーの中心座標の求め方に変更。
+			// 始点はボックスコライダーの中心。
+			start.setOrigin(btVector3(m_position.x, m_position.y + m_size.y * 0.5f, m_position.z));
+			//-----------------------------------------------------------
+
+
 			//終点は地面上にいない場合は1m下を見る。
 			//地面上にいなくてジャンプで上昇中の場合は上昇量の0.01倍下を見る。
 			//地面上にいなくて降下中の場合はそのまま落下先を調べる。
@@ -287,8 +351,15 @@ namespace nsK2EngineLow {
 		//剛体を動かす。
 		btBody->setActivationState(DISABLE_DEACTIVATION);
 		btTransform& trans = btBody->getWorldTransform();
+
+		//-------------------------------------------------------------------------
 		//剛体の位置を更新。
-		trans.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+		//trans.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+
+		// 変更：中心座標の求め方をボックスコライダーの中心座標の求め方に変更。
+		// 剛体の位置を更新。
+		trans.setOrigin(btVector3(m_position.x, m_position.y + m_size.y * 0.5f, m_position.z));
+		//-------------------------------------------------------------------------
 		//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 		return m_position;
 	}
