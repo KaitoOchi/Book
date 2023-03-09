@@ -160,7 +160,7 @@ void Player::ProcessThrowStateTransition()
 	//速度を初期化
 	m_moveSpeed.x *= SPEEDDOWN;
 	m_moveSpeed.z *= SPEEDDOWN;
-	if (m_modelRender.IsPlayingAniamtion() == false)
+	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
 		//ステートを遷移する。
 		ProcessCommonStateTransition();
