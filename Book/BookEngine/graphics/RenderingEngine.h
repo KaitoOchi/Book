@@ -2,6 +2,7 @@
 
 #include "graphics/light/DirectionLight.h"
 #include "graphics/light/PointLight.h"
+#include "graphics/light/SpotLight.h"
 #include "graphics/light/HemiSphereLight.h"
 
 namespace nsBookEngine {
@@ -14,6 +15,7 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig;
+			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 		};
 
@@ -76,6 +78,19 @@ namespace nsBookEngine {
 			GetLightCB().pointLig.ptPosition = ptlig.ptPosition;
 			GetLightCB().pointLig.ptColor = ptlig.ptColor;
 			GetLightCB().pointLig.ptRange = ptlig.ptRange;
+		}
+
+		/// <summary>
+		/// スポットライトを設定
+		/// </summary>
+		/// <param name="spLig"></param>
+		void SetSpotLight(SpotLight::spotLight& spLig)
+		{
+			GetLightCB().spotLig.spPosition = spLig.spPosition;
+			GetLightCB().spotLig.spColor = spLig.spColor;
+			GetLightCB().spotLig.spRange = spLig.spRange;
+			GetLightCB().spotLig.spDirection = spLig.spDirection;
+			GetLightCB().spotLig.spAngle = spLig.spAngle;
 		}
 
 		/// <summary>

@@ -16,7 +16,7 @@ Debug::Debug()
 
 Debug::~Debug()
 {
-	DeleteGO(m_playerCollision);
+	//DeleteGO(m_playerCollision);
 
 	delete m_levelRender;
 }
@@ -54,11 +54,11 @@ bool Debug::Start()
 	m_fontRender.SetText(L"‚½‚¿‚Â‚Ä‚Æ");
 	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
-	m_playerCollision = NewGO<CollisionObject>(0);
-	m_playerCollision->CreateBox(Vector3(0.0f, 50.0f, 0.0f), Quaternion::Identity, Vector3(5.0f, 5.0f, 5.0f));
-	m_playerCollision->SetName("collision1");
-	m_playerCollision->SetIsEnableAutoDelete(false);
-	m_playerCollision->SetIsEnable(true);
+	//m_playerCollision = NewGO<CollisionObject>(0);
+	//m_playerCollision->CreateBox(Vector3(0.0f, 50.0f, 0.0f), Quaternion::Identity, Vector3(5.0f, 5.0f, 5.0f));
+	//m_playerCollision->SetName("collision1");
+	//m_playerCollision->SetIsEnableAutoDelete(false);
+	//m_playerCollision->SetIsEnable(true);
 
 	m_levelRender = new LevelRender;
 
@@ -82,10 +82,17 @@ bool Debug::Start()
 
 	m_position.y = 50.0f;
 
-	m_pointLight.SetPosition(m_position);
-	m_pointLight.SetColor(Vector3(5.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(150.0f);
+	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, 0.0f));
+	m_pointLight.SetColor(Vector3(15.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(250.0f);
 	m_pointLight.Update();
+
+	m_spotLight.SetPosition(m_position);
+	m_spotLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
+	m_spotLight.SetRange(300.0f);
+	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
+	m_spotLight.SetAngle(25.0f);
+	m_spotLight.Update();
 
 	return true;
 }
@@ -93,10 +100,31 @@ bool Debug::Start()
 void Debug::Update()
 {
 	m_position.x += g_pad[0]->GetLStickXF();
-	m_position.z += g_pad[0]->GetLStickYF();
 
-	m_pointLight.SetPosition(m_position);
-	m_pointLight.Update();
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_position.y += g_pad[0]->GetLStickYF();
+	}
+	else {
+		m_position.z += g_pad[0]->GetLStickYF();
+	}
+	m_spotLight.SetPosition(m_position);
+
+	Quaternion qRotY;
+	qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
+	qRotY.Apply(m_spotLight.GetDirection());
+
+	Vector3 rotAxis;
+	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
+	Quaternion qRotX;
+	qRotX.SetRotation(rotAxis, g_pad[0]->GetRStickYF() * 0.01f);
+
+	qRotX.Apply(m_spotLight.GetDirection());
+
+	Quaternion qRot;
+	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
+
+	m_spotLight.Update();
+
 
 	m_animModelRender.PlayAnimation(enAnimationClip_Run);
 	m_animModelRender.Update();

@@ -167,6 +167,7 @@
     <ClInclude Include="graphics\light\HemiSphereLight.h" />
     <ClInclude Include="graphics\light\PointLight.h" />
     <ClInclude Include="graphics\light\SceneLight.h" />
+    <ClInclude Include="graphics\light\SpotLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="graphics\light\HemiSphereLight.cpp" />
     <ClCompile Include="graphics\light\PointLight.cpp" />
     <ClCompile Include="graphics\light\SceneLight.cpp" />
+    <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
     <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
