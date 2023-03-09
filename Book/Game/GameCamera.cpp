@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-#include "Player.h"
+#include "Player3D.h"
 namespace
 {
-	const Vector3 BEKUTORU(0.0f, 100.0f, -200.0f);//注視点から視点までのベクトルを設定。
-	const float TAGETUP = 80.0f;//注視点を上げれる
+	const Vector3 BEKUTORU(-200.0f, 100.0f, -300.0f);//注視点から視点までのベクトルを設定。
+
+	const float TAGETUP = 100.0f;//注視点を上げれる
+
 	const float FRONTO = 20.0f;//カメラの前方向の量を変更できる
 	const float YUP = -0.5f;//カメラの上方向の限界
 	const float YDOWN = 0.8f;//カメラの下方向の限界
-	const float XRIGHT = 0.8f;//カメラの右方向の限界
-	const float XLEFT = -0.5f;//カメラの左方向の限界
+	const float XRIGHT = 0.5f;//カメラの右方向の限界
+	const float XLEFT = -0.9f;//カメラの左方向の限界
 }
 GameCamera::GameCamera()
 {
@@ -24,7 +26,7 @@ bool GameCamera::Start()
 	//注視点から視点までのベクトルを設定
 	m_toCameraPos.Set(BEKUTORU);
 	//プレイヤーのインスタンス
-	m_player = FindGO<Player>("player");
+	m_player3D = FindGO<Player3D>("player3d");
 	return true;
 }
 void GameCamera::Update()
@@ -36,9 +38,9 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	target = m_player->GetPosition();
+	target = m_player3D->GetPosition();
 	//プレイヤーの足元からちょっと上を注視点とする
-	target.y += TAGETUP;
+	target += Vector3(0.0f, TAGETUP, 0.0f);
 	target += g_camera3D->GetForward() * FRONTO;
 
 	m_toCameraPosOld = m_toCameraPos;
@@ -47,32 +49,40 @@ void GameCamera::UpdatePositionAndTarget()
 	float y = g_pad[0]->GetRStickYF();
 	//Y軸周りの回転
 	Quaternion qRot;
+	qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
+	qRot.Apply(m_toCameraPos);
+	//X軸周りの回転
+	/*Vector3 axisX;
 	axisX.Cross(Vector3::AxisY, m_toCameraPos);
 	axisX.Normalize();
-	qRot.SetRotationDeg(axisX, 1.5f * y);
-	qRot.Apply(m_toCameraPos);
+	qRot.SetRotationDeg(axisX,1.5f * y);
+	qRot.Apply(m_toCameraPos);*/
 	//カメラの回転の上限をチェックする。
 	Vector3 toPosDir = m_toCameraPos;
 	toPosDir.Normalize();
-	if (toPosDir.y < YUP)
+	//if (toPosDir.y < YUP)
+	//{
+	//	//上向きすぎ
+	//	m_toCameraPos = m_toCameraPosOld;
+	//}
+	//else if (toPosDir.y > YDOWN)
+	//{
+	//	//上向きすぎ
+	//	m_toCameraPos = m_toCameraPosOld;
+	//}
+	if (toPosDir.x > XRIGHT)
 	{
 		//上向きすぎ
 		m_toCameraPos = m_toCameraPosOld;
 	}
-	else if (toPosDir.y > YDOWN)
+	else if (toPosDir.x < XLEFT)
 	{
 		//上向きすぎ
 		m_toCameraPos = m_toCameraPosOld;
 	}
-	if (toPosDir.x < XRIGHT)
+	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
-		//上向きすぎ
-		m_toCameraPos = m_toCameraPosOld;
-	}
-	else if (toPosDir.x > XLEFT)
-	{
-		//上向きすぎ
-		m_toCameraPos = m_toCameraPosOld;
+		m_toCameraPos.Set(BEKUTORU);
 	}
 	//視点の計算
 	Vector3 pos = target + m_toCameraPos;
