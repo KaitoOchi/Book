@@ -2,6 +2,7 @@
 #include "Player.h"
 namespace
 {
+	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
 	const float WALK = 20.0f;//歩き時の乗算量
 	const float RUN = 40.0f;//走り時の乗算量
 	const float JUMPVOLUM = 200.0f;//ジャンプ量
@@ -21,7 +22,7 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_characon.Init(25.0f, 75.0f, m_position);
+	m_characon.Init(BOXSIZE, m_position);
 	return true;
 }
 
