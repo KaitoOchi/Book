@@ -11,9 +11,14 @@ public:
 		m_enPlayer_Jump,//ジャンプ
 		m_enPlayer_Jumpend,//ジャンプ終わり
 		m_enPlayer_Change,//切替
+		m_enPlayer_Found,//見つかる
+		m_enPlayer_Caught,//捕まった
+		m_enPlayer_Clear,//ゲームクリア
+		m_enPlayer_GameOver,//ゲームオーバー
 		m_enPlayer3D_Throw,//投げる
 		m_enPlayer3D_Steal,//盗む
 		m_enPlayer3D_Push,//押す
+
 	};
 	Player();
 	~Player();
@@ -73,6 +78,22 @@ protected:
 	/// 押すステートの遷移処理
 	/// </summary>
 	void ProcessPushStateTransition();
+	/// <summary>
+	/// 見つかるステートの遷移処理
+	/// </summary>
+	void ProcessFoundStateTransition();
+	/// <summary>
+	/// 捕まるステートの遷移処理
+	/// </summary>
+	void ProcessCaughtStateTransition();
+	/// <summary>
+	/// ゲームクリアステートの遷移処理
+	/// </summary>
+	void ProcessClearStateTransition();
+	/// <summary>
+	/// ゲームオーバーステートの遷移処理
+	/// </summary>
+	void ProcessGameOverStateTransition();
 	
 	
 
