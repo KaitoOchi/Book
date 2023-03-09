@@ -17,6 +17,7 @@
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Player3D.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -29,5 +30,6 @@
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Player3D.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
 </Project>
