@@ -30,7 +30,24 @@ namespace nsK2EngineLow {
 			*@param[in]	height		カプセルコライダーの高さ。
 			*@param[in]	position	初期位置。
 			*/
-		void Init(float radius, float height, const Vector3& position);
+			//void Init(float radius, float height, const Vector3& position);
+
+
+
+			//--------------------------------------------------------------------------------
+			// 初期化の関数を変更
+			// 変更する理由 : もともとの初期化関数にあった引数のradius(半径)とheight(高さ)は
+			//				 カプセル形状用の数値の為、ボックスのような形状には合っていない。
+			/// <summary>
+			/// 初期化
+			/// </summary>
+			/// <param name="size">コライダーのサイズ</param>
+			/// <param name="position">コライダーの座標</param>
+		void Init(const Vector3& size, const Vector3& position);
+		//--------------------------------------------------------------------------------
+
+
+
 		/*!
 			* @brief	実行。
 			*@param[in, out]	moveSpeed		移動速度。
@@ -70,10 +87,17 @@ namespace nsK2EngineLow {
 		/*!
 		* @brief	コライダーを取得。
 		*/
-		CCapsuleCollider* GetCollider()
+		//------------------------------
+		//CCapsuleCollider* GetCollider()
+		//{
+		//	return &m_collider;
+		//}
+		//-----------------------------
+		BoxCollider* GetCollider()
 		{
 			return &m_collider;
 		}
+
 		/*!
 		* @brief	剛体を取得。
 		*/
@@ -90,9 +114,20 @@ namespace nsK2EngineLow {
 		Vector3 			m_position;						//!<座標。
 		bool 				m_isJump = false;				//!<ジャンプ中？
 		bool				m_isOnGround = true;			//!<地面の上にいる？
-		CCapsuleCollider	m_collider;						//!<コライダー。
-		float				m_radius = 0.0f;				//!<カプセルコライダーの半径。
-		float				m_height = 0.0f;				//!<カプセルコライダーの高さ。
+
+
+		//-------------------------------------------------------------------------------	
+		//CCapsuleCollider	m_collider;						//!<コライダー。
+		// コライダーをボックスコライダーに変更
+		BoxCollider 		m_collider;						// コライダー
+		//-------------------------------------------------------------------------------
+
+
+		//--------------------------------------------------------------------------------
+		//float				m_radius = 0.0f;				//!<カプセルコライダーの半径。
+		//float				m_height = 0.0f;				//!<カプセルコライダーの高さ。
+		Vector3				m_size = Vector3::Zero;			// コライダーのサイズ。
+		//--------------------------------------------------------------------------------
 		RigidBody			m_rigidBody;					//剛体。
 	};
 }
