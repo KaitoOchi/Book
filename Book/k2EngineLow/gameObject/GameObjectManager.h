@@ -70,6 +70,14 @@ namespace nsK2EngineLow {
 			m_isStop = stop;
 		}
 
+		/// <summary>
+		/// ゲームオブジェクトの停止状態を取得
+		/// </summary>
+		const bool& GetStop()
+		{
+			return m_isStop;
+		}
+
 
 		/*!
 		*@brief	ゲームオブジェクトのnew

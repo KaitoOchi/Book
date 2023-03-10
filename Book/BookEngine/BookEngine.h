@@ -1,8 +1,5 @@
 #pragma once
 
-class GameManager;
-
-
 namespace nsBookEngine {
 
 	class BookEngine {
@@ -66,8 +63,6 @@ namespace nsBookEngine {
 		K2EngineLow m_k2EngineLow;
 
 		static BookEngine* m_instance;
-
-		GameManager* m_gameManager = nullptr;
 	};
 
 	// グローバルなアクセスポイント。
