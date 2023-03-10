@@ -10,8 +10,9 @@ Player3D::~Player3D()
 }
 bool Player3D::Start()
 {
-	m_modelRender= new ModelRender;
 	Player::Start();
+	m_modelRender= new ModelRender;
+	
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
