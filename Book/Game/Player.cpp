@@ -22,7 +22,8 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_characon.Init(BOXSIZE, m_position);
+	m_characon = new CharacterController;
+	m_characon->Init(BOXSIZE, m_position);
 	return true;
 }
 
@@ -68,7 +69,7 @@ void Player::Move()
 void Player::Jump()
 {
 	//もし地面についているなら
-	if (m_characon.IsOnGround() == true)
+	if (m_characon->IsOnGround() == true)
 	{
 		//重力を無くす
 		m_moveSpeed.y = 0.0f;
@@ -101,7 +102,7 @@ void Player::Rotation()
 }
 void Player::ProcessCommonStateTransition()
 {
-	if (m_characon.IsOnGround() == false)
+	if (m_characon->IsOnGround() == false)
 	{
 		//ジャンプ中にする
 		m_playerState = m_enPlayer_Jump;

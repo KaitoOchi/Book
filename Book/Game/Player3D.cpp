@@ -48,7 +48,7 @@ void Player3D::Update()
 	}
 	//プレイヤーの移動を継承する。
 	//キャラコンで座標を移動させる。
-	m_position = m_characon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();

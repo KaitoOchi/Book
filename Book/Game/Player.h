@@ -108,6 +108,6 @@ protected:
 	ModelRender *m_modelRender=nullptr;//3Dモデル
 	nsK2EngineLow::Texture m_player2D[3];//
 	Quaternion m_rotation;//回転
-	CharacterController m_characon;//キャラコン
+	CharacterController *m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
 };
