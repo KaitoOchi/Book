@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
-
+namespace
+{
+	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
+	const float WALK = 40.0f;//歩き時の乗算量
+	const float RUN = 80.0f;//走り時の乗算量
+	const float JUMPVOLUM = 200.0f;//ジャンプ量
+	const float GRAVITY = 400.0f;//重力
+	const float SPEEDDOWN = 0.8;//速度減速率
+}
 
 Player::Player()
 {
@@ -14,16 +22,19 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_characon.Init(Vector3{50.0f,120.0f,50.0f}, m_position);
+	m_characon.Init(BOXSIZE, m_position);
 	return true;
 }
 
 void Player::Update()
 {
-
-	Move();
-	Jump();
-	Rotation();
+	if (m_playerState!=m_enPlayer3D_Throw) {
+		Move();
+		Jump();
+		Rotation();
+	}
+	
+	
 	ManageState();
 
 }
@@ -33,8 +44,8 @@ void Player::Move()
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//速度を初期化
-	m_moveSpeed.x *= 0.8f;
-	m_moveSpeed.z *= 0.8f;
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
 	//左ステックの情報を取得
 	m_Lstic.x = g_pad[0]->GetLStickXF();
 	m_Lstic.z = g_pad[0]->GetLStickYF();
@@ -43,14 +54,14 @@ void Player::Move()
 	{
 		//ダッシュをさせる
 		//左ステックと走る速度を乗算する
-		m_moveSpeed.x += m_Lstic.x * m_run;
-		m_moveSpeed.z += m_Lstic.z * m_run;
+		m_moveSpeed.x += m_Lstic.x * RUN;
+		m_moveSpeed.z += m_Lstic.z * RUN;
 	}
 	else
 	{
 		//左ステックと歩く速度を乗算させる
-		m_moveSpeed.x += m_Lstic.x * m_walk;
-		m_moveSpeed.z += m_Lstic.z * m_walk;
+		m_moveSpeed.x += m_Lstic.x * WALK;
+		m_moveSpeed.z += m_Lstic.z * WALK;
 	}
 
 }
@@ -65,7 +76,7 @@ void Player::Jump()
 		if (g_pad[0]->IsTrigger(enButtonB))
 		{
 			//ジャンプをする
-			m_moveSpeed.y = m_jumpvolume;
+			m_moveSpeed.y = JUMPVOLUM;
 
 		}
 	}
@@ -73,7 +84,7 @@ void Player::Jump()
 	else
 	{
 		//重力を発生させる
-		m_moveSpeed.y -= 400.0f * g_gameTime->GetFrameDeltaTime();
+		m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
 	}
 }
 void Player::Rotation()
@@ -145,6 +156,17 @@ void Player::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
+void Player::ProcessThrowStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+}
 void Player::ManageState()
 {
 	switch (m_playerState)
@@ -178,6 +200,10 @@ void Player::ManageState()
 	case m_enPlayer_Change:
 		//切替ステートのステート遷移処理。
 		ProcessChangeStateTransition();
+		break;
+		//投げるとき
+	case m_enPlayer3D_Throw:
+		ProcessThrowStateTransition();
 		break;
 	default:
 		break;

@@ -11,10 +11,24 @@ public:
 		m_enPlayer_Jump,//ジャンプ
 		m_enPlayer_Jumpend,//ジャンプ終わり
 		m_enPlayer_Change,//切替
+		m_enPlayer_Found,//見つかる
+		m_enPlayer_Caught,//捕まった
+		m_enPlayer_Clear,//ゲームクリア
+		m_enPlayer_GameOver,//ゲームオーバー
+		m_enPlayer3D_Throw,//投げる
+		m_enPlayer3D_Steal,//盗む
+		m_enPlayer3D_Push,//押す
+
 	};
 	Player();
 	~Player();
 	bool Start();
+	//座標の取得
+	const Vector3& GetPosition()const
+	{
+		return m_position;
+	}
+	
 protected:
 	void Update();
 	void Move();
@@ -52,17 +66,47 @@ protected:
 	/// 変更ステートの遷移処理
 	/// </summary>
 	void ProcessChangeStateTransition();
+	/// <summary>
+	/// 投げるステートの遷移処理
+	/// </summary>
+	void ProcessThrowStateTransition();
+	/// <summary>
+	/// 盗むステートの遷移処理
+	/// </summary>
+	void ProcessStealStateTransition();
+	/// <summary>
+	/// 押すステートの遷移処理
+	/// </summary>
+	void ProcessPushStateTransition();
+	/// <summary>
+	/// 見つかるステートの遷移処理
+	/// </summary>
+	void ProcessFoundStateTransition();
+	/// <summary>
+	/// 捕まるステートの遷移処理
+	/// </summary>
+	void ProcessCaughtStateTransition();
+	/// <summary>
+	/// ゲームクリアステートの遷移処理
+	/// </summary>
+	void ProcessClearStateTransition();
+	/// <summary>
+	/// ゲームオーバーステートの遷移処理
+	/// </summary>
+	void ProcessGameOverStateTransition();
 	
+	
+
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック
 	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
 	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
 	
-	float m_walk = 20.0f;//歩き時の乗算量
-	float m_run = 40.0f;//走り時の乗算量
-	float m_jumpvolume = 150.0f;//ジャンプ量
+	
 	float angle=0;//回転角度
 	
+	ModelRender *m_modelRender=nullptr;//3Dモデル
+	nsK2EngineLow::Texture m_player2D[3];//
 	Quaternion m_rotation;//回転
 	CharacterController m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
