@@ -4,6 +4,8 @@
 
 namespace nsBookEngine {
 
+	RenderingEngine* RenderingEngine::m_instance = nullptr;
+
 	RenderingEngine::RenderingEngine()
 	{
 	}
