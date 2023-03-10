@@ -19,6 +19,7 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player2D.cpp" />
+    <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -33,5 +34,6 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Player2D.h" />
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
 </Project>

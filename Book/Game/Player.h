@@ -105,7 +105,7 @@ protected:
 	
 	float angle=0;//‰ñ“]Šp“x
 	
-	ModelRender *m_modelRender;//3Dƒ‚ƒfƒ‹
+	ModelRender *m_modelRender=nullptr;//3Dƒ‚ƒfƒ‹
 	nsK2EngineLow::Texture m_player2D[3];//
 	Quaternion m_rotation;//‰ñ“]
 	CharacterController m_characon;//ƒLƒƒƒ‰ƒRƒ“
