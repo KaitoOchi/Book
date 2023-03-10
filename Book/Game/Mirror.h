@@ -13,7 +13,8 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	Model m_model;
+	ModelRender m_boxModelRender;
+	ModelRender m_modelRender;
 	RenderTarget offscreenRenderTarget;
 
 	Debug* m_debug = nullptr;

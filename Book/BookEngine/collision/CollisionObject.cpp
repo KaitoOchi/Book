@@ -4,20 +4,20 @@
 
 namespace nsBookEngine {
 
+	CollisionObjectManager* CollisionObjectManager::m_instance = nullptr;
+
 	CollisionObject::CollisionObject()
 	{
 	}
 
 	CollisionObject::~CollisionObject()
 	{
-		if (g_bookEngine->GetCollisionObjectManager()) {
-			g_bookEngine->GetCollisionObjectManager()->RemoveCollisionObject(this);
-		}
+		CollisionObjectManager::GetInstance()->RemoveCollisionObject(this);
 	}
 
 	bool CollisionObject::Start()
 	{
-		g_bookEngine->GetCollisionObjectManager()->AddCollisionObject(this);
+		CollisionObjectManager::GetInstance()->AddCollisionObject(this);
 		return true;
 	}
 
@@ -39,15 +39,12 @@ namespace nsBookEngine {
 
 	CollisionObjectManager::CollisionObjectManager()
 	{
-		int a = 1;
 	}
 
 	CollisionObjectManager::~CollisionObjectManager()
 	{
-		int a = 1;
 		m_collisionObjectVector.clear();
 		m_findsCollisionObjectVector.clear();
 		m_findMatchForwardNameCollisionObjectVector.clear();
-
 	}
 }
