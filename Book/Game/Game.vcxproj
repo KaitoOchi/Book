@@ -229,7 +229,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -248,7 +247,6 @@
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameManager.h" />
