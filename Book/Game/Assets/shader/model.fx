@@ -168,7 +168,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//ディフューズマップをサンプリング
 	float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
 
-	if (diffuseMap.r < 0.1f && diffuseMap.g < 0.1f && diffuseMap.b < 0.1f) {
+	if (diffuseMap.r == 0.0f && diffuseMap.g == 0.0f && diffuseMap.b == 0.0f) {
 		diffuseMap.a = 0.0f;
 
 		return diffuseMap;
