@@ -1,6 +1,8 @@
 #include "BookEnginePreCompile.h"
 #include "BookEngine.h"
 
+#include "../Game/GameManager.h"
+
 
 namespace nsBookEngine {
 
@@ -20,16 +22,21 @@ namespace nsBookEngine {
 		);
 		g_camera3D->SetPosition({ 0.0f, 200.0f, -400.0f });
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
+		g_camera3D->Update();
 
 		//レンダリングエンジンを呼ぶ
 		RenderingEngine::CreateInstance();
 		//コリジョンオブジェクトマネージャーを呼ぶ
 		CollisionObjectManager::CreateInstance();
+
+		m_gameManager = new GameManager;
 	}
 
 	BookEngine::~BookEngine()
 	{
 		g_engine = nullptr;
+
+		delete m_gameManager;
 
 		//レンダリングエンジンを削除
 		RenderingEngine::DeleteInstance();
@@ -44,6 +51,8 @@ namespace nsBookEngine {
 		g_engine->BeginFrame();
 
 		g_engine->ExecuteUpdate();
+
+		m_gameManager->Update();
 
 		// レンダリングエンジンの更新。
 		//m_renderingEngine.Update();

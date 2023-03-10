@@ -187,7 +187,6 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float limPower = CalcLim(dirDirection, psIn.normal, psIn.normalInView);
 
 
-
 	//最終的な反射光にリムライトの反射光を合算する
 	float3 limColor = limPower * dirColor;
 

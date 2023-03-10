@@ -78,8 +78,8 @@ namespace nsBookEngine {
 	{
 		ModelInitData modelInitData;
 		modelInitData.m_tkmFilePath = tkmFilePath;
-		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_modelUpAxis = modelUpAxis;
+		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 
