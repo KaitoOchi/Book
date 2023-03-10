@@ -29,14 +29,14 @@ namespace nsBookEngine {
 		//コリジョンオブジェクトマネージャーを呼ぶ
 		CollisionObjectManager::CreateInstance();
 
-		m_gameManager = new GameManager;
+		GameManager::CreateInstance();
 	}
 
 	BookEngine::~BookEngine()
 	{
 		g_engine = nullptr;
 
-		delete m_gameManager;
+		GameManager::DeleteInstance();
 
 		//レンダリングエンジンを削除
 		RenderingEngine::DeleteInstance();
@@ -52,7 +52,7 @@ namespace nsBookEngine {
 
 		g_engine->ExecuteUpdate();
 
-		m_gameManager->Update();
+		GameManager::GetInstance()->Update();
 
 		// レンダリングエンジンの更新。
 		//m_renderingEngine.Update();

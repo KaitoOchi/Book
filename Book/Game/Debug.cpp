@@ -35,9 +35,6 @@ bool Debug::Start()
 	m_modelRender.Init("Assets/modelData/player/player2D.tkm");
 	m_modelRender.SetPosition(Vector3(-20.0f, 190.0f, -370.0f));
 	m_modelRender.SetScale(Vector3::One);
-	Quaternion rot;
-	rot.AddRotationDegY(180.0f);
-	m_modelRender.SetRotation(rot);
 	m_modelRender.Update();
 
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
