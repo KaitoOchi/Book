@@ -7,12 +7,13 @@ public:
 	~Player3D();
 	bool Start();
 	void Update();
-protected:
 	void Animation();
 	void Throw();
 	void Render(RenderContext& rc);
-	
-	
+
+
+	CharacterController m_3Dcharacon;//キャラコン
+	ModelRender m_model3DRender;//3Dモデル
 	//アニメーション
 	enum EnAnimationClip {
 		m_enAnimationClip_Idle,//待機アニメーション

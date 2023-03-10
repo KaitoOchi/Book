@@ -16,10 +16,10 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Player3D.cpp" />
-    <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -31,9 +31,9 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Player3D.h" />
-    <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Player2D.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameCamera.h" />
   </ItemGroup>
 </Project>

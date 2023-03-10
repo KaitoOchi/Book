@@ -10,8 +10,9 @@ Player3D::~Player3D()
 }
 bool Player3D::Start()
 {
-	m_modelRender= new ModelRender;
 	Player::Start();
+	m_modelRender= new ModelRender;
+	
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
@@ -48,7 +49,7 @@ void Player3D::Update()
 	}
 	//プレイヤーの移動を継承する。
 	//キャラコンで座標を移動させる。
-	m_position = m_characon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();
