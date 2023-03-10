@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include"Player3D.h"
+#include"Player2D.h"
 #include"GameCamera.h"
 #include "Title.h"
 

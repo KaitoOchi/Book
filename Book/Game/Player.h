@@ -105,7 +105,8 @@ protected:
 	
 	float angle=0;//回転角度
 	
-	ModelRender *m_modelRender=nullptr;//モデル
+	ModelRender *m_modelRender;//3Dモデル
+	nsK2EngineLow::Texture m_player2D[3];//
 	Quaternion m_rotation;//回転
 	CharacterController m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
