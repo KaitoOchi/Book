@@ -168,6 +168,15 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	//ディフューズマップをサンプリング
 	float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
 
+	if (diffuseMap.x < 0.1f && diffuseMap.y < 0.1f && diffuseMap.z < 0.1f) {
+		diffuseMap.x = 1.0f;
+		diffuseMap.y = 1.0f;
+		diffuseMap.z = 1.0f;
+		diffuseMap.w = 0.5f;
+
+		return diffuseMap;
+	}
+
 	//法線マップを求める
 	float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
 
