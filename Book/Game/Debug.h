@@ -17,6 +17,7 @@ public:
 private:
 	ModelRender m_stageModelRender;
 	ModelRender m_modelRender;
+	ModelRender m_boxModelRender;
 	ModelRender m_animModelRender;
 	FontRender m_fontRender;
 

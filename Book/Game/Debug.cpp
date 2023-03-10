@@ -37,6 +37,14 @@ bool Debug::Start()
 	m_modelRender.SetScale(Vector3::One);
 	m_modelRender.Update();
 
+	m_boxModelRender.Init("Assets/modelData/debugBox/sample.tkm");
+	m_boxModelRender.SetPosition(Vector3(-80.0f, 0.0f, -100.0f));
+	Quaternion rot;
+	rot.AddRotationDegY(270.0f);
+	m_boxModelRender.SetRotation(rot);
+	m_boxModelRender.SetScale(Vector3(1.0f, 1.0f, 1.0f));
+	m_boxModelRender.Update();
+
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);
@@ -148,6 +156,7 @@ void Debug::Update()
 void Debug::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+	m_boxModelRender.Draw(rc);
 	m_animModelRender.Draw(rc);
 	m_stageModelRender.Draw(rc);
 	m_fontRender.Draw(rc);

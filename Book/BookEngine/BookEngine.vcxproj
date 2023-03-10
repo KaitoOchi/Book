@@ -169,6 +169,7 @@
     <ClInclude Include="graphics\light\SceneLight.h" />
     <ClInclude Include="graphics\light\SpotLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
+    <ClInclude Include="graphics\PostEffect\Bloom.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="level3DRender\LevelRender.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="graphics\light\SceneLight.cpp" />
     <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
+    <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
     <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="level3DRender\LevelRender.cpp" />

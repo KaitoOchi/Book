@@ -14,7 +14,7 @@ bool Player2D::Start()
 	Player::Start();
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
 	m_modelRender->Init("Assets/modelData/player/player2D.tkm");
-	m_modelRender->SetScale(Vector3(10.0f,10.0f,10.0f));
+	m_modelRender->SetScale(Vector3(5.0f,5.0f,5.0f));
 	m_player2D[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.DDS");
 	m_player2D[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.DDS");
 	m_player2D[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.DDS");

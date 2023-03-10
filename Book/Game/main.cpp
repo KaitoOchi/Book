@@ -14,8 +14,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 
-	NewGO<Title>(0, "title");
-	//NewGO<Debug>(0, "debug");
+	//NewGO<Title>(0, "title");
+	NewGO<Debug>(0, "debug");
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
