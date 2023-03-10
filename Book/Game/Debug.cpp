@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Debug.h"
 
+#include "Player.h"
 #include "Mirror.h"
 #include "level3DRender/LevelRender.h"
-#include "graphics/Texture.h"
 
 
 Debug::Debug()
@@ -17,7 +17,7 @@ Debug::Debug()
 
 Debug::~Debug()
 {
-	//DeleteGO(m_playerCollision);
+	DeleteGO(m_playerCollision);
 
 	delete m_levelRender;
 }
@@ -32,12 +32,12 @@ bool Debug::Start()
 	animationClips[enAnimationClip_Jump].Load("Assets/animData/jump.tka");
 	animationClips[enAnimationClip_Jump].SetLoopFlag(false);
 
-	m_modelRender.Init("Assets/modelData/player/player2D.tkm");
-	m_modelRender.SetPosition(Vector3(-20.0f, 190.0f, -370.0f));
+	m_modelRender.Init("Assets/modelData/player/player.tkm");
+	m_modelRender.SetPosition(Vector3(-20.0f, 100.0f, -300.0f));
+	Quaternion rotation;
+	rotation.AddRotationDegY(220.0f);
+	m_modelRender.SetRotation(rotation);
 	m_modelRender.SetScale(Vector3::One);
-	Quaternion rot;
-	rot.AddRotationDegY(180.0f);
-	m_modelRender.SetRotation(rot);
 	m_modelRender.Update();
 
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -55,11 +55,11 @@ bool Debug::Start()
 	m_fontRender.SetText(L"たちつてと");
 	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
-	//m_playerCollision = NewGO<CollisionObject>(0);
-	//m_playerCollision->CreateBox(Vector3(0.0f, 50.0f, 0.0f), Quaternion::Identity, Vector3(5.0f, 5.0f, 5.0f));
-	//m_playerCollision->SetName("collision1");
-	//m_playerCollision->SetIsEnableAutoDelete(false);
-	//m_playerCollision->SetIsEnable(true);
+	m_playerCollision = NewGO<CollisionObject>(0);
+	m_playerCollision->CreateBox(Vector3(0.0f, 0.0f, 0.0f), Quaternion::Identity, Vector3(50.0f, 50.0f, 50.0f));
+	m_playerCollision->SetName("collision1");
+	m_playerCollision->SetIsEnableAutoDelete(false);
+	m_playerCollision->SetIsEnable(true);
 
 	m_levelRender = new LevelRender;
 
@@ -68,7 +68,8 @@ bool Debug::Start()
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"unityChan") == true) {
-			//m_mirror = NewGO<Mirror>(0, "mirror");
+			m_player = NewGO<Player>(0, "player");
+			m_mirror = NewGO<Mirror>(0, "mirror");
 			return true;
 		}
 
@@ -81,69 +82,18 @@ bool Debug::Start()
 		}
 	);
 
-	m_position.y = 50.0f;
-
-	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, 0.0f));
-	m_pointLight.SetColor(Vector3(15.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(250.0f);
-	m_pointLight.Update();
-
-	m_spotLight.SetPosition(m_position);
-	m_spotLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
-	m_spotLight.SetRange(500.0f);
-	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
-	m_spotLight.SetAngle(25.0f);
-	m_spotLight.Update();
-
-	texture[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.dds");
-	texture[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.dds");
-	texture[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.dds");
+	//m_pointLight.SetPosition(Vector3(0.0f, 30.0f, 0.0f));
+	//m_pointLight.SetColor(Vector3(1.0f, 0.0f, 0.0f));
+	//m_pointLight.SetRange(100.0f);
+	//g_bookEngine->GetRenderingEngine()->SetPointLight(m_pointLight);
 
 	return true;
 }
 
 void Debug::Update()
 {
-	m_position.x += g_pad[0]->GetLStickXF();
-
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_position.y += g_pad[0]->GetLStickYF();
-	}
-	else {
-		m_position.z += g_pad[0]->GetLStickYF();
-	}
-	m_spotLight.SetPosition(m_position);
-
-	Quaternion qRotY;
-	qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
-	qRotY.Apply(m_spotLight.GetDirection());
-
-	Vector3 rotAxis;
-	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
-	Quaternion qRotX;
-	qRotX.SetRotation(rotAxis, g_pad[0]->GetRStickYF() * 0.01f);
-
-	qRotX.Apply(m_spotLight.GetDirection());
-
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
-
-	m_spotLight.Update();
-
-
 	m_animModelRender.PlayAnimation(enAnimationClip_Run);
 	m_animModelRender.Update();
-
-
-	//2Dアニメーションをモデルで表示する処理
-	int j = i / 10;
-	i++;
-	if (i >= 30) {
-		i = 0;
-	}
-	m_modelRender.GetModel().ChangeAlbedoMap("", texture[j]);
-	m_modelRender.SetPosition(m_position);
-	m_modelRender.Update();
 }
 
 void Debug::Render(RenderContext& rc)

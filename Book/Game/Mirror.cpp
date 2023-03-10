@@ -19,29 +19,22 @@ bool Mirror::Start()
 	m_debug = FindGO<Debug>("debug");
 
 	offscreenRenderTarget.Create(
-		g_graphicsEngine->GetFrameBufferWidth(),
-		g_graphicsEngine->GetFrameBufferHeight(),
+		1920,
+		1080,
 		1,
 		1,
-		DXGI_FORMAT_R16G16B16A16_FLOAT,
-		DXGI_FORMAT_UNKNOWN
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		DXGI_FORMAT_D32_FLOAT
 	);
 
-	m_modelRender.Init("Assets/modelData/player/player2D.tkm");
-	m_modelRender.SetPosition(Vector3(-20.0f, 190.0f, -370.0f));
-	m_modelRender.SetScale(Vector3::One);
-	m_modelRender.Update();
-
-	m_boxModelRender.Init("Assets/modelData/box.tkm");
-	m_boxModelRender.SetPosition(Vector3(0.0f, 100.0f, -250.0f));
-	Quaternion rot;
-	rot.SetRotationDegX(90.0f);
-	m_boxModelRender.SetRotation(rot);
-	m_boxModelRender.SetScale(Vector3::One);
-	m_boxModelRender.Update();
+	ModelInitData boxModelInitData;
+	boxModelInitData.m_tkmFilePath = "Assets/modelData/box.tkm";
+	boxModelInitData.m_fxFilePath = "Assets/shader/model.fx";
+	m_model .Init(boxModelInitData);
+	m_model.UpdateWorldMatrix({ 0.0f, 100.0f, -100.0f }, g_quatIdentity, Vector3(1.0f, 1.0f, 1.0f));
 
 	//箱モデルのテクスチャをオフスクリーンレンダリングされるテクスチャに切り替える
-	m_boxModelRender.GetModel().ChangeAlbedoMap(
+	m_model.ChangeAlbedoMap(
 		"",
 		offscreenRenderTarget.GetRenderTargetTexture()
 	);
@@ -51,31 +44,30 @@ bool Mirror::Start()
 
 void Mirror::Update()
 {
-	auto& renderContext = g_graphicsEngine->GetRenderContext();
-
-	//レンダリングターゲットをoffscreenRenderTargetに変更する
-	renderContext.WaitUntilToPossibleSetRenderTarget(offscreenRenderTarget);
-
-	renderContext.SetRenderTarget(offscreenRenderTarget);
-
-	const float clearColor[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	renderContext.ClearRenderTargetView(g_graphicsEngine->GetCurrentFrameBuffuerRTV(), clearColor);
-
-	m_modelRender.Draw(renderContext);
-	m_debug->Render(renderContext);
-
-	renderContext.WaitUntilFinishDrawingToRenderTarget(offscreenRenderTarget);
-
-	//画面に表示されるレンダリングターゲットに戻す
-	renderContext.SetRenderTarget(
-		g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
-		g_graphicsEngine->GetCurrentFrameBuffuerDSV()
-	);
 }
 
 void Mirror::Render(RenderContext& rc)
 {
 	//todo できない
-	m_boxModelRender.Draw(rc);
-	//m_modelRender.Draw(rc);
+
+	////レンダリングターゲットをoffscreenRenderTargetに変更する
+	//RenderTarget* rtArray[] = { &offscreenRenderTarget };
+
+	//rc.WaitUntilToPossibleSetRenderTargets(1, rtArray);
+
+	//rc.SetRenderTargets(1, rtArray);uuuuuuuuuu
+
+	//rc.ClearRenderTargetViews(1, rtArray);
+
+	//m_debug->Render(rc);
+
+	//rc.WaitUntilFinishDrawingToRenderTargets(1, rtArray);
+
+	////画面に表示されるレンダリングターゲットに戻す
+	//rc.SetRenderTarget(
+	//	g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+	//	g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+	//);
+
+	//m_model.Draw(rc);
 }

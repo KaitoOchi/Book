@@ -231,7 +231,6 @@
   <ItemGroup>
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -247,7 +246,6 @@
   <ItemGroup>
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player3D.h" />

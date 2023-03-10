@@ -39,12 +39,10 @@ namespace nsK2EngineLow {
 			}
 		}
 
-		if (!m_isStop) {
 
-			for (auto& goList : m_gameObjectListArray) {
-				for (auto& go : goList) {
-					go->UpdateWrapper();
-				}
+		for (auto& goList : m_gameObjectListArray) {
+			for (auto& go : goList) {
+				go->UpdateWrapper();
 			}
 		}
 		//物理エンジンのアップデートを呼び出す。

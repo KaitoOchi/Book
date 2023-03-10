@@ -14,7 +14,6 @@ namespace nsBookEngine {
 		~CollisionObject();
 		bool Start();
 		void Update();
-
 		/// <summary>
 		/// ボックス形状のゴーストオブジェクトを作成。
 		/// </summary>
@@ -194,40 +193,13 @@ namespace nsBookEngine {
 
 	class CollisionObjectManager
 	{
-	private:
+	public:
 		CollisionObjectManager();
 		~CollisionObjectManager();
-
-	public:
-		/// <summary>
-		/// インスタンスの作成。
-		/// </summary>
-		static void CreateInstance()
-		{
-			m_instance = new CollisionObjectManager;
-		}
-		/// <summary>
-		/// インスタンスの破棄。
-		/// </summary>
-		static void DeleteInstance()
-		{
-			delete m_instance;
-		}
-		/// <summary>
-		/// インスタンスを取得。
-		/// </summary>
-		/// <returns></returns>
-		static CollisionObjectManager* GetInstance()
-		{
-			return m_instance;
-		}
-
-
 		void AddCollisionObject(CollisionObject* collisionObject)
 		{
 			m_collisionObjectVector.push_back(collisionObject);
 		}
-
 		/// <summary>
 		/// 名前が完全一致するコリジョンオブジェクトを検索する。こちらは1つだけ。
 		/// </summary>
@@ -344,8 +316,6 @@ namespace nsBookEngine {
 		}
 
 	private:
-		static CollisionObjectManager* m_instance;
-
 		std::vector<CollisionObject*>		m_collisionObjectVector = {};
 		std::vector<CollisionObject*>		m_findsCollisionObjectVector = {};
 		std::vector<CollisionObject*>		m_findMatchForwardNameCollisionObjectVector = {};

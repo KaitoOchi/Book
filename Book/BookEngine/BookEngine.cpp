@@ -1,47 +1,45 @@
 #include "BookEnginePreCompile.h"
 #include "BookEngine.h"
 
-#include "../Game/GameManager.h"
-
 
 namespace nsBookEngine {
 
 	BookEngine* BookEngine::m_instance = nullptr;
+	//RenderingEngine* g_renderingEngine = nullptr;
 	//SceneLight* g_sceneLight = nullptr;
+	//CollisionObjectManager* g_collisionObjectManager = nullptr;
 	BookEngine* g_bookEngine = nullptr;
 
 	void BookEngine::Init(const InitData& initData)
 	{
 		g_bookEngine = this;
 		g_engine = &m_k2EngineLow;
+		//g_collisionObjectManager = &m_collisionObjectManager;
+		//g_renderingEngine = &m_renderingEngine;
 
 		m_k2EngineLow.Init(
 			initData.hwnd,
 			initData.frameBufferWidth,
 			initData.frameBufferHeight
 		);
+		//m_renderingEngine.Init(initData.isSoftShadow);
 		g_camera3D->SetPosition({ 0.0f, 200.0f, -400.0f });
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
-		g_camera3D->Update();
 
-		//レンダリングエンジンを呼ぶ
-		RenderingEngine::CreateInstance();
-		//コリジョンオブジェクトマネージャーを呼ぶ
-		CollisionObjectManager::CreateInstance();
-
-		m_gameManager = new GameManager;
+		m_renderingEngine = new RenderingEngine;
+		m_renderingEngine->Init();
+		m_collisionObjectManager = new CollisionObjectManager;
 	}
 
 	BookEngine::~BookEngine()
 	{
+		//g_renderingEngine = nullptr;
+		//g_collisionObjectManager = nullptr;
+		delete m_renderingEngine;
+		m_renderingEngine = nullptr;
+		delete m_collisionObjectManager;
+		m_collisionObjectManager = nullptr;
 		g_engine = nullptr;
-
-		delete m_gameManager;
-
-		//レンダリングエンジンを削除
-		RenderingEngine::DeleteInstance();
-		//コリジョンオブジェクトマネージャーを削除
-		CollisionObjectManager::DeleteInstance();
 	}
 
 	void BookEngine::Execute()
@@ -51,8 +49,6 @@ namespace nsBookEngine {
 		g_engine->BeginFrame();
 
 		g_engine->ExecuteUpdate();
-
-		m_gameManager->Update();
 
 		// レンダリングエンジンの更新。
 		//m_renderingEngine.Update();

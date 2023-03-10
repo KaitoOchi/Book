@@ -2,7 +2,6 @@
 
 #include "graphics/light/DirectionLight.h"
 #include "graphics/light/PointLight.h"
-#include "graphics/light/SpotLight.h"
 #include "graphics/light/HemiSphereLight.h"
 
 namespace nsBookEngine {
@@ -15,38 +14,11 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig;
-			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 		};
 
-	private:
 		RenderingEngine();
 		~RenderingEngine();
-
-	public:
-		/// <summary>
-		/// インスタンスの作成。
-		/// </summary>
-		static void CreateInstance()
-		{
-			m_instance = new RenderingEngine;
-			m_instance->Init();
-		}
-		/// <summary>
-		/// インスタンスの破棄。
-		/// </summary>
-		static void DeleteInstance()
-		{
-			delete m_instance;
-		}
-		/// <summary>
-		/// インスタンスを取得。
-		/// </summary>
-		/// <returns></returns>
-		static RenderingEngine* GetInstance()
-		{
-			return m_instance;
-		}
 
 		/// <summary>
 		/// ディレクションライトを設定。
@@ -72,25 +44,12 @@ namespace nsBookEngine {
 		/// ポイントライトを設定
 		/// </summary>
 		/// <param name="ptlig"></param>
-		void SetPointLight(PointLight::pointLight& ptlig)
+		void SetPointLight(PointLight& ptlig)
 		{
 			//GetLightCB().pointLig = ptlig.GetPointLig();
-			GetLightCB().pointLig.ptPosition = ptlig.ptPosition;
-			GetLightCB().pointLig.ptColor = ptlig.ptColor;
-			GetLightCB().pointLig.ptRange = ptlig.ptRange;
-		}
-
-		/// <summary>
-		/// スポットライトを設定
-		/// </summary>
-		/// <param name="spLig"></param>
-		void SetSpotLight(SpotLight::spotLight& spLig)
-		{
-			GetLightCB().spotLig.spPosition = spLig.spPosition;
-			GetLightCB().spotLig.spColor = spLig.spColor;
-			GetLightCB().spotLig.spRange = spLig.spRange;
-			GetLightCB().spotLig.spDirection = spLig.spDirection;
-			GetLightCB().spotLig.spAngle = spLig.spAngle;
+			GetLightCB().pointLig.ptPosition = ptlig.GetPosition();
+			GetLightCB().pointLig.ptColor = ptlig.GetColor();
+			GetLightCB().pointLig.ptRange = ptlig.GetRange();
 		}
 
 		/// <summary>
@@ -118,8 +77,6 @@ namespace nsBookEngine {
 		void Update();
 
 	private:
-		static RenderingEngine* m_instance;
-
 		LightCB m_lightCB;
 
 		DirectionLight m_directionLig;
