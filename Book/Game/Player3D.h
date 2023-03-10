@@ -10,11 +10,6 @@ public:
 	void Animation();
 	void Throw();
 	void Render(RenderContext& rc);
-	enum EnPlayer3DState {
-		m_enPlayer3D_Throw,//“Š‚°‚é
-		m_enPlayer3D_Steal,//“‚Ş
-		m_enPlayer3D_Push,//‰Ÿ‚·
-	};
 
 
 	CharacterController m_3Dcharacon;//ƒLƒƒƒ‰ƒRƒ“
