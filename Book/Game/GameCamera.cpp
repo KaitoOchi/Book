@@ -71,16 +71,16 @@ void GameCamera::UpdatePositionAndTarget()
 	//	//ãŒü‚«‚·‚¬
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
-	if (toPosDir.x > XRIGHT)
-	{
-		//ãŒü‚«‚·‚¬
-		m_toCameraPos = m_toCameraPosOld;
-	}
-	else if (toPosDir.x < XLEFT)
-	{
-		//ãŒü‚«‚·‚¬
-		m_toCameraPos = m_toCameraPosOld;
-	}
+	//if (toPosDir.x > XRIGHT)
+	//{
+	//	//ãŒü‚«‚·‚¬
+	//	m_toCameraPos = m_toCameraPosOld;
+	//}
+	//else if (toPosDir.x < XLEFT)
+	//{
+	//	//ãŒü‚«‚·‚¬
+	//	m_toCameraPos = m_toCameraPosOld;
+	//}
 	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
 		m_toCameraPos.Set(BEKUTORU);
