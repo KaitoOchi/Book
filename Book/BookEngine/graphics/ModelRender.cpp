@@ -82,6 +82,7 @@ namespace nsBookEngine {
 		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
+		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
 		SetupVertexShaderEntryPointFunc(modelInitData);

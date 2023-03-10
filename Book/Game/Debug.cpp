@@ -96,6 +96,8 @@ bool Debug::Start()
 	texture[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.dds");
 	texture[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.dds");
 
+
+
 	return true;
 }
 
