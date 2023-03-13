@@ -7,7 +7,7 @@ using namespace nsK2EngineLow;
 #include "graphics/RenderingEngine.h"
 #include "BookEngine.h"
 #include "geometry/AABB.h"
-//#include "graphics/IRenderer.h"
+#include "graphics/IRenderer.h"
 #include "graphics/ModelRender.h"
 #include "graphics/SpriteRender.h"
 #include "graphics/FontRender.h"

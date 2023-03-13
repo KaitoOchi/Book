@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	class FontRender
+	class FontRender : public IRenderer
 	{
 	public:
 		static const int MAX_TEXT_SIZE = 256;
@@ -144,7 +144,7 @@ namespace nsBookEngine {
 		/// 2D•`‰æƒpƒX‚©‚çŒÄ‚Î‚ê‚éˆ—B
 		/// </summary>
 		/// <param name="rc"></param>
-		void OnRender2D(RenderContext& rc)
+		void OnRender2D(RenderContext& rc) override
 		{
 			m_font.Begin(rc);
 			m_font.Draw(m_text, Vector2(m_position.x, m_position.y), m_color, m_rotation, m_scale, m_pivot);

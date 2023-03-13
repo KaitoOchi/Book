@@ -42,6 +42,9 @@
     <ClInclude Include="graphics\PostEffect\Bloom.h">
       <Filter>graphics\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\IRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />

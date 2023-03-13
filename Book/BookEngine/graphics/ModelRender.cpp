@@ -114,6 +114,11 @@ namespace nsBookEngine {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		m_model.Draw(rc);
+		RenderingEngine::GetInstance()->AddRenderObject(this);
+	}
+
+	void ModelRender::OnForwardRender(RenderContext& rc)
+	{
+		m_model.Draw(rc, 1);
 	}
 }

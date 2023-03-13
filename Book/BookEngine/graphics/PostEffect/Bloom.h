@@ -32,9 +32,24 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// ポストエフェクトを実行した結果となるテクスチャを取得。
+		/// </summary>
+		/// <returns></returns>
+		Texture& GetResultTexture()
+		{
+			return m_luminanceRenderTarget.GetRenderTargetTexture();
+		}
+
+		/// <summary>
 		/// 初期化処理。
 		/// </summary>
 		void Init(RenderTarget& mainRenderTarget);
+
+		/// <summary>
+		/// 描画処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void Render(RenderContext& rc, RenderTarget& mainRenderTarget);
 
 	private:
 		RenderTarget m_luminanceRenderTarget;
@@ -43,5 +58,7 @@ namespace nsBookEngine {
 		Sprite m_finalSprite;
 
 		LuminanceCB m_luminanceCB;
+
+		Sprite m_copyMainRtSprite;	// メインレンダリングターゲットに描画するためのスプライト。
 	};
 }

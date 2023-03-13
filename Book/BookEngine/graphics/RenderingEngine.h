@@ -1,9 +1,12 @@
 #pragma once
 
+#include "graphics/IRenderer.h"
+
 #include "graphics/light/DirectionLight.h"
 #include "graphics/light/PointLight.h"
 #include "graphics/light/SpotLight.h"
 #include "graphics/light/HemiSphereLight.h"
+#include "graphics/postEffect/Bloom.h"
 
 namespace nsBookEngine {
 
@@ -46,6 +49,15 @@ namespace nsBookEngine {
 		static RenderingEngine* GetInstance()
 		{
 			return m_instance;
+		}
+
+		/// <summary>
+		/// 描画オブジェクトを追加。
+		/// </summary>
+		/// <param name="renderObject"></param>
+		void AddRenderObject(IRenderer* renderObject)
+		{
+			m_renderObjects.push_back(renderObject);
 		}
 
 		/// <summary>
@@ -114,8 +126,51 @@ namespace nsBookEngine {
 			return m_lightCB;
 		}
 
+		/// <summary>
+		/// ブルームが発生する閾値を設定
+		/// </summary>
+		void SetBloomThreshold(const float threshold)
+		{
+
+		}
+
 		void Init();
-		void Update();
+
+		/// <summary>
+		/// 実行処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void Execute(RenderContext& rc);
+
+	private:
+		/// <summary>
+		/// 2D描画用のレンダ―ターゲットを初期化
+		/// </summary>
+		void Init2DRenderTarget();
+
+		/// <summary>
+		/// メインレンダリングターゲットのカラーバッファの内容を
+		/// フレームバッファにコピーするためのスプライトを初期化する
+		/// </summary>
+		void InitCopyMainRenderTargetToFrameBufferSprite();
+
+		/// <summary>
+		/// フォワードレンダリングの処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void ForwardRendering(RenderContext& rc);
+
+		/// <summary>
+		/// 2D描画
+		/// </summary>
+		/// <param name="rc">レンダリングコンテキスト</param>
+		void Render2D(RenderContext& rc);
+
+		/// <summary>
+		/// メインレンダリングターゲットの内容をフレームバッファにコピーする
+		/// </summary>
+		/// <param name="rc">レンダリングコンテキスト</param>
+		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 
 	private:
 		static RenderingEngine* m_instance;
@@ -124,5 +179,15 @@ namespace nsBookEngine {
 
 		DirectionLight m_directionLig;
 		HemiSphereLight m_hemiSphereLig;
+
+		Bloom m_bloom;
+
+		RenderTarget m_mainRenderTarget;								//メインレンダリングターゲット
+
+		RenderTarget m_2DRenderTarget;                                  //2D描画用のレンダ―ターゲット
+		Sprite m_2DSprite;                                              //2D合成用のスプライト
+		Sprite m_mainSprite;
+		Sprite m_copyMainRtToFrameBufferSprite;                         // メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
+		std::vector<IRenderer*> m_renderObjects;
 	};
 }
