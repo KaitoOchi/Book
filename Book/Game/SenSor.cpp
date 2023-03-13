@@ -42,7 +42,7 @@ void SenSor::Hit()
 {
 	//ƒvƒŒƒCƒ„[‚ÆÚG
 	int a = 0;
-	a = a;
+	a = 1;
 }
 
 
