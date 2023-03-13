@@ -19,7 +19,7 @@ public:
 	// trueのとき被弾
 	void SetHitFlashBullet(bool b) {
 		// 引数を渡す
-		b = HitFlashBulletFlag;
+		b = m_HitFlashBulletFlag;
 	};
 
 private:
@@ -30,22 +30,24 @@ private:
 	// アニメーションクリップ
 	enum EnEnemyAnimationClip
 	{
-		enEnemyAnimationClip_Idle,		// 待機
-		enEnemyAnimationClip_Walk,		// 歩く
-		enEnemyAnimationClip_Run,		// 走る
-		enEnemyAnimationClip_Attack,	// 攻撃
-		enEnemyAnimationClip_Damege,	// 被弾
-		enEnemyAnimationClip_Num
+		enAnimationClip_Idle,			// 待機
+		enAnimationClip_Walk,			// 歩く
+		enAnimationClip_Run,			// 走る
+		enAnimationClip_Attack,			// 攻撃
+		enAnimationClip_Damege,			// 被弾
+		enAnimationClip_Num
 	};
 
-	AnimationClip m_animationClips[enEnemyAnimationClip_Num];
+	AnimationClip m_animationClips[enAnimationClip_Num];
 
 	Vector3 m_position;
 
-	bool FoundPlayerFlag = false;		// プレイヤーを発見したかどうか
-	bool CatchPlayerFlag = false;		// プレイヤーを捕まえたかどうか
-	bool MissigPlayerFlag = false;		// プレイヤーを見失ったかどうか
-	bool HitFlashBulletFlag = false;	// 閃光弾が当たったかどうか
-	bool ReturnToPassFlag = false;		// 直近のパスに戻ったかどうか
+	bool m_FoundPlayerFlag = false;		// プレイヤーを発見したかどうか
+	bool m_CatchPlayerFlag = false;		// プレイヤーを捕まえたかどうか
+	bool m_MissigPlayerFlag = false;	// プレイヤーを見失ったかどうか
+	bool m_HitFlashBulletFlag = false;	// 閃光弾が当たったかどうか
+	bool m_ReturnToPassFlag = false;	// 直近のパスに戻ったかどうか
+
+	float catchDecision = 10.0f;		// 捕まえたと認識する範囲
 };
 

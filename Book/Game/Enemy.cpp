@@ -21,16 +21,16 @@ bool Enemy::Start()
 	m_modelRender.SetPosition({ 0.0f,0.0f,0.0f });
 
 	// アニメーションの読み込み
-	//m_animationClips[enEnemyAnimationClip_Idle].Load("Assets/animData/enemy/idle.tka");
-	//m_animationClips[enEnemyAnimationClip_Idle].SetLoopFlag(true);
-	//m_animationClips[enEnemyAnimationClip_Walk].Load("Assets/animData/enemy/walk.tka");
-	//m_animationClips[enEnemyAnimationClip_Walk].SetLoopFlag(true);
-	//m_animationClips[enEnemyAnimationClip_Run].Load("Assets/animData/enemy/run.tka");
-	//m_animationClips[enEnemyAnimationClip_Run].SetLoopFlag(true);
-	//m_animationClips[enEnemyAnimationClip_Attack].Load("Assets/animData/enemy/attack.tka");
-	//m_animationClips[enEnemyAnimationClip_Attack].SetLoopFlag(false);
-	//m_animationClips[enEnemyAnimationClip_Damege].Load("Assets/animData/enemy/damege.tka");
-	//m_animationClips[enEnemyAnimationClip_Damege].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Idle].Load("Assets/animData/enemy/idle.tka");
+	m_animationClips[enAnimationClip_Idle].SetLoopFlag(true);
+	m_animationClips[enAnimationClip_Walk].Load("Assets/animData/enemy/walk.tka");
+	m_animationClips[enAnimationClip_Walk].SetLoopFlag(true);
+	m_animationClips[enAnimationClip_Run].Load("Assets/animData/enemy/run.tka");
+	m_animationClips[enAnimationClip_Run].SetLoopFlag(true);
+	m_animationClips[enAnimationClip_Attack].Load("Assets/animData/enemy/attack.tka");
+	m_animationClips[enAnimationClip_Attack].SetLoopFlag(false);
+	m_animationClips[enAnimationClip_Damege].Load("Assets/animData/enemy/damege.tka");
+	m_animationClips[enAnimationClip_Damege].SetLoopFlag(false);
 
 	return true;
 }
@@ -51,12 +51,12 @@ void Enemy::HeadToDestination()
 {
 	// 目的地に向かう処理
 	// プレイヤーを見失ったとき
-	if (MissigPlayerFlag) {
+	if (m_MissigPlayerFlag) {
 		// 直近のパスを探す
 		// パスに戻ったときにfalseにする
 	}
 	// プレイヤーを発見したとき
-	if (FoundPlayerFlag) {
+	if (m_FoundPlayerFlag) {
 		// プレイヤーに向かう経路を作成
 	}	
 }
