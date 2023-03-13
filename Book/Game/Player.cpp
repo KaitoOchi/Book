@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "GameCamera.h"
 namespace
 {
 	const float WALK = 40.0f;//歩き時の乗算量
@@ -21,6 +22,8 @@ Player::~Player()
 
 bool Player::Start()
 {
+	gamecamera = FindGO<GameCamera>("gameCamera");
+	gamecamera->SetPosition(m_position);
 	return true;
 }
 
@@ -102,15 +105,16 @@ void Player::Change(bool m_change)
 {
 	if (m_change)
 	{
+		//3dプレイヤーのみ動かせるようにする
 		m_playerState = m_enPlayer_3DChanging;
 
 	}
 	else
 	{
+		//2Dプレイヤーのみ動かせるようにする
 		m_playerState = m_enPlayer_2DChanging;
 	}
 }	
-
 void Player::ProcessCommonStateTransition()
 {
 	if (m_characon->IsOnGround() == false)

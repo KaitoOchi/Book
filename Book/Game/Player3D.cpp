@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player3D.h"
 #include"Player2D.h"
+#include "GameCamera.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
@@ -46,11 +47,11 @@ bool Player3D::Start()
 	return true;
 }
 
-void Player3D::Update() 
+void Player3D::Update()
 {
 	Player::Update();
 	Animation();
-	Changing();
+	
 	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
 		Player::Change(false);
@@ -65,24 +66,28 @@ void Player3D::Update()
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
+	gamecamera->SetPosition(m_position);
 	m_modelRender->Update();
+	//切り替える
+	PlayerChang();
 
 }
 void Player3D::Throw()
 {
 	m_playerState = m_enPlayer3D_Throw;
 }
-void Player3D::Changing()
+void Player3D::PlayerChang()
 {
 	if (m_playerState == m_enPlayer_2DChanging)
 	{
 		m_player2D->Activate();
-		
+	
 		//プレイヤー２Dに３Dの座標を与える
 		m_player2D->SetPosition(m_position);
 		//ステートを遷移する。
 		ProcessCommonStateTransition();
 		Deactivate();
+		delete(m_characon);
 	}
 }
 void Player3D::Animation()

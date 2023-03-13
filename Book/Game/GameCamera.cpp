@@ -28,6 +28,7 @@ bool GameCamera::Start()
 	m_toCameraPos.Set(BEKUTORU);
 	//プレイヤーのインスタンス
 	m_player3D = FindGO<Player3D>("player3d");
+	m_player2D = FindGO<Player2D>("player2d");
 	return true;
 }
 void GameCamera::Update()
@@ -39,10 +40,10 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	target = m_player3D->GetPosition();
+
 	//プレイヤーの足元からちょっと上を注視点とする
-	target += Vector3(0.0f, TAGETUP, 0.0f);
-	target += g_camera3D->GetForward() * FRONTO;
+	m_target += Vector3(0.0f, TAGETUP, 0.0f);
+	m_target += g_camera3D->GetForward() * FRONTO;
 
 	m_toCameraPosOld = m_toCameraPos;
 	//右ステックで回す
@@ -86,9 +87,9 @@ void GameCamera::UpdatePositionAndTarget()
 		m_toCameraPos.Set(BEKUTORU);
 	}
 	//視点の計算
-	Vector3 pos = target + m_toCameraPos;
+	Vector3 pos = m_target + m_toCameraPos;
 	//カメラに注視点と視点を設定する
 	g_camera3D->SetPosition(pos);
-	g_camera3D->SetTarget(target);
+	g_camera3D->SetTarget(m_target);
 
 }

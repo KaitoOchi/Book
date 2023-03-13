@@ -7,8 +7,8 @@ public:
 	Player2D();
 	~Player2D();
 	bool Start();
-	void Update();
-	void Changing();
+	void Update(bool m_newcharacon);
+	void PlayerChang();
 	void Animation();
 	void Render(RenderContext& rc);
 private:

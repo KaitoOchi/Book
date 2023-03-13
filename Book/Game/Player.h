@@ -1,6 +1,6 @@
 #pragma once
 
-
+class GameCamera;
 class Player : public IGameObject
 {
 public:
@@ -34,6 +34,11 @@ public:
 	void SetPosition(const Vector3& m_pos)
 	{
 		m_position = m_pos;
+	}
+	//キャラコンの取得
+	const CharacterController& GetCharacon()const
+	{
+		return *m_characon;
 	}
 protected:
 	void Update();
@@ -110,8 +115,7 @@ protected:
 	/// </summary>
 	void ProcessGameOverStateTransition();
 	
-	
-	bool m_PlayerChange = true;//今どちらかtureなら３Dfalseなら２D
+	bool m_characonState = false;//キャラコンを作るかどうか
 
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック
@@ -126,4 +130,6 @@ protected:
 	Quaternion m_rotation;//回転
 	CharacterController *m_characon;//キャラコン
 	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
+
+	GameCamera* gamecamera=nullptr;//ゲームカメラ
 };

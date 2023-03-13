@@ -10,7 +10,7 @@ public:
 	void Update();
 	void Animation();
 	void Throw();
-	void Changing();
+	void PlayerChang();
 	void Render(RenderContext& rc);
 	
 private:

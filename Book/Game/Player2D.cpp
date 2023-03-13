@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player2D.h"
 #include "Player3D.h"
+#include "GameCamera.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 80.0f,120.0f,2.0f };//ボックスコライダーの大きさ
@@ -18,8 +19,6 @@ Player2D::~Player2D()
 bool Player2D::Start()
 {
 	Player::Start();
-	delete(m_characon);
-	delete(m_modelRender);
 	m_modelRender = new ModelRender;
 	m_characon = new CharacterController;
 	m_player3D = FindGO<Player3D>("player3d");
@@ -31,25 +30,37 @@ bool Player2D::Start()
 	m_player2D[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.DDS");
 	m_player2D[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.DDS");
 	Deactivate();
+	delete(m_characon);
 	return true;
 }
-void Player2D::Update()
+void Player2D::Update(bool m_newcharacon)
 {
 	Player::Update();
-	Changing();
 	Animation();
-	m_position;
+
+	//キャラコンが生成されているかどうか
+	if (m_newcharacon != true)
+	{
+		//一度しか生成されないようにする
+		m_characon = new CharacterController;
+		m_newcharacon = false;
+	}
+	//プレイヤーを切替る
 	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
 		Player::Change(true);
 	}
+
 	m_characon->SetPosition(m_position);
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
 	m_modelRender->SetPosition(m_position);
-	m_modelRender->Update();		
+	gamecamera->SetPosition(m_position);
+	m_modelRender->Update();	
+	//切り替える
+	PlayerChang();
 }
 
-void Player2D::Changing()
+void Player2D::PlayerChang()
 {
 	if (m_playerState == m_enPlayer_3DChanging)
 	{
