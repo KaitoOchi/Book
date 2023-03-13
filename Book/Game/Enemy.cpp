@@ -6,12 +6,12 @@
 
 #define FIELDOFVIEW Math::PI / 180.0f) * 120.0f // エネミーの視野角(初期値120)
 
-namespace 
+namespace
 {
-	const float		 LINEARCOMPLETION	= 0.5f;						// 線形補完のフレーム数
-	const float		 CATCHDECISION		= 10.0f;					// プレイヤーを確保したことになる範囲
-	const float		 SCALESIZE			= 1.3f;						// SetScaleのサイズ
-	const Vector3	 BOXSIZE			= { 75.0f, 90.0f,60.0f };	// CharacterControllerのサイズ
+	const float		 LINEARCOMPLETION = 0.5f;						// 線形補完のフレーム数
+	const float		 CATCHDECISION = 10.0f;					// プレイヤーを確保したことになる範囲
+	const float		 SCALESIZE = 1.3f;						// SetScaleのサイズ
+	const Vector3	 BOXSIZE = { 75.0f, 90.0f,60.0f };	// CharacterControllerのサイズ
 }
 
 Enemy::Enemy()
@@ -27,7 +27,7 @@ bool Enemy::Start()
 {
 	// モデルの読み込み
 	m_modelRender.Init("Assets/modelData/enemy/enemy.tkm");
-	m_modelRender.SetScale({1.3f, 1.3f, 1.3f});
+	m_modelRender.SetScale({ 1.3f, 1.3f, 1.3f });
 
 	// アニメーションの読み込み
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/enemy/idle.tka");
@@ -84,7 +84,7 @@ void Enemy::HeadToDestination()
 void Enemy::Act()
 {
 	// 行動パターン
-	switch (m_enEnemyActState){
+	switch (m_enEnemyActState) {
 		// 巡回
 	case Enemy::m_enEnemyActState_Craw:
 		break;
@@ -101,7 +101,7 @@ bool Enemy::SeachPlayer()
 	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff =  /*playerの座標*/ - m_position;
+	Vector3 diff =  /*playerの座標*/ -m_position;
 
 	// プレイヤーにある程度近いとき
 	if (diff.LengthSq() <= 700.0 * 700.0f) {
@@ -112,7 +112,7 @@ bool Enemy::SeachPlayer()
 		// 内積から角度を計算
 		float angle = acosf(cos);
 		// 角度が視野角より狭いとき
-		if (angle <= () {
+		if (angle <= (FIELDOFVIEW) {
 			// プレイヤーを発見
 			flag = true;
 		}
@@ -121,7 +121,7 @@ bool Enemy::SeachPlayer()
 	return flag;
 }
 
-void Enemy::CatchPlayer()
+bool Enemy::CatchPlayer()
 {
 	// プレイヤーを確保する処理
 	// エネミーからプレイヤーへ向かうベクトルを計算する
@@ -146,7 +146,7 @@ void Enemy::HitFlashBullet()
 void Enemy::Animation()
 {
 	// アニメーションのステート
-	switch (m_enEnemyAnimationState){
+	switch (m_enEnemyAnimationState) {
 		// 待機
 	case Enemy::m_enEnemyAnimationState_Idle:
 		m_modelRender.PlayAnimation(m_enAnimationClip_Idle, LINEARCOMPLETION);
