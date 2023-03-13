@@ -235,9 +235,11 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mirror.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="Player3D.cpp" />
+    <ClCompile Include="SenSor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -253,9 +255,11 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Mirror.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player2D.h" />
     <ClInclude Include="Player3D.h" />
+    <ClInclude Include="SenSor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />

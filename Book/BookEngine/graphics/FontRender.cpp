@@ -9,6 +9,6 @@ namespace nsBookEngine {
 			return;
 		}
 
-		OnRender2D(rc);
+		RenderingEngine::GetInstance()->AddRenderObject(this);
 	}
 }

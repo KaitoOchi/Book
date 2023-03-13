@@ -2,6 +2,9 @@
 #include "Debug.h"
 
 #include "Mirror.h"
+#include "SenSor.h"
+
+
 #include "level3DRender/LevelRender.h"
 #include "graphics/Texture.h"
 
@@ -38,7 +41,7 @@ bool Debug::Start()
 	m_modelRender.Update();
 
 	m_boxModelRender.Init("Assets/modelData/debugBox/sample.tkm");
-	m_boxModelRender.SetPosition(Vector3(-80.0f, 0.0f, -100.0f));
+	m_boxModelRender.SetPosition(Vector3(-80.0f, 0.0f, 200.0f));
 	Quaternion rot;
 	rot.AddRotationDegY(270.0f);
 	m_boxModelRender.SetRotation(rot);
@@ -86,15 +89,17 @@ bool Debug::Start()
 		}
 	);
 
+	NewGO<SenSor>(0, "sensor");
+
 	m_position.y = 50.0f;
 
-	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, 0.0f));
-	m_pointLight.SetColor(Vector3(15.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(250.0f);
+	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, -0.0f));
+	m_pointLight.SetColor(Vector3(0.0f, 50.0f, 0.0f));
+	m_pointLight.SetRange(500.0f);
 	m_pointLight.Update();
 
 	m_spotLight.SetPosition(m_position);
-	m_spotLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
+	m_spotLight.SetColor(Vector3(50.0f, 0.0f, 0.0f));
 	m_spotLight.SetRange(500.0f);
 	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
 	m_spotLight.SetAngle(25.0f);
@@ -135,6 +140,7 @@ void Debug::Update()
 	Quaternion qRot;
 	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
 
+	m_pointLight.Update();
 	m_spotLight.Update();
 
 
@@ -149,7 +155,7 @@ void Debug::Update()
 		i = 0;
 	}
 	m_modelRender.GetModel().ChangeAlbedoMap("", texture[j]);
-	m_modelRender.SetPosition(m_position);
+	//m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
 }
 

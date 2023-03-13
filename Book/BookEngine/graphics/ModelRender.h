@@ -8,7 +8,7 @@
 
 namespace nsBookEngine {
 
-	class ModelRender
+	class ModelRender : public IRenderer
 	{
 	public:
 		ModelRender();
@@ -191,12 +191,18 @@ namespace nsBookEngine {
 		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
 
 	private:
+		/// <summary>
+		/// フォワードレンダーパスから呼ばれる処理。
+		/// </summary>
+		void OnForwardRender(RenderContext& rc) override;
+
+	private:
 		AnimationClip*	m_animationClips = nullptr;
 		int				m_numAnimationClips = 0;
 
 		Vector3			m_position = Vector3::Zero;
 		Quaternion		m_rotation = Quaternion::Identity;
-		Vector3			m_scale = Vector3::Zero;
+		Vector3			m_scale = Vector3::One;
 		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
 		Animation		m_animation;
 		Model			m_model;

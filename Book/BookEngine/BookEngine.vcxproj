@@ -163,6 +163,7 @@
     <ClInclude Include="BookEnginePreCompile.h" />
     <ClInclude Include="collision\CollisionObject.h" />
     <ClInclude Include="graphics\FontRender.h" />
+    <ClInclude Include="graphics\IRenderer.h" />
     <ClInclude Include="graphics\light\DirectionLight.h" />
     <ClInclude Include="graphics\light\HemiSphereLight.h" />
     <ClInclude Include="graphics\light\PointLight.h" />
