@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+class Player3D;
 class Player2D:public Player
 {
 public:
@@ -7,9 +8,11 @@ public:
 	~Player2D();
 	bool Start();
 	void Update();
+	void Changing();
+	void Animation();
 	void Render(RenderContext& rc);
-	
 private:
 	int i = 0;
+	Player3D* m_player3D=nullptr;//3DÉvÉåÉCÉÑÅ[
 };
 

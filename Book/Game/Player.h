@@ -11,6 +11,8 @@ public:
 		m_enPlayer_Jump,//ジャンプ
 		m_enPlayer_Jumpend,//ジャンプ終わり
 		m_enPlayer_Change,//切替
+		m_enPlayer_2DChanging,//2Dに切替中
+		m_enPlayer_3DChanging,//3Dに切替中
 		m_enPlayer_Found,//見つかる
 		m_enPlayer_Caught,//捕まった
 		m_enPlayer_Clear,//ゲームクリア
@@ -28,11 +30,16 @@ public:
 	{
 		return m_position;
 	}
-	
+	//座標の取得
+	void SetPosition(const Vector3& m_pos)
+	{
+		m_position = m_pos;
+	}
 protected:
 	void Update();
 	void Move();
 	void Jump();
+	void Change(bool m_change);
 	void Rotation();
 	/// <summary>
 	/// 各ステートの遷移処理
@@ -67,6 +74,14 @@ protected:
 	/// </summary>
 	void ProcessChangeStateTransition();
 	/// <summary>
+	/// 2Dに切替中ステートの遷移処理
+	/// </summary>
+	void Process2DChangingStateTransition();
+	/// <summary>
+	/// 3Dに切替中ステートの遷移処理
+	/// </summary>
+	void Process3DChangingStateTransition();
+	/// <summary>
 	/// 投げるステートの遷移処理
 	/// </summary>
 	void ProcessThrowStateTransition();
@@ -96,6 +111,7 @@ protected:
 	void ProcessGameOverStateTransition();
 	
 	
+	bool m_PlayerChange = true;//今どちらかtureなら３Dfalseなら２D
 
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック

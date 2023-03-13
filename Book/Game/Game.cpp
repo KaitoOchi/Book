@@ -15,6 +15,7 @@ Game::Game()
 Game::~Game()
 {
 	DeleteGO(m_player3D);
+	DeleteGO(m_player2D);
 	DeleteGO(m_gamecamera);
 
 }
@@ -22,6 +23,7 @@ Game::~Game()
 bool Game::Start()
 {
 	m_player2D=NewGO<Player2D>(0,"player2d");
+	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gamecamera");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
