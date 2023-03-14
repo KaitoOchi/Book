@@ -1,20 +1,4 @@
 #pragma once
-class Enemy :public IGameObject
-{
-public:
-	Enemy();
-	~Enemy();
-
-	bool Start();
-	void Update();
-
-	void MoveDestination();				// 目的地に移動する処理
-	void Search();						// エネミーの索敵範囲
-	void HitFlashBullet();				// 閃光弾が当たったときの処理
-	void CatchPlayer();					// プレイヤーを捕まえる処理
-
-	void Render(RenderContext& rc);
-#pragma once
 
 	class Player3D;
 	class Player2D;
@@ -99,26 +83,3 @@ public:
 		bool HitFlashBulletFlag = false;	// 閃光弾が当たったかどうか
 		bool ReturnToPassFlag = false;		// 直近のパスに戻ったかどうか
 	};
-
-
-private:
-	ModelRender modelRender;			// モデルレンダー
-
-	// アニメーションクリップ
-	enum EnEnemyAnimationClip
-	{
-		enEnemyAnimationClip_Idle,
-		enEnemyAnimationClip_Walk,
-		enEnemyAnimationClip_Run,
-		enEnemyAnimationClip_Attack,
-		enEnemyAnimationClip_Damege,
-		enEnemyAnimationClip_Num
-	};
-
-	AnimationClip animationClips[enEnemyAnimationClip_Num];
-	
-	bool FoundPlayerFlag = false;		// プレイヤーを見つけたかどうか
-	bool MissingPlayerFlag = false;		// プレイヤーを見失ったかどうか
-	bool CatchPlayerFlag = false;		// プレイヤーを捕まえたかどうか
-};
-
