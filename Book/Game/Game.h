@@ -2,6 +2,7 @@
 class Player3D;
 class Player2D;
 class GameCamera;
+class Enemy;
 class Game : public IGameObject
 {
 public:
@@ -10,6 +11,7 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+	void LevelDesign();			// ステージのレベルデザインの処理
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
@@ -29,5 +31,6 @@ private:
 	Player2D* m_player2D = nullptr;//2Dプレイヤー
 	GameCamera* m_gamecamera = nullptr;
 
+	LevelRender* m_levelRender = nullptr;
 };
 

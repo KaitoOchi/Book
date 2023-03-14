@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
-#include "Player2D.h"
-#include "Player3D.h"
-#include "Player.h"
+#include "PlayerManagement.h"
 
 #define FIELDOFVIEW Math::PI / 180.0f) * 120.0f				// エネミーの視野角(初期値120)
 
@@ -47,8 +45,8 @@ bool Enemy::Start()
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
 
-	// プレイヤーのインスタンスを探す
-	m_player = FindGO<Player>("player");
+	// インスタンスを探す
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
 	return true;
 }
@@ -118,7 +116,7 @@ bool Enemy::SeachPlayer()
 	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_player->GetPosition() - m_position;
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
 	// プレイヤーにある程度近いとき
 	if (diff.LengthSq() <= 700.0 * 700.0f) {
@@ -145,7 +143,7 @@ bool Enemy::CatchPlayer()
 	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトルを計算する
-	Vector3 diff = m_player->GetPosition() - m_position;
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 	// ベクトルの長さを求める
 	float length = diff.Length();
 

@@ -7,7 +7,6 @@
 #include "Title.h"
 #include "SenSor.h"
 
-
 Game::Game()
 {
 	//当たり判定を有効化
@@ -35,7 +34,31 @@ bool Game::Start()
 	m_stageModelRender.SetScale(Vector3::One);
 	m_stageModelRender.Update();
 	m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());
+
+	LevelDesign();
+
 	return true;
+}
+
+void Game::LevelDesign()
+{
+	////レベルデザイン処理
+	//m_levelRender->Init("Assets/debugstage/debugstage_1.tkl", [&](LevelObjectData& objData) {
+
+	//	//名前がunityChanなら
+	//	if (objData.ForwardMatchName(L"FootmanHP") == true) {
+	//		//m_mirror = NewGO<Mirror>(0, "mirror");
+	//		return true;
+	//	}
+
+	//	//名前がbackgroundなら
+	//	if (objData.EqualObjectName(L"debug") == true) {
+
+	//		return false;
+	//	}
+	//	return true;
+	//	}
+	//);
 }
 
 void Game::Update()
