@@ -3,13 +3,15 @@
 #include"Player3D.h"
 #include"Player2D.h"
 #include"GameCamera.h"
+#include "PlayerManagement.h"
 #include "Title.h"
+#include "SenSor.h"
 
 
 Game::Game()
 {
 	//“–‚½‚è”»’è‚ð—LŒø‰»
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -25,6 +27,8 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
+	NewGO<SenSor>(0, "senSour");
+	NewGO<PlayerManagement>(0,"playerManagement");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);

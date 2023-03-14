@@ -12,7 +12,7 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	// ÉQÅ[ÉÄÇÃèâä˙âªÅB
-	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
+	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
 	NewGO<Title>(0, "title");
 	//NewGO<Debug>(0, "debug");

@@ -69,6 +69,10 @@ void Player::Move()
 }
 void Player::Jump()
 {
+	if (GetCharacon() == nullptr)
+	{
+		return;
+	}
 	//もし地面についているなら
 	if (m_characon->IsOnGround() == true)
 	{
@@ -101,22 +105,12 @@ void Player::Rotation()
 	//SetRotationを使用する
 	m_rotation.SetRotationY(-angle);
 }
-void Player::Change(bool m_change)
-{
-	if (m_change)
-	{
-		//3dプレイヤーのみ動かせるようにする
-		m_playerState = m_enPlayer_3DChanging;
-
-	}
-	else
-	{
-		//2Dプレイヤーのみ動かせるようにする
-		m_playerState = m_enPlayer_2DChanging;
-	}
-}	
 void Player::ProcessCommonStateTransition()
 {
+	if (GetCharacon() == nullptr)
+	{
+		return;
+	}
 	if (m_characon->IsOnGround() == false)
 	{
 		//ジャンプ中にする
@@ -226,14 +220,6 @@ void Player::ManageState()
 		//切替ステートのステート遷移処理。
 		ProcessChangeStateTransition();
 		break;
-	//case m_enPlayer_2DChanging:
-	//	//切替ステートのステート遷移処理。
-	//	Process2DChangingStateTransition();
-	//	break;
-	//case m_enPlayer_3DChanging:
-	//	//切替ステートのステート遷移処理。
-	//	Process3DChangingStateTransition();
-	//	break;
 	     //投げるとき
 	case m_enPlayer3D_Throw:
 		ProcessThrowStateTransition();
@@ -241,4 +227,7 @@ void Player::ManageState()
 	default:
 		break;
 	}
+}
+void Player::Animation()
+{
 }

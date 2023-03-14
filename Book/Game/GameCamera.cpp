@@ -2,6 +2,7 @@
 #include "GameCamera.h"
 #include "Player3D.h"
 #include "Player2D.h"
+#include"PlayerManagement.h"
 namespace
 {
 	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//注視点から視点までのベクトルを設定。
@@ -26,9 +27,8 @@ bool GameCamera::Start()
 {
 	//注視点から視点までのベクトルを設定
 	m_toCameraPos.Set(BEKUTORU);
-	//プレイヤーのインスタンス
-	m_player3D = FindGO<Player3D>("player3d");
-	m_player2D = FindGO<Player2D>("player2d");
+	//プレイヤー管理のインスタンス
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	return true;
 }
 void GameCamera::Update()
@@ -40,7 +40,7 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-
+	SetPosition(m_playerManagement->GetPosition());
 	//プレイヤーの足元からちょっと上を注視点とする
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
 	m_target += g_camera3D->GetForward() * FRONTO;

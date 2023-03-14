@@ -2,6 +2,7 @@
 #include "Player3D.h"
 #include"Player2D.h"
 #include "GameCamera.h"
+#include "PlayerManagement.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
@@ -12,17 +13,16 @@ Player3D::Player3D()
 }
 Player3D::~Player3D()
 {
-	delete(m_characon);
 	delete(m_modelRender);
 }
 bool Player3D::Start()
 {
-	Player::Start();
 	m_characon = new CharacterController;
+	Player::Start();
 	m_characon->Init(BOXSIZE, m_position);
 	m_modelRender= new ModelRender;
-	
-	m_player2D = FindGO<Player2D>("player2d");
+	//マネジメントの呼び出し
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
@@ -49,13 +49,12 @@ bool Player3D::Start()
 
 void Player3D::Update()
 {
+	if (GetCharacon() == nullptr)
+	{
+		return;
+	}
 	Player::Update();
 	Animation();
-	
-	if (g_pad[0]->IsTrigger(enButtonLB1))
-	{
-		Player::Change(false);
-	}
 	if (g_pad[0]->IsTrigger(enButtonRB1))
 	{
 		Throw();
@@ -66,11 +65,7 @@ void Player3D::Update()
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
-	gamecamera->SetPosition(m_position);
 	m_modelRender->Update();
-	//切り替える
-	PlayerChang();
-
 }
 void Player3D::Throw()
 {
@@ -78,17 +73,18 @@ void Player3D::Throw()
 }
 void Player3D::PlayerChang()
 {
-	if (m_playerState == m_enPlayer_2DChanging)
-	{
-		m_player2D->Activate();
+	delete(m_characon);
+	m_characon = nullptr;
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+	Deactivate();
 	
-		//プレイヤー２Dに３Dの座標を与える
-		m_player2D->SetPosition(m_position);
-		//ステートを遷移する。
-		ProcessCommonStateTransition();
-		Deactivate();
-		delete(m_characon);
-	}
+}
+//キャラコンの作成関数
+void Player3D::CreatCharcon()
+{
+	m_characon = new CharacterController;
+	m_characon->Init(BOXSIZE, GetPosition());
 }
 void Player3D::Animation()
 {

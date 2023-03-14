@@ -36,16 +36,17 @@ public:
 		m_position = m_pos;
 	}
 	//キャラコンの取得
-	const CharacterController& GetCharacon()const
+	CharacterController* GetCharacon()
 	{
-		return *m_characon;
+		return m_characon;
 	}
+
 protected:
 	void Update();
 	void Move();
 	void Jump();
-	void Change(bool m_change);
 	void Rotation();
+	void Animation();
 	/// <summary>
 	/// 各ステートの遷移処理
 	/// </summary>
@@ -115,13 +116,12 @@ protected:
 	/// </summary>
 	void ProcessGameOverStateTransition();
 	
-	bool m_characonState = false;//キャラコンを作るかどうか
+	bool m_characonState = true;//キャラコンを作るかどうか
 
 	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
 	Vector3 m_Lstic = Vector3::Zero;//左ステック
 	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
 	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
-	
 	
 	float angle=0;//回転角度
 	

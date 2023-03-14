@@ -1,18 +1,22 @@
 #pragma once
 #include "Player.h"
-class Player3D;
+class PlayerManagement;
 class Player2D:public Player
 {
 public:
 	Player2D();
 	~Player2D();
 	bool Start();
-	void Update(bool m_newcharacon);
+	void Update();
 	void PlayerChang();
+	/// <summary>
+	/// キャラコンの作成の関数
+	/// </summary>
+	void CreatCharcon();
 	void Animation();
 	void Render(RenderContext& rc);
 private:
 	int i = 0;
-	Player3D* m_player3D=nullptr;//3Dプレイヤー
+	PlayerManagement* m_playerManagement = nullptr;
 };
 
