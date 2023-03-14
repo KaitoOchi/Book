@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "GameCamera.h"
 namespace
 {
-	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
 	const float WALK = 40.0f;//歩き時の乗算量
 	const float RUN = 80.0f;//走り時の乗算量
 	const float JUMPVOLUM = 200.0f;//ジャンプ量
@@ -22,13 +22,14 @@ Player::~Player()
 
 bool Player::Start()
 {
-	m_characon = new CharacterController;
-	m_characon->Init(BOXSIZE, m_position);
+	gamecamera = FindGO<GameCamera>("gameCamera");
+	gamecamera->SetPosition(m_position);
 	return true;
 }
 
 void Player::Update()
 {
+	//投げているときに行動出来ないようにする
 	if (m_playerState!=m_enPlayer3D_Throw) {
 		Move();
 		Jump();
@@ -68,6 +69,10 @@ void Player::Move()
 }
 void Player::Jump()
 {
+	if (GetCharacon() == nullptr)
+	{
+		return;
+	}
 	//もし地面についているなら
 	if (m_characon->IsOnGround() == true)
 	{
@@ -102,6 +107,10 @@ void Player::Rotation()
 }
 void Player::ProcessCommonStateTransition()
 {
+	if (GetCharacon() == nullptr)
+	{
+		return;
+	}
 	if (m_characon->IsOnGround() == false)
 	{
 		//ジャンプ中にする
@@ -154,8 +163,17 @@ void Player::ProcessJumpendStateTransition()
 }
 void Player::ProcessChangeStateTransition()
 {
+
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
+}
+void Player::Process2DChangingStateTransition()
+{
+	
+}
+void Player::Process3DChangingStateTransition()
+{
+	
 }
 void Player::ProcessThrowStateTransition()
 {
@@ -202,11 +220,14 @@ void Player::ManageState()
 		//切替ステートのステート遷移処理。
 		ProcessChangeStateTransition();
 		break;
-		//投げるとき
+	     //投げるとき
 	case m_enPlayer3D_Throw:
 		ProcessThrowStateTransition();
 		break;
 	default:
 		break;
 	}
+}
+void Player::Animation()
+{
 }

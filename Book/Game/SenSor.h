@@ -1,6 +1,5 @@
 #pragma once
 #include "Object.h"
-
 class SenSor : public IGameObject, public Object
 {
 public:
@@ -15,7 +14,7 @@ private:
 	/// “–‚½‚Á‚½‚Æ‚«‚Ìˆ—B
 	/// </summary>
 	void Hit() override;
-
+	
 private:
 };
 

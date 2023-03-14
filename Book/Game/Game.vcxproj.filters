@@ -22,7 +22,7 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="SenSor.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="PlayerManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -40,6 +40,6 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="SenSor.h" />
     <ClInclude Include="Object.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="PlayerManagement.h" />
   </ItemGroup>
 </Project>
