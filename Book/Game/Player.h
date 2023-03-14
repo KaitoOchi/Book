@@ -35,6 +35,12 @@ public:
 	{
 		m_position = m_pos;
 	}
+	// 外部から更新をする
+	void ModelRenderUpdate() {
+		m_modelRender->SetPosition(m_position);
+		m_modelRender->Update();
+	}
+
 	//キャラコンの取得
 	CharacterController* GetCharacon()
 	{
