@@ -29,7 +29,9 @@ private:
 	Player3D* m_player3D = nullptr;//3Dプレイヤー
 	Player2D* m_player2D = nullptr;//2Dプレイヤー
 	GameCamera* m_gamecamera = nullptr;
-
 	Enemy* m_enemy = nullptr;	// エネミー
+
+
+	LevelRender* m_levelRender = nullptr;	// レベルレンダー
 };
 

@@ -6,7 +6,6 @@
 #include "Title.h"
 #include "Enemy.h"
 
-
 Game::Game()
 {
 	//“–‚½‚è”»’è‚ð—LŒø‰»
@@ -17,14 +16,13 @@ Game::~Game()
 {
 	DeleteGO(m_player3D);
 	DeleteGO(m_gamecamera);
-	DeleteGO(m_enemy);
+
 }
 
 bool Game::Start()
 {
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_gamecamera=NewGO<GameCamera>(0, "gamecamera");
-	m_enemy = NewGO<Enemy>(0, "enemy");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);

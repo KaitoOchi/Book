@@ -14,13 +14,8 @@ namespace nsBookEngine {
 
 	}
 
-	void PointLight::Init()
-	{
-
-	}
-
 	void PointLight::Update()
 	{
-
+		RenderingEngine::GetInstance()->SetPointLight(m_pointLig);
 	}
 }

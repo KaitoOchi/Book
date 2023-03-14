@@ -3,15 +3,18 @@
 
 #include "Player2D.h"
 #include "Player3D.h"
+#include "Player.h"
 
-#define FIELDOFVIEW Math::PI / 180.0f) * 120.0f // エネミーの視野角(初期値120)
+#define FIELDOFVIEW Math::PI / 180.0f) * 120.0f				// エネミーの視野角(初期値120)
 
 namespace
 {
-	const float		 LINEARCOMPLETION = 0.5f;						// 線形補完のフレーム数
-	const float		 CATCHDECISION = 10.0f;					// プレイヤーを確保したことになる範囲
-	const float		 SCALESIZE = 1.3f;						// SetScaleのサイズ
-	const Vector3	 BOXSIZE = { 75.0f, 90.0f,60.0f };	// CharacterControllerのサイズ
+	const float		MOVESPEED = 8.0f;						// 移動速度
+	const float		CANMOVETIMER = 10.0f;					// 再度行動できるまでのタイマー
+	const float		LINEARCOMPLETION = 0.5f;				// 線形補完のフレーム数
+	const float		CATCHDECISION = 20.0f;					// プレイヤーを確保したことになる範囲
+	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
+	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 }
 
 Enemy::Enemy()
@@ -45,8 +48,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// プレイヤーのインスタンスを探す
-	m_player2D = FindGO<Player2D>("player2d");
-	m_player3D = FindGO<Player3D>("player3d");
+	m_player = FindGO<Player>("player");
 
 	return true;
 }
@@ -60,8 +62,15 @@ void Enemy::Update()
 
 void Enemy::HeadToDestination()
 {
+	// 閃光弾が当たったとき
+	if (HitFlashBullet() == true) {
+		// これより下の処理を実行しない
+		HitAfterFlashBullet();
+		return;
+	}
+
 	// プレイヤーを見失ったとき
-	if (MissigPlayerFlag) {
+	if (MissigPlayerFlag == true) {
 		// 巡回に移行する
 		m_enEnemyActState = m_enEnemyActState_Craw;
 
@@ -70,11 +79,19 @@ void Enemy::HeadToDestination()
 	}
 
 	// プレイヤーを発見したとき
-	if (FoundPlayerFlag) {
+	if (SeachPlayer() == true) {
 		// 追跡に移行する
 		m_enEnemyActState = m_enEnemyActState_Tracking;
 
 		// プレイヤーに向かう経路を作成
+
+
+		// プレイヤーを確保したとき
+		if (CatchPlayer() == true) {
+			// 捕まえたことを伝える
+			m_fontRender.SetText(L"捕まえた");
+			m_fontRender.SetPosition({ 0.0f, 0.0f, 0.0f });
+		}
 	}
 
 	// 目的地に向かう処理
@@ -101,7 +118,7 @@ bool Enemy::SeachPlayer()
 	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff =  /*playerの座標*/ -m_position;
+	Vector3 diff = m_player->GetPosition() - m_position;
 
 	// プレイヤーにある程度近いとき
 	if (diff.LengthSq() <= 700.0 * 700.0f) {
@@ -124,23 +141,53 @@ bool Enemy::SeachPlayer()
 bool Enemy::CatchPlayer()
 {
 	// プレイヤーを確保する処理
+	// trueのときプレイヤーを確保している
+	bool flag = false;
+
 	// エネミーからプレイヤーへ向かうベクトルを計算する
-	//float diff = player->position - m_position;
+	Vector3 diff = m_player->GetPosition() - m_position;
+	// ベクトルの長さを求める
+	float length = diff.Length();
 
-	//// ベクトルが一定以下のとき
-	//if (diff <= CATCHDECISION) {
-	//	// 捕まえたフラグをtrueにする
-	//	CatchPlayerFlag = true;
+	// ベクトルが一定以下のとき
+	if (length <= CATCHDECISION) {
+		// 捕まえる処理を行う
+		// 捕まえたフラグをtrueにする
+		flag = true;
+	}
 
-	//	// 捕まえたことを伝える
-	//	m_fontRender.SetText(L"捕まえた");
-	//	m_fontRender.SetPosition({ 0.0f, 0.0f, 0.0f });
-	//}
+	return flag;
 }
 
-void Enemy::HitFlashBullet()
+bool Enemy::HitFlashBullet()
 {
 	// 閃光弾が当たったときの処理
+	// 閃光弾がヒットしたときtrue
+	bool flag = false;
+
+	// 閃光弾が当たったとき
+	if (HitFlashBulletFlag == true) {
+		// 被弾
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
+
+		// 移動を硬直
+	}
+
+	return flag;
+}
+
+void Enemy::HitAfterFlashBullet()
+{
+	// 閃光弾が当たった後の硬直処理
+	// 経過時間を加算
+	float time =+ g_gameTime->GetFrameDeltaTime();
+
+	// 加算された時間が一定以上になったとき
+	if (CANMOVETIMER <= time) {
+		// 加算する経過時間をリセット
+		time = 0;
+		return;
+	}
 }
 
 void Enemy::Animation()

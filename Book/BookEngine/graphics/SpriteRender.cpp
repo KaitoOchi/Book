@@ -1,6 +1,5 @@
 #include "BookEnginePreCompile.h"
 #include "SpriteRender.h"
-//#include "RenderingEngine.h"
 
 namespace nsBookEngine {
 
@@ -22,8 +21,6 @@ namespace nsBookEngine {
 
 	void SpriteRender::Draw(RenderContext& rc)
 	{
-		//g_renderingEngine->AddRenderObject(this);
-
-		m_sprite.Draw(rc);
+		RenderingEngine::GetInstance()->AddRenderObject(this);
 	}
 }

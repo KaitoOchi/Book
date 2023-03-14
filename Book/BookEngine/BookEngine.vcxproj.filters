@@ -33,6 +33,18 @@
     <ClInclude Include="graphics\light\SceneLight.h">
       <Filter>graphics\light</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\light\HemiSphereLight.h">
+      <Filter>graphics\light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\light\SpotLight.h">
+      <Filter>graphics\light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\Bloom.h">
+      <Filter>graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\IRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
@@ -67,6 +79,15 @@
     <ClCompile Include="graphics\light\SceneLight.cpp">
       <Filter>graphics\light</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\light\HemiSphereLight.cpp">
+      <Filter>graphics\light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\light\SpotLight.cpp">
+      <Filter>graphics\light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\Bloom.cpp">
+      <Filter>graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
@@ -83,6 +104,9 @@
     </Filter>
     <Filter Include="graphics\light">
       <UniqueIdentifier>{12fb39c8-08c6-4d1b-b8bd-e9e24b67062b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graphics\PostEffect">
+      <UniqueIdentifier>{99842d15-bb58-4011-ad2e-c1e8c5d02dd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

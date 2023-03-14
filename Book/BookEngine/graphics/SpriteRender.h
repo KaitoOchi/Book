@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	class SpriteRender
+	class SpriteRender : public IRenderer
 	{
 	public:
 		/// <summary>
@@ -123,7 +123,11 @@ namespace nsBookEngine {
 		void Draw(RenderContext& rc);
 
 	private:
-		void OnRender2D(RenderContext& rc)
+		/// <summary>
+		/// 2D•`‰æƒpƒX‚©‚çŒÄ‚Î‚ê‚éˆ—B
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnRender2D(RenderContext& rc) override
 		{
 			m_sprite.Draw(rc);
 		}

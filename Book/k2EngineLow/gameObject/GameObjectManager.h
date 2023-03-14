@@ -61,6 +61,23 @@ namespace nsK2EngineLow {
 		/// <param name="rc"></param>
 		void ExecuteRender(RenderContext& rc);
 
+		/// <summary>
+		/// ゲームオブジェクトの停止状態を設定
+		/// </summary>
+		/// <param name="stop">trueなら全て停止</param>
+		void SetStop(const bool& stop)
+		{
+			m_isStop = stop;
+		}
+
+		/// <summary>
+		/// ゲームオブジェクトの停止状態を取得
+		/// </summary>
+		const bool& GetStop()
+		{
+			return m_isStop;
+		}
+
 
 		/*!
 		*@brief	ゲームオブジェクトのnew
@@ -181,6 +198,7 @@ namespace nsK2EngineLow {
 		std::array<GameObjectList, GAME_OBJECT_PRIO_MAX>	m_gameObjectListArray;							//!<ゲームオブジェクトの優先度付きリスト。
 		static GameObjectManager* m_instance;		//唯一のインスタンスのアドレスを記録する変数。
 		bool												m_isActive = true;
+		bool												m_isStop = false;
 	};
 
 

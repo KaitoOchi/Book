@@ -16,6 +16,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//NewGO<Title>(0, "title");
 	//NewGO<Debug>(0, "debug");
+
 	NewGO<Game>(0, "game");
 
 	// ここからゲームループ。
