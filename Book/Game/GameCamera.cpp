@@ -2,9 +2,10 @@
 #include "GameCamera.h"
 #include "Player3D.h"
 #include "Player2D.h"
+#include"PlayerManagement.h"
 namespace
 {
-	const Vector3 BEKUTORU(-200.0f, 100.0f, -300.0f);//注視点から視点までのベクトルを設定。
+	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//注視点から視点までのベクトルを設定。
 
 	const float TAGETUP = 100.0f;//注視点を上げれる
 
@@ -26,8 +27,8 @@ bool GameCamera::Start()
 {
 	//注視点から視点までのベクトルを設定
 	m_toCameraPos.Set(BEKUTORU);
-	//プレイヤーのインスタンス
-	m_player2D = FindGO<Player2D>("player2d");
+	//プレイヤー管理のインスタンス
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	return true;
 }
 void GameCamera::Update()
@@ -39,10 +40,10 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	target = m_player2D->GetPosition();
+	SetPosition(m_playerManagement->GetPosition());
 	//プレイヤーの足元からちょっと上を注視点とする
-	target += Vector3(0.0f, TAGETUP, 0.0f);
-	target += g_camera3D->GetForward() * FRONTO;
+	m_target += Vector3(0.0f, TAGETUP, 0.0f);
+	m_target += g_camera3D->GetForward() * FRONTO;
 
 	m_toCameraPosOld = m_toCameraPos;
 	//右ステックで回す
@@ -86,9 +87,9 @@ void GameCamera::UpdatePositionAndTarget()
 		m_toCameraPos.Set(BEKUTORU);
 	}
 	//視点の計算
-	Vector3 pos = target + m_toCameraPos;
+	Vector3 pos = m_target + m_toCameraPos;
 	//カメラに注視点と視点を設定する
 	g_camera3D->SetPosition(pos);
-	g_camera3D->SetTarget(target);
+	g_camera3D->SetTarget(m_target);
 
 }
