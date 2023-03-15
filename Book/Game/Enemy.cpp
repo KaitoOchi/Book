@@ -104,15 +104,15 @@ void Enemy::HitAfterFlashBullet()
 	}
 }
 
-void Enemy::Act()
-{
-	// 行動パターン
-	switch (m_enEnemyActState) {
-		// 巡回
-	case Enemy::m_enEnemyActState_Craw:
-		break;
-		// 追跡
-	case Enemy::m_enEnemyActState_Tracking:
-		break;
-	}
-}
+//void Enemy::Act()
+//{
+//	// 行動パターン
+//	switch (m_enEnemyActState) {
+//		// 巡回
+//	case Enemy::m_enEnemyActState_Craw:
+//		break;
+//		// 追跡
+//	case Enemy::m_enEnemyActState_Tracking:
+//		break;
+//	}
+//}

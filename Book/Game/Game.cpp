@@ -7,6 +7,8 @@
 #include "Title.h"
 #include "SenSor.h"
 #include "MiniMap.h"
+#include "Enemy_Normal.h"
+#include "BackGround.h"
 
 Game::Game()
 {
@@ -29,11 +31,11 @@ bool Game::Start()
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<SenSor>(0, "senSour");
 	NewGO<PlayerManagement>(0,"playerManagement");
-	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
+	/*m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);
 	m_stageModelRender.SetScale(Vector3::One);
-	m_stageModelRender.Update();
+	m_stageModelRender.Update();*/
 	m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
@@ -44,23 +46,31 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	////レベルデザイン処理
-	//m_levelRender->Init("Assets/debugstage/debugstage_1.tkl", [&](LevelObjectData& objData) {
+	//レベルデザイン処理
+	m_levelRender->Init("Assets/debugstage/debugstage_1.tkl", [&](LevelObjectData& objData) {
 
-	//	//名前がunityChanなら
-	//	if (objData.ForwardMatchName(L"FootmanHP") == true) {
-	//		//m_mirror = NewGO<Mirror>(0, "mirror");
-	//		return true;
-	//	}
+		//名前がunityChanなら
+		if (objData.ForwardMatchName(L"FootmanHP") == true) {
+			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-	//	//名前がbackgroundなら
-	//	if (objData.EqualObjectName(L"debug") == true) {
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
 
-	//		return false;
-	//	}
-	//	return true;
-	//	}
-	//);
+			return true;
+		}
+
+		//名前がbackgroundなら
+		if (objData.EqualObjectName(L"debug") == true) {
+
+			m_backGround = NewGO<BackGround>(0, "backGround");
+			m_backGround->SetPosition(objData.position);
+			m_backGround->SetRotation(objData.rotation);
+			return false;
+		}
+		return true;
+		}
+	);
 }
 
 void Game::Update()

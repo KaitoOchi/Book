@@ -12,19 +12,19 @@ public:
 	/// 座標を設定する
 	/// </summary>
 	void SetPosition(Vector3 pos) {
-		position = pos;
+		m_position = pos;
 	}
 
 	/// <summary>
 	/// 回転を設定する
 	/// </summary>
 	void SetRotation(Quaternion rot) {
-		rotation = rot;
+		m_rotation = rot;
 	}
 
 private:
 	ModelRender m_ModelRender;			// モデルレンダー
 
-	Quaternion rotation;					// 回転
-	Vector3 position = Vector3::Zero;	// 座標
+	Quaternion m_rotation;					// 回転
+	Vector3 m_position = Vector3::Zero;	// 座標
 }
