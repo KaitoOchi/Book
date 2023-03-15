@@ -62,6 +62,7 @@ void Player2D::Update()
 	Animation();
 	Rotation2D();
 	m_characon->SetPosition(m_position);
+	m_characon->SetRotaition(m_rotation);
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);

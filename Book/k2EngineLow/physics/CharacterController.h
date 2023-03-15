@@ -69,7 +69,16 @@ namespace nsK2EngineLow {
 		{
 			m_position = pos;
 		}
-
+		//----------------------------------------
+		const Quaternion& GetRotaition()const
+		{
+			return m_rotaition;
+		}
+		void SetRotaition(const Quaternion& m_rot)
+		{
+			m_rotaition = m_rot;
+		}
+		//----------------------------------------
 		/*!
 			* @brief	ジャンプ中か判定
 			*/
@@ -112,6 +121,9 @@ namespace nsK2EngineLow {
 	private:
 		bool				m_isInited = false;				//!<初期化済み？
 		Vector3 			m_position;						//!<座標。
+		//-------------------------------------------
+		Quaternion			m_rotaition;
+		//-------------------------------------------
 		bool 				m_isJump = false;				//!<ジャンプ中？
 		bool				m_isOnGround = true;			//!<地面の上にいる？
 
