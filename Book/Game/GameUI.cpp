@@ -14,11 +14,16 @@ GameUI::~GameUI()
 
 bool GameUI::Start()
 {
+	m_gageSpriteRender.Init("Assets/sprite/UI/gage.dds", 280.0f, 820.0f);
+	m_gageSpriteRender.SetPosition(Vector3(-400.0f, 100.0f, 0.0f));
+	m_gageSpriteRender.SetScale(Vector3(0.5f, 0.5f, 0.5f));
+	m_gageSpriteRender.Update();
+
 	//É^ÉCÉÄÇÃê›íË
-	m_fontRender.SetPosition(Vector3(0.0f, 500.0f, 0.0f));
-	m_fontRender.SetPivot(Vector2(0.5f, 0.5f));
-	m_fontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-	m_fontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_timeFontRender.SetPosition(Vector3(0.0f, 500.0f, 0.0f));
+	m_timeFontRender.SetPivot(Vector2(0.5f, 0.5f));
+	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	return true;
 }
@@ -42,10 +47,11 @@ void GameUI::Time()
 
 	wchar_t debugText[255];
 	swprintf_s(debugText, 255, L"Time %d:%05.02f", m, s);
-	m_fontRender.SetText(debugText);
+	m_timeFontRender.SetText(debugText);
 }
 
 void GameUI::Render(RenderContext& rc)
 {
-	m_fontRender.Draw(rc);
+	m_gageSpriteRender.Draw(rc);
+	m_timeFontRender.Draw(rc);
 }
