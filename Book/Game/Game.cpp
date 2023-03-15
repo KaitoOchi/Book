@@ -6,6 +6,7 @@
 #include "PlayerManagement.h"
 #include "Title.h"
 #include "SenSor.h"
+#include "MiniMap.h"
 
 Game::Game()
 {
@@ -35,6 +36,7 @@ bool Game::Start()
 	m_stageModelRender.Update();
 	m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());
 
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	LevelDesign();
 
 	return true;

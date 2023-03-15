@@ -3,6 +3,7 @@ class Player3D;
 class Player2D;
 class GameCamera;
 class Enemy;
+class MiniMap;
 class Game : public IGameObject
 {
 public:
@@ -32,5 +33,7 @@ private:
 	GameCamera* m_gamecamera = nullptr;
 
 	LevelRender* m_levelRender = nullptr;
+	MiniMap* m_miniMap = nullptr;
+	Enemy* m_enemy = nullptr;
 };
 
