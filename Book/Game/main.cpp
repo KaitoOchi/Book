@@ -14,8 +14,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ÉQÅ[ÉÄÇÃèâä˙âªÅB
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
-	//NewGO<Title>(0, "title");
-	NewGO<Debug>(0, "debug");
+	NewGO<Title>(0, "title");
+	//NewGO<Debug>(0, "debug");
 
 	RenderingEngine::GetInstance()->Init();
 

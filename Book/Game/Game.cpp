@@ -6,6 +6,7 @@
 #include "PlayerManagement.h"
 #include "Title.h"
 #include "SenSor.h"
+#include "GameUI.h"
 
 
 Game::Game()
@@ -27,6 +28,7 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
+	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Sensor>(0, "sensor");
 	NewGO<PlayerManagement>(0,"playerManagement");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");

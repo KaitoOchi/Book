@@ -2,6 +2,7 @@
 class Player3D;
 class Player2D;
 class GameCamera;
+class GameUI;
 class Game : public IGameObject
 {
 public:
@@ -28,6 +29,7 @@ private:
 	Player3D* m_player3D = nullptr;//3Dプレイヤー
 	Player2D* m_player2D = nullptr;//2Dプレイヤー
 	GameCamera* m_gamecamera = nullptr;
+	GameUI* m_gameUI = nullptr;
 
 };
 

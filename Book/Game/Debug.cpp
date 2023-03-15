@@ -21,7 +21,6 @@ Debug::Debug()
 
 Debug::~Debug()
 {
-	//DeleteGO(m_playerCollision);
 
 	delete m_levelRender;
 }

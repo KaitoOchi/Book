@@ -19,8 +19,6 @@ private:
 	ModelRender m_boxModelRender;
 	FontRender m_fontRender;
 
-	//CollisionObject* m_playerCollision = nullptr;
-
 	LevelRender* m_levelRender = nullptr;
 
 	Mirror* m_mirror = nullptr;
