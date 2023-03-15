@@ -1,5 +1,7 @@
 #pragma once
 #include "Player.h"
+#include "Player2D.h"
+#include"Player3D.h"
 class Player2D;
 class Player3D;
 class PlayerManagement:public Player
@@ -23,6 +25,16 @@ public:
 			return m_player2D->GetPosition();
 		}
 	}
+	//キャラコンの取得
+	void SetCharacon(CharacterController* m_characon)
+	{
+		m_setChara = m_characon;
+	}
+	const CharacterController* GetCharacon()
+	{
+		return m_characon;
+	}
+	//ポジションの取得
 	void  SetPosition(const Vector3& m_pos)
 	{
 		m_position = m_pos;
@@ -39,6 +51,7 @@ private:
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
 	Vector3 m_position = Vector3::Zero;
+	CharacterController* m_setChara=nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
 };
