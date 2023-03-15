@@ -30,6 +30,8 @@ bool Enemy::Start()
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+
+	return start;
 }
 
 bool Enemy::SeachPlayer()

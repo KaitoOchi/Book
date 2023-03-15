@@ -2,8 +2,9 @@
 class Player3D;
 class Player2D;
 class GameCamera;
-class EnemyNormal;
+class Enemy_Normal;
 class MiniMap;
+class BackGround;
 class Game : public IGameObject
 {
 public:
@@ -34,6 +35,7 @@ private:
 
 	LevelRender* m_levelRender = nullptr;
 	MiniMap* m_miniMap = nullptr;
-	EnemyNormal* m_enemyNormal = nullptr;
+	Enemy_Normal* m_enemyNormal = nullptr;
+	BackGround* m_backGround = nullptr;
 };
 
