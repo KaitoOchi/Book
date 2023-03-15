@@ -12,10 +12,10 @@ public:
 
 private:
 	/// <summary>
-	/// “–‚½‚Á‚½‚Æ‚«‚Ìˆ—B
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½B
 	/// </summary>
 	void Hit() override;
-
+	
 private:
 };
 

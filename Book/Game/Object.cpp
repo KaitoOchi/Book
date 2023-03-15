@@ -22,11 +22,16 @@ void Object::Update()
 
 void Object::Collision()
 {
-	//“–‚½‚è”»’è
-	//if (m_collisionObject->IsHit(m_player->GetCharacterController())) {
+	if (m_player->GetCharacon() == nullptr)
+	{
+		return;
+	}
 
-	//	Hit();
-	//}
+	//“–‚½‚è”»’è
+	if (m_collisionObject->IsHit(*m_player->GetCharacon())) {
+
+		Hit();
+	}
 }
 
 void Object::Hit()

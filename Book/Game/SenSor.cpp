@@ -14,9 +14,9 @@ Sensor::~Sensor()
 
 bool Sensor::Start()
 {
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<Player3D>("player3d");
 
-	m_position = Vector3(-80.0f, 50.0f, 0.0f);
+	m_position = Vector3(200.0f, 50.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 50.0f);
 
 	m_modelRender.Init("Assets/modelData/object/sensor/sensor.tkm");

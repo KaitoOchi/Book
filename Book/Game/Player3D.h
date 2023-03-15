@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+class PlayerManagement;
 class Player3D :public Player
 {
 public:
@@ -9,10 +10,13 @@ public:
 	void Update();
 	void Animation();
 	void Throw();
+	void PlayerChang();
 	void Render(RenderContext& rc);
-
-
-	CharacterController m_3Dcharacon;//キャラコン
+	/// <summary>
+	/// キャラコンの作成の関数
+	/// </summary>
+	void CreatCharcon();
+private:
 	ModelRender m_model3DRender;//3Dモデル
 	//アニメーション
 	enum EnAnimationClip {
@@ -26,6 +30,7 @@ public:
 		m_enAnimationClip_Num,//アニメーションの数
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
+	PlayerManagement* m_playerManagement = nullptr;
 
 };
 
