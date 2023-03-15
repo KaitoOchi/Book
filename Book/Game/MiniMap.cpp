@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "MiniMap.h"
 
-#include "Player.h"
-#include "Player2D.h"
-#include "Player3D.h"
+#include "PlayerManagement.h"
 #include "Enemy.h"
 
 namespace
@@ -24,19 +22,25 @@ MiniMap::~MiniMap()
 bool MiniMap::Start()
 {
 	// マップの黒い画像
+	m_SpriteRender.Init("Assets/sprite/map_base.DDS", 566, 550);
+	m_SpriteRender.SetPosition(CENTER_POSITION);
 
 	// 中心の画像
+	m_PlayerSpriteRender.Init("Assets/sprite/map_1.DDS", 566, 550);
+	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
 
 	// エネミーを表す画像
-
+	m_EnemySpriteRender.Init("Assets/sprite/map_2.DDS", 556, 550);
 
 	// インスタンスを探す
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_enemy = FindGO<Enemy>("enemy");
 }
 
 void MiniMap::Update()
 {
 	// 座標を取得
-	Vector3 playerPos = m_player->GetPosition();
+	Vector3 playerPos = m_playerManagement->GetPosition();
 	Vector3 enemyPos = m_enemy->GetPosition();
 
 	Vector3 mapPos;

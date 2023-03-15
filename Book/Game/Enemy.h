@@ -67,7 +67,7 @@ private:
 		m_enEnemyAnimationState_Damege,	// 被弾
 	};
 	// アニメーションステート
-	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
 	// エネミーの行動ステート
 	enum EnEnemyActState

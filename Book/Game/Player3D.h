@@ -16,7 +16,6 @@ public:
 	/// キャラコンの作成の関数
 	/// </summary>
 	void CreatCharcon();
-
 private:
 	ModelRender m_model3DRender;//3Dモデル
 	//アニメーション
