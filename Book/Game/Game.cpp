@@ -11,7 +11,7 @@
 Game::Game()
 {
 	//“–‚½‚è”»’è‚ð—LŒø‰»
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()

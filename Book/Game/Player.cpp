@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "GameCamera.h"
+#include "PlayerManagement.h"
 namespace
 {
 	const float WALK = 40.0f;//•à‚«‚ÌæZ—Ê
@@ -22,8 +23,7 @@ Player::~Player()
 
 bool Player::Start()
 {
-	gamecamera = FindGO<GameCamera>("gameCamera");
-	gamecamera->SetPosition(m_position);
+	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	return true;
 }
 
@@ -100,8 +100,8 @@ void Player::Rotation()
 		&& fabsf(m_moveSpeed.z) < 0.001f) {
 		return;
 	}
-	//atan2‚ğg—p‚µ‚Ä‰ñ“]Šp“x‚ğ‹‚ß‚é
-	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+
+	
 	//SetRotation‚ğg—p‚·‚é
 	m_rotation.SetRotationY(-angle);
 }
