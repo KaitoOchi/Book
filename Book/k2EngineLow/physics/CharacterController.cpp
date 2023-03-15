@@ -159,7 +159,8 @@ namespace nsK2EngineLow {
 		trans.setOrigin(btVector3(position.x, position.y + size.y * 0.5f, position.z));
 		//------------------------------------------------------------
 
-
+		// 追加
+		trans.setRotation(btQuaternion(m_rotaition.y, m_rotaition.x, m_rotaition.x));
 
 		// @todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
@@ -359,6 +360,8 @@ namespace nsK2EngineLow {
 		// 変更：中心座標の求め方をボックスコライダーの中心座標の求め方に変更。
 		// 剛体の位置を更新。
 		trans.setOrigin(btVector3(m_position.x, m_position.y + m_size.y * 0.5f, m_position.z));
+
+		trans.setRotation(btQuaternion(m_rotaition.x,m_rotaition.y , m_rotaition.z, m_rotaition.w));
 		//-------------------------------------------------------------------------
 		//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 		return m_position;

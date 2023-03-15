@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "SenSor.h"
+#include "Sensor.h"
 
 
-SenSor::SenSor()
+Sensor::Sensor()
 {
 
 }
 
-SenSor::~SenSor()
+Sensor::~Sensor()
 {
 
 }
 
-bool SenSor::Start()
+bool Sensor::Start()
 {
-	m_player = FindGO<Player3D>("player3d");
+	m_player = FindGO<PlayerManagement>("playerManagement");
 
 	m_position = Vector3(200.0f, 50.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 50.0f);
 
-	m_modelRender.Init("Assets/modelData/object/sensor.tkm");
+	m_modelRender.Init("Assets/modelData/object/sensor/sensor.tkm");
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.SetRotation(m_rotation);
 	m_modelRender.SetScale(m_scale);
@@ -33,20 +33,20 @@ bool SenSor::Start()
 	return true;
 }
 
-void SenSor::Update()
+void Sensor::Update()
 {
 	Collision();
 }
 
-void SenSor::Hit()
+void Sensor::Hit()
 {
 	//ÉvÉåÉCÉÑÅ[Ç∆ê⁄êG
 	int a = 0;
 	a = 1;
 }
 
-
-void SenSor::Render(RenderContext& rc)
+void Sensor::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
+	if (m_isActive)
+		m_modelRender.Draw(rc);
 }

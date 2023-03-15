@@ -31,22 +31,22 @@ void PlayerManagement::PlayerChange()
 		switch (m_enMnanagementState)
 		{
 		case PlayerManagement::m_enPlayer_2DChanging:
-			//プレイヤー3Dに2Dの座標を与える
-			m_player3D->Activate();
-			m_player3D->SetPosition(m_player2D->GetPosition());
-			m_player3D->ModelRenderUpdate();
-			m_player2D->PlayerChang();
-			m_player3D->CreatCharcon();
+			m_player3D->Activate();//プレイヤー3Dをアクティブにする
+			m_player3D->SetPosition(m_player2D->GetPosition());//3Dに2Dのポジションを与える
+			m_player3D->ModelRenderUpdate();//モデルを更新する
+			m_player2D->PlayerChang();//プレイヤー2Dをディアクティブにする
+			m_player3D->CreatCharcon();//キャラコンを生成する
+			SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
 			//プレイヤーを３Dにする
 			m_enMnanagementState = m_enPlayer_3DChanging;
 			break;
 		case PlayerManagement::m_enPlayer_3DChanging:
-			//プレイヤー2Dに3Dの座標を与える
-			m_player2D->Activate();
-			m_player2D->SetPosition(m_player3D->GetPosition());
-			m_player2D->ModelRenderUpdate();
-			m_player3D->PlayerChang();
-			m_player2D->CreatCharcon();
+			m_player2D->Activate();//プレイヤー2Dをアクティブにする
+			m_player2D->SetPosition(m_player3D->GetPosition());//2Dに3Dのポジションを与える
+			m_player2D->ModelRenderUpdate();//モデルを更新する
+			m_player3D->PlayerChang();//プレイヤー3Dをディアクティブにする
+			m_player2D->CreatCharcon();//キャラコンを生成する
+			SetCharacon(m_player2D->GetCharacon());//キャラコンの情報を得る
 			m_enMnanagementState = m_enPlayer_2DChanging;
 			break;
 		default:

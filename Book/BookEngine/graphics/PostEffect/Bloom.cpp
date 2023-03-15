@@ -20,8 +20,8 @@ namespace nsBookEngine {
 			mainRenderTarget.GetHeight(),
 			1,
 			1,
-			mainRenderTarget.GetColorBufferFormat(),
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT
 		);
 
 		//輝度抽出用のスプライトを初期化
@@ -39,7 +39,7 @@ namespace nsBookEngine {
 		// テクスチャはメインレンダリングターゲットのカラーバッファー
 		spriteInitData.m_textures[0] = &mainRenderTarget.GetRenderTargetTexture();
 		// 描き込むレンダリングターゲットのフォーマットを指定する
-		spriteInitData.m_colorBufferFormat[0] = mainRenderTarget.GetColorBufferFormat();
+		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		m_luminanceSprite.Init(spriteInitData);
 
 
@@ -75,7 +75,6 @@ namespace nsBookEngine {
 		SpriteInitData initData;
 		initData.m_width = mainRenderTarget.GetWidth();
 		initData.m_height = mainRenderTarget.GetHeight();
-		initData.m_colorBufferFormat[0] = mainRenderTarget.GetColorBufferFormat();
 		initData.m_fxFilePath = "Assets/shader/Sprite.fx";
 		initData.m_textures[0] = &mainRenderTarget.GetRenderTargetTexture();
 		m_copyMainRtSprite.Init(initData);
@@ -101,10 +100,10 @@ namespace nsBookEngine {
 		// レンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_luminanceRenderTarget);
 
-		m_gaussianBlur[0].ExecuteOnGPU(rc, 10);
-		m_gaussianBlur[1].ExecuteOnGPU(rc, 10);
-		m_gaussianBlur[2].ExecuteOnGPU(rc, 10);
-		m_gaussianBlur[3].ExecuteOnGPU(rc, 10);
+		m_gaussianBlur[0].ExecuteOnGPU(rc, 20);
+		m_gaussianBlur[1].ExecuteOnGPU(rc, 20);
+		m_gaussianBlur[2].ExecuteOnGPU(rc, 20);
+		m_gaussianBlur[3].ExecuteOnGPU(rc, 20);
 
 		// 4枚のボケ画像を合成してメインレンダリングターゲットに加算合成
 		// レンダリングターゲットとして利用できるまで待つ
@@ -116,23 +115,14 @@ namespace nsBookEngine {
 		// レンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
 
-		//// レンダリングターゲットとして利用できるまで待つ
-		//rc.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
-		//// レンダリングターゲットを設定
-		//rc.SetRenderTargetAndViewport(mainRenderTarget);
-		//// ポストエフェクトの結果をメインレンダリングターゲットに反映。
-		//m_copyMainRtSprite.Draw(rc);
-		//// レンダリングターゲットへの書き込み終了待ち
-		//rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
-
 		// メインレンダリングターゲットの絵をフレームバッファーにコピー
 		rc.SetRenderTarget(
 			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
 			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
 		);
 
-		////// ポストエフェクトの結果をメインレンダリングターゲットに反映。
-		//m_copyMainRtSprite.Draw(rc);
+		// ポストエフェクトの結果をメインレンダリングターゲットに反映。
+		m_copyMainRtSprite.Draw(rc);
 
 		g_graphicsEngine->EndGPUEvent();
 	}

@@ -18,6 +18,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	NewGO<Game>(0, "game");
 	//NewGO<Debug>(0, "debug");
 
+	RenderingEngine::GetInstance()->Init();
+
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{

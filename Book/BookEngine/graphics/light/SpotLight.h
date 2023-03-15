@@ -1,4 +1,5 @@
 #pragma once
+#include "graphics/ModelRender.h"
 
 namespace nsBookEngine {
 
@@ -21,6 +22,7 @@ namespace nsBookEngine {
 	public:
 		SpotLight();
 		~SpotLight();
+		void Render(RenderContext& rc);
 
 		/// <summary>
 		/// 座標を設定。
@@ -126,6 +128,11 @@ namespace nsBookEngine {
 		/// 更新処理。
 		/// </summary>
 		void Update();
+
+		/// <summary>
+		/// 光があたっているかどうか
+		/// </summary>
+		const bool IsHit(const Vector3& playerPos);
 
 	private:
 		spotLight m_spotLig;

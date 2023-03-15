@@ -1,21 +1,25 @@
 #pragma once
 #include "Object.h"
 
-class Sensor : public Object
+class LightSensor : public Object
 {
 public:
-	Sensor();
-	~Sensor();
+	LightSensor();
+	~LightSensor();
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc);
 
-private:
+protected:
 	/// <summary>
-	/// å½“ãŸã‚Šåˆ¤å®šã®å‡¦ç†ã€‚
+	/// “–‚½‚Á‚½‚Æ‚«‚Ìˆ—B
 	/// </summary>
 	void Hit() override;
-	
-private:
+
+	SpotLight m_spotLight;
+
+	float m_angle = 25.0f;
+
+	FontRender m_fontRender;
 };
 

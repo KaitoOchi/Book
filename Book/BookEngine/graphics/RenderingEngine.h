@@ -131,7 +131,7 @@ namespace nsBookEngine {
 		/// </summary>
 		void SetBloomThreshold(const float threshold)
 		{
-
+			m_bloom.SetThreshold(threshold);
 		}
 
 		void Init();

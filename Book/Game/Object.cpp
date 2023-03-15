@@ -7,6 +7,12 @@ Object::Object()
 
 Object::~Object()
 {
+	DeleteGO(m_collisionObject);
+}
+
+bool Object::Start()
+{
+	return true;
 }
 
 void Object::Update()
