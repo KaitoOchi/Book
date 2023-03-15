@@ -9,7 +9,6 @@ namespace
 {
 	const float		MOVE_SPEED = 8.0f;						// 移動速度
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
-	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完のフレーム数
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
@@ -37,7 +36,6 @@ bool Enemy::SeachPlayer()
 {
 	// 視野角の処理
 	// trueのときプレイヤーを発見している
-	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
@@ -53,11 +51,11 @@ bool Enemy::SeachPlayer()
 		// 角度が視野角より狭いとき
 		if (angle <= (FIELDOF_VIEW) {
 			// プレイヤーを発見
-			flag = true;
+			return true;
 		}
 	}
 
-	return flag;
+	return false;
 }
 
 bool Enemy::CatchPlayer()
@@ -75,18 +73,14 @@ bool Enemy::CatchPlayer()
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
 		// 捕まえたフラグをtrueにする
-		flag = true;
+		return true;
 	}
 
-	return flag;
+	return false;
 }
 
-bool Enemy::HitFlashBullet()
+void Enemy::HitFlashBullet()
 {
-	// 閃光弾が当たったときの処理
-	// 閃光弾がヒットしたときtrue
-	bool flag = false;
-
 	// 閃光弾が当たったとき
 	if (HitFlashBulletFlag == true) {
 		// 移動を硬直
@@ -94,8 +88,6 @@ bool Enemy::HitFlashBullet()
 
 		HitAfterFlashBullet();
 	}
-
-	return flag;
 }
 
 void Enemy::HitAfterFlashBullet()
@@ -121,33 +113,6 @@ void Enemy::Act()
 		break;
 		// 追跡
 	case Enemy::m_enEnemyActState_Tracking:
-		break;
-	}
-}
-
-void Enemy::Animation()
-{
-	// アニメーションのステート
-	switch (m_enEnemyAnimationState) {
-		// 待機
-	case Enemy::m_enEnemyAnimationState_Idle:
-		m_modelRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
-		break;
-		// 歩く
-	case Enemy::m_enEnemyAnimationState_Walk:
-		m_modelRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
-		break;
-		// 走る
-	case Enemy::m_enEnemyAnimationState_Run:
-		m_modelRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
-		break;
-		// 攻撃
-	case Enemy::m_enEnemyAnimationState_Attack:
-		m_modelRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
-		break;
-		// 被弾
-	case Enemy::m_enEnemyAnimationState_Damege:
-		m_modelRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
 		break;
 	}
 }
