@@ -1,5 +1,7 @@
 #pragma once
 #include "Player.h"
+#include "Player2D.h"
+#include "Player3D.h"
 class Player2D;
 class Player3D;
 class PlayerManagement:public Player
