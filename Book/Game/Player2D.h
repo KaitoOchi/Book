@@ -17,6 +17,7 @@ public:
 	void Render(RenderContext& rc);
 private:
 	int i = 0;
+	int j = 0;
 	PlayerManagement* m_playerManagement = nullptr;
 };
 
