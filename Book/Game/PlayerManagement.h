@@ -30,7 +30,7 @@ public:
 	{
 		m_setChara = m_characon;
 	}
-	const CharacterController* GetCharacon()
+    CharacterController* GetCharacon()
 	{
 		return m_characon;
 	}
