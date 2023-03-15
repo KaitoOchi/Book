@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "Player2D.h"
-#include "Player3D.h"
+#include"Player3D.h"
 class Player2D;
 class Player3D;
 class PlayerManagement:public Player
@@ -13,11 +13,11 @@ public:
 	void Update();
 	void PlayerChange();
 	/// <summary>
-	/// ƒ|ƒWƒVƒ‡ƒ“‚Ìæ“¾
+	/// ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
 	/// </summary>
 	const Vector3& GetPosition()const
 	{
-		// ¡ƒAƒNƒeƒBƒu‚ÈƒvƒŒƒCƒ„[‚ÌÀ•W‚ğ•Ô‚·
+		// ï¿½ï¿½ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½Èƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Wï¿½ï¿½Ô‚ï¿½
 		if (m_enMnanagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPosition();
 		}
@@ -25,22 +25,33 @@ public:
 			return m_player2D->GetPosition();
 		}
 	}
+	//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìæ“¾
+	void SetCharacon(CharacterController* m_characon)
+	{
+		m_setChara = m_characon;
+	}
+	const CharacterController* GetCharacon()
+	{
+		return m_characon;
+	}
+	//ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
 	void  SetPosition(const Vector3& m_pos)
 	{
 		m_position = m_pos;
 	}
 	/// <summary>
-	/// ‹¤’Ê‚ÌƒXƒe[ƒg‘JˆÚˆ—
+	/// ï¿½ï¿½ï¿½Ê‚ÌƒXï¿½eï¿½[ï¿½gï¿½Jï¿½Úï¿½ï¿½ï¿½
 	/// </summary>
 	void ProcessCommonStateTransition();
 private:
 	enum EnMnagementState
 	{
-		m_enPlayer_2DChanging,//2D‚ÉØ‘Ö’†
-		m_enPlayer_3DChanging,//3D‚ÉØ‘Ö’†
+		m_enPlayer_2DChanging,//2Dï¿½ÉØ‘Ö’ï¿½
+		m_enPlayer_3DChanging,//3Dï¿½ÉØ‘Ö’ï¿½
 	};
-	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//‚RDó‘Ô
+	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//ï¿½RDï¿½ï¿½ï¿½
 	Vector3 m_position = Vector3::Zero;
+	CharacterController* m_setChara=nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
 };

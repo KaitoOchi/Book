@@ -53,6 +53,8 @@ void Player3D::Update()
 	{
 		return;
 	}
+	//atn2‚Å‚RD‚Ì‰ñ“]‚ð‹‚ß‚é
+	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 	Player::Update();
 	Animation();
 	if (g_pad[0]->IsTrigger(enButtonRB1))
