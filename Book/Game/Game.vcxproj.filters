@@ -24,6 +24,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PlayerManagement.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -43,5 +44,6 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="PlayerManagement.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="MiniMap.h" />
   </ItemGroup>
 </Project>
