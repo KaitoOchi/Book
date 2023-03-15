@@ -32,8 +32,9 @@ void PlayerManagement::PlayerChange()
 		{
 		case PlayerManagement::m_enPlayer_2DChanging:
 			//プレイヤー3Dに2Dの座標を与える
-			m_player3D->SetPosition(m_player2D->GetPosition());
 			m_player3D->Activate();
+			m_player3D->SetPosition(m_player2D->GetPosition());
+			m_player3D->ModelRenderUpdate();
 			m_player2D->PlayerChang();
 			m_player3D->CreatCharcon();
 			//プレイヤーを３Dにする
@@ -41,8 +42,9 @@ void PlayerManagement::PlayerChange()
 			break;
 		case PlayerManagement::m_enPlayer_3DChanging:
 			//プレイヤー2Dに3Dの座標を与える
-			m_player2D->SetPosition(m_player3D->GetPosition());
 			m_player2D->Activate();
+			m_player2D->SetPosition(m_player3D->GetPosition());
+			m_player2D->ModelRenderUpdate();
 			m_player3D->PlayerChang();
 			m_player2D->CreatCharcon();
 			m_enMnanagementState = m_enPlayer_2DChanging;
