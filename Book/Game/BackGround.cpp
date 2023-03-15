@@ -3,7 +3,6 @@
 
 BackGround::BackGround()
 {
-
 }
 
 BackGround::~BackGround()
