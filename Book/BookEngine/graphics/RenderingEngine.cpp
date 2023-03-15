@@ -39,10 +39,11 @@ namespace nsBookEngine {
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
-			DXGI_FORMAT_R16G16B16A16_FLOAT,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT
 		);
 
+		SetBloomThreshold(1.25f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -130,12 +131,15 @@ namespace nsBookEngine {
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
 	{
 		BeginGPUEvent("ForwardRendering");
+
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 
-		rc.SetRenderTarget(
-			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
-			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
-		);
+		//rc.SetRenderTarget(
+		//	g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+		//	g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+		//);
+
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 

@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace nsBookEngine {
 
 	class SpotLight
@@ -127,8 +128,21 @@ namespace nsBookEngine {
 		/// </summary>
 		void Update();
 
+		/// <summary>
+		/// コリジョンを設定。
+		/// </summary>
+		void SetCollisionObject(const Vector3& playerPos);
+
+		/// <summary>
+		/// レイを飛ばす処理。
+		/// </summary>
+		void HitRay();
+
 	private:
 		spotLight m_spotLig;
+		CollisionObject* m_collisionObject = nullptr;
+
+		Quaternion m_rotation;
 	};
 
 }

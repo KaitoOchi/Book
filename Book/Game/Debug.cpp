@@ -3,6 +3,7 @@
 
 #include "Mirror.h"
 #include "SenSor.h"
+#include "LightSensor.h"
 
 
 #include "level3DRender/LevelRender.h"
@@ -12,7 +13,7 @@
 Debug::Debug()
 {
 	//当たり判定を有効化
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
 	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
@@ -89,21 +90,15 @@ bool Debug::Start()
 		}
 	);
 
-	NewGO<SenSor>(0, "sensor");
-
-	m_position.y = 50.0f;
+	NewGO<Sensor>(0, "sensor");
+	NewGO<LightSensor>(0, "lightSensor");
 
 	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, -0.0f));
 	m_pointLight.SetColor(Vector3(0.0f, 50.0f, 0.0f));
 	m_pointLight.SetRange(500.0f);
 	m_pointLight.Update();
 
-	m_spotLight.SetPosition(m_position);
-	m_spotLight.SetColor(Vector3(50.0f, 0.0f, 0.0f));
-	m_spotLight.SetRange(500.0f);
-	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
-	m_spotLight.SetAngle(25.0f);
-	m_spotLight.Update();
+
 
 	texture[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.dds");
 	texture[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.dds");
@@ -116,32 +111,7 @@ bool Debug::Start()
 
 void Debug::Update()
 {
-	m_position.x += g_pad[0]->GetLStickXF();
-
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_position.y += g_pad[0]->GetLStickYF();
-	}
-	else {
-		m_position.z += g_pad[0]->GetLStickYF();
-	}
-	m_spotLight.SetPosition(m_position);
-
-	Quaternion qRotY;
-	qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
-	qRotY.Apply(m_spotLight.GetDirection());
-
-	Vector3 rotAxis;
-	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
-	Quaternion qRotX;
-	qRotX.SetRotation(rotAxis, g_pad[0]->GetRStickYF() * 0.01f);
-
-	qRotX.Apply(m_spotLight.GetDirection());
-
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
-
 	m_pointLight.Update();
-	m_spotLight.Update();
 
 
 	m_animModelRender.PlayAnimation(enAnimationClip_Run);
@@ -155,13 +125,12 @@ void Debug::Update()
 		i = 0;
 	}
 	m_modelRender.GetModel().ChangeAlbedoMap("", texture[j]);
-	//m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
 }
 
 void Debug::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
+	//m_modelRender.Draw(rc);
 	m_boxModelRender.Draw(rc);
 	m_animModelRender.Draw(rc);
 	m_stageModelRender.Draw(rc);

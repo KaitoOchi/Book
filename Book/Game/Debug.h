@@ -37,9 +37,6 @@ private:
 	Mirror* m_mirror = nullptr;
 
 	PointLight m_pointLight;
-	SpotLight m_spotLight;
-
-	Vector3 m_position;
 
 	nsK2EngineLow::Texture texture[3];
 	int i = 0;

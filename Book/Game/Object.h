@@ -2,11 +2,12 @@
 #include "Player.h"
 
 
-class Object
+class Object : public IGameObject
 {
 public:
 	Object();
 	~Object();
+	virtual bool Start();
 	virtual void Update() = 0;
 
 	/// <summary>
@@ -44,6 +45,22 @@ public:
 	{
 		return m_rotation;
 	}
+
+	/// <summary>
+	/// 表示状態を設定。
+	/// </summary>
+	void SetActive(const bool active)
+	{
+		m_isActive = active;
+	}
+
+	/// <summary>
+	/// 表示状態を取得。
+	/// </summary>
+	bool GetActive()
+	{
+		return m_isActive;
+	}
 	
 protected:
 	/// <summary>
@@ -64,5 +81,7 @@ protected:
 	Vector3				m_position	= Vector3::Zero;
 	Quaternion			m_rotation	= Quaternion::Identity;
 	Vector3				m_scale		= Vector3::One;
+
+	bool m_isActive = true;
 };
 

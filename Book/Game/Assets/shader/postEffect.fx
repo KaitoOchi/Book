@@ -29,6 +29,11 @@ PSInput VSMain(VSInput In)
 Texture2D<float4> mainRenderTargetTexture : register(t0);	//メインレンダリングターゲットのテクスチャ
 sampler Sampler : register(s0);
 
+cbuffer SamplingLuminanceCb : register(b1)
+{
+	float threshold;
+};
+
 //輝度抽出用
 float4 PSLuminance(PSInput In) : SV_Target0
 {
@@ -36,9 +41,10 @@ float4 PSLuminance(PSInput In) : SV_Target0
 	float4 color = mainRenderTargetTexture.Sample(Sampler, In.uv);
 
 	//サンプリングしたカラーの明るさを計算
-	float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.00721f));
+	float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
 
-	clip(t - 1.0f);
+	clip(t - threshold);
+	t -= threshold;
 	return color;
 }
 
