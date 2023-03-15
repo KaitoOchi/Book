@@ -1,5 +1,5 @@
 #pragma once
-#include "Player3D.h"
+#include "PlayerManagement.h"
 
 
 class Object : public IGameObject
@@ -76,7 +76,7 @@ protected:
 	ModelRender			m_modelRender;
 
 	CollisionObject*	m_collisionObject = nullptr;
-	Player3D*			m_player = nullptr;
+	PlayerManagement*	m_player = nullptr;
 
 	Vector3				m_position	= Vector3::Zero;
 	Quaternion			m_rotation	= Quaternion::Identity;

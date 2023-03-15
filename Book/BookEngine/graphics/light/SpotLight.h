@@ -1,5 +1,5 @@
 #pragma once
-
+#include "graphics/ModelRender.h"
 
 namespace nsBookEngine {
 
@@ -22,6 +22,7 @@ namespace nsBookEngine {
 	public:
 		SpotLight();
 		~SpotLight();
+		void Render(RenderContext& rc);
 
 		/// <summary>
 		/// 座標を設定。
@@ -129,20 +130,12 @@ namespace nsBookEngine {
 		void Update();
 
 		/// <summary>
-		/// コリジョンを設定。
+		/// 光があたっているかどうか
 		/// </summary>
-		void SetCollisionObject(const Vector3& playerPos);
-
-		/// <summary>
-		/// レイを飛ばす処理。
-		/// </summary>
-		void HitRay();
+		const bool IsHit(const Vector3& playerPos);
 
 	private:
 		spotLight m_spotLig;
-		CollisionObject* m_collisionObject = nullptr;
-
-		Quaternion m_rotation;
 	};
 
 }

@@ -14,8 +14,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
-	NewGO<Title>(0, "title");
-	//NewGO<Debug>(0, "debug");
+	//NewGO<Title>(0, "title");
+	NewGO<Debug>(0, "debug");
+
+	RenderingEngine::GetInstance()->Init();
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

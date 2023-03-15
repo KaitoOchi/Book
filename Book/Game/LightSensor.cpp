@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "LightSensor.h"
 
-#include "Player.h"
+#include "PlayerManagement.h"
 
 
 LightSensor::LightSensor()
@@ -16,7 +16,7 @@ LightSensor::~LightSensor()
 
 bool LightSensor::Start()
 {
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<PlayerManagement>("playerManagement");
 
 	m_position = Vector3(-80.0f, 50.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 1.0f);
@@ -28,7 +28,7 @@ bool LightSensor::Start()
 	m_spotLight.SetRange(500.0f);
 	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
 	m_spotLight.SetAngle(m_angle);
-	m_spotLight.SetCollisionObject(m_player->GetPosition());
+	//m_spotLight.SetCollisionObject(m_player->GetPosition());
 	m_spotLight.Update();
 
 	return true;
@@ -44,9 +44,6 @@ void LightSensor::Update()
 	else {
 		m_position.z += g_pad[0]->GetLStickYF();
 	}
-
-	//m_angle += g_pad[0]->GetRStickXF();
-
 	m_spotLight.SetAngle(m_angle);
 	m_spotLight.SetPosition(m_position);
 
@@ -71,7 +68,12 @@ void LightSensor::Update()
 		m_spotLight.GetAngle(), m_spotLight.GetDirection().x, m_spotLight.GetDirection().y, m_spotLight.GetDirection().z);
 	m_fontRender.SetText(debugText);
 
-	m_spotLight.HitRay();
+	Vector3 playerPos = Vector3(100.0f, 0.0f, 0.0f);
+
+	if (m_spotLight.IsHit(playerPos))
+	{
+		int i = 0;
+	}
 }
 
 void LightSensor::Hit()

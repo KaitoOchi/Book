@@ -34,6 +34,7 @@ namespace nsBookEngine {
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
+		//メインレンダリングターゲットの設定
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -43,6 +44,7 @@ namespace nsBookEngine {
 			DXGI_FORMAT_D32_FLOAT
 		);
 
+		//ブルームの閾値を設定
 		SetBloomThreshold(1.25f);
 		m_bloom.Init(m_mainRenderTarget);
 

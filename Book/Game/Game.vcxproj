@@ -240,6 +240,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="Player3D.cpp" />
+    <ClCompile Include="PlayerManagement.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -261,6 +262,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player2D.h" />
     <ClInclude Include="Player3D.h" />
+    <ClInclude Include="PlayerManagement.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

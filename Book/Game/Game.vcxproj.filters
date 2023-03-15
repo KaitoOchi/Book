@@ -32,6 +32,7 @@
     <ClCompile Include="Sensor.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -56,5 +57,6 @@
     <ClInclude Include="Sensor.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerManagement.h" />
   </ItemGroup>
 </Project>

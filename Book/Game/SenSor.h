@@ -12,7 +12,7 @@ public:
 
 private:
 	/// <summary>
-	/// ���������Ƃ��̏����B
+	/// 当たり判定の処理。
 	/// </summary>
 	void Hit() override;
 	
