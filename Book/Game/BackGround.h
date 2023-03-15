@@ -1,5 +1,5 @@
 #pragma once
-class BackGround:public IGameObject
+class BackGround :public IGameObject
 {
 public:
 	BackGround();
@@ -25,6 +25,6 @@ public:
 private:
 	ModelRender m_ModelRender;			// モデルレンダー
 
-	Quaternion m_rotation;					// 回転
+	Quaternion m_rotation;				// 回転
 	Vector3 m_position = Vector3::Zero;	// 座標
-}
+};
