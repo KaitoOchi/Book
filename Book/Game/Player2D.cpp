@@ -16,6 +16,7 @@ Player2D::Player2D()
 }
 Player2D::~Player2D()
 {
+	delete m_characon;
 	delete(m_modelRender);
 }
 bool Player2D::Start()
