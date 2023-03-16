@@ -16,6 +16,12 @@ struct PSInput{
 	float2 uv  : TEXCOORD0;
 };
 
+//スプライト用構造体データ
+cbuffer SpriteCB : register(b1)
+{
+	float clipSize;
+}
+
 Texture2D<float4> colorTexture : register(t0);	//�J���[�e�N�X�`���B
 sampler Sampler : register(s0);
 
@@ -28,5 +34,9 @@ PSInput VSMain(VSInput In)
 }
 float4 PSMain( PSInput In ) : SV_Target0
 {
-	return colorTexture.Sample(Sampler, In.uv) * mulColor;
+	float4 color = colorTexture.Sample(Sampler, In.uv) * mulColor;
+
+	clip(In.pos.y - clipSize);
+
+	return color;
 }

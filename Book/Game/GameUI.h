@@ -13,9 +13,11 @@ public:
 private:
 	void Time();
 
+	SpriteRender m_gageFrameSpriteRender;
 	SpriteRender m_gageSpriteRender;
 	FontRender m_timeFontRender;
 
-	float m_timer = 130.0f;
+	float m_timer = 0.0f;
+	float m_gage = 0.0f;
 };
 
