@@ -99,7 +99,7 @@ protected:
 	};
 
 	std::vector<Point> m_pointList;			// ポイント構造体の配列
-	Point* m_point;							// ポイント構造体のポインタ、現在の目的地になる
+	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
 
 	PlayerManagement* m_playerManagement = nullptr;
 
