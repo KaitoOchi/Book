@@ -13,6 +13,7 @@ public:
 	bool CatchPlayer();					// プレイヤーを確保する処理
 	void HitFlashBullet();				// 閃光弾が当たったときの処理
 	void HitAfterFlashBullet();			// 閃光弾が当たった後の処理
+	void Act();
 
 	// エネミーのアニメーションステート
 	enum EnEnemyAnimationState
