@@ -236,6 +236,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="Mirror.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="LightSensor.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Object.h" />

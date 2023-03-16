@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Player.h"
 #include "Player2D.h"
 #include "Player3D.h"
@@ -13,11 +13,11 @@ public:
 	void Update();
 	void PlayerChange();
 	/// <summary>
-	/// ƒ|ƒWƒVƒ‡ƒ“‚Ìæ“¾
+	/// ãƒã‚¸ã‚·ãƒ§ãƒ³ã®å–å¾—
 	/// </summary>
 	const Vector3& GetPosition()const
 	{
-		// ¡ƒAƒNƒeƒBƒu‚ÈƒvƒŒƒCƒ„[‚ÌÀ•W‚ğ•Ô‚·
+		// ä»Šã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‚’è¿”ã™
 		if (m_enMnanagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPosition();
 		}
@@ -25,22 +25,32 @@ public:
 			return m_player2D->GetPosition();
 		}
 	}
+	//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìæ“¾
+	void SetCharacon(CharacterController* m_characon)
+	{
+		m_setChara = m_characon;
+	}
+	CharacterController* GetCharacon()
+	{
+		return m_characon;
+	}
 	void  SetPosition(const Vector3& m_pos)
 	{
 		m_position = m_pos;
 	}
 	/// <summary>
-	/// ‹¤’Ê‚ÌƒXƒe[ƒg‘JˆÚˆ—
+	/// å…±é€šã®ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»å‡¦ç†
 	/// </summary>
 	void ProcessCommonStateTransition();
 private:
 	enum EnMnagementState
 	{
-		m_enPlayer_2DChanging,//2D‚ÉØ‘Ö’†
-		m_enPlayer_3DChanging,//3D‚ÉØ‘Ö’†
+		m_enPlayer_2DChanging,//2Dã«åˆ‡æ›¿ä¸­
+		m_enPlayer_3DChanging,//3Dã«åˆ‡æ›¿ä¸­
 	};
-	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//‚RDó‘Ô
+	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//ï¼“DçŠ¶æ…‹
 	Vector3 m_position = Vector3::Zero;
+	CharacterController* m_setChara = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
 };

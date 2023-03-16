@@ -13,7 +13,6 @@
     </ClCompile>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Player3D.cpp" />
     <ClCompile Include="Title.cpp" />
@@ -27,6 +26,8 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy_Normal.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="LightSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -35,7 +36,6 @@
     </ClInclude>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Player3D.h" />
     <ClInclude Include="Title.h" />
@@ -49,5 +49,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Enemy_Normal.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="LightSensor.h" />
   </ItemGroup>
 </Project>

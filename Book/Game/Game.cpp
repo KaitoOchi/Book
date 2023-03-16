@@ -31,15 +31,15 @@ bool Game::Start()
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
 	NewGO<PlayerManagement>(0,"playerManagement");
-	/*m_stageModelRender.Init("Assets/modelData/stage1.tkm");
+	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);
 	m_stageModelRender.SetScale(Vector3::One);
-	m_stageModelRender.Update();*/
+	m_stageModelRender.Update();
 	m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
-	LevelDesign();
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//LevelDesign();
 
 	return true;
 }
@@ -47,7 +47,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender->Init("Assets/debugstage/debugstage_1.tkl", [&](LevelObjectData& objData) {
+	m_levelRender->Init("Assets/modelData/debugStage/debug_1.tkl", [&](LevelObjectData& objData) {
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
