@@ -112,4 +112,5 @@ protected:
 	Quaternion m_rotation;					// 回転
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	float time = 0.0f;						// 経過時間を加算するタイマー
 };

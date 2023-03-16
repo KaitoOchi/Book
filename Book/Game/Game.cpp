@@ -40,7 +40,7 @@ bool Game::Start()
 
 	LevelDesign();
 
-	m_miniMap=NewGO<MiniMap>(0, "miniMap");
+	//m_miniMap=NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }

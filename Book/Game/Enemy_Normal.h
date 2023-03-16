@@ -10,9 +10,8 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void HeadToDestination();			// 目的地に向かう処理
 	void Animation();					// アニメーション
-	void Act();
+	void Act();							// 行動パターン
 
 private:
 

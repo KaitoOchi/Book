@@ -10,7 +10,7 @@ namespace
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
-	const float		STOP_TIMER = 2.0f;						// パス移動時の待機時間
+	const float		STOP_TIMER = 12.0f;						// パス移動時の待機時間
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
@@ -121,21 +121,14 @@ void Enemy::Act_Craw()
 		}
 	}
 
-	// 経過時間を加算
-	float time = 0.0f;
-	time += g_gameTime->GetFrameDeltaTime();
-
-	// 加算された時間が一定以上になったとき
-	if (STOP_TIMER <= time) {
-		// 目標のポイントの座標から現在の座標を引いて、距離ベクトルを計算する
-		Vector3 moveSpeed = m_point->s_position - m_position;
-		// 正規化
-		moveSpeed.Normalize();
-		// ベクトルにスカラーを乗算
-		moveSpeed *= MOVE_SPEED;
-		// 座標に加算する
-		m_position += moveSpeed;
-	}
+	// 目標のポイントの座標から現在の座標を引いて、距離ベクトルを計算する
+	Vector3 moveSpeed = m_point->s_position - m_position;
+	// 正規化
+	moveSpeed.Normalize();
+	// ベクトルにスカラーを乗算
+	moveSpeed *= MOVE_SPEED;
+	// 座標に加算する
+	m_position += moveSpeed;
 }
 
 void Enemy::Act_Tracking()
