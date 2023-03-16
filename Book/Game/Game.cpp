@@ -19,6 +19,7 @@ Game::~Game()
 {
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
+	DeleteGO(m_playerManagement);
 	DeleteGO(m_gamecamera);
 
 }
@@ -30,7 +31,7 @@ bool Game::Start()
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Sensor>(0, "sensor");
-	NewGO<PlayerManagement>(0,"playerManagement");
+	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	m_stageModelRender.SetRotation(Quaternion::Identity);
