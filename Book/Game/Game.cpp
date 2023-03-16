@@ -38,8 +38,9 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	LevelDesign();
+
+	m_miniMap=NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }

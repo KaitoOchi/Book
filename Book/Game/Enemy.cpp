@@ -7,9 +7,12 @@
 
 namespace
 {
-	const float		MOVE_SPEED = 8.0f;						// 移動速度
+	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
+	const float		STOP_TIMER = 2.0f;						// パス移動時の待機時間
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
+	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 }
@@ -75,46 +78,95 @@ bool Enemy::CatchPlayer()
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
 		// 捕まえたフラグをtrueにする
+		m_fontRender.SetText(L"捕まえた");
+		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 		return true;
 	}
 
 	return false;
 }
 
-void Enemy::HitFlashBullet()
+bool Enemy::HitFlashBullet()
 {
 	// 閃光弾が当たったとき
+	// trueなら当たった
+
 	if (HitFlashBulletFlag == true) {
 		// 移動を硬直
 		m_position = m_position;
 
-		HitAfterFlashBullet();
+		return true;
+	}
+
+	return false;
+}
+
+void Enemy::Act_Craw()
+{
+	// パス移動
+	// 目標とするポイントの座標から現在の座標を引いて、距離ベクトルを求める
+	Vector3 diff = m_point->s_position - m_position;
+
+	// 距離が一定以内なら目的地とするポイントを変更する
+	if (diff.Length() <= CHANGING_DISTANCE) {
+
+		// 現在の目的地のポイントが配列の最後のとき
+		if (m_point->s_number == m_pointList.size()) {
+			// 一番最初のポイントを目的地とする
+			m_point = &m_pointList[0];
+		}
+		// そうでないとき
+		else {
+			m_point = &m_pointList[m_point->s_number];
+		}
+	}
+
+	// 経過時間を加算
+	float time = 0.0f;
+	time += g_gameTime->GetFrameDeltaTime();
+
+	// 加算された時間が一定以上になったとき
+	if (STOP_TIMER <= time) {
+		// 目標のポイントの座標から現在の座標を引いて、距離ベクトルを計算する
+		Vector3 moveSpeed = m_point->s_position - m_position;
+		// 正規化
+		moveSpeed.Normalize();
+		// ベクトルにスカラーを乗算
+		moveSpeed *= MOVE_SPEED;
+		// 座標に加算する
+		m_position += moveSpeed;
 	}
 }
 
-void Enemy::HitAfterFlashBullet()
+void Enemy::Act_Tracking()
+{
+	// ナビメッシュでの移動
+}
+
+void Enemy::Act_Access()
+{
+	// エネミーからプレイヤーへ向かうベクトルを計算する
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+	// ベクトルの長さを求める
+	float length = diff.Length();
+
+	// ベクトルが一定以下のとき
+	if (length <= ACCESS_DECISION) {
+		// ベクトルを正規化
+		diff.Normalize();
+		m_position += diff * MOVE_SPEED;
+	}
+}
+
+void Enemy::Act_Confuion()
 {
 	// 閃光弾が当たった後の硬直処理
 	// 経過時間を加算
-	float time = +g_gameTime->GetFrameDeltaTime();
+	float time = 0.0f;
+	time += g_gameTime->GetFrameDeltaTime();
 
 	// 加算された時間が一定以上になったとき
 	if (CANMOVE_TIMER <= time) {
-		// 加算する経過時間をリセット
-		time = 0;
 		return;
-	}
-}
-
-void Enemy::Act()
-{
-	// 行動パターン
-	switch (m_enEnemyActState) {
-		// 巡回
-	case Enemy::m_enEnemyActState_Craw:
-		break;
-		// 追跡
-	case Enemy::m_enEnemyActState_Tracking:
-		break;
 	}
 }

@@ -2,13 +2,14 @@
 #include "MiniMap.h"
 
 #include "PlayerManagement.h"
-#include "Enemy.h"
+#include "Enemy_Normal.h"
 
 namespace
 {
-	Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);	// マップの中心
-	float MAP_RADIUS = 240.0f;								// マップの半径
-	float LIMITED_RANGE_IMAGE = 600.0f;						// マップの範囲
+	const Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);	// マップの中心
+	const float MAP_RADIUS = 240.0f;									// マップの半径
+	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
+	const float ALPHA = 0.25f;
 }
 
 MiniMap::MiniMap()
@@ -22,48 +23,48 @@ MiniMap::~MiniMap()
 bool MiniMap::Start()
 {
 	// マップの黒い画像
-	m_SpriteRender.Init("Assets/sprite/map_base.DDS", 315, 315);
+	m_SpriteRender.Init("Assets/sprite/UI/map_base.DDS", 315, 315);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
-	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, 0.25f });
-	m_SpriteRender.Update();
+	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
 
 	// 中心の画像
-	m_PlayerSpriteRender.Init("Assets/sprite/map_1.DDS", 14, 15);
+	m_PlayerSpriteRender.Init("Assets/sprite/UI/map_1.DDS", 15,15);
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
-	m_PlayerSpriteRender.Update();
 
 	// エネミーを表す画像
-	m_EnemySpriteRender.Init("Assets/sprite/map_2.DDS", 25, 25);
-
+	m_EnemySpriteRender.Init("Assets/sprite/UI/map_2.DDS", 10, 10);
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_enemy = FindGO<Enemy>("enemy");
+	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
 
 	return true;
 }
 
 void MiniMap::Update()
 {
-	//// 座標を取得
-	//Vector3 playerPos = m_playerManagement->GetPosition();
-	//Vector3 enemyPos = m_enemy->GetPosition();
+	// 座標を取得
+	Vector3 playerPos = m_playerManagement->GetPosition();
+	//Vector3 enemyPos = m_enemyNormal->GetPosition();
+	Vector3 enemyPos = m_playerManagement->GetPosition();
 
-	//Vector3 mapPos;
+	Vector3 mapPos;
 
-	//// マップに表示する範囲に敵がいたら
-	//if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
-	//	// マップに表示する
-	//	m_isImage = true;
-	//	// spriteRenderに座標を設定
-	//	m_EnemySpriteRender.SetPosition(mapPos);
-	//}
-	//// マップに表示する敵がいなかったら
-	//else {
-	//	m_isImage = false;
-	//}
+	// マップに表示する範囲に敵がいたら
+	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
+		// マップに表示する
+		m_isImage = true;
+		// spriteRenderに座標を設定
+		m_EnemySpriteRender.SetPosition(mapPos);
+	}
+	// マップに表示する敵がいなかったら
+	else {
+		m_isImage = false;
+	}
 
-	
+	m_EnemySpriteRender.Update();
+	m_PlayerSpriteRender.Update();
+	m_SpriteRender.Update();
 }
 
 const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition,Vector3 worldPosition,Vector3& mapPosition) 
@@ -111,10 +112,13 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 void MiniMap::Render(RenderContext& rc)
 {
+	// 描画
 	m_SpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
+	// エネミーが近くにいないとき
 	if (m_isImage == false) {
+		// ここで処理を終了
 		return;
 	}
 

@@ -1,7 +1,7 @@
 #pragma once
 
 class PlayerManagement;
-class Enemy;
+class Enemy_Normal;
 class MiniMap:public IGameObject
 {
 public:
@@ -31,7 +31,7 @@ private:
 	SpriteRender m_EnemySpriteRender;
 
 	PlayerManagement* m_playerManagement = nullptr;
-	Enemy* m_enemy = nullptr;
+	Enemy_Normal* m_enemyNormal = nullptr;
 
 	bool m_isImage = false;
 };
