@@ -22,6 +22,12 @@ namespace nsBookEngine {
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 		};
 
+		//スプライト用定数バッファの構造体
+		struct SpriteCB
+		{
+			float clipSize;
+		};
+
 	private:
 		RenderingEngine();
 		~RenderingEngine();
@@ -127,6 +133,15 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// スプライト用の構造体を取得。
+		/// </summary>
+		/// <returns></returns>
+		SpriteCB& GetSpriteCB()
+		{
+			return m_spriteCB;
+		}
+
+		/// <summary>
 		/// ブルームが発生する閾値を設定
 		/// </summary>
 		void SetBloomThreshold(const float threshold)
@@ -176,6 +191,7 @@ namespace nsBookEngine {
 		static RenderingEngine* m_instance;
 
 		LightCB m_lightCB;
+		SpriteCB m_spriteCB;
 
 		DirectionLight m_directionLig;
 		HemiSphereLight m_hemiSphereLig;

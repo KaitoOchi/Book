@@ -1,9 +1,10 @@
 #pragma once
 class Player3D;
 class Player2D;
-class PlayerManagement;
 class GameCamera;
-class GameUI;
+class Enemy_Normal;
+class MiniMap;
+class BackGround;
 class Game : public IGameObject
 {
 public:
@@ -12,6 +13,7 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+	void LevelDesign();			// ステージのレベルデザインの処理
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
@@ -30,8 +32,10 @@ private:
 	Player3D* m_player3D = nullptr;//3Dプレイヤー
 	Player2D* m_player2D = nullptr;//2Dプレイヤー
 	GameCamera* m_gamecamera = nullptr;
-	GameUI* m_gameUI = nullptr;
-	PlayerManagement* m_playerManagement = nullptr;
 
+	LevelRender m_levelRender;
+	MiniMap* m_miniMap = nullptr;
+	Enemy_Normal* m_enemyNormal = nullptr;
+	BackGround* m_backGround = nullptr;
 };
 

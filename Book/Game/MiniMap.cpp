@@ -6,7 +6,7 @@
 
 namespace
 {
-	Vector3 CENTER_POSITION = Vector3(0.0f, 0.0f, 0.0f);	// マップの中心
+	Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);	// マップの中心
 	float MAP_RADIUS = 240.0f;								// マップの半径
 	float LIMITED_RANGE_IMAGE = 600.0f;						// マップの範囲
 }
@@ -22,40 +22,48 @@ MiniMap::~MiniMap()
 bool MiniMap::Start()
 {
 	// マップの黒い画像
-	m_SpriteRender.Init("Assets/sprite/map_base.DDS", 566, 550);
+	m_SpriteRender.Init("Assets/sprite/map_base.DDS", 315, 315);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
+	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, 0.25f });
+	m_SpriteRender.Update();
 
 	// 中心の画像
-	m_PlayerSpriteRender.Init("Assets/sprite/map_1.DDS", 566, 550);
+	m_PlayerSpriteRender.Init("Assets/sprite/map_1.DDS", 14, 15);
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
+	m_PlayerSpriteRender.Update();
 
 	// エネミーを表す画像
-	m_EnemySpriteRender.Init("Assets/sprite/map_2.DDS", 556, 550);
+	m_EnemySpriteRender.Init("Assets/sprite/map_2.DDS", 25, 25);
+
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_enemy = FindGO<Enemy>("enemy");
+
+	return true;
 }
 
 void MiniMap::Update()
 {
-	// 座標を取得
-	Vector3 playerPos = m_playerManagement->GetPosition();
-	Vector3 enemyPos = m_enemy->GetPosition();
+	//// 座標を取得
+	//Vector3 playerPos = m_playerManagement->GetPosition();
+	//Vector3 enemyPos = m_enemy->GetPosition();
 
-	Vector3 mapPos;
+	//Vector3 mapPos;
 
-	// マップに表示する範囲に敵がいたら
-	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
-		// マップに表示する
-		m_isImage = true;
-		// spriteRenderに座標を設定
-		m_EnemySpriteRender.SetPosition(mapPos);
-	}
-	// マップに表示する敵がいなかったら
-	else {
-		m_isImage = false;
-	}
+	//// マップに表示する範囲に敵がいたら
+	//if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
+	//	// マップに表示する
+	//	m_isImage = true;
+	//	// spriteRenderに座標を設定
+	//	m_EnemySpriteRender.SetPosition(mapPos);
+	//}
+	//// マップに表示する敵がいなかったら
+	//else {
+	//	m_isImage = false;
+	//}
+
+	
 }
 
 const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition,Vector3 worldPosition,Vector3& mapPosition) 

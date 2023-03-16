@@ -48,18 +48,18 @@ namespace nsBookEngine {
 
 			if (bone->GetParentBoneNo() == 0) {
 
-				//行列から座標を作成
+				////行列から座標を作成
 				LevelObjectData levelObjData;
 				bone->CalcWorldTRS(levelObjData.position, levelObjData.rotation, levelObjData.scale);
 
-				//ZupとYupの変更
+				//ZupとYupの変更。
 				float fix = levelObjData.position.y;
 				levelObjData.position.y = levelObjData.position.z;
 				levelObjData.position.z = -fix;
 
-				fix = levelObjData.rotation.y;
-				levelObjData.rotation.y = levelObjData.rotation.z;
-				levelObjData.rotation.z = -fix;
+				/*fix = levelObjData.rotation.z;
+				levelObjData.rotation.z = levelObjData.rotation.y;
+				levelObjData.rotation.z = fix;*/
 
 				std::swap(levelObjData.scale.y, levelObjData.scale.z);
 
