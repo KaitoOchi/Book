@@ -4,15 +4,6 @@
     <Filter Include="system">
       <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{6a860a1d-ba7f-46fc-b2a8-eba01a0af2da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Player">
-      <UniqueIdentifier>{faa5b47d-d692-428a-9061-819cf83c8d9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{a03129cb-dbc0-4f96-8b20-d24436e05e39}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -20,75 +11,45 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Mirror.cpp" />
+    <ClCompile Include="Player3D.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="LightSensor.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Sensor.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="GameUI.cpp" />
-    <ClCompile Include="Player.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Player2D.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Player3D.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerManagement.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
+    <ClCompile Include="SenSor.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="PlayerManagement.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Normal.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="LightSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Mirror.h" />
+    <ClInclude Include="Player3D.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Player2D.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameCamera.h" />
-    <ClInclude Include="LightSensor.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Sensor.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="GameUI.h" />
-    <ClInclude Include="Player.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Player2D.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Player3D.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerManagement.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
+    <ClInclude Include="SenSor.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="PlayerManagement.h" />
+    <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Enemy_Normal.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="LightSensor.h" />
   </ItemGroup>
 </Project>

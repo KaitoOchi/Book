@@ -229,20 +229,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_Normal.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player2D.cpp" />
     <ClCompile Include="Player3D.cpp" />
     <ClCompile Include="PlayerManagement.cpp" />
-    <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="SenSor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -253,19 +256,22 @@
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_Normal.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="GameUI.h" />
     <ClInclude Include="LightSensor.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player2D.h" />
     <ClInclude Include="Player3D.h" />
     <ClInclude Include="PlayerManagement.h" />
-    <ClInclude Include="Sensor.h" />
+    <ClInclude Include="SenSor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
