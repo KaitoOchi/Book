@@ -13,6 +13,7 @@ Player3D::Player3D()
 }
 Player3D::~Player3D()
 {
+	delete(m_characon);
 	delete(m_modelRender);
 }
 bool Player3D::Start()

@@ -1,6 +1,7 @@
 #pragma once
 class Player3D;
 class Player2D;
+class PlayerManagement;
 class GameCamera;
 class GameUI;
 class Game : public IGameObject
@@ -30,6 +31,7 @@ private:
 	Player2D* m_player2D = nullptr;//2DÉvÉåÉCÉÑÅ[
 	GameCamera* m_gamecamera = nullptr;
 	GameUI* m_gameUI = nullptr;
+	PlayerManagement* m_playerManagement = nullptr;
 
 };
 
