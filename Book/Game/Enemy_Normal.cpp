@@ -48,17 +48,12 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// çXêV
-	HeadToDestination();
-
+	Act();
+	//Enemy::Act_Access();
 	Animation();
 
 	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.Update();
-}
-
-void Enemy_Normal::HeadToDestination()
-{
-	Act();
 }
 
 void Enemy_Normal::Act()

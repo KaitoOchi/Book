@@ -90,7 +90,6 @@ bool Enemy::HitFlashBullet()
 {
 	// 閃光弾が当たったとき
 	// trueなら当たった
-
 	if (HitFlashBulletFlag == true) {
 		// 移動を硬直
 		m_position = m_position;
@@ -104,7 +103,8 @@ bool Enemy::HitFlashBullet()
 void Enemy::Act_Craw()
 {
 	// パス移動
-	// 目標とするポイントの座標から現在の座標を引いて、距離ベクトルを求める
+	
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
 	// 距離が一定以内なら目的地とするポイントを変更する
@@ -121,7 +121,7 @@ void Enemy::Act_Craw()
 		}
 	}
 
-	// 目標のポイントの座標から現在の座標を引いて、距離ベクトルを計算する
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
 	// 正規化
 	moveSpeed.Normalize();
@@ -129,18 +129,23 @@ void Enemy::Act_Craw()
 	moveSpeed *= MOVE_SPEED;
 	// 座標に加算する
 	m_position += moveSpeed;
+
+	Enemy::SeachPlayer();
 }
 
 void Enemy::Act_Tracking()
 {
 	// ナビメッシュでの移動
+
+
+	Enemy::CatchPlayer();
 }
 
 void Enemy::Act_Access()
 {
-	// エネミーからプレイヤーへ向かうベクトルを計算する
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ベクトルの長さを求める
+	// ベクトルの長さ
 	float length = diff.Length();
 
 	// ベクトルが一定以下のとき
@@ -154,6 +159,7 @@ void Enemy::Act_Access()
 void Enemy::Act_Confuion()
 {
 	// 閃光弾が当たった後の硬直処理
+	
 	// 経過時間を加算
 	float time = 0.0f;
 	time += g_gameTime->GetFrameDeltaTime();
