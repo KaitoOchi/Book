@@ -55,6 +55,7 @@ void Game::LevelDesign()
 
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
 			m_enemyNormal->SetPosition(objData.position);
+			//m_enemyNormal->SetRotation(Quaternion(objData.rotation.x, objData.rotation.z, objData.rotation.y, objData.rotation.w));
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
 
