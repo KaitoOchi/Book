@@ -22,9 +22,18 @@ public:
 		m_rotation = rot;
 	}
 
+	/// <summary>
+	/// スケールを設定する
+	/// </summary>
+	void SetScale(Vector3 sca) {
+		m_scale = sca;
+	}
+
 private:
+	PhysicsStaticObject m_physicsStaticObj;
 	ModelRender m_ModelRender;			// モデルレンダー
 
 	Quaternion m_rotation;				// 回転
 	Vector3 m_position = Vector3::Zero;	// 座標
+	Vector3 m_scale = Vector3::One;			// スケール
 };

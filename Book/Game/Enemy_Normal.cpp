@@ -16,10 +16,6 @@ Enemy_Normal::~Enemy_Normal()
 
 bool Enemy_Normal::Start()
 {
-	// モデルの読み込み
-	m_NormalModelRender.Init("Assets/modelData/enemy/enemy.tkm");
-	m_NormalModelRender.SetScale({ 1.3f, 1.3f, 1.3f });
-
 	// アニメーションの読み込み
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/enemy/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
@@ -31,6 +27,12 @@ bool Enemy_Normal::Start()
 	m_animationClips[m_enAnimationClip_Attack].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Damege].Load("Assets/animData/enemy/damege.tka");
 	m_animationClips[m_enAnimationClip_Damege].SetLoopFlag(false);
+
+	// モデルの読み込み
+	m_NormalModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
+	m_NormalModelRender.SetScale(m_scale);
+	m_NormalModelRender.SetPosition(m_position);
+	m_NormalModelRender.SetRotation(m_rotation);
 
 	Enemy::Start();
 
@@ -47,7 +49,7 @@ void Enemy_Normal::Update()
 void Enemy_Normal::HeadToDestination()
 {
 	// プレイヤーを発見したとき
-	if (SeachPlayer() == true) {
+	if (Enemy::SeachPlayer() == true) {
 		// 追跡に移行する
 		m_enEnemyActState = m_enEnemyActState_Tracking;
 
@@ -55,7 +57,7 @@ void Enemy_Normal::HeadToDestination()
 
 
 		// プレイヤーを確保したとき
-		if (CatchPlayer() == true) {
+		if (Enemy::CatchPlayer() == true) {
 		}
 	}
 	else {

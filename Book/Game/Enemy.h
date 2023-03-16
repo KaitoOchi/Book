@@ -51,6 +51,13 @@ public:
 	}
 
 	/// <summary>
+	/// スケールを設定する
+	/// </summary>
+	void SetScale(Vector3 sca) {
+		m_scale = sca;
+	}
+
+	/// <summary>
 	/// 被弾フラグ設定用。必要なければ消去
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
@@ -66,7 +73,15 @@ public:
 		return m_position;
 	}
 
-private:
+	const Vector3 GetScale() const {
+		return m_scale;
+	}
+
+	const Quaternion GetRotation() const {
+		return m_rotation;
+	}
+
+protected:
 	PlayerManagement* m_playerManagement = nullptr;
 
 	CharacterController m_characterController;
@@ -74,6 +89,7 @@ private:
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
+	Vector3 m_scale = Vector3::One;			// スケール
 	Quaternion m_rotation;					// 回転
 
 	bool MissigPlayerFlag = false;			// プレイヤーを見失ったかどうか

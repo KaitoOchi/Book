@@ -33,7 +33,7 @@ private:
 	Player2D* m_player2D = nullptr;//2DÉvÉåÉCÉÑÅ[
 	GameCamera* m_gamecamera = nullptr;
 
-	LevelRender* m_levelRender = nullptr;
+	LevelRender m_levelRender;
 	MiniMap* m_miniMap = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
 	BackGround* m_backGround = nullptr;
