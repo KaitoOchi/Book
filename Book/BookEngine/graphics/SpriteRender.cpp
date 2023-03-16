@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha)
+	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha, const bool isClip)
 	{
 		SpriteInitData initData;
 		///DDSファイルのファイルパスを指定する
@@ -14,6 +14,11 @@ namespace nsBookEngine {
 		initData.m_width = static_cast<UINT>(w);
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alpha;
+
+		if (isClip) {
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
 
 		///Sprite初期化オブジェクトを使用して、Spriteを初期化する
 		m_sprite.Init(initData);
