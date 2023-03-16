@@ -30,7 +30,7 @@ bool Enemy_Normal::Start()
 
 	// ÉÇÉfÉãÇÃì«Ç›çûÇ›
 	//m_NormalModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
-	m_NormalModelRender.Init("Assets/unityChan.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
+	m_NormalModelRender.Init("Assets/modelData/unityChan.tkm");
 	m_NormalModelRender.SetScale(m_scale);
 	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.SetRotation(m_rotation);
