@@ -12,7 +12,7 @@ BackGround::~BackGround()
 bool BackGround::Start()
 {
 	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_ModelRender.Init("Assets/modelData/debugStage/debug.tkm");
+	m_ModelRender.Init("Assets/modelData/level/debug.tkm");
 	m_ModelRender.SetScale(m_scale);
 	m_ModelRender.SetPosition(m_position);
 	m_ModelRender.SetRotation(m_rotation);

@@ -38,7 +38,6 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
-	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	LevelDesign();
 
@@ -48,19 +47,19 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/debugStage/debug_1.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
 
-		////名前がunityChanなら
-		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
-		//	//m_mirror = NewGO<Mirror>(0, "mirror");
+		//名前がunityChanなら
+		if (objData.ForwardMatchName(L"FootmanHP") == true) {
+			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-		//	//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
-		//	m_enemyNormal->SetPosition(objData.position);
-		//	m_enemyNormal->SetRotation(objData.rotation);
-		//	m_enemyNormal->SetScale(objData.scale);
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
 
-		//	return true;
-		//}
+			return true;
+		}
 
 		//名前がbackgroundなら
 		if (objData.EqualObjectName(L"debug") == true) {
