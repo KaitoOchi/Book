@@ -10,7 +10,7 @@ namespace nsBookEngine {
 		Vector3			position;		//座標。
 		Quaternion		rotation;		//回転。
 		Vector3			scale;			//拡大率。
-		const wchar_t* name;			//名前。
+		const wchar_t*	name;			//名前。
 		int				number = 0;		//番号。
 
 		/// <summary>
