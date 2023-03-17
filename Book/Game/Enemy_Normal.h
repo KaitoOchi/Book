@@ -14,6 +14,8 @@ public:
 
 private:
 
+	Enemy* enemy;
+
 	ModelRender m_NormalModelRender;	// モデルレンダー
 
 	// アニメーションクリップ

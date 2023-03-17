@@ -40,7 +40,7 @@ bool Game::Start()
 
 	LevelDesign();
 
-	//m_miniMap=NewGO<MiniMap>(0, "miniMap");
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }
@@ -54,7 +54,7 @@ void Game::LevelDesign()
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			m_enemyNormal->SetPosition(objData.position);
 			//m_enemyNormal->SetRotation(Quaternion(objData.rotation.x, objData.rotation.z, objData.rotation.y, objData.rotation.w));
 			m_enemyNormal->SetRotation(objData.rotation);

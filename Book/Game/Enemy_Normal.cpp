@@ -4,6 +4,7 @@
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.5f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
+	const float		MOVING_DISTANCE = 500.0f;		// ˆÚ“®—Ê
 }
 
 Enemy_Normal::Enemy_Normal()
@@ -37,8 +38,8 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
-	m_pointList.push_back({ Vector3(-371.0f,0.0f,350.0f),1 });
-	m_pointList.push_back({ Vector3(371.0f,0.0f,350.0f),2 });
+	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 
 	m_point = &m_pointList[0];
 

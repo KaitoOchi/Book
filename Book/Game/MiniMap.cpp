@@ -7,7 +7,7 @@
 namespace
 {
 	const Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);	// マップの中心
-	const float MAP_RADIUS = 240.0f;									// マップの半径
+	const float MAP_RADIUS = 150.0f;									// マップの半径
 	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
 	const float ALPHA = 0.25f;
 }
@@ -46,7 +46,6 @@ void MiniMap::Update()
 	// 座標を取得
 	Vector3 playerPos = m_playerManagement->GetPosition();
 	Vector3 enemyPos = m_enemyNormal->GetPosition();
-	//Vector3 enemyPos = m_playerManagement->GetPosition();
 
 	Vector3 mapPos;
 
