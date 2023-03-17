@@ -233,6 +233,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy_Normal.cpp" />
+    <ClCompile Include="Enemy_Serch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Enemy_Normal.h" />
+    <ClInclude Include="Enemy_Serch.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />

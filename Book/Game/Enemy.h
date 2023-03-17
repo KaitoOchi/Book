@@ -95,4 +95,6 @@ protected:
 	bool MissigPlayerFlag = false;			// プレイヤーを見失ったかどうか
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
 	bool ReturnToPassFlag = false;			// 直近のパスに戻ったかどうか
+
+	ModelRender m_enemyRender;				//エネミーモデル
 };

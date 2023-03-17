@@ -9,6 +9,7 @@ namespace nsBookEngine{
 
 	SpotLight::~SpotLight()
 	{
+		
 	}
 
 	void SpotLight::Update()
