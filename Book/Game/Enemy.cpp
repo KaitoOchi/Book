@@ -9,8 +9,11 @@ namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
+	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
+	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
+	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
@@ -30,6 +33,9 @@ bool Enemy::Start()
 {
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
+
+	// ナビメッシュを構築
+	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -56,6 +62,7 @@ bool Enemy::SeachPlayer()
 		// 角度が視野角より狭いとき
 		if (angle <= (FIELDOF_VIEW) {
 			// プレイヤーを発見
+			m_rotation.SetRotationY(angle);
 			return true;
 		}
 	}
@@ -78,7 +85,7 @@ bool Enemy::CatchPlayer()
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
 		// 攻撃アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Attack;
 
 		return true;
 	}
@@ -91,13 +98,19 @@ void Enemy::HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueなら当たった
 	if (HitFlashBulletFlag == true) {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		// 被弾アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
 			HitFlashBulletFlag = false;		// フラグを降ろす
 			addTimer = 0.0f;				// 加算用タイマーをリセット
+
+		}
+		// そうでないとき
+		else {
+			// 待機アニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
 }
@@ -148,10 +161,43 @@ void Enemy::Act_Craw()
 
 void Enemy::Act_Tracking()
 {
+	// 経過時間を加算
+	NaviTimer += g_gameTime->GetFrameDeltaTime();
+
+	// 一定時間以下のときreturn
+	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
+		return;
+	}
+
 	// ナビメッシュでの移動
+	// プレイヤーの座標を獲得する
+	m_playerPos = m_playerManagement->GetPosition();
+
+	bool isEnd;							// パス移動が終了した際のフラグ
+
+	// パス検索
+	m_pathFiding.Execute(
+		m_path,							// 構築されたパスの格納先
+		m_nvmMesh,						// ナビメッシュ
+		m_position,						// 開始座標
+		m_playerPos,					// 目標地点
+		PhysicsWorld::GetInstance(),	// 物理エンジン
+		AI_RADIUS,						// AIエージェントの半径
+		AI_HIGH							// AIエージェントの高さ
+	);
+
+	// パス上を移動する
+	m_position = m_path.Move(
+		m_position,						// 移動させる座標
+		MOVE_SPEED,						// 移動速度
+		isEnd							// 終了時にtrueを格納するフラグ
+	);
 
 	// 捕まえたとき
 	if (CatchPlayer() == true) {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
 		m_fontRender.SetText(L"捕まえた");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
@@ -168,11 +214,17 @@ void Enemy::Act_Access()
 	if (length <= ACCESS_DECISION) {
 		// ベクトルを正規化
 		diff.Normalize();
+		// エネミーの座標に加算
 		m_position += diff * MOVE_SPEED;
+		// 歩きアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 
 	// 捕まえたとき
 	if (CatchPlayer() == true) {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
 		m_fontRender.SetText(L"捕まえた");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}

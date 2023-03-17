@@ -1,4 +1,8 @@
 #pragma once
+#include "tkFile/TknFile.h"
+#include "AI/PathFinding/NaviMesh.h"
+#include "AI/PathFinding/Path.h"
+#include "AI/PathFinding/PathFinding.h"
 
 class PlayerManagement;
 class Enemy :public IGameObject
@@ -18,6 +22,8 @@ public:
 	bool Act_Stop(float time);			// 行動停止
 
 	// エネミーのアニメーションステート
+	// Enemy内で指定しているので、継承した派生クラスで関数を呼ぶだけで再生されます。
+	// 関数は基本的にAct_を呼んでください。
 	enum EnEnemyAnimationState
 	{
 		m_enEnemyAnimationState_Idle,	// 待機
@@ -30,6 +36,7 @@ public:
 	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
 	// エネミーの行動ステート
+	// 必要なければ削除してください。
 	enum EnEnemyActState
 	{
 		m_enEnemyActState_Craw,			// 巡回
@@ -98,6 +105,12 @@ protected:
 		int s_number;						// ポイントの番号
 	};
 
+	TknFile m_tknFile;
+	PhysicsStaticObject m_bgObject;
+	nsAI::NaviMesh m_nvmMesh;		// ナビメッシュ
+	nsAI::Path m_path;				// パス
+	nsAI::PathFinding m_pathFiding;	// パスを探す
+
 	std::vector<Point> m_pointList;			// ポイント構造体の配列
 	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
 
@@ -107,10 +120,14 @@ protected:
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
-	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
+	Vector3 m_forward = Vector3::AxisY;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
 	Quaternion m_rotation;					// 回転
 
+	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
+
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+
 	float addTimer = 0.0f;					// 加算するタイマー
+	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 };

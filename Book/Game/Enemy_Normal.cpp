@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float		LINEAR_COMPLETION = 0.5f;		// 線形補完のフレーム数
+	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
 	const float		MOVING_DISTANCE = 500.0f;		// 移動量
 }
 
@@ -54,22 +54,24 @@ void Enemy_Normal::Update()
 	Animation();				// アニメーション
 
 	m_NormalModelRender.SetPosition(m_position);
-	//m_NormalModelRender.SetRotation(m_rotation);
+	m_NormalModelRender.SetRotation(m_rotation);
+	m_characterController.SetPosition(m_position);
+
+	Vector3 move = Vector3::Zero;
+	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 	m_NormalModelRender.Update();
 }
 
 void Enemy_Normal::Act()
 {
-	Enemy::Act_Craw();		// 追尾行動
-
-
-	//// プレイヤーを見つけたとき
-	//if (Enemy::SeachPlayer() == true) {
-	//	Enemy::Act_Access();	// プレイヤーに接近する
-	//}
-	//// プレイヤーを見つけていないとき
-	//else {
-	//}
+	// プレイヤーを見つけたとき
+	if (Enemy::SeachPlayer() == true) {
+		Enemy::Act_Tracking();
+	}
+	// プレイヤーを見つけていないとき
+	else {
+		Enemy::Act_Craw();		// 巡回行動
+	}
 }
 
 void Enemy_Normal::Animation()

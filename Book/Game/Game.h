@@ -1,4 +1,5 @@
 #pragma once
+
 class Player3D;
 class Player2D;
 class GameCamera;
@@ -14,6 +15,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 	void LevelDesign();			// ステージのレベルデザインの処理
+
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
