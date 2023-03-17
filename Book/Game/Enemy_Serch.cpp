@@ -5,6 +5,7 @@ namespace
 	const float KEEPTIME = 2.0f;
 	const Vector3 LIGHTCOLOR(100.0f, 1.0f, 1.0f);
 	const float ANGLE = 45.0f;
+	const float RODADD = 0.01f;
 }
 Enemy_Serch::Enemy_Serch()
 {
@@ -25,16 +26,16 @@ bool Enemy_Serch::Start()
 	m_spotLight.SetColor(LIGHTCOLOR);
 	m_spotLight.SetRange(500.0f);
 	m_spotLight.SetAngle(ANGLE);
-	Vector3 direction = Vector3::AxisY;
+	Vector3 forward = Vector3::AxisY;
 	//ÉâÉCÉgÇÃï˚å¸ê›íË
-	m_spotLight.SetDirection(direction);
+	m_spotLight.SetDirection(forward);
 	m_spotLight.Update();
 	return true;
 }
 void Enemy_Serch::Update()
 {
 	Rotaition();
-	LightRotaition();
+	//LightRotaition();
 	m_position.z += 1;
 	m_enemyRender.SetRotation(m_rot);
 	m_enemyRender.SetPosition(m_position);
@@ -63,22 +64,27 @@ void Enemy_Serch::Rotaition()
 	switch (m_rotState)
 	{
 	case true:
-		m_rot.AddRotationY(0.01f);
+		m_rot.AddRotationY(RODADD);
 		break;
 	case false:
-		m_rot.AddRotationY(-0.01f);
+		m_rot.AddRotationY(-RODADD);
 		break;
 	default:
 		break;
 	}
-	Vector3 forward = Vector3(0.0f, -1.0f, 2.0f);
-	m_rot.Apply(forward);
-	m_spotLight.SetDirection(forward);
-	//m_spotLight.SetDirection(Vector3(0.0f,-1.0f,0.0f));
+	
+	
 }
 void Enemy_Serch::LightRotaition()
 {
-
+	Vector3 forward = Vector3(0.0f, 0.0f, 1.0f);
+	//forward.LengthSq();
+	m_rot.Apply(forward);
+	forward.y = -1.0;
+	m_spotLight.SetDirection(forward);
+	//m_spotLight.SetDirection(Vector3(0.0f,-1.0f,0.0f));
+	/*Vector3 m_hoge = Calc(m_rot);
+	m_spotLight.SetDirection(m_hoge);*/
 }
 void Enemy_Serch::Render(RenderContext& rc)
 {

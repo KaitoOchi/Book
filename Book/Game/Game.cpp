@@ -49,7 +49,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug_2.tkl", [&](LevelObjectData& objData) {
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {

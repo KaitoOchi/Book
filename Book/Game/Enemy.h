@@ -16,6 +16,7 @@ public:
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
 	void Act_Stop(float time);			// 行動停止
+	void SpotLight_Serch();				//スポットライト索敵
 
 	// エネミーのアニメーションステート
 	enum EnEnemyAnimationState
@@ -113,4 +114,6 @@ protected:
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
 	float addTimer = 0.0f;					// 加算するタイマー
+	ModelRender m_enemyRender;
+	SpotLight m_spotLight;				//スポットライト
 };

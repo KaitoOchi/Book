@@ -180,3 +180,11 @@ void Enemy::Act_Stop(float time)
 		return;
 	}
 }
+
+void Enemy::SpotLight_Serch()
+{
+	if (m_spotLight.IsHit(m_position))
+	{
+		//ステートの遷移
+	}
+}
