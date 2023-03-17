@@ -9,6 +9,7 @@
 #include "MiniMap.h"
 #include "Enemy_Normal.h"
 #include "BackGround.h"
+#include "LightSensor.h"
 
 Game::Game()
 {
@@ -29,8 +30,10 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	NewGO<Sensor>(0, "sensor");
+	//NewGO<Sensor>(0, "sensor");
 	NewGO<PlayerManagement>(0,"playerManagement");
+
+	//NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);

@@ -69,7 +69,12 @@ namespace nsBookEngine {
 		/// <returns></returns>
 		Model& GetModel()
 		{
-			return m_model;
+			if (m_model.IsInited()) {
+				return m_model;
+			}
+			else if (m_renderToGBufferModel.IsInited()) {
+				return m_renderToGBufferModel;
+			}
 		}
 
 		/// <summary>
@@ -186,6 +191,16 @@ namespace nsBookEngine {
 		);
 
 		/// <summary>
+		/// GBuffer描画用のモデルを初期化。
+		/// </summary>
+		/// <param name="renderingEngine">レンダリングエンジン</param>
+		/// <param name="tkmFilePath">tkmファイルパス</param>
+		void InitModelOnRenderGBuffer(
+			const char* tkmFilePath,
+			EnModelUpAxis enModelUpAxis,
+			bool isShadowReciever);
+
+		/// <summary>
 		/// 各種モデルの頂点シェーダーのエントリーポイントを設定。
 		/// </summary>
 		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
@@ -195,6 +210,12 @@ namespace nsBookEngine {
 		/// フォワードレンダーパスから呼ばれる処理。
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
+
+		/// <summary>
+		/// GBufferパスから呼ばれる処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnRenderToGBuffer(RenderContext& rc) override;
 
 	private:
 		AnimationClip*	m_animationClips = nullptr;
@@ -206,6 +227,7 @@ namespace nsBookEngine {
 		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
 		Animation		m_animation;
 		Model			m_model;
+		Model			m_renderToGBufferModel;				// RenderToGBufferで描画されるモデル
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
 		bool			m_isShadowCaster = true;

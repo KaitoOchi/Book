@@ -17,16 +17,17 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Init()
 	{
+
 		//ディレクションライトを設定
 		SetDirectionLight(Vector3(-1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//環境光を設定
-		SetAmbient(0.1f);
+		SetAmbient(0.0f);
 
 		//半球ライトを設定
 		SetHemiSphereLight(
-			Vector3(1.0f, 0.5f, 0.2f),
-			Vector3(0.3f, 0.5f, 0.1f),
+			Vector3(0.3f, 0.2f, 0.2f),
+			Vector3(0.3f, 0.5f, 0.3f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
@@ -45,10 +46,13 @@ namespace nsBookEngine {
 		);
 
 		//ブルームの閾値を設定
-		SetBloomThreshold(1.25f);
+		SetBloomThreshold(1.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
+
+		InitGBuffer();
+		InitDefferedLighting();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -95,39 +99,130 @@ namespace nsBookEngine {
 		m_mainSprite.Init(spriteInitData);
 	}
 
-	void RenderingEngine::InitCopyMainRenderTargetToFrameBufferSprite()
+	void RenderingEngine::InitGBuffer()
 	{
+		int frameBuffer_w = g_graphicsEngine->GetFrameBufferWidth();
+		int frameBuffer_h = g_graphicsEngine->GetFrameBufferHeight();
+
+		// アルベドカラーを出力用のレンダリングターゲットを初期化する
+		float clearColor[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		m_gBuffer[enGBuffer_Albedo].Create(
+			frameBuffer_w,
+			frameBuffer_h,
+			1,
+			1,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
+		);
+
+		// 法線出力用のレンダリングターゲットを初期化する
+		m_gBuffer[enGBuffer_Normal].Create(
+			frameBuffer_w,
+			frameBuffer_h,
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_SNORM,
+			DXGI_FORMAT_UNKNOWN
+		);
+
+
+		// ワールド座標用のレンダリングターゲットを初期化する    
+		m_gBuffer[enGBuffer_WorldPos].Create(
+			frameBuffer_w,
+			frameBuffer_h,
+			1,
+			1,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_UNKNOWN
+		);
+	}
+
+	void RenderingEngine::InitDefferedLighting()
+	{
+		//ディファードライティングを行うためのスプライトを初期化
 		SpriteInitData spriteInitData;
-
-		// テクスチャはyBlurRenderTargetのカラーバッファー
-		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
-
-		// レンダリング先がフレームバッファーなので、解像度はフレームバッファーと同じ
 		spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
 		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
 
-		// ガンマ補正ありの2D描画のシェーダーを指定する
-		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-		spriteInitData.m_psEntryPoinFunc = "PSMain";
-		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		int texNo = 0;
+		for (auto& gBuffer : m_gBuffer)
+		{
+			spriteInitData.m_textures[texNo++] = &gBuffer.GetRenderTargetTexture();
+		}
 
-		// 初期化オブジェクトを使って、スプライトを初期化する
-		m_copyMainRtToFrameBufferSprite.Init(spriteInitData);
+		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
+		spriteInitData.m_expandConstantBuffer = &m_lightCB;
+		spriteInitData.m_expandConstantBufferSize = sizeof(m_lightCB);
+		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R16G16B16A16_FLOAT;
 
+		m_deferredLightingSprite.Init(spriteInitData);
 	}
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
-		ForwardRendering(rc);
+		// ディファードライティングに必要なライト情報を更新する
+		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
+		//m_lightCB.mViewProjInv = g_camera3D->GetViewProjectionMatrixInv();
+		m_lightCB.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+
+		RenderToGBuffer(rc);
+
+		DeferredLighting(rc);
+
+
+		//ForwardRendering(rc);
 
 		m_bloom.Render(rc, m_mainRenderTarget);
 
 		Render2D(rc);
 
-		// メインレンダリングターゲットの内容をフレームバッファにコピー
-		//CopyMainRenderTargetToFrameBuffer(rc);
-
 		m_renderObjects.clear();
+	}
+
+	void RenderingEngine::RenderToGBuffer(RenderContext& rc)
+	{
+		BeginGPUEvent("RenderToGBuffer");
+
+		RenderTarget* rts[enGBuffer_Num] = {
+			&m_gBuffer[enGBuffer_Albedo],
+			&m_gBuffer[enGBuffer_Normal],
+			&m_gBuffer[enGBuffer_WorldPos]
+		};
+
+		rc.WaitUntilToPossibleSetRenderTargets(3, rts);
+
+		rc.SetRenderTargets(3, rts);
+
+		rc.ClearRenderTargetViews(3, rts);
+
+		for (auto& renderObj : m_renderObjects) {
+			renderObj->OnRenderToGBuffer(rc);
+		}
+
+		rc.WaitUntilFinishDrawingToRenderTargets(3, rts);
+
+		EndGPUEvent();
+	}
+
+	void RenderingEngine::DeferredLighting(RenderContext& rc)
+	{
+		BeginGPUEvent("DeferredLighting");
+
+		//m_deferredLightingCB.m_light.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+
+		// レンダリング先をメインレンダリングターゲットにする
+		// メインレンダリングターゲットを設定
+		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+
+		// G-Bufferの内容を元にしてディファードライティング
+		m_deferredLightingSprite.Draw(rc);
+
+		// メインレンダリングターゲットへの書き込み終了待ち
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
@@ -187,31 +282,6 @@ namespace nsBookEngine {
 
 		////RENDERTARGETからPRESENTへ。
 		//rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
-
-		EndGPUEvent();
-	}
-
-	void RenderingEngine::CopyMainRenderTargetToFrameBuffer(RenderContext& rc)
-	{
-		BeginGPUEvent("CopyMainRenderTargetToFrameBuffer");
-
-		// メインレンダリングターゲットの絵をフレームバッファーにコピー
-		rc.SetRenderTarget(
-			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
-			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
-		);
-
-		// ビューポートを指定する
-		D3D12_VIEWPORT viewport;
-		viewport.TopLeftX = 0;
-		viewport.TopLeftY = 0;
-		viewport.Width = static_cast<FLOAT>(g_graphicsEngine->GetFrameBufferWidth());
-		viewport.Height = static_cast<FLOAT>(g_graphicsEngine->GetFrameBufferHeight());
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-
-		rc.SetViewportAndScissor(viewport);
-		m_copyMainRtToFrameBufferSprite.Draw(rc);
 
 		EndGPUEvent();
 	}

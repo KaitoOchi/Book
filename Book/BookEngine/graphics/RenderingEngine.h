@@ -20,6 +20,7 @@ namespace nsBookEngine {
 			PointLight::pointLight pointLig;
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
+			Matrix mViewProjInv;
 		};
 
 		//スプライト用定数バッファの構造体
@@ -164,10 +165,14 @@ namespace nsBookEngine {
 		void Init2DRenderTarget();
 
 		/// <summary>
-		/// メインレンダリングターゲットのカラーバッファの内容を
-		/// フレームバッファにコピーするためのスプライトを初期化する
+		/// GBufferを初期化。
 		/// </summary>
-		void InitCopyMainRenderTargetToFrameBufferSprite();
+		void InitGBuffer();
+
+		/// <summary>
+		/// ディファードライティングを初期化。
+		/// </summary>
+		void InitDefferedLighting();
 
 		/// <summary>
 		/// フォワードレンダリングの処理。
@@ -176,18 +181,32 @@ namespace nsBookEngine {
 		void ForwardRendering(RenderContext& rc);
 
 		/// <summary>
+		/// GBufferの処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void RenderToGBuffer(RenderContext& rc);
+
+		/// <summary>
+		/// ディファードライティングの処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void DeferredLighting(RenderContext& rc);
+
+		/// <summary>
 		/// 2D描画
 		/// </summary>
 		/// <param name="rc">レンダリングコンテキスト</param>
 		void Render2D(RenderContext& rc);
 
-		/// <summary>
-		/// メインレンダリングターゲットの内容をフレームバッファにコピーする
-		/// </summary>
-		/// <param name="rc">レンダリングコンテキスト</param>
-		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
-
 	private:
+		enum enGBuffer
+		{
+			enGBuffer_Albedo,
+			enGBuffer_Normal,
+			enGBuffer_WorldPos,
+			enGBuffer_Num
+		};
+
 		static RenderingEngine* m_instance;
 
 		LightCB m_lightCB;
@@ -204,6 +223,9 @@ namespace nsBookEngine {
 		Sprite m_2DSprite;                                              //2D合成用のスプライト
 		Sprite m_mainSprite;
 		Sprite m_copyMainRtToFrameBufferSprite;                         // メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
+		Sprite m_deferredLightingSprite;								//ディファードライティング用のスプライト
 		std::vector<IRenderer*> m_renderObjects;
+
+		RenderTarget m_gBuffer[enGBuffer_Num];							//GBuffer用のレンダリングターゲット
 	};
 }

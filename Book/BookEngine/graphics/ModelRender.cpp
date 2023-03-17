@@ -43,7 +43,10 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis);
+		//InitModel(filePath, enModelUpAxis);
+
+		//GBufferモデルを初期化。
+		InitModelOnRenderGBuffer(filePath, enModelUpAxis, false);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -96,9 +99,43 @@ namespace nsBookEngine {
 		m_model.Init(modelInitData);
 	}
 
+
+	void ModelRender::InitModelOnRenderGBuffer(
+		const char* tkmFilePath,
+		EnModelUpAxis enModelUpAxis,
+		bool isShadowReciever
+	)
+	{
+		ModelInitData modelInitData;
+		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
+
+		// 頂点シェーダーのエントリーポイントをセットアップ。
+		SetupVertexShaderEntryPointFunc(modelInitData);
+
+		if (m_animationClips != nullptr) {
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+		}
+		//モデルの上方向を指定する。
+		modelInitData.m_modelUpAxis = enModelUpAxis;
+
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
+		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		m_renderToGBufferModel.Init(modelInitData);
+
+	}
+
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
-		m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		if (m_model.IsInited()) {
+			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		if (m_renderToGBufferModel.IsInited()) {
+			m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
 	}
 
 	void ModelRender::Update()
@@ -106,7 +143,13 @@ namespace nsBookEngine {
 		UpdateWorldMatrixInModes();
 		
 		if (m_skeleton.IsInited()) {
-			m_skeleton.Update(m_model.GetWorldMatrix());
+
+			if (m_model.IsInited()) {
+				m_skeleton.Update(m_model.GetWorldMatrix());
+			}
+			else if (m_renderToGBufferModel.IsInited()) {
+				m_skeleton.Update(m_renderToGBufferModel.GetWorldMatrix());
+			}
 		}
 
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
@@ -119,6 +162,15 @@ namespace nsBookEngine {
 
 	void ModelRender::OnForwardRender(RenderContext& rc)
 	{
-		m_model.Draw(rc, 1);
+		if (m_model.IsInited()) {
+			m_model.Draw(rc, 1);
+		}
+	}
+
+	void ModelRender::OnRenderToGBuffer(RenderContext& rc)
+	{
+		if (m_renderToGBufferModel.IsInited()) {
+			m_renderToGBufferModel.Draw(rc, 1);
+		}
 	}
 }
