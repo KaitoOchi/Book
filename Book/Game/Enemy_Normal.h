@@ -11,7 +11,6 @@ public:
 	void Render(RenderContext& rc);
 
 	void Animation();					// アニメーション
-	void Act();							// 行動パターン
 
 private:
 

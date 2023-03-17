@@ -45,8 +45,8 @@ void MiniMap::Update()
 {
 	// À•W‚ðŽæ“¾
 	Vector3 playerPos = m_playerManagement->GetPosition();
-	//Vector3 enemyPos = m_enemyNormal->GetPosition();
-	Vector3 enemyPos = m_playerManagement->GetPosition();
+	Vector3 enemyPos = m_enemyNormal->GetPosition();
+	//Vector3 enemyPos = m_playerManagement->GetPosition();
 
 	Vector3 mapPos;
 

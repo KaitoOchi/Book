@@ -48,36 +48,12 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// 更新
-	Act();
-	//Enemy::Act_Access();
+	Enemy::Act_Craw();
+	Enemy::HitFlashBullet();
 	Animation();
 
 	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.Update();
-}
-
-void Enemy_Normal::Act()
-{
-	// 行動パターン
-	switch (m_enEnemyActState) {
-	// 巡回
-	case Enemy::m_enEnemyActState_Craw:
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		Enemy::Act_Craw();
-		break;
-
-	// 追跡
-	case Enemy::m_enEnemyActState_Tracking:
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		Enemy::Act_Tracking();
-		break;
-
-	// 錯乱
-	case Enemy::m_enEnemyActState_Confusion:
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
-		Enemy::Act_Confuion();
-		break;
-	}
 }
 
 void Enemy_Normal::Animation()

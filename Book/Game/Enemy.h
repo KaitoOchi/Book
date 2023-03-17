@@ -11,11 +11,11 @@ public:
 
 	bool SeachPlayer();					// プレイヤーを発見する処理
 	bool CatchPlayer();					// プレイヤーを確保する処理
-	bool HitFlashBullet();				// 閃光弾が当たったときの処理
-	void Act_Craw();					// パス移動での巡回行動
-	void Act_Tracking();				// ナビメッシュでの追跡行動
+	void HitFlashBullet();				// 閃光弾が当たったときの処理
+	void Act_Craw();					// 巡回行動
+	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
-	void Act_Confuion();				// 閃光弾が当たった後の処理
+	void Act_Stop(float time);			// 行動停止
 
 	// エネミーのアニメーションステート
 	enum EnEnemyAnimationState
@@ -72,21 +72,21 @@ public:
 	/// <summary>
 	/// 座標を取得する
 	/// </summary>
-	const Vector3 GetPosition() const {
+	const Vector3& GetPosition() const {
 		return m_position;
 	}
 
 	/// <summary>
 	/// スケールを取得する
 	/// </summary>
-	const Vector3 GetScale() const {
+	const Vector3& GetScale() const {
 		return m_scale;
 	}
 
 	/// <summary>
 	/// 回転を取得する
 	/// </summary>
-	const Quaternion GetRotation() const {
+	const Quaternion& GetRotation() const {
 		return m_rotation;
 	}
 
@@ -94,8 +94,8 @@ protected:
 
 	// パス移動用のポイント構造体
 	struct Point {
-		Vector3 s_position;	// ポイントの座標
-		int s_number;		// ポイントの番号
+		Vector3 s_position;					// ポイントの座標
+		int s_number;						// ポイントの番号
 	};
 
 	std::vector<Point> m_pointList;			// ポイント構造体の配列
@@ -112,5 +112,5 @@ protected:
 	Quaternion m_rotation;					// 回転
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	float time = 0.0f;						// 経過時間を加算するタイマー
+	float addTimer = 0.0f;					// 加算するタイマー
 };
