@@ -54,6 +54,7 @@ void Enemy_Normal::Update()
 	Animation();				// アニメーション
 
 	m_NormalModelRender.SetPosition(m_position);
+	//m_NormalModelRender.SetRotation(m_rotation);
 	m_NormalModelRender.Update();
 }
 

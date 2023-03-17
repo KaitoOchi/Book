@@ -3,7 +3,7 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f				// エネミーの視野角(初期:120)
+#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
 
 namespace
 {
@@ -88,8 +88,9 @@ void Enemy::HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueなら当たった
 	if (HitFlashBulletFlag == true) {
-		Act_Stop(CANMOVE_TIMER);	// 移動を硬直
-		HitFlashBulletFlag = false;	// フラグを降ろす
+		if (Act_Stop(CANMOVE_TIMER) == true) {
+			HitFlashBulletFlag = false;	// フラグを降ろす
+		}
 	}
 }
 
@@ -112,10 +113,9 @@ void Enemy::Act_Craw()
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
-	}
 
-	// タイマーが一定以下の時行動を停止する
-	Act_Stop(WAITING_TIMER);
+		addTimer = 0.0f;	// 加算用タイマーをリセット
+	}
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
@@ -124,7 +124,11 @@ void Enemy::Act_Craw()
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
 	// 座標に加算する
-	m_position += moveSpeed;
+
+	// タイマーが一定以下の時行動を停止する
+	if (Act_Stop(WAITING_TIMER) == true) {
+		m_position += moveSpeed;
+	}
 }
 
 void Enemy::Act_Tracking()
@@ -159,7 +163,7 @@ void Enemy::Act_Access()
 	}
 }
 
-void Enemy::Act_Stop(float time)
+bool Enemy::Act_Stop(float time)
 {
 	// 閃光弾に当たったとき
 	if (HitFlashBulletFlag == true) {
@@ -176,8 +180,8 @@ void Enemy::Act_Stop(float time)
 
 	// 加算された時間が一定以上になったとき
 	if (time <= addTimer) {
-		// タイマーをリセットして処理を終了する
-		addTimer = 0.0f;
-		return;
+		return true;
 	}
+
+	return false;
 }

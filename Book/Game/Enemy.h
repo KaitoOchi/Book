@@ -15,7 +15,7 @@ public:
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
-	void Act_Stop(float time);			// 行動停止
+	bool Act_Stop(float time);			// 行動停止
 
 	// エネミーのアニメーションステート
 	enum EnEnemyAnimationState
