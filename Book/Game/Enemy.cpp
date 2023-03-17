@@ -77,6 +77,9 @@ bool Enemy::CatchPlayer()
 	// ベクトルが一定以下のとき
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
+		// 攻撃アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
 		return true;
 	}
 
@@ -88,8 +91,13 @@ void Enemy::HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueなら当たった
 	if (HitFlashBulletFlag == true) {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
-			HitFlashBulletFlag = false;	// フラグを降ろす
+			HitFlashBulletFlag = false;		// フラグを降ろす
+			addTimer = 0.0f;				// 加算用タイマーをリセット
 		}
 	}
 }
@@ -123,11 +131,18 @@ void Enemy::Act_Craw()
 	moveSpeed.Normalize();
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
-	// 座標に加算する
 
-	// タイマーが一定以下の時行動を停止する
+	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER) == true) {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		// 座標に加算する
 		m_position += moveSpeed;
+	}
+	// そうでないとき
+	else {
+		// 歩きアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
@@ -165,16 +180,6 @@ void Enemy::Act_Access()
 
 bool Enemy::Act_Stop(float time)
 {
-	// 閃光弾に当たったとき
-	if (HitFlashBulletFlag == true) {
-		// 混乱モーションを再生
-	}
-	// そうでないとき
-	else {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
-	}
-
 	// 経過時間を加算
 	addTimer += g_gameTime->GetFrameDeltaTime();
 

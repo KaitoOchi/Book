@@ -30,17 +30,5 @@ private:
 	};
 	// アニメーションクリップ
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
-
-	// エネミーのアニメーションステート
-	enum EnEnemyAnimationState
-	{
-		m_enEnemyAnimationState_Idle,	// 待機
-		m_enEnemyAnimationState_Walk,	// 歩く
-		m_enEnemyAnimationState_Run,	// 走る
-		m_enEnemyAnimationState_Attack,	// 攻撃
-		m_enEnemyAnimationState_Damege,	// 被弾
-	};
-	// アニメーションステート
-	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 };
 
