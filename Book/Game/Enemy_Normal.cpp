@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完のフレーム数
+	const float		LINEAR_COMPLETION = 0.5f;		// 線形補完のフレーム数
 }
 
 Enemy_Normal::Enemy_Normal()
@@ -37,37 +37,23 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
+	m_pointList.push_back({ Vector3(-371.0f,0.0f,350.0f),1 });
+	m_pointList.push_back({ Vector3(371.0f,0.0f,350.0f),2 });
+
+	m_point = &m_pointList[0];
+
 	return true;
 }
 
 void Enemy_Normal::Update()
 {
 	// 更新
-	//HeadToDestination();
+	Enemy::Act_Craw();
+	Enemy::HitFlashBullet();
+	Animation();
+
+	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.Update();
-}
-
-void Enemy_Normal::HeadToDestination()
-{
-	// プレイヤーを発見したとき
-	if (Enemy::SeachPlayer() == true) {
-		// 追跡に移行する
-		m_enEnemyActState = m_enEnemyActState_Tracking;
-
-		// プレイヤーに向かう経路を作成
-
-
-		// プレイヤーを確保したとき
-		if (Enemy::CatchPlayer() == true) {
-		}
-	}
-	else {
-		// 巡回に移行する
-		m_enEnemyActState = m_enEnemyActState_Craw;
-
-		// 直近のパスを探す
-		// パスに戻ったときにfalseにする
-	}
 }
 
 void Enemy_Normal::Animation()

@@ -10,10 +10,10 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void HeadToDestination();			// 目的地に向かう処理
 	void Animation();					// アニメーション
 
 private:
+
 	ModelRender m_NormalModelRender;	// モデルレンダー
 
 	// アニメーションクリップ
@@ -39,6 +39,6 @@ private:
 		m_enEnemyAnimationState_Damege,	// 被弾
 	};
 	// アニメーションステート
-	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 };
 

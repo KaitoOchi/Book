@@ -7,9 +7,12 @@
 
 namespace
 {
-	const float		MOVE_SPEED = 8.0f;						// 移動速度
+	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
+	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
+	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 }
@@ -74,7 +77,6 @@ bool Enemy::CatchPlayer()
 	// ベクトルが一定以下のとき
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
-		// 捕まえたフラグをtrueにする
 		return true;
 	}
 
@@ -84,37 +86,97 @@ bool Enemy::CatchPlayer()
 void Enemy::HitFlashBullet()
 {
 	// 閃光弾が当たったとき
+	// trueなら当たった
 	if (HitFlashBulletFlag == true) {
-		// 移動を硬直
-		m_position = m_position;
-
-		HitAfterFlashBullet();
+		Act_Stop(CANMOVE_TIMER);	// 移動を硬直
+		HitFlashBulletFlag = false;	// フラグを降ろす
 	}
 }
 
-void Enemy::HitAfterFlashBullet()
+void Enemy::Act_Craw()
 {
-	// 閃光弾が当たった後の硬直処理
+	// パス移動
+	
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	Vector3 diff = m_point->s_position - m_position;
+
+	// 距離が一定以内なら目的地とするポイントを変更する
+	if (diff.Length() <= CHANGING_DISTANCE) {
+
+		// 現在の目的地のポイントが配列の最後のとき
+		if (m_point->s_number == m_pointList.size()) {
+			// 一番最初のポイントを目的地とする
+			m_point = &m_pointList[0];
+		}
+		// そうでないとき
+		else {
+			m_point = &m_pointList[m_point->s_number];
+		}
+	}
+
+	// タイマーが一定以下の時行動を停止する
+	Act_Stop(WAITING_TIMER);
+
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	Vector3 moveSpeed = m_point->s_position - m_position;
+	// 正規化
+	moveSpeed.Normalize();
+	// ベクトルにスカラーを乗算
+	moveSpeed *= MOVE_SPEED;
+	// 座標に加算する
+	m_position += moveSpeed;
+
+	// プレイヤーを見つけたとき
+	if (Enemy::SeachPlayer() == true) {
+		Act_Access();
+	}
+}
+
+void Enemy::Act_Tracking()
+{
+	// ナビメッシュでの移動
+
+	// 捕まえたとき
+	if (Enemy::CatchPlayer() == true) {
+		m_fontRender.SetText(L"捕まえた");
+		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
+	}
+}
+
+void Enemy::Act_Access()
+{
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+	// ベクトルの長さ
+	float length = diff.Length();
+
+	// ベクトルが一定以下のとき
+	if (length <= ACCESS_DECISION) {
+		// ベクトルを正規化
+		diff.Normalize();
+		m_position += diff * MOVE_SPEED;
+	}
+}
+
+void Enemy::Act_Stop(float time)
+{
+	// 閃光弾に当たったとき
+	if (HitFlashBulletFlag == true) {
+		// 混乱モーションを再生
+	}
+	// そうでないとき
+	else {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	}
+
 	// 経過時間を加算
-	float time = +g_gameTime->GetFrameDeltaTime();
+	addTimer += g_gameTime->GetFrameDeltaTime();
 
 	// 加算された時間が一定以上になったとき
-	if (CANMOVE_TIMER <= time) {
-		// 加算する経過時間をリセット
-		time = 0;
+	if (time <= addTimer) {
+		// タイマーをリセットして処理を終了する
+		addTimer = 0.0f;
 		return;
 	}
 }
-
-//void Enemy::Act()
-//{
-//	// 行動パターン
-//	switch (m_enEnemyActState) {
-//		// 巡回
-//	case Enemy::m_enEnemyActState_Craw:
-//		break;
-//		// 追跡
-//	case Enemy::m_enEnemyActState_Tracking:
-//		break;
-//	}
-//}
