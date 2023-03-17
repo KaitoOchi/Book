@@ -3,7 +3,7 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f				// エネミーの視野角(初期値120)
+#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f				// エネミーの視野角(初期:120)
 
 namespace
 {
@@ -125,11 +125,6 @@ void Enemy::Act_Craw()
 	moveSpeed *= MOVE_SPEED;
 	// 座標に加算する
 	m_position += moveSpeed;
-
-	// プレイヤーを見つけたとき
-	if (Enemy::SeachPlayer() == true) {
-		Act_Access();
-	}
 }
 
 void Enemy::Act_Tracking()
@@ -137,7 +132,7 @@ void Enemy::Act_Tracking()
 	// ナビメッシュでの移動
 
 	// 捕まえたとき
-	if (Enemy::CatchPlayer() == true) {
+	if (CatchPlayer() == true) {
 		m_fontRender.SetText(L"捕まえた");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
@@ -155,6 +150,12 @@ void Enemy::Act_Access()
 		// ベクトルを正規化
 		diff.Normalize();
 		m_position += diff * MOVE_SPEED;
+	}
+
+	// 捕まえたとき
+	if (CatchPlayer() == true) {
+		m_fontRender.SetText(L"捕まえた");
+		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
 }
 

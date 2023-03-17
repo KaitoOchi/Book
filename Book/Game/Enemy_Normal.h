@@ -9,7 +9,7 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-
+	void Act();							// エネミーの行動パターン
 	void Animation();					// アニメーション
 
 private:

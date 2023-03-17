@@ -12,6 +12,8 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
+	void DrawMap();		// マップに描画するかどうかの判定
+
 private:
 	/// <summary>
 	/// ワールド座標系からマップ座標系に変換

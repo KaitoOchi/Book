@@ -38,6 +38,7 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
+	// パスの設定(初期:横移動)
 	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 
@@ -49,12 +50,25 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// 更新
-	Enemy::Act_Craw();
-	Enemy::HitFlashBullet();
-	Animation();
+	Act();						// 行動パターン
+	Animation();				// アニメーション
 
 	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.Update();
+}
+
+void Enemy_Normal::Act()
+{
+	Enemy::Act_Craw();		// 追尾行動
+
+
+	//// プレイヤーを見つけたとき
+	//if (Enemy::SeachPlayer() == true) {
+	//	Enemy::Act_Access();	// プレイヤーに接近する
+	//}
+	//// プレイヤーを見つけていないとき
+	//else {
+	//}
 }
 
 void Enemy_Normal::Animation()
