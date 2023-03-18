@@ -122,7 +122,7 @@ namespace nsBookEngine {
 			frameBuffer_h,
 			1,
 			1,
-			DXGI_FORMAT_R8G8B8A8_SNORM,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_FORMAT_UNKNOWN
 		);
 

@@ -168,13 +168,14 @@ SPSOut PSMain(SPSIn psIn) : SV_Target0
 
 	//ディフューズマップをサンプリング
 	float4 deffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
-
+/*
 	if (deffuseMap.x == 0.0f && deffuseMap.y == 0.0f && deffuseMap.z == 0.0f) {
 		deffuseMap.w = 0.0f;
 
 		psOut.albedo = deffuseMap;
 		return psOut;
 	}
+*/
 	psOut.albedo = deffuseMap;
 
 	psOut.normal = (psIn.normal / 2.0f) + 0.5f;

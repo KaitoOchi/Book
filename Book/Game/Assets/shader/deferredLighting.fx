@@ -66,7 +66,7 @@ float3 CalcLigFromSpotLight(PSInput psIn, float3 normal);
 float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
 //float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
-float3 CalcSpecular(float3 specLig, float2 uv, float3 normal, float3 worldPos);
+float3 CalcSpecular(float3 normal, float3 worldPos);
 float3 CalcWorldPosFromUVZ(float2 uv, float zInScreen, float4x4 mViewProjInv);
 
 PSInput VSMain(VSInput In) 
@@ -110,10 +110,10 @@ float4 PSMain( PSInput In ) : SV_Target0
 	//float3 spotLight = CalcLigFromSpotLight(In, normal);
 
 	//半球ライトを求める
-	float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
+	//float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
 
 	//リムライトを求める
-	float limPower = CalcLim(dirDirection, normal, worldPos);
+	//float limPower = CalcLim(dirDirection, normal, worldPos);
 
 
 	//最終的な反射光にリムライトの反射光を合算する
@@ -130,8 +130,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 				*/
 	float3 lig = directionLight
 			+ ambient
-			+ limColor
-			+ hemiLight;
+			+ limColor;
 
 	float4 albedoColor = albedo;
 	albedoColor.xyz *= lig;
@@ -199,7 +198,7 @@ float3 CalcLigFromDirectionLight(PSInput psIn, float3 normal, float3 worldPos)
 	float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, worldPos, normal);
 
 	//スペキュラマップを求める
-	specDirection *= CalcSpecular(specDirection, psIn.uv, normal, worldPos);
+	specDirection += CalcSpecular(normal, worldPos);
 
 	return diffDirection + specDirection;
 }
@@ -372,7 +371,7 @@ float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
 /// <summary>
 /// スペキュラを計算
 /// </summary>
-float3 CalcSpecular(float3 specLig, float2 uv, float3 normal, float3 worldPos)
+float3 CalcSpecular(float3 normal, float3 worldPos)
 {
 	float3 toEye = normalize(eyePos - worldPos);
 	float3 r = reflect(dirDirection, normal);
