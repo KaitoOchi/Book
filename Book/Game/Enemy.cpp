@@ -15,8 +15,11 @@ namespace
 	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
+	const float		ANGLE = 45.0f;							//回転角度
+	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//ライトのカラー
+	const float		LIGHTRANGE = 300.0f;						//ライトの影響範囲
+	const float		LIGHTPOSITION = 40.0f;						//ライトのポジション
 }
-
 Enemy::Enemy()
 {
 }
@@ -181,10 +184,40 @@ void Enemy::Act_Stop(float time)
 	}
 }
 
-void Enemy::SpotLight_Serch()
+void Enemy::SpotLight_New(Vector3 position)
 {
-	if (m_spotLight.IsHit(m_position))
+	
+	m_spotLight.SetPosition(position);
+	m_spotLight.SetColor(LIGHTCOLOR);
+	m_spotLight.SetRange(LIGHTRANGE);
+	m_spotLight.SetAngle(ANGLE);
+	Vector3 forward = Vector3::AxisY;
+	//ライトの方向設定
+	m_spotLight.SetDirection(forward);
+	m_spotLight.Update();
+}
+void Enemy::SpotLight_Serch(Quaternion lightrotaition,Vector3 lightpos)
+{
+	lightpos.y = LIGHTPOSITION;
+	//Y軸
+	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
+	//プレイヤーの正面
+	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
+	lightrotaition.Apply(m_front);
+	//その二つの垂直なベクトル
+	Vector3 m_vertical = Cross(m_Yup, m_front);
+	Quaternion m_SitenRot;
+	//その垂直なベクトルを元にクォータニオンを作る
+	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
+	//ベクトルにクォータニオンを加算する
+	m_SitenRot.Apply(m_front);
+	m_spotLight.SetDirection(m_front);
+
+	if (m_spotLight.IsHit(lightpos)==true)
 	{
 		//ステートの遷移
+		int a=0;
 	}
+	m_spotLight.SetPosition(lightpos);
+	m_spotLight.Update();
 }

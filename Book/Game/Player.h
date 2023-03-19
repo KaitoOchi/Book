@@ -23,8 +23,8 @@ public:
 
 	};
 	Player();
-	~Player();
-	bool Start();
+	virtual ~Player();
+	virtual bool Start();
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -48,11 +48,11 @@ public:
 	}
 
 protected:
-	void Update();
+	virtual void Update();
 	void Move();
 	void Jump();
 	void Rotation();
-	void Animation();
+	virtual void Animation();
 	/// <summary>
 	/// 各ステートの遷移処理
 	/// </summary>

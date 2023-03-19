@@ -5,7 +5,7 @@ class Enemy :public IGameObject
 {
 public:
 	Enemy();
-	~Enemy();
+	virtual ~Enemy();
 
 	bool Start();
 
@@ -16,7 +16,8 @@ public:
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
 	void Act_Stop(float time);			// 行動停止
-	void SpotLight_Serch();				//スポットライト索敵
+	void SpotLight_New(Vector3 position);						//回転の作成
+	void SpotLight_Serch(Quaternion lightrotaition,Vector3 lightpos);		//スポットライト索敵
 
 	// エネミーのアニメーションステート
 	enum EnEnemyAnimationState
