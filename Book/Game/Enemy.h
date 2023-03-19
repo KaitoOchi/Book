@@ -22,9 +22,10 @@ public:
 	bool Act_Stop(float time);			// 行動停止
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
+
 	// エネミーのアニメーションステート
 	// Enemy内で指定しているので、継承した派生クラスで関数を呼ぶだけで再生されます。
-	// 関数は基本的にAct_を呼んでください。
+
 	enum EnEnemyAnimationState
 	{
 		m_enEnemyAnimationState_Idle,	// 待機
