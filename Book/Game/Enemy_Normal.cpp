@@ -3,7 +3,8 @@
 
 namespace
 {
-	const float		LINEAR_COMPLETION = 0.5f;		// 線形補完のフレーム数
+	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
+	const float		MOVING_DISTANCE = 500.0f;		// 移動量
 }
 
 Enemy_Normal::Enemy_Normal()
@@ -37,8 +38,9 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
-	m_pointList.push_back({ Vector3(-371.0f,0.0f,350.0f),1 });
-	m_pointList.push_back({ Vector3(371.0f,0.0f,350.0f),2 });
+	// パスの設定(初期:横移動)
+	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 
 	m_point = &m_pointList[0];
 
@@ -48,12 +50,28 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// 更新
-	Enemy::Act_Craw();
-	Enemy::HitFlashBullet();
-	Animation();
+	Act();						// 行動パターン
+	Animation();				// アニメーション
 
 	m_NormalModelRender.SetPosition(m_position);
+	m_NormalModelRender.SetRotation(m_rotation);
+	m_characterController.SetPosition(m_position);
+
+	Vector3 move = Vector3::Zero;
+	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 	m_NormalModelRender.Update();
+}
+
+void Enemy_Normal::Act()
+{
+	// プレイヤーを見つけたとき
+	if (Enemy::SeachPlayer() == true) {
+		Enemy::Act_Tracking();
+	}
+	// プレイヤーを見つけていないとき
+	else {
+		Enemy::Act_Craw();		// 巡回行動
+	}
 }
 
 void Enemy_Normal::Animation()

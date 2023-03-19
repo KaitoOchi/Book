@@ -14,7 +14,7 @@
 Game::Game()
 {
 	//“–‚½‚è”»’è‚ð—LŒø‰»
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -41,7 +41,7 @@ bool Game::Start()
 
 	LevelDesign();
 
-	//m_miniMap=NewGO<MiniMap>(0, "miniMap");
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }
@@ -55,7 +55,7 @@ void Game::LevelDesign()
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);

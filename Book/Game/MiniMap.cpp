@@ -6,8 +6,8 @@
 
 namespace
 {
-	const Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);	// マップの中心
-	const float MAP_RADIUS = 240.0f;									// マップの半径
+	const Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);		// マップの中心
+	const float MAP_RADIUS = 150.0f;									// マップの半径
 	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
 	const float ALPHA = 0.25f;
 }
@@ -43,15 +43,23 @@ bool MiniMap::Start()
 
 void MiniMap::Update()
 {
+	DrawMap();
+
+	m_EnemySpriteRender.Update();
+	m_PlayerSpriteRender.Update();
+	m_SpriteRender.Update();
+}
+
+void MiniMap::DrawMap()
+{
 	// 座標を取得
 	Vector3 playerPos = m_playerManagement->GetPosition();
-	Vector3 enemyPos = m_enemyNormal->GetPosition();
-	//Vector3 enemyPos = m_playerManagement->GetPosition();
+	Vector3 enemy_NormalPos = m_enemyNormal->GetPosition();
 
 	Vector3 mapPos;
 
 	// マップに表示する範囲に敵がいたら
-	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
+	if (WorldPositionConvertToMapPosition(playerPos, enemy_NormalPos, mapPos)) {
 		// マップに表示する
 		m_isImage = true;
 		// spriteRenderに座標を設定
@@ -61,10 +69,6 @@ void MiniMap::Update()
 	else {
 		m_isImage = false;
 	}
-
-	m_EnemySpriteRender.Update();
-	m_PlayerSpriteRender.Update();
-	m_SpriteRender.Update();
 }
 
 const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition,Vector3 worldPosition,Vector3& mapPosition) 

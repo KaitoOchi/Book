@@ -3,22 +3,25 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f				// ƒGƒlƒ~[‚ÌŽ‹–ìŠp(‰Šú’l120)
+#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ÌŽï¿½ï¿½ï¿½p(ï¿½ï¿½ï¿½ï¿½:120)
 
 namespace
 {
-	const float		MOVE_SPEED = 3.0f;						// ˆÚ“®‘¬“x
-	const float		CHANGING_DISTANCE = 20.0f;				// –Ú“I’n‚ð•ÏX‚·‚é‹——£
-	const float		CANMOVE_TIMER = 10.0f;					// Ä“xs“®‚Å‚«‚é‚Ü‚Å‚Ìƒ^ƒCƒ}[
-	const float		WAITING_TIMER = 3.0f;					// ƒpƒXˆÚ“®Žž‚Ì‘Ò‹@ŽžŠÔ
-	const float		CATCH_DECISION = 20.0f;					// ƒvƒŒƒCƒ„[‚ðŠm•Û‚µ‚½‚±‚Æ‚É‚È‚é”ÍˆÍ
-	const float		ACCESS_DECISION = 40.0f;				// ƒvƒŒƒCƒ„[‚É‹ß‚Ã‚­”ÍˆÍ
-	const float		SCALESIZE = 1.3f;						// SetScale‚ÌƒTƒCƒY
-	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterController‚ÌƒTƒCƒY
-	const float		ANGLE = 45.0f;							//‰ñ“]Šp“x
-	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//ƒ‰ƒCƒg‚ÌƒJƒ‰[
-	const float		LIGHTRANGE = 300.0f;						//ƒ‰ƒCƒg‚Ì‰e‹¿”ÍˆÍ
-	const float		LIGHTPOSITION = 40.0f;						//ƒ‰ƒCƒg‚Ìƒ|ƒWƒVƒ‡ƒ“
+	const float		MOVE_SPEED = 3.0f;						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
+	const float		CHANGING_DISTANCE = 20.0f;				// ï¿½Ú“Iï¿½nï¿½ï¿½ÏXï¿½ï¿½ï¿½é‹—ï¿½ï¿½
+	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½Ä“xï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½[
+	const float		CANMOVE_TIMER = 10.0f;					// ï¿½Ä“xï¿½sï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½Ü‚Å‚Ìƒ^ï¿½Cï¿½}ï¿½[
+	const float		WAITING_TIMER = 3.0f;					// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½ï¿½ï¿½Ì‘Ò‹@ï¿½ï¿½ï¿½ï¿½
+	const float		AI_RADIUS = 50.0f;						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ì”ï¿½ï¿½a
+	const float		AI_HIGH = 200.0f;						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½ï¿½
+	const float		CATCH_DECISION = 20.0f;					// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚É‚È‚ï¿½Íˆï¿½
+	const float		ACCESS_DECISION = 40.0f;				// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½É‹ß‚Ã‚ï¿½ï¿½Íˆï¿½
+	const float		SCALESIZE = 1.3f;						// SetScaleï¿½ÌƒTï¿½Cï¿½Y
+	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerï¿½ÌƒTï¿½Cï¿½Y
+	const float		ANGLE = 45.0f;							//ï¿½ï¿½]ï¿½pï¿½x
+	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//ï¿½ï¿½ï¿½Cï¿½gï¿½ÌƒJï¿½ï¿½ï¿½[
+	const float		LIGHTRANGE = 300.0f;						//ï¿½ï¿½ï¿½Cï¿½gï¿½Ì‰eï¿½ï¿½ï¿½Íˆï¿½
+	const float		LIGHTPOSITION = 40.0f;						//ï¿½ï¿½ï¿½Cï¿½gï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½
 }
 Enemy::Enemy()
 {
@@ -31,10 +34,13 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ð‰Šú‰»‚·‚é
+	// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_characterController.Init(BOXSIZE, m_position);
 
-	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ð’T‚·
+	// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½\ï¿½z
+	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
+
+	// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½Tï¿½ï¿½
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
 	return true;
@@ -42,23 +48,24 @@ bool Enemy::Start()
 
 bool Enemy::SeachPlayer()
 {
-	// Ž‹–ìŠp‚Ìˆ—
-	// true‚Ì‚Æ‚«ƒvƒŒƒCƒ„[‚ð”­Œ©‚µ‚Ä‚¢‚é
+	// ï¿½ï¿½ï¿½ï¿½pï¿½Ìï¿½ï¿½ï¿½
+	// trueï¿½Ì‚Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ð”­Œï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-	// ƒvƒŒƒCƒ„[‚É‚ ‚é’ö“x‹ß‚¢‚Æ‚«
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ß‚ï¿½ï¿½Æ‚ï¿½
 	if (diff.LengthSq() <= 700.0 * 700.0f) {
-		// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ð³‹K‰»
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ð³‹Kï¿½ï¿½
 		diff.Normalize();
-		// ƒGƒlƒ~[‚Ì³–ÊƒxƒNƒgƒ‹AƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚Ì“àÏ‚ðŒvŽZ
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½ï¿½Aï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì“ï¿½Ï‚ï¿½vï¿½Z
 		float cos = m_forward.Dot(diff);
-		// “àÏ‚©‚çŠp“x‚ðŒvŽZ
+		// ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½pï¿½xï¿½ï¿½vï¿½Z
 		float angle = acosf(cos);
-		// Šp“x‚ªŽ‹–ìŠp‚æ‚è‹·‚¢‚Æ‚«
+		// ï¿½pï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½è‹·ï¿½ï¿½ï¿½Æ‚ï¿½
 		if (angle <= (FIELDOF_VIEW) {
-			// ƒvƒŒƒCƒ„[‚ð”­Œ©
+			// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ð”­Œï¿½
+			m_rotation.SetRotationY(angle);
 			return true;
 		}
 	}
@@ -68,18 +75,21 @@ bool Enemy::SeachPlayer()
 
 bool Enemy::CatchPlayer()
 {
-	// ƒvƒŒƒCƒ„[‚ðŠm•Û‚·‚éˆ—
-	// true‚Ì‚Æ‚«ƒvƒŒƒCƒ„[‚ðŠm•Û‚µ‚Ä‚¢‚é
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½éˆï¿½ï¿½
+	// trueï¿½Ì‚Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 	bool flag = false;
 
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ðŒvŽZ‚·‚é
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ƒxƒNƒgƒ‹‚Ì’·‚³‚ð‹‚ß‚é
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
 	float length = diff.Length();
 
-	// ƒxƒNƒgƒ‹‚ªˆê’èˆÈ‰º‚Ì‚Æ‚«
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½
 	if (length <= CATCH_DECISION) {
-		// •ß‚Ü‚¦‚éˆ—‚ðs‚¤
+		// ï¿½ß‚Ü‚ï¿½ï¿½éˆï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+		// ï¿½Uï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Attack;
+
 		return true;
 	}
 
@@ -88,136 +98,150 @@ bool Enemy::CatchPlayer()
 
 void Enemy::HitFlashBullet()
 {
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	// true‚È‚ç“–‚½‚Á‚½
+	// ï¿½Mï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	// trueï¿½È‚ç“–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (HitFlashBulletFlag == true) {
-		Act_Stop(CANMOVE_TIMER);	// ˆÚ“®‚ðd’¼
-		HitFlashBulletFlag = false;	// ƒtƒ‰ƒO‚ð~‚ë‚·
+		// ï¿½ï¿½eï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
+
+		// ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
+		if (Act_Stop(CANMOVE_TIMER) == true) {
+			HitFlashBulletFlag = false;		// ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½~ï¿½ë‚·
+			addTimer = 0.0f;				// ï¿½ï¿½ï¿½Zï¿½pï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+
+		}
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
+		else {
+			// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+		}
 	}
 }
 
 void Enemy::Act_Craw()
 {
-	// ƒpƒXˆÚ“®
+	// ï¿½pï¿½Xï¿½Ú“ï¿½
 	
-	// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_point->s_position - m_position;
 
-	// ‹——£‚ªˆê’èˆÈ“à‚È‚ç–Ú“I’n‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ð•ÏX‚·‚é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È“ï¿½È‚ï¿½Ú“Iï¿½nï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// Œ»Ý‚Ì–Ú“I’n‚Ìƒ|ƒCƒ“ƒg‚ª”z—ñ‚ÌÅŒã‚Ì‚Æ‚«
+		// ï¿½ï¿½ï¿½Ý‚Ì–Ú“Iï¿½nï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½zï¿½ï¿½ÌÅŒï¿½Ì‚Æ‚ï¿½
 		if (m_point->s_number == m_pointList.size()) {
-			// ˆê”ÔÅ‰‚Ìƒ|ƒCƒ“ƒg‚ð–Ú“I’n‚Æ‚·‚é
+			// ï¿½ï¿½ÔÅï¿½ï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½Ú“Iï¿½nï¿½Æ‚ï¿½ï¿½ï¿½
 			m_point = &m_pointList[0];
 		}
-		// ‚»‚¤‚Å‚È‚¢‚Æ‚«
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
+
+		addTimer = 0.0f;	// ï¿½ï¿½ï¿½Zï¿½pï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 	}
 
-	// ƒ^ƒCƒ}[‚ªˆê’èˆÈ‰º‚ÌŽžs“®‚ð’âŽ~‚·‚é
-	Act_Stop(WAITING_TIMER);
-
-	// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ³‹K‰»
+	// ï¿½ï¿½ï¿½Kï¿½ï¿½
 	moveSpeed.Normalize();
-	// ƒxƒNƒgƒ‹‚ÉƒXƒJƒ‰[‚ðæŽZ
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒXï¿½Jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Z
 	moveSpeed *= MOVE_SPEED;
-	// À•W‚É‰ÁŽZ‚·‚é
-	m_position += moveSpeed;
 
-	// ƒvƒŒƒCƒ„[‚ðŒ©‚Â‚¯‚½‚Æ‚«
-	if (Enemy::SeachPlayer() == true) {
-		Act_Access();
+	// ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
+	if (Act_Stop(WAITING_TIMER) == true) {
+		// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		// ï¿½ï¿½ï¿½Wï¿½É‰ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
+		m_position += moveSpeed;
+	}
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
+	else {
+		// ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// ƒiƒrƒƒbƒVƒ…‚Å‚ÌˆÚ“®
+	// ï¿½oï¿½ßŽï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Z
+	NaviTimer += g_gameTime->GetFrameDeltaTime();
 
-	// •ß‚Ü‚¦‚½‚Æ‚«
-	if (Enemy::CatchPlayer() == true) {
-		m_fontRender.SetText(L"•ß‚Ü‚¦‚½");
+	// ï¿½ï¿½èŽžï¿½ÔˆÈ‰ï¿½ï¿½Ì‚Æ‚ï¿½return
+	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
+		return;
+	}
+
+	// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½Å‚ÌˆÚ“ï¿½
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Wï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	m_playerPos = m_playerManagement->GetPosition();
+
+	bool isEnd;							// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚Ìƒtï¿½ï¿½ï¿½O
+
+	// ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½
+	m_pathFiding.Execute(
+		m_path,							// ï¿½\ï¿½zï¿½ï¿½ï¿½ê‚½ï¿½pï¿½Xï¿½ÌŠiï¿½[ï¿½ï¿½
+		m_nvmMesh,						// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+		m_position,						// ï¿½Jï¿½nï¿½ï¿½ï¿½W
+		m_playerPos,					// ï¿½Ú•Wï¿½nï¿½_
+		PhysicsWorld::GetInstance(),	// ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Wï¿½ï¿½
+		AI_RADIUS,						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ì”ï¿½ï¿½a
+		AI_HIGH							// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½ï¿½
+	);
+
+	// ï¿½pï¿½Xï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
+	m_position = m_path.Move(
+		m_position,						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
+		MOVE_SPEED,						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
+		isEnd							// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
+	);
+
+	// ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	if (CatchPlayer() == true) {
+		// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+		m_fontRender.SetText(L"ï¿½ß‚Ü‚ï¿½ï¿½ï¿½");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
 }
 
 void Enemy::Act_Access()
 {
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ƒxƒNƒgƒ‹‚Ì’·‚³
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½
 	float length = diff.Length();
 
-	// ƒxƒNƒgƒ‹‚ªˆê’èˆÈ‰º‚Ì‚Æ‚«
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½
 	if (length <= ACCESS_DECISION) {
-		// ƒxƒNƒgƒ‹‚ð³‹K‰»
+		// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ð³‹Kï¿½ï¿½
 		diff.Normalize();
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Wï¿½É‰ï¿½ï¿½Z
 		m_position += diff * MOVE_SPEED;
-	}
-}
-
-void Enemy::Act_Stop(float time)
-{
-	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
-	if (HitFlashBulletFlag == true) {
-		// ¬—ƒ‚[ƒVƒ‡ƒ“‚ðÄ¶
-	}
-	// ‚»‚¤‚Å‚È‚¢‚Æ‚«
-	else {
-		// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 
-	// Œo‰ßŽžŠÔ‚ð‰ÁŽZ
+	// ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	if (CatchPlayer() == true) {
+		// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+		m_fontRender.SetText(L"ï¿½ß‚Ü‚ï¿½ï¿½ï¿½");
+		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
+	}
+}
+
+bool Enemy::Act_Stop(float time)
+{
+	// ï¿½oï¿½ßŽï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Z
 	addTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ‰ÁŽZ‚³‚ê‚½ŽžŠÔ‚ªˆê’èˆÈã‚É‚È‚Á‚½‚Æ‚«
+	// ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Èï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
 	if (time <= addTimer) {
-		// ƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg‚µ‚Äˆ—‚ðI—¹‚·‚é
-		addTimer = 0.0f;
-		return;
+		return true;
 	}
-}
 
-void Enemy::SpotLight_New(Vector3 position)
-{
-	
-	m_spotLight.SetPosition(position);
-	m_spotLight.SetColor(LIGHTCOLOR);
-	m_spotLight.SetRange(LIGHTRANGE);
-	m_spotLight.SetAngle(ANGLE);
-	Vector3 forward = Vector3::AxisY;
-	//ƒ‰ƒCƒg‚Ì•ûŒüÝ’è
-	m_spotLight.SetDirection(forward);
-	m_spotLight.Update();
-}
-void Enemy::SpotLight_Serch(Quaternion lightrotaition,Vector3 lightpos)
-{
-	lightpos.y = LIGHTPOSITION;
-	//YŽ²
-	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//ƒvƒŒƒCƒ„[‚Ì³–Ê
-	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
-	lightrotaition.Apply(m_front);
-	//‚»‚Ì“ñ‚Â‚Ì‚’¼‚ÈƒxƒNƒgƒ‹
-	Vector3 m_vertical = Cross(m_Yup, m_front);
-	Quaternion m_SitenRot;
-	//‚»‚Ì‚’¼‚ÈƒxƒNƒgƒ‹‚ðŒ³‚ÉƒNƒH[ƒ^ƒjƒIƒ“‚ðì‚é
-	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ƒxƒNƒgƒ‹‚ÉƒNƒH[ƒ^ƒjƒIƒ“‚ð‰ÁŽZ‚·‚é
-	m_SitenRot.Apply(m_front);
-	m_spotLight.SetDirection(m_front);
-
-	if (m_spotLight.IsHit(lightpos)==true)
-	{
-		//ƒXƒe[ƒg‚Ì‘JˆÚ
-		int a=0;
-	}
-	m_spotLight.SetPosition(lightpos);
-	m_spotLight.Update();
+	return false;
 }
