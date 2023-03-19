@@ -8,6 +8,7 @@
 #include "SenSor.h"
 #include "MiniMap.h"
 #include "Enemy_Normal.h"
+#include "Enemy_Serch.h"
 #include "BackGround.h"
 
 Game::Game()
@@ -48,7 +49,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug_2.tkl", [&](LevelObjectData& objData) {
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -56,7 +57,6 @@ void Game::LevelDesign()
 
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			m_enemyNormal->SetPosition(objData.position);
-			//m_enemyNormal->SetRotation(Quaternion(objData.rotation.x, objData.rotation.z, objData.rotation.y, objData.rotation.w));
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
 
@@ -70,6 +70,15 @@ void Game::LevelDesign()
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
 			m_backGround->SetScale(objData.scale);
+
+			return true;
+		}
+		if (objData.EqualObjectName(L"unityChan") == true) {
+
+			m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
+			m_enemySerch->SetPosition(objData.position);
+			m_enemySerch->SetRotation(objData.rotation);
+			m_enemySerch->SetScale(objData.scale);
 
 			return true;
 		}

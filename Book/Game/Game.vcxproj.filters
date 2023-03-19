@@ -28,6 +28,7 @@
     <ClCompile Include="Enemy_Normal.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="LightSensor.cpp" />
+    <ClCompile Include="Enemy_Serch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -51,5 +52,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="LightSensor.h" />
+    <ClInclude Include="Enemy_Serch.h" />
   </ItemGroup>
 </Project>

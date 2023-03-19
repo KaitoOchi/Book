@@ -12,9 +12,6 @@
     <ClInclude Include="graphics\FontRender.h">
       <Filter>graphics</Filter>
     </ClInclude>
-    <ClInclude Include="collision\CollisionObject.h">
-      <Filter>collision</Filter>
-    </ClInclude>
     <ClInclude Include="level3DRender\LevelRender.h">
       <Filter>level3DRender</Filter>
     </ClInclude>
@@ -43,6 +40,9 @@
       <Filter>graphics\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="graphics\IRenderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="collision\CollisionObject.h">
       <Filter>graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -93,9 +93,6 @@
     <Filter Include="graphics">
       <UniqueIdentifier>{9a2b131b-fa59-45c2-ad75-4565fa6927a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="geometry">
-      <UniqueIdentifier>{56103c67-a932-4d99-9301-55d7626719f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="collision">
       <UniqueIdentifier>{40b8de1e-54a4-4bdd-adef-d5953bb71a52}</UniqueIdentifier>
     </Filter>
@@ -107,6 +104,9 @@
     </Filter>
     <Filter Include="graphics\PostEffect">
       <UniqueIdentifier>{99842d15-bb58-4011-ad2e-c1e8c5d02dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="collision\geometry">
+      <UniqueIdentifier>{56103c67-a932-4d99-9301-55d7626719f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
