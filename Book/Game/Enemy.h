@@ -9,7 +9,7 @@ class Enemy :public IGameObject
 {
 public:
 	Enemy();
-	~Enemy();
+	virtual ~Enemy();
 
 	bool Start();
 
@@ -20,7 +20,8 @@ public:
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
 	bool Act_Stop(float time);			// 行動停止
-
+	void SpotLight_New(Vector3 position);
+	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	// エネミーのアニメーションステート
 	// Enemy内で指定しているので、継承した派生クラスで関数を呼ぶだけで再生されます。
 	// 関数は基本的にAct_を呼んでください。
@@ -130,4 +131,7 @@ protected:
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
+
+	ModelRender m_enemyRender;				//エネミーモデル
+	SpotLight m_spotLight;					//スポットライト
 };
