@@ -3,26 +3,27 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// �G�l�~�[�̎���p(����:120)
+#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
 
 namespace
 {
-	const float		MOVE_SPEED = 3.0f;						// �ړ����x
-	const float		CHANGING_DISTANCE = 20.0f;				// �ړI�n��ύX���鋗��
-	const float		CALCULATIONNAVI_TIMER = 1.0f;			// �i�r���b�V����ēx�v�Z����^�C�}�[
-	const float		CANMOVE_TIMER = 10.0f;					// �ēx�s���ł���܂ł̃^�C�}�[
-	const float		WAITING_TIMER = 3.0f;					// �p�X�ړ����̑ҋ@����
-	const float		AI_RADIUS = 50.0f;						// AI�G�[�W�F���g�̔��a
-	const float		AI_HIGH = 200.0f;						// AI�G�[�W�F���g�̍���
-	const float		CATCH_DECISION = 20.0f;					// �v���C���[��m�ۂ������ƂɂȂ�͈�
-	const float		ACCESS_DECISION = 40.0f;				// �v���C���[�ɋ߂Â��͈�
-	const float		SCALESIZE = 1.3f;						// SetScale�̃T�C�Y
-	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterController�̃T�C�Y
+	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
+	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
+	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
+	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
+	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
+	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
+	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
+	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
+	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
+	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;						//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 40.0f;						//���C�g�̃|�W�V����
 }
+
 Enemy::Enemy()
 {
 }
@@ -34,13 +35,13 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	// �L�����N�^�[�R���g���[���[�����������
+	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
 
-	// �i�r���b�V����\�z
+	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 
-	// �C���X�^���X��T��
+	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
 	return true;
@@ -48,25 +49,25 @@ bool Enemy::Start()
 
 bool Enemy::SeachPlayer()
 {
-	// ����p�̏���
-	// true�̂Ƃ��v���C���[�𔭌����Ă���
+	// 視野角の処理
+	// trueのときプレイヤーを発見している
 
-	// �G�l�~�[����v���C���[�֌������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-	// �v���C���[�ɂ�����x�߂��Ƃ�
+	// プレイヤーにある程度近いとき
 	if (diff.LengthSq() <= 700.0 * 700.0f) {
-		// �G�l�~�[����v���C���[�֌������x�N�g���𐳋K��
+		// エネミーからプレイヤーへ向かうベクトルを正規化
 		diff.Normalize();
-		// �G�l�~�[�̐��ʃx�N�g���A�G�l�~�[����v���C���[�֌������x�N�g���̓�ς�v�Z
+		// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
 		float cos = m_forward.Dot(diff);
-		// ��ς���p�x��v�Z
+		// 内積から角度を計算
 		float angle = acosf(cos);
-		// �p�x������p��苷���Ƃ�
+		// 角度が視野角より狭いとき
 		if (angle <= (FIELDOF_VIEW) {
-			// �v���C���[�𔭌�
+			// プレイヤーを発見
 			m_rotation.SetRotationY(angle);
-			return true;
+				return true;
 		}
 	}
 
@@ -75,19 +76,19 @@ bool Enemy::SeachPlayer()
 
 bool Enemy::CatchPlayer()
 {
-	// �v���C���[��m�ۂ��鏈��
-	// true�̂Ƃ��v���C���[��m�ۂ��Ă���
+	// プレイヤーを確保する処理
+	// trueのときプレイヤーを確保している
 	bool flag = false;
 
-	// �G�l�~�[����v���C���[�֌������x�N�g����v�Z����
+	// エネミーからプレイヤーへ向かうベクトルを計算する
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// �x�N�g���̒�������߂�
+	// ベクトルの長さを求める
 	float length = diff.Length();
 
-	// �x�N�g�������ȉ��̂Ƃ�
+	// ベクトルが一定以下のとき
 	if (length <= CATCH_DECISION) {
-		// �߂܂��鏈����s��
-		// �U���A�j���[�V������Đ�
+		// 捕まえる処理を行う
+		// 攻撃アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Attack;
 
 		return true;
@@ -98,21 +99,21 @@ bool Enemy::CatchPlayer()
 
 void Enemy::HitFlashBullet()
 {
-	// �M���e�����������Ƃ�
-	// true�Ȃ瓖������
+	// 閃光弾が当たったとき
+	// trueなら当たった
 	if (HitFlashBulletFlag == true) {
-		// ��e�A�j���[�V������Đ�
+		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 
-		// �^�C�}�[��true�̂Ƃ�
+		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
-			HitFlashBulletFlag = false;		// �t���O��~�낷
-			addTimer = 0.0f;				// ���Z�p�^�C�}�[����Z�b�g
+			HitFlashBulletFlag = false;		// フラグを降ろす
+			addTimer = 0.0f;				// 加算用タイマーをリセット
 
 		}
-		// �����łȂ��Ƃ�
+		// そうでないとき
 		else {
-			// �ҋ@�A�j���[�V������Đ�
+			// 待機アニメーションを再生
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
@@ -120,125 +121,125 @@ void Enemy::HitFlashBullet()
 
 void Enemy::Act_Craw()
 {
-	// �p�X�ړ�
-	
-	// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// パス移動
+
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
-	// ���������ȓ�Ȃ�ړI�n�Ƃ���|�C���g��ύX����
+	// 距離が一定以内なら目的地とするポイントを変更する
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// ���݂̖ړI�n�̃|�C���g���z��̍Ō�̂Ƃ�
+		// 現在の目的地のポイントが配列の最後のとき
 		if (m_point->s_number == m_pointList.size()) {
-			// ��ԍŏ��̃|�C���g��ړI�n�Ƃ���
+			// 一番最初のポイントを目的地とする
 			m_point = &m_pointList[0];
 		}
-		// �����łȂ��Ƃ�
+		// そうでないとき
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer = 0.0f;	// ���Z�p�^�C�}�[����Z�b�g
+		addTimer = 0.0f;	// 加算用タイマーをリセット
 	}
 
-	// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ���K��
+	// 正規化
 	moveSpeed.Normalize();
-	// �x�N�g���ɃX�J���[���Z
+	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
 
-	// �^�C�}�[��true�̂Ƃ�
+	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER) == true) {
-		// �ҋ@�A�j���[�V������Đ�
+		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		// ���W�ɉ��Z����
+		// 座標に加算する
 		m_position += moveSpeed;
 	}
-	// �����łȂ��Ƃ�
+	// そうでないとき
 	else {
-		// ����A�j���[�V������Đ�
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// �o�ߎ��Ԃ���Z
+	// 経過時間を加算
 	NaviTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ��莞�Ԉȉ��̂Ƃ�return
+	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
 		return;
 	}
 
-	// �i�r���b�V���ł̈ړ�
-	// �v���C���[�̍��W��l������
+	// ナビメッシュでの移動
+	// プレイヤーの座標を獲得する
 	m_playerPos = m_playerManagement->GetPosition();
 
-	bool isEnd;							// �p�X�ړ����I�������ۂ̃t���O
+	bool isEnd;							// パス移動が終了した際のフラグ
 
-	// �p�X����
+	// パス検索
 	m_pathFiding.Execute(
-		m_path,							// �\�z���ꂽ�p�X�̊i�[��
-		m_nvmMesh,						// �i�r���b�V��
-		m_position,						// �J�n���W
-		m_playerPos,					// �ڕW�n�_
-		PhysicsWorld::GetInstance(),	// �����G���W��
-		AI_RADIUS,						// AI�G�[�W�F���g�̔��a
-		AI_HIGH							// AI�G�[�W�F���g�̍���
+		m_path,							// 構築されたパスの格納先
+		m_nvmMesh,						// ナビメッシュ
+		m_position,						// 開始座標
+		m_playerPos,					// 目標地点
+		PhysicsWorld::GetInstance(),	// 物理エンジン
+		AI_RADIUS,						// AIエージェントの半径
+		AI_HIGH							// AIエージェントの高さ
 	);
 
-	// �p�X���ړ�����
+	// パス上を移動する
 	m_position = m_path.Move(
-		m_position,						// �ړ���������W
-		MOVE_SPEED,						// �ړ����x
-		isEnd							// �I������true��i�[����t���O
+		m_position,						// 移動させる座標
+		MOVE_SPEED,						// 移動速度
+		isEnd							// 終了時にtrueを格納するフラグ
 	);
 
-	// �߂܂����Ƃ�
+	// 捕まえたとき
 	if (CatchPlayer() == true) {
-		// �ҋ@�A�j���[�V������Đ�
+		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
-		m_fontRender.SetText(L"�߂܂���");
+		m_fontRender.SetText(L"捕まえた");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
 }
 
 void Enemy::Act_Access()
 {
-	// �G�l�~�[����v���C���[�֌������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// �x�N�g���̒���
+	// ベクトルの長さ
 	float length = diff.Length();
 
-	// �x�N�g�������ȉ��̂Ƃ�
+	// ベクトルが一定以下のとき
 	if (length <= ACCESS_DECISION) {
-		// �x�N�g���𐳋K��
+		// ベクトルを正規化
 		diff.Normalize();
-		// �G�l�~�[�̍��W�ɉ��Z
+		// エネミーの座標に加算
 		m_position += diff * MOVE_SPEED;
-		// ����A�j���[�V������Đ�
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 
-	// �߂܂����Ƃ�
+	// 捕まえたとき
 	if (CatchPlayer() == true) {
-		// �ҋ@�A�j���[�V������Đ�
+		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
-		m_fontRender.SetText(L"�߂܂���");
+		m_fontRender.SetText(L"捕まえた");
 		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
 	}
 }
 
 bool Enemy::Act_Stop(float time)
 {
-	// �o�ߎ��Ԃ���Z
+	// 経過時間を加算
 	addTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ���Z���ꂽ���Ԃ����ȏ�ɂȂ����Ƃ�
+	// 加算された時間が一定以上になったとき
 	if (time <= addTimer) {
 		return true;
 	}
