@@ -38,40 +38,81 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
-	// パスの設定(初期:横移動)
-	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+	// パス移動の指定
+	// レベルデザイン処理時に呼び出してください
+	Pass(Horizontal);
 
 	m_point = &m_pointList[0];
 
 	return true;
 }
 
+void Enemy_Normal::Pass(int PassState)
+{
+	switch (PassState)
+	{
+		// 縦
+	case Line:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		break;
+		// 横
+	case Horizontal:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		break;
+		// 右回り
+	case RightRotation:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// 左回り
+	case LeftRotation:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// (右に)直角
+	case RightAngle:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
+		break;
+	}
+}
+
 void Enemy_Normal::Update()
 {
-	// 更新
-	Act();						// 行動パターン
-	Animation();				// アニメーション
+	Act();							// 行動パターン
+	Animation();					// アニメーション
 
 	m_NormalModelRender.SetPosition(m_position);
 	m_NormalModelRender.SetRotation(m_rotation);
 	m_characterController.SetPosition(m_position);
 
+	// キャラクターコントローラーをモデルの位置と同期
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
-	m_NormalModelRender.Update();
+
+	m_NormalModelRender.Update();	// 更新
 }
 
 void Enemy_Normal::Act()
 {
-	// プレイヤーを見つけたとき
-	if (Enemy::SeachPlayer() == true) {
-		Enemy::Act_Tracking();
-	}
-	// プレイヤーを見つけていないとき
-	else {
-		Enemy::Act_Craw();		// 巡回行動
-	}
+	Enemy::Act_Craw();		// 巡回行動
+
+	//// プレイヤーを見つけたとき
+	//if (Enemy::SeachPlayer() == true) {
+	//	Enemy::Act_Tracking();
+	//}
+	//// プレイヤーを見つけていないとき
+	//else {
+	//	
+	//}
 }
 
 void Enemy_Normal::Animation()
