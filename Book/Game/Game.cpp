@@ -14,7 +14,7 @@
 Game::Game()
 {
 	//当たり判定を有効化
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -51,7 +51,7 @@ void Game::LevelDesign()
 	//レベルデザイン処理
 	m_levelRender.Init("Assets/modelData/level/debug_2.tkl", [&](LevelObjectData& objData) {
 
-		//名前がunityChanなら
+		////名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
