@@ -25,7 +25,6 @@ public:
 
 	// エネミーのアニメーションステート
 	// Enemy内で指定しているので、継承した派生クラスで関数を呼ぶだけで再生されます。
-
 	enum EnEnemyAnimationState
 	{
 		m_enEnemyAnimationState_Idle,	// 待機
@@ -109,9 +108,9 @@ protected:
 
 	TknFile m_tknFile;
 	PhysicsStaticObject m_bgObject;
-	nsAI::NaviMesh m_nvmMesh;		// ナビメッシュ
-	nsAI::Path m_path;				// パス
-	nsAI::PathFinding m_pathFiding;	// パスを探す
+	nsAI::NaviMesh m_nvmMesh;				// ナビメッシュ
+	nsAI::Path m_path;						// パス
+	nsAI::PathFinding m_pathFiding;			// パスを探す
 
 	std::vector<Point> m_pointList;			// ポイント構造体の配列
 	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる

@@ -40,7 +40,7 @@ bool Enemy_Normal::Start()
 
 	// パス移動の指定
 	// レベルデザイン処理時に呼び出してください
-	Pass(Horizontal);
+	Pass(Line);
 
 	m_point = &m_pointList[0];
 
