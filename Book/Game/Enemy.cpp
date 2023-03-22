@@ -275,7 +275,7 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_SitenRot.Apply(m_front);
 	m_spotLight.SetDirection(m_front);
 
-	if (m_spotLight.IsHit(lightpos) == true)
+	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
 		//ステートの遷移
 		int a = 0;
