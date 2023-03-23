@@ -6,7 +6,7 @@
 
 namespace
 {
-	const Vector3 CENTER_POSITION = Vector3(630.0f, 300.0f, 0.0f);		// マップの中心
+	const Vector3 CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
 	const float MAP_RADIUS = 150.0f;									// マップの半径
 	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
 	const float ALPHA = 0.25f;
