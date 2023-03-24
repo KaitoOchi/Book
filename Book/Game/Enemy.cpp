@@ -4,6 +4,7 @@
 #include "PlayerManagement.h"
 
 #define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
+#define SEACH_DECISION 250.0f * 250.0f						// ベクトルを作成する範囲
 
 namespace
 {
@@ -37,6 +38,8 @@ bool Enemy::Start()
 {
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
+	// スフィアコライダーを初期化
+	m_sphereCollider.Create(1.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -52,11 +55,16 @@ bool Enemy::SeachPlayer()
 	// 視野角の処理
 	// trueのときプレイヤーを発見している
 
+	m_forward = Vector3::AxisZ;
+	m_rotation.Apply(m_forward);
+
+	m_playerPos = m_playerManagement->GetPosition();
+
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+	Vector3 diff = m_playerPos - m_position;
 
 	// プレイヤーにある程度近いとき
-	if (diff.LengthSq() <= 700.0 * 700.0f) {
+	if (diff.LengthSq() <= SEACH_DECISION) {
 		// エネミーからプレイヤーへ向かうベクトルを正規化
 		diff.Normalize();
 		// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
@@ -65,13 +73,60 @@ bool Enemy::SeachPlayer()
 		float angle = acosf(cos);
 		// 角度が視野角より狭いとき
 		if (angle <= (FIELDOF_VIEW) {
-			// プレイヤーを発見
-			m_rotation.SetRotationY(angle);
-				return true;
+
+			return WallAndHit(m_playerPos);
 		}
 	}
 
 	return false;
+}
+
+// 衝突した際に呼ばれつ関数オブジェクト(壁用)
+struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
+{
+	bool isHit = false;		// 衝突フラグ
+
+	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		// 壁と衝突していないとき
+		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
+			// 衝突したのは壁ではない
+			return 0.0f;
+		}
+
+		// 壁と衝突したとき
+		// フラグをtrueにする
+		isHit = true;
+		return 0.0f;
+	}
+};
+
+bool Enemy::WallAndHit(Vector3 pos)
+{
+	btTransform start, end;
+
+	start.setIdentity();
+	end.setIdentity();
+
+	// 始点はエネミーの座標
+	start.setOrigin(btVector3(m_position.x, m_position.y + 70.0f, m_position.z));
+	// 終点はプレイヤーの座標
+	end.setOrigin(btVector3(pos.x, pos.y + 70.0f, pos.z));
+
+	SweepResultWall callback;
+
+	// コライダーを始点から終点まで動かして、
+	// 衝突するかどうかを調べる
+	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+
+	// 壁と衝突した
+	if (callback.isHit == true) {
+		// プレイヤーは見つかっていない
+		return false;
+	}
+
+	// 壁と衝突していない
+	return true;
 }
 
 bool Enemy::CatchPlayer()

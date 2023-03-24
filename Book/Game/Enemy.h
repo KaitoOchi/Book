@@ -16,6 +16,7 @@ public:
 	bool SeachPlayer();					// プレイヤーを発見する処理
 	bool CatchPlayer();					// プレイヤーを確保する処理
 	void HitFlashBullet();				// 閃光弾が当たったときの処理
+	bool WallAndHit(Vector3 pos);		// 壁と衝突したかどうかの処理
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
@@ -118,6 +119,9 @@ protected:
 	PlayerManagement* m_playerManagement = nullptr;
 
 	CharacterController m_characterController;
+
+	SphereCollider m_sphereCollider;
+
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標

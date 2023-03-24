@@ -103,16 +103,20 @@ void Enemy_Normal::Update()
 
 void Enemy_Normal::Act()
 {
-	Enemy::Act_Craw();		// 巡回行動
+	HitFlashBullet();		// 閃光弾に当たったときの処理
 
-	//// プレイヤーを見つけたとき
-	//if (Enemy::SeachPlayer() == true) {
-	//	Enemy::Act_Tracking();
-	//}
-	//// プレイヤーを見つけていないとき
-	//else {
-	//	
-	//}
+	// プレイヤーを見つけたとき
+	if (Enemy::SeachPlayer() == true) {
+		Enemy::Act_Tracking();
+
+		// 追跡を停止する
+		if (HitFlashBulletFlag == true || Enemy::SeachPlayer() == false) {
+			Enemy::Act_Craw();		// 巡回行動
+		}
+	}
+	else {
+		Enemy::Act_Craw();		// 巡回行動
+	}
 }
 
 void Enemy_Normal::Animation()
