@@ -60,6 +60,8 @@ void Game::LevelDesign()
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
 
+			// ƒpƒXˆÚ“®‚Ìw’è
+			m_enemyNormal->Pass(0);
 			return true;
 		}
 

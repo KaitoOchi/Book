@@ -132,6 +132,7 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool ChangeCrawFlag = false;			// 巡回行動に切り替えるとき
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー

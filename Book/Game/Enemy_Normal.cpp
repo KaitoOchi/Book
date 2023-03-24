@@ -38,10 +38,6 @@ bool Enemy_Normal::Start()
 
 	Enemy::Start();
 
-	// パス移動の指定
-	// レベルデザイン処理時に呼び出してください
-	Pass(Line);
-
 	m_point = &m_pointList[0];
 
 	return true;
@@ -109,13 +105,21 @@ void Enemy_Normal::Act()
 	if (Enemy::SeachPlayer() == true) {
 		Enemy::Act_Tracking();
 
+		// 捕まえたとき
+		if (CatchPlayer() == true) {
+
+			m_fontRender.SetText(L"つかまえた");
+			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+		}
+
 		// 追跡を停止する
 		if (HitFlashBulletFlag == true || Enemy::SeachPlayer() == false) {
+			ChangeCrawFlag = true;
 			Enemy::Act_Craw();		// 巡回行動
 		}
 	}
 	else {
-		Enemy::Act_Craw();		// 巡回行動
+		Enemy::Act_Craw();			// 巡回行動
 	}
 }
 
@@ -150,4 +154,8 @@ void Enemy_Normal::Render(RenderContext& rc)
 {
 	// 描画
 	m_NormalModelRender.Draw(rc);
+
+	if (Enemy::CatchPlayer() == true) {
+		m_fontRender.Draw(rc);
+	}
 }

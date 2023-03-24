@@ -25,7 +25,7 @@ bool MiniMap::Start()
 	// ƒ}ƒbƒv‚Ì•‚¢‰æ‘œ
 	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
-	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
+	//m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
 
 	// ü‚è‚Ì‰æ‘œ
 	m_OutLineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);

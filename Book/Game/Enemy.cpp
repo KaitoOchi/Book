@@ -15,7 +15,7 @@ namespace
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
-	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
+	const float		CATCH_DECISION = 52.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
@@ -133,7 +133,6 @@ bool Enemy::CatchPlayer()
 {
 	// プレイヤーを確保する処理
 	// trueのときプレイヤーを確保している
-	bool flag = false;
 
 	// エネミーからプレイヤーへ向かうベクトルを計算する
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
@@ -143,9 +142,6 @@ bool Enemy::CatchPlayer()
 	// ベクトルが一定以下のとき
 	if (length <= CATCH_DECISION) {
 		// 捕まえる処理を行う
-		// 攻撃アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Attack;
-
 		return true;
 	}
 
@@ -177,15 +173,44 @@ void Enemy::HitFlashBullet()
 void Enemy::Act_Craw()
 {
 	// パス移動
+	
+	// 追跡から状態を切り替えたとき
+	if (ChangeCrawFlag == true) {
+
+		// 一番近いパスを探す
+		for (int i = 1; i <= m_pointList.size(); i++) {
+
+			m_point = &m_pointList[i];
+			Vector3 diff = m_point->s_position - m_position;
+
+			for (int j = i + 1; j <= m_pointList.size(); j++) {
+
+				m_point = &m_pointList[j];
+				Vector3 diff2 = m_point->s_position - m_position;
+
+				// 長さを比較
+				// diff2が長いとき
+				if (diff.Length() < diff2.Length()) {
+					// numberを格納する
+					m_point->s_number = j;
+				}
+			}
+		}
+	}
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
-	Vector3 diff = m_point->s_position - m_position;
+	Vector3 vec = m_point->s_position - m_position;
 
 	// 距離が一定以内なら目的地とするポイントを変更する
-	if (diff.Length() <= CHANGING_DISTANCE) {
+	if (vec.Length() <= CHANGING_DISTANCE) {
 
+		// 状態を切り替えたとき
+		if (ChangeCrawFlag == true) {
+			// そのまま格納
+			m_point = &m_pointList[m_point->s_number];
+		}
 		// 現在の目的地のポイントが配列の最後のとき
-		if (m_point->s_number == m_pointList.size()) {
+		else if (ChangeCrawFlag == false && m_point->s_number == m_pointList.size()) {
 			// 一番最初のポイントを目的地とする
 			m_point = &m_pointList[0];
 		}
@@ -196,6 +221,9 @@ void Enemy::Act_Craw()
 
 		addTimer = 0.0f;	// 加算用タイマーをリセット
 	}
+
+	// フラグを戻す
+	ChangeCrawFlag = false;
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
@@ -252,14 +280,8 @@ void Enemy::Act_Tracking()
 		isEnd							// 終了時にtrueを格納するフラグ
 	);
 
-	// 捕まえたとき
-	if (CatchPlayer() == true) {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-
-		m_fontRender.SetText(L"捕まえた");
-		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
-	}
+	// 歩行アニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
 void Enemy::Act_Access()
@@ -276,7 +298,7 @@ void Enemy::Act_Access()
 		// エネミーの座標に加算
 		m_position += diff * MOVE_SPEED;
 		// 歩きアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
 
 	// 捕まえたとき
