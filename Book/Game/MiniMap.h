@@ -29,6 +29,7 @@ private:
 	);
 
 	SpriteRender m_SpriteRender;
+	SpriteRender m_OutLineSpriteRender;		// ü‚è‚Ì•”•ª
 	SpriteRender m_PlayerSpriteRender;
 	SpriteRender m_EnemySpriteRender;
 

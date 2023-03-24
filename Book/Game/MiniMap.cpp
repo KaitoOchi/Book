@@ -9,7 +9,7 @@ namespace
 	const Vector3 CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
 	const float MAP_RADIUS = 150.0f;									// マップの半径
 	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
-	const float ALPHA = 0.25f;
+	const float ALPHA = 0.75f;
 }
 
 MiniMap::MiniMap()
@@ -23,16 +23,21 @@ MiniMap::~MiniMap()
 bool MiniMap::Start()
 {
 	// マップの黒い画像
-	m_SpriteRender.Init("Assets/sprite/UI/map_base.DDS", 315, 315);
+	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
 	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
 
+	// 飾りの画像
+	m_OutLineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);
+	m_OutLineSpriteRender.SetPosition({ 635.0f, -200.0f, 0.0f });
+	m_OutLineSpriteRender.Update();
+
 	// 中心の画像
-	m_PlayerSpriteRender.Init("Assets/sprite/UI/map_1.DDS", 15,15);
+	m_PlayerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
 
 	// エネミーを表す画像
-	m_EnemySpriteRender.Init("Assets/sprite/UI/map_2.DDS", 10, 10);
+	m_EnemySpriteRender.Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -118,6 +123,7 @@ void MiniMap::Render(RenderContext& rc)
 {
 	// 描画
 	m_SpriteRender.Draw(rc);
+	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
 	// エネミーが近くにいないとき
