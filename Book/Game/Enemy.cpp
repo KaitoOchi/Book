@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 #include "PlayerManagement.h"
+#include "GameUI.h"
 
 #define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
 
@@ -17,6 +18,7 @@ namespace
 	const float		CATCH_DECISION = 20.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
+	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//���C�g�̃J���[
@@ -35,6 +37,9 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
+	//警戒度時間を代入
+	m_Vicount = VIGILANCETIME;
+
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
 
@@ -43,6 +48,7 @@ bool Enemy::Start()
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_gameUI = FindGO<GameUI>("gameUI");
 
 	return true;
 }
@@ -277,9 +283,18 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
-		//ステートの遷移
-		int a = 0;
+		VigilanceCount();
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
+}
+void Enemy::VigilanceCount()
+{
+	m_Vicount -= g_gameTime->GetFrameDeltaTime();
+	if (m_Vicount <= 0.0f) 
+	{
+		//ステートの遷移
+		m_gameUI->Vigilance(1);
+		m_Vicount = VIGILANCETIME;
+	}
 }

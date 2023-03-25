@@ -12,6 +12,8 @@ public:
 	bool Start();
 	void Update();
 	void PlayerChange();
+	void PlayerChange2D();
+	void PlayerChange3D();
 	/// <summary>
 	/// ポジションの取得
 	/// </summary>
@@ -42,13 +44,14 @@ public:
 	/// 共通のステート遷移処理
 	/// </summary>
 	void ProcessCommonStateTransition();
-private:
 	enum EnMnagementState
 	{
 		m_enPlayer_2DChanging,//2Dに切替中
 		m_enPlayer_3DChanging,//3Dに切替中
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
+private:
+	
 	Vector3 m_position = Vector3::Zero;
 	CharacterController* m_setChara = nullptr;
 	Player2D* m_player2D = nullptr;

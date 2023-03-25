@@ -4,6 +4,7 @@
 #include"Player2D.h"
 #include"GameCamera.h"
 #include "PlayerManagement.h"
+#include "GameUI.h"
 #include "Title.h"
 #include "SenSor.h"
 #include "MiniMap.h"
@@ -31,7 +32,10 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
-	NewGO<PlayerManagement>(0,"playerManagement");
+	NewGO<PlayerManagement>(0, "playerManagement");
+	NewGO<GameUI>(0, "gameUI");
+	
+	
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
