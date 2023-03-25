@@ -4,7 +4,7 @@
 #include "PlayerManagement.h"
 
 #define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
-#define SEACH_DECISION 250.0f * 250.0f						// ベクトルを作成する範囲
+#define SEACH_DECISION 300.0f * 300.0f						// ベクトルを作成する範囲
 
 namespace
 {
@@ -16,7 +16,7 @@ namespace
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
-	const float		ACT_LIMIT = 100.0f;						// プレイヤーに近づける範囲
+	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
@@ -177,7 +177,7 @@ void Enemy::Act_Craw()
 {
 	// パス移動
 	
-	//// 追跡から状態を切り替えたとき
+	// 追跡から状態を切り替えたとき
 	//if (ChangeCrawFlag == true) {
 
 	//	// 一番近いパスを探す
@@ -200,20 +200,15 @@ void Enemy::Act_Craw()
 	//		}
 	//	}
 	//}
-
+	
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
 	// 距離が一定以内なら目的地とするポイントを変更する
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// 状態を切り替えたとき
-		if (ChangeCrawFlag == true) {
-			// そのまま格納
-			m_point = &m_pointList[m_point->s_number];
-		}
 		// 現在の目的地のポイントが配列の最後のとき
-		else if (ChangeCrawFlag == false && m_point->s_number == m_pointList.size()) {
+		if (ChangeCrawFlag == false && m_point->s_number == m_pointList.size()) {
 			// 一番最初のポイントを目的地とする
 			m_point = &m_pointList[0];
 		}
@@ -224,9 +219,9 @@ void Enemy::Act_Craw()
 
 		addTimer = 0.0f;	// 加算用タイマーをリセット
 	}
-
+	
 	// フラグを戻す
-	ChangeCrawFlag = false;
+	//ChangeCrawFlag = false;
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
@@ -285,8 +280,6 @@ void Enemy::Act_Tracking()
 
 	// 歩行アニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-
-	Act_Limit();
 }
 
 void Enemy::Act_Access()

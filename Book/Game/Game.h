@@ -3,10 +3,11 @@
 class Player3D;
 class Player2D;
 class GameCamera;
-class Enemy_Normal;
 class MiniMap;
 class BackGround;
+class Enemy_Normal;
 class Enemy_Serch;
+class Enemy_Charge;
 class Game : public IGameObject
 {
 public:
@@ -40,6 +41,7 @@ private:
 	MiniMap* m_miniMap = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Serch* m_enemySerch = nullptr;
+	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
 };
 
