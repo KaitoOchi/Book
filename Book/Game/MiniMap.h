@@ -2,6 +2,7 @@
 
 class PlayerManagement;
 class Enemy_Normal;
+class Enemy_Serch;
 class MiniMap:public IGameObject
 {
 public:
@@ -12,7 +13,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void DrawMap();		// マップに描画するかどうかの判定
+	void DrawMap(Vector3 pos,int num);		// マップに描画するかどうかの判定
 
 private:
 	/// <summary>
@@ -28,14 +29,15 @@ private:
 		Vector3& mapPosirion
 	);
 
-	SpriteRender m_SpriteRender;
-	SpriteRender m_OutLineSpriteRender;		// 飾りの部分
-	SpriteRender m_PlayerSpriteRender;
-	SpriteRender m_EnemySpriteRender;
+	SpriteRender m_SpriteRender;			// スプライトレンダー。ミニマップのベース
+	SpriteRender m_OutLineSpriteRender;		// スプライトレンダー。ミニマップの装飾部分
+	SpriteRender m_PlayerSpriteRender;		// スプライトレンダー。プレイヤー
+	SpriteRender m_EnemySpriteRender[2];	// スプライトレンダー。エネミー
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
+	Enemy_Serch* m_enemySerch = nullptr;
 
-	bool m_isImage = false;
+	bool m_isImage[2];						// 表示するかどうかのフラグ。エネミーの数分用意する
 };
 

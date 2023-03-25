@@ -114,7 +114,6 @@ void Enemy_Normal::Act()
 
 		// ’ÇÕ‚ğ’â~‚·‚é
 		if (HitFlashBulletFlag == true || Enemy::SeachPlayer() == false) {
-			ChangeCrawFlag = true;
 			Enemy::Act_Craw();		// „‰ñs“®
 		}
 	}

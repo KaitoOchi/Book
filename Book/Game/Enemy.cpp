@@ -15,8 +15,8 @@ namespace
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
-	const float		CATCH_DECISION = 52.0f;					// プレイヤーを確保したことになる範囲
-	const float		ACCESS_DECISION = 40.0f;				// プレイヤーに近づく範囲
+	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
+	const float		ACT_LIMIT = 100.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
@@ -73,7 +73,7 @@ bool Enemy::SeachPlayer()
 		float angle = acosf(cos);
 		// 角度が視野角より狭いとき
 		if (angle <= (FIELDOF_VIEW) {
-
+			// 壁との衝突判定を行う
 			return WallAndHit(m_playerPos);
 		}
 	}
@@ -81,7 +81,7 @@ bool Enemy::SeachPlayer()
 	return false;
 }
 
-// 衝突した際に呼ばれつ関数オブジェクト(壁用)
+// 衝突した際に呼ばれる関数オブジェクト(壁用)
 struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 {
 	bool isHit = false;		// 衝突フラグ
@@ -103,6 +103,9 @@ struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 
 bool Enemy::WallAndHit(Vector3 pos)
 {
+	// 障害物を考慮した視野角の処理
+	// プレイヤーを発見したときtrueを返す
+
 	btTransform start, end;
 
 	start.setIdentity();
@@ -174,35 +177,35 @@ void Enemy::Act_Craw()
 {
 	// パス移動
 	
-	// 追跡から状態を切り替えたとき
-	if (ChangeCrawFlag == true) {
+	//// 追跡から状態を切り替えたとき
+	//if (ChangeCrawFlag == true) {
 
-		// 一番近いパスを探す
-		for (int i = 1; i <= m_pointList.size(); i++) {
+	//	// 一番近いパスを探す
+	//	for (int i = 1; i <= m_pointList.size(); i++) {
 
-			m_point = &m_pointList[i];
-			Vector3 diff = m_point->s_position - m_position;
+	//		m_point = &m_pointList[i];
+	//		Vector3 diff = m_point->s_position - m_position;
 
-			for (int j = i + 1; j <= m_pointList.size(); j++) {
+	//		for (int j = i + 1; j <= m_pointList.size(); j++) {
 
-				m_point = &m_pointList[j];
-				Vector3 diff2 = m_point->s_position - m_position;
+	//			m_point = &m_pointList[j];
+	//			Vector3 diff2 = m_point->s_position - m_position;
 
-				// 長さを比較
-				// diff2が長いとき
-				if (diff.Length() < diff2.Length()) {
-					// numberを格納する
-					m_point->s_number = j;
-				}
-			}
-		}
-	}
+	//			// 長さを比較
+	//			// diff2が長いとき
+	//			if (diff.Length() < diff2.Length()) {
+	//				// numberを格納する
+	//				m_point->s_number = j;
+	//			}
+	//		}
+	//	}
+	//}
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
-	Vector3 vec = m_point->s_position - m_position;
+	Vector3 diff = m_point->s_position - m_position;
 
 	// 距離が一定以内なら目的地とするポイントを変更する
-	if (vec.Length() <= CHANGING_DISTANCE) {
+	if (diff.Length() <= CHANGING_DISTANCE) {
 
 		// 状態を切り替えたとき
 		if (ChangeCrawFlag == true) {
@@ -282,6 +285,8 @@ void Enemy::Act_Tracking()
 
 	// 歩行アニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+	Act_Limit();
 }
 
 void Enemy::Act_Access()
@@ -292,7 +297,7 @@ void Enemy::Act_Access()
 	float length = diff.Length();
 
 	// ベクトルが一定以下のとき
-	if (length <= ACCESS_DECISION) {
+	if (length <= SEACH_DECISION) {
 		// ベクトルを正規化
 		diff.Normalize();
 		// エネミーの座標に加算
@@ -300,14 +305,18 @@ void Enemy::Act_Access()
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
+}
 
-	// 捕まえたとき
-	if (CatchPlayer() == true) {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+void Enemy::Act_Limit()
+{
+	// 一定の距離には近づかない
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-		m_fontRender.SetText(L"捕まえた");
-		m_fontRender.SetPosition({ 500.0f, 200.0f, 0.0f });
+	// 長さが一定以下のとき
+	if ( diff.Length() <= ACT_LIMIT) {
+		// 動かないようにする
+		m_position = m_position;
 	}
 }
 
