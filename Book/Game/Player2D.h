@@ -5,16 +5,16 @@ class Player2D:public Player
 {
 public:
 	Player2D();
-	~Player2D();
-	bool Start();
-	void Update();
+	~Player2D()override;
+	bool Start()override;
+	void Update()override;
 	void PlayerChang();
 	void Rotation2D();
 	/// <summary>
 	/// ƒLƒƒƒ‰ƒRƒ“‚Ìì¬‚ÌŠÖ”
 	/// </summary>
 	void CreatCharcon();
-	void Animation();
+	void Animation()override;
 	void Render(RenderContext& rc);
 private:
 	int i = 0;

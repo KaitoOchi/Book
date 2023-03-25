@@ -13,13 +13,24 @@ Player3D::Player3D()
 }
 Player3D::~Player3D()
 {
+	delete(m_characon);
 	delete(m_modelRender);
+	delete(m_collisionObject);
 }
 bool Player3D::Start()
 {
 	m_characon = new CharacterController;
 	Player::Start();
+
+	//キャラコンやコリジョンの作成
 	m_characon->Init(BOXSIZE, m_position);
+	m_collisionObject->CreateBox(
+		m_position,
+		Quaternion::Identity,
+		BOXSIZE
+		);
+	m_collisionObject->SetIsEnableAutoDelete(false);
+
 	m_modelRender= new ModelRender;
 	//マネジメントの呼び出し
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -57,17 +68,20 @@ void Player3D::Update()
 	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 	Player::Update();
 	Animation();
-	if (g_pad[0]->IsTrigger(enButtonRB1))
+	if (g_pad[0]->IsTrigger(enButtonRB1)&&m_playerState!=m_enAnimationClip_Jump)
 	{
 		Throw();
 	}
 	//プレイヤーの移動を継承する。
 	//キャラコンで座標を移動させる。
 	m_characon->SetPosition(m_position);
+	m_collisionObject->SetPosition(m_position);
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();
+	m_collisionObject->Update();
+
 }
 void Player3D::Throw()
 {

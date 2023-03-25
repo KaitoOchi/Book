@@ -5,7 +5,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const Vector3 BOXSIZE{ 80.0f,120.0f,2.0f };//ボックスコライダーの大きさ
+	const Vector3 BOXSIZE{ 20.0f,120.0f,2.0f };//ボックスコライダーの大きさ
 	const Vector3 MODELSIZE{ 1.0f,1.0f,1.0f };
 	int WALKVALUE = 30;
 	int JUMPVALUE = 90;
@@ -16,6 +16,7 @@ Player2D::Player2D()
 }
 Player2D::~Player2D()
 {
+	delete m_characon;
 	delete(m_modelRender);
 }
 bool Player2D::Start()

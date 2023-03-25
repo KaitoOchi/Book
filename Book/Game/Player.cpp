@@ -24,6 +24,7 @@ Player::~Player()
 bool Player::Start()
 {
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
+	m_collisionObject = NewGO<CollisionObject>(0);
 	return true;
 }
 
@@ -50,20 +51,28 @@ void Player::Move()
 	m_moveSpeed.z *= SPEEDDOWN;
 	//左ステックの情報を取得
 	m_Lstic.x = g_pad[0]->GetLStickXF();
-	m_Lstic.z = g_pad[0]->GetLStickYF();
+	m_Lstic.y = g_pad[0]->GetLStickYF();
+	//カメラの前方向と、右方向の取得
+	Vector3 cameraFoward = g_camera3D->GetForward();
+	Vector3 cameraRight = g_camera3D->GetRight();
+	//XZ平面での前方方向と右方向を取得
+	cameraFoward.y = 0.0f;
+	cameraFoward.Normalize();
+	cameraRight.y = 0.0f;
+	cameraRight.Normalize();
 	//もしAボタンが押されているなら
 	if (g_pad[0]->IsPress(enButtonA))
 	{
 		//ダッシュをさせる
 		//左ステックと走る速度を乗算する
-		m_moveSpeed.x += m_Lstic.x * RUN;
-		m_moveSpeed.z += m_Lstic.z * RUN;
+		m_moveSpeed+= cameraFoward*m_Lstic.y * RUN;
+		m_moveSpeed+= cameraRight*m_Lstic.x * RUN;
 	}
 	else
 	{
 		//左ステックと歩く速度を乗算させる
-		m_moveSpeed.x += m_Lstic.x * WALK;
-		m_moveSpeed.z += m_Lstic.z * WALK;
+		m_moveSpeed += cameraFoward* m_Lstic.y * WALK;
+		m_moveSpeed += cameraRight*m_Lstic.x * WALK;
 	}
 
 }
