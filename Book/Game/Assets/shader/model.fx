@@ -170,8 +170,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	if (diffuseMap.r == 0.0f && diffuseMap.g == 0.0f && diffuseMap.b == 0.0f) {
 		diffuseMap.a = 0.0f;
-
-		return diffuseMap;
+		clip(-1);
+		// return diffuseMap;
 	}
 
 	//法線マップを求める
