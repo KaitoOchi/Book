@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
-
 namespace
 {
 	const Vector3	GAGE_SPRITE_POSITION = { -700.0f, 300.0f, 0.0f };	//ゲージ画像の位置
 	const Vector3	TIME_FONT_POSITION = { -100.0f, 500.0f, 0.0f };		//タイムの位置
-	const Vector3   VIGILANCE_POSITION = { 550.0f,100.0f,0.0f };
+	const Vector3   VIGILANCE_POSITION = { 500.0f,350.0f,0.0f };
+	const float		YSIZE = 154.0f;										//縦の大きさ
+	const float     XSIZE = 553.0f;										//横の大きさ
 	const float		GAGE_MAX = 255.0f;									//ゲージの最大値
 	const float		TIME_MAX = 180.0f;									//最大残り時間
 }
@@ -43,7 +44,7 @@ bool GameUI::Start()
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	//警戒度ゲージ画像の設定
-	m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_1.DDS",450,128);
+	m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_1.DDS", XSIZE, YSIZE);
 	m_vigilanceRender.SetPosition(VIGILANCE_POSITION);
 	m_vigilanceRender.Update();
 
@@ -105,34 +106,34 @@ void GameUI::VigilanceChange()
 	switch (m_Gitgage)
 	{
 	case 1:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_1.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_1.DDS", XSIZE, YSIZE);
 		break;
 	case 2:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_2.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_2.DDS", XSIZE, YSIZE);
 		break;
 	case 3:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_3.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_3.DDS", XSIZE, YSIZE);
 		break;
 	case 4:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_4.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_4.DDS", XSIZE, YSIZE);
 		break;
 	case 5:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_5.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_5.DDS", XSIZE, YSIZE);
 		break;
 	case 6:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_6.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_6.DDS", XSIZE, YSIZE);
 		break;
 	case 7:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_7.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_7.DDS", XSIZE, YSIZE);
 		break;
 	case 8:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_8.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_8.DDS", XSIZE, YSIZE);
 		break;
 	case 9:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_9.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_9.DDS", XSIZE, YSIZE);
 		break;
 	case 10:
-		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_10.DDS", 450, 128);
+		m_vigilanceRender.Init("Assets/sprite/CautionTimeGauge/gage_10.DDS", XSIZE, YSIZE);
 		break;
 	default:
 		break;

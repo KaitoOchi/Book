@@ -4,6 +4,7 @@
 #include "Player3D.h"
 class Player2D;
 class Player3D;
+class TransparentBox;
 class PlayerManagement:public Player
 {
 public:
@@ -27,7 +28,7 @@ public:
 			return m_player2D->GetPosition();
 		}
 	}
-	//�L�����R���̎擾
+	//キャラコンの取得
 	void SetCharacon(CharacterController* m_characon)
 	{
 		m_setChara = m_characon;
@@ -40,9 +41,7 @@ public:
 	{
 		m_position = m_pos;
 	}
-
-
-
+	
 	/// <summary>
 	/// 共通のステート遷移処理
 	/// </summary>
@@ -59,5 +58,6 @@ private:
 	CharacterController* m_setChara = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
+	TransparentBox* m_trans = nullptr;
 };
 
