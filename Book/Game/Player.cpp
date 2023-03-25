@@ -24,6 +24,7 @@ Player::~Player()
 bool Player::Start()
 {
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
+	m_collisionObject = NewGO<CollisionObject>(0);
 	return true;
 }
 

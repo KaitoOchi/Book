@@ -373,4 +373,12 @@ namespace nsK2EngineLow {
 	{
 		PhysicsWorld::GetInstance()->RemoveRigidBody(m_rigidBody);
 	}
+
+	//------------------------------------------------------------
+	//“–‚½‚è”»’è‚ğŒÄ‚Ño‚·‚½‚ß‚Ìˆ—
+	void CharacterController::HogeHit()
+	{
+
+	}
+	//------------------------------------------------------------
 }

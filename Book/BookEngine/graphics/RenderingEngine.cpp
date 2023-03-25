@@ -45,7 +45,7 @@ namespace nsBookEngine {
 		);
 
 		//ƒuƒ‹[ƒ€‚Ìè‡’l‚ğİ’è
-		SetBloomThreshold(1.25f);
+		SetBloomThreshold(50.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();

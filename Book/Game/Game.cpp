@@ -4,16 +4,19 @@
 #include"Player2D.h"
 #include"GameCamera.h"
 #include "PlayerManagement.h"
+#include "GameUI.h"
 #include "Title.h"
 #include "SenSor.h"
 #include "MiniMap.h"
 #include "Enemy_Normal.h"
+#include "Enemy_Serch.h"
+#include "Enemy_Charge.h"
 #include "BackGround.h"
-
+#include "TransparentBox.h"
 Game::Game()
 {
 	//当たり判定を有効化
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -30,7 +33,10 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
-	NewGO<PlayerManagement>(0,"playerManagement");
+	NewGO<PlayerManagement>(0, "playerManagement");
+	NewGO<GameUI>(0, "gameUI");
+	
+	
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
@@ -38,8 +44,9 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	LevelDesign();
+
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }
@@ -47,17 +54,24 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemNormal");
-			m_enemyNormal->SetPosition(objData.position);
-			//m_enemyNormal->SetRotation(Quaternion(objData.rotation.x, objData.rotation.z, objData.rotation.y, objData.rotation.w));
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
+			//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//m_enemyNormal->SetPosition(objData.position);
+			//m_enemyNormal->SetRotation(objData.rotation);
+			//m_enemyNormal->SetScale(objData.scale);
+
+			//// パス移動の指定
+			//m_enemyNormal->Pass(0);
+
+			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			m_enemyCharge->SetPosition(objData.position);
+			m_enemyCharge->SetRotation(objData.rotation);
+			m_enemyCharge->SetScale(objData.scale);
 
 			return true;
 		}
@@ -72,6 +86,22 @@ void Game::LevelDesign()
 
 			return true;
 		}
+		if (objData.EqualObjectName(L"unityChan") == true) {
+
+			m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
+			m_enemySerch->SetPosition(objData.position);
+			m_enemySerch->SetRotation(objData.rotation);
+			m_enemySerch->SetScale(objData.scale);
+
+			return true;
+		}
+		if (objData.EqualObjectName(L"debugtoumei") == true) {
+
+			m_trans = NewGO<TransparentBox>(0, "transparentBox");
+			m_trans->SetPosition(objData.position);
+			return true;
+		}
+
 		return true;
 		}
 	);
