@@ -16,7 +16,9 @@ bool BackGround::Start()
 	m_ModelRender.SetScale(m_scale);
 	m_ModelRender.SetPosition(m_position);
 	m_ModelRender.SetRotation(m_rotation);
+
 	m_physicsStaticObj.CreateFromModel(m_ModelRender.GetModel(), m_ModelRender.GetModel().GetWorldMatrix());
+	m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ƒRƒŠƒWƒ‡ƒ“‘®«‚ğİ’è
 
 	return true;
 }

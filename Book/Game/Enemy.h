@@ -16,10 +16,12 @@ public:
 
 	bool SeachPlayer();					// プレイヤーを発見する処理
 	bool CatchPlayer();					// プレイヤーを確保する処理
+	bool WallAndHit(Vector3 pos);		// 壁と衝突したかどうかの処理
 	void HitFlashBullet();				// 閃光弾が当たったときの処理
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
+	void Act_Limit();					// 一定以内には近づかないための処理
 	bool Act_Stop(float time);			// 行動停止
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
@@ -122,6 +124,9 @@ protected:
 	GameUI* m_gameUI = nullptr;
 
 	CharacterController m_characterController;
+
+	SphereCollider m_sphereCollider;
+
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
@@ -132,6 +137,7 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool ChangeCrawFlag = false;			// 巡回行動に切り替えるとき
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
