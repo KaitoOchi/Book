@@ -22,7 +22,7 @@ namespace nsBookEngine {
 		SetDirectionLight(Vector3(-1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//������ݒ�
-		SetAmbient(0.0f);
+		SetAmbient(0.3f);
 
 		//�������C�g��ݒ�
 		SetHemiSphereLight(
@@ -46,7 +46,7 @@ namespace nsBookEngine {
 		);
 
 		//�u���[����臒l��ݒ�
-		SetBloomThreshold(1.0f);
+		SetBloomThreshold(10.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -113,69 +113,9 @@ namespace nsBookEngine {
 		);
 	}
 
-	void RenderingEngine::InitCopyMainRenderTargetToFrameBufferSprite()
-	{
-		int frameBuffer_w = g_graphicsEngine->GetFrameBufferWidth();
-		int frameBuffer_h = g_graphicsEngine->GetFrameBufferHeight();
-
-		// �A���x�h�J���[��o�͗p�̃����_�����O�^�[�Q�b�g�����������
-		float clearColor[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-		m_gBuffer[enGBuffer_Albedo].Create(
-			frameBuffer_w,
-			frameBuffer_h,
-			1,
-			1,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			DXGI_FORMAT_D32_FLOAT,
-			clearColor
-		);
-
-		// �@���o�͗p�̃����_�����O�^�[�Q�b�g�����������
-		m_gBuffer[enGBuffer_Normal].Create(
-			frameBuffer_w,
-			frameBuffer_h,
-			1,
-			1,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_FORMAT_UNKNOWN
-		);
-
-
-		// ���[���h���W�p�̃����_�����O�^�[�Q�b�g�����������    
-		m_gBuffer[enGBuffer_WorldPos].Create(
-			frameBuffer_w,
-			frameBuffer_h,
-			1,
-			1,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			DXGI_FORMAT_UNKNOWN
-		);
-	}
-
-	void RenderingEngine::InitDefferedLighting()
-	{
-		//�f�B�t�@�[�h���C�e�B���O��s�����߂̃X�v���C�g�������
-		SpriteInitData spriteInitData;
-		spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
-		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
-
-		int texNo = 0;
-		for (auto& gBuffer : m_gBuffer)
-		{
-			spriteInitData.m_textures[texNo++] = &gBuffer.GetRenderTargetTexture();
-		}
-
-		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
-		spriteInitData.m_expandConstantBuffer = &m_lightCB;
-		spriteInitData.m_expandConstantBufferSize = sizeof(m_lightCB);
-		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R16G16B16A16_FLOAT;
-
-		m_deferredLightingSprite.Init(spriteInitData);
-	}
-
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
-		RenderShadowMap(rc);
+		//RenderShadowMap(rc);
 
 		ForwardRendering(rc);
 

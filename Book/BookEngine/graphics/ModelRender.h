@@ -69,12 +69,7 @@ namespace nsBookEngine {
 		/// <returns></returns>
 		Model& GetModel()
 		{
-			if (m_model.IsInited()) {
-				return m_model;
-			}
-			else if (m_renderToGBufferModel.IsInited()) {
-				return m_renderToGBufferModel;
-			}
+			return m_model;
 		}
 
 		/// <summary>
@@ -191,16 +186,6 @@ namespace nsBookEngine {
 		);
 
 		/// <summary>
-		/// GBuffer�`��p�̃��f����������B
-		/// </summary>
-		/// <param name="renderingEngine">�����_�����O�G���W��</param>
-		/// <param name="tkmFilePath">tkm�t�@�C���p�X</param>
-		void InitModelOnRenderGBuffer(
-			const char* tkmFilePath,
-			EnModelUpAxis enModelUpAxis,
-			bool isShadowReciever);
-
-		/// <summary>
 		/// �e�탂�f���̒��_�V�F�[�_�[�̃G���g���[�|�C���g��ݒ�B
 		/// </summary>
 		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
@@ -215,12 +200,6 @@ namespace nsBookEngine {
 		/// �t�H���[�h�����_�[�p�X����Ă΂�鏈���B
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
-
-		/// <summary>
-		/// GBuffer�p�X����Ă΂�鏈���B
-		/// </summary>
-		/// <param name="rc"></param>
-		void OnRenderToGBuffer(RenderContext& rc) override;
 
 	private:
 		AnimationClip*	m_animationClips = nullptr;

@@ -43,10 +43,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		//InitModel(filePath, enModelUpAxis);
-
-		//GBufferモデルを初期化。
-		InitModelOnRenderGBuffer(filePath, enModelUpAxis, false);
+		InitModel(filePath, enModelUpAxis);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -112,41 +109,10 @@ namespace nsBookEngine {
 	}
 
 
-	void ModelRender::InitModelOnRenderGBuffer(
-		const char* tkmFilePath,
-		EnModelUpAxis enModelUpAxis,
-		bool isShadowReciever
-	)
-	{
-		ModelInitData modelInitData;
-		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
-
-		// 頂点シェーダーのエントリーポイントをセットアップ。
-		SetupVertexShaderEntryPointFunc(modelInitData);
-
-		if (m_animationClips != nullptr) {
-			//スケルトンを指定する。
-			modelInitData.m_skeleton = &m_skeleton;
-		}
-		//モデルの上方向を指定する。
-		modelInitData.m_modelUpAxis = enModelUpAxis;
-
-		modelInitData.m_tkmFilePath = tkmFilePath;
-		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
-		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-		m_renderToGBufferModel.Init(modelInitData);
-
-	}
-
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
 		if (m_model.IsInited()) {
 			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-		}
-		if (m_renderToGBufferModel.IsInited()) {
-			m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 	}
 
@@ -158,9 +124,6 @@ namespace nsBookEngine {
 
 			if (m_model.IsInited()) {
 				m_skeleton.Update(m_model.GetWorldMatrix());
-			}
-			else if (m_renderToGBufferModel.IsInited()) {
-				m_skeleton.Update(m_renderToGBufferModel.GetWorldMatrix());
 			}
 		}
 
@@ -179,15 +142,6 @@ namespace nsBookEngine {
 
 	void ModelRender::OnForwardRender(RenderContext& rc)
 	{
-		if (m_model.IsInited()) {
-			m_model.Draw(rc, 1);
-		}
-	}
-
-	void ModelRender::OnRenderToGBuffer(RenderContext& rc)
-	{
-		if (m_renderToGBufferModel.IsInited()) {
-			m_renderToGBufferModel.Draw(rc, 1);
-		}
+		m_model.Draw(rc, 1);
 	}
 }

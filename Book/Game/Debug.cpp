@@ -67,9 +67,9 @@ bool Debug::Start()
 	//NewGO<Sensor>(0, "sensor");
 	NewGO<LightSensor>(0, "lightSensor");
 
-	m_pointLight.SetPosition(Vector3(-50.0f, 0.0f, -0.0f));
+	m_pointLight.SetPosition(Vector3(50.0f, -200.0f, 0.0f));
 	m_pointLight.SetColor(Vector3(0.0f, 50.0f, 0.0f));
-	m_pointLight.SetRange(500.0f);
+	m_pointLight.SetRange(1000.0f);
 	m_pointLight.Update();
 
 

@@ -211,14 +211,6 @@ namespace nsBookEngine {
 		void Render2D(RenderContext& rc);
 
 	private:
-		enum enGBuffer
-		{
-			enGBuffer_Albedo,
-			enGBuffer_Normal,
-			enGBuffer_WorldPos,
-			enGBuffer_Num
-		};
-
 		static RenderingEngine* m_instance;
 
 		LightCB m_lightCB;
@@ -240,6 +232,5 @@ namespace nsBookEngine {
 		
 		std::vector<IRenderer*> m_renderObjects;
 
-		RenderTarget m_gBuffer[enGBuffer_Num];							//GBuffer�p�̃����_�����O�^�[�Q�b�g
 	};
 }
