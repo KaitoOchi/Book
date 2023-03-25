@@ -1,10 +1,10 @@
 #pragma once
 #include "Enemy.h"
-class Enemy_Normal:public Enemy
+class Enemy_Charge : public Enemy
 {
 public:
-	Enemy_Normal();
-	~Enemy_Normal();
+	Enemy_Charge();
+	~Enemy_Charge();
 
 	bool Start();
 	void Update();
@@ -27,7 +27,7 @@ private:
 
 	Enemy* enemy;
 
-	ModelRender m_NormalModelRender;	// モデルレンダー
+	ModelRender m_ChargeModelRender;	// モデルレンダー
 
 	// アニメーションクリップ
 	enum EnEnemyAnimationClip
