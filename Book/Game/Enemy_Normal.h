@@ -10,23 +10,10 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void Act();							// エネミーの行動パターン
+	void HeadToDestination();			// 目的地に向かう処理
 	void Animation();					// アニメーション
 
-	/// <summary>
-	/// エネミーの巡回パターンを指定
-	/// </summary>
-	/// <param name="Line">縦に移動</param>
-	/// <param name="Horizontal">横に移動</param>
-	/// <param name="RightRotation">右回りに移動</param>
-	/// <param name="LeftRotation">左回りに移動</param>
-	/// <param name="RightAngle">直角に移動</param>
-	void Pass(int PassState);
-
 private:
-
-	Enemy* enemy;
-
 	ModelRender m_NormalModelRender;	// モデルレンダー
 
 	// アニメーションクリップ
@@ -42,15 +29,16 @@ private:
 	// アニメーションクリップ
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 
-	// 指定できるパス移動
-	enum EnEnemyPassState
+	// エネミーのアニメーションステート
+	enum EnEnemyAnimationState
 	{
-		Line,			// 縦
-		Horizontal,		// 横
-		RightRotation,	// 右回り
-		LeftRotation,	// 左回り
-		RightAngle,		// 直角
+		m_enEnemyAnimationState_Idle,	// 待機
+		m_enEnemyAnimationState_Walk,	// 歩く
+		m_enEnemyAnimationState_Run,	// 走る
+		m_enEnemyAnimationState_Attack,	// 攻撃
+		m_enEnemyAnimationState_Damege,	// 被弾
 	};
-
-	EnEnemyPassState PassState;
+	// アニメーションステート
+	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 };
+
