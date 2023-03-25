@@ -46,7 +46,7 @@ bool MiniMap::Start()
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
-	//m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
+	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
 
 	m_enemySerch = FindGO<Enemy_Serch>("enemySerch");
 
@@ -103,9 +103,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 		return false;
 	}
 
-	/*以下コピペ。
-	敵の向きが反映されていないらしいので反映させること。*/
-
+	
 
 	//ベクトルの長さを取得する
 	float length = diff.Length();

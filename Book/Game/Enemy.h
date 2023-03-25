@@ -145,5 +145,5 @@ protected:
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
 
-	float m_Vicount;							//警戒度を一定回数増やす
+	float m_Vicount;						//警戒度を一定回数増やす
 };
