@@ -303,6 +303,33 @@ void Enemy::Act_Access()
 	}
 
 }
+
+void Enemy::Act_Limit()
+{
+	// 一定の距離には近づかない
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+
+	// 長さが一定以下のとき
+	if (diff.Length() <= ACT_LIMIT) {
+		// 動かないようにする
+		m_position = m_position;
+	}
+}
+
+bool Enemy::Act_Stop(float time)
+{
+	// 経過時間を加算
+	addTimer += g_gameTime->GetFrameDeltaTime();
+
+	// 加算された時間が一定以上になったとき
+	if (time <= addTimer) {
+		return true;
+	}
+
+	return false;
+}
+
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
 	lightpos.y = LIGHTPOSITION;
@@ -326,39 +353,16 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
 }
+
 void Enemy::VigilanceCount()
 {
 	m_Vicount -= g_gameTime->GetFrameDeltaTime();
-	if (m_Vicount <= 0.0f) 
+	if (m_Vicount <= 0.0f)
 	{
 		//ステートの遷移
 		m_gameUI->Vigilance(1);
 		m_Vicount = VIGILANCETIME;
 	}
-void Enemy::Act_Limit()
-{
-	// 一定の距離には近づかない
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-
-	// 長さが一定以下のとき
-	if ( diff.Length() <= ACT_LIMIT) {
-		// 動かないようにする
-		m_position = m_position;
-	}
-}
-
-bool Enemy::Act_Stop(float time)
-{
-	// 経過時間を加算
-	addTimer += g_gameTime->GetFrameDeltaTime();
-
-	// 加算された時間が一定以上になったとき
-	if (time <= addTimer) {
-		return true;
-	}
-
-	return false;
 }
 
 void Enemy::SpotLight_New(Vector3 position)
@@ -371,30 +375,4 @@ void Enemy::SpotLight_New(Vector3 position)
 	//ライトの方向設定
 	m_spotLight.SetDirection(forward);
 	m_spotLight.Update();
-}
-void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
-{
-	lightpos.y = LIGHTPOSITION;
-	//Y軸
-	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//プレイヤーの正面
-	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
-	lightrotaition.Apply(m_front);
-	//その二つの垂直なベクトル
-	Vector3 m_vertical = Cross(m_Yup, m_front);
-	Quaternion m_SitenRot;
-	//その垂直なベクトルを元にクォータニオンを作る
-	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ベクトルにクォータニオンを加算する
-	m_SitenRot.Apply(m_front);
-	m_spotLight.SetDirection(m_front);
-
-	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
-	{
-		//ステートの遷移
-		int a = 0;
-	}
-	m_spotLight.SetPosition(lightpos);
-	m_spotLight.Update();
-
 }
