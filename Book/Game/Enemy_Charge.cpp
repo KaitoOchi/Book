@@ -3,8 +3,8 @@
 
 namespace 
 {
-	const float		LINEAR_COMPLETION = 0.2f;		// ç·šå½¢è£œå®Œã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
-	const float		STOP_TIMER = 1.0f;				// æºœã‚æ™‚é–“
+	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
+	const float		STOP_TIMER = 1.0f;				// —­‚ßŠÔ
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -17,7 +17,7 @@ Enemy_Charge::~Enemy_Charge()
 
 bool Enemy_Charge::Start()
 {
-	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®èª­ã¿è¾¼ã¿
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/enemy/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
 	m_animationClips[m_enAnimationClip_Walk].Load("Assets/animData/enemy/walk.tka");
@@ -29,7 +29,7 @@ bool Enemy_Charge::Start()
 	m_animationClips[m_enAnimationClip_Damege].Load("Assets/animData/enemy/damege.tka");
 	m_animationClips[m_enAnimationClip_Damege].SetLoopFlag(false);
 
-	// ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_ChargeModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
 	m_ChargeModelRender.SetScale(m_scale);
 	m_ChargeModelRender.SetPosition(m_position);
@@ -37,29 +37,31 @@ bool Enemy_Charge::Start()
 
 	Enemy::Start();
 
-	// é•·æ–¹å½¢ã«ç§»å‹•
+	// ’·•ûŒ`‚ÉˆÚ“®
 	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
 	m_pointList.push_back({ Vector3(m_position.x + 500.0f ,m_position.y,m_position.z + 300.0f),3 });
 	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),4 });
 
 	m_point = &m_pointList[0];
-	// è¦–é‡ã‚’ä½œæˆ
+
+	// ‹–ì‚ğì¬
 	Enemy::SpotLight_New(m_position);
+
 	return true;
 }
 
 void Enemy_Charge::Update()
 {
-	Act();			// è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³
-	Animation();	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	Act();			// s“®ƒpƒ^[ƒ“
+	Animation();	// ƒAƒjƒ[ƒVƒ‡ƒ“
 
-	// æ›´æ–°
+	// XV
 	m_ChargeModelRender.SetScale(m_scale);
 	m_ChargeModelRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
-	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ãƒ¢ãƒ‡ãƒ«ã®ä½ç½®ã¨åŒæœŸ
+	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğƒ‚ƒfƒ‹‚ÌˆÊ’u‚Æ“¯Šú
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
@@ -68,40 +70,53 @@ void Enemy_Charge::Update()
 
 void Enemy_Charge::Act()
 {
-	Enemy::HitFlashBullet();		// é–ƒå…‰å¼¾ã«å½“ãŸã£ãŸã¨ãã®å‡¦ç†
+	Enemy::HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
-	Enemy::Act_Craw();				// ä¸€å®šä»¥å†…ã«è¿‘ã¥ã‹ãªã„
+	// ƒXƒ|ƒbƒgƒ‰ƒCƒg
+	Enemy::SpotLight_Serch(m_rotation, m_position);
+
+	// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚µ‚½‚Æ‚«
+	if (Enemy::SeachPlayer() == true) {
+		Enemy::Act_Access();	// “ËiUŒ‚
+
+		if (Enemy::SeachPlayer() == false) {
+			Enemy::Act_Craw();		// „‰ñ
+		}
+	}
+	else {
+		Enemy::Act_Craw();			// „‰ñ
+	}
 }
 
 void Enemy_Charge::Pass(int PassState)
 {
 	switch (PassState)
 	{
-		// ç¸¦
+		// c
 	case Line:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		break;
-		// æ¨ª
+		// ‰¡
 	case Horizontal:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		break;
-		// å³å›ã‚Š
+		// ‰E‰ñ‚è
 	case RightRotation:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// å·¦å›ã‚Š
+		// ¶‰ñ‚è
 	case LeftRotation:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// (å·¦ã«)ç›´è§’
+		// (¶‚É)’¼Šp
 	case RightAngle:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
@@ -113,25 +128,25 @@ void Enemy_Charge::Pass(int PassState)
 
 void Enemy_Charge::Animation()
 {
-	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¹ãƒ†ãƒ¼ãƒˆ
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒXƒe[ƒg
 	switch (m_enEnemyAnimationState) {
-		// å¾…æ©Ÿ
+		// ‘Ò‹@
 	case Enemy::m_enEnemyAnimationState_Idle:
 		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
 		break;
-		// æ­©ã
+		// •à‚­
 	case Enemy::m_enEnemyAnimationState_Walk:
 		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
 		break;
-		// èµ°ã‚‹
+		// ‘–‚é
 	case Enemy::m_enEnemyAnimationState_Run:
 		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
 		break;
-		// æ”»æ’ƒ
+		// UŒ‚
 	case Enemy::m_enEnemyAnimationState_Attack:
 		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
 		break;
-		// è¢«å¼¾
+		// ”í’e
 	case Enemy::m_enEnemyAnimationState_Damege:
 		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
 		break;
@@ -140,6 +155,6 @@ void Enemy_Charge::Animation()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	// æç”»
+	// •`‰æ
 	m_ChargeModelRender.Draw(rc);
 }

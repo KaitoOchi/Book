@@ -21,6 +21,7 @@ public:
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
+	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	bool Act_Stop(float time);			// 行動停止
 	void SpotLight_New(Vector3 position);

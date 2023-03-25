@@ -11,12 +11,12 @@ namespace nsBookEngine {
 		/// </summary>
 		struct spotLight
 		{
-			Vector3 spPosition;		//座標
-			float pad0;				
-			Vector3 spColor;		//カラー
-			float spRange;			//影響範囲
-			Vector3 spDirection;	//方向
-			float spAngle;			//射出角度
+			Vector3 spPosition = Vector3::Zero;		//座標
+			float pad0 = 0.0f;				
+			Vector3 spColor = Vector3::Zero;		//カラー
+			float spRange = 0.0f;			//影響範囲
+			Vector3 spDirection = Vector3::Zero;	//方向
+			float spAngle = 0.0f;			//射出角度
 		};
 
 	public:

@@ -39,7 +39,7 @@ namespace nsBookEngine {
 			return;
 		}
 
-		m_modelRender.Init(*m_filePath.get(), nullptr, 0, enModelUpAxisZ, true, m_mapChipDataNum);
+		//m_modelRender.Init(*m_filePath.get(), nullptr, 0, enModelUpAxisZ, true, m_mapChipDataNum);
 
 		for (auto& mapChipData : m_mapChipDataVector)
 		{
