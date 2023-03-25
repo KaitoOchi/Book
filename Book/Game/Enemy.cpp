@@ -295,6 +295,7 @@ void Enemy::Act_Access()
 		diff.Normalize();
 		// エネミーの座標に加算
 		m_position += diff * MOVE_SPEED;
+
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}

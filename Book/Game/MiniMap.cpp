@@ -53,7 +53,7 @@ bool MiniMap::Start()
 
 void MiniMap::Update()
 {
-	DrawMap(m_enemyNormal->GetPosition(),0);
+	//DrawMap(m_enemyNormal->GetPosition(),0);
 	DrawMap(m_enemySerch->GetPosition(), 1);
 
 	for (int i = 0; i < ENEMY_NUM; i++) {

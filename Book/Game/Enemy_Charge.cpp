@@ -4,6 +4,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
+	const float		STOP_TIMER = 1.0f;				// 溜め時間
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -44,6 +45,9 @@ bool Enemy_Charge::Start()
 
 	m_point = &m_pointList[0];
 
+	// 視野を作成
+	Enemy::SpotLight_New(m_position);
+
 	return true;
 }
 
@@ -67,7 +71,21 @@ void Enemy_Charge::Update()
 void Enemy_Charge::Act()
 {
 	Enemy::HitFlashBullet();		// 閃光弾に当たったときの処理
-	Enemy::Act_Craw();				// 一定以内に近づかない
+
+	// スポットライト
+	Enemy::SpotLight_Serch(m_rotation, m_position);
+
+	// プレイヤーを発見したとき
+	if (Enemy::SeachPlayer() == true) {
+		Enemy::Act_Access();	// 突進攻撃
+
+		if (Enemy::SeachPlayer() == false) {
+			Enemy::Act_Craw();		// 巡回
+		}
+	}
+	else {
+		Enemy::Act_Craw();			// 巡回
+	}
 }
 
 void Enemy_Charge::Pass(int PassState)
