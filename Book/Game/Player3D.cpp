@@ -58,7 +58,7 @@ void Player3D::Update()
 	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 	Player::Update();
 	Animation();
-	if (g_pad[0]->IsTrigger(enButtonRB1))
+	if (g_pad[0]->IsTrigger(enButtonRB1)&&m_playerState!=m_enAnimationClip_Jump)
 	{
 		Throw();
 	}

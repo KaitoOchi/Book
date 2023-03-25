@@ -7,6 +7,7 @@ class Enemy_Normal;
 class MiniMap;
 class BackGround;
 class Enemy_Serch;
+class TransparentBox;
 class Game : public IGameObject
 {
 public:
@@ -41,5 +42,6 @@ private:
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Serch* m_enemySerch = nullptr;
 	BackGround* m_backGround = nullptr;
+	TransparentBox *m_trans = nullptr;
 };
 

@@ -11,7 +11,7 @@
 #include "Enemy_Normal.h"
 #include "Enemy_Serch.h"
 #include "BackGround.h"
-
+#include "TransparentBox.h"
 Game::Game()
 {
 	//当たり判定を有効化
@@ -53,7 +53,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level/debug_2.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
 		//名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -86,6 +86,13 @@ void Game::LevelDesign()
 
 			return true;
 		}
+		if (objData.EqualObjectName(L"debugtoumei") == true) {
+
+			m_trans = NewGO<TransparentBox>(0, "transparentBox");
+			m_trans->SetPosition(objData.position);
+			return true;
+		}
+
 		return true;
 		}
 	);

@@ -30,6 +30,7 @@
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="Enemy_Serch.cpp" />
     <ClCompile Include="GameUI.cpp" />
+    <ClCompile Include="TransparentBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -55,5 +56,6 @@
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="Enemy_Serch.h" />
     <ClInclude Include="GameUI.h" />
+    <ClInclude Include="TransparentBox.h" />
   </ItemGroup>
 </Project>

@@ -40,6 +40,9 @@ public:
 	{
 		m_position = m_pos;
 	}
+
+
+
 	/// <summary>
 	/// 共通のステート遷移処理
 	/// </summary>
