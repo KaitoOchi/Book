@@ -103,6 +103,10 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 		return false;
 	}
 
+	/*以下コピペ。
+	敵の向きが反映されていないらしいので反映させること。*/
+
+
 	//ベクトルの長さを取得する
 	float length = diff.Length();
 
