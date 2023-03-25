@@ -19,6 +19,7 @@ namespace
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
+
 	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
@@ -40,15 +41,12 @@ bool Enemy::Start()
 {
 	//警戒度時間を代入
 	m_Vicount = VIGILANCETIME;
-
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
 	// スフィアコライダーを初期化
 	m_sphereCollider.Create(1.0f);
-
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
-
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gameUI = FindGO<GameUI>("gameUI");
@@ -65,7 +63,6 @@ bool Enemy::SeachPlayer()
 	m_rotation.Apply(m_forward);
 
 	m_playerPos = m_playerManagement->GetPosition();
-
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 
@@ -164,7 +161,6 @@ void Enemy::HitFlashBullet()
 	if (HitFlashBulletFlag == true) {
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
-
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
 			HitFlashBulletFlag = false;		// フラグを降ろす
@@ -255,6 +251,7 @@ void Enemy::Act_Tracking()
 	// 経過時間を加算
 	NaviTimer += g_gameTime->GetFrameDeltaTime();
 
+
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
 		return;
@@ -304,8 +301,40 @@ void Enemy::Act_Access()
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
-}
 
+}
+void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
+{
+	lightpos.y = LIGHTPOSITION;
+	//Y軸
+	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
+	//プレイヤーの正面
+	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
+	lightrotaition.Apply(m_front);
+	//その二つの垂直なベクトル
+	Vector3 m_vertical = Cross(m_Yup, m_front);
+	Quaternion m_SitenRot;
+	//その垂直なベクトルを元にクォータニオンを作る
+	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
+	//ベクトルにクォータニオンを加算する
+	m_SitenRot.Apply(m_front);
+	m_spotLight.SetDirection(m_front);
+	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
+	{
+		VigilanceCount();
+	}
+	m_spotLight.SetPosition(lightpos);
+	m_spotLight.Update();
+}
+void Enemy::VigilanceCount()
+{
+	m_Vicount -= g_gameTime->GetFrameDeltaTime();
+	if (m_Vicount <= 0.0f) 
+	{
+		//ステートの遷移
+		m_gameUI->Vigilance(1);
+		m_Vicount = VIGILANCETIME;
+	}
 void Enemy::Act_Limit()
 {
 	// 一定の距離には近づかない
@@ -362,18 +391,10 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
-		VigilanceCount();
+		//ステートの遷移
+		int a = 0;
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
-}
-void Enemy::VigilanceCount()
-{
-	m_Vicount -= g_gameTime->GetFrameDeltaTime();
-	if (m_Vicount <= 0.0f) 
-	{
-		//ステートの遷移
-		m_gameUI->Vigilance(1);
-		m_Vicount = VIGILANCETIME;
-	}
+
 }
