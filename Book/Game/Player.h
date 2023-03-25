@@ -23,8 +23,8 @@ public:
 
 	};
 	Player();
-	~Player();
-	bool Start();
+	virtual ~Player();
+	virtual bool Start();
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -47,12 +47,18 @@ public:
 		return m_characon;
 	}
 
+	//コリジョンの取得
+	CollisionObject* GetCollision()
+	{
+		return m_collisionObject;
+	}
+
 protected:
-	void Update();
+	virtual void Update();
 	void Move();
 	void Jump();
 	void Rotation();
-	void Animation();
+	virtual void Animation();
 	/// <summary>
 	/// 各ステートの遷移処理
 	/// </summary>
@@ -122,21 +128,22 @@ protected:
 	/// </summary>
 	void ProcessGameOverStateTransition();
 	
-	bool m_characonState = true;//キャラコンを作るかどうか
+	bool m_characonState = true;								//キャラコンを作るかどうか
 
-	Vector3 m_moveSpeed=Vector3::Zero;//移動速度
-	Vector3 m_Lstic = Vector3::Zero;//左ステック
-	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);//初期座標
-	Vector3 m_forward = Vector3::AxisZ;//プレイヤーの正面ベクトル
+	Vector3 m_moveSpeed=Vector3::Zero;							//移動速度
+	Vector3 m_Lstic = Vector3::Zero;							//左ステック
+	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);				//初期座標
+	Vector3 m_forward = Vector3::AxisZ;							//プレイヤーの正面ベクトル
 	
-	float angle=0;//回転角度
+	float angle=0;												//回転角度
 	
-	ModelRender *m_modelRender=nullptr;//3Dモデル
-	nsK2EngineLow::Texture m_player2D[14];//
-	Quaternion m_rotation;//回転
-	CharacterController *m_characon;//キャラコン
-	EnPlayerState m_playerState = m_enPlayer_Idle;//待機状態
+	ModelRender *m_modelRender=nullptr;							//3Dモデル
+	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
+	Quaternion m_rotation;										//回転
+	CharacterController *m_characon;							//キャラコン
+	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
+	CollisionObject* m_collisionObject = nullptr;							//コリジョン
 
-	GameCamera* gamecamera=nullptr;//ゲームカメラ
-	PlayerManagement* m_playerManagement=nullptr;//プレイヤー管理
+	GameCamera* gamecamera=nullptr;								//ゲームカメラ
+	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 };

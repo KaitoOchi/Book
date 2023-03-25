@@ -5,10 +5,10 @@ class Player3D :public Player
 {
 public:
 	Player3D();
-	~Player3D();
-	bool Start();
-	void Update();
-	void Animation();
+	~Player3D()override;
+	bool Start()override;
+	void Update()override;
+	void Animation()override;
 	void Throw();
 	void PlayerChang();
 	void Render(RenderContext& rc);

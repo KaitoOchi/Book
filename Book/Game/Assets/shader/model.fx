@@ -194,7 +194,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 
 	//最終的な反射光にリムライトの反射光を合算する
-	float3 limColor = limPower * dirColor;
+	float3 limColor =  dirColor;
 
 	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
 	float3 lig = directionLight 
