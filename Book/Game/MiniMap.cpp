@@ -3,13 +3,15 @@
 
 #include "PlayerManagement.h"
 #include "Enemy_Normal.h"
+#include "Enemy_Serch.h"
 
 namespace
 {
-	const Vector3 CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
-	const float MAP_RADIUS = 150.0f;									// マップの半径
-	const float LIMITED_RANGE_IMAGE = 600.0f;							// マップの範囲
-	const float ALPHA = 0.75f;
+	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
+	const float		MAP_RADIUS = 150.0f;									// マップの半径
+	const float		LIMITED_RANGE_IMAGE = 500.0f;							// マップの範囲
+	const float		ALPHA = 0.75f;											// α値
+	const int		ENEMY_NUM = 2;											// エネミーの総数
 }
 
 MiniMap::MiniMap()
@@ -22,57 +24,65 @@ MiniMap::~MiniMap()
 
 bool MiniMap::Start()
 {
-	// マップの黒い画像
+	// ベース
 	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
-	m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
+	//m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
 
-	// 飾りの画像
+	// ベースの装飾
 	m_OutLineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);
-	m_OutLineSpriteRender.SetPosition({ 635.0f, -200.0f, 0.0f });
+	m_OutLineSpriteRender.SetPosition({ 640.0f, -210.0f, 0.0f });
 	m_OutLineSpriteRender.Update();
 
-	// 中心の画像
+	// プレイヤー
 	m_PlayerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
 
-	// エネミーを表す画像
-	m_EnemySpriteRender.Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
+	// エネミー
+	for (int i = 0; i < ENEMY_NUM; i++) {
+		m_EnemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
+	}
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
+	m_enemySerch = FindGO<Enemy_Serch>("enemySerch");
 
 	return true;
 }
 
 void MiniMap::Update()
 {
-	DrawMap();
+	DrawMap(m_enemyNormal->GetPosition(),0);
+	DrawMap(m_enemySerch->GetPosition(), 1);
 
-	m_EnemySpriteRender.Update();
+	for (int i = 0; i < ENEMY_NUM; i++) {
+		m_EnemySpriteRender[i].Update();
+	}
+	
 	m_PlayerSpriteRender.Update();
 	m_SpriteRender.Update();
 }
 
-void MiniMap::DrawMap()
+void MiniMap::DrawMap(Vector3 pos, int num)
 {
 	// 座標を取得
 	Vector3 playerPos = m_playerManagement->GetPosition();
-	Vector3 enemy_NormalPos = m_enemyNormal->GetPosition();
+	Vector3 enemy_NormalPos = pos;
 
 	Vector3 mapPos;
 
 	// マップに表示する範囲に敵がいたら
 	if (WorldPositionConvertToMapPosition(playerPos, enemy_NormalPos, mapPos)) {
-		// マップに表示する
-		m_isImage = true;
+
 		// spriteRenderに座標を設定
-		m_EnemySpriteRender.SetPosition(mapPos);
+		m_EnemySpriteRender[num].SetPosition(mapPos);
+		// マップに表示する
+		m_isImage[num] = true;
 	}
 	// マップに表示する敵がいなかったら
 	else {
-		m_isImage = false;
+		m_isImage[num] = false;
 	}
 }
 
@@ -126,11 +136,11 @@ void MiniMap::Render(RenderContext& rc)
 	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
-	// エネミーが近くにいないとき
-	if (m_isImage == false) {
-		// ここで処理を終了
-		return;
+	for (int i = 0; i < ENEMY_NUM; i++) {
+		// エネミーが近くにいないとき
+		if (m_isImage[i] == true) {
+			// 近くにいるときは描画する
+			m_EnemySpriteRender[i].Draw(rc);
+		}
 	}
-
-	m_EnemySpriteRender.Draw(rc);
 }
