@@ -172,35 +172,28 @@ float4 PSMain(SPSIn In) : SV_Target0
 	float3 directionLight = CalcLigFromDirectionLight(In, normal);
 
 	//ポイントライトを求める
-	float3 pointLight = CalcLigFromPointLight(In, normal);
+	float3 pointLight = CalcLigFromPointLight(In, In.normal);
 
 	//スポットライトを求める
-	float3 spotLight = CalcLigFromSpotLight(In, normal);
+	float3 spotLight = CalcLigFromSpotLight(In, In.normal);
 
 	//半球ライトを求める
-	//float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
+	float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
 
 	//リムライトを求める
-	//float limPower = CalcLim(dirDirection, normal, worldPos);
+	float limPower = CalcLim(dirDirection, In.normal, In.normalInView);
 
 
 	//最終的な反射光にリムライトの反射光を合算する
-	float3 limColor = dirColor ;//* limPower ;
+	float3 limColor = dirColor * limPower ;
 
 	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
-	/*
 	float3 lig = directionLight 
 				+ pointLight
 				+ spotLight
 				+ ambient
 				+ limColor
 				+ hemiLight;
-				*/
-	float3 lig = directionLight
-			+ pointLight
-			+ spotLight
-			+ ambient
-			+ limColor;
 
 	float4 albedoColor = albedo;
 	albedoColor.xyz *= lig;

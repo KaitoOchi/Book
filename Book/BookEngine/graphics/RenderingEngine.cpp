@@ -26,8 +26,8 @@ namespace nsBookEngine {
 
 		//�������C�g��ݒ�
 		SetHemiSphereLight(
-			Vector3(0.3f, 0.2f, 0.2f),
-			Vector3(0.3f, 0.5f, 0.3f),
+			Vector3(0.4f, 0.2f, 0.2f),
+			Vector3(0.1f, 0.3f, 0.2f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
@@ -46,7 +46,7 @@ namespace nsBookEngine {
 		);
 
 		//�u���[����臒l��ݒ�
-		SetBloomThreshold(10.0f);
+		SetBloomThreshold(1.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -115,6 +115,9 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
+		//視点の位置を設定する
+		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
+
 		//RenderShadowMap(rc);
 
 		ForwardRendering(rc);
