@@ -97,6 +97,18 @@ namespace nsBookEngine {
 
 		//modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		m_model.Init(modelInitData);
+
+
+		//シャドウ用のモデルを初期化
+		ModelInitData shadowModelInitData;
+		shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
+		shadowModelInitData.m_tkmFilePath = tkmFilePath;
+
+		// 頂点シェーダーのエントリーポイントをセットアップ。
+		SetupVertexShaderEntryPointFunc(shadowModelInitData);
+
+		m_shadowModel.Init(shadowModelInitData);
+		m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	}
 
 
@@ -158,6 +170,11 @@ namespace nsBookEngine {
 	void ModelRender::Draw(RenderContext& rc)
 	{
 		RenderingEngine::GetInstance()->AddRenderObject(this);
+	}
+
+	void ModelRender::OnRenderShadowMap(RenderContext& rc)
+	{
+		m_shadowModel.Draw(rc, 1);
 	}
 
 	void ModelRender::OnForwardRender(RenderContext& rc)

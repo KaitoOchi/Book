@@ -18,24 +18,24 @@ namespace nsBookEngine {
 	void RenderingEngine::Init()
 	{
 
-		//ѓfѓBѓЊѓNѓVѓ‡ѓ“ѓ‰ѓCѓg‚рђЭ’и
+		//пїЅfпїЅBпїЅпїЅпїЅNпїЅVпїЅпїЅпїЅпїЅпїЅпїЅпїЅCпїЅgпїЅпїЅЭ’пїЅ
 		SetDirectionLight(Vector3(-1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
-		//ЉВ‹«Њх‚рђЭ’и
+		//пїЅВ‹пїЅпїЅпїЅпїЅпїЅЭ’пїЅ
 		SetAmbient(0.0f);
 
-		//”ј‹…ѓ‰ѓCѓg‚рђЭ’и
+		//пїЅпїЅпїЅпїЅпїЅпїЅпїЅCпїЅgпїЅпїЅЭ’пїЅ
 		SetHemiSphereLight(
 			Vector3(0.3f, 0.2f, 0.2f),
 			Vector3(0.3f, 0.5f, 0.3f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
-		//Ќ\‘ў‘М‚Й•Ы‘¶
+		//пїЅ\пїЅпїЅпїЅМ‚Й•Ы‘пїЅ
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
-		//ѓЃѓCѓ“ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚МђЭ’и
+		//пїЅпїЅпїЅCпїЅпїЅпїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅМђЭ’пїЅ
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -45,14 +45,13 @@ namespace nsBookEngine {
 			DXGI_FORMAT_D32_FLOAT
 		);
 
-		//ѓuѓ‹Ѓ[ѓЂ‚Ми‡’l‚рђЭ’и
+		//пїЅuпїЅпїЅпїЅ[пїЅпїЅпїЅпїЅи‡’lпїЅпїЅЭ’пїЅ
 		SetBloomThreshold(1.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
 
-		InitGBuffer();
-		InitDefferedLighting();
+		InitShadowMapRenderTarget();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -69,42 +68,57 @@ namespace nsBookEngine {
 			clearColor
 		);
 
-		// ЌЕЏIЌ‡ђ¬—p‚МѓXѓvѓ‰ѓCѓg‚рЏ‰Љъ‰»‚·‚й
+		// пїЅЕЏIпїЅпїЅпїЅпїЅпїЅpпїЅМѓXпїЅvпїЅпїЅпїЅCпїЅgпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		SpriteInitData spriteInitData;
-		//ѓeѓNѓXѓ`ѓѓ‚Н2DѓЊѓ“ѓ_Ѓ\ѓ^Ѓ[ѓQѓbѓgЃB
+		//пїЅeпїЅNпїЅXпїЅ`пїЅпїЅпїЅпїЅ2DпїЅпїЅпїЅпїЅпїЅ_пїЅ\пїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅB
 		spriteInitData.m_textures[0] = &m_2DRenderTarget.GetRenderTargetTexture();
-		// ‰р‘њ“x‚НmainRenderTarget‚М•ќ‚ЖЌ‚‚і
+		// пїЅр‘њ“xпїЅпїЅmainRenderTargetпїЅМ•пїЅпїЅЖЌпїЅпїЅпїЅ
 		spriteInitData.m_width = m_mainRenderTarget.GetWidth();
 		spriteInitData.m_height = m_mainRenderTarget.GetHeight();
-		// 2D—p‚МѓVѓFЃ[ѓ_Ѓ[‚рЋg—p‚·‚й
+		// 2DпїЅpпїЅМѓVпїЅFпїЅ[пїЅ_пїЅ[пїЅпїЅgпїЅpпїЅпїЅпїЅпїЅ
 		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
 		spriteInitData.m_vsEntryPointFunc = "VSMain";
 		spriteInitData.m_psEntryPoinFunc = "PSMain";
-		//ЏгЏ‘‚«ЃB
+		//пїЅгЏ‘пїЅпїЅпїЅB
 		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
-		//ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚МѓtѓHЃ[ѓ}ѓbѓgЃB
+		//пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅМѓtпїЅHпїЅ[пїЅ}пїЅbпїЅgпїЅB
 		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
 		m_2DSprite.Init(spriteInitData);
 
-		//ѓeѓNѓXѓ`ѓѓ‚НѓЃѓCѓ“ѓЊѓ“ѓ_Ѓ\ѓ^Ѓ[ѓQѓbѓgЃB
+		//пїЅeпїЅNпїЅXпїЅ`пїЅпїЅпїЅНѓпїЅпїЅCпїЅпїЅпїЅпїЅпїЅпїЅпїЅ_пїЅ\пїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅB
 		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
 
-		//‰р‘њ“x‚Н2DѓЊѓ“ѓ_Ѓ\ѓ^Ѓ[ѓQѓbѓg‚М•ќ‚ЖЌ‚‚і
+		//пїЅр‘њ“xпїЅпїЅ2DпїЅпїЅпїЅпїЅпїЅ_пїЅ\пїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅМ•пїЅпїЅЖЌпїЅпїЅпїЅ
 		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
 		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
-		//ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚МѓtѓHЃ[ѓ}ѓbѓgЃB
+		//пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅМѓtпїЅHпїЅ[пїЅ}пїЅbпїЅgпїЅB
 		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
 
 		m_mainSprite.Init(spriteInitData);
 	}
 
-	void RenderingEngine::InitGBuffer()
+	void RenderingEngine::InitShadowMapRenderTarget()
+	{
+		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+		m_shadowMapRenderTarget.Create(
+			1024,
+			1024,
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
+		);
+	}
+
+	void RenderingEngine::InitCopyMainRenderTargetToFrameBufferSprite()
 	{
 		int frameBuffer_w = g_graphicsEngine->GetFrameBufferWidth();
 		int frameBuffer_h = g_graphicsEngine->GetFrameBufferHeight();
 
-		// ѓAѓ‹ѓxѓhѓJѓ‰Ѓ[‚рЏo—Н—p‚МѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рЏ‰Љъ‰»‚·‚й
+		// пїЅAпїЅпїЅпїЅxпїЅhпїЅJпїЅпїЅпїЅ[пїЅпїЅoпїЅН—pпїЅМѓпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		float clearColor[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 		m_gBuffer[enGBuffer_Albedo].Create(
 			frameBuffer_w,
@@ -116,7 +130,7 @@ namespace nsBookEngine {
 			clearColor
 		);
 
-		// –@ђьЏo—Н—p‚МѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рЏ‰Љъ‰»‚·‚й
+		// пїЅ@пїЅпїЅпїЅoпїЅН—pпїЅМѓпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		m_gBuffer[enGBuffer_Normal].Create(
 			frameBuffer_w,
 			frameBuffer_h,
@@ -127,7 +141,7 @@ namespace nsBookEngine {
 		);
 
 
-		// ѓЏЃ[ѓ‹ѓhЌА•W—p‚МѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рЏ‰Љъ‰»‚·‚й    
+		// пїЅпїЅпїЅ[пїЅпїЅпїЅhпїЅпїЅпїЅWпїЅpпїЅМѓпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ    
 		m_gBuffer[enGBuffer_WorldPos].Create(
 			frameBuffer_w,
 			frameBuffer_h,
@@ -140,7 +154,7 @@ namespace nsBookEngine {
 
 	void RenderingEngine::InitDefferedLighting()
 	{
-		//ѓfѓBѓtѓ@Ѓ[ѓhѓ‰ѓCѓeѓBѓ“ѓO‚рЌs‚¤‚Ѕ‚Я‚МѓXѓvѓ‰ѓCѓg‚рЏ‰Љъ‰»
+		//пїЅfпїЅBпїЅtпїЅ@пїЅ[пїЅhпїЅпїЅпїЅCпїЅeпїЅBпїЅпїЅпїЅOпїЅпїЅsпїЅпїЅпїЅпїЅпїЅЯ‚МѓXпїЅvпїЅпїЅпїЅCпїЅgпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		SpriteInitData spriteInitData;
 		spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
 		spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
@@ -161,17 +175,9 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
-		// ѓfѓBѓtѓ@Ѓ[ѓhѓ‰ѓCѓeѓBѓ“ѓO‚Й•K—v‚Иѓ‰ѓCѓgЏо•с‚рЌXђV‚·‚й
-		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
-		//m_lightCB.mViewProjInv = g_camera3D->GetViewProjectionMatrixInv();
-		m_lightCB.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+		RenderShadowMap(rc);
 
-		RenderToGBuffer(rc);
-
-		DeferredLighting(rc);
-
-
-		//ForwardRendering(rc);
+		ForwardRendering(rc);
 
 		m_bloom.Render(rc, m_mainRenderTarget);
 
@@ -180,49 +186,20 @@ namespace nsBookEngine {
 		m_renderObjects.clear();
 	}
 
-	void RenderingEngine::RenderToGBuffer(RenderContext& rc)
+	void RenderingEngine::RenderShadowMap(RenderContext& rc)
 	{
-		BeginGPUEvent("RenderToGBuffer");
+		//пїЅeпїЅрђ¶ђпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅfпїЅпїЅпїЅпїЅVпїЅпїЅпїЅhпїЅEпїЅ}пїЅbпїЅvпїЅЙ•`пїЅж‚·пїЅпїЅ
+		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMapRenderTarget);
+		rc.SetRenderTargetAndViewport(m_shadowMapRenderTarget);
+		rc.ClearRenderTargetView(m_shadowMapRenderTarget);
 
-		RenderTarget* rts[enGBuffer_Num] = {
-			&m_gBuffer[enGBuffer_Albedo],
-			&m_gBuffer[enGBuffer_Normal],
-			&m_gBuffer[enGBuffer_WorldPos]
-		};
-
-		rc.WaitUntilToPossibleSetRenderTargets(3, rts);
-
-		rc.SetRenderTargets(3, rts);
-
-		rc.ClearRenderTargetViews(3, rts);
-
+		//пїЅIпїЅuпїЅWпїЅFпїЅNпїЅgпїЅМ•`пїЅпїЅ
 		for (auto& renderObj : m_renderObjects) {
-			renderObj->OnRenderToGBuffer(rc);
+			renderObj->OnRenderShadowMap(rc);
 		}
 
-		rc.WaitUntilFinishDrawingToRenderTargets(3, rts);
 
-		EndGPUEvent();
-	}
-
-	void RenderingEngine::DeferredLighting(RenderContext& rc)
-	{
-		BeginGPUEvent("DeferredLighting");
-
-		//m_deferredLightingCB.m_light.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
-
-		// ѓЊѓ“ѓ_ѓЉѓ“ѓOђж‚рѓЃѓCѓ“ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚Й‚·‚й
-		// ѓЃѓCѓ“ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рђЭ’и
-		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
-		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
-
-		// G-Buffer‚М“а—e‚рЊі‚Й‚µ‚ДѓfѓBѓtѓ@Ѓ[ѓhѓ‰ѓCѓeѓBѓ“ѓO
-		m_deferredLightingSprite.Draw(rc);
-
-		// ѓЃѓCѓ“ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚Ц‚МЏ‘‚«Ќћ‚ЭЏI—№‘Т‚ї
-		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
-
-		EndGPUEvent();
+		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
 	}
 
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
@@ -240,12 +217,12 @@ namespace nsBookEngine {
 
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 
-		//ѓIѓuѓWѓFѓNѓg‚М•`‰ж
+		//пїЅIпїЅuпїЅWпїЅFпїЅNпїЅgпїЅМ•`пїЅпїЅ
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnForwardRender(rc);
 		}
 
-		// ѓЃѓCѓ“ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚Ц‚МЏ‘‚«Ќћ‚ЭЏI—№‘Т‚ї
+		// пїЅпїЅпїЅCпїЅпїЅпїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅЦ‚МЏпїЅпїЅпїЅпїЅпїЅпїЅЭЏIпїЅпїЅпїЅТ‚пїЅ
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 
 		EndGPUEvent();
@@ -254,14 +231,14 @@ namespace nsBookEngine {
 	void RenderingEngine::Render2D(RenderContext& rc)
 	{
 		BeginGPUEvent("Render2D");
-		////ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚Ж‚µ‚Д——p‚Е‚«‚й‚Ь‚Е‘Т‚ВЃB
-		////PRESENT‚©‚зRENDERTARGET‚ЦЃB
+		////пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅЖ‚пїЅпїЅД—пїЅпїЅpпїЅЕ‚пїЅпїЅпїЅЬ‚Е‘Т‚ВЃB
+		////PRESENTпїЅпїЅпїЅпїЅRENDERTARGETпїЅЦЃB
 		//rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
 
-		//// ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рђЭ’и
+		//// пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅЭ’пїЅ
 		//rc.SetRenderTargetAndViewport(m_2DRenderTarget);
 
-		//// ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рѓNѓЉѓA
+		//// пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅNпїЅпїЅпїЅA
 		//rc.ClearRenderTargetView(m_2DRenderTarget);
 
 		//m_mainSprite.Draw(rc);
@@ -270,17 +247,17 @@ namespace nsBookEngine {
 			renderObj->OnRender2D(rc);
 		}
 
-		////RENDERTARGET‚©‚зPRESENT‚ЦЃB
+		////RENDERTARGETпїЅпїЅпїЅпїЅPRESENTпїЅЦЃB
 		//rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
-		////PRESENT‚©‚зRENDERTARGET‚ЦЃB
+		////PRESENTпїЅпїЅпїЅпїЅRENDERTARGETпїЅЦЃB
 		//rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 
-		//// ѓЊѓ“ѓ_ѓЉѓ“ѓOѓ^Ѓ[ѓQѓbѓg‚рђЭ’и
+		//// пїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅOпїЅ^пїЅ[пїЅQпїЅbпїЅgпїЅпїЅЭ’пїЅ
 		//rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 
 		//m_2DSprite.Draw(rc);
 
-		////RENDERTARGET‚©‚зPRESENT‚ЦЃB
+		////RENDERTARGETпїЅпїЅпїЅпїЅPRESENTпїЅЦЃB
 		//rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 
 		EndGPUEvent();

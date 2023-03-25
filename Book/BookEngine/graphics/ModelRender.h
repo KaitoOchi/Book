@@ -15,15 +15,15 @@ namespace nsBookEngine {
 		~ModelRender();
 
 		/// <summary>
-		/// ‰Šú‰»ˆ—B
+		/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒXB</param>
-		/// <param name="animationClip">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB</param>
-		/// <param name="numAnimationClip">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì”B</param>
-		/// <param name="enModelUpAxis">ƒ‚ƒfƒ‹‚Ìã•ûŒüB</param>
-		/// <param name="isShadowReceiver">true‚È‚ç‰e‚ª¶¬‚³‚ê‚éB</param>
-		/// <param name="maxInstance">ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌÅ‘å”BƒCƒ“ƒXƒ^ƒ“ƒVƒ“ƒO•`‰æ—pB</param>
-		/// <param name="isFrontCullingOnDrawShadowMap">ƒVƒƒƒhƒEƒ}ƒbƒv•`‰æŽž‚Éƒtƒƒ“ƒgƒJƒŠƒ“ƒO‚ðs‚¤‚©‚Ç‚¤‚©B</param>
+		/// <param name="filePath">ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½pï¿½Xï¿½B</param>
+		/// <param name="animationClip">ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½vï¿½B</param>
+		/// <param name="numAnimationClip">ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½vï¿½Ìï¿½ï¿½B</param>
+		/// <param name="enModelUpAxis">ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½B</param>
+		/// <param name="isShadowReceiver">trueï¿½È‚ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B</param>
+		/// <param name="maxInstance">ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ÌÅ‘å”ï¿½Bï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½Oï¿½`ï¿½ï¿½pï¿½B</param>
+		/// <param name="isFrontCullingOnDrawShadowMap">ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½vï¿½`ï¿½æŽžï¿½Éƒtï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½B</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationClip = nullptr,
@@ -34,28 +34,28 @@ namespace nsBookEngine {
 			bool isFrontCullingOnDrawShadowMap = false);
 
 		/// <summary>
-		/// XVˆ—B
+		/// ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		void Update();
 
 		/// <summary>
-		/// •`‰æˆ—B
+		/// ï¿½`ï¿½æˆï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="rc">ƒŒƒ“ƒ_[ƒRƒ“ƒeƒLƒXƒg</param>
+		/// <param name="rc">ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½g</param>
 		void Draw(RenderContext& rc);
 
 		/// <summary>
-		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶B
+		/// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½B
 		/// </summary>
-		/// <param name="animNo">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì”Ô†B</param>
-		/// <param name="interpolateTime">üŒ`•âŠÔ‚ÌŽžŠÔ</param>
+		/// <param name="animNo">ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½vï¿½Ì”Ôï¿½ï¿½B</param>
+		/// <param name="interpolateTime">ï¿½ï¿½ï¿½`ï¿½ï¿½Ô‚ÌŽï¿½ï¿½ï¿½</param>
 		void PlayAnimation(int animNo, float interpolateTime = 0.0f)
 		{
 			m_animation.Play(animNo, interpolateTime);
 		}
 
 		/// <summary>
-		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶’†‚©‚Ç‚¤‚©B
+		/// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÌÄï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <returns></returns>
 		bool IsPlayingAniamtion()
@@ -64,7 +64,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒ‚ƒfƒ‹‚ðŽæ“¾B
+		/// ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½æ“¾ï¿½B
 		/// </summary>
 		/// <returns></returns>
 		Model& GetModel()
@@ -78,7 +78,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// À•W‚ðÝ’èB
+		/// ï¿½ï¿½ï¿½Wï¿½ï¿½Ý’ï¿½B
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -87,7 +87,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ‰ñ“]‚ðÝ’èB
+		/// ï¿½ï¿½]ï¿½ï¿½Ý’ï¿½B
 		/// </summary>
 		/// <param name="rot"></param>
 		void SetRotation(const Quaternion& rot)
@@ -96,7 +96,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// Šg‘å—¦‚ðÝ’èB
+		/// ï¿½gï¿½å—¦ï¿½ï¿½Ý’ï¿½B
 		/// </summary>
 		/// <param name="scale"></param>
 		void SetScale(const Vector3& scale)
@@ -110,7 +110,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒVƒƒƒhƒEƒLƒƒƒXƒ^[‚Ìƒtƒ‰ƒO‚ðÝ’è‚·‚éB
+		/// ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½Lï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½Ý’è‚·ï¿½ï¿½B
 		/// </summary>
 		/// <param name="flag"></param>
 		void SetShadowCasterFlag(bool flag)
@@ -119,7 +119,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬“x‚ðÝ’è‚·‚éB
+		/// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½xï¿½ï¿½Ý’è‚·ï¿½ï¿½B
 		/// </summary>
 		/// <param name="animationSpeed"></param>
 		void SetAnimationSpeed(const float animationSpeed)
@@ -128,7 +128,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒ{[ƒ“‚Ì–¼‘O‚©‚çƒ{[ƒ“”Ô†‚ðŒŸõB
+		/// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì–ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <param name="boneName"></param>
 		/// <returns></returns>
@@ -138,7 +138,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒ{[ƒ“”Ô†‚©‚çƒ{[ƒ“‚ðŽæ“¾B
+		/// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½B
 		/// </summary>
 		/// <param name="boneNo"></param>
 		/// <returns></returns>
@@ -148,7 +148,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒVƒƒƒhƒEƒLƒƒƒXƒ^[‚Ìƒtƒ‰ƒO‚ª‚ ‚é‚©‚Ç‚¤‚©B
+		/// ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½Lï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½Ìƒtï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <returns></returns>
 		bool IsShadowCaster()
@@ -158,29 +158,29 @@ namespace nsBookEngine {
 
 	private:
 		/// <summary>
-		/// ƒXƒPƒ‹ƒgƒ“‚Ì‰Šú‰»B
+		/// ï¿½Xï¿½Pï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒX</param>
+		/// <param name="filePath">ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½pï¿½X</param>
 		void InitSkeleton(const char* filePath);
 
 
 		/// <summary>
-		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»B
+		/// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="animationClips">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv</param>
-		/// <param name="numAnimationClips">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv‚Ì”</param>
-		/// <param name="enModelUpAxis">ƒ‚ƒfƒ‹‚ÌãŒü‚«</param>
+		/// <param name="animationClips">ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½v</param>
+		/// <param name="numAnimationClips">ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½bï¿½vï¿½Ìï¿½</param>
+		/// <param name="enModelUpAxis">ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½</param>
 		void InitAnimation(AnimationClip* animationClips,
 			int numAnimationClips,
 			EnModelUpAxis enModelUpAxis);
 
 		/// <summary>
-		/// ŠeŽíƒ‚ƒfƒ‹‚Ìƒ[ƒ‹ƒhs—ñ‚ðXV‚·‚éB
+		/// ï¿½eï¿½íƒ‚ï¿½fï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		void UpdateWorldMatrixInModes();
 
 		/// <summary>
-		/// ƒ‚ƒfƒ‹‚ð‰Šú‰»B
+		/// ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <param name="renderingEngine"></param>
 		/// <param name="tkmFilePath"></param>
@@ -191,28 +191,33 @@ namespace nsBookEngine {
 		);
 
 		/// <summary>
-		/// GBuffer•`‰æ—p‚Ìƒ‚ƒfƒ‹‚ð‰Šú‰»B
+		/// GBufferï¿½`ï¿½ï¿½pï¿½Ìƒï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="renderingEngine">ƒŒƒ“ƒ_ƒŠƒ“ƒOƒGƒ“ƒWƒ“</param>
-		/// <param name="tkmFilePath">tkmƒtƒ@ƒCƒ‹ƒpƒX</param>
+		/// <param name="renderingEngine">ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Gï¿½ï¿½ï¿½Wï¿½ï¿½</param>
+		/// <param name="tkmFilePath">tkmï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½pï¿½X</param>
 		void InitModelOnRenderGBuffer(
 			const char* tkmFilePath,
 			EnModelUpAxis enModelUpAxis,
 			bool isShadowReciever);
 
 		/// <summary>
-		/// ŠeŽíƒ‚ƒfƒ‹‚Ì’¸“_ƒVƒF[ƒ_[‚ÌƒGƒ“ƒgƒŠ[ƒ|ƒCƒ“ƒg‚ðÝ’èB
+		/// ï¿½eï¿½íƒ‚ï¿½fï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒGï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½Ý’ï¿½B
 		/// </summary>
 		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
 
 	private:
 		/// <summary>
-		/// ƒtƒHƒ[ƒhƒŒƒ“ƒ_[ƒpƒX‚©‚çŒÄ‚Î‚ê‚éˆ—B
+		///ï¿½@ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Ä‚Î‚ï¿½éˆï¿½ï¿½ï¿½B
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnRenderShadowMap(RenderContext& rc) override;
+		/// <summary>
+		/// ï¿½tï¿½Hï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Ä‚Î‚ï¿½éˆï¿½ï¿½ï¿½B
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
 
 		/// <summary>
-		/// GBufferƒpƒX‚©‚çŒÄ‚Î‚ê‚éˆ—B
+		/// GBufferï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Ä‚Î‚ï¿½éˆï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <param name="rc"></param>
 		void OnRenderToGBuffer(RenderContext& rc) override;
@@ -227,7 +232,7 @@ namespace nsBookEngine {
 		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
 		Animation		m_animation;
 		Model			m_model;
-		Model			m_renderToGBufferModel;				// RenderToGBuffer‚Å•`‰æ‚³‚ê‚éƒ‚ƒfƒ‹
+		Model			m_shadowModel;
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
 		bool			m_isShadowCaster = true;
