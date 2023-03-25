@@ -33,6 +33,7 @@ namespace nsBookEngine {
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxis,
 		bool isShadowReceiver,
+		D3D12_CULL_MODE m_cullMode,
 		int maxInstance)
 	{
 		//スケルトンを初期化。

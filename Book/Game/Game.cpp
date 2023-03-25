@@ -97,8 +97,8 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-			m_trans = NewGO<TransparentBox>(0, "transparentBox");
-			m_trans->SetPosition(objData.position);
+			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
+			//m_trans->SetPosition(objData.position);
 			return true;
 		}
 

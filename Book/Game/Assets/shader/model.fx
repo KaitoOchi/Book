@@ -174,6 +174,10 @@ float4 PSMain(SPSIn In) : SV_Target0
 	// G-Bufferの内容を使ってライティング
     float4 albedo = g_albedo.Sample(g_sampler, In.uv);
 
+	if(albedo.r == 0.0f, albedo.g == 0.0f, albedo.b == 0.0f){
+		clip(-1);
+	}
+
 	//ノーマルマップを求める
     float3 normal = CalcNormal(In);
 
@@ -464,6 +468,7 @@ float3 ShadowMap(SPSIn psIn)
 	if(shadowReceiver){
 		return shadowMap;
 	}
+
 	//ライトビュースクリーン空間からUV空間に座標変換
     float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
     shadowMapUV *= float2(0.5f, -0.5f);

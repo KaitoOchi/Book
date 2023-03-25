@@ -10,6 +10,9 @@
     <Filter Include="Actor">
       <UniqueIdentifier>{ec6239f9-66bd-4f59-a5ba-92258fbfe31c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{4b9e679b-3076-4a38-8433-1d36265c8486}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -17,8 +20,6 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -54,14 +55,26 @@
     <ClCompile Include="SenSor.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp" />
+    <ClCompile Include="TransparentBox.cpp" />
+    <ClCompile Include="Enemy_Charge.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_Serch.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Title.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="MiniMap.h" />
@@ -96,6 +109,20 @@
     </ClInclude>
     <ClInclude Include="SenSor.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h" />
+    <ClInclude Include="TransparentBox.h" />
+    <ClInclude Include="Enemy_Serch.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Charge.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
