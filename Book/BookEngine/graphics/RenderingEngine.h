@@ -20,7 +20,8 @@ namespace nsBookEngine {
 			PointLight::pointLight pointLig;
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
-			Matrix mViewProjInv;
+			Matrix mLVP;
+			bool shadowReceiver;
 		};
 
 		//�X�v���C�g�p�萔�o�b�t�@�̍\����
@@ -143,6 +144,15 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// シャドウマップ用レンダーターゲットを取得。
+		/// </summary>
+		/// <returns></returns>
+		RenderTarget& GetShadowRenderTarget()
+		{
+			return m_shadowMapRenderTarget;
+		}
+
+		/// <summary>
 		/// �u���[������������臒l��ݒ�
 		/// </summary>
 		void SetBloomThreshold(const float threshold)
@@ -211,6 +221,8 @@ namespace nsBookEngine {
 		void Render2D(RenderContext& rc);
 
 	private:
+
+
 		static RenderingEngine* m_instance;
 
 		LightCB m_lightCB;

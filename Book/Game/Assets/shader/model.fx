@@ -37,6 +37,10 @@ cbuffer LightCb : register(b1) {
 	float3 groundColor;		//照り返しのライト
 	float3 skyColor;		//天球ライト
 	float3 groundNormal;	//地面の法線
+
+	float4x4 mLVP;
+
+	bool shadowReceiver = false;
 }
 
 
@@ -66,6 +70,7 @@ struct SPSIn{
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド座標
 	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
+	float4 posInLVP 	: TEXCOORD3;    // ライトビュースクリーン空間でのピクセルの座標
 };
 
 ////////////////////////////////////////////////
@@ -74,6 +79,7 @@ struct SPSIn{
 Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);			//法線マップ
 Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ
+Texture2D<float4> g_shadowMap : register(t10);  // シャドウマップ
 
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
 sampler g_sampler : register(s0);	//サンプラステート。
@@ -90,7 +96,7 @@ float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
 float3 CalcNormal(SPSIn psIn);
 float3 CalcSpecular(float3 normal, float3 worldPos);
-float3 CalcWorldPosFromUVZ(float2 uv, float zInScreen, float4x4 mViewProjInv);
+float3 ShadowMap(SPSIn psIn);
 
 /// <summary>
 //スキン行列を計算する。
@@ -139,6 +145,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//カメラ空間の法線を求める
 	psIn.normalInView = mul(mView, psIn.normal);
 
+	//ライトビュースクリーン空間の座標を計算する
+    psIn.posInLVP = mul(mLVP, psIn.worldPos);
+
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -183,6 +192,9 @@ float4 PSMain(SPSIn In) : SV_Target0
 	//リムライトを求める
 	float limPower = CalcLim(dirDirection, In.normal, In.normalInView);
 
+	//シャドウマップを求める
+	float3 shadowMap = ShadowMap(In);
+
 
 	//最終的な反射光にリムライトの反射光を合算する
 	float3 limColor = dirColor * limPower ;
@@ -197,6 +209,7 @@ float4 PSMain(SPSIn In) : SV_Target0
 
 	float4 albedoColor = albedo;
 	albedoColor.xyz *= lig;
+	albedoColor.xyz *= shadowMap;
 
 	return albedoColor;
 }
@@ -442,4 +455,26 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 	t = pow(t, 5.0f);
 	
 	return t;
+}
+
+float3 ShadowMap(SPSIn psIn)
+{
+    float3 shadowMap = 1.0f;
+
+	if(shadowReceiver){
+		return shadowMap;
+	}
+	//ライトビュースクリーン空間からUV空間に座標変換
+    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+    shadowMapUV *= float2(0.5f, -0.5f);
+    shadowMapUV += 0.5f;
+
+    // step-7 UV座標を使ってシャドウマップから影情報をサンプリング
+    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
+    {
+        shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
+    }
+
+	return shadowMap;
 }

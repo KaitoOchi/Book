@@ -33,8 +33,7 @@ namespace nsBookEngine {
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxis,
 		bool isShadowReceiver,
-		int maxInstance,
-		bool isFrontCullingOnDrawShadowMap)
+		int maxInstance)
 	{
 		//スケルトンを初期化。
 		InitSkeleton(filePath);
@@ -43,7 +42,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis);
+		InitModel(filePath, enModelUpAxis, isShadowReceiver);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -71,9 +70,9 @@ namespace nsBookEngine {
 	}
 
 	void ModelRender::InitModel(
-		//RenderingEngine& renderingEngine,
 		const char* tkmFilePath,
-		EnModelUpAxis modelUpAxis
+		EnModelUpAxis modelUpAxis,
+		const bool isShadow
 	)
 	{
 		ModelInitData modelInitData;
@@ -83,6 +82,10 @@ namespace nsBookEngine {
 		modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+
+		if (isShadow) {
+			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowRenderTarget().GetRenderTargetTexture();
+		}
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
 		SetupVertexShaderEntryPointFunc(modelInitData);
@@ -96,22 +99,34 @@ namespace nsBookEngine {
 		m_model.Init(modelInitData);
 
 
-		//シャドウ用のモデルを初期化
-		ModelInitData shadowModelInitData;
-		shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
-		shadowModelInitData.m_tkmFilePath = tkmFilePath;
+		if (isShadow) {
 
-		// 頂点シェーダーのエントリーポイントをセットアップ。
-		SetupVertexShaderEntryPointFunc(shadowModelInitData);
+			//シャドウ用のモデルを初期化
+			ModelInitData shadowModelInitData;
+			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
+			shadowModelInitData.m_tkmFilePath = tkmFilePath;
+			shadowModelInitData.m_modelUpAxis = modelUpAxis;
 
-		m_shadowModel.Init(shadowModelInitData);
-		m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+			if (m_animationClips != nullptr) {
+				//スケルトンを指定する。
+				shadowModelInitData.m_skeleton = &m_skeleton;
+			}
+
+			// 頂点シェーダーのエントリーポイントをセットアップ。
+			SetupVertexShaderEntryPointFunc(shadowModelInitData);
+
+			m_shadowModel.Init(shadowModelInitData);
+			m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
 	}
 
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
 		if (m_model.IsInited()) {
+			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		if (m_shadowModel.IsInited()) {
 			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 	}

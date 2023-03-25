@@ -29,9 +29,9 @@ namespace nsBookEngine {
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClip = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadowReceiver = true,
-			int maxInstance = 1,
-			bool isFrontCullingOnDrawShadowMap = false);
+			bool isShadowReceiver = false,
+			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
+			int maxInstance = 1);
 
 		/// <summary>
 		/// �X�V�����B
@@ -180,9 +180,9 @@ namespace nsBookEngine {
 		/// <param name="renderingEngine"></param>
 		/// <param name="tkmFilePath"></param>
 		void InitModel(
-			//RenderingEngine& renderingEngine,
 			const char* tkmFilePath,
-			EnModelUpAxis modelUpAxis
+			EnModelUpAxis modelUpAxis,
+			const bool isShadow
 		);
 
 		/// <summary>

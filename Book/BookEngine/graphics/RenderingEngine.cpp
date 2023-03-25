@@ -35,6 +35,23 @@ namespace nsBookEngine {
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
+		// 影描画用のライトカメラを作成する
+		Camera lightCamera;
+
+		// カメラの位置を設定。これはライトの位置
+		lightCamera.SetPosition(0, 500, 0);
+
+		// カメラの注視点を設定。これがライトが照らしている場所
+		lightCamera.SetTarget(1, 0, 0);
+
+		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
+		lightCamera.SetUp(0, 1, 0);
+
+		// ライトビュープロジェクション行列を計算している
+		lightCamera.Update();
+		m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
+		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
+
 		//���C�������_�����O�^�[�Q�b�g�̐ݒ�
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
@@ -118,7 +135,9 @@ namespace nsBookEngine {
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 
-		//RenderShadowMap(rc);
+		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
+
+		RenderShadowMap(rc);
 
 		ForwardRendering(rc);
 
@@ -136,10 +155,14 @@ namespace nsBookEngine {
 		rc.SetRenderTargetAndViewport(m_shadowMapRenderTarget);
 		rc.ClearRenderTargetView(m_shadowMapRenderTarget);
 
+		m_lightCB.shadowReceiver = true;
+
 		//�I�u�W�F�N�g�̕`��
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRenderShadowMap(rc);
 		}
+
+		m_lightCB.shadowReceiver = false;
 
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
