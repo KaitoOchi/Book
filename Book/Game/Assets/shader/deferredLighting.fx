@@ -1,17 +1,28 @@
 /*!
- * @brief	シンプルなモデルシェーダー。
+ * @brief	�X�v���C�g�p�̃V�F�[�_�[�B
  */
 
-////////////////////////////////////////////////
-// 定数バッファ。
-////////////////////////////////////////////////
-//モデル用の定数バッファ
-cbuffer ModelCb : register(b0){
-	float4x4 mWorld;
-	float4x4 mView;
-	float4x4 mProj;
+cbuffer cb : register(b0){
+	float4x4 mvp;		//���[���h�r���[�v���W�F�N�V�����s��B
+	float4 mulColor;	//��Z�J���[�B
+    //float4 screenParam;
+};
+struct VSInput{
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
 };
 
+struct PSInput{
+	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
+	//float3 normal		: NORMAL;		//法線
+	//float3 tangent		: TANGENT;		//接ベクトル
+	//float3 biNormal		: BINORMAL;		//従ベクトル
+	float2 uv 			: TEXCOORD0;	//uv座標。
+	//float3 worldPos		: TEXCOORD1;	//ワールド座標
+	//float3 normalInView : TEXCOORD2;	//カメラ空間の法線
+};
+
+//スプライト用構造体データ
 //ライト用の定数バッファ
 cbuffer LightCb : register(b1) {
 
@@ -38,182 +49,91 @@ cbuffer LightCb : register(b1) {
 	float3 skyColor;		//天球ライト
 	float3 groundNormal;	//地面の法線
 
-	float4x4 mLVP;
-
-	bool shadowReceiver = false;
+	float4x4 mViewProjInv;  // ビュープロジェクション行列の逆行列
 }
 
 
-////////////////////////////////////////////////
-// 構造体
-////////////////////////////////////////////////
-//スキニング用の頂点データをひとまとめ。
-struct SSkinVSIn{
-	int4  Indices  	: BLENDINDICES0;
-    float4 Weights  : BLENDWEIGHT0;
-};
-//頂点シェーダーへの入力。
-struct SVSIn{
-	float4 pos 		: POSITION;		//モデルの頂点座標。
-	float3 normal	: NORMAL;		//法線
-	float3 tangent	: TANGENT;		//接ベクトル
-	float3 biNormal : BINORMAL;		//従ベクトル
-	float2 uv 		: TEXCOORD0;	//UV座標。
-	SSkinVSIn skinVert;				//スキン用のデータ。
-};
-//ピクセルシェーダーへの入力。
-struct SPSIn{
-	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
-	float3 normal		: NORMAL;		//法線
-	float3 tangent		: TANGENT;		//接ベクトル
-	float3 biNormal		: BINORMAL;		//従ベクトル
-	float2 uv 			: TEXCOORD0;	//uv座標。
-	float3 worldPos		: TEXCOORD1;	//ワールド座標
-	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
-	float4 posInLVP 	: TEXCOORD3;    // ライトビュースクリーン空間でのピクセルの座標
-};
+Texture2D<float4> colorTexture : register(t0);	//�J���[�e�N�X�`���B
+Texture2D<float4> normalTexture : register(t1); // 法線
+Texture2D<float4> worldPosTexture : register(t2);
+sampler Sampler : register(s0);
 
-////////////////////////////////////////////////
-// グローバル変数。
-////////////////////////////////////////////////
-Texture2D<float4> g_albedo : register(t0);				//アルベドマップ
-Texture2D<float4> g_normalMap : register(t1);			//法線マップ
-Texture2D<float4> g_specularMap : register(t2);			//スペキュラマップ
-Texture2D<float4> g_shadowMap : register(t10);  // シャドウマップ
-
-StructuredBuffer<float4x4> g_boneMatrix : register(t3);	//ボーン行列。
-sampler g_sampler : register(s0);	//サンプラステート。
-
-///////////////////////////////////////////
-// 関数宣言
-///////////////////////////////////////////
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
-float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal);
-float3 CalcLigFromPointLight(SPSIn psIn, float3 normal);
-float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal);
+float3 CalcLigFromDirectionLight(PSInput psIn, float3 normal, float3 worldPos);
+float3 CalcLigFromPointLight(PSInput psIn, float3 normal);
+float3 CalcLigFromSpotLight(PSInput psIn, float3 normal);
 float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
-float3 CalcNormal(SPSIn psIn);
+//float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv);
 float3 CalcSpecular(float3 normal, float3 worldPos);
-float3 ShadowMap(SPSIn psIn);
+float3 CalcWorldPosFromUVZ(float2 uv, float zInScreen, float4x4 mViewProjInv);
 
-/// <summary>
-//スキン行列を計算する。
-/// </summary>
-float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+PSInput VSMain(VSInput In) 
 {
-	float4x4 skinning = 0;
-	float w = 0.0f;
-	[unroll]
-	for (int i = 0; i < 3; i++)
-	{
-		skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-		w += skinVert.Weights[i];
-	}
+    PSInput psIn;
+    psIn.pos = mul(mvp, In.pos);
+    psIn.uv = In.uv;
 
-	skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
-
-	return skinning;
-}
-
-/// <summary>
-/// 頂点シェーダーのコア関数。
-/// </summary>
-SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
-{
-	SPSIn psIn;
-	float4x4 m;
-	if( hasSkin ){
-		m = CalcSkinMatrix(vsIn.skinVert);
-	}else{
-		m = mWorld;
-	}
-
-	psIn.pos = mul(m, vsIn.pos);
-	psIn.worldPos = psIn.pos;
-	psIn.pos = mul(mView, psIn.pos);
-	psIn.pos = mul(mProj, psIn.pos);
-
-	//頂点法線をピクセルシェーダーにわたす
-	psIn.normal = mul(m, vsIn.normal);
-
+/*
 	//ワールド空間に変換
 	psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
 	psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));
 
 	//カメラ空間の法線を求める
 	psIn.normalInView = mul(mView, psIn.normal);
-
-	//ライトビュースクリーン空間の座標を計算する
-    psIn.posInLVP = mul(mLVP, psIn.worldPos);
-
-	psIn.uv = vsIn.uv;
+*/
 
 	return psIn;
 }
 
-/// <summary>
-/// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
-/// </summary>
-SPSIn VSMain(SVSIn vsIn)
-{
-	return VSMainCore(vsIn, false);
-}
-
-/// <summary>
-/// スキンありメッシュの頂点シェーダーのエントリー関数。
-/// </summary>
-SPSIn VSSkinMain( SVSIn vsIn ) 
-{
-	return VSMainCore(vsIn, true);
-}
-
-float4 PSMain(SPSIn In) : SV_Target0
+float4 PSMain( PSInput In ) : SV_Target0
 {
 	// G-Bufferの内容を使ってライティング
-    float4 albedo = g_albedo.Sample(g_sampler, In.uv);
-
-	if(albedo.r == 0.0f, albedo.g == 0.0f, albedo.b == 0.0f){
-		clip(-1);
-	}
+    float4 albedo = colorTexture.Sample(Sampler, In.uv);
 
 	//ノーマルマップを求める
-    float3 normal = CalcNormal(In);
+    float3 normal = normalTexture.Sample(Sampler, In.uv).xyz;
+    normal = (normal * 2.0f) - 1.0f;
+
+	//ワールド座標をサンプリング。
+    //float3 worldPos = CalcWorldPosFromUVZ(In.uv, albedo.w, mViewProjInv);
+	float3 worldPos = worldPosTexture.Sample(Sampler, In.uv).xyz;
 
 	//ディレクションライトを求める
-	float3 directionLight = CalcLigFromDirectionLight(In, normal);
+	float3 directionLight = CalcLigFromDirectionLight(In, normal, worldPos);
 
 	//ポイントライトを求める
-	float3 pointLight = CalcLigFromPointLight(In, In.normal);
+	//float3 pointLight = CalcLigFromPointLight(In, normal);
 
 	//スポットライトを求める
-	float3 spotLight = CalcLigFromSpotLight(In, In.normal);
+	//float3 spotLight = CalcLigFromSpotLight(In, normal);
 
 	//半球ライトを求める
-	float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
+	//float3 hemiLight = CalcHemiSphereLight(normal, groundColor, skyColor, groundNormal);
 
 	//リムライトを求める
-	float limPower = CalcLim(dirDirection, In.normal, In.normalInView);
-
-	//シャドウマップを求める
-	float3 shadowMap = ShadowMap(In);
+	//float limPower = CalcLim(dirDirection, normal, worldPos);
 
 
 	//最終的な反射光にリムライトの反射光を合算する
-	float3 limColor = dirColor * limPower ;
+	float3 limColor = dirColor ;//* limPower ;
 
 	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
+	/*
 	float3 lig = directionLight 
 				+ pointLight
 				+ spotLight
 				+ ambient
 				+ limColor
 				+ hemiLight;
+				*/
+	float3 lig = directionLight
+			+ ambient
+			+ limColor;
 
 	float4 albedoColor = albedo;
 	albedoColor.xyz *= lig;
-	albedoColor.xyz *= shadowMap;
 
 	return albedoColor;
 }
@@ -269,24 +189,24 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 /// <summary>
 /// ディレクションライトを計算する
 /// </summary>
-float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromDirectionLight(PSInput psIn, float3 normal, float3 worldPos)
 {
 	//拡散反射光を求める
 	float3 diffDirection = CalcLambertDiffuse(dirDirection, dirColor, normal);
 
 	//鏡面反射光を求める
-	float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, psIn.worldPos, normal);
+	float3 specDirection = CalcPhongSpecular(dirDirection, dirColor, worldPos, normal);
 
 	//スペキュラマップを求める
-	specDirection += CalcSpecular(normal, psIn.worldPos);
+	specDirection += CalcSpecular(normal, worldPos);
 
 	return diffDirection + specDirection;
 }
-
+/*
 /// <summary>
 /// ポイントライトを計算する
 /// </summary>
-float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromPointLight(PSInput psIn, float3 normal)
 {
 	//サーフェイスに入射するポイントライトの光の向きを計算
 	float3 ligDir = psIn.worldPos - ptPosition;
@@ -330,11 +250,10 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 	return diffPoint + specPoint;
 }
 
-
 /// <summary>
 /// スポットライトを計算する
 /// </summary>
-float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromSpotLight(PSInput psIn, float3 normal)
 {
 	//ピクセルの座標 - スポットライトの座標を計算
 	float3 ligDir = psIn.worldPos - spPosition;
@@ -394,7 +313,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 	return diffSpotLight + specSpotLight;
 
 }
-
+*/
 
 /// <summary>
 /// リムライトを計算する
@@ -430,24 +349,25 @@ float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, f
 
 	return hemiLig;
 }
+/*
 
 /// <summary>
 /// 法線を計算する
 /// </summary>
-float3 CalcNormal(SPSIn psIn)
+float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
 {
 	//法線マップからタンジェントスペースの法線をサンプリングする
-	float3 binSpcaeNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+	float3 binSpcaeNormal = g_normalMap.Sample(g_sampler, uv).xyz;
 	binSpcaeNormal = (binSpcaeNormal - 0.5f) * 2.0f;
 
 	//タンジェントスペースの法線をワールドスペースに変換する
-	float3 newNormal = psIn.tangent * binSpcaeNormal.x + psIn.biNormal * binSpcaeNormal.y + psIn.normal * binSpcaeNormal.z;
+	float3 newNormal = tangent * binSpcaeNormal.x + biNormal * binSpcaeNormal.y + normal * binSpcaeNormal.z;
 
 	newNormal = (newNormal / 2.0f) + 0.5f;
 
 	return newNormal;
 }
-
+*/
 /// <summary>
 /// スペキュラを計算
 /// </summary>
@@ -461,25 +381,16 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 	return t;
 }
 
-float3 ShadowMap(SPSIn psIn)
+/// <summary>
+/// ワールド座標を計算
+/// </summary>
+float3 CalcWorldPosFromUVZ( float2 uv, float zInScreen, float4x4 mViewProjInv )
 {
-    float3 shadowMap = 1.0f;
-
-	if(shadowReceiver){
-		return shadowMap;
-	}
-
-	//ライトビュースクリーン空間からUV空間に座標変換
-    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
-    shadowMapUV *= float2(0.5f, -0.5f);
-    shadowMapUV += 0.5f;
-
-    // step-7 UV座標を使ってシャドウマップから影情報をサンプリング
-    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
-    {
-        shadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV);
-    }
-
-	return shadowMap;
+	float3 screenPos;
+	screenPos.xy = (uv * float2(2.0f, -2.0f)) + float2( -1.0f, 1.0f);
+	screenPos.z = zInScreen;
+	
+	float4 worldPos = mul(mViewProjInv, float4(screenPos, 1.0f));
+	worldPos.xyz /= worldPos.w;
+	return worldPos.xyz;
 }

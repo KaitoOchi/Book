@@ -9,6 +9,19 @@ namespace nsBookEngine {
 	class IRenderer {
 	public:
 		/// <summary>
+		/// シャドウマップへの描画パスから呼ばれる処理。
+		/// </summary>
+		/// <param name="rc">レンダリングコンテキスト</param>
+		/// <param name="ligNo">ライト番号</param>
+		/// <param name="lvpMatrix">ライトビュープロジェクション行列</param>
+		virtual void OnRenderShadowMap(
+			RenderContext& rc
+		)
+		{
+
+		}
+
+		/// <summary>
 		/// G-Buffer描画パスから呼ばれる処理。
 		/// </summary>
 		virtual void OnRenderToGBuffer(RenderContext& rc)

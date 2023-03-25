@@ -376,29 +376,3 @@ void Enemy::SpotLight_New(Vector3 position)
 	m_spotLight.SetDirection(forward);
 	m_spotLight.Update();
 }
-void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
-{
-	lightpos.y = LIGHTPOSITION;
-	//Y軸
-	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//プレイヤーの正面
-	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
-	lightrotaition.Apply(m_front);
-	//その二つの垂直なベクトル
-	Vector3 m_vertical = Cross(m_Yup, m_front);
-	Quaternion m_SitenRot;
-	//その垂直なベクトルを元にクォータニオンを作る
-	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ベクトルにクォータニオンを加算する
-	m_SitenRot.Apply(m_front);
-	m_spotLight.SetDirection(m_front);
-
-	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
-	{
-		//ステートの遷移
-		int a = 0;
-	}
-	m_spotLight.SetPosition(lightpos);
-	m_spotLight.Update();
-
-}

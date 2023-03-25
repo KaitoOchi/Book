@@ -12,10 +12,11 @@
 #include "Enemy_Serch.h"
 #include "Enemy_Charge.h"
 #include "BackGround.h"
-#include "TransparentBox.h"
+#include "LightSensor.h"
+
 Game::Game()
 {
-	//“–‚½‚è”»’è‚ğ—LŒø‰»
+	//ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
 	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
@@ -33,10 +34,9 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
-	NewGO<PlayerManagement>(0, "playerManagement");
+	NewGO<PlayerManagement>(0,"playerManagement");
 	NewGO<GameUI>(0, "gameUI");
-	
-	
+	NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
@@ -53,10 +53,10 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	//ƒŒƒxƒ‹ƒfƒUƒCƒ“ˆ—
+	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½fï¿½Uï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
-		//–¼‘O‚ªunityChan‚È‚ç
+		//ï¿½ï¿½ï¿½Oï¿½ï¿½unityChanï¿½È‚ï¿½
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
@@ -65,7 +65,7 @@ void Game::LevelDesign()
 			//m_enemyNormal->SetRotation(objData.rotation);
 			//m_enemyNormal->SetScale(objData.scale);
 
-			//// ƒpƒXˆÚ“®‚Ìw’è
+			//// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½Ìwï¿½ï¿½
 			//m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
@@ -76,7 +76,7 @@ void Game::LevelDesign()
 			return true;
 		}
 
-		//–¼‘O‚ªbackground‚È‚ç
+		//ï¿½ï¿½ï¿½Oï¿½ï¿½backgroundï¿½È‚ï¿½
 		if (objData.EqualObjectName(L"debug") == true) {
 
 			m_backGround = NewGO<BackGround>(0, "backGround");
@@ -97,8 +97,8 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-			m_trans = NewGO<TransparentBox>(0, "transparentBox");
-			m_trans->SetPosition(objData.position);
+			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
+			//m_trans->SetPosition(objData.position);
 			return true;
 		}
 
