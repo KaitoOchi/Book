@@ -114,8 +114,7 @@ void Enemy_Normal::Act()
 
 		// 追跡を停止する
 		if (HitFlashBulletFlag == true || Enemy::SeachPlayer() == false) {
-			ChangeCrawFlag = true;	// フラグをtrueにする
-			Enemy::Act_Craw();		// 巡回行動
+			Enemy::Act_Loss();		// 追跡行動からの切り替え
 		}
 	}
 	else {

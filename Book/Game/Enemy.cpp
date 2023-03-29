@@ -18,7 +18,7 @@ namespace
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
-	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
+	const Vector3	BOXSIZE = { 50.0f, 80.0f,50.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;						//���C�g�̉e���͈�
@@ -177,30 +177,6 @@ void Enemy::Act_Craw()
 {
 	// パス移動
 	
-	// 追跡から状態を切り替えたとき
-	//if (ChangeCrawFlag == true) {
-
-	//	// 一番近いパスを探す
-	//	for (int i = 1; i <= m_pointList.size(); i++) {
-
-	//		m_point = &m_pointList[i];
-	//		Vector3 diff = m_point->s_position - m_position;
-
-	//		for (int j = i + 1; j <= m_pointList.size(); j++) {
-
-	//			m_point = &m_pointList[j];
-	//			Vector3 diff2 = m_point->s_position - m_position;
-
-	//			// 長さを比較
-	//			// diff2が長いとき
-	//			if (diff.Length() < diff2.Length()) {
-	//				// numberを格納する
-	//				m_point->s_number = j;
-	//			}
-	//		}
-	//	}
-	//}
-	
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
@@ -208,7 +184,7 @@ void Enemy::Act_Craw()
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
 		// 現在の目的地のポイントが配列の最後のとき
-		if (ChangeCrawFlag == false && m_point->s_number == m_pointList.size()) {
+		if (m_point->s_number == m_pointList.size()) {
 			// 一番最初のポイントを目的地とする
 			m_point = &m_pointList[0];
 		}
@@ -219,9 +195,6 @@ void Enemy::Act_Craw()
 
 		addTimer = 0.0f;	// 加算用タイマーをリセット
 	}
-	
-	// フラグを戻す
-	//ChangeCrawFlag = false;
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
@@ -298,6 +271,53 @@ void Enemy::Act_Access()
 
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	}
+}
+
+
+void Enemy::Act_Loss()
+{
+	// プレイヤーを見失ったときのパスへの切り替え時の処理
+	// プレイヤーを最後に見た箇所まで移動すると賢い
+
+	// 今の対象の距離
+	// floatの最大値を格納
+	float NowTargetDiff = D3D12_FLOAT32_MAX;
+	int NowTargetNum = -1;
+
+	// 一番近いパスを探す
+	for (int i = 1; i <= m_pointList.size(); i++) {
+
+		m_point = &m_pointList[i];
+		Vector3 diff = m_point->s_position - m_position;
+		float length = diff.Length();
+
+		// 長さを比較
+		// 新しく計算したベクトルの方が長い場合、値を入れ替える
+		if (NowTargetDiff > length) {
+			NowTargetNum = i;
+			NowTargetDiff = length;
+		}
+	}
+
+	// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	Vector3 moveSpeed = m_point->s_position - m_position;
+	// 正規化
+	moveSpeed.Normalize();
+	// ベクトルにスカラーを乗算
+	moveSpeed *= MOVE_SPEED;
+
+	// タイマーがtrueのとき
+	if (Act_Stop(WAITING_TIMER) == true) {
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		// 座標に加算する
+		m_position += moveSpeed;
+	}
+	// そうでないとき
+	else {
+		// 歩きアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 

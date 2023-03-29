@@ -20,6 +20,7 @@ public:
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
+	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	bool Act_Stop(float time);			// 行動停止
 	void SpotLight_New(Vector3 position);
@@ -133,7 +134,6 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool ChangeCrawFlag = false;			// 巡回行動に切り替えるとき
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
