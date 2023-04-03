@@ -70,16 +70,16 @@ void Enemy_Charge::Update()
 
 void Enemy_Charge::Act()
 {
-	Enemy::HitFlashBullet();		// 閃光弾に当たったときの処理
+	Enemy::Act_HitFlashBullet();	// 閃光弾に当たったときの処理
 
 	// スポットライト
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 
 	// プレイヤーを発見したとき
-	if (Enemy::SeachPlayer() == true) {
-		Enemy::Act_Access();	// 突進攻撃
+	if (Enemy::Act_SeachPlayer() == true) {
+		Enemy::Act_Access();		// 突進攻撃
 
-		if (Enemy::SeachPlayer() == false) {
+		if (Enemy::Act_SeachPlayer() == false) {
 			Enemy::Act_Craw();		// 巡回
 		}
 	}

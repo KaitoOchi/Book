@@ -53,4 +53,6 @@ private:
 	};
 
 	EnEnemyPassState PassState;
+
+	bool ChangeFlag = false;			// ’ÇÕË„‰ñ‚ÌØ‚è‘Ö‚¦ƒtƒ‰ƒO
 };

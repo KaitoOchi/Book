@@ -56,18 +56,18 @@ void Game::LevelDesign()
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//m_enemyNormal->SetPosition(objData.position);
-			//m_enemyNormal->SetRotation(objData.rotation);
-			//m_enemyNormal->SetScale(objData.scale);
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
 
-			//// パス移動の指定
-			//m_enemyNormal->Pass(0);
+			// パス移動の指定
+			m_enemyNormal->Pass(0);
 
-			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			m_enemyCharge->SetPosition(objData.position);
-			m_enemyCharge->SetRotation(objData.rotation);
-			m_enemyCharge->SetScale(objData.scale);
+			//m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			//m_enemyCharge->SetPosition(objData.position);
+			//m_enemyCharge->SetRotation(objData.rotation);
+			//m_enemyCharge->SetScale(objData.scale);
 
 			return true;
 		}
