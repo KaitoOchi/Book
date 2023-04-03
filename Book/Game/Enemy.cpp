@@ -303,7 +303,7 @@ void Enemy::Act_Loss()
 		float length = diff.Length();
 
 		// 長さを比較
-		// 新しく計算したベクトルの方が長い場合、値を入れ替える
+		// 新しく計算したベクトルの方が短い場合、値を入れ替える
 		if (NowTargetDiff > length) {
 			NowTargetNum = i;
 			NowTargetDiff = length;

@@ -120,10 +120,10 @@ void Enemy_Normal::Act()
 	// プレイヤーを見失う　または　閃光弾がヒットしたとき
 	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
 
-		// 初回時はこの行動を行う
-		if (ChangeFlag == true) {
-			Enemy::Act_Loss();		// 追跡行動からの切り替え
-		}
+		//// 初回時はこの行動を行う
+		//if (ChangeFlag == true) {
+		//	Enemy::Act_Loss();		// 追跡行動からの切り替え
+		//}
 
 		Enemy::Act_Craw();			// 巡回行動
 	}
