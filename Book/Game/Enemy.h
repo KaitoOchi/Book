@@ -128,9 +128,9 @@ protected:
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
-	Vector3 m_forward = Vector3::AxisY;		// エネミーの前方向
+	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
-	Quaternion m_rotation;					// 回転
+	Quaternion m_rotation=Quaternion::Identity;	// 回転
 
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 

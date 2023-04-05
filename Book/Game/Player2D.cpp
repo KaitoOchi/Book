@@ -28,11 +28,6 @@ bool Player2D::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	//モデルの読み込み
 	m_modelRender->Init("Assets/modelData/player/player2D.tkm");
-
-	//Quaternion rot;
-	//rot.SetRotationDegX(180.0f);
-	//m_modelRender->SetRotation(rot);
-
 	m_modelRender->SetScale(MODELSIZE);
 	m_characon->Init(BOXSIZE, m_position);
 	m_player2D[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.DDS");

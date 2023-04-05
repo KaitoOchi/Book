@@ -3,8 +3,8 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
-#define SEACH_DECISION 300.0f * 300.0f						// ベクトルを作成する範囲
+#define FIELDOF_VIEW Math::PI / 180.0f) * 80.0f				// エネミーの視野角(初期:120)
+#define SEACH_DECISION 350.0f * 350.0f						// ベクトルを作成する範囲
 
 namespace
 {
@@ -16,7 +16,7 @@ namespace
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
-	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
+	const float		ACT_LIMIT = 100.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const Vector3	BOXSIZE = { 50.0f, 80.0f,50.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//??]?p?x
@@ -214,7 +214,6 @@ void Enemy::Act_Craw()
 	moveSpeed.Normalize();
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
-
 	Rotation(moveSpeed);
 
 	// タイマーがtrueのとき
@@ -238,12 +237,6 @@ void Enemy::Act_Tracking()
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
-
-		//// 回転を教える
-		//Vector3 rot = m_position - m_playerPos;
-		//rot.Normalize();
-		//Rotation(rot);
-
 		return;
 	}
 
@@ -271,6 +264,16 @@ void Enemy::Act_Tracking()
 		MOVE_SPEED,						// 移動速度
 		isEnd							// 終了時にtrueを格納するフラグ
 	);
+
+	//// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	Vector3 moveSpeed = m_playerPos - m_position;
+
+	float angle = atan2(-moveSpeed.x, moveSpeed.z);
+	Quaternion rot = Quaternion::Identity;
+	rot.SetRotationY(-angle);
+
+	// 回転を教える
+	m_enemyRender.SetRotation(rot);
 
 	// 歩行アニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
@@ -300,7 +303,7 @@ void Enemy::Act_Access()
 void Enemy::Act_Loss()
 {
 	// プレイヤーを見失ったときのパスへの切り替え時の処理
-	// プレイヤーを最後に見た箇所まで移動すると賢い
+	// プレイヤーを最後に見た箇所の少し先まで移動すると賢い
 
 	addTimer = 0.0f;	// 加算用タイマーをリセット
 

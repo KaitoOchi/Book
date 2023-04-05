@@ -29,11 +29,10 @@ bool Enemy_Normal::Start()
 	m_animationClips[m_enAnimationClip_Damege].SetLoopFlag(false);
 
 	// モデルの読み込み
-	m_NormalModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
-	//m_NormalModelRender.Init("Assets/modelData/unityChan.tkm");
-	m_NormalModelRender.SetScale(m_scale);
-	m_NormalModelRender.SetPosition(m_position);
-	m_NormalModelRender.SetRotation(m_rotation);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
+	m_enemyRender.SetScale(m_scale);
+	m_enemyRender.SetPosition(m_position);
+	m_enemyRender.SetRotation(m_rotation);
 
 	Enemy::Start();
 
@@ -85,15 +84,15 @@ void Enemy_Normal::Update()
 	Act();							// 行動パターン
 	Animation();					// アニメーション
 
-	m_NormalModelRender.SetPosition(m_position);
-	m_NormalModelRender.SetRotation(m_rotation);
+	m_enemyRender.SetPosition(m_position);
+	//m_enemyRender.SetRotation(m_rotation);
 	m_characterController.SetPosition(m_position);
 
 	// キャラクターコントローラーをモデルの位置と同期
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	m_NormalModelRender.Update();	// 更新
+	m_enemyRender.Update();	// 更新
 }
 
 void Enemy_Normal::Act()
@@ -111,6 +110,10 @@ void Enemy_Normal::Act()
 			m_fontRender.SetText(L"つかまえた");
 			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 		}
+
+		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
+			ChangeFlag = true;
+		}
 	}
 	// プレイヤーを見失う　または　閃光弾がヒットしたとき
 	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
@@ -119,8 +122,9 @@ void Enemy_Normal::Act()
 			Enemy::Act_Loss();			// 追跡行動からの切り替え
 			ChangeFlag = false;			// 毎度初回だけ処理を実行する
 		}
-
-		Enemy::Act_Craw();				// 巡回行動
+		else{
+			Enemy::Act_Craw();				// 巡回行動
+		}
 	}
 }
 
@@ -130,23 +134,23 @@ void Enemy_Normal::Animation()
 	switch (m_enEnemyAnimationState) {
 		// 待機
 	case Enemy::m_enEnemyAnimationState_Idle:
-		m_NormalModelRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
 		break;
 		// 歩く
 	case Enemy::m_enEnemyAnimationState_Walk:
-		m_NormalModelRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
 		break;
 		// 走る
 	case Enemy::m_enEnemyAnimationState_Run:
-		m_NormalModelRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
 		break;
 		// 攻撃
 	case Enemy::m_enEnemyAnimationState_Attack:
-		m_NormalModelRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
 		break;
 		// 被弾
 	case Enemy::m_enEnemyAnimationState_Damege:
-		m_NormalModelRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
 		break;
 	}
 }
@@ -154,7 +158,7 @@ void Enemy_Normal::Animation()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// 描画
-	m_NormalModelRender.Draw(rc);
+	m_enemyRender.Draw(rc);
 
 	if (Enemy::Act_CatchPlayer() == true) {
 		m_fontRender.Draw(rc);
