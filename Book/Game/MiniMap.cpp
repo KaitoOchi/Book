@@ -4,6 +4,7 @@
 #include "PlayerManagement.h"
 #include "Enemy_Normal.h"
 #include "Enemy_Serch.h"
+#include "Enemy_Charge.h"
 
 namespace
 {
@@ -47,15 +48,19 @@ bool MiniMap::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
 	m_enemySerch = FindGO<Enemy_Serch>("enemySerch");
+	//m_enemyCharge = FindGO<Enemy_Charge>("enemyCharge");
 
 	return true;
 }
 
 void MiniMap::Update()
 {
-	//DrawMap(m_enemyNormal->GetPosition(),0);
+	// マップ座標に変換
+	DrawMap(m_enemyNormal->GetPosition(),0);
 	DrawMap(m_enemySerch->GetPosition(), 1);
+	//DrawMap(m_enemyCharge->GetPosition(), 2);
 
+	// 更新
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		m_EnemySpriteRender[i].Update();
 	}

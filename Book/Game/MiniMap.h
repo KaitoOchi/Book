@@ -3,6 +3,7 @@
 class PlayerManagement;
 class Enemy_Normal;
 class Enemy_Serch;
+class Enemy_Charge;
 class MiniMap:public IGameObject
 {
 public:
@@ -13,7 +14,12 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void DrawMap(Vector3 pos,int num);		// マップに描画するかどうかの判定
+	/// <summary>
+	/// マップに描画するかどうかの判定
+	/// </summary>
+	/// <param name="pos">変換するエネミーの座標</param>
+	/// <param name="num">配列番号</param>
+	void DrawMap(Vector3 pos,int num);		
 
 private:
 	/// <summary>
@@ -37,7 +43,8 @@ private:
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Serch* m_enemySerch = nullptr;
+	Enemy_Charge* m_enemyCharge = nullptr;
 
-	bool m_isImage[2];						// 表示するかどうかのフラグ。エネミーの数分用意する
+	bool m_isImage[3];						// 表示するかどうかのフラグ。エネミーの数分用意する
 };
 

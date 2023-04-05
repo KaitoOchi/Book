@@ -103,7 +103,7 @@ void Enemy_Normal::Act()
 
 	// プレイヤーを見つけたとき
 	if (Enemy::Act_SeachPlayer() == true) {
-		Enemy::Act_Tracking();
+		Enemy::Act_Tracking();			// 追跡行動
 
 		// 捕まえたとき
 		if (Act_CatchPlayer() == true) {
@@ -111,21 +111,16 @@ void Enemy_Normal::Act()
 			m_fontRender.SetText(L"つかまえた");
 			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 		}
-		// プレイヤーを見失う　または　閃光弾がヒットしたとき
-		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
-			// 切り替えるフラグをONにする
-			ChangeFlag = true;
-		}
 	}
 	// プレイヤーを見失う　または　閃光弾がヒットしたとき
 	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
 
-		//// 初回時はこの行動を行う
-		//if (ChangeFlag == true) {
-		//	Enemy::Act_Loss();		// 追跡行動からの切り替え
-		//}
+		if (ChangeFlag == true) {
+			Enemy::Act_Loss();			// 追跡行動からの切り替え
+			ChangeFlag = false;			// 毎度初回だけ処理を実行する
+		}
 
-		Enemy::Act_Craw();			// 巡回行動
+		Enemy::Act_Craw();				// 巡回行動
 	}
 }
 

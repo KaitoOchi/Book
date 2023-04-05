@@ -14,7 +14,7 @@ public:
 	bool Start();
 
 	bool WallAndHit(Vector3 pos);		// 壁と衝突したかどうかの処理
-	void Rotation();			// 回転処理
+	void Rotation(Vector3 rot);			// 回転処理
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
@@ -28,7 +28,7 @@ public:
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 
 	// エネミーのアニメーションステート
-	// Enemy内で指定しているので、継承した派生クラスで関数を呼ぶだけで再生されます。
+	// 継承した派生クラスでアニメーションを読み込み、関数を呼ぶと再生されます。
 	enum EnEnemyAnimationState
 	{
 		m_enEnemyAnimationState_Idle,	// 待機
@@ -110,8 +110,8 @@ protected:
 		int s_number;						// ポイントの番号
 	};
 
-	TknFile m_tknFile;
-	PhysicsStaticObject m_bgObject;
+	TknFile m_tknFile;						// tknファイル
+	PhysicsStaticObject m_bgObject;			// 静的物理オブジェクト
 	nsAI::NaviMesh m_nvmMesh;				// ナビメッシュ
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
@@ -135,6 +135,7 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool ChangeFlag = false;				// 追跡⇒巡回の切り替えフラグ
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー

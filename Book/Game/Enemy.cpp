@@ -50,10 +50,10 @@ bool Enemy::Start()
 	return true;
 }
 
-void Enemy::Rotation()
+void Enemy::Rotation(Vector3 rot)
 {
 	// 回転処理
-	m_rotation.SetRotationDegY(90.0f);
+	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
 }
 
@@ -82,6 +82,11 @@ bool Enemy::Act_SeachPlayer()
 		if (angle <= (FIELDOF_VIEW) {
 			// 壁との衝突判定を行う
 			return WallAndHit(m_playerPos);
+
+			// 壁との衝突判定がfalseのとき
+			if (WallAndHit(m_playerPos) == false) {
+				ChangeFlag = true;
+			}
 		}
 	}
 
@@ -131,11 +136,11 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 	// 壁と衝突した
 	if (callback.isHit == true) {
-		// プレイヤーは見つかっていない
+		// プレイヤーは見つかっていないのでfalse
 		return false;
 	}
 
-	// 壁と衝突していない
+	// 壁と衝突していないのでtrue
 	return true;
 }
 
@@ -210,6 +215,8 @@ void Enemy::Act_Craw()
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
 
+	Rotation(moveSpeed);
+
 	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER) == true) {
 		// 待機アニメーションを再生
@@ -231,10 +238,17 @@ void Enemy::Act_Tracking()
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
+
+		//// 回転を教える
+		//Vector3 rot = m_position - m_playerPos;
+		//rot.Normalize();
+		//Rotation(rot);
+
 		return;
 	}
 
 	// ナビメッシュでの移動
+
 	// プレイヤーの座標を獲得する
 	m_playerPos = m_playerManagement->GetPosition();
 
@@ -296,7 +310,7 @@ void Enemy::Act_Loss()
 	int NowTargetNum = -1;
 
 	// 一番近いパスを探す
-	for (int i = 1; i <= m_pointList.size(); i++) {
+	for (int i = 1; i < m_pointList.size()+1; i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
@@ -307,10 +321,11 @@ void Enemy::Act_Loss()
 		if (NowTargetDiff > length) {
 			NowTargetNum = i;
 			NowTargetDiff = length;
-
-			m_point->s_number = NowTargetNum;
 		}
 	}
+
+	// 最短のパス値を格納する
+	m_point = &m_pointList[NowTargetNum];
 
 	// 目標とするポイントの座標から、現在の座標を引いたベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
@@ -319,8 +334,9 @@ void Enemy::Act_Loss()
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
 
+
 	// タイマーがtrueのとき
-	if (Act_Stop(WAITING_TIMER) == true) {
+	if (WallAndHit(m_position) == false) {
 		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 		// 座標に加算する
