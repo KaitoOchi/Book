@@ -12,7 +12,7 @@ BackGround::~BackGround()
 bool BackGround::Start()
 {
 	// ÉÇÉfÉãÇÃì«Ç›çûÇ›
-	m_ModelRender.Init("Assets/modelData/level/debug.tkm");
+	m_ModelRender.Init("Assets/modelData/level/debug.tkm", 0, 0, enModelUpAxisZ, true, D3D12_CULL_MODE_BACK, false);
 	m_ModelRender.SetScale(m_scale);
 	m_ModelRender.SetPosition(m_position);
 	m_ModelRender.SetRotation(m_rotation);

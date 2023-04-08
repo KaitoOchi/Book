@@ -42,15 +42,17 @@ namespace nsBookEngine {
 		lightCamera.SetPosition(0, 500, 0);
 
 		// カメラの注視点を設定。これがライトが照らしている場所
-		lightCamera.SetTarget(1, 0, 0);
+		lightCamera.SetTarget(0, 0, 0);
 
 		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
-		lightCamera.SetUp(0, 1, 0);
+		lightCamera.SetUp(1, 0, 0);
+
+		lightCamera.SetViewAngle(Math::DegToRad(20.0f));
 
 		// ライトビュープロジェクション行列を計算している
 		lightCamera.Update();
-		m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
-		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
+		//m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
+		m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
 
 		//���C�������_�����O�^�[�Q�b�g�̐ݒ�
 		m_mainRenderTarget.Create(
@@ -166,6 +168,12 @@ namespace nsBookEngine {
 
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
+
+		rc.SetRenderTarget(
+			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+		);
+		rc.SetViewportAndScissor(g_graphicsEngine->GetFrameBufferViewport());
 	}
 
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
