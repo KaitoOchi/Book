@@ -201,14 +201,14 @@ float4 PSMain(SPSIn In) : SV_Target0
 
 
 	//最終的な反射光にリムライトの反射光を合算する
-	float3 limColor = dirColor * limPower ;
+	float3 limColor = dirColor;// * limPower ;
 
 	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
 	float3 lig = directionLight 
 				+ pointLight
 				+ spotLight
 				+ ambient
-				+ limColor
+				+ limColor																							
 				+ hemiLight;
 
 	float4 albedoColor = albedo;
@@ -405,7 +405,7 @@ float CalcLim(float3 dirDirection, float3 normal, float3 normalInView)
 	float power1 = 1.0f - max(0.0f, dot(dirDirection, normal));
 
 	//サーフェイスの法線と視線の方向に依存するリムの強さを求める
-	float power2 = 1.0f - max(0.0f, normalInView * -1.0f);
+	float power2 = 1.0f - max(0.0f, normalInView.z * -1.0f);
 
 	//最終的なリムの強さを求める
 	float limPow = power1 * power2;

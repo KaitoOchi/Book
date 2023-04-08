@@ -41,7 +41,7 @@ namespace nsBookEngine {
 		lightCamera.SetPosition(0, 500, 0);
 
 		// カメラの注視点を設定。これがライトが照らしている場所
-		lightCamera.SetTarget(0, 0, 0);
+		lightCamera.SetTarget(1, 0, 0);
 
 		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
 		lightCamera.SetUp(1, 0, 0);
@@ -50,8 +50,8 @@ namespace nsBookEngine {
 
 		// ライトビュープロジェクション行列を計算している
 		lightCamera.Update();
-		//m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
-		m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
+		m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
+		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
 
 		//メインレンダーターゲットを設定
 		m_mainRenderTarget.Create(
@@ -64,7 +64,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(12.5f);
+		SetBloomThreshold(20.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();

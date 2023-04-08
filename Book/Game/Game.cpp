@@ -47,8 +47,8 @@ bool Game::Start()
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
 	LevelDesign();
-	m_pointLight.SetColor(Vector3(10.0f, 0.3f, 0.5f));
-	m_pointLight.SetRange(250.0f);
+	m_pointLight.SetColor(Vector3(5.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(50.0f);
 	m_pointLight.Update();
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
