@@ -12,7 +12,7 @@ namespace
 	const float		MAP_RADIUS = 150.0f;									// マップの半径
 	const float		LIMITED_RANGE_IMAGE = 500.0f;							// マップの範囲
 	const float		ALPHA = 0.75f;											// α値
-	const int		ENEMY_NUM = 2;											// エネミーの総数
+	const int		ENEMY_NUM = 3;											// エネミーの総数
 }
 
 MiniMap::MiniMap()
@@ -58,7 +58,7 @@ void MiniMap::Update()
 	// マップ座標に変換
 	DrawMap(m_enemyNormal->GetPosition(),0);
 	DrawMap(m_enemySerch->GetPosition(), 1);
-	//DrawMap(m_enemyCharge->GetPosition(), 2);
+	DrawMap(m_enemyCharge->GetPosition(), 2);
 
 	// 更新
 	for (int i = 0; i < ENEMY_NUM; i++) {
@@ -69,16 +69,15 @@ void MiniMap::Update()
 	m_SpriteRender.Update();
 }
 
-void MiniMap::DrawMap(Vector3 pos, int num)
+void MiniMap::DrawMap(Vector3 enemyPos, int num)
 {
 	// 座標を取得
 	Vector3 playerPos = m_playerManagement->GetPosition();
-	Vector3 enemy_NormalPos = pos;
 
 	Vector3 mapPos;
 
 	// マップに表示する範囲に敵がいたら
-	if (WorldPositionConvertToMapPosition(playerPos, enemy_NormalPos, mapPos)) {
+	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
 
 		// spriteRenderに座標を設定
 		m_EnemySpriteRender[num].SetPosition(mapPos);

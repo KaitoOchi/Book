@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="pos">変換するエネミーの座標</param>
 	/// <param name="num">配列番号</param>
-	void DrawMap(Vector3 pos,int num);		
+	void DrawMap(Vector3 enemyPos,int num);		
 
 private:
 	/// <summary>
