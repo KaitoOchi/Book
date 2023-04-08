@@ -58,7 +58,7 @@ void MiniMap::Update()
 	// マップ座標に変換
 	DrawMap(m_enemyNormal->GetPosition(),0);
 	DrawMap(m_enemySerch->GetPosition(), 1);
-	DrawMap(m_enemyCharge->GetPosition(), 2);
+	//DrawMap(m_enemyCharge->GetPosition(), 2);
 
 	// 更新
 	for (int i = 0; i < ENEMY_NUM; i++) {
