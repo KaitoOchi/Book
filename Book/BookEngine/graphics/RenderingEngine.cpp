@@ -1,4 +1,4 @@
-#include "BookEnginePreCompile.h"
+﻿#include "BookEnginePreCompile.h"
 #include "RenderingEngine.h"
 
 
@@ -18,20 +18,19 @@ namespace nsBookEngine {
 	void RenderingEngine::Init()
 	{
 
-		//�f�B���N�V�������C�g��ݒ�
-		SetDirectionLight(Vector3(-1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
+		//ディレクショナルライトの設定
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
-		//������ݒ�
+		//環境光の設定
 		SetAmbient(0.3f);
 
-		//�������C�g��ݒ�
+		//半球光の設定
 		SetHemiSphereLight(
 			Vector3(0.4f, 0.2f, 0.2f),
 			Vector3(0.1f, 0.3f, 0.2f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
-		//�\���̂ɕۑ�
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
@@ -54,7 +53,7 @@ namespace nsBookEngine {
 		//m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
 		m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
 
-		//���C�������_�����O�^�[�Q�b�g�̐ݒ�
+		//メインレンダーターゲットを設定
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -64,8 +63,8 @@ namespace nsBookEngine {
 			DXGI_FORMAT_D32_FLOAT
 		);
 
-		//�u���[����臒l��ݒ�
-		SetBloomThreshold(1.5f);
+		//ブルームを設定
+		SetBloomThreshold(12.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();

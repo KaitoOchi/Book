@@ -465,7 +465,7 @@ float3 ShadowMap(SPSIn psIn)
 {
     float3 shadowMap = 1.0f;
 
-	if(shadowReceiver){
+	if(!shadowReceiver){
 		return shadowMap;
 	}
 
