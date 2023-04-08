@@ -46,7 +46,7 @@ bool MiniMap::Start()
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
-	//m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
+	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
 
 	m_enemySerch = FindGO<Enemy_Serch>("enemySerch");
 

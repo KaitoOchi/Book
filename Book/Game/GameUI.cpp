@@ -8,7 +8,7 @@ namespace
 	const Vector3   VIGILANCE_POSITION = { 500.0f,350.0f,0.0f };
 	const float		YSIZE = 154.0f;										//縦の大きさ
 	const float     XSIZE = 553.0f;										//横の大きさ
-	const float		GAGE_MAX = 255.0f;									//ゲージの最大値
+	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
 	const float		TIME_MAX = 180.0f;									//最大残り時間
 }
 

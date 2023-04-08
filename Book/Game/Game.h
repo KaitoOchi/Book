@@ -9,6 +9,8 @@ class Enemy_Normal;
 class Enemy_Serch;
 class TransparentBox;
 class Enemy_Charge;
+class PlayerManagement;
+class Wall;
 class Game : public IGameObject
 {
 public:
@@ -19,6 +21,17 @@ public:
 	void Render(RenderContext& rc);
 	void LevelDesign();			// ステージのレベルデザインの処理
 
+	//クリア座標を返す
+	Vector3 GetClearPosition()
+	{
+		return m_position;
+	}
+	void SetClearPosition(Vector3 m_pos)
+	{
+		m_position = m_pos;
+	}
+	
+	Vector3 m_position = Vector3::Zero;
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
@@ -27,6 +40,11 @@ public:
 		m_enGameState_GameBuck//タイトルに戻る
 	};
 private:
+	/// <summary>
+	/// クリアステートに遷移
+	/// </summary>
+	void ClearState();
+
 	/// <summary>
 	/// ステートの切替
 	/// </summary>
@@ -45,5 +63,12 @@ private:
 	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
 	TransparentBox *m_trans = nullptr;
+	PlayerManagement* m_playerManagement = nullptr;
+	Wall* m_wall = nullptr;
+
+	PointLight m_pointLight;
+
+	
+
 };
 

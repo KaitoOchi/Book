@@ -28,7 +28,7 @@ namespace nsK2EngineLow {
 																										// t10レジスタから順番に割り当てられます。
 		Skeleton* m_skeleton = nullptr;									// スケルトン。
 		EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					// モデルの上方向。
-		AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_None;			// アルファブレンディングモード。
+		AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_Trans;			// アルファブレンディングモード。
 		bool m_isDepthWrite = true;										// 深度バッファに書き込む？
 		bool m_isDepthTest = true;										// 深度テストを行う？
 		D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;				// カリングモード。

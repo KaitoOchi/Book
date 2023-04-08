@@ -11,14 +11,14 @@ BackGround::~BackGround()
 
 bool BackGround::Start()
 {
-	// ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	m_ModelRender.Init("Assets/modelData/level/debug.tkm", 0, 0, enModelUpAxisZ, true, D3D12_CULL_MODE_BACK, false);
+	// ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ì“Ç‚Ýï¿½ï¿½ï¿½
+	m_ModelRender.Init("Assets/modelData/level_test/base.tkm");
 	m_ModelRender.SetScale(m_scale);
 	m_ModelRender.SetPosition(m_position);
 	m_ModelRender.SetRotation(m_rotation);
 
 	m_physicsStaticObj.CreateFromModel(m_ModelRender.GetModel(), m_ModelRender.GetModel().GetWorldMatrix());
-	m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ƒRƒŠƒWƒ‡ƒ“‘®«‚ðÝ’è
+	m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý’ï¿½
 
 	return true;
 }

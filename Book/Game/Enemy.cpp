@@ -311,7 +311,7 @@ void Enemy::Act_Limit()
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
 	// 長さが一定以下のとき
-	if (diff.Length() <= ACT_LIMIT) {
+	if ( diff.Length() <= ACT_LIMIT) {
 		// 動かないようにする
 		m_position = m_position;
 	}
@@ -328,6 +328,18 @@ bool Enemy::Act_Stop(float time)
 	}
 
 	return false;
+}
+
+void Enemy::SpotLight_New(Vector3 position)
+{
+	m_spotLight.SetPosition(position);
+	m_spotLight.SetColor(LIGHTCOLOR);
+	m_spotLight.SetRange(LIGHTRANGE);
+	m_spotLight.SetAngle(ANGLE);
+	Vector3 forward = Vector3::AxisY;
+	//ライトの方向設定
+	m_spotLight.SetDirection(forward);
+	m_spotLight.Update();
 }
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
@@ -353,7 +365,6 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
 }
-
 void Enemy::VigilanceCount()
 {
 	m_Vicount -= g_gameTime->GetFrameDeltaTime();
@@ -363,16 +374,4 @@ void Enemy::VigilanceCount()
 		m_gameUI->Vigilance(1);
 		m_Vicount = VIGILANCETIME;
 	}
-}
-
-void Enemy::SpotLight_New(Vector3 position)
-{
-	m_spotLight.SetPosition(position);
-	m_spotLight.SetColor(LIGHTCOLOR);
-	m_spotLight.SetRange(LIGHTRANGE);
-	m_spotLight.SetAngle(ANGLE);
-	Vector3 forward = Vector3::AxisY;
-	//ライトの方向設定
-	m_spotLight.SetDirection(forward);
-	m_spotLight.Update();
 }

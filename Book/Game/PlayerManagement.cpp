@@ -64,7 +64,6 @@ void PlayerManagement::PlayerChange3D()
 	m_player2D->PlayerChang();//プレイヤー2Dをディアクティブにする
 	m_player3D->CreatCharcon();//キャラコンを生成する
 	SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
-	
 	//プレイヤーを３Dにする
 	m_enMnanagementState = m_enPlayer_3DChanging;
 }

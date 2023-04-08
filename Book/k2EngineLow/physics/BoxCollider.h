@@ -8,7 +8,7 @@ namespace nsK2EngineLow {
 	class BoxCollider : public ICollider
 	{
 	public:
-
+		
 		void Create(const Vector3& size);
 		btCollisionShape* GetBody() const override
 		{

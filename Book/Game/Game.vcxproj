@@ -259,6 +259,8 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="TransparentBox.cpp" />
+    <ClCompile Include="Treasure.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -284,6 +286,8 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="TransparentBox.h" />
+    <ClInclude Include="Treasure.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
