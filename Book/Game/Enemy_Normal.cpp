@@ -41,51 +41,12 @@ bool Enemy_Normal::Start()
 	return true;
 }
 
-void Enemy_Normal::Pass(int PassState)
-{
-	switch (PassState)
-	{
-		// 縦
-	case Line:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
-		break;
-		// 横
-	case Horizontal:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
-		break;
-		// 右回り
-	case RightRotation:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
-		break;
-		// 左回り
-	case LeftRotation:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
-		break;
-		// (左に)直角
-	case RightAngle:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
-		break;
-	}
-}
-
 void Enemy_Normal::Update()
 {
 	Act();							// 行動パターン
 	Animation();					// アニメーション
 
 	m_enemyRender.SetPosition(m_position);
-	//m_enemyRender.SetRotation(m_rotation);
 	m_characterController.SetPosition(m_position);
 
 	// キャラクターコントローラーをモデルの位置と同期

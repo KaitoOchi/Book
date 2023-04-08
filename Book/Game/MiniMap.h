@@ -45,6 +45,6 @@ private:
 	Enemy_Serch* m_enemySerch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 
-	bool m_isImage[3];						// 表示するかどうかのフラグ。エネミーの数分用意する
+	bool m_isImage[5];						// 表示するかどうかのフラグ。エネミーの数分用意する
 };
 

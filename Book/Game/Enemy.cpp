@@ -279,12 +279,74 @@ void Enemy::Act_Tracking()
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
+void Enemy::Pass(int PassState)
+{
+	switch (PassState)
+	{
+		// 縦
+	case LINE_VERTICAL:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		break;
+		// 横
+	case LINE_HORIZONTAL:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		break;
+		// 右回り(正方形)
+	case SQUARE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// 左回り(正方形)
+	case SQUARE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// (右に)直角
+	case ANGLE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
+		break;
+		// (左に)直角
+	case ANGLE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
+		break;
+		// 右回り(長方形)
+	case RECTANGLE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f ,m_position.y,m_position.z + 300.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),4 });
+		break;
+		// 左回り(長方形)
+	case RECTANGLE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f ,m_position.y,m_position.z + 300.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),4 });
+	}
+}
+
 void Enemy::Act_Access()
 {
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 	// ベクトルの長さ
 	float length = diff.Length();
+
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
+	Rotation(rot);
 
 	// ベクトルが一定以下のとき
 	if (length <= SEACH_DECISION) {
@@ -299,6 +361,31 @@ void Enemy::Act_Access()
 	}
 }
 
+void Enemy::Act_Charge(float time)
+{
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+	// ベクトルの長さ
+	float length = diff.Length();
+
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
+	Rotation(rot);
+
+	// ベクトルが一定以下のとき
+	if (Act_Stop(time) == true) {
+		// ベクトルを正規化
+		diff.Normalize();
+		// エネミーの座標に加算
+		Vector3 moveSpeed = diff * MOVE_SPEED;
+		m_position += moveSpeed;
+
+		// 歩きアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+		// タイマーが一定になったら終了する
+	}
+}
 
 void Enemy::Act_Loss()
 {

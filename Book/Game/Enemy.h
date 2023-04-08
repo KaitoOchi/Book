@@ -18,6 +18,7 @@ public:
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
+	void Act_Charge(float time);		// 突進行動
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
@@ -51,6 +52,33 @@ public:
 	};
 	// 行動ステート
 	EnEnemyActState m_enEnemyActState = m_enEnemyActState_Craw;
+
+
+	// 指定できるパス移動
+	enum EnEnemyPassState
+	{
+		LINE_VERTICAL,					// 縦
+		LINE_HORIZONTAL,				// 横
+		SQUARE_RIGHT,					// 右回り(正方形)
+		SQUARE_LEFT,					// 左回り(正方形)
+		ANGLE_RIGHT,					// 右に直角
+		ANGLE_LEFT,						// 左に直角
+		RECTANGLE_RIGHT,				// 右回り(長方形)
+		RECTANGLE_LEFT,					// 左回り(長方形)
+	};
+	EnEnemyPassState PassState;
+	/// <summary>
+	/// エネミーの巡回パターンを指定
+	/// </summary>
+	/// <param name="0">縦</param>
+	/// <param name="1">横</param>
+	/// <param name="2">右回り(正方形)</param>
+	/// <param name="3">左回り(正方形)</param>
+	/// <param name="4">右に直角</param>
+	/// <param name="6">右に直角</param>
+	/// <param name="7">右回り(長方形)</param>
+	/// <param name="8">左回り(長方形)</param>
+	void Pass(int num);
 
 	/// <summary>
 	/// 座標を設定する

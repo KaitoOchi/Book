@@ -69,6 +69,9 @@ void Game::LevelDesign()
 			//m_enemyCharge->SetRotation(objData.rotation);
 			//m_enemyCharge->SetScale(objData.scale);
 
+			//// ƒpƒXˆÚ“®‚Ìw’è
+			//m_enemyCharge->Pass(7);
+
 			return true;
 		}
 

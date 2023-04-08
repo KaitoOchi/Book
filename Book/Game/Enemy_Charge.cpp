@@ -4,7 +4,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
-	const float		STOP_TIMER = 1.0f;				// 溜め時間
+	const float		STOP_TIMER = 5.0f;				// 溜め時間
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -30,19 +30,14 @@ bool Enemy_Charge::Start()
 	m_animationClips[m_enAnimationClip_Damege].SetLoopFlag(false);
 
 	// モデルの読み込み
-	m_ChargeModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
-	m_ChargeModelRender.SetScale(m_scale);
-	m_ChargeModelRender.SetPosition(m_position);
-	m_ChargeModelRender.SetRotation(m_rotation);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ);
+	m_enemyRender.SetScale(m_scale);
+	m_enemyRender.SetPosition(m_position);
+	m_enemyRender.SetRotation(m_rotation);
 
 	Enemy::Start();
 
-	// 長方形に移動
-	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-	m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
-	m_pointList.push_back({ Vector3(m_position.x + 500.0f ,m_position.y,m_position.z + 300.0f),3 });
-	m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),4 });
-
+	// パス移動
 	m_point = &m_pointList[0];
 
 	// 視野を作成
@@ -57,72 +52,41 @@ void Enemy_Charge::Update()
 	Animation();	// アニメーション
 
 	// 更新
-	m_ChargeModelRender.SetScale(m_scale);
-	m_ChargeModelRender.SetPosition(m_position);
+	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
 	// キャラクターコントローラーをモデルの位置と同期
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	m_ChargeModelRender.Update();
+	m_enemyRender.Update();
 }
 
 void Enemy_Charge::Act()
 {
-	Enemy::Act_HitFlashBullet();	// 閃光弾に当たったときの処理
+	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
 
 	// スポットライト
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 
 	// プレイヤーを発見したとき
 	if (Enemy::Act_SeachPlayer() == true) {
-		Enemy::Act_Access();		// 突進攻撃
+		Act_Charge(STOP_TIMER);		// 突進攻撃
 
-		if (Enemy::Act_SeachPlayer() == false) {
-			Enemy::Act_Craw();		// 巡回
+		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
+			ChangeFlag = true;
 		}
 	}
-	else {
-		Enemy::Act_Craw();			// 巡回
-	}
-}
+	// プレイヤーを見失う　または　閃光弾がヒットしたとき
+	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
 
-void Enemy_Charge::Pass(int PassState)
-{
-	switch (PassState)
-	{
-		// 縦
-	case Line:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
-		break;
-		// 横
-	case Horizontal:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
-		break;
-		// 右回り
-	case RightRotation:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
-		break;
-		// 左回り
-	case LeftRotation:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
-		break;
-		// (左に)直角
-	case RightAngle:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
-		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
-		break;
+		if (ChangeFlag == true) {
+			Enemy::Act_Loss();			// 追跡行動からの切り替え
+			ChangeFlag = false;			// 毎度初回だけ処理を実行する
+		}
+		else {
+			Enemy::Act_Craw();			// 巡回行動
+		}
 	}
 }
 
@@ -132,23 +96,23 @@ void Enemy_Charge::Animation()
 	switch (m_enEnemyAnimationState) {
 		// 待機
 	case Enemy::m_enEnemyAnimationState_Idle:
-		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Idle, LINEAR_COMPLETION);
 		break;
 		// 歩く
 	case Enemy::m_enEnemyAnimationState_Walk:
-		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Walk, LINEAR_COMPLETION);
 		break;
 		// 走る
 	case Enemy::m_enEnemyAnimationState_Run:
-		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Run, LINEAR_COMPLETION);
 		break;
 		// 攻撃
 	case Enemy::m_enEnemyAnimationState_Attack:
-		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Attack, LINEAR_COMPLETION);
 		break;
 		// 被弾
 	case Enemy::m_enEnemyAnimationState_Damege:
-		m_ChargeModelRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
+		m_enemyRender.PlayAnimation(m_enAnimationClip_Damege, LINEAR_COMPLETION);
 		break;
 	}
 }
@@ -156,5 +120,5 @@ void Enemy_Charge::Animation()
 void Enemy_Charge::Render(RenderContext& rc)
 {
 	// 描画
-	m_ChargeModelRender.Draw(rc);
+	m_enemyRender.Draw(rc);
 }

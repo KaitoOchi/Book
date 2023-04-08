@@ -13,16 +13,6 @@ public:
 	void Act();							// エネミーの行動パターン
 	void Animation();					// アニメーション
 
-	/// <summary>
-	/// エネミーの巡回パターンを指定
-	/// </summary>
-	/// <param name="Line">縦に移動</param>
-	/// <param name="Horizontal">横に移動</param>
-	/// <param name="RightRotation">右回りに移動</param>
-	/// <param name="LeftRotation">左回りに移動</param>
-	/// <param name="RightAngle">直角に移動</param>
-	void Pass(int PassState);
-
 private:
 
 	Enemy* enemy;
@@ -39,16 +29,4 @@ private:
 	};
 	// アニメーションクリップ
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
-
-	// 指定できるパス移動
-	enum EnEnemyPassState
-	{
-		Line,			// 縦
-		Horizontal,		// 横
-		RightRotation,	// 右回り
-		LeftRotation,	// 左回り
-		RightAngle,		// 直角
-	};
-
-	EnEnemyPassState PassState;
 };
