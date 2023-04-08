@@ -35,7 +35,7 @@ public:
 	{
 		return m_rotation;
 	}
-	void SetScale(const Quaternion m_rot)
+	void SetRotation(const Quaternion m_rot)
 	{
 		m_rotation = m_rot;
 	}

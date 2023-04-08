@@ -14,6 +14,7 @@
 #include "BackGround.h"
 #include "LightSensor.h"
 #include "Wall.h"
+#include "Treasure.h"
 Game::Game()
 {
 	//�����蔻���L����
@@ -110,6 +111,14 @@ void Game::LevelDesign()
 
 			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
 			//m_trans->SetPosition(objData.position);
+			return true;
+		}
+		if (objData.EqualObjectName(L"item") == true) {
+
+			m_treaSure = NewGO<Treasure>(0, "treaSure");
+			m_treaSure->SetPosition(objData.position);
+			m_treaSure->SetScale(objData.scale);
+			m_treaSure->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
