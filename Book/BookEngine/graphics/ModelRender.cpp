@@ -34,6 +34,7 @@ namespace nsBookEngine {
 		EnModelUpAxis enModelUpAxis,
 		bool isShadowReceiver,
 		D3D12_CULL_MODE m_cullMode,
+		bool isShadow,
 		int maxInstance)
 	{
 		//スケルトンを初期化。
@@ -43,7 +44,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis, isShadowReceiver);
+		InitModel(filePath, enModelUpAxis, isShadowReceiver, isShadow);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -73,6 +74,7 @@ namespace nsBookEngine {
 	void ModelRender::InitModel(
 		const char* tkmFilePath,
 		EnModelUpAxis modelUpAxis,
+		const bool isShadowReceiver,
 		const bool isShadow
 	)
 	{
@@ -84,7 +86,7 @@ namespace nsBookEngine {
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 
-		if (isShadow) {
+		if (isShadowReceiver) {
 			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowRenderTarget().GetRenderTargetTexture();
 		}
 
@@ -128,7 +130,7 @@ namespace nsBookEngine {
 			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 		if (m_shadowModel.IsInited()) {
-			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+			m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 	}
 
@@ -140,6 +142,9 @@ namespace nsBookEngine {
 
 			if (m_model.IsInited()) {
 				m_skeleton.Update(m_model.GetWorldMatrix());
+			}
+			if (m_shadowModel.IsInited()) {
+				m_skeleton.Update(m_shadowModel.GetWorldMatrix());
 			}
 		}
 
