@@ -164,9 +164,14 @@ protected:
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
 	bool ChangeFlag = false;				// 追跡⇒巡回の切り替えフラグ
+	bool FindPlayerFlag = false;
+	bool CalculatedFlag = false;
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
+
+	Vector3 playerPos = Vector3::Zero;		// 突進用
+	Vector3 enemyPos = Vector3::Zero;
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト

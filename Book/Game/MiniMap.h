@@ -4,6 +4,12 @@ class PlayerManagement;
 class Enemy_Normal;
 class Enemy_Serch;
 class Enemy_Charge;
+
+namespace
+{
+	const int ENEMY_NUM = 3;							// 表示するエネミーの総数
+}
+
 class MiniMap:public IGameObject
 {
 public:
@@ -35,16 +41,16 @@ private:
 		Vector3& mapPosirion
 	);
 
-	SpriteRender m_SpriteRender;			// スプライトレンダー。ミニマップのベース
-	SpriteRender m_OutLineSpriteRender;		// スプライトレンダー。ミニマップの装飾部分
-	SpriteRender m_PlayerSpriteRender;		// スプライトレンダー。プレイヤー
-	SpriteRender m_EnemySpriteRender[2];	// スプライトレンダー。エネミー
+	SpriteRender m_SpriteRender;					// スプライトレンダー。ミニマップのベース
+	SpriteRender m_OutLineSpriteRender;				// スプライトレンダー。ミニマップの装飾部分
+	SpriteRender m_PlayerSpriteRender;				// スプライトレンダー。プレイヤー
+	SpriteRender m_EnemySpriteRender[ENEMY_NUM];	// スプライトレンダー。エネミー
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Serch* m_enemySerch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 
-	bool m_isImage[5];						// 表示するかどうかのフラグ。エネミーの数分用意する
+	bool m_isImage[ENEMY_NUM];						// 表示するかどうかのフラグ。エネミーの数分用意する
 };
 

@@ -42,7 +42,7 @@ bool Game::Start()
 
 	LevelDesign();
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 
 	return true;
 }
@@ -64,13 +64,13 @@ void Game::LevelDesign()
 			// パス移動の指定
 			m_enemyNormal->Pass(0);
 
-			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			m_enemyCharge->SetPosition(objData.position);
-			m_enemyCharge->SetRotation(objData.rotation);
-			m_enemyCharge->SetScale(objData.scale);
+			//m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			//m_enemyCharge->SetPosition(objData.position);
+			//m_enemyCharge->SetRotation(objData.rotation);
+			//m_enemyCharge->SetScale(objData.scale);
 
-			// パス移動の指定
-			m_enemyCharge->Pass(7);
+			//// パス移動の指定
+			//m_enemyCharge->Pass(7);
 
 			return true;
 		}
@@ -85,15 +85,15 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		if (objData.EqualObjectName(L"unityChan") == true) {
+		//if (objData.EqualObjectName(L"unityChan") == true) {
 
-			m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
-			m_enemySerch->SetPosition(objData.position);
-			m_enemySerch->SetRotation(objData.rotation);
-			m_enemySerch->SetScale(objData.scale);
+		//	m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
+		//	m_enemySerch->SetPosition(objData.position);
+		//	m_enemySerch->SetRotation(objData.rotation);
+		//	m_enemySerch->SetScale(objData.scale);
 
-			return true;
-		}
+		//	return true;
+		//}
 		return true;
 		}
 	);

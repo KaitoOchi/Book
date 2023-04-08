@@ -59,6 +59,9 @@ void Enemy_Charge::Update()
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
+	// スポットライト
+	Enemy::SpotLight_Serch(m_rotation, m_position);
+
 	m_enemyRender.Update();
 }
 
@@ -66,11 +69,9 @@ void Enemy_Charge::Act()
 {
 	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
 
-	// スポットライト
-	Enemy::SpotLight_Serch(m_rotation, m_position);
-
 	// プレイヤーを発見したとき
 	if (Enemy::Act_SeachPlayer() == true) {
+
 		Act_Charge(STOP_TIMER);		// 突進攻撃
 
 		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {

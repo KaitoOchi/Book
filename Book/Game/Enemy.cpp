@@ -3,12 +3,13 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 80.0f				// エネミーの視野角(初期:120)
-#define SEACH_DECISION 350.0f * 350.0f						// ベクトルを作成する範囲
+#define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
+#define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
 
 namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -363,27 +364,57 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ベクトルの長さ
-	float length = diff.Length();
-
+	// 回転
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// ベクトルが一定以下のとき
+	// 待機アニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+
+	// 停止する時間を過ぎたとき
 	if (Act_Stop(time) == true) {
-		// ベクトルを正規化
+
+		// 一度だけ座標を参照する
+		if (CalculatedFlag == false) {
+
+			// 座標を渡す
+			playerPos = m_playerManagement->GetPosition();
+			enemyPos = m_position;
+
+			// 複数回行わないようにフラグを立てる
+			CalculatedFlag = true;
+		}
+
+		// エネミーからプレイヤーへ向かう座標
+		Vector3 diff = playerPos - enemyPos;
 		diff.Normalize();
+		// 回転
+		Rotation(diff);
+
 		// エネミーの座標に加算
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
 
+		// 移動距離を加算
+		Vector3 movingPos = Vector3::Zero;
+		movingPos += moveSpeed;
+
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
-		// タイマーが一定になったら終了する
+		// 移動距離が一定のとき加算を終了する
+		if (movingPos.Length() >= MOVING_DISTANCE) {
+
+			// 待機アニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+
+			// タイマーをリセット
+			addTimer = 0.0f;
+			CalculatedFlag = false;
+
+			return;
+		}
 	}
 }
 
@@ -400,7 +431,7 @@ void Enemy::Act_Loss()
 	int NowTargetNum = -1;
 
 	// 一番近いパスを探す
-	for (int i = 1; i < m_pointList.size()+1; i++) {
+	for (int i = 1; i <= m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
