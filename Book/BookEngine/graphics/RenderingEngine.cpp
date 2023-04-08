@@ -19,7 +19,7 @@ namespace nsBookEngine {
 	{
 
 		//�f�B���N�V�������C�g��ݒ�
-		SetDirectionLight(Vector3(-1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//������ݒ�
 		SetAmbient(0.3f);
@@ -63,7 +63,7 @@ namespace nsBookEngine {
 		);
 
 		//�u���[����臒l��ݒ�
-		SetBloomThreshold(1.5f);
+		SetBloomThreshold(3.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();

@@ -6,6 +6,7 @@
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
+	const Vector3 COLLIBOX{ 40.0f,70.0f,40.0f };//コリジョンの大きさ
 }
 Player3D::Player3D()
 {
@@ -25,9 +26,9 @@ bool Player3D::Start()
 	//キャラコンやコリジョンの作成
 	m_characon->Init(BOXSIZE, m_position);
 	m_collisionObject->CreateBox(
-		m_position,
+	    Vector3(m_position.x,m_position.y+70.0f,m_position.z),
 		Quaternion::Identity,
-		BOXSIZE
+		COLLIBOX
 		);
 	m_collisionObject->SetIsEnableAutoDelete(false);
 
@@ -68,14 +69,17 @@ void Player3D::Update()
 	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 	Player::Update();
 	Animation();
+	//アイテムを投げる
 	if (g_pad[0]->IsTrigger(enButtonRB1)&&m_playerState!=m_enAnimationClip_Jump)
 	{
 		Throw();
 	}
+	//お宝を盗む演出を入れる
+	// 
 	//プレイヤーの移動を継承する。
 	//キャラコンで座標を移動させる。
 	m_characon->SetPosition(m_position);
-	m_collisionObject->SetPosition(m_position);
+	m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);

@@ -69,6 +69,8 @@
     <ClCompile Include="Title.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Treasure.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -124,5 +126,7 @@
     <ClInclude Include="Title.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="Treasure.h" />
   </ItemGroup>
 </Project>

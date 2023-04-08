@@ -36,7 +36,7 @@ public:
 	/// XVˆ—B
 	/// </summary>
 	void Update();
-
+	bool m_posState = true;
 private:
 	static GameManager* m_instance;
 };

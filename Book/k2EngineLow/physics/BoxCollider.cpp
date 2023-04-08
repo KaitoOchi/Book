@@ -8,5 +8,6 @@ namespace nsK2EngineLow {
 	{
 		shape = std::make_unique<btBoxShape>(btVector3(size.x * 0.5f, size.y * 0.5f, size.z * 0.5f));
 	}
+
 }
 

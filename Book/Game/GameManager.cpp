@@ -17,13 +17,15 @@ GameManager::~GameManager()
 
 void GameManager::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonX))
+	if (g_pad[0]->IsTrigger(enButtonStart)&&m_posState==true)
 	{
 		GameObjectManager::GetInstance()->SetStop(true);
+		m_posState = false;
 	}
 
-	if (g_pad[0]->IsTrigger(enButtonY))
+	else if (g_pad[0]->IsTrigger(enButtonStart) && m_posState == false)
 	{
 		GameObjectManager::GetInstance()->SetStop(false);
+		m_posState = true;
 	}
 }

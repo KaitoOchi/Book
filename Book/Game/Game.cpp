@@ -13,7 +13,7 @@
 #include "Enemy_Charge.h"
 #include "BackGround.h"
 #include "LightSensor.h"
-
+#include "Wall.h"
 Game::Game()
 {
 	//�����蔻���L����
@@ -33,8 +33,9 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	NewGO<Sensor>(0, "sensor");
-	NewGO<PlayerManagement>(0,"playerManagement");
+	//NewGO<Sensor>(0, "sensor");
+	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	NewGO<GameUI>(0, "gameUI");
 	NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -45,16 +46,17 @@ bool Game::Start()
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
 	LevelDesign();
-
+	m_pointLight.SetColor(Vector3(10.0f, 0.3f, 0.5f));
+	m_pointLight.SetRange(250.0f);
+	m_pointLight.Update();
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
-
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	//���x���f�U�C������
-	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData) {
 
 		//���O��unityChan�Ȃ�
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -77,12 +79,21 @@ void Game::LevelDesign()
 		}
 
 		//���O��background�Ȃ�
-		if (objData.EqualObjectName(L"debug") == true) {
+		if (objData.EqualObjectName(L"base") == true) {
 
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
 			m_backGround->SetScale(objData.scale);
+
+			return true;
+		}
+		if (objData.EqualObjectName(L"box") == true) {
+
+			m_wall = NewGO<Wall>(0, "wall");
+			m_wall ->SetPosition(objData.position);
+			m_wall->SetRotation(objData.rotation);
+			m_wall->SetScale(objData.scale);
 
 			return true;
 		}
@@ -101,6 +112,12 @@ void Game::LevelDesign()
 			//m_trans->SetPosition(objData.position);
 			return true;
 		}
+		if (objData.EqualObjectName(L"clear") == true) {
+
+			SetClearPosition(objData.position);
+			m_pointLight.SetPosition(Vector3(m_position.x,m_position.y+50.0f,m_position.z));
+			return true;
+		}
 
 		return true;
 		}
@@ -109,18 +126,37 @@ void Game::LevelDesign()
 
 void Game::Update()
 {
-	MnageState();
-}
-void Game::MnageState()
-{
-	if (g_pad[0]->IsPress(enButtonLB2))
+	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
+	if (diff.LengthSq() <= 120.0f*120.0f)
 	{
 		m_gameState = m_enGameState_GameClear;
 	}
-	if (g_pad[0]->IsPress(enButtonRB2)&&m_gameState==m_enGameState_GameClear)
+		
+	MnageState();
+	m_pointLight.Update();
+}
+void Game::ClearState()
+{
+	//NewGO<Title>(0, "title");
+	//DeleteGO(this);
+	int a = 0;
+}
+
+void Game::MnageState()
+{
+	switch (m_gameState)
 	{
-		NewGO<Title>(0, "title");
-		DeleteGO(this);
+	case Game::m_enGameState_DuringGamePlay:
+		break;
+	case Game::m_enGameState_GameClear:
+		ClearState();
+		break;
+	case Game::m_enGameState_GameOver:
+		break;
+	case Game::m_enGameState_GameBuck:
+		break;
+	default:
+		break;
 	}
 }
 void Game::Render(RenderContext& rc)
