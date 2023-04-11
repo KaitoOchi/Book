@@ -42,12 +42,12 @@ namespace nsBookEngine {
 		m_lightCamera.SetTarget(0, 0, 0);
 
 		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
-		m_lightCamera.SetUp(1, -1, 1);
+		m_lightCamera.SetUp(1, 0, 0);
 
 		//m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
 
 		// ライトビュープロジェクション行列を計算している
-		m_lightCamera.Update();
+		//m_lightCamera.Update();
 		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 
 		//メインレンダーターゲットを設定
@@ -131,17 +131,20 @@ namespace nsBookEngine {
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		//視点の位置を設定する
-		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
+		//m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 
 		// カメラの位置を設定
 		//m_lightCamera.SetPosition(g_camera3D->GetPosition());
-		m_lightCamera.SetPosition(Vector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y + 200.0f, g_camera3D->GetPosition().z));
+		m_lightCamera.SetPosition(Vector3(0.0f, 600.0f, 0.0f));
 		//m_lightCamera.SetTarget(g_camera3D->GetTarget());
-		m_lightCamera.SetTarget(g_camera3D->GetTarget().x, g_camera3D->GetTarget().y + 100.0f, g_camera3D->GetTarget().z);
-		m_lightCamera.Update();
-		//m_lightCamera.SetUp(g_camera3D->GetUp());
+		//m_lightCamera.SetTarget(g_camera3D->GetTarget().x, g_camera3D->GetTarget().y, g_camera3D->GetTarget().z);
+		m_lightCamera.SetUp({1.0f,0.0f,0.0f});
+
+		m_lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
+		//m_lightCamera.Update();
 		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
-		
+		//m_lightCB.mLVP.MakeLookAt(Vector3(0.0f, 5000.0f, 0.0f), g_camera3D->GetPosition(), g_vec3AxisX);
+
 		RenderShadowMap(rc);
 
 		ForwardRendering(rc);
