@@ -3,23 +3,23 @@
 
 #include "PlayerManagement.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// ƒGƒlƒ~[‚ÌŽ‹–ìŠp(‰Šú:120)
-#define SEACH_DECISION 200.0f * 200.0f						// ƒxƒNƒgƒ‹‚ðì¬‚·‚é”ÍˆÍ
+#define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ÌŽï¿½ï¿½ï¿½p(ï¿½ï¿½ï¿½ï¿½:120)
+#define SEACH_DECISION 200.0f * 200.0f						// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½Íˆï¿½
 
 namespace
 {
-	const float		MOVE_SPEED = 3.0f;						// ˆÚ“®‘¬“x
-	const float		MOVING_DISTANCE = 200.0f;				// ˆÚ“®‹——£
-	const float		CHANGING_DISTANCE = 20.0f;				// –Ú“I’n‚ð•ÏX‚·‚é‹——£
-	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ƒiƒrƒƒbƒVƒ…‚ðÄ“xŒvŽZ‚·‚éƒ^ƒCƒ}[
-	const float		CANMOVE_TIMER = 10.0f;					// Ä“xs“®‚Å‚«‚é‚Ü‚Å‚Ìƒ^ƒCƒ}[
-	const float		WAITING_TIMER = 3.0f;					// ƒpƒXˆÚ“®Žž‚Ì‘Ò‹@ŽžŠÔ
-	const float		AI_RADIUS = 50.0f;						// AIƒG[ƒWƒFƒ“ƒg‚Ì”¼Œa
-	const float		AI_HIGH = 200.0f;						// AIƒG[ƒWƒFƒ“ƒg‚Ì‚‚³
-	const float		CATCH_DECISION = 60.0f;					// ƒvƒŒƒCƒ„[‚ðŠm•Û‚µ‚½‚±‚Æ‚É‚È‚é”ÍˆÍ
-	const float		ACT_LIMIT = 100.0f;						// ƒvƒŒƒCƒ„[‚É‹ß‚Ã‚¯‚é”ÍˆÍ
-	const float		SCALESIZE = 1.3f;						// SetScale‚ÌƒTƒCƒY
-	const Vector3	BOXSIZE = { 50.0f, 80.0f,50.0f };		// CharacterController‚ÌƒTƒCƒY
+	const float		MOVE_SPEED = 3.0f;						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
+	const float		MOVING_DISTANCE = 200.0f;				// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
+	const float		CHANGING_DISTANCE = 20.0f;				// ï¿½Ú“Iï¿½nï¿½ï¿½ÏXï¿½ï¿½ï¿½é‹—ï¿½ï¿½
+	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½Ä“xï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½[
+	const float		CANMOVE_TIMER = 10.0f;					// ï¿½Ä“xï¿½sï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½Ü‚Å‚Ìƒ^ï¿½Cï¿½}ï¿½[
+	const float		WAITING_TIMER = 3.0f;					// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½ï¿½ï¿½Ì‘Ò‹@ï¿½ï¿½ï¿½ï¿½
+	const float		AI_RADIUS = 50.0f;						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ì”ï¿½ï¿½a
+	const float		AI_HIGH = 200.0f;						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½ï¿½
+	const float		CATCH_DECISION = 60.0f;					// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚É‚È‚ï¿½Íˆï¿½
+	const float		ACT_LIMIT = 100.0f;						// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½É‹ß‚Ã‚ï¿½ï¿½ï¿½Íˆï¿½
+	const float		SCALESIZE = 1.3f;						// SetScaleï¿½ÌƒTï¿½Cï¿½Y
+	const Vector3	BOXSIZE = { 50.0f, 80.0f,50.0f };		// CharacterControllerï¿½ÌƒTï¿½Cï¿½Y
 	const float		ANGLE = 45.0f;							//??]?p?x
 	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//???C?g??J???[
 	const float		LIGHTRANGE = 300.0f;						//???C?g??e?????
@@ -37,15 +37,15 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ð‰Šú‰»‚·‚é
+	// ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_characterController.Init(BOXSIZE, m_position);
-	// ƒXƒtƒBƒAƒRƒ‰ƒCƒ_[‚ð‰Šú‰»
+	// ï¿½Xï¿½tï¿½Bï¿½Aï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_sphereCollider.Create(1.0f);
 
-	// ƒiƒrƒƒbƒVƒ…‚ð\’z
+	// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½ï¿½\ï¿½z
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 
-	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ð’T‚·
+	// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½Tï¿½ï¿½
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
 	return true;
@@ -53,38 +53,38 @@ bool Enemy::Start()
 
 void Enemy::Rotation(Vector3 rot)
 {
-	// ‰ñ“]ˆ—
+	// ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½
 	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
 }
 
 bool Enemy::Act_SeachPlayer()
 {
-	// Ž‹–ìŠp‚Ìˆ—
-	// true‚Ì‚Æ‚«ƒvƒŒƒCƒ„[‚ð”­Œ©‚µ‚Ä‚¢‚é
+	// ï¿½ï¿½ï¿½ï¿½pï¿½Ìï¿½ï¿½ï¿½
+	// trueï¿½Ì‚Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ð”­Œï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 
 	m_forward = Vector3::AxisZ;
 	m_rotation.Apply(m_forward);
 
 	m_playerPos = m_playerManagement->GetPosition();
 
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_playerPos - m_position;
 
-	// ƒvƒŒƒCƒ„[‚É‚ ‚é’ö“x‹ß‚¢‚Æ‚«
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½ß‚ï¿½ï¿½Æ‚ï¿½
 	if (FindPlayerFlag == false) {
 		if (diff.LengthSq() <= SEACH_DECISION) {
-			// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ð³‹K‰»
+			// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ð³‹Kï¿½ï¿½
 			diff.Normalize();
-			// ƒGƒlƒ~[‚Ì³–ÊƒxƒNƒgƒ‹AƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚Ì“àÏ‚ðŒvŽZ
+			// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½ï¿½Aï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì“ï¿½Ï‚ï¿½vï¿½Z
 			float cos = m_forward.Dot(diff);
-			// “àÏ‚©‚çŠp“x‚ðŒvŽZ
+			// ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½pï¿½xï¿½ï¿½vï¿½Z
 			float angle = acosf(cos);
-			// Šp“x‚ªŽ‹–ìŠp‚æ‚è‹·‚¢‚Æ‚«
+			// ï¿½pï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½è‹·ï¿½ï¿½ï¿½Æ‚ï¿½
 			if (angle <= (FIELDOF_VIEW) {
-				// •Ç‚Æ‚ÌÕ“Ë”»’è‚ðs‚¤
+				// ï¿½Ç‚Æ‚ÌÕ“Ë”ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 				
-				//// •Ç‚Æ‚ÌÕ“Ë”»’è‚ªtrue‚Ì‚Æ‚«
+				//// ï¿½Ç‚Æ‚ÌÕ“Ë”ï¿½ï¿½è‚ªtrueï¿½Ì‚Æ‚ï¿½
 				//else if (WallAndHit(m_playerPos) == true) {
 				//	FindPlayerFlag = true;
 				//}
@@ -93,18 +93,18 @@ bool Enemy::Act_SeachPlayer()
 			}
 		}
 	}
-	//// ƒvƒŒƒCƒ„[‚ð”­Œ©‚µ‚Ä‚¢‚é‚Æ‚«
+	//// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ð”­Œï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½
 	//else if (FindPlayerFlag == true) {
-	//	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ð³‹K‰»
+	//	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ð³‹Kï¿½ï¿½
 	//	diff.Normalize();
-	//	// ƒGƒlƒ~[‚Ì³–ÊƒxƒNƒgƒ‹AƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚Ì“àÏ‚ðŒvŽZ
+	//	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½ï¿½Aï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì“ï¿½Ï‚ï¿½vï¿½Z
 	//	float cos = m_forward.Dot(diff);
-	//	// “àÏ‚©‚çŠp“x‚ðŒvŽZ
+	//	// ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½pï¿½xï¿½ï¿½vï¿½Z
 	//	float angle = acosf(cos);
-	//	// Šp“x‚ªŽ‹–ìŠp‚æ‚è‹·‚¢‚Æ‚«
+	//	// ï¿½pï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½è‹·ï¿½ï¿½ï¿½Æ‚ï¿½
 	//	if (angle <= (FIELDOF_VIEW) {
-	//		// •Ç‚Æ‚ÌÕ“Ë”»’è‚ðs‚¤
-	//		// •Ç‚Æ‚ÌÕ“Ë”»’è‚ªfalse‚Ì‚Æ‚«
+	//		// ï¿½Ç‚Æ‚ÌÕ“Ë”ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+	//		// ï¿½Ç‚Æ‚ÌÕ“Ë”ï¿½ï¿½è‚ªfalseï¿½Ì‚Æ‚ï¿½
 	//		if (WallAndHit(m_playerPos) == false) {
 	//			ChangeFlag = true;
 	//			FindPlayerFlag = false;
@@ -117,21 +117,21 @@ bool Enemy::Act_SeachPlayer()
 	return false;
 }
 
-// Õ“Ë‚µ‚½Û‚ÉŒÄ‚Î‚ê‚éŠÖ”ƒIƒuƒWƒFƒNƒg(•Ç—p)
+// ï¿½Õ“Ë‚ï¿½ï¿½ï¿½ï¿½Û‚ÉŒÄ‚Î‚ï¿½ï¿½Öï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g(ï¿½Ç—p)
 struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 {
-	bool isHit = false;		// Õ“Ëƒtƒ‰ƒO
+	bool isHit = false;		// ï¿½Õ“Ëƒtï¿½ï¿½ï¿½O
 
 	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
-		// •Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚È‚¢‚Æ‚«
+		// ï¿½Ç‚ÆÕ“Ë‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½
 		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
-			// Õ“Ë‚µ‚½‚Ì‚Í•Ç‚Å‚Í‚È‚¢
+			// ï¿½Õ“Ë‚ï¿½ï¿½ï¿½ï¿½Ì‚Í•Ç‚Å‚Í‚È‚ï¿½
 			return 0.0f;
 		}
 
-		// •Ç‚ÆÕ“Ë‚µ‚½‚Æ‚«
-		// ƒtƒ‰ƒO‚ðtrue‚É‚·‚é
+		// ï¿½Ç‚ÆÕ“Ë‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+		// ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½trueï¿½É‚ï¿½ï¿½ï¿½
 		isHit = true;
 		return 0.0f;
 	}
@@ -139,48 +139,48 @@ struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 
 bool Enemy::WallAndHit(Vector3 pos)
 {
-	// áŠQ•¨‚ðl—¶‚µ‚½Ž‹–ìŠp‚Ìˆ—
-	// ƒvƒŒƒCƒ„[‚ð”­Œ©‚µ‚½‚Æ‚«true‚ð•Ô‚·
+	// ï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ìï¿½ï¿½ï¿½
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ð”­Œï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½trueï¿½ï¿½Ô‚ï¿½
 
 	btTransform start, end;
 
 	start.setIdentity();
 	end.setIdentity();
 
-	// Žn“_‚ÍƒGƒlƒ~[‚ÌÀ•W
+	// ï¿½nï¿½_ï¿½ÍƒGï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½W
 	start.setOrigin(btVector3(m_position.x, m_position.y + 70.0f, m_position.z));
-	// I“_‚ÍƒvƒŒƒCƒ„[‚ÌÀ•W
+	// ï¿½Iï¿½_ï¿½Íƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½W
 	end.setOrigin(btVector3(pos.x, pos.y + 70.0f, pos.z));
 
 	SweepResultWall callback;
 
-	// ƒRƒ‰ƒCƒ_[‚ðŽn“_‚©‚çI“_‚Ü‚Å“®‚©‚µ‚ÄA
-	// Õ“Ë‚·‚é‚©‚Ç‚¤‚©‚ð’²‚×‚é
+	// ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ï¿½nï¿½_ï¿½ï¿½ï¿½ï¿½Iï¿½_ï¿½Ü‚Å“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄA
+	// ï¿½Õ“Ë‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ð’²‚×‚ï¿½
 	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
 
-	// •Ç‚ÆÕ“Ë‚µ‚½
+	// ï¿½Ç‚ÆÕ“Ë‚ï¿½ï¿½ï¿½
 	if (callback.isHit == true) {
-		// ƒvƒŒƒCƒ„[‚ÍŒ©‚Â‚©‚Á‚Ä‚¢‚È‚¢‚Ì‚Åfalse
+		// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÍŒï¿½ï¿½Â‚ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ï¿½false
 		return false;
 	}
 
-	// •Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚È‚¢‚Ì‚Åtrue
+	// ï¿½Ç‚ÆÕ“Ë‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ì‚ï¿½true
 	return true;
 }
 
 bool Enemy::Act_CatchPlayer()
 {
-	// ƒvƒŒƒCƒ„[‚ðŠm•Û‚·‚éˆ—
-	// true‚Ì‚Æ‚«ƒvƒŒƒCƒ„[‚ðŠm•Û‚µ‚Ä‚¢‚é
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½éˆï¿½ï¿½
+	// trueï¿½Ì‚Æ‚ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½mï¿½Û‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ðŒvŽZ‚·‚é
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ƒxƒNƒgƒ‹‚Ì’·‚³‚ð‹‚ß‚é
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
 	float length = diff.Length();
 
-	// ƒxƒNƒgƒ‹‚ªˆê’èˆÈ‰º‚Ì‚Æ‚«
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½
 	if (length <= CATCH_DECISION) {
-		// •ß‚Ü‚¦‚éˆ—‚ðs‚¤
+		// ï¿½ß‚Ü‚ï¿½ï¿½éˆï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
 		return true;
 	}
 
@@ -189,21 +189,21 @@ bool Enemy::Act_CatchPlayer()
 
 void Enemy::Act_HitFlashBullet()
 {
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	// true‚È‚ç“–‚½‚Á‚½
+	// ï¿½Mï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	// trueï¿½È‚ç“–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (HitFlashBulletFlag == true) {
-		// ”í’eƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½ï¿½eï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 
-		// ƒ^ƒCƒ}[‚ªtrue‚Ì‚Æ‚«
+		// ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
 		if (Act_Stop(CANMOVE_TIMER) == true) {
-			HitFlashBulletFlag = false;		// ƒtƒ‰ƒO‚ð~‚ë‚·
-			addTimer = 0.0f;				// ‰ÁŽZ—pƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg
+			HitFlashBulletFlag = false;		// ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½~ï¿½ë‚·
+			addTimer = 0.0f;				// ï¿½ï¿½ï¿½Zï¿½pï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 
 		}
-		// ‚»‚¤‚Å‚È‚¢‚Æ‚«
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
 		else {
-			// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+			// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
@@ -211,95 +211,95 @@ void Enemy::Act_HitFlashBullet()
 
 void Enemy::Act_Craw()
 {
-	// ƒpƒXˆÚ“®
+	// ï¿½pï¿½Xï¿½Ú“ï¿½
 	
-	// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_point->s_position - m_position;
 
-	// ‹——£‚ªˆê’èˆÈ“à‚È‚ç–Ú“I’n‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ð•ÏX‚·‚é
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È“ï¿½È‚ï¿½Ú“Iï¿½nï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// Œ»Ý‚Ì–Ú“I’n‚Ìƒ|ƒCƒ“ƒg‚ª”z—ñ‚ÌÅŒã‚Ì‚Æ‚«
+		// ï¿½ï¿½ï¿½Ý‚Ì–Ú“Iï¿½nï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½zï¿½ï¿½ÌÅŒï¿½Ì‚Æ‚ï¿½
 		if (m_point->s_number == m_pointList.size()) {
-			// ˆê”ÔÅ‰‚Ìƒ|ƒCƒ“ƒg‚ð–Ú“I’n‚Æ‚·‚é
+			// ï¿½ï¿½ÔÅï¿½ï¿½Ìƒ|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½Ú“Iï¿½nï¿½Æ‚ï¿½ï¿½ï¿½
 			m_point = &m_pointList[0];
 		}
-		// ‚»‚¤‚Å‚È‚¢‚Æ‚«
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer = 0.0f;	// ‰ÁŽZ—pƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg
+		addTimer = 0.0f;	// ï¿½ï¿½ï¿½Zï¿½pï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 	}
 
-	// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ³‹K‰»
+	// ï¿½ï¿½ï¿½Kï¿½ï¿½
 	moveSpeed.Normalize();
-	// ƒxƒNƒgƒ‹‚ÉƒXƒJƒ‰[‚ðæŽZ
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒXï¿½Jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Z
 	moveSpeed *= MOVE_SPEED;
 	Rotation(moveSpeed);
 
-	// ƒ^ƒCƒ}[‚ªtrue‚Ì‚Æ‚«
+	// ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
 	if (Act_Stop(WAITING_TIMER) == true) {
-		// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		// À•W‚É‰ÁŽZ‚·‚é
+		// ï¿½ï¿½ï¿½Wï¿½É‰ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
 		m_position += moveSpeed;
 	}
-	// ‚»‚¤‚Å‚È‚¢‚Æ‚«
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½Æ‚ï¿½
 	else {
-		// •à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// Œo‰ßŽžŠÔ‚ð‰ÁŽZ
+	// ï¿½oï¿½ßŽï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Z
 	NaviTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ˆê’èŽžŠÔˆÈ‰º‚Ì‚Æ‚«return
+	// ï¿½ï¿½èŽžï¿½ÔˆÈ‰ï¿½ï¿½Ì‚Æ‚ï¿½return
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
 		return;
 	}
 
-	// ƒiƒrƒƒbƒVƒ…‚Å‚ÌˆÚ“®
+	// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½Å‚ÌˆÚ“ï¿½
 
-	// ƒvƒŒƒCƒ„[‚ÌÀ•W‚ðŠl“¾‚·‚é
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Wï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_playerPos = m_playerManagement->GetPosition();
 
-	bool isEnd;							// ƒpƒXˆÚ“®‚ªI—¹‚µ‚½Û‚Ìƒtƒ‰ƒO
+	bool isEnd;							// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û‚Ìƒtï¿½ï¿½ï¿½O
 
-	// ƒpƒXŒŸõ
+	// ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½
 	m_pathFiding.Execute(
-		m_path,							// \’z‚³‚ê‚½ƒpƒX‚ÌŠi”[æ
-		m_nvmMesh,						// ƒiƒrƒƒbƒVƒ…
-		m_position,						// ŠJŽnÀ•W
-		m_playerPos,					// –Ú•W’n“_
-		PhysicsWorld::GetInstance(),	// •¨—ƒGƒ“ƒWƒ“
-		AI_RADIUS,						// AIƒG[ƒWƒFƒ“ƒg‚Ì”¼Œa
-		AI_HIGH							// AIƒG[ƒWƒFƒ“ƒg‚Ì‚‚³
+		m_path,							// ï¿½\ï¿½zï¿½ï¿½ï¿½ê‚½ï¿½pï¿½Xï¿½ÌŠiï¿½[ï¿½ï¿½
+		m_nvmMesh,						// ï¿½iï¿½rï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+		m_position,						// ï¿½Jï¿½nï¿½ï¿½ï¿½W
+		m_playerPos,					// ï¿½Ú•Wï¿½nï¿½_
+		PhysicsWorld::GetInstance(),	// ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Wï¿½ï¿½
+		AI_RADIUS,						// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ì”ï¿½ï¿½a
+		AI_HIGH							// AIï¿½Gï¿½[ï¿½Wï¿½Fï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½ï¿½
 	);
 
-	// ƒpƒXã‚ðˆÚ“®‚·‚é
+	// ï¿½pï¿½Xï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_position = m_path.Move(
-		m_position,						// ˆÚ“®‚³‚¹‚éÀ•W
-		MOVE_SPEED,						// ˆÚ“®‘¬“x
-		isEnd							// I—¹Žž‚Étrue‚ðŠi”[‚·‚éƒtƒ‰ƒO
+		m_position,						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
+		MOVE_SPEED,						// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
+		isEnd							// ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
 	);
 
-	//// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	//// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 moveSpeed = m_playerPos - m_position;
 
 	float angle = atan2(-moveSpeed.x, moveSpeed.z);
 	Quaternion rot = Quaternion::Identity;
 	rot.SetRotationY(-angle);
 
-	// ‰ñ“]‚ð‹³‚¦‚é
+	// ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_enemyRender.SetRotation(rot);
 
-	// •àsƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+	// ï¿½ï¿½sï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
@@ -307,52 +307,52 @@ void Enemy::Pass(int PassState)
 {
 	switch (PassState)
 	{
-		// c
+		// ï¿½c
 	case LINE_VERTICAL:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		break;
-		// ‰¡
+		// ï¿½ï¿½
 	case LINE_HORIZONTAL:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		break;
-		// ‰E‰ñ‚è(³•ûŒ`)
+		// ï¿½Eï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½`)
 	case SQUARE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// ¶‰ñ‚è(³•ûŒ`)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½`)
 	case SQUARE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// (‰E‚É)’¼Šp
+		// (ï¿½Eï¿½ï¿½)ï¿½ï¿½ï¿½p
 	case ANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
 		break;
-		// (¶‚É)’¼Šp
+		// (ï¿½ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½p
 	case ANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
 		break;
-		// ‰E‰ñ‚è(’·•ûŒ`)
+		// ï¿½Eï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½`)
 	case RECTANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f ,m_position.y,m_position.z + 300.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),4 });
 		break;
-		// ¶‰ñ‚è(’·•ûŒ`)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½`)
 	case RECTANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
@@ -363,77 +363,77 @@ void Enemy::Pass(int PassState)
 
 void Enemy::Act_Access()
 {
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ƒxƒNƒgƒ‹‚Ì’·‚³
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½
 	float length = diff.Length();
 
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// ƒxƒNƒgƒ‹‚ªˆê’èˆÈ‰º‚Ì‚Æ‚«
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½
 	if (length <= SEACH_DECISION) {
-		// ƒxƒNƒgƒ‹‚ð³‹K‰»
+		// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ð³‹Kï¿½ï¿½
 		diff.Normalize();
-		// ƒGƒlƒ~[‚ÌÀ•W‚É‰ÁŽZ
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Wï¿½É‰ï¿½ï¿½Z
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
 
-		// •à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
 }
 
 void Enemy::Act_Charge(float time)
 {
-	// ‰ñ“]
+	// ï¿½ï¿½]
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+	// ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
-	// ’âŽ~‚·‚éŽžŠÔ‚ð‰ß‚¬‚½‚Æ‚«
+	// ï¿½ï¿½~ï¿½ï¿½ï¿½éŽžï¿½Ô‚ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
 	if (Act_Stop(time) == true) {
 
-		// ˆê“x‚¾‚¯À•W‚ðŽQÆ‚·‚é
+		// ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½ï¿½
 		if (CalculatedFlag == false) {
 
-			// À•W‚ð“n‚·
+			// ï¿½ï¿½ï¿½Wï¿½ï¿½nï¿½ï¿½
 			playerPos = m_playerManagement->GetPosition();
 			enemyPos = m_position;
 
-			// •¡”‰ñs‚í‚È‚¢‚æ‚¤‚Éƒtƒ‰ƒO‚ð—§‚Ä‚é
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½Éƒtï¿½ï¿½ï¿½Oï¿½ð—§‚Ä‚ï¿½
 			CalculatedFlag = true;
 		}
 
-		// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤À•W
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
 		Vector3 diff = playerPos - enemyPos;
 		diff.Normalize();
-		// ‰ñ“]
+		// ï¿½ï¿½]
 		Rotation(diff);
 
-		// ƒGƒlƒ~[‚ÌÀ•W‚É‰ÁŽZ
+		// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìï¿½ï¿½Wï¿½É‰ï¿½ï¿½Z
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
-		// ˆÚ“®—Ê‚ð‰ÁŽZ
+		// ï¿½Ú“ï¿½ï¿½Ê‚ï¿½ï¿½ï¿½Z
 		sumPos += moveSpeed;
 
-		// •à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+		// ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
-		// ˆÚ“®‹——£‚ªˆê’è‚Ì‚Æ‚«‰ÁŽZ‚ðI—¹‚·‚é
+		// ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (sumPos.Length() > MOVING_DISTANCE) {
 			
-			m_position = m_position;	// À•W‚ðŒÅ’è
+			m_position = m_position;	// ï¿½ï¿½ï¿½Wï¿½ï¿½Å’ï¿½
 
-			addTimer = 0.0f;			// ƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg
-			sumPos = Vector3::Zero;		// ‘ˆÚ“®‹——£‚ðƒŠƒZƒbƒg
-			CalculatedFlag = false;		// ƒtƒ‰ƒO‚ð~‚ë‚·
+			addTimer = 0.0f;			// ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+			sumPos = Vector3::Zero;		// ï¿½ï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+			CalculatedFlag = false;		// ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½~ï¿½ë‚·
 
-			// ƒvƒŒƒCƒ„[‚ªŽ‹–ìŠp“à‚É‘¶Ý‚·‚é‚Æ‚«
+			// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½É‘ï¿½ï¿½Ý‚ï¿½ï¿½ï¿½Æ‚ï¿½
 			if (Act_SeachPlayer() == true) {
 				return;
 			}
@@ -445,41 +445,41 @@ void Enemy::Act_Charge(float time)
 
 void Enemy::Act_Loss()
 {
-	// ƒvƒŒƒCƒ„[‚ðŒ©Ž¸‚Á‚½‚Æ‚«‚ÌƒpƒX‚Ö‚ÌØ‚è‘Ö‚¦Žž‚Ìˆ—
-	// ƒvƒŒƒCƒ„[‚ðÅŒã‚ÉŒ©‚½‰ÓŠ‚Ì­‚µæ‚Ü‚ÅˆÚ“®‚·‚é‚ÆŒ«‚¢
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Ìƒpï¿½Xï¿½Ö‚ÌØ‚ï¿½Ö‚ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ÅŒï¿½ÉŒï¿½ï¿½ï¿½ï¿½Óï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ÅˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½ÆŒï¿½ï¿½ï¿½
 
-	addTimer = 0.0f;	// ‰ÁŽZ—pƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg
+	addTimer = 0.0f;	// ï¿½ï¿½ï¿½Zï¿½pï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
 
-	// ¡‚Ì‘ÎÛ‚Ì‹——£
-	// float‚ÌÅ‘å’l‚ðŠi”[
+	// ï¿½ï¿½ï¿½Ì‘ÎÛ‚Ì‹ï¿½ï¿½ï¿½
+	// floatï¿½ÌÅ‘ï¿½lï¿½ï¿½iï¿½[
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
 	int NowTargetNum = -1;
 
-	// ˆê”Ô‹ß‚¢ƒpƒX‚ð’T‚·
+	// ï¿½ï¿½Ô‹ß‚ï¿½ï¿½pï¿½Xï¿½ï¿½Tï¿½ï¿½
 	for (int i = 0; i < m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
 		float length = diff.Length();
 
-		// ’·‚³‚ð”äŠr
-		// V‚µ‚­ŒvŽZ‚µ‚½ƒxƒNƒgƒ‹‚Ì•û‚ª’Z‚¢ê‡A’l‚ð“ü‚ê‘Ö‚¦‚é
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½r
+		// ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ê‡ï¿½Aï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ö‚ï¿½ï¿½ï¿½
 		if (NowTargetDiff > length) {
 			NowTargetNum = i;
 			NowTargetDiff = length;
 		}
 	}
 
-	// Å’Z‚ÌƒpƒX’l‚ðŠi”[‚·‚é
+	// ï¿½Å’Zï¿½Ìƒpï¿½Xï¿½lï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½
 	m_point = &m_pointList[NowTargetNum];
 
-	// –Ú•W‚Æ‚·‚éƒ|ƒCƒ“ƒg‚ÌÀ•W‚©‚çAŒ»Ý‚ÌÀ•W‚ðˆø‚¢‚½ƒxƒNƒgƒ‹
+	// ï¿½Ú•Wï¿½Æ‚ï¿½ï¿½ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ³‹K‰»
+	// ï¿½ï¿½ï¿½Kï¿½ï¿½
 	moveSpeed.Normalize();
-	// ƒxƒNƒgƒ‹‚ÉƒXƒJƒ‰[‚ðæŽZ
+	// ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒXï¿½Jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Z
 	moveSpeed *= MOVE_SPEED;
-	// ‰ñ“]‚ð‹³‚¦‚é
+	// ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	Rotation(moveSpeed);
 
 	return;
@@ -487,23 +487,23 @@ void Enemy::Act_Loss()
 
 void Enemy::Act_Limit()
 {
-	// ˆê’è‚Ì‹——£‚É‚Í‹ß‚Ã‚©‚È‚¢
-	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
+	// ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½É‚Í‹ß‚Ã‚ï¿½ï¿½È‚ï¿½
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÖŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-	// ’·‚³‚ªˆê’èˆÈ‰º‚Ì‚Æ‚«
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½
 	if ( diff.Length() <= ACT_LIMIT) {
-		// “®‚©‚È‚¢‚æ‚¤‚É‚·‚é
+		// ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
 		m_position = m_position;
 	}
 }
 
 bool Enemy::Act_Stop(float time)
 {
-	// Œo‰ßŽžŠÔ‚ð‰ÁŽZ
+	// ï¿½oï¿½ßŽï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Z
 	addTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ‰ÁŽZ‚³‚ê‚½ŽžŠÔ‚ªˆê’èˆÈã‚É‚È‚Á‚½‚Æ‚«
+	// ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Èï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
 	if (time <= addTimer) {
 		return true;
 	}
@@ -518,30 +518,30 @@ void Enemy::SpotLight_New(Vector3 position)
 	m_spotLight.SetRange(LIGHTRANGE);
 	m_spotLight.SetAngle(ANGLE);
 	Vector3 forward = Vector3::AxisY;
-	//ƒ‰ƒCƒg‚Ì•ûŒüÝ’è
+	//ï¿½ï¿½ï¿½Cï¿½gï¿½Ì•ï¿½ï¿½ï¿½ï¿½Ý’ï¿½
 	m_spotLight.SetDirection(forward);
 	m_spotLight.Update();
 }
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
 	lightpos.y = LIGHTPOSITION;
-	//YŽ²
+	//Yï¿½ï¿½
 	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//ƒvƒŒƒCƒ„[‚Ì³–Ê
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½ï¿½
 	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
 	lightrotaition.Apply(m_front);
-	//‚»‚Ì“ñ‚Â‚Ì‚’¼‚ÈƒxƒNƒgƒ‹
+	//ï¿½ï¿½ï¿½Ì“ï¿½Â‚Ìï¿½ï¿½ï¿½ï¿½Èƒxï¿½Nï¿½gï¿½ï¿½
 	Vector3 m_vertical = Cross(m_Yup, m_front);
 	Quaternion m_SitenRot;
-	//‚»‚Ì‚’¼‚ÈƒxƒNƒgƒ‹‚ðŒ³‚ÉƒNƒH[ƒ^ƒjƒIƒ“‚ðì‚é
+	//ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Èƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒNï¿½Hï¿½[ï¿½^ï¿½jï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ƒxƒNƒgƒ‹‚ÉƒNƒH[ƒ^ƒjƒIƒ“‚ð‰ÁŽZ‚·‚é
+	//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒNï¿½Hï¿½[ï¿½^ï¿½jï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
 	m_SitenRot.Apply(m_front);
 	m_spotLight.SetDirection(m_front);
 
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
-		//ƒXƒe[ƒg‚Ì‘JˆÚ
+		//ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½ï¿½
 		int a = 0;
 	}
 	m_spotLight.SetPosition(lightpos);
