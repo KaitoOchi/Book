@@ -48,8 +48,8 @@ bool Game::Start()
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
 	LevelDesign();
-	m_pointLight.SetColor(Vector3(5.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(50.0f);
+	m_pointLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
+	m_pointLight.SetRange(100.0f);
 	m_pointLight.Update();
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
@@ -133,6 +133,7 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"clear") == true) {
 
 			SetClearPosition(objData.position);
+
 			m_pointLight.SetPosition(Vector3(m_position.x,m_position.y+10.0f,m_position.z));
 			return true;
 		}

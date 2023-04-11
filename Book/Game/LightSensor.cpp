@@ -86,5 +86,5 @@ void LightSensor::Render(RenderContext& rc)
 	if (m_isActive)
 		m_modelRender.Draw(rc);
 
-	m_fontRender.Draw(rc);
+	//m_fontRender.Draw(rc);
 }

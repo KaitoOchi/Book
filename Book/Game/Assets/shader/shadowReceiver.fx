@@ -94,6 +94,7 @@ float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
 float3 CalcNormal(SPSIn psIn);
 float3 CalcSpecular(float3 normal, float3 worldPos);
+float4 ShadowMap(SPSIn psIn, float4 albedo);
 
 /// <summary>
 //スキン行列を計算する。
@@ -128,7 +129,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	}
 
 	psIn.pos = mul(m, vsIn.pos);
-	psIn.worldPos = psIn.pos;
+	psIn.worldPos = mul(m, vsIn.pos);
+	float4 worldPos = psIn.pos;
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 
@@ -143,7 +145,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.normalInView = mul(mView, psIn.normal);
 
 	//ライトビュースクリーン空間の座標を計算する
-    psIn.posInLVP = mul(mLVP, psIn.worldPos);
+    psIn.posInLVP = mul(mLVP, worldPos);
 
 	psIn.uv = vsIn.uv;
 
@@ -206,9 +208,13 @@ float4 PSMain(SPSIn In) : SV_Target0
 				+ hemiLight;
 
 	float4 albedoColor = albedo;
-	albedoColor.xyz *= lig;
 
-	return albedoColor;
+	//シャドウマップを求める
+	float4 shadowMap = ShadowMap(In, albedoColor);
+
+	shadowMap.xyz *= lig;
+
+	return shadowMap;
 }
 
 /// <summary>
@@ -452,4 +458,30 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 	t = pow(t, 5.0f);
 	
 	return t;
+}
+
+float4 ShadowMap(SPSIn psIn, float4 albedo)
+{
+    // ライトビュースクリーン空間からUV空間に座標変換
+    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+    shadowMapUV *= float2(0.5f, -0.5f);
+    shadowMapUV += 0.5f;
+
+    // step-4 ライトビュースクリーン空間でのZ値を計算する
+    float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
+
+    if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+        && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
+    {
+        // step-3 シャドウマップに描き込まれているZ値と比較する
+        // 計算したUV座標を使って、シャドウマップから深度値をサンプリング
+        float zInShadowMap = g_shadowMap.Sample(g_sampler, shadowMapUV).r;
+        if(zInLVP > zInShadowMap)
+        {
+            // 遮蔽されている
+            albedo.xyz *= 0.5f;
+        }
+    }
+
+	return albedo;
 }

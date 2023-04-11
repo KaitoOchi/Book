@@ -29,9 +29,8 @@ namespace nsBookEngine {
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClip = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadowReceiver = false,
+			bool isShadow = true,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
-			bool isShadow = false,
 			int maxInstance = 1);
 
 		/// <summary>
@@ -183,7 +182,6 @@ namespace nsBookEngine {
 		void InitModel(
 			const char* tkmFilePath,
 			EnModelUpAxis modelUpAxis,
-			const bool isShadowReceiver,
 			const bool isShadow
 		);
 
