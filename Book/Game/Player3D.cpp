@@ -6,7 +6,6 @@
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
-	const Vector3 COLLIBOX{ 40.0f,70.0f,40.0f };//コリジョンの大きさ
 }
 Player3D::Player3D()
 {
@@ -28,7 +27,7 @@ bool Player3D::Start()
 	m_collisionObject->CreateBox(
 	    Vector3(m_position.x,m_position.y+70.0f,m_position.z),
 		Quaternion::Identity,
-		COLLIBOX
+		BOXSIZE
 		);
 	m_collisionObject->SetIsEnableAutoDelete(false);
 
@@ -59,6 +58,8 @@ bool Player3D::Start()
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);
 	m_modelRender->Update();
+
+	m_playerManagement->SetCharacon(m_characon);
 	return true;
 }
 

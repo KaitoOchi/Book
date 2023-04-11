@@ -36,8 +36,7 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	//NewGO<Sensor>(0, "sensor");
-	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
-	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	
 	NewGO<GameUI>(0, "gameUI");
 	NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -48,6 +47,8 @@ bool Game::Start()
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
 	LevelDesign();
+	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_pointLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
 	m_pointLight.SetRange(100.0f);
 	m_pointLight.Update();
