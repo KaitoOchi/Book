@@ -1,13 +1,13 @@
 #pragma once
-#include "PlayerManagement.h"
-class Object : public IGameObject
+#include "physics/PhysicsGhostObject.h"
+
+class Gost:public IGameObject
 {
 public:
-	Object();
-	~Object();
-	virtual bool Start();
-	virtual void Update() = 0;
-
+	Gost();
+	~Gost();
+	bool Start();
+	void Update();
 	/// <summary>
 	/// 座標を設定。
 	/// </summary>
@@ -61,43 +61,23 @@ public:
 	{
 		return m_scale;
 	}
-
-	/// <summary>
-	/// 表示状態を設定。
-	/// </summary>
-	void SetActive(const bool active)
-	{
-		m_isActive = active;
-	}
-
-	/// <summary>
-	/// 表示状態を取得。
-	/// </summary>
-	bool GetActive()
-	{
-		return m_isActive;
-	}
+	PhysicsGhostObject m_physicsGhostObj;
+private:
 	
-protected:
-	/// <summary>
-	/// 当たり判定の処理。
-	/// </summary>
-	void Collision();
 
-	/// <summary>
-	/// 当たったときの処理。
-	/// </summary>
-	virtual void Hit() = 0;
-
-	ModelRender			m_modelRender;
-
-	CollisionObject*	m_collisionObject = nullptr;
-	PlayerManagement*	m_player = nullptr;
-
-	Vector3				m_position	= Vector3::Zero;
-	Quaternion			m_rotation	= Quaternion::Identity;
-	Vector3				m_scale		= Vector3::One;
-
-	bool m_isActive = true;
+	Vector3 m_position = Vector3::Zero;
+	Vector3 m_scale = Vector3::Zero;
+	Quaternion m_rotation;
+	float posXmax = 0;
+	float posXmin = 1000000.0;
+	float posYmax = 0;
+	float posYmin = 1000000.0;
+	float posZmax = 0;
+	float posZmin = 1000000.0;
+	float posX;
+	float posY;
+	float posZ;
+	Vector3 m_boxSize = Vector3::Zero;
+	ModelRender m_modelRender;
 };
 

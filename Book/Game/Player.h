@@ -5,21 +5,22 @@ class Player : public IGameObject
 {
 public:
 	enum EnPlayerState{
-		m_enPlayer_Idle,//待機中
-		m_enPlayer_walk,//歩く
-		m_enPlayer_Run,//走る
-		m_enPlayer_Jump,//ジャンプ
-		m_enPlayer_Jumpend,//ジャンプ終わり
-		m_enPlayer_Change,//切替
-		m_enPlayer_2DChanging,//2Dに切替中
-		m_enPlayer_3DChanging,//3Dに切替中
-		m_enPlayer_Found,//見つかる
-		m_enPlayer_Caught,//捕まった
-		m_enPlayer_Clear,//ゲームクリア
-		m_enPlayer_GameOver,//ゲームオーバー
-		m_enPlayer3D_Throw,//投げる
-		m_enPlayer3D_Steal,//盗む
-		m_enPlayer3D_Push,//押す
+		m_enPlayer_Idle,		//待機中
+		m_enPlayer_walk,		//歩く
+		m_enPlayer_Run,			//走る
+		m_enPlayer_Jump,		//ジャンプ
+		m_enPlayer_Jumpend,		//ジャンプ終わり
+		m_enPlayer_Change,		//切替
+		m_enPlayer_2DChanging,	//2Dに切替中
+		m_enPlayer_3DChanging,	//3Dに切替中
+		m_enPlayer_Found,		//見つかる
+		m_enPlayer_Caught,		//捕まった
+		m_enPlayer_GostHit,		//透明ブロックに当たる
+		m_enPlayer_Clear,		//ゲームクリア
+		m_enPlayer_GameOver,	//ゲームオーバー
+		m_enPlayer3D_Throw,		//投げる
+		m_enPlayer3D_Steal,		//盗む
+		m_enPlayer3D_Push,		//押す
 
 	};
 	Player();

@@ -41,8 +41,19 @@ public:
 	Quaternion m_rotation;
 private:
 	PhysicsStaticObject m_physicsStaticObj;
-	
+	PhysicsBoxObject m_physicsBoxObj;
+	PhysicsGhostObject m_physicsGhostObj;
 	ModelRender m_wallRender;					//壁モデルの作成
-	CollisionObject m_colliob;					//ボックスコライダーの作成
+	CollisionObject m_colliob;	
+	float posXmax = 0;
+	float posXmin = 1000000.0;
+	float posYmax = 0;
+	float posYmin = 1000000.0;
+	float posZmax = 0;
+	float posZmin = 1000000.0;
+	float posX;
+	float posY;
+	float posZ;
+	Vector3 m_boxSize = Vector3::Zero;//ボックスコライダーの作成
 };
 

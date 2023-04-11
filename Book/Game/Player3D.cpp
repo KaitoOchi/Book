@@ -35,6 +35,9 @@ bool Player3D::Start()
 	m_modelRender= new ModelRender;
 	//マネジメントの呼び出し
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_playerManagement->SetCharacon(m_characon);
+	
+	
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);

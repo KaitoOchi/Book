@@ -14,10 +14,12 @@
 #include "BackGround.h"
 #include "LightSensor.h"
 #include "Wall.h"
+#include "Treasure.h"
+#include "Gost.h"
 Game::Game()
 {
 	//�����蔻���L����
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -56,7 +58,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	//���x���f�U�C������
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
 		//���O��unityChan�Ȃ�
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -79,7 +81,7 @@ void Game::LevelDesign()
 		}
 
 		//���O��background�Ȃ�
-		if (objData.EqualObjectName(L"base") == true) {
+		if (objData.EqualObjectName(L"debug") == true) {
 
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
@@ -88,7 +90,7 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		if (objData.EqualObjectName(L"box") == true) {
+		/*if (objData.EqualObjectName(L"box") == true) {
 
 			m_wall = NewGO<Wall>(0, "wall");
 			m_wall ->SetPosition(objData.position);
@@ -96,7 +98,7 @@ void Game::LevelDesign()
 			m_wall->SetScale(objData.scale);
 
 			return true;
-		}
+		}*/
 		if (objData.EqualObjectName(L"unityChan") == true) {
 
 			m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
@@ -112,10 +114,27 @@ void Game::LevelDesign()
 			//m_trans->SetPosition(objData.position);
 			return true;
 		}
+		if (objData.EqualObjectName(L"item") == true) {
+
+			m_treaSure = NewGO<Treasure>(0, "treaSure");
+			m_treaSure->SetPosition(objData.position);
+			m_treaSure->SetScale(objData.scale);
+			m_treaSure->SetRotation(objData.rotation);
+			return true;
+		}
+		if (objData.EqualObjectName(L"gost") == true) {
+
+			m_gost = NewGO<Gost>(0, "gost");
+			m_gost->SetPosition(objData.position);
+			m_gost->SetScale(objData.scale);
+			m_gost->SetRotation(objData.rotation);
+			return true;
+		}
 		if (objData.EqualObjectName(L"clear") == true) {
 
 			SetClearPosition(objData.position);
-			m_pointLight.SetPosition(Vector3(m_position.x,m_position.y+5.0f,m_position.z));
+
+			m_pointLight.SetPosition(Vector3(m_position.x,m_position.y+10.0f,m_position.z));
 			return true;
 		}
 
