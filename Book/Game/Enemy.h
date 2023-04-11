@@ -41,17 +41,27 @@ public:
 	// アニメーションステート
 	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
-	// エネミーの行動ステート
-	// 必要なければ削除してください。
+	// エネミーの行動パターン
 	enum EnEnemyActState
 	{
-		m_enEnemyActState_Craw,			// 巡回
-		m_enEnemyActState_Tracking,		// 追跡
-		m_enEnemyActState_Waiting,		// 待機
-		m_enEnemyActState_Confusion		// 錯乱
+		CRAW,			// 巡回
+		TRACKING,		// 追跡
+		SEARCH,			// 索敵
+		CHARGE,			// 突進
+		BACKBASEDON,	// 巡回状態に戻る
+		CONFUSION,		// 錯乱
+		CATCH			// 捕獲
 	};
-	// 行動ステート
-	EnEnemyActState m_enEnemyActState = m_enEnemyActState_Craw;
+	/// <summary>
+	/// エネミーの行動パターン。switchで管理してください
+	/// </summary>
+	/// <param name="CRAW">巡回</param>
+	/// <param name="TRACKING">追跡</param>
+	/// <param name="SEARCH">待機</param>
+	/// <param name="CHARGE">突進</param>
+	/// <param name="BACKBASEDON">巡回状態に戻る</param>
+	/// <param name="CONFUSION">錯乱</param>
+	EnEnemyActState m_ActState = CRAW;
 
 
 	// 指定できるパス移動
@@ -67,6 +77,7 @@ public:
 		RECTANGLE_LEFT,					// 左回り(長方形)
 	};
 	EnEnemyPassState PassState;
+
 	/// <summary>
 	/// エネミーの巡回パターンを指定
 	/// </summary>
@@ -163,15 +174,15 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool ChangeFlag = false;				// 追跡⇒巡回の切り替えフラグ
-	bool FindPlayerFlag = false;
-	bool CalculatedFlag = false;
+	bool FindPlayerFlag = false;			
+	bool CalculatedFlag = false;			// 突進用フラグ
 
 	float addTimer = 0.0f;					// 加算するタイマー
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 
 	Vector3 playerPos = Vector3::Zero;		// 突進用
 	Vector3 enemyPos = Vector3::Zero;
+	Vector3 sumPos = Vector3::Zero;			// 総移動距離
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト

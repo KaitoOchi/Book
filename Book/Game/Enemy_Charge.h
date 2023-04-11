@@ -10,9 +10,11 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void Act();							// エネミーの行動パターン
 	void Animation();					// アニメーション
-
+	void Update_OnCraw();				// 巡回
+	void Update_OnCharge();				// 突進
+	void Update_OnBackBasedOn();		// 巡回状態に戻る
+	void Update_OnConfusion();			// 錯乱
 private:
 
 	Enemy* enemy;

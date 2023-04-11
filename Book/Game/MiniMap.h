@@ -2,7 +2,7 @@
 
 class PlayerManagement;
 class Enemy_Normal;
-class Enemy_Serch;
+class Enemy_Search;
 class Enemy_Charge;
 
 namespace
@@ -48,7 +48,7 @@ private:
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
-	Enemy_Serch* m_enemySerch = nullptr;
+	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 
 	bool m_isImage[ENEMY_NUM];						// 表示するかどうかのフラグ。エネミーの数分用意する

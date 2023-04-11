@@ -43,7 +43,24 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	Act();							// 行動パターン
+	switch (m_ActState) {
+	case CRAW:
+		Update_OnCraw();
+		break;
+	case TRACKING:
+		Update_OnTracking();
+		break;
+	case BACKBASEDON:
+		Update_OnBackBasedOn();
+		break;
+	case CONFUSION:
+		Update_OnConfusion();
+		break;
+	case CATCH:
+		Update_OnCatch();
+		break;
+	}
+
 	Animation();					// アニメーション
 
 	m_enemyRender.SetPosition(m_position);
@@ -56,37 +73,58 @@ void Enemy_Normal::Update()
 	m_enemyRender.Update();	// 更新
 }
 
-void Enemy_Normal::Act()
+void Enemy_Normal::Update_OnCraw()
+{
+	Enemy::Act_Craw();				// 巡回行動
+
+	// 視野角にプレイヤーがいるとき
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = TRACKING;
+	}
+
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
+}
+
+void Enemy_Normal::Update_OnTracking()
+{
+	Enemy::Act_Tracking();			// 追跡行動
+
+	// 視野角にプレイヤーがいないとき
+	if (Enemy::Act_SeachPlayer() == false) {
+		m_ActState = BACKBASEDON;
+	}
+
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
+}
+
+void Enemy_Normal::Update_OnBackBasedOn()
+{
+	Enemy::Act_Loss();					// 追跡行動からの切り替え
+	m_ActState = CRAW;
+}
+
+void Enemy_Normal::Update_OnConfusion()
 {
 	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
-	Enemy::Act_Limit();					// 一定以内に近づかない
 
-	// プレイヤーを見つけたとき
-	if (Enemy::Act_SeachPlayer() == true) {
-		Enemy::Act_Tracking();			// 追跡行動
-
-		// 捕まえたとき
-		if (Act_CatchPlayer() == true) {
-
-			m_fontRender.SetText(L"つかまえた");
-			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
-		}
-
-		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
-			ChangeFlag = true;
-		}
+	// 硬直が解けているとき
+	if (HitFlashBulletFlag == false) {
+		m_ActState = BACKBASEDON;
 	}
-	// プレイヤーを見失う　または　閃光弾がヒットしたとき
-	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
+}
 
-		if (ChangeFlag == true) {
-			Enemy::Act_Loss();			// 追跡行動からの切り替え
-			ChangeFlag = false;			// 毎度初回だけ処理を実行する
-		}
-		else{
-			Enemy::Act_Craw();				// 巡回行動
-		}
-	}
+void Enemy_Normal::Update_OnCatch()
+{
+	m_fontRender.SetText(L"つかまえた");
+	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+
+	m_ActState = CRAW;
 }
 
 void Enemy_Normal::Animation()

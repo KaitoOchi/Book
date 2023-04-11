@@ -48,7 +48,23 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
-	Act();			// 行動パターン
+	switch (m_ActState) {
+		// 巡回
+	case CRAW:
+		Update_OnCraw();
+		break;
+		// 突進
+	case CHARGE:
+		Update_OnCharge();
+		break;
+	case BACKBASEDON:
+		Update_OnBackBasedOn();
+		// 錯乱
+	case CONFUSION:
+		Update_OnConfusion();
+		break;
+	}
+
 	Animation();	// アニメーション
 
 	// 更新
@@ -65,29 +81,58 @@ void Enemy_Charge::Update()
 	m_enemyRender.Update();
 }
 
-void Enemy_Charge::Act()
+void Enemy_Charge::Update_OnCraw()
 {
+	// 巡回
+
+	Enemy::Act_Craw();					// 巡回行動
+
+	// 視野角にプレイヤーがいるとき
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = CHARGE;
+	}
+
+	// 閃光弾が当たったとき
+	if (HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+}
+
+void Enemy_Charge::Update_OnCharge()
+{
+	// 突進
+
+	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
+
+	// 視野角にプレイヤーがいないとき
+	if (Enemy::Act_SeachPlayer() == false) {
+		//m_ActState = BACKBASEDON;
+	}
+
+	// 閃光弾が当たったとき
+	if (HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+}
+
+void Enemy_Charge::Update_OnBackBasedOn()
+{
+	// 突進⇒巡回への切り替え
+
+	Enemy::Act_Loss();					// 追跡行動からの切り替え
+
+	m_ActState = CRAW;
+}
+
+void Enemy_Charge::Update_OnConfusion()
+{
+	// 錯乱
+
 	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
 
-	// プレイヤーを発見したとき
-	if (Enemy::Act_SeachPlayer() == true) {
-
-		Act_Charge(STOP_TIMER);		// 突進攻撃
-
-		if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
-			ChangeFlag = true;
-		}
-	}
-	// プレイヤーを見失う　または　閃光弾がヒットしたとき
-	else if (HitFlashBulletFlag == true || Enemy::Act_SeachPlayer() == false) {
-
-		if (ChangeFlag == true) {
-			Enemy::Act_Loss();			// 追跡行動からの切り替え
-			ChangeFlag = false;			// 毎度初回だけ処理を実行する
-		}
-		else {
-			Enemy::Act_Craw();			// 巡回行動
-		}
+	// 閃光弾に当たっていないとき
+	if (HitFlashBulletFlag == false) {
+		m_ActState = CRAW;
 	}
 }
 

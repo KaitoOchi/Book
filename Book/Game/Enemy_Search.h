@@ -1,15 +1,18 @@
 #pragma once
 #include "Enemy.h"
-class Enemy_Serch:public Enemy
+class Enemy_Search:public Enemy
 {
 public:
-	Enemy_Serch();
-	~Enemy_Serch();
+	Enemy_Search();
+	~Enemy_Search();
 	bool Start();
 	void Update();
 	void Rotaition();
 	void LightRotaition();
 	void Render(RenderContext& rc);
+
+	void Update_OnSearch();				// 索敵
+	void Update_OnConfusion();			// 錯乱
 		
 private:
 	//SpotLight m_spotLight;				//スポットライト

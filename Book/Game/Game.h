@@ -6,7 +6,7 @@ class GameCamera;
 class MiniMap;
 class BackGround;
 class Enemy_Normal;
-class Enemy_Serch;
+class Enemy_Search;
 class Enemy_Charge;
 class Game : public IGameObject
 {
@@ -40,7 +40,7 @@ private:
 	LevelRender m_levelRender;
 	MiniMap* m_miniMap = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
-	Enemy_Serch* m_enemySerch = nullptr;
+	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
 };

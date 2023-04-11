@@ -9,7 +9,7 @@
 namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
+	const float		MOVING_DISTANCE = 200.0f;				// 移動距離
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -72,24 +72,47 @@ bool Enemy::Act_SeachPlayer()
 	Vector3 diff = m_playerPos - m_position;
 
 	// プレイヤーにある程度近いとき
-	if (diff.LengthSq() <= SEACH_DECISION) {
-		// エネミーからプレイヤーへ向かうベクトルを正規化
-		diff.Normalize();
-		// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
-		float cos = m_forward.Dot(diff);
-		// 内積から角度を計算
-		float angle = acosf(cos);
-		// 角度が視野角より狭いとき
-		if (angle <= (FIELDOF_VIEW) {
-			// 壁との衝突判定を行う
-			return WallAndHit(m_playerPos);
+	if (FindPlayerFlag == false) {
+		if (diff.LengthSq() <= SEACH_DECISION) {
+			// エネミーからプレイヤーへ向かうベクトルを正規化
+			diff.Normalize();
+			// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
+			float cos = m_forward.Dot(diff);
+			// 内積から角度を計算
+			float angle = acosf(cos);
+			// 角度が視野角より狭いとき
+			if (angle <= (FIELDOF_VIEW) {
+				// 壁との衝突判定を行う
+				
+				//// 壁との衝突判定がtrueのとき
+				//else if (WallAndHit(m_playerPos) == true) {
+				//	FindPlayerFlag = true;
+				//}
 
-			// 壁との衝突判定がfalseのとき
-			if (WallAndHit(m_playerPos) == false) {
-				ChangeFlag = true;
+				return WallAndHit(m_playerPos);
 			}
 		}
 	}
+	//// プレイヤーを発見しているとき
+	//else if (FindPlayerFlag == true) {
+	//	// エネミーからプレイヤーへ向かうベクトルを正規化
+	//	diff.Normalize();
+	//	// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
+	//	float cos = m_forward.Dot(diff);
+	//	// 内積から角度を計算
+	//	float angle = acosf(cos);
+	//	// 角度が視野角より狭いとき
+	//	if (angle <= (FIELDOF_VIEW) {
+	//		// 壁との衝突判定を行う
+	//		// 壁との衝突判定がfalseのとき
+	//		if (WallAndHit(m_playerPos) == false) {
+	//			ChangeFlag = true;
+	//			FindPlayerFlag = false;
+	//		}
+
+	//		return WallAndHit(m_playerPos);
+	//	}
+	//}
 
 	return false;
 }
@@ -395,25 +418,27 @@ void Enemy::Act_Charge(float time)
 		// エネミーの座標に加算
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
-
-		// 移動距離を加算
-		Vector3 movingPos = Vector3::Zero;
-		movingPos += moveSpeed;
+		// 移動量を加算
+		sumPos += moveSpeed;
 
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
 		// 移動距離が一定のとき加算を終了する
-		if (movingPos.Length() >= MOVING_DISTANCE) {
+		if (sumPos.Length() > MOVING_DISTANCE) {
+			
+			m_position = m_position;	// 座標を固定
 
-			// 待機アニメーションを再生
-			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+			addTimer = 0.0f;			// タイマーをリセット
+			sumPos = Vector3::Zero;		// 総移動距離をリセット
+			CalculatedFlag = false;		// フラグを降ろす
 
-			// タイマーをリセット
-			addTimer = 0.0f;
-			CalculatedFlag = false;
+			// プレイヤーが視野角内に存在するとき
+			if (Act_SeachPlayer() == true) {
+				return;
+			}
 
-			return;
+			m_ActState = CRAW;			// 巡回状態に戻る
 		}
 	}
 }
@@ -431,7 +456,7 @@ void Enemy::Act_Loss()
 	int NowTargetNum = -1;
 
 	// 一番近いパスを探す
-	for (int i = 1; i <= m_pointList.size(); i++) {
+	for (int i = 1; i < m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;

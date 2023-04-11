@@ -28,7 +28,7 @@
     <ClCompile Include="Enemy_Normal.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="LightSensor.cpp" />
-    <ClCompile Include="Enemy_Serch.cpp" />
+    <ClCompile Include="Enemy_Search.cpp" />
     <ClCompile Include="Enemy_Charge.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="LightSensor.h" />
-    <ClInclude Include="Enemy_Serch.h" />
+    <ClInclude Include="Enemy_Search.h" />
     <ClInclude Include="Enemy_Charge.h" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@
 #include "SenSor.h"
 #include "MiniMap.h"
 #include "Enemy_Normal.h"
-#include "Enemy_Serch.h"
+#include "Enemy_Search.h"
 #include "Enemy_Charge.h"
 #include "BackGround.h"
 
@@ -56,21 +56,21 @@ void Game::LevelDesign()
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
-
-			// パス移動の指定
-			m_enemyNormal->Pass(0);
-
-			//m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			//m_enemyCharge->SetPosition(objData.position);
-			//m_enemyCharge->SetRotation(objData.rotation);
-			//m_enemyCharge->SetScale(objData.scale);
+			//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//m_enemyNormal->SetPosition(objData.position);
+			//m_enemyNormal->SetRotation(objData.rotation);
+			//m_enemyNormal->SetScale(objData.scale);
 
 			//// パス移動の指定
-			//m_enemyCharge->Pass(7);
+			//m_enemyNormal->Pass(0);
+
+			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			m_enemyCharge->SetPosition(objData.position);
+			m_enemyCharge->SetRotation(objData.rotation);
+			m_enemyCharge->SetScale(objData.scale);
+
+			// パス移動の指定
+			m_enemyCharge->Pass(7);
 
 			return true;
 		}
@@ -85,15 +85,15 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		//if (objData.EqualObjectName(L"unityChan") == true) {
+		if (objData.EqualObjectName(L"unityChan") == true) {
 
-		//	m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
-		//	m_enemySerch->SetPosition(objData.position);
-		//	m_enemySerch->SetRotation(objData.rotation);
-		//	m_enemySerch->SetScale(objData.scale);
+			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			m_enemySearch->SetPosition(objData.position);
+			m_enemySearch->SetRotation(objData.rotation);
+			m_enemySearch->SetScale(objData.scale);
 
-		//	return true;
-		//}
+			return true;
+		}
 		return true;
 		}
 	);
