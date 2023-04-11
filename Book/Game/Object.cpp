@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Object.h"
+#include "PlayerManagement.h"
 
 Object::Object()
 {
@@ -12,6 +13,7 @@ Object::~Object()
 
 bool Object::Start()
 {
+	m_player = FindGO<PlayerManagement>("playerManagement");
 	return true;
 }
 

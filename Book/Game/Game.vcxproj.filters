@@ -71,6 +71,7 @@
     </ClCompile>
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Treasure.cpp" />
+    <ClCompile Include="Gost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -128,5 +129,6 @@
     </ClInclude>
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Treasure.h" />
+    <ClInclude Include="Gost.h" />
   </ItemGroup>
 </Project>
