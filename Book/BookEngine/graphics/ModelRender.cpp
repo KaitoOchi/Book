@@ -32,9 +32,8 @@ namespace nsBookEngine {
 		AnimationClip* animationClips,
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxis,
-		bool isShadowReceiver,
-		D3D12_CULL_MODE m_cullMode,
 		bool isShadow,
+		D3D12_CULL_MODE m_cullMode,
 		int maxInstance)
 	{
 		//スケルトンを初期化。
@@ -44,7 +43,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis, isShadowReceiver, isShadow);
+		InitModel(filePath, enModelUpAxis, isShadow);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -74,21 +73,18 @@ namespace nsBookEngine {
 	void ModelRender::InitModel(
 		const char* tkmFilePath,
 		EnModelUpAxis modelUpAxis,
-		const bool isShadowReceiver,
 		const bool isShadow
 	)
 	{
 		ModelInitData modelInitData;
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_modelUpAxis = modelUpAxis;
-		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 
-		if (isShadowReceiver) {
-			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowRenderTarget().GetRenderTargetTexture();
-		}
+		modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
+		modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowRenderTarget().GetRenderTargetTexture();
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
 		SetupVertexShaderEntryPointFunc(modelInitData);
@@ -96,6 +92,7 @@ namespace nsBookEngine {
 		if (m_skeleton.IsInited()) {
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 
 		//modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -105,21 +102,23 @@ namespace nsBookEngine {
 		if (isShadow) {
 
 			//シャドウ用のモデルを初期化
-			ModelInitData shadowModelInitData;
-			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
-			shadowModelInitData.m_tkmFilePath = tkmFilePath;
-			shadowModelInitData.m_modelUpAxis = modelUpAxis;
+			modelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
+			modelInitData.m_tkmFilePath = tkmFilePath;
+			modelInitData.m_modelUpAxis = modelUpAxis;
+			modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-			if (m_animationClips != nullptr) {
-				//スケルトンを指定する。
-				shadowModelInitData.m_skeleton = &m_skeleton;
-			}
 
 			// 頂点シェーダーのエントリーポイントをセットアップ。
-			SetupVertexShaderEntryPointFunc(shadowModelInitData);
+			SetupVertexShaderEntryPointFunc(modelInitData);
 
-			m_shadowModel.Init(shadowModelInitData);
-			m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+			if (m_skeleton.IsInited()) {
+				//スケルトンを指定する。
+				modelInitData.m_skeleton = &m_skeleton;
+				modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+			}
+
+			m_shadowModel.Init(modelInitData);
+			//m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 	}
 
@@ -139,13 +138,7 @@ namespace nsBookEngine {
 		UpdateWorldMatrixInModes();
 		
 		if (m_skeleton.IsInited()) {
-
-			if (m_model.IsInited()) {
-				m_skeleton.Update(m_model.GetWorldMatrix());
-			}
-			if (m_shadowModel.IsInited()) {
-				m_skeleton.Update(m_shadowModel.GetWorldMatrix());
-			}
+			m_skeleton.Update(m_model.GetWorldMatrix());
 		}
 
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
@@ -158,11 +151,15 @@ namespace nsBookEngine {
 
 	void ModelRender::OnRenderShadowMap(RenderContext& rc)
 	{
-		m_shadowModel.Draw(rc, 1);
+		if (m_shadowModel.IsInited()) {
+			m_shadowModel.Draw(rc, 1);
+		}
 	}
 
 	void ModelRender::OnForwardRender(RenderContext& rc)
 	{
-		m_model.Draw(rc, 1);
+		if (m_model.IsInited()) {
+			m_model.Draw(rc, 1);
+		}
 	}
 }

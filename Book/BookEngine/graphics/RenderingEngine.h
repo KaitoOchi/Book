@@ -21,7 +21,6 @@ namespace nsBookEngine {
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			Matrix mLVP;
-			bool shadowReceiver;
 		};
 
 		//�X�v���C�g�p�萔�o�b�t�@�̍\����
@@ -244,5 +243,6 @@ namespace nsBookEngine {
 		
 		std::vector<IRenderer*> m_renderObjects;
 
+		Camera m_lightCamera;
 	};
 }

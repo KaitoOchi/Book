@@ -34,24 +34,21 @@ namespace nsBookEngine {
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
-		// 影描画用のライトカメラを作成する
-		Camera lightCamera;
 
 		// カメラの位置を設定。これはライトの位置
-		lightCamera.SetPosition(0, 500, 0);
+		m_lightCamera.SetPosition(0, 600, 0);
 
 		// カメラの注視点を設定。これがライトが照らしている場所
-		lightCamera.SetTarget(1, 0, 0);
+		m_lightCamera.SetTarget(0, 0, 0);
 
 		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
-		lightCamera.SetUp(1, 0, 0);
+		m_lightCamera.SetUp(1, -1, 1);
 
-		lightCamera.SetViewAngle(Math::DegToRad(20.0f));
+		//m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
 
 		// ライトビュープロジェクション行列を計算している
-		lightCamera.Update();
-		m_lightCB.mLVP = lightCamera.GetViewProjectionMatrix();
-		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
+		m_lightCamera.Update();
+		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 
 		//メインレンダーターゲットを設定
 		m_mainRenderTarget.Create(
@@ -125,7 +122,7 @@ namespace nsBookEngine {
 			1024,
 			1,
 			1,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT,
 			clearColor
 		);
@@ -136,8 +133,15 @@ namespace nsBookEngine {
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 
-		//m_lightCB.mLVP = g_camera3D->GetViewProjectionMatrix();
-
+		// カメラの位置を設定
+		//m_lightCamera.SetPosition(g_camera3D->GetPosition());
+		m_lightCamera.SetPosition(Vector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y + 200.0f, g_camera3D->GetPosition().z));
+		//m_lightCamera.SetTarget(g_camera3D->GetTarget());
+		m_lightCamera.SetTarget(g_camera3D->GetTarget().x, g_camera3D->GetTarget().y + 100.0f, g_camera3D->GetTarget().z);
+		m_lightCamera.Update();
+		//m_lightCamera.SetUp(g_camera3D->GetUp());
+		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
+		
 		RenderShadowMap(rc);
 
 		ForwardRendering(rc);
@@ -156,23 +160,18 @@ namespace nsBookEngine {
 		rc.SetRenderTargetAndViewport(m_shadowMapRenderTarget);
 		rc.ClearRenderTargetView(m_shadowMapRenderTarget);
 
-		m_lightCB.shadowReceiver = true;
-
 		//�I�u�W�F�N�g�̕`��
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRenderShadowMap(rc);
 		}
 
-		m_lightCB.shadowReceiver = false;
-
-
 		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
 
-		rc.SetRenderTarget(
-			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
-			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
-		);
-		rc.SetViewportAndScissor(g_graphicsEngine->GetFrameBufferViewport());
+		//rc.SetRenderTarget(
+		//	g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+		//	g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+		//);
+		//rc.SetViewportAndScissor(g_graphicsEngine->GetFrameBufferViewport());
 	}
 
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
