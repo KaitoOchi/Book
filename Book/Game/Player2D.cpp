@@ -29,7 +29,9 @@ bool Player2D::Start()
 	//モデルの読み込み
 	m_modelRender->Init("Assets/modelData/player/player2D.tkm");
 	m_modelRender->SetScale(MODELSIZE);
+	
 	m_characon->Init(BOXSIZE, m_position);
+
 	m_player2D[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.DDS");
 	m_player2D[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.DDS");
 	m_player2D[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.DDS");

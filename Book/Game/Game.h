@@ -11,6 +11,8 @@ class TransparentBox;
 class Enemy_Charge;
 class PlayerManagement;
 class Wall;
+class Treasure;
+class Gost;
 class Game : public IGameObject
 {
 public:
@@ -65,7 +67,9 @@ private:
 	TransparentBox *m_trans = nullptr;
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
-
+	Treasure* m_treaSure = nullptr;
+	Gost* m_gost = nullptr;
+	
 	PointLight m_pointLight;
 
 	
