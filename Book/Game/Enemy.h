@@ -25,8 +25,17 @@ public:
 	bool Act_Stop(float time);			// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
+	void Act_Call();					// 周りの敵を呼ぶ
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
+
+	enum EnemyType
+	{
+		Normal,
+		Charge,
+		Search
+	};
+	EnemyType m_enemyType;
 
 	// エネミーのアニメーションステート
 	// 継承した派生クラスでアニメーションを読み込み、関数を呼ぶと再生されます。

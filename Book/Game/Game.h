@@ -5,6 +5,7 @@ class Player2D;
 class GameCamera;
 class MiniMap;
 class BackGround;
+class Enemy;
 class Enemy_Normal;
 class Enemy_Search;
 class Enemy_Charge;
@@ -43,5 +44,7 @@ private:
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
+
+	std::vector<Enemy*> m_enemyList;
 };
 
