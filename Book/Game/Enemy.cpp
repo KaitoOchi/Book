@@ -438,7 +438,7 @@ void Enemy::Act_Charge(float time)
 				return;
 			}
 
-			m_ActState = CRAW;			// 巡回状態に戻る
+			m_ActState = BACKBASEDON;
 		}
 	}
 }
@@ -456,7 +456,7 @@ void Enemy::Act_Loss()
 	int NowTargetNum = -1;
 
 	// 一番近いパスを探す
-	for (int i = 1; i < m_pointList.size(); i++) {
+	for (int i = 0; i < m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
@@ -479,20 +479,8 @@ void Enemy::Act_Loss()
 	moveSpeed.Normalize();
 	// ベクトルにスカラーを乗算
 	moveSpeed *= MOVE_SPEED;
-
-
-	// タイマーがtrueのとき
-	if (WallAndHit(m_position) == false) {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		// 座標に加算する
-		m_position += moveSpeed;
-	}
-	// そうでないとき
-	else {
-		// 歩きアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
-	}
+	// 回転を教える
+	Rotation(moveSpeed);
 
 	return;
 }

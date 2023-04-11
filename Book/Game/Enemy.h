@@ -63,7 +63,6 @@ public:
 	/// <param name="CONFUSION">ö—</param>
 	EnEnemyActState m_ActState = CRAW;
 
-
 	// w’è‚Å‚«‚éƒpƒXˆÚ“®
 	enum EnEnemyPassState
 	{

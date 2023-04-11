@@ -103,11 +103,7 @@ void Enemy_Charge::Update_OnCharge()
 	// 突進
 
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
-
-	// 視野角にプレイヤーがいないとき
-	if (Enemy::Act_SeachPlayer() == false) {
-		//m_ActState = BACKBASEDON;
-	}
+										// 関数内で巡回状態に戻る処理を記述
 
 	// 閃光弾が当たったとき
 	if (HitFlashBulletFlag == true) {
@@ -120,7 +116,6 @@ void Enemy_Charge::Update_OnBackBasedOn()
 	// 突進⇒巡回への切り替え
 
 	Enemy::Act_Loss();					// 追跡行動からの切り替え
-
 	m_ActState = CRAW;
 }
 
@@ -132,7 +127,7 @@ void Enemy_Charge::Update_OnConfusion()
 
 	// 閃光弾に当たっていないとき
 	if (HitFlashBulletFlag == false) {
-		m_ActState = CRAW;
+		m_ActState = BACKBASEDON;
 	}
 }
 

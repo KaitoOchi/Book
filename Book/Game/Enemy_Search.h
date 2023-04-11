@@ -20,4 +20,3 @@ private:
 	bool m_rotState=true;				//‰ñ“]‚ÌŒü‚«‚ÌØ‘Ö
 	float m_rotTime = 2.0f;
 };
-
