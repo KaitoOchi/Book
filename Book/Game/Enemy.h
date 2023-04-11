@@ -5,6 +5,7 @@
 #include "AI/PathFinding/PathFinding.h"
 
 class PlayerManagement;
+class GameUI;
 class Enemy :public IGameObject
 {
 public:
@@ -28,6 +29,8 @@ public:
 	void Act_Call();					// 周りの敵を呼ぶ
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
+	void VigilanceCount();				//
+
 
 	enum EnemyType
 	{
@@ -167,6 +170,7 @@ protected:
 	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
 
 	PlayerManagement* m_playerManagement = nullptr;
+	GameUI* m_gameUI = nullptr;
 
 	CharacterController m_characterController;
 
@@ -194,4 +198,6 @@ protected:
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
+
+	float m_Vicount;						//警戒度を一定回数増やす
 };

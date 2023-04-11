@@ -28,9 +28,10 @@ namespace nsBookEngine {
 		void SetPosition(const Vector3& pos)
 		{
 			m_pointLig.ptPosition = pos;
+			//g_camera3D->GetViewMatrix().Apply(m_pointLig.ptPosition);
 		}
 
-		/// <summary>
+		/// <sSummary>
 		/// À•W‚ğæ“¾B
 		/// </summary>
 		/// <returns></returns>

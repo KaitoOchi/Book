@@ -43,7 +43,7 @@
       <Filter>graphics</Filter>
     </ClInclude>
     <ClInclude Include="collision\CollisionObject.h">
-      <Filter>graphics</Filter>
+      <Filter>collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

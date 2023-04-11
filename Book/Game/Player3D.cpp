@@ -6,6 +6,7 @@
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
+	const Vector3 COLLIBOX{ 40.0f,70.0f,40.0f };//コリジョンの大きさ
 }
 Player3D::Player3D()
 {
@@ -15,15 +16,28 @@ Player3D::~Player3D()
 {
 	delete(m_characon);
 	delete(m_modelRender);
+	delete(m_collisionObject);
 }
 bool Player3D::Start()
 {
 	m_characon = new CharacterController;
 	Player::Start();
+
+	//キャラコンやコリジョンの作成
 	m_characon->Init(BOXSIZE, m_position);
+	m_collisionObject->CreateBox(
+	    Vector3(m_position.x,m_position.y+70.0f,m_position.z),
+		Quaternion::Identity,
+		COLLIBOX
+		);
+	m_collisionObject->SetIsEnableAutoDelete(false);
+
 	m_modelRender= new ModelRender;
 	//マネジメントの呼び出し
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_playerManagement->SetCharacon(m_characon);
+	
+	
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
@@ -40,7 +54,7 @@ bool Player3D::Start()
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	//モデルを読み込む
-	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num);
+	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);
@@ -58,17 +72,23 @@ void Player3D::Update()
 	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 	Player::Update();
 	Animation();
-	if (g_pad[0]->IsTrigger(enButtonRB1))
+	//アイテムを投げる
+	if (g_pad[0]->IsTrigger(enButtonRB1)&&m_playerState!=m_enAnimationClip_Jump)
 	{
 		Throw();
 	}
+	//お宝を盗む演出を入れる
+	// 
 	//プレイヤーの移動を継承する。
 	//キャラコンで座標を移動させる。
 	m_characon->SetPosition(m_position);
+	m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();
+	m_collisionObject->Update();
+
 }
 void Player3D::Throw()
 {

@@ -1,42 +1,43 @@
-/*!
- * @brief	�X�v���C�g�p�̃V�F�[�_�[�B
- */
-
-cbuffer cb : register(b0){
-	float4x4 mvp;		//���[���h�r���[�v���W�F�N�V�����s��B
-	float4 mulColor;	//��Z�J���[�B
-};
-struct VSInput{
-	float4 pos : POSITION;
-	float2 uv  : TEXCOORD0;
+cbuffer cb : register(b0)
+{
+    float4x4 mvp;
+    float4 mulColor;
 };
 
-struct PSInput{
-	float4 pos : SV_POSITION;
-	float2 uv  : TEXCOORD0;
-};
-
-//スプライト用構造体データ
 cbuffer SpriteCB : register(b1)
 {
-	float clipSize;
-}
+    float clipSize;
+};
 
-Texture2D<float4> colorTexture : register(t0);	//�J���[�e�N�X�`���B
+struct VSInput
+{
+    float4 pos : POSITION;
+    float2 uv  : TEXCOORD0;
+};
+
+struct PSInput
+{
+    float4 pos : SV_POSITION;
+    float2 uv  : TEXCOORD0;
+};
+
+Texture2D<float4> albedoTexture : register(t0); // アルベド
 sampler Sampler : register(s0);
 
-PSInput VSMain(VSInput In) 
+PSInput VSMain(VSInput In)
 {
-	PSInput psIn;
-	psIn.pos = mul( mvp, In.pos );
-	psIn.uv = In.uv;
-	return psIn;
+    PSInput psIn;
+    psIn.pos = mul(mvp, In.pos);
+    psIn.uv = In.uv;
+    return psIn;
 }
-float4 PSMain( PSInput In ) : SV_Target0
+
+float4 PSMain(PSInput In) : SV_Target0
 {
-	float4 color = colorTexture.Sample(Sampler, In.uv) * mulColor;
+    // step-7 G-Bufferの内容を使ってライティング
+    float4 albedo = albedoTexture.Sample(Sampler, In.uv);
 
 	clip(In.pos.y - clipSize);
 
-	return color;
+    return albedo;
 }

@@ -1,7 +1,5 @@
 #pragma once
 #include "PlayerManagement.h"
-
-
 class Object : public IGameObject
 {
 public:
@@ -44,6 +42,24 @@ public:
 	const Quaternion& GetRotation()
 	{
 		return m_rotation;
+	}
+
+	/// <summary>
+	/// ‘å‚«‚³‚ğİ’èB
+	/// </summary>
+	/// <param name="rot"></param>
+	void SetScale(const Vector3& scl)
+	{
+		m_scale = scl;
+	}
+
+	/// <summary>
+	/// ‘å‚«‚³‚ğæ“¾B
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetScale()
+	{
+		return m_scale;
 	}
 
 	/// <summary>

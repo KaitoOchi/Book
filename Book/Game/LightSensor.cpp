@@ -18,7 +18,7 @@ bool LightSensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
 
-	m_position = Vector3(-80.0f, 50.0f, 0.0f);
+	m_position = Vector3(-80.0f, 100.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 1.0f);
 
 	m_isActive = false;
@@ -86,5 +86,5 @@ void LightSensor::Render(RenderContext& rc)
 	if (m_isActive)
 		m_modelRender.Draw(rc);
 
-	m_fontRender.Draw(rc);
+	//m_fontRender.Draw(rc);
 }

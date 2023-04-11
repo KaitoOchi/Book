@@ -31,7 +31,7 @@ namespace nsBookEngine{
 				Vector3 diff = playerPos - colPos;
 
 				//ベクトルの長さが小さかったら。
-				if (diff.Length() <= m_spotLig.spRange/10) {
+				if (diff.Length() <= m_spotLig.spRange/5) {
 
 					return true;
 				}

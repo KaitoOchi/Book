@@ -13,16 +13,17 @@ namespace nsBookEngine {
 	class RenderingEngine
 	{
 	public:
-		//ƒ‰ƒCƒg—p’è”ƒoƒbƒtƒ@‚Ì\‘¢‘Ì
+		//ï¿½ï¿½ï¿½Cï¿½gï¿½pï¿½è”ï¿½oï¿½bï¿½tï¿½@ï¿½Ì\ï¿½ï¿½ï¿½ï¿½
 		struct LightCB
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig;
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
+			Matrix mLVP;
 		};
 
-		//ƒXƒvƒ‰ƒCƒg—p’è”ƒoƒbƒtƒ@‚Ì\‘¢‘Ì
+		//ï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½gï¿½pï¿½è”ï¿½oï¿½bï¿½tï¿½@ï¿½Ì\ï¿½ï¿½ï¿½ï¿½
 		struct SpriteCB
 		{
 			float clipSize;
@@ -34,7 +35,7 @@ namespace nsBookEngine {
 
 	public:
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìì¬B
+		/// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½Ìì¬ï¿½B
 		/// </summary>
 		static void CreateInstance()
 		{
@@ -42,14 +43,14 @@ namespace nsBookEngine {
 			m_instance->Init();
 		}
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì”jŠüB
+		/// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½Ì”jï¿½ï¿½ï¿½B
 		/// </summary>
 		static void DeleteInstance()
 		{
 			delete m_instance;
 		}
 		/// <summary>
-		/// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾B
+		/// ï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½æ“¾ï¿½B
 		/// </summary>
 		/// <returns></returns>
 		static RenderingEngine* GetInstance()
@@ -58,7 +59,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// •`‰æƒIƒuƒWƒFƒNƒg‚ğ’Ç‰ÁB
+		/// ï¿½`ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½Ç‰ï¿½ï¿½B
 		/// </summary>
 		/// <param name="renderObject"></param>
 		void AddRenderObject(IRenderer* renderObject)
@@ -67,10 +68,10 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒfƒBƒŒƒNƒVƒ‡ƒ“ƒ‰ƒCƒg‚ğİ’èB
+		/// ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½İ’ï¿½B
 		/// </summary>
-		/// <param name="dir">ƒ‰ƒCƒg‚Ì•ûŒü</param>
-		/// <param name="color">ƒ‰ƒCƒg‚ÌƒJƒ‰[</param>
+		/// <param name="dir">ï¿½ï¿½ï¿½Cï¿½gï¿½Ì•ï¿½ï¿½ï¿½</param>
+		/// <param name="color">ï¿½ï¿½ï¿½Cï¿½gï¿½ÌƒJï¿½ï¿½ï¿½[</param>
 		void SetDirectionLight(const Vector3& dir, const Vector3 color)
 		{
 			m_directionLig.SetDirection(dir);
@@ -78,16 +79,16 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ŠÂ‹«Œõ‚ğİ’èB
+		/// ï¿½Â‹ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½B
 		/// </summary>
-		/// <param name="amb">ŠÂ‹«Œõ</param>
+		/// <param name="amb">ï¿½Â‹ï¿½ï¿½ï¿½</param>
 		void SetAmbient(const float amb)
 		{
 			m_directionLig.SetAmbientLight(amb);
 		}
 
 		/// <summary>
-		/// ƒ|ƒCƒ“ƒgƒ‰ƒCƒg‚ğİ’è
+		/// ï¿½|ï¿½Cï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½İ’ï¿½
 		/// </summary>
 		/// <param name="ptlig"></param>
 		void SetPointLight(PointLight::pointLight& ptlig)
@@ -99,7 +100,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ğİ’è
+		/// ï¿½Xï¿½|ï¿½bï¿½gï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½İ’ï¿½
 		/// </summary>
 		/// <param name="spLig"></param>
 		void SetSpotLight(SpotLight::spotLight& spLig)
@@ -112,11 +113,11 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ”¼‹…ƒ‰ƒCƒg‚ğİ’èB
+		/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½İ’ï¿½B
 		/// </summary>
-		/// <param name="grdColor">Æ‚è•Ô‚µ‚Ìƒ‰ƒCƒgRGBB0.0f`1.0f‚ÌŠÔ</param>
-		/// <param name="skyColor">“V‹…ƒ‰ƒCƒgRGBB0.0f`1.0f‚ÌŠÔ</param>
-		/// <param name="grdNormal">’n–Ê‚Ì–@ü0.0f`1.0f‚ÌŠÔ</param>
+		/// <param name="grdColor">ï¿½Æ‚ï¿½Ô‚ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½gRGBï¿½B0.0fï¿½`1.0fï¿½ÌŠï¿½</param>
+		/// <param name="skyColor">ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½gRGBï¿½B0.0fï¿½`1.0fï¿½ÌŠï¿½</param>
+		/// <param name="grdNormal">ï¿½nï¿½Ê‚Ì–@ï¿½ï¿½0.0fï¿½`1.0fï¿½ÌŠï¿½</param>
 		void SetHemiSphereLight(const Vector3& grdColor, const Vector3& skyColor, const Vector3& grdNormal)
 		{
 			m_hemiSphereLig.SetGroundColor(grdColor);
@@ -125,7 +126,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒ‰ƒCƒg—p‚Ì\‘¢‘Ì‚ğæ“¾B
+		/// ï¿½ï¿½ï¿½Cï¿½gï¿½pï¿½Ì\ï¿½ï¿½ï¿½Ì‚ï¿½æ“¾ï¿½B
 		/// </summary>
 		LightCB& GetLightCB()
 		{
@@ -133,7 +134,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒXƒvƒ‰ƒCƒg—p‚Ì\‘¢‘Ì‚ğæ“¾B
+		/// ï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½gï¿½pï¿½Ì\ï¿½ï¿½ï¿½Ì‚ï¿½æ“¾ï¿½B
 		/// </summary>
 		/// <returns></returns>
 		SpriteCB& GetSpriteCB()
@@ -142,7 +143,16 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ƒuƒ‹[ƒ€‚ª”­¶‚·‚éè‡’l‚ğİ’è
+		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ç”¨ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’å–å¾—ã€‚
+		/// </summary>
+		/// <returns></returns>
+		RenderTarget& GetShadowRenderTarget()
+		{
+			return m_shadowMapRenderTarget;
+		}
+
+		/// <summary>
+		/// ï¿½uï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è‡’lï¿½ï¿½İ’ï¿½
 		/// </summary>
 		void SetBloomThreshold(const float threshold)
 		{
@@ -152,42 +162,66 @@ namespace nsBookEngine {
 		void Init();
 
 		/// <summary>
-		/// Àsˆ—B
+		/// ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <param name="rc"></param>
 		void Execute(RenderContext& rc);
 
 	private:
 		/// <summary>
-		/// 2D•`‰æ—p‚ÌƒŒƒ“ƒ_\ƒ^[ƒQƒbƒg‚ğ‰Šú‰»
+		/// 2Dï¿½`ï¿½ï¿½pï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½\ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		/// </summary>
 		void Init2DRenderTarget();
 
 		/// <summary>
-		/// ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚ÌƒJƒ‰[ƒoƒbƒtƒ@‚Ì“à—e‚ğ
-		/// ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÉƒRƒs[‚·‚é‚½‚ß‚ÌƒXƒvƒ‰ƒCƒg‚ğ‰Šú‰»‚·‚é
+		/// ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½vï¿½pï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		void InitCopyMainRenderTargetToFrameBufferSprite();
+		void InitShadowMapRenderTarget();
 
 		/// <summary>
-		/// ƒtƒHƒ[ƒhƒŒƒ“ƒ_ƒŠƒ“ƒO‚Ìˆ—B
+		/// ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ÌƒJï¿½ï¿½ï¿½[ï¿½oï¿½bï¿½tï¿½@ï¿½Ì“ï¿½eï¿½ï¿½
+		/// ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½ÉƒRï¿½sï¿½[ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÌƒXï¿½vï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		/// </summary>
+		void InitGBuffer();
+
+		/// <summary>
+		/// ï¿½fï¿½Bï¿½tï¿½@ï¿½[ï¿½hï¿½ï¿½ï¿½Cï¿½eï¿½Bï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+		/// </summary>
+		void InitDefferedLighting();
+
+		/// <summary>
+		/// ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½vï¿½Ìï¿½ï¿½ï¿½ï¿½B
+		/// </summary>
+		/// <param name="rc"></param>
+		void RenderShadowMap(RenderContext& rc);
+
+		/// <summary>
+		/// ï¿½tï¿½Hï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
 		/// <param name="rc"></param>
 		void ForwardRendering(RenderContext& rc);
 
 		/// <summary>
-		/// 2D•`‰æ
+		/// GBufferï¿½Ìï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="rc">ƒŒƒ“ƒ_ƒŠƒ“ƒOƒRƒ“ƒeƒLƒXƒg</param>
-		void Render2D(RenderContext& rc);
+		/// <param name="rc"></param>
+		void RenderToGBuffer(RenderContext& rc);
 
 		/// <summary>
-		/// ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚Ì“à—e‚ğƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÉƒRƒs[‚·‚é
+		/// ï¿½fï¿½Bï¿½tï¿½@ï¿½[ï¿½hï¿½ï¿½ï¿½Cï¿½eï¿½Bï¿½ï¿½ï¿½Oï¿½Ìï¿½ï¿½ï¿½ï¿½B
 		/// </summary>
-		/// <param name="rc">ƒŒƒ“ƒ_ƒŠƒ“ƒOƒRƒ“ƒeƒLƒXƒg</param>
-		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
+		/// <param name="rc"></param>
+		void DeferredLighting(RenderContext& rc);
+
+		/// <summary>
+		/// 2Dï¿½`ï¿½ï¿½
+		/// </summary>
+		/// <param name="rc">ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½g</param>
+		void Render2D(RenderContext& rc);
 
 	private:
+
+
 		static RenderingEngine* m_instance;
 
 		LightCB m_lightCB;
@@ -198,12 +232,17 @@ namespace nsBookEngine {
 
 		Bloom m_bloom;
 
-		RenderTarget m_mainRenderTarget;								//ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg
+		RenderTarget m_mainRenderTarget;								//ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½^ï¿½[ï¿½Qï¿½bï¿½g
 
-		RenderTarget m_2DRenderTarget;                                  //2D•`‰æ—p‚ÌƒŒƒ“ƒ_\ƒ^[ƒQƒbƒg
-		Sprite m_2DSprite;                                              //2D‡¬—p‚ÌƒXƒvƒ‰ƒCƒg
+		RenderTarget m_2DRenderTarget;                                  //2Dï¿½`ï¿½ï¿½pï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½\ï¿½^ï¿½[ï¿½Qï¿½bï¿½g
+		Sprite m_2DSprite;                                              //2Dï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ÌƒXï¿½vï¿½ï¿½ï¿½Cï¿½g
 		Sprite m_mainSprite;
-		Sprite m_copyMainRtToFrameBufferSprite;                         // ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚ğƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÉƒRƒs[‚·‚é‚½‚ß‚ÌƒXƒvƒ‰ƒCƒg
+		Sprite m_copyMainRtToFrameBufferSprite;                         // ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½bï¿½tï¿½@ï¿½ÉƒRï¿½sï¿½[ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÌƒXï¿½vï¿½ï¿½ï¿½Cï¿½g
+		
+		RenderTarget m_shadowMapRenderTarget;							//ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½vï¿½pï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½[ï¿½^ï¿½[ï¿½Qï¿½bï¿½g
+		
 		std::vector<IRenderer*> m_renderObjects;
+
+		Camera m_lightCamera;
 	};
 }
