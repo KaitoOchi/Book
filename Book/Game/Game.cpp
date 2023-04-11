@@ -8,8 +8,9 @@
 #include "Title.h"
 #include "SenSor.h"
 #include "MiniMap.h"
+#include "Enemy.h"
 #include "Enemy_Normal.h"
-#include "Enemy_Serch.h"
+#include "Enemy_Search.h"
 #include "Enemy_Charge.h"
 #include "BackGround.h"
 #include "LightSensor.h"
@@ -18,7 +19,7 @@
 #include "Gost.h"
 Game::Game()
 {
-	//ï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
+	//E½E½E½E½E½è”»E½E½E½LE½E½E½E½
 	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
@@ -57,10 +58,10 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½fï¿½Uï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//E½E½E½xE½E½E½fE½UE½CE½E½E½E½E½E½
 	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
-		//ï¿½ï¿½ï¿½Oï¿½ï¿½unityChanï¿½È‚ï¿½
+		//E½E½E½OE½E½unityChanE½È‚ï¿½
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
@@ -69,7 +70,7 @@ void Game::LevelDesign()
 			//m_enemyNormal->SetRotation(objData.rotation);
 			//m_enemyNormal->SetScale(objData.scale);
 
-			//// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½Ìwï¿½ï¿½
+			//// E½pE½XE½Ú“ï¿½E½ÌwE½E½
 			//m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
@@ -77,12 +78,65 @@ void Game::LevelDesign()
 			m_enemyCharge->SetRotation(objData.rotation);
 			m_enemyCharge->SetScale(objData.scale);
 
+			// ƒpƒXˆÚ“®‚Ìw’è
+			m_enemyCharge->Pass(7);
+
 			return true;
 		}
 
-		//ï¿½ï¿½ï¿½Oï¿½ï¿½backgroundï¿½È‚ï¿½
+		// –¼‘O‚ª EnemyNormal ‚È‚ç
+		if (objData.ForwardMatchName(L"EnemyNormal") == true) {
+
+			// ƒGƒlƒ~[‚ğ¶¬
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			// ©g‚ª Normal ‚Å‚ ‚é‚Æ‹³‚¦‚é
+			m_enemyNormal->m_enemyType = Enemy::Normal;
+			// À•WA‰ñ“]AƒXƒP[ƒ‹‚Ìİ’è
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
+			// ƒpƒXˆÚ“®‚Ìw’è
+			m_enemyNormal->Pass(0);
+			// Enemy‚ÌƒŠƒXƒg‚É’Ç‰Á
+			m_enemyList.push_back(m_enemyNormal);
+		}
+
+		// –¼‘O‚ª EnemyCharge ‚È‚ç
+		if (objData.ForwardMatchName(L"EnemyCharge") == true) {
+
+			// ƒGƒlƒ~[‚ğ¶¬
+			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			// ©g‚ª Charge ‚Å‚ ‚é‚Æ‹³‚¦‚é
+			m_enemyCharge->m_enemyType = Enemy::Charge;
+			// À•WA‰ñ“]AƒXƒP[ƒ‹‚Ìİ’è
+			m_enemyCharge->SetPosition(objData.position);
+			m_enemyCharge->SetRotation(objData.rotation);
+			m_enemyCharge->SetScale(objData.scale);
+			// ƒpƒXˆÚ“®‚Ìw’è
+			m_enemyCharge->Pass(7);
+			// Enemy‚ÌƒŠƒXƒg‚É’Ç‰Á
+			m_enemyList.push_back(m_enemyCharge);
+		}
+
+		// –¼‘O‚ª EnemySearch ‚È‚ç
+		if(objData.ForwardMatchName(L"EnemySearch") == true) {
+
+			// ƒGƒlƒ~[‚ğ¶¬
+			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			// ©g‚ª Charge ‚Å‚ ‚é‚Æ‹³‚¦‚é
+			m_enemySearch->m_enemyType = Enemy::Search;
+			// À•WA‰ñ“]AƒXƒP[ƒ‹‚Ìİ’è
+			m_enemySearch->SetPosition(objData.position);
+			m_enemySearch->SetRotation(objData.rotation);
+			m_enemySearch->SetScale(objData.scale);
+			// Enemy‚ÌƒŠƒXƒg‚É’Ç‰Á
+			m_enemyList.push_back(m_enemyCharge);
+		}
+
+		//–¼‘O‚ªbackground‚È‚ç
 		if (objData.EqualObjectName(L"debug") == true) {
 
+			// ”wŒi‚ğ¶¬
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
@@ -101,10 +155,10 @@ void Game::LevelDesign()
 		}*/
 		if (objData.EqualObjectName(L"unityChan") == true) {
 
-			m_enemySerch = NewGO<Enemy_Serch>(0, "enemySerch");
-			m_enemySerch->SetPosition(objData.position);
-			m_enemySerch->SetRotation(objData.rotation);
-			m_enemySerch->SetScale(objData.scale);
+			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			m_enemySearch->SetPosition(objData.position);
+			m_enemySearch->SetRotation(objData.rotation);
+			m_enemySearch->SetScale(objData.scale);
 
 			return true;
 		}
