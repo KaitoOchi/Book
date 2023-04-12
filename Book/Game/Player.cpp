@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
+#include "Ghost.h"
 namespace
 {
 	const float WALK = 40.0f;//•à‚«‚ÌæZ—Ê
@@ -25,6 +26,7 @@ bool Player::Start()
 {
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
+	m_ghost = FindGO<Ghost>("ghost");
 	return true;
 }
 
@@ -113,6 +115,22 @@ void Player::Rotation()
 	
 	//SetRotation‚ğg—p‚·‚é
 	m_rotation.SetRotationY(-angle);
+}
+
+void Player::GhostHit()
+{
+	float NowTargetDiff = D3D12_FLOAT32_MAX;
+	for (const auto& ghostposition : m_ghostpositions)
+	{
+		Vector3 diff = ghostposition - GetPosition();
+		float lenght = diff.Length();
+		if (NowTargetDiff > lenght)
+		{
+			NowTargetDiff = lenght;
+			m_ghostPosition = ghostposition;
+			m_keepGhostPosition = ghostposition;
+		}
+	}
 }
 void Player::ProcessCommonStateTransition()
 {

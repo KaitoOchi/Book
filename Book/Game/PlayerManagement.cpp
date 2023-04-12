@@ -13,9 +13,9 @@ PlayerManagement::~PlayerManagement()
 }
 bool PlayerManagement::Start()
 {
+	Player::Start();
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
-	m_ghost = FindGO<Ghost>("ghost");
 	return true;
 }
 void PlayerManagement::Update()
@@ -69,27 +69,9 @@ void PlayerManagement::PlayerChange3D()
 			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
 				GhostHit();
+				m_player3D->SetPosition(m_ghostPosition);
 			}
 		});
 	//ƒvƒŒƒCƒ„[‚ð‚RD‚É‚·‚é
 	m_enMnanagementState = m_enPlayer_3DChanging;
-}
-
-void PlayerManagement::GhostHit()
-{
-	float NowTargetDiff = D3D12_FLOAT32_MAX;
-	for (const auto& ghostposition :m_ghostpositions)
-	{
-		Vector3 diff = ghostposition-GetPosition();
-		float lenght=diff.Length();
-		if (NowTargetDiff > lenght)
-		{
-			NowTargetDiff = lenght;
-			m_ghostPosition = ghostposition;
-			m_keepGhostPosition = ghostposition;
-		}
-	}
-
-	m_player3D->SetPosition(m_ghostPosition);
-	
 }

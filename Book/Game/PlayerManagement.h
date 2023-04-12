@@ -4,7 +4,6 @@
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class Ghost;
 class PlayerManagement:public Player
 {
 public:
@@ -55,13 +54,6 @@ public:
 		m_enPlayer_3DChanging,//3Dに切替中
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
-
-	/// <summary>
-	/// 透明ブロックの当たり判定
-	/// </summary>
-	void GhostHit();
-
-	std::vector<Vector3> m_ghostpositions;
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
 	Vector3 m_keepGhostPosition=Vector3::Zero;
@@ -70,6 +62,6 @@ private:
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
 	
-	Ghost* m_ghost = nullptr;
+	
 };
 

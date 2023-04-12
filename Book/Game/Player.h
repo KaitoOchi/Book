@@ -1,6 +1,7 @@
 #pragma once
 class PlayerManagement;
 class GameCamera;
+class Ghost;
 class Player : public IGameObject
 {
 public:
@@ -54,6 +55,7 @@ public:
 		return m_collisionObject;
 	}
 	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
+	std::vector<Vector3> m_ghostpositions;
 protected:
 	virtual void Update();
 	void Move();
@@ -128,6 +130,12 @@ protected:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition();
+	/// <summary>
+	/// 透明ブロックの当たり判定
+	/// </summary>
+	void GhostHit();
+
+	
 	
 	bool m_characonState = true;								//キャラコンを作るかどうか
 
@@ -142,9 +150,12 @@ protected:
 	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
 	Quaternion m_rotation;										//回転
 	CharacterController *m_characon;							//キャラコン
-	
+	Ghost* m_ghost = nullptr;
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
+
+	Vector3 m_ghostPosition = Vector3::Zero;
+	Vector3 m_keepGhostPosition = Vector3::Zero;
 };
