@@ -212,6 +212,15 @@ float4 PSMain(SPSIn In) : SV_Target0
 }
 
 /// <summary>
+/// シャドウマップ描画用のピクセルシェーダー
+/// </summary>
+float4 PSShadowMain(SPSIn psIn) : SV_Target0
+{
+    //シャドウマップ描画用のピクセルシェーダーを実装
+    return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
+}
+
+/// <summary>
 /// Lambert拡散反射光を計算する
 /// </summary>
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal)
