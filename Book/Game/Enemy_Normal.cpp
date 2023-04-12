@@ -114,7 +114,7 @@ void Enemy_Normal::Update_OnTracking()
 
 void Enemy_Normal::Update_OnCalled()
 {
-	Enemy::Act_Access();
+	//Enemy::Act_Access();
 }
 
 void Enemy_Normal::Update_OnBackBasedOn()

@@ -70,9 +70,8 @@ void Enemy_Search::Update_OnCall()
 {
 	// Žü‚è‚Ì“G‚ðŒÄ‚Ô
 
-	Enemy::Act_Call();
-
 	Enemy::SpotLight_Serch(m_rot, m_position);
+	Enemy::Act_Call();
 
 	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
 	if (HitFlashBulletFlag == true) {

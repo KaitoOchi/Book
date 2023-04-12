@@ -64,15 +64,9 @@ void Enemy_Charge::Update()
 		// „‰ñó‘Ô‚É–ß‚é
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
+		break;
 		// ö—
 	case CONFUSION:
-
-		// ‚È‚º‚©ö—‚É“ü‚é‚Ì‚Å‰‹}ˆ’u
-		if (m_ActState == CRAW) {
-			Update_OnCraw();
-			break;
-		}
-
 		Update_OnConfusion();
 		break;
 	}
@@ -121,6 +115,15 @@ void Enemy_Charge::Update_OnCharge()
 	if (HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
+
+	//// •Ç‚ÉÕ“Ë‚µ‚½‚Æ‚«
+	//if (Enemy::WallAndHit(m_playerPos) == false) {
+	//	move = 0.0f;
+	//	m_ActState = BACKBASEDON;
+	//}
+	//else {
+	//	move = 1.0f;
+	//}
 }
 
 void Enemy_Charge::Update_OnBackBasedOn()
@@ -129,12 +132,11 @@ void Enemy_Charge::Update_OnBackBasedOn()
 
 	Enemy::Act_Loss();					// ’ÇÕs“®‚©‚ç‚ÌØ‚è‘Ö‚¦
 	m_ActState = CRAW;
-
 }
 
 void Enemy_Charge::Update_OnCalled()
 {
-	Enemy::Act_Access();
+	//Enemy::Act_Access();
 }
 
 void Enemy_Charge::Update_OnConfusion()

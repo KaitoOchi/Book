@@ -408,9 +408,9 @@ void Enemy::Act_Charge(float time)
 		Rotation(diff);
 
 		// 移動速度に加算
-		Vector3 moveSpeed = diff * MOVE_SPEED * 2.5f;
+		Vector3 moveSpeed = diff * (MOVE_SPEED * 1.5f);
 		m_position += moveSpeed;
-		// 装移動距離を計算
+		// 総移動距離を計算
 		sumPos += moveSpeed;
 
 		// 歩きアニメーションを再生
@@ -429,7 +429,6 @@ void Enemy::Act_Charge(float time)
 			if (Act_SeachPlayer() == true) {
 				return;
 			}
-
 			// いないときは巡回状態に戻る
 			m_ActState = BACKBASEDON;
 		}
@@ -447,15 +446,11 @@ void Enemy::Act_Call()
 		Vector3 diff = m_position - enemyList[i]->m_position;
 		float length = diff.Length();
 
-		if (length <= 0.0f) {
-			m_fontRender.SetText(L"not call");
-			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
-
-			return;
-		}
-
 		// 長さが一定以内のとき
-		if (length < CALL_DISTANCE) {
+		if (length > 100.0f && length < CALL_DISTANCE) {
+
+			enemyList[i]->m_ActState = CALLED;
+
 			// 正規化
 			diff.Normalize();
 			// 移動速度を加算

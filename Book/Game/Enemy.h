@@ -180,6 +180,7 @@ protected:
 
 	CharacterController m_characterController;
 	SphereCollider m_sphereCollider;
+
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
@@ -195,10 +196,11 @@ protected:
 
 	float addTimer[3];						// 加算するタイマー。処理ごとに配列を作成
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
+	//float move = 1.0f;
 
 	Vector3 playerPos = Vector3::Zero;		// 突進用
 	Vector3 enemyPos = Vector3::Zero;
-	Vector3 sumPos = Vector3::Zero;			// 総移動距離
+	Vector3 sumPos = Vector3::Zero;			// 総移動距離]
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
