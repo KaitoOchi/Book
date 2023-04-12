@@ -30,7 +30,7 @@ bool Enemy_Charge::Start()
 	m_animationClips[m_enAnimationClip_Damege].SetLoopFlag(false);
 
 	// ÉÇÉfÉãÇÃì«Ç›çûÇ›
-	m_ChargeModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true);
+	m_ChargeModelRender.Init("Assets/modelData/enemy/enemy.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, false);
 	m_ChargeModelRender.SetScale(m_scale);
 	m_ChargeModelRender.SetPosition(m_position);
 	m_ChargeModelRender.SetRotation(m_rotation);

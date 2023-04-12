@@ -16,7 +16,7 @@ Debug::Debug()
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//フレームレートを固定
-	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
+	g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, 60);
 }
 
 Debug::~Debug()

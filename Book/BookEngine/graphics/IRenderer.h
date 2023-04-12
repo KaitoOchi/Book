@@ -15,7 +15,8 @@ namespace nsBookEngine {
 		/// <param name="ligNo">ライト番号</param>
 		/// <param name="lvpMatrix">ライトビュープロジェクション行列</param>
 		virtual void OnRenderShadowMap(
-			RenderContext& rc
+			RenderContext& rc,
+			Camera& camera
 		)
 		{
 
