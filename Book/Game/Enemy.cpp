@@ -3,6 +3,7 @@
 
 #include "PlayerManagement.h"
 #include "GameUI.h"
+#include "Game.h"
 
 #define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
 #define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
@@ -11,7 +12,7 @@ namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
-	const float		CALL_DISTANCE = 300.0f;					// 呼ぶことができる範囲
+	const float		CALL_DISTANCE = 350.0f;					// 呼ぶことができる範囲
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -52,6 +53,8 @@ bool Enemy::Start()
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gameUI = FindGO<GameUI>("gameUI");
+	m_game = FindGO<Game>("game");
+	enemyList = m_game->GetEnemyList();
 
 	return true;
 }
@@ -161,6 +164,9 @@ bool Enemy::Act_CatchPlayer()
 	// 一定の長さのとき
 	if (length <= CATCH_DECISION) {
 		// 捕まえる
+		m_fontRender.SetText(L"catch");
+		m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+
 		return true;
 	}
 
@@ -397,7 +403,7 @@ void Enemy::Act_Charge(float time)
 		Rotation(diff);
 
 		// 移動速度に加算
-		Vector3 moveSpeed = diff * MOVE_SPEED;
+		Vector3 moveSpeed = diff * MOVE_SPEED * 2.5f;
 		m_position += moveSpeed;
 		// 装移動距離を計算
 		sumPos += moveSpeed;
@@ -418,9 +424,10 @@ void Enemy::Act_Charge(float time)
 			if (Act_SeachPlayer() == true) {
 				return;
 			}
-
-			// いないときは巡回状態に戻る
-			m_ActState = BACKBASEDON;
+			else {
+				// いないときは巡回状態に戻る
+				m_ActState = BACKBASEDON;
+			}
 		}
 	}
 }
@@ -429,21 +436,29 @@ void Enemy::Act_Call()
 {
 	// 周りの敵を呼ぶ処理
 
-	// えねみーのリストを検索
-	// ベクトルを計算して一定以内のとき正規化、移動速度を加算する
+	// エネミーのリストを検索
+	for (int i = 0; i < enemyList.size(); i++) {
 
-	for (int i = 0; i < m_enemyList.size(); i++) {
-
-		// エネミーから各エネミーへ向かうベクトル
-		Vector3 diff = m_enemylist[i] - m_position;
+		// 各エネミーから該当エネミーへ向かうベクトル
+		Vector3 diff = m_position - enemyList[i]->m_position;
 		float length = diff.Length();
+
+		if (length <= 0.0f) {
+			m_fontRender.SetText(L"not call");
+			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+
+			return;
+		}
 
 		// 長さが一定以内のとき
 		if (length < CALL_DISTANCE) {
 			// 正規化
 			diff.Normalize();
 			// 移動速度を加算
-			m_position += diff * MOVE_SPEED;
+			enemyList[i]->m_position += diff * MOVE_SPEED;
+
+			m_fontRender.SetText(L"call");
+			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 		}
 	}
 }

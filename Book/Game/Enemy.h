@@ -6,6 +6,7 @@
 
 class PlayerManagement;
 class GameUI;
+class Game;
 class Enemy :public IGameObject
 {
 public:
@@ -59,6 +60,8 @@ public:
 		CRAW,			// 巡回
 		TRACKING,		// 追跡
 		SEARCH,			// 索敵
+		CALL,			// 周りの敵を呼ぶ
+		CALLED,			// CALL時にSearch以外が実行
 		CHARGE,			// 突進
 		BACKBASEDON,	// 巡回状態に戻る
 		CONFUSION,		// 錯乱
@@ -160,22 +163,23 @@ protected:
 		int s_number;						// ポイントの番号
 	};
 
+	std::vector<Point> m_pointList;			// ポイント構造体の配列
+	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
+
 	TknFile m_tknFile;						// tknファイル
 	PhysicsStaticObject m_bgObject;			// 静的物理オブジェクト
 	nsAI::NaviMesh m_nvmMesh;				// ナビメッシュ
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
 
-	std::vector<Point> m_pointList;			// ポイント構造体の配列
-	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
+	std::vector<Enemy*> enemyList;
 
 	PlayerManagement* m_playerManagement = nullptr;
 	GameUI* m_gameUI = nullptr;
+	Game* m_game = nullptr;
 
 	CharacterController m_characterController;
-
 	SphereCollider m_sphereCollider;
-
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標

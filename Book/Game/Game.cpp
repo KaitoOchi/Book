@@ -65,18 +65,22 @@ void Game::LevelDesign()
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//m_enemyNormal->SetPosition(objData.position);
-			//m_enemyNormal->SetRotation(objData.rotation);
-			//m_enemyNormal->SetScale(objData.scale);
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemyNormal);
 
-			//// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
-			//m_enemyNormal->Pass(0);
+			// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
+			m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			m_enemyCharge->SetPosition(objData.position);
 			m_enemyCharge->SetRotation(objData.rotation);
 			m_enemyCharge->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemyCharge);
 
 			// パス移動の指定
 			m_enemyCharge->Pass(7);
@@ -130,7 +134,7 @@ void Game::LevelDesign()
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
 			// Enemyのリストに追加
-			m_enemyList.push_back(m_enemyCharge);
+			m_enemyList.push_back(m_enemySearch);
 		}
 
 		//名前がbackgroundなら
@@ -159,6 +163,8 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemySearch);
 
 			return true;
 		}

@@ -4,7 +4,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
-	const float		STOP_TIMER = 5.0f;				// 溜め時間
+	const float		STOP_TIMER = 3.0f;				// 溜め時間
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -57,6 +57,11 @@ void Enemy_Charge::Update()
 	case CHARGE:
 		Update_OnCharge();
 		break;
+		// 呼ばれたとき
+	case CALLED:
+		Update_OnCalled();
+		break;
+		// 巡回状態に戻る
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		// 錯乱
@@ -116,7 +121,13 @@ void Enemy_Charge::Update_OnBackBasedOn()
 	// 突進⇒巡回への切り替え
 
 	Enemy::Act_Loss();					// 追跡行動からの切り替え
+
 	m_ActState = CRAW;
+}
+
+void Enemy_Charge::Update_OnCalled()
+{
+	Enemy::Act_Access();
 }
 
 void Enemy_Charge::Update_OnConfusion()

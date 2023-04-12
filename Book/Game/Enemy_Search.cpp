@@ -34,11 +34,15 @@ void Enemy_Search::Update()
 	case SEARCH:
 		Update_OnSearch();
 		break;
+	case CALL:
+		Update_OnCall();
+		break;
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
 	}
 
+	// XV
 	m_enemyRender.Update();
 }
 
@@ -54,6 +58,30 @@ void Enemy_Search::Update_OnSearch()
 	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
 	if (HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
+	}
+
+	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚·‚é‚Æ‚«
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = CALL;
+	}
+}
+
+void Enemy_Search::Update_OnCall()
+{
+	// ü‚è‚Ì“G‚ğŒÄ‚Ô
+
+	Enemy::Act_Call();
+
+	Enemy::SpotLight_Serch(m_rot, m_position);
+
+	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
+	if (HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+
+	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚µ‚È‚¢‚Æ‚«
+	if (Enemy::Act_SeachPlayer() == false) {
+		m_ActState = SEARCH;
 	}
 }
 
@@ -103,4 +131,5 @@ void Enemy_Search::Rotaition()
 void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
+	m_fontRender.Draw(rc);
 }
