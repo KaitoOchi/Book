@@ -1,18 +1,24 @@
 #include "stdafx.h"
-#include "Gost.h"
-Gost::Gost()
+#include "Ghost.h"
+Ghost::Ghost()
 {
 
 }
-Gost::~Gost()
+Ghost::~Ghost()
 {
 
 }
-bool Gost::Start()
+bool Ghost::Start()
 {
 	//ƒ‚ƒfƒ‹‚ğ“Ç‚İ‚İƒ‚ƒfƒ‹‚Ì‘å‚«‚³‚ğ‹‚ß‚é
 	m_modelRender.Init("Assets/modelData/level/box.tkm");
 	m_modelRender.Update();
+	CreateGhostBox();
+	
+	return true;
+}
+void Ghost::CreateGhostBox()
+{
 	const auto& tkmFile = m_modelRender.GetModel().GetTkmFile();
 	const auto& meshParts = tkmFile.GetMeshParts();
 
@@ -64,9 +70,8 @@ bool Gost::Start()
 		m_boxSize
 	);
 	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Wall);
-	return true;
 }
-void Gost::Update()
+void Ghost::Update()
 {
 	m_modelRender.Update();
 }

@@ -16,7 +16,7 @@
 #include "LightSensor.h"
 #include "Wall.h"
 #include "Treasure.h"
-#include "Gost.h"
+#include "Ghost.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -63,15 +63,6 @@ void Game::LevelDesign()
 
 		//・ｽ・ｽ・ｽO・ｽ・ｽunityChan・ｽﾈゑｿｽ
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
-			//m_mirror = NewGO<Mirror>(0, "mirror");
-
-			//m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//m_enemyNormal->SetPosition(objData.position);
-			//m_enemyNormal->SetRotation(objData.rotation);
-			//m_enemyNormal->SetScale(objData.scale);
-
-			//// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
-			//m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			m_enemyCharge->SetPosition(objData.position);
@@ -163,9 +154,7 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
-
-			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
-			//m_trans->SetPosition(objData.position);
+			m_playerManagement->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
@@ -178,10 +167,10 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"gost") == true) {
 
-			m_gost = NewGO<Gost>(0, "gost");
-			m_gost->SetPosition(objData.position);
-			m_gost->SetScale(objData.scale);
-			m_gost->SetRotation(objData.rotation);
+			m_ghost = NewGO<Ghost>(0, "ghost");
+			m_ghost->SetPosition(objData.position);
+			m_ghost->SetScale(objData.scale);
+			m_ghost->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {

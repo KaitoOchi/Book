@@ -9,7 +9,7 @@ public:
 	void Update()override;
 	void Render(RenderContext& rc);
 	void Hit()override;
-	int m_gagecount=0;
+	float m_gagecount=0;
 private:
 
 };

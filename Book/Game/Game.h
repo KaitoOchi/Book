@@ -8,12 +8,11 @@ class BackGround;
 class Enemy;
 class Enemy_Normal;
 class Enemy_Search;
-class TransparentBox;
 class Enemy_Charge;
 class PlayerManagement;
 class Wall;
 class Treasure;
-class Gost;
+class Ghost;
 class Game : public IGameObject
 {
 public:
@@ -67,12 +66,13 @@ private:
 	BackGround* m_backGround = nullptr;
 
 	std::vector<Enemy*> m_enemyList;
+	
 
-	TransparentBox *m_trans = nullptr;
+
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
-	Gost* m_gost = nullptr;
+	Ghost* m_ghost = nullptr;
 	
 	PointLight m_pointLight;
 

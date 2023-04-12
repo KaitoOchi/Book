@@ -3,7 +3,7 @@
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,50.0f,50.0f };
-	const int GAGESIZE = 10.0f;
+	const float GAGESIZE = 10.0f;
 }
 Treasure::Treasure()
 {
@@ -11,7 +11,7 @@ Treasure::Treasure()
 }
 Treasure::~Treasure()
 {
-
+	DeleteGO(m_collisionObject);
 }
 bool Treasure::Start()
 {
@@ -49,9 +49,11 @@ void Treasure::Hit()
 	{
 		m_gagecount += g_gameTime->GetFrameDeltaTime();
 	}
-	if (m_gagecount == 30)
+	if (m_gagecount >= 5.0f)
 	{
-		int a;
+		m_player->m_enPlayer3D_Steal;
+		
+		DeleteGO(this);
 	}
 }
 

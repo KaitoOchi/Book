@@ -1,13 +1,14 @@
 #pragma once
 #include "physics/PhysicsGhostObject.h"
 
-class Gost:public IGameObject
+class Ghost:public IGameObject
 {
 public:
-	Gost();
-	~Gost();
+	Ghost();
+	~Ghost();
 	bool Start();
 	void Update();
+	void CreateGhostBox();
 	/// <summary>
 	/// 座標を設定。
 	/// </summary>
@@ -62,10 +63,29 @@ public:
 		return m_scale;
 	}
 	PhysicsGhostObject m_physicsGhostObj;
-private:
-	
 
+	/// <summary>
+	/// 透明座標を設定。
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetGhostPosition(const Vector3& ghostpos)
+	{
+		m_ghostPosition = ghostpos;
+	}
+
+	/// <summary>
+	/// 透明座標を取得。
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetGhostPosition()
+	{
+		return m_ghostPosition;
+	}
+
+	
+private:
 	Vector3 m_position = Vector3::Zero;
+	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_scale = Vector3::Zero;
 	Quaternion m_rotation;
 	float posXmax = 0;

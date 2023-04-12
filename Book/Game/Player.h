@@ -15,7 +15,7 @@ public:
 		m_enPlayer_3DChanging,	//3Dに切替中
 		m_enPlayer_Found,		//見つかる
 		m_enPlayer_Caught,		//捕まった
-		m_enPlayer_GostHit,		//透明ブロックに当たる
+		m_enPlayer_GhostHit,		//透明ブロックに当たる
 		m_enPlayer_Clear,		//ゲームクリア
 		m_enPlayer_GameOver,	//ゲームオーバー
 		m_enPlayer3D_Throw,		//投げる
@@ -53,7 +53,7 @@ public:
 	{
 		return m_collisionObject;
 	}
-
+	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
 protected:
 	virtual void Update();
 	void Move();
@@ -142,7 +142,7 @@ protected:
 	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
 	Quaternion m_rotation;										//回転
 	CharacterController *m_characon;							//キャラコン
-	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
+	
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ

@@ -4,15 +4,14 @@
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class TransparentBox;
-class Gost;
+class Ghost;
 class PlayerManagement:public Player
 {
 public:
 	PlayerManagement();
 	~PlayerManagement();
 	bool Start();
-	void Update();
+	void Update()override;
 	void PlayerChange();
 	void PlayerChange2D();
 	void PlayerChange3D();
@@ -36,9 +35,9 @@ public:
 
 
 	//キャラコンの取得
-	void SetCharacon(CharacterController* m_characon)
+	void SetCharacon(CharacterController* m_chara)
 	{
-		m_setChara = m_characon;
+		m_characon = m_chara;
 	}
 	CharacterController* GetCharacon()
 	{
@@ -60,15 +59,17 @@ public:
 	/// <summary>
 	/// 透明ブロックの当たり判定
 	/// </summary>
-	void GostHit();
+	void GhostHit();
 
+	std::vector<Vector3> m_ghostpositions;
 private:
-	
+	Vector3 m_ghostPosition=Vector3::Zero;
+	Vector3 m_keepGhostPosition=Vector3::Zero;
 	Vector3 m_position = Vector3::Zero;
 	CharacterController* m_setChara = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
-	TransparentBox* m_trans = nullptr;
-	Gost* m_gost = nullptr;
+	
+	Ghost* m_ghost = nullptr;
 };
 

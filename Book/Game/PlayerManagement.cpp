@@ -2,8 +2,7 @@
 #include "Player2D.h"
 #include"Player3D.h"
 #include "PlayerManagement.h"
-#include "Gost.h"
-#include "TransparentBox.h"
+#include "Ghost.h"
 PlayerManagement::PlayerManagement()
 {
 
@@ -16,8 +15,7 @@ bool PlayerManagement::Start()
 {
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
-	m_trans = FindGO<TransparentBox>("transparentBox");
-	m_gost = FindGO<Gost>("gost");
+	m_ghost = FindGO<Ghost>("ghost");
 	return true;
 }
 void PlayerManagement::Update()
@@ -68,16 +66,30 @@ void PlayerManagement::PlayerChange3D()
 	SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーが埋まっているなら
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
-			if (m_gost->m_physicsGhostObj.IsSelf(contactObject) == true)
+			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
-				GostHit();
+				GhostHit();
 			}
 		});
 	//プレイヤーを３Dにする
 	m_enMnanagementState = m_enPlayer_3DChanging;
 }
 
-void PlayerManagement::GostHit()
+void PlayerManagement::GhostHit()
 {
-	m_player3D->SetPosition(Vector3::Zero);
+	float NowTargetDiff = D3D12_FLOAT32_MAX;
+	for (const auto& ghostposition :m_ghostpositions)
+	{
+		Vector3 diff = ghostposition-GetPosition();
+		float lenght=diff.Length();
+		if (NowTargetDiff > lenght)
+		{
+			NowTargetDiff = lenght;
+			m_ghostPosition = ghostposition;
+			m_keepGhostPosition = ghostposition;
+		}
+	}
+
+	m_player3D->SetPosition(m_ghostPosition);
+	
 }
