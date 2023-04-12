@@ -432,7 +432,20 @@ void Enemy::Act_Call()
 	// えねみーのリストを検索
 	// ベクトルを計算して一定以内のとき正規化、移動速度を加算する
 
+	for (int i = 0; i < m_enemyList.size(); i++) {
 
+		// エネミーから各エネミーへ向かうベクトル
+		Vector3 diff = m_enemylist[i] - m_position;
+		float length = diff.Length();
+
+		// 長さが一定以内のとき
+		if (length < CALL_DISTANCE) {
+			// 正規化
+			diff.Normalize();
+			// 移動速度を加算
+			m_position += diff * MOVE_SPEED;
+		}
+	}
 }
 
 void Enemy::Act_Loss()
