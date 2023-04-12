@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Enemy_Serch.h"
+#include "Enemy_Search.h"
 namespace
 {
 	const float KEEPTIME = 2.0f;
@@ -7,15 +7,15 @@ namespace
 	const float ANGLE = 45.0f;
 	const float RODADD = 0.01f;
 }
-Enemy_Serch::Enemy_Serch()
+Enemy_Search::Enemy_Search()
 {
 
 }
-Enemy_Serch::~Enemy_Serch()
+Enemy_Search::~Enemy_Search()
 {
 
 }
-bool Enemy_Serch::Start()
+bool Enemy_Search::Start()
 {
 	Enemy::Start();
 	m_enemyRender.Init("Assets/modelData/unityChan.tkm", 0, 0, enModelUpAxisZ, true, false);
@@ -23,16 +23,52 @@ bool Enemy_Serch::Start()
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
 	Enemy::SpotLight_New(m_position);
+
+	m_ActState = SEARCH;	// s“®ƒpƒ^[ƒ“‚ðÝ’èBŠî–{‚ªCRAW‚Ì‚½‚ßB
+
 	return true;
 }
-void Enemy_Serch::Update()
+void Enemy_Search::Update()
 {
-	Rotaition();
-	m_enemyRender.SetRotation(m_rot);
-	Enemy::SpotLight_Serch(m_rot,m_position);
+	switch (m_ActState) {
+	case SEARCH:
+		Update_OnSearch();
+		break;
+	case CONFUSION:
+		Update_OnConfusion();
+		break;
+	}
+
 	m_enemyRender.Update();
 }
-void Enemy_Serch::Rotaition()
+
+void Enemy_Search::Update_OnSearch()
+{
+	// õ“G
+
+	Rotaition();
+
+	m_enemyRender.SetRotation(m_rot);
+	Enemy::SpotLight_Serch(m_rot, m_position);
+
+	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
+	if (HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+}
+
+void Enemy_Search::Update_OnConfusion()
+{
+	// ö—
+	Enemy::Act_HitFlashBullet();
+
+	// d’¼‚ª‰ð‚¯‚Ä‚¢‚é‚Æ‚«
+	if (HitFlashBulletFlag == false) {
+		m_ActState = SEARCH;
+	}
+}
+
+void Enemy_Search::Rotaition()
 {
 	m_rotTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_rotTime < 0.0f)
@@ -64,7 +100,7 @@ void Enemy_Serch::Rotaition()
 	
 	
 }
-void Enemy_Serch::Render(RenderContext& rc)
+void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
 }
