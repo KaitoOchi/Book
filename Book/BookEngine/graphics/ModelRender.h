@@ -15,47 +15,49 @@ namespace nsBookEngine {
 		~ModelRender();
 
 		/// <summary>
-		/// �����������B
+		/// 初期化処理。
 		/// </summary>
-		/// <param name="filePath">�t�@�C���p�X�B</param>
-		/// <param name="animationClip">�A�j���[�V�����N���b�v�B</param>
-		/// <param name="numAnimationClip">�A�j���[�V�����N���b�v�̐��B</param>
-		/// <param name="enModelUpAxis">���f���̏�����B</param>
-		/// <param name="isShadowReceiver">true�Ȃ�e�����������B</param>
-		/// <param name="maxInstance">�C���X�^���X�̍ő吔�B�C���X�^���V���O�`��p�B</param>
-		/// <param name="isFrontCullingOnDrawShadowMap">�V���h�E�}�b�v�`�掞�Ƀt�����g�J�����O��s�����ǂ����B</param>
+		/// <param name="filePath">ファイルパス。</param>
+		/// <param name="animationClip">アニメーションクリップ。</param>
+		/// <param name="numAnimationClip">アニメーションの数。</param>
+		/// <param name="enModelUpAxis">モデルの上方向。</param>
+		/// <param name="isShadow">trueなら影を与える。</param>
+		/// <param name="isShadow">trueなら影を落とす。</param>
+		/// <param name="isFrontCullingOnDrawShadowMap">カリングモード。</param>
+		/// <param name="maxInstance">インスタンスの数。</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClip = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
 			bool isShadow = true,
+			bool isShadowReceiver = true,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
 			int maxInstance = 1);
 
 		/// <summary>
-		/// �X�V�����B
+		/// 更新処理。
 		/// </summary>
 		void Update();
 
 		/// <summary>
-		/// �`�揈���B
+		/// 描画処理。
 		/// </summary>
-		/// <param name="rc">�����_�[�R���e�L�X�g</param>
+		/// <param name="rc"></param>
 		void Draw(RenderContext& rc);
 
 		/// <summary>
-		/// �A�j���[�V������Đ��B
+		/// アニメーションの実行。
 		/// </summary>
-		/// <param name="animNo">�A�j���[�V�����N���b�v�̔ԍ��B</param>
-		/// <param name="interpolateTime">���`��Ԃ̎���</param>
+		/// <param name="animNo">アニメーションの番号。</param>
+		/// <param name="interpolateTime">実行速度。</param>
 		void PlayAnimation(int animNo, float interpolateTime = 0.0f)
 		{
 			m_animation.Play(animNo, interpolateTime);
 		}
 
 		/// <summary>
-		/// �A�j���[�V�����̍Đ������ǂ����B
+		/// アニメーションを再生しているか？
 		/// </summary>
 		/// <returns></returns>
 		bool IsPlayingAniamtion()
@@ -64,7 +66,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ���f����擾�B
+		/// モデルの取得。
 		/// </summary>
 		/// <returns></returns>
 		Model& GetModel()
@@ -73,7 +75,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ���W��ݒ�B
+		/// 座標の設定。
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -82,7 +84,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ��]��ݒ�B
+		/// 回転の設定。
 		/// </summary>
 		/// <param name="rot"></param>
 		void SetRotation(const Quaternion& rot)
@@ -91,7 +93,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// �g�嗦��ݒ�B
+		/// 拡大率の設定。
 		/// </summary>
 		/// <param name="scale"></param>
 		void SetScale(const Vector3& scale)
@@ -99,13 +101,17 @@ namespace nsBookEngine {
 			m_scale = scale;
 		}
 
+		/// <summary>
+		/// アニメーションイベントの追加。
+		/// </summary>
+		/// <param name="eventListener"></param>
 		void AddAnimationEvent(AnimationEventListener eventListener)
 		{
 			m_animation.AddAnimationEventListener(eventListener);
 		}
 
 		/// <summary>
-		/// �V���h�E�L���X�^�[�̃t���O��ݒ肷��B
+		/// 
 		/// </summary>
 		/// <param name="flag"></param>
 		void SetShadowCasterFlag(bool flag)
@@ -114,7 +120,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// �A�j���[�V�����̑��x��ݒ肷��B
+		/// アニメーションの速度を設定。
 		/// </summary>
 		/// <param name="animationSpeed"></param>
 		void SetAnimationSpeed(const float animationSpeed)
@@ -123,7 +129,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// �{�[���̖��O����{�[���ԍ�������B
+		/// ボーンIDの取得。
 		/// </summary>
 		/// <param name="boneName"></param>
 		/// <returns></returns>
@@ -133,7 +139,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// �{�[���ԍ�����{�[����擾�B
+		/// ボーンの取得。
 		/// </summary>
 		/// <param name="boneNo"></param>
 		/// <returns></returns>
@@ -143,7 +149,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// �V���h�E�L���X�^�[�̃t���O�����邩�ǂ����B
+		/// 
 		/// </summary>
 		/// <returns></returns>
 		bool IsShadowCaster()
@@ -153,51 +159,48 @@ namespace nsBookEngine {
 
 	private:
 		/// <summary>
-		/// �X�P���g���̏������B
+		/// スケルトンの初期化。
 		/// </summary>
-		/// <param name="filePath">�t�@�C���p�X</param>
+		/// <param name="filePath">X</param>
 		void InitSkeleton(const char* filePath);
 
 
 		/// <summary>
-		/// �A�j���[�V�����̏������B
+		/// アニメーションの初期化。
 		/// </summary>
-		/// <param name="animationClips">�A�j���[�V�����N���b�v</param>
-		/// <param name="numAnimationClips">�A�j���[�V�����N���b�v�̐�</param>
-		/// <param name="enModelUpAxis">���f���̏����</param>
+		/// <param name="animationClips"></param>
+		/// <param name="numAnimationClips"></param>
+		/// <param name="enModelUpAxis"></param>
 		void InitAnimation(AnimationClip* animationClips,
 			int numAnimationClips,
 			EnModelUpAxis enModelUpAxis);
 
 		/// <summary>
-		/// �e�탂�f���̃��[���h�s���X�V����B
+		/// モデルの更新処理。
 		/// </summary>
 		void UpdateWorldMatrixInModes();
 
 		/// <summary>
-		/// ���f����������B
+		/// モデルの初期化。
 		/// </summary>
 		/// <param name="renderingEngine"></param>
 		/// <param name="tkmFilePath"></param>
 		void InitModel(
 			const char* tkmFilePath,
 			EnModelUpAxis modelUpAxis,
-			const bool isShadow
+			const bool isShadow,
+			const bool isShadowReceiver,
+			D3D12_CULL_MODE cullMode
 		);
-
-		/// <summary>
-		/// �e�탂�f���̒��_�V�F�[�_�[�̃G���g���[�|�C���g��ݒ�B
-		/// </summary>
-		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
 
 	private:
 		/// <summary>
-		///�@�V���h�E�}�b�v�����_�[�p�X����Ă΂�鏈���B
+		/// シャドウマップの描画処理。
 		/// </summary>
 		/// <param name="rc"></param>
-		void OnRenderShadowMap(RenderContext& rc) override;
+		void OnRenderShadowMap(RenderContext& rc, Camera& camera) override;
 		/// <summary>
-		/// �t�H���[�h�����_�[�p�X����Ă΂�鏈���B
+		/// フォワードレンダリングの描画処理。
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
 
