@@ -8,10 +8,10 @@
 
 namespace
 {
-	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// 繝槭ャ繝励・荳ｭ蠢・
-	const float		MAP_RADIUS = 140.0f;									// 繝槭ャ繝励・蜊雁ｾ・
-	const float		LIMITED_RANGE_IMAGE = 500.0f;							// 繝槭ャ繝励・遽・峇
-	const float		ALPHA = 0.75f;											// ﾎｱ蛟､
+	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
+	const float		MAP_RADIUS = 140.0f;									// マップの半径
+	const float		LIMITED_RANGE_IMAGE = 500.0f;							// マップの範囲
+	const float		ALPHA = 0.75f;											// α値
 }
 
 MiniMap::MiniMap()
@@ -79,12 +79,12 @@ void MiniMap::DrawMap(Vector3 enemyPos, int num)
 	// マップに表示する範囲に敵がいたら
 	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
 
-		// spriteRender縺ｫ蠎ｧ讓吶ｒ險ｭ螳・
+		// spriteRenderに座標を設定
 		m_EnemySpriteRender[num].SetPosition(mapPos);
-		// 繝槭ャ繝励↓陦ｨ遉ｺ縺吶ｋ
+		// マップに表示する
 		m_isImage[num] = true;
 	}
-	// 繝槭ャ繝励↓陦ｨ遉ｺ縺吶ｋ謨ｵ縺後＞縺ｪ縺九▲縺溘ｉ
+	// マップに表示する敵がいなかったら
 	else {
 		m_isImage[num] = false;
 	}
@@ -92,41 +92,41 @@ void MiniMap::DrawMap(Vector3 enemyPos, int num)
 
 const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition,Vector3 worldPosition,Vector3& mapPosition) 
 {
-	// Y蠎ｧ讓吶・繝槭ャ繝励→縺ｯ髢｢菫ゅ↑縺・・縺ｧ0.0f繧定ｨｭ螳・
+	// Y座標はマップとは関係ないので0.0fを設定
 	worldCenterPosition.y = 0.0f;
 	worldPosition.y = 0.0f;
 
-	// 荳ｭ蠢・ｺｧ讓吶°繧芽｡ｨ遉ｺ縺励◆縺・が繝悶ず繧ｧ繧ｯ繝医・蠎ｧ讓吶∈蜷代°縺・・繧ｯ繝医Ν繧定ｨ育ｮ・
+	// 中心の座標から表示したいオブジェクトの座標へ向かうベクトルを計算
 	Vector3 diff = worldPosition - worldCenterPosition;
 
-	// 險育ｮ励＠縺溘・繧ｯ繝医Ν縺御ｸ螳壻ｻ･荳企屬繧後※縺・◆繧・
+	// 	計算したベクトルが一定以上離れていたら
 	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
-		// 遽・峇螟悶↓蟄伜惠縺励※縺・ｋ縺ｮ縺ｧ繝槭ャ繝励↓陦ｨ遉ｺ縺励↑縺・
+		// 範囲外に存在しているのでマップに表示しない
 		return false;
 	}
 
 	
 
-	//繝吶け繝医Ν縺ｮ髟ｷ縺輔ｒ蜿門ｾ励☆繧・
+	// ベクトルの長さを取得する
 	float length = diff.Length();
 
-	//繧ｫ繝｡繝ｩ縺ｮ蜑肴婿蜷代・繧ｯ繝医Ν縺九ｉ縲・
-	//繧ｯ繧ｩ繝ｼ繧ｿ繝九が繝ｳ繧堤函謌舌・
+	// カメラの前方向ベクトルから、
+	// Y軸方向の回転クォータニオンを生成する
 	Vector3 forward = g_camera3D->GetForward();
 	Quaternion rot;
 	rot.SetRotationY(atan2(-forward.x, forward.z));
 
-	//繝吶け繝医Ν縺ｫ繧ｫ繝｡繝ｩ縺ｮ蝗櫁ｻ｢繧帝←逕ｨ縲・
+	// ベクトルにカメラの回転を適用
 	rot.Apply(diff);
 
-	//繝吶け繝医Ν繧呈ｭ｣隕丞喧縲・
+	// ベクトルを正規化
 	diff.Normalize();
 
-	//繝槭ャ繝励・螟ｧ縺阪＆/霍晞屬蛻ｶ髯舌〒縲・
-	//繝吶け繝医Ν繧偵・繝・・蠎ｧ讓咏ｳｻ縺ｫ螟画鋤縺吶ｋ縲・
+	// マップの大きさ/範囲で、
+	// ベクトルをマップ座標系に変換する
 	diff *= length * MAP_RADIUS / LIMITED_RANGE_IMAGE;
 
-	//繝槭ャ繝励・荳ｭ螟ｮ蠎ｧ讓吶→荳願ｨ倥・繧ｯ繝医Ν繧貞刈邂励☆繧九・
+	// マップの中央座標と上記ベクトルを加算する
 	mapPosition = Vector3(CENTER_POSITION.x + diff.x, CENTER_POSITION.y + diff.z, 0.0f);
 	return true;
 }

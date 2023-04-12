@@ -11,6 +11,7 @@ namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
+	const float		CALL_DISTANCE = 300.0f;					// 呼ぶことができる範囲
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -57,15 +58,15 @@ bool Enemy::Start()
 
 void Enemy::Rotation(Vector3 rot)
 {
-	// ��]����
+	// 回転
 	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
 }
 
 bool Enemy::Act_SeachPlayer()
 {
-	// ����p�̏���
-	// true�̂Ƃ��v���C���[�𔭌����Ă���
+	// 索敵
+	// trueのときプレイヤーを発見している
 
 	m_forward = Vector3::AxisZ;
 	m_rotation.Apply(m_forward);
@@ -74,67 +75,45 @@ bool Enemy::Act_SeachPlayer()
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 
-	// �v���C���[�ɂ�����x�߂��Ƃ�
-	if (FindPlayerFlag == false) {
-		if (diff.LengthSq() <= SEACH_DECISION) {
-			// �G�l�~�[����v���C���[�֌������x�N�g���𐳋K��
-			diff.Normalize();
-			// �G�l�~�[�̐��ʃx�N�g���A�G�l�~�[����v���C���[�֌������x�N�g���̓�ς�v�Z
-			float cos = m_forward.Dot(diff);
-			// ��ς���p�x��v�Z
-			float angle = acosf(cos);
-			// �p�x������p��苷���Ƃ�
-			if (angle <= (FIELDOF_VIEW) {
-				// �ǂƂ̏Փ˔����s��
-				
-				//// �ǂƂ̏Փ˔��肪true�̂Ƃ�
-				//else if (WallAndHit(m_playerPos) == true) {
-				//	FindPlayerFlag = true;
-				//}
+	// ベクトルが一定の長さ以下のとき
+	if (diff.LengthSq() <= SEACH_DECISION) {
+		// 正規化
+		diff.Normalize();
+		// 内積を計算
+		float cos = m_forward.Dot(diff);
+		// 角度を計算
+		float angle = acosf(cos);
+		// 角度が視野角内のとき
+		if (angle <= (FIELDOF_VIEW) {
+			// 衝突判定を行う
+			
+			//// 衝突しているとき
+			//else if (WallAndHit(m_playerPos) == true) {
+			//	FindPlayerFlag = true;
+			//}
 
-				return WallAndHit(m_playerPos);
-			}
+			return WallAndHit(m_playerPos);
 		}
 	}
-	//// �v���C���[�𔭌����Ă���Ƃ�
-	//else if (FindPlayerFlag == true) {
-	//	// �G�l�~�[����v���C���[�֌������x�N�g���𐳋K��
-	//	diff.Normalize();
-	//	// �G�l�~�[�̐��ʃx�N�g���A�G�l�~�[����v���C���[�֌������x�N�g���̓�ς�v�Z
-	//	float cos = m_forward.Dot(diff);
-	//	// ��ς���p�x��v�Z
-	//	float angle = acosf(cos);
-	//	// �p�x������p��苷���Ƃ�
-	//	if (angle <= (FIELDOF_VIEW) {
-	//		// �ǂƂ̏Փ˔����s��
-	//		// �ǂƂ̏Փ˔��肪false�̂Ƃ�
-	//		if (WallAndHit(m_playerPos) == false) {
-	//			ChangeFlag = true;
-	//			FindPlayerFlag = false;
-	//		}
-
-	//		return WallAndHit(m_playerPos);
-	//	}
-	//}
 
 	return false;
 }
 
-// �Փ˂����ۂɌĂ΂��֐��I�u�W�F�N�g(�Ǘp)
+// 衝突したときに呼ばれる関数オブジェクト(壁用)
 struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 {
-	bool isHit = false;		// �Փ˃t���O
+	bool isHit = false;		// 衝突フラグ
 
 	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
-		// �ǂƏՓ˂��Ă��Ȃ��Ƃ�
+		// 壁とぶつかっていなかったら
 		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
-			// �Փ˂����͕̂ǂł͂Ȃ�
+			// 衝突したのは壁ではない
 			return 0.0f;
 		}
 
-		// �ǂƏՓ˂����Ƃ�
-		// �t���O��true�ɂ���
+		// 壁とぶつかったら
+		// フラグをtrueにする
 		isHit = true;
 		return 0.0f;
 	}
@@ -142,48 +121,46 @@ struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 
 bool Enemy::WallAndHit(Vector3 pos)
 {
-	// ��Q����l����������p�̏���
-	// �v���C���[�𔭌������Ƃ�true��Ԃ�
-
 	btTransform start, end;
 
 	start.setIdentity();
 	end.setIdentity();
 
-	// �n�_�̓G�l�~�[�̍��W
+	// 始点はエネミーの座標
 	start.setOrigin(btVector3(m_position.x, m_position.y + 70.0f, m_position.z));
-	// �I�_�̓v���C���[�̍��W
+	// 終点はプレイヤーの座標
 	end.setOrigin(btVector3(pos.x, pos.y + 70.0f, pos.z));
 
 	SweepResultWall callback;
 
-	// �R���C�_�[��n�_����I�_�܂œ������āA
-	// �Փ˂��邩�ǂ����𒲂ׂ�
+	// コライダーを始点から終点まで動かして、
+	// 衝突するかどうか調べる
 	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
 
-	// �ǂƏՓ˂���
+	// 壁と衝突した
 	if (callback.isHit == true) {
-		// �v���C���[�͌������Ă��Ȃ��̂�false
+		// プレイヤーは見つかっていない
 		return false;
 	}
 
-	// �ǂƏՓ˂��Ă��Ȃ��̂�true
+	// 壁と衝突していない
+	// プレイヤーを見つけた
 	return true;
 }
 
 bool Enemy::Act_CatchPlayer()
 {
-	// �v���C���[��m�ۂ��鏈��
-	// true�̂Ƃ��v���C���[��m�ۂ��Ă���
+	// プレイヤーを捕まえる処理
+	// trueのときプレイヤーを捕まえた
 
-	// �G�l�~�[����v���C���[�֌������x�N�g����v�Z����
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// �x�N�g���̒�������߂�
+	// 長さを計算する
 	float length = diff.Length();
 
-	// �x�N�g�������ȉ��̂Ƃ�
+	// 一定の長さのとき
 	if (length <= CATCH_DECISION) {
-		// �߂܂��鏈����s��
+		// 捕まえる
 		return true;
 	}
 
@@ -192,20 +169,21 @@ bool Enemy::Act_CatchPlayer()
 
 void Enemy::Act_HitFlashBullet()
 {
-	// �M���e�����������Ƃ�
-	// true�Ȃ瓖������
+	// 閃光弾が当たったとき
+	// trueのとき当たった
+
 	if (HitFlashBulletFlag == true) {
-		// ��e�A�j���[�V������Đ�
+		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
-			HitFlashBulletFlag = false;		// �t���O��~�낷
-			addTimer = 0.0f;				// ���Z�p�^�C�}�[����Z�b�g
+			HitFlashBulletFlag = false;		// フラグを降ろす
+			addTimer = 0.0f;				// タイマーをリセット
 
 		}
-		// �����łȂ��Ƃ�
+		// そうでないとき
 		else {
-			// �ҋ@�A�j���[�V������Đ�
+			// 待機アニメーションを再生
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
@@ -213,52 +191,52 @@ void Enemy::Act_HitFlashBullet()
 
 void Enemy::Act_Craw()
 {
-	// �p�X�ړ�
+	// 巡回
 	
-	// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
-	// ���������ȓ�Ȃ�ړI�n�Ƃ���|�C���g��ύX����
+	// 長さが一定のとき
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// ���݂̖ړI�n�̃|�C���g���z��̍Ō�̂Ƃ�
+		// パスが最後のとき
 		if (m_point->s_number == m_pointList.size()) {
-			// ��ԍŏ��̃|�C���g��ړI�n�Ƃ���
+			// 最初の値を渡す
 			m_point = &m_pointList[0];
 		}
-		// �����łȂ��Ƃ�
+		// そうでないとき
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer = 0.0f;	// ���Z�p�^�C�}�[����Z�b�g
+		addTimer = 0.0f;	// タイマーをリセット
 	}
 
-	// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ���K��
+	// 正規化
 	moveSpeed.Normalize();
-	// �x�N�g���ɃX�J���[���Z
+	// 回転を教える
 	moveSpeed *= MOVE_SPEED;
 	Rotation(moveSpeed);
 
-	// �^�C�}�[��true�̂Ƃ�
+	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER) == true) {
-		// �ҋ@�A�j���[�V������Đ�
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		// ���W�ɉ��Z����
+		// 座標に加算
 		m_position += moveSpeed;
 	}
-	// �����łȂ��Ƃ�
+	// そうでないとき
 	else {
-		// ����A�j���[�V������Đ�
+		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// �o�ߎ��Ԃ���Z
+	// タイマーを加算
 	NaviTimer += g_gameTime->GetFrameDeltaTime();
 
 	// 一定時間以下のときreturn
@@ -266,42 +244,42 @@ void Enemy::Act_Tracking()
 		return;
 	}
 
-	// �i�r���b�V���ł̈ړ�
+	// ナビメッシュ
 
-	// �v���C���[�̍��W��l������
+	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
 
-	bool isEnd;							// �p�X�ړ����I�������ۂ̃t���O
+	bool isEnd;							// フラグ
 
-	// �p�X����
+	// パス検索
 	m_pathFiding.Execute(
-		m_path,							// �\�z���ꂽ�p�X�̊i�[��
-		m_nvmMesh,						// �i�r���b�V��
-		m_position,						// �J�n���W
-		m_playerPos,					// �ڕW�n�_
-		PhysicsWorld::GetInstance(),	// �����G���W��
-		AI_RADIUS,						// AI�G�[�W�F���g�̔��a
-		AI_HIGH							// AI�G�[�W�F���g�̍���
+		m_path,							// 構築されたパスの格納先
+		m_nvmMesh,						// ナビメッシュ
+		m_position,						// 開始座標
+		m_playerPos,					// 移動目標座標
+		PhysicsWorld::GetInstance(),	// 物理エンジン
+		AI_RADIUS,						// AIエージェントの半径
+		AI_HIGH							// AIエージェントの高さ
 	);
 
-	// �p�X���ړ�����
+	// パス上を移動する
 	m_position = m_path.Move(
-		m_position,						// �ړ���������W
-		MOVE_SPEED,						// �ړ����x
-		isEnd							// �I������true��i�[����t���O
+		m_position,						// 座標
+		MOVE_SPEED,						// 移動速度
+		isEnd							// 移動したときtrue
 	);
 
-	//// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_playerPos - m_position;
 
 	float angle = atan2(-moveSpeed.x, moveSpeed.z);
 	Quaternion rot = Quaternion::Identity;
 	rot.SetRotationY(-angle);
 
-	// ��]�������
+	// 回転を教える
 	m_enemyRender.SetRotation(rot);
 
-	// ��s�A�j���[�V������Đ�
+	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
@@ -309,52 +287,52 @@ void Enemy::Pass(int PassState)
 {
 	switch (PassState)
 	{
-		// �c
+		// 縦
 	case LINE_VERTICAL:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		break;
-		// ��
+		// 横
 	case LINE_HORIZONTAL:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		break;
-		// �E���(�����`)
+		// 右回り(正方形)
 	case SQUARE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// �����(�����`)
+		// 左回り(正方形)
 	case SQUARE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
 		break;
-		// (�E��)���p
+		// (右に)直角
 	case ANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
 		break;
-		// (����)���p
+		// (左に)直角
 	case ANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
 		break;
-		// �E���(�����`)
+		// 右回り(長方形)
 	case RECTANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f ,m_position.y,m_position.z + 300.0f),3 });
 		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),4 });
 		break;
-		// �����(�����`)
+		// 左回り(長方形)
 	case RECTANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
@@ -365,24 +343,24 @@ void Enemy::Pass(int PassState)
 
 void Enemy::Act_Access()
 {
-	// �G�l�~�[����v���C���[�֌������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// �x�N�g���̒���
+	// 長さを計算
 	float length = diff.Length();
-
+	// 回転を教える
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// �x�N�g�������ȉ��̂Ƃ�
+	// 長さが一定のとき
 	if (length <= SEACH_DECISION) {
-		// �x�N�g���𐳋K��
+		// 正規化
 		diff.Normalize();
-		// �G�l�~�[�̍��W�ɉ��Z
+		// 移動速度に加算
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
 
-		// ����A�j���[�V������Đ�
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
 
@@ -390,99 +368,107 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
-	// ��]
+	// 回転
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// �ҋ@�A�j���[�V������Đ�
+	// 待機アニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
-	// ��~���鎞�Ԃ�߂����Ƃ�
+	// タイマーがtrueのとき
 	if (Act_Stop(time) == true) {
 
-		// ��x�������W��Q�Ƃ���
+		// 一度だけ実行する
 		if (CalculatedFlag == false) {
 
-			// ���W��n��
+			// 座標を参照
 			playerPos = m_playerManagement->GetPosition();
 			enemyPos = m_position;
 
-			// ������s��Ȃ��悤�Ƀt���O�𗧂Ă�
+			// 何度も実行しないようにtrueにする
 			CalculatedFlag = true;
 		}
 
-		// �G�l�~�[����v���C���[�֌��������W
+		// エネミーからプレイヤーへ向かうベクトル
 		Vector3 diff = playerPos - enemyPos;
 		diff.Normalize();
-		// ��]
+		// 回転
 		Rotation(diff);
 
-		// �G�l�~�[�̍��W�ɉ��Z
+		// 移動速度に加算
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
-		// �ړ��ʂ���Z
+		// 装移動距離を計算
 		sumPos += moveSpeed;
 
-		// ����A�j���[�V������Đ�
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
-		// �ړ����������̂Ƃ����Z��I������
+		// 長さが一定以上のとき
 		if (sumPos.Length() > MOVING_DISTANCE) {
 			
-			m_position = m_position;	// ���W��Œ�
+			m_position = m_position;	// 座標を固定
 
-			addTimer = 0.0f;			// �^�C�}�[����Z�b�g
-			sumPos = Vector3::Zero;		// ���ړ���������Z�b�g
-			CalculatedFlag = false;		// �t���O��~�낷
+			addTimer = 0.0f;			// タイマーをリセット
+			sumPos = Vector3::Zero;		// 移動距離をリセット
+			CalculatedFlag = false;		// フラグを降ろす
 
-			// �v���C���[������p��ɑ��݂���Ƃ�
+			// プレイヤーが視野角内にいるとき
 			if (Act_SeachPlayer() == true) {
 				return;
 			}
 
+			// いないときは巡回状態に戻る
 			m_ActState = BACKBASEDON;
 		}
 	}
 }
 
+void Enemy::Act_Call()
+{
+	// 周りの敵を呼ぶ処理
+
+	// えねみーのリストを検索
+	// ベクトルを計算して一定以内のとき正規化、移動速度を加算する
+
+
+}
+
 void Enemy::Act_Loss()
 {
-	// �v���C���[����������Ƃ��̃p�X�ւ̐؂�ւ����̏���
-	// �v���C���[��Ō�Ɍ����ӏ��̏�����܂ňړ�����ƌ���
+	addTimer = 0.0f;	// タイマーをリセット
 
-	addTimer = 0.0f;	// ���Z�p�^�C�}�[����Z�b�g
-
-	// ���̑Ώۂ̋���
-	// float�̍ő�l��i�[
+	// 直近のパスを検索
+	// floatに最大値を格納
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
 	int NowTargetNum = -1;
 
-	// ��ԋ߂��p�X��T��
+	// パスの個数文回す
 	for (int i = 0; i < m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
 		float length = diff.Length();
 
-		// �������r
-		// �V�����v�Z�����x�N�g���̕����Z���ꍇ�A�l�����ւ���
+		// 再度計算した長さが現在保存している長さより短いとき
 		if (NowTargetDiff > length) {
+			// 値を更新する
 			NowTargetNum = i;
 			NowTargetDiff = length;
 		}
 	}
 
-	// �ŒZ�̃p�X�l��i�[����
+	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	// �ڕW�Ƃ���|�C���g�̍��W����A���݂̍��W��������x�N�g��
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// ���K��
+	// 正規化
 	moveSpeed.Normalize();
-	// �x�N�g���ɃX�J���[���Z
+	// 移動速度に乗算
 	moveSpeed *= MOVE_SPEED;
-	// ��]�������
+	// 回転
 	Rotation(moveSpeed);
 
 	return;
@@ -490,23 +476,23 @@ void Enemy::Act_Loss()
 
 void Enemy::Act_Limit()
 {
-	// ���̋����ɂ͋߂Â��Ȃ�
-	// �G�l�~�[����v���C���[�֌������x�N�g��
+	// 近づける距離
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-	// ���������ȉ��̂Ƃ�
-	if ( diff.Length() <= ACT_LIMIT) {
-		// �����Ȃ��悤�ɂ���
+	// 長さが一定以内のとき
+	if ( diff.Length() < ACT_LIMIT) {
+		// 座標を固定
 		m_position = m_position;
 	}
 }
 
 bool Enemy::Act_Stop(float time)
 {
-	// �o�ߎ��Ԃ���Z
+	// フレームを加算
 	addTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ���Z���ꂽ���Ԃ����ȏ�ɂȂ����Ƃ�
+	// タイマーが一定以上になったら
 	if (time <= addTimer) {
 		return true;
 	}
