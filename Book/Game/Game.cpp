@@ -58,10 +58,10 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽf・ｽU・ｽC・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	// レベルデザイン処理
 	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
-		//・ｽ・ｽ・ｽO・ｽ・ｽunityChan・ｽﾈゑｿｽ
+		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
@@ -72,7 +72,7 @@ void Game::LevelDesign()
 			// Enemyのリストに追加
 			m_enemyList.push_back(m_enemyNormal);
 
-			// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
+			// パス移動の指定
 			m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");

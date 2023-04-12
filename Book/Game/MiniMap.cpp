@@ -10,7 +10,7 @@ namespace
 {
 	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
 	const float		MAP_RADIUS = 140.0f;									// マップの半径
-	const float		LIMITED_RANGE_IMAGE = 500.0f;							// マップの範囲
+	const float		LIMITED_RANGE_IMAGE = 650.0f;							// マップの範囲
 	const float		ALPHA = 0.75f;											// α値
 }
 
@@ -46,7 +46,7 @@ bool MiniMap::Start()
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
-	//m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
+	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
 	m_enemySearch = FindGO<Enemy_Search>("enemySearch");
 	m_enemyCharge = FindGO<Enemy_Charge>("enemyCharge");
 
@@ -56,7 +56,7 @@ bool MiniMap::Start()
 void MiniMap::Update()
 {
 	// マップ座標に変換
-	//DrawMap(m_enemyNormal->GetPosition(),0);
+	DrawMap(m_enemyNormal->GetPosition(),0);
 	DrawMap(m_enemySearch->GetPosition(), 1);
 	DrawMap(m_enemyCharge->GetPosition(), 2);
 

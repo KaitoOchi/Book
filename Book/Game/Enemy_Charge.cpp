@@ -66,6 +66,13 @@ void Enemy_Charge::Update()
 		Update_OnBackBasedOn();
 		// ö—
 	case CONFUSION:
+
+		// ‚È‚º‚©ö—‚É“ü‚é‚Ì‚Å‰‹}ˆ’u
+		if (m_ActState == CRAW) {
+			Update_OnCraw();
+			break;
+		}
+
 		Update_OnConfusion();
 		break;
 	}
@@ -121,8 +128,8 @@ void Enemy_Charge::Update_OnBackBasedOn()
 	// “ËiË„‰ñ‚Ö‚ÌØ‚è‘Ö‚¦
 
 	Enemy::Act_Loss();					// ’ÇÕs“®‚©‚ç‚ÌØ‚è‘Ö‚¦
-
 	m_ActState = CRAW;
+
 }
 
 void Enemy_Charge::Update_OnCalled()

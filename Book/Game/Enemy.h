@@ -24,7 +24,7 @@ public:
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
-	bool Act_Stop(float time);			// 行動停止
+	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
 	void Act_Call();					// 周りの敵を呼ぶ
@@ -193,7 +193,7 @@ protected:
 	bool FindPlayerFlag = false;			
 	bool CalculatedFlag = false;			// 突進用フラグ
 
-	float addTimer = 0.0f;					// 加算するタイマー
+	float addTimer[3];						// 加算するタイマー。処理ごとに配列を作成
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 
 	Vector3 playerPos = Vector3::Zero;		// 突進用

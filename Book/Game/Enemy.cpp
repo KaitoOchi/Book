@@ -56,6 +56,11 @@ bool Enemy::Start()
 	m_game = FindGO<Game>("game");
 	enemyList = m_game->GetEnemyList();
 
+	for (int i = 0; i < 3; i++) {
+		// 0が閃光弾。1が巡回。2を突進用として用意
+		addTimer[i] = 0.0f;
+	}
+
 	return true;
 }
 
@@ -182,9 +187,9 @@ void Enemy::Act_HitFlashBullet()
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 		// タイマーがtrueのとき
-		if (Act_Stop(CANMOVE_TIMER) == true) {
+		if (Act_Stop(CANMOVE_TIMER,0) == true) {
 			HitFlashBulletFlag = false;		// フラグを降ろす
-			addTimer = 0.0f;				// タイマーをリセット
+			addTimer[0] = 0.0f;				// タイマーをリセット
 
 		}
 		// そうでないとき
@@ -215,7 +220,7 @@ void Enemy::Act_Craw()
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer = 0.0f;	// タイマーをリセット
+		addTimer[1] = 0.0f;	// タイマーをリセット
 	}
 
 	// エネミーからプレイヤーへ向かうベクトル
@@ -227,7 +232,7 @@ void Enemy::Act_Craw()
 	Rotation(moveSpeed);
 
 	// タイマーがtrueのとき
-	if (Act_Stop(WAITING_TIMER) == true) {
+	if (Act_Stop(WAITING_TIMER,1) == true) {
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 		// 座標に加算
@@ -383,7 +388,7 @@ void Enemy::Act_Charge(float time)
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 
 	// タイマーがtrueのとき
-	if (Act_Stop(time) == true) {
+	if (Act_Stop(time,2) == true) {
 
 		// 一度だけ実行する
 		if (CalculatedFlag == false) {
@@ -416,7 +421,7 @@ void Enemy::Act_Charge(float time)
 			
 			m_position = m_position;	// 座標を固定
 
-			addTimer = 0.0f;			// タイマーをリセット
+			addTimer[2] = 0.0f;			// タイマーをリセット
 			sumPos = Vector3::Zero;		// 移動距離をリセット
 			CalculatedFlag = false;		// フラグを降ろす
 
@@ -424,10 +429,9 @@ void Enemy::Act_Charge(float time)
 			if (Act_SeachPlayer() == true) {
 				return;
 			}
-			else {
-				// いないときは巡回状態に戻る
-				m_ActState = BACKBASEDON;
-			}
+
+			// いないときは巡回状態に戻る
+			m_ActState = BACKBASEDON;
 		}
 	}
 }
@@ -465,7 +469,7 @@ void Enemy::Act_Call()
 
 void Enemy::Act_Loss()
 {
-	addTimer = 0.0f;	// タイマーをリセット
+	addTimer[1] = 0.0f;	// タイマーをリセット
 
 	// 直近のパスを検索
 	// floatに最大値を格納
@@ -515,13 +519,13 @@ void Enemy::Act_Limit()
 	}
 }
 
-bool Enemy::Act_Stop(float time)
+bool Enemy::Act_Stop(float time,int i)
 {
 	// フレームを加算
-	addTimer += g_gameTime->GetFrameDeltaTime();
+	addTimer[i] += g_gameTime->GetFrameDeltaTime();
 
 	// タイマーが一定以上になったら
-	if (time <= addTimer) {
+	if (time <= addTimer[i]) {
 		return true;
 	}
 
