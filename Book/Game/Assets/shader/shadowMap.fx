@@ -15,7 +15,14 @@ cbuffer ModelCb : register(b0)
 cbuffer ShadowCB : register(b1) {
 
 	float3 lightPos;		//ライトの座標
-}*/
+}
+*/
+
+cbuffer A : register(b1)
+{
+    int a;
+}
+
 
 // 頂点シェーダーへの入力
 struct SVSIn

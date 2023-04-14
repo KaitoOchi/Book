@@ -83,8 +83,6 @@ namespace nsBookEngine {
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		}
 
-		modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
-
 		if (m_skeleton.IsInited()) {
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;

@@ -32,6 +32,7 @@ namespace nsBookEngine {
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
+			int ptNum;											//ポイントライトの数
 		};
 
 		//スプライト用の構造体
@@ -150,7 +151,7 @@ namespace nsBookEngine {
 			return m_spriteCB;
 		}
 
-		Vector3& GetLightPos()
+		const Vector3& GetLightPos()
 		{
 			return m_lightCB.shadowCB.lightPos;
 		}
