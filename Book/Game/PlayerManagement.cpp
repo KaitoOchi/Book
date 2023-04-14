@@ -13,7 +13,7 @@ PlayerManagement::~PlayerManagement()
 }
 bool PlayerManagement::Start()
 {
-	Player::Start();
+	m_ghost = FindGO<Ghost>("ghost");
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
 	return true;
@@ -68,8 +68,8 @@ void PlayerManagement::PlayerChange3D()
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
 			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
-				GhostHit();
-				m_player3D->SetPosition(m_ghostPosition);
+				m_player3D->GhostHit();
+				m_player3D->m_ghostHit = false;
 			}
 		});
 	//ƒvƒŒƒCƒ„[‚ğ‚RD‚É‚·‚é

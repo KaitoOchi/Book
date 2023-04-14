@@ -21,7 +21,8 @@ bool Player3D::Start()
 {
 	m_characon = new CharacterController;
 	Player::Start();
-
+	//3Dアニメーションの読み込み
+	Player::Animation3D();
 	//キャラコンやコリジョンの作成
 	m_characon->Init(BOXSIZE, m_position);
 	m_collisionObject->CreateBox(
@@ -35,23 +36,6 @@ bool Player3D::Start()
 	//マネジメントの呼び出し
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_playerManagement->SetCharacon(m_characon);
-	
-	
-	//アニメーションを読み込む
-	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
-	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
-	m_animationClips[m_enAnimationClip_Walk].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_Run].Load("Assets/animData/player/run.tka");
-	m_animationClips[m_enAnimationClip_Run].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_Jump].Load("Assets/animData/player/jump_start.tka");
-	m_animationClips[m_enAnimationClip_Jump].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Jumpend].Load("Assets/animData/player/jump_end.tka");
-	m_animationClips[m_enAnimationClip_Jumpend].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/die.tka");
-	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
-	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	//モデルを読み込む
 	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, false, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
@@ -69,26 +53,47 @@ void Player3D::Update()
 	{
 		return;
 	}
-	//atn2で３Dの回転を求める
-	angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-	Player::Update();
-	Animation();
-	//アイテムを投げる
-	if (g_pad[0]->IsTrigger(enButtonRB1)&&m_playerState!=m_enAnimationClip_Jump)
+	//壁に埋まっていないなら
+	if (m_ghostHit)
 	{
-		Throw();
+		//atn2で３Dの回転を求める
+		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+		Player::Update();
+		Animation();
+		//アイテムを投げる
+		if (g_pad[0]->IsTrigger(enButtonRB1) && m_playerState != m_enAnimationClip_Jump)
+		{
+			Throw();
+		}
+		//お宝を盗む演出を入れる
+		// 
+		//プレイヤーの移動を継承する。
+		//キャラコンで座標を移動させる。
+		m_characon->SetPosition(m_position);
+		m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
+		m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+		m_modelRender->SetPosition(m_position);
+		m_modelRender->SetRotation(m_rotation);
+		m_modelRender->Update();
+		m_collisionObject->Update();
 	}
-	//お宝を盗む演出を入れる
-	// 
-	//プレイヤーの移動を継承する。
-	//キャラコンで座標を移動させる。
-	m_characon->SetPosition(m_position);
-	m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
-	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
-	m_modelRender->SetPosition(m_position);
-	m_modelRender->SetRotation(m_rotation);
-	m_modelRender->Update();
-	m_collisionObject->Update();
+	else
+	{
+		senkeiTime -= g_gameTime->GetFrameDeltaTime();
+		if (senkeiTime < 0.0f)
+		{
+			m_movePosition.Lerp(senkeiPos, GetPosition(), GetGhostPosition());
+			m_modelRender->SetPosition(m_movePosition);
+			m_modelRender->Update();
+			m_characon->SetPosition(m_movePosition);
+			senkeiPos+=0.1;
+			senkeiTime = 1.0f;
+		}
+		if (senkeiPos >= 1.0f)
+		{
+			m_ghostHit = true;
+		}
+	}
 
 }
 void Player3D::Throw()

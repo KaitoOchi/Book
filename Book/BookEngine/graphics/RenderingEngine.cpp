@@ -19,10 +19,10 @@ namespace nsBookEngine {
 	{
 
 		//ディレクショナルライトの設定
-		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
 		//環境光の設定
-		SetAmbient(0.3f);
+		SetAmbient(0.5f);
 
 		//半球光の設定
 		SetHemiSphereLight(
@@ -61,7 +61,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(20.5f);
+		SetBloomThreshold(1.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -94,12 +94,12 @@ namespace nsBookEngine {
 		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
 		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
-		m_2DSprite.Init(spriteInitData);
+		/*m_2DSprite.Init(spriteInitData);
 
 		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
 		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
 		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
-		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
+		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();*/
 
 		m_mainSprite.Init(spriteInitData);
 	}

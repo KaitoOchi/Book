@@ -19,7 +19,6 @@ Player::Player()
 
 Player::~Player()
 {
-
 }
 
 bool Player::Start()
@@ -29,7 +28,41 @@ bool Player::Start()
 	m_ghost = FindGO<Ghost>("ghost");
 	return true;
 }
-
+void Player::Animation3D()
+{
+	//アニメーションを読み込む
+	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
+	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
+	m_animationClips[m_enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
+	m_animationClips[m_enAnimationClip_Walk].SetLoopFlag(true);
+	m_animationClips[m_enAnimationClip_Run].Load("Assets/animData/player/run.tka");
+	m_animationClips[m_enAnimationClip_Run].SetLoopFlag(true);
+	m_animationClips[m_enAnimationClip_Jump].Load("Assets/animData/player/jump_start.tka");
+	m_animationClips[m_enAnimationClip_Jump].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_Jumpend].Load("Assets/animData/player/jump_end.tka");
+	m_animationClips[m_enAnimationClip_Jumpend].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/die.tka");
+	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
+	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
+}
+void Player::Animation2D()
+{
+	m_player2D[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.DDS");
+	m_player2D[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.DDS");
+	m_player2D[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.DDS");
+	m_player2D[3].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_1.DDS");
+	m_player2D[4].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_2.DDS");
+	m_player2D[5].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_3.DDS");
+	m_player2D[6].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_4.DDS");
+	m_player2D[7].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_5.DDS");
+	m_player2D[8].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_6.DDS");
+	m_player2D[9].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_1.DDS");
+	m_player2D[10].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_2.DDS");
+	m_player2D[11].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_3.DDS");
+	m_player2D[12].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_4.DDS");
+	m_player2D[13].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_5.DDS");
+}
 void Player::Update()
 {
 	//投げているときに行動出来ないようにする
@@ -127,10 +160,11 @@ void Player::GhostHit()
 		if (NowTargetDiff > lenght)
 		{
 			NowTargetDiff = lenght;
-			m_ghostPosition = ghostposition;
-			m_keepGhostPosition = ghostposition;
+			SetGhostPosition(ghostposition);
 		}
 	}
+
+	
 }
 void Player::ProcessCommonStateTransition()
 {
@@ -194,6 +228,11 @@ void Player::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
+void Player::ProcessDownStateTransition()
+{
+	//ステートの遷移
+	ProcessCommonStateTransition();
+}
 void Player::Process2DChangingStateTransition()
 {
 	
@@ -251,6 +290,9 @@ void Player::ManageState()
 	case m_enPlayer3D_Throw:
 		ProcessThrowStateTransition();
 		break;
+		//気絶しているとき
+	case m_enPlayer_Downh:
+		ProcessDownStateTransition();
 	default:
 		break;
 	}

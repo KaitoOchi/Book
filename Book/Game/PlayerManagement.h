@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include "Player.h"
 #include "Player2D.h"
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class PlayerManagement:public Player
+class Ghost;
+class PlayerManagement:public IGameObject
 {
 public:
 	PlayerManagement();
@@ -50,18 +50,20 @@ public:
 	void ProcessCommonStateTransition();
 	enum EnMnagementState
 	{
+		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
 		m_enPlayer_2DChanging,//2Dに切替中
 		m_enPlayer_3DChanging,//3Dに切替中
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
+
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
-	Vector3 m_keepGhostPosition=Vector3::Zero;
+	
 	Vector3 m_position = Vector3::Zero;
-	CharacterController* m_setChara = nullptr;
+	CharacterController* m_characon = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
-	
+	Ghost* m_ghost = nullptr;
 	
 };
 

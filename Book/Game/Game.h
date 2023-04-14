@@ -13,6 +13,7 @@ class PlayerManagement;
 class Wall;
 class Treasure;
 class Ghost;
+class GameUI;
 class Game : public IGameObject
 {
 public:
@@ -37,21 +38,27 @@ public:
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
+		m_enGameState_GameClearable,//ゲームクリア条件達成
 		m_enGameState_GameClear,//ゲームクリア
 		m_enGameState_GameOver,//ゲームオーバー
 		m_enGameState_GameBuck//タイトルに戻る
 	};
+	EnGameState m_gameState = m_enGameState_DuringGamePlay;//現在のステートの管理
 private:
 	/// <summary>
 	/// クリアステートに遷移
 	/// </summary>
 	void ClearState();
+	/// <summary>
+	/// クリア可能ステートに遷移
+	/// </summary>
+	void Clearable();
 
 	/// <summary>
 	/// ステートの切替
 	/// </summary>
 	void MnageState();
-	EnGameState m_gameState=m_enGameState_DuringGamePlay;//現在のステートの管理
+	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
 	Player3D* m_player3D = nullptr;//3Dプレイヤー
@@ -73,7 +80,7 @@ private:
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
-	
+	GameUI* m_gameUI = nullptr;
 	PointLight m_pointLight;
 
 };
