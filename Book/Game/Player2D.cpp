@@ -29,7 +29,7 @@ bool Player2D::Start()
 	m_modelRender = new ModelRender;
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	//モデルの読み込み
-	m_modelRender->Init("Assets/modelData/player/player2D.tkm");
+	m_modelRender->Init("Assets/modelData/player/player2D.tkm",0,0,enModelUpAxisZ,false,false, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetScale(MODELSIZE);
 
 	

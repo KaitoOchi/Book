@@ -56,6 +56,7 @@ bool Game::Start()
 	m_pointLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
 	m_pointLight.SetRange(100.0f);
 	m_pointLight.Update();
+
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
@@ -181,7 +182,7 @@ void Game::LevelDesign()
 
 			SetClearPosition(objData.position);
 
-			m_pointLight.SetPosition(Vector3(m_position.x,m_position.y+10.0f,m_position.z));
+			m_pointLight.SetPosition(Vector3(m_position.x, m_position.y + 10.0f, m_position.z));
 			return true;
 		}
 
@@ -193,6 +194,7 @@ void Game::LevelDesign()
 void Game::Update()
 {
 	MnageState();
+
 	m_pointLight.Update();
 }
 void Game::Clearable()

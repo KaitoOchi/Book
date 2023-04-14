@@ -10,6 +10,12 @@ cbuffer ModelCb : register(b0)
     float4x4 mView;
     float4x4 mProj;
 };
+/*
+//ライト用の定数バッファ
+cbuffer ShadowCB : register(b1) {
+
+	float3 lightPos;		//ライトの座標
+}*/
 
 // 頂点シェーダーへの入力
 struct SVSIn
@@ -25,6 +31,7 @@ struct SPSIn
     float4 pos : SV_POSITION;   // スクリーン空間でのピクセルの座標
     float3 normal : NORMAL;     // 法線
     float2 uv : TEXCOORD0;      // uv座標
+    float2 depth : TEXCOORD1;   // ライト空間での座標
 };
 
 ///////////////////////////////////////////////////
@@ -70,10 +77,15 @@ SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
 	}
 
     psIn.pos = mul(m, vsIn.pos);
+    float3 worldPos = psIn.pos;
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);
 
     psIn.normal = mul(m, vsIn.normal);
+
+    //頂点のライトから見た深度値と、ライトから見た深度値の2乗を計算する
+    psIn.depth.x = length(worldPos - (600, 800, 600)) / 1000.0f;
+    psIn.depth.y = psIn.depth.x * psIn.depth.x;
 
     psIn.uv = vsIn.uv;
 
@@ -91,6 +103,6 @@ SPSIn VSSkinMain(SVSIn vsIn)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
-    //シャドウマップ描画用のピクセルシェーダーを実装
-    return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
+    //ライトから見た深度値と、ライトから見た深度値の2乗を出力する
+    return float4(psIn.depth.x, psIn.depth.y, 0.0f, 1.0f);
 }

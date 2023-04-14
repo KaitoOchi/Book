@@ -17,12 +17,11 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Init()
 	{
-
 		//ディレクショナルライトの設定
-		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//環境光の設定
-		SetAmbient(0.5f);
+		SetAmbient(0.3f);
 
 		//半球光の設定
 		SetHemiSphereLight(
@@ -33,22 +32,6 @@ namespace nsBookEngine {
 
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
-
-
-		// カメラの位置を設定。これはライトの位置
-		m_lightCamera.SetPosition(600, 800, 600);
-
-		// カメラの注視点を設定。これがライトが照らしている場所
-		m_lightCamera.SetTarget(0, 0, 0);
-
-		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
-		m_lightCamera.SetUp(1, -1, 1);
-
-		m_lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Perspective);
-		m_lightCamera.Update();
-
-		// ライトビュープロジェクション行列を計算している
-		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 
 		//メインレンダーターゲットを設定
 		m_mainRenderTarget.Create(
@@ -61,7 +44,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(1.0f);
+		SetBloomThreshold(0.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -94,29 +77,48 @@ namespace nsBookEngine {
 		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
 		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
-		/*m_2DSprite.Init(spriteInitData);
+		m_2DSprite.Init(spriteInitData);
 
 		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
 		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
 		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
-		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();*/
+		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
 
 		m_mainSprite.Init(spriteInitData);
 	}
 
 	void RenderingEngine::InitShadowMapRenderTarget()
 	{
-		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		// カメラの位置を設定。これはライトの位置
+		m_lightCamera.SetPosition(600, 800, 600);
 
+		// カメラの注視点を設定。これがライトが照らしている場所
+		m_lightCamera.SetTarget(0, 0, 0);
+
+		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
+		m_lightCamera.SetUp(1, -1, 1);
+
+		m_lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Perspective);
+		m_lightCamera.Update();
+
+		// ライトビュープロジェクション行列を計算している
+		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
+		m_lightCB.shadowCB.lightPos = m_lightCamera.GetPosition();
+
+		//シャドウマップ用レンダーターゲットの初期化
+		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		m_shadowMapRenderTarget.Create(
-			1024,
-			1024,
+			2048,
+			2048,
 			1,
 			1,
-			DXGI_FORMAT_R32_FLOAT,
+			DXGI_FORMAT_R32G32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT,
 			clearColor
 		);
+
+		//シャドウマップ用のガウシアンブラーを初期化
+		m_shadowBlur.Init(&m_shadowMapRenderTarget.GetRenderTargetTexture());
 	}
 
 	void RenderingEngine::Execute(RenderContext& rc)
@@ -141,7 +143,9 @@ namespace nsBookEngine {
 		m_lightCamera.SetPosition(Vector3(g_camera3D->GetPosition().x + 400.0f, g_camera3D->GetPosition().y + 200.0f, g_camera3D->GetPosition().z + 400.0f));
 		m_lightCamera.SetTarget(g_camera3D->GetTarget());
 		m_lightCamera.Update();
-		m_lightCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
+		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
+		m_lightCB.shadowCB.lightPos = m_lightCamera.GetPosition();
+
 
 		//シャドウマップ用のレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMapRenderTarget);
@@ -154,6 +158,9 @@ namespace nsBookEngine {
 		}
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
+
+		m_shadowBlur.ExecuteOnGPU(rc, 5.0f);
+
 	}
 
 	void RenderingEngine::ForwardRendering(RenderContext& rc)

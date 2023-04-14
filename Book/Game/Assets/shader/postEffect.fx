@@ -16,7 +16,7 @@ struct PSInput
 	float2 uv	: TEXCOORD0;
 };
 
-//’¸“_ƒVƒF[ƒ_[
+//ï¿½ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[
 PSInput VSMain(VSInput In)
 {
 	PSInput psIn;
@@ -26,7 +26,7 @@ PSInput VSMain(VSInput In)
 	return psIn;
 }
 
-Texture2D<float4> mainRenderTargetTexture : register(t0);	//ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚ÌƒeƒNƒXƒ`ƒƒ
+Texture2D<float4> mainRenderTargetTexture : register(t0);	//ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½
 sampler Sampler : register(s0);
 
 cbuffer SamplingLuminanceCb : register(b1)
@@ -34,13 +34,13 @@ cbuffer SamplingLuminanceCb : register(b1)
 	float threshold;
 };
 
-//‹P“x’Šo—p
+//ï¿½Pï¿½xï¿½ï¿½ï¿½oï¿½p
 float4 PSLuminance(PSInput In) : SV_Target0
 {
-	//ƒƒCƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚©‚çƒJƒ‰[‚ğƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½^ï¿½[ï¿½Qï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float4 color = mainRenderTargetTexture.Sample(Sampler, In.uv);
 
-	//ƒTƒ“ƒvƒŠƒ“ƒO‚µ‚½ƒJƒ‰[‚Ì–¾‚é‚³‚ğŒvZ
+	//ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½[ï¿½Ì–ï¿½ï¿½é‚³ï¿½ï¿½ï¿½vï¿½Z
 	float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
 
 	clip(t - threshold);
@@ -53,15 +53,38 @@ Texture2D<float> g_bokeTexture_1 : register(t1);
 Texture2D<float> g_bokeTexture_2 : register(t2);
 Texture2D<float> g_bokeTexture_3 : register(t3);
 
+float4 SetColor(float4 color);
+
 float4 PSBloomFinal(PSInput In) : SV_Target0
 {
-	//ƒ{ƒP‰æ‘œ‚ğƒTƒ“ƒvƒŠƒ“ƒO‚µ‚ÄA•½‹Ï‚ğæ‚Á‚Äo—Í‚·‚é
-	float4 combineColor = g_bokeTexture_0.Sample(Sampler, In.uv);
-	combineColor += g_bokeTexture_1.Sample(Sampler, In.uv);
-	combineColor += g_bokeTexture_2.Sample(Sampler, In.uv);
-	combineColor += g_bokeTexture_3.Sample(Sampler, In.uv);
+	//ï¿½{ï¿½Pï¿½æ‘œï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½ï¿½Äoï¿½Í‚ï¿½ï¿½ï¿½
+	float4 combineColor0 = g_bokeTexture_0.Sample(Sampler, In.uv);
+	float4 combineColor1 = g_bokeTexture_1.Sample(Sampler, In.uv);
+	float4 combineColor2 = g_bokeTexture_2.Sample(Sampler, In.uv);
+	float4 combineColor3 = g_bokeTexture_3.Sample(Sampler, In.uv);
 
-	combineColor /= 4.0f;
-	combineColor.a = 1.0f;
-	return combineColor;
+	combineColor0 = SetColor(combineColor0);
+	combineColor1 = SetColor(combineColor1);
+	combineColor2 = SetColor(combineColor2);
+	combineColor3 = SetColor(combineColor3);
+	combineColor0 += combineColor1;
+	combineColor0 += combineColor2;
+	combineColor0 += combineColor3;
+
+	combineColor0 /= 4.0f;
+	combineColor0.a = 1.0f;
+	return combineColor0;
+}
+
+float4 SetColor(float4 color)
+{
+	if(color.r >= 1.0f && color.g >= 1.0f && color.b >= 1.0f){
+	color.r = 1.0f;
+	color.g = 1.0f;
+	color.b = 1.0f;
+	}
+
+	color /= 4.0f;
+
+	return color;
 }
