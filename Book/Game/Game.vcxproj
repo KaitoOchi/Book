@@ -241,6 +241,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Mirror.h" />

@@ -64,6 +64,6 @@ private:
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
 	Ghost* m_ghost = nullptr;
-	
+	float YLstickamount = 0;
 };
 

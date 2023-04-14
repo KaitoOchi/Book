@@ -65,8 +65,6 @@ void Player3D::Update()
 		{
 			Throw();
 		}
-		//お宝を盗む演出を入れる
-		// 
 		//プレイヤーの移動を継承する。
 		//キャラコンで座標を移動させる。
 		m_characon->SetPosition(m_position);
@@ -79,18 +77,20 @@ void Player3D::Update()
 	}
 	else
 	{
-		senkeiTime -= g_gameTime->GetFrameDeltaTime();
-		if (senkeiTime < 0.0f)
-		{
-			m_movePosition.Lerp(senkeiPos, GetPosition(), GetGhostPosition());
-			m_modelRender->SetPosition(m_movePosition);
-			m_modelRender->Update();
-			m_characon->SetPosition(m_movePosition);
-			senkeiPos+=0.1;
-			senkeiTime = 1.0f;
-		}
+		senkeiPos += g_gameTime->GetFrameDeltaTime()*1.5f;
+		m_position.Lerp(senkeiPos,GetPushPosition(), GetGhostPosition());
+		m_modelRender->SetPosition(m_position);
+		m_modelRender->Update();
+		m_characon->SetPosition(m_position);
+		m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
+		//プレイヤーを押し出す方向に回転させる
+		m_pushRotPos = GetPushPosition() - GetGhostPosition();
+		m_pushRot=atan2(-m_pushRotPos.x, m_pushRotPos.z);
+		m_rotation.SetRotationY(m_pushRot);
+		m_modelRender->SetRotation(m_rotation);
 		if (senkeiPos >= 1.0f)
 		{
+			senkeiPos = 0.0f;
 			m_ghostHit = true;
 		}
 	}

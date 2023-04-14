@@ -24,6 +24,9 @@ public:
 		m_enPlayer3D_Push,		//‰Ÿ‚·
 
 	};
+
+	EnPlayerState m_playerState = m_enPlayer_Idle;				//‘Ò‹@ó‘Ô
+
 	Player();
 	virtual ~Player();
 	virtual bool Start();
@@ -54,7 +57,7 @@ public:
 	{
 		return m_collisionObject;
 	}
-	EnPlayerState m_playerState = m_enPlayer_Idle;				//‘Ò‹@ó‘Ô
+
 
 
 	/// <summary>

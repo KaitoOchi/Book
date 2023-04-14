@@ -69,6 +69,7 @@
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Enemy_Search.cpp" />
+    <ClCompile Include="Item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -124,5 +125,6 @@
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Enemy_Search.h" />
+    <ClInclude Include="Item.h" />
   </ItemGroup>
 </Project>

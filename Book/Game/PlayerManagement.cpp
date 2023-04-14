@@ -69,6 +69,7 @@ void PlayerManagement::PlayerChange3D()
 			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
 				m_player3D->GhostHit();
+				m_player3D->SetPushPosition(m_player3D->GetPosition());
 				m_player3D->m_ghostHit = false;
 			}
 		});

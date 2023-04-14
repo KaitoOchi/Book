@@ -25,7 +25,7 @@ namespace
 	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(30.0f, 0.0f, 0.0f);		//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(50.0f, 0.0f, 0.0f);		//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 }

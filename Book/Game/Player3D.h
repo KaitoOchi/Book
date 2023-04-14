@@ -16,13 +16,25 @@ public:
 	/// キャラコンの作成の関数
 	/// </summary>
 	void CreatCharcon();
+
+	void SetPushPosition(const Vector3 pushpos)
+	{
+		m_pushPosition = pushpos;
+	}
+	const Vector3 GetPushPosition()const
+	{
+		return m_pushPosition;
+	}
+
 private:
-	ModelRender m_model3DRender;//3Dモデル
 	PlayerManagement* m_playerManagement = nullptr;
 
 	//透明座標に動かす
-	Vector3 m_movePosition = Vector3::Zero;
-	float senkeiPos = 0.1f;
+	Vector3 m_pushPosition = Vector3::Zero;
+	Vector3 m_pushRotPos = Vector3::Zero;
+
+	float m_pushRot;
+	float senkeiPos = 0.0f;
 	float senkeiTime = 1.0f;
 };
 
