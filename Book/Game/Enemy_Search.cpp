@@ -60,28 +60,28 @@ void Enemy_Search::Update_OnSearch()
 		m_ActState = CONFUSION;
 	}
 
-	// 視野角内にプレイヤーが存在するとき
-	if (Enemy::Act_SeachPlayer() == true) {
-		m_ActState = CALL;
-	}
+	//// 視野角内にプレイヤーが存在するとき
+	//if (Enemy::Act_SeachPlayer() == true) {
+	//	m_ActState = CALL;
+	//}
 }
 
 void Enemy_Search::Update_OnCall()
 {
 	// 周りの敵を呼ぶ
 
-	Enemy::SpotLight_Serch(m_rot, m_position);
-	Enemy::Act_Call();
+	//Enemy::SpotLight_Serch(m_rot, m_position);
+	////Enemy::Act_Call();
 
-	// 閃光弾が当たったとき
-	if (HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
+	//// 閃光弾が当たったとき
+	//if (HitFlashBulletFlag == true) {
+	//	m_ActState = CONFUSION;
+	//}
 
-	// 視野角内にプレイヤーが存在しないとき
-	if (Enemy::Act_SeachPlayer() == false) {
-		m_ActState = SEARCH;
-	}
+	//// 視野角内にプレイヤーが存在しないとき
+	//if (Enemy::Act_SeachPlayer() == false) {
+	//	m_ActState = SEARCH;
+	//}
 }
 
 void Enemy_Search::Update_OnConfusion()

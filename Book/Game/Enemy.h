@@ -21,13 +21,14 @@ public:
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
 	void Act_Charge(float time);		// 突進行動
+	void Act_Call();					// 敵を呼ぶ行動
+	void Act_Called();					// 呼ばれた時の行動
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
 	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
-	void Act_Call();					// 周りの敵を呼ぶ
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
@@ -172,14 +173,14 @@ protected:
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
 
-	std::vector<Enemy*> enemyList;
+	std::vector<Enemy*> enemyList;			// エネミーのリスト
 
 	PlayerManagement* m_playerManagement = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Game* m_game = nullptr;
 
-	CharacterController m_characterController;
-	SphereCollider m_sphereCollider;
+	CharacterController m_characterController;	// キャラクターコントローラー
+	SphereCollider m_sphereCollider;			// スフィアコライダー
 
 	FontRender m_fontRender;				// フォントレンダー
 
@@ -196,7 +197,7 @@ protected:
 
 	float addTimer[3];						// 加算するタイマー。処理ごとに配列を作成
 	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
-	//float move = 1.0f;
+	float move = 1.0f;
 
 	Vector3 playerPos = Vector3::Zero;		// 突進用
 	Vector3 enemyPos = Vector3::Zero;

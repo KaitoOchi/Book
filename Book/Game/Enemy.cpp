@@ -22,6 +22,7 @@ namespace
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
+	const float		ADD_LENGTH = 45.0f;						// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
@@ -44,18 +45,24 @@ bool Enemy::Start()
 {
 	//警戒度時間を代入
 	m_Vicount = VIGILANCETIME;
+
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
-	// �X�t�B�A�R���C�_�[�������
-	m_sphereCollider.Create(1.0f);
+
+	// スフィアコライダーを設定
+	m_sphereCollider.Create(17.0f);
+
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
+
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gameUI = FindGO<GameUI>("gameUI");
 	m_game = FindGO<Game>("game");
+	// gameで設定したエネミーのリストを取得する
 	enemyList = m_game->GetEnemyList();
 
+	// 各タイマーのリセット
 	for (int i = 0; i < 3; i++) {
 		// 0が閃光弾。1が巡回。2を突進用として用意
 		addTimer[i] = 0.0f;
@@ -94,12 +101,6 @@ bool Enemy::Act_SeachPlayer()
 		// 角度が視野角内のとき
 		if (angle <= (FIELDOF_VIEW) {
 			// 衝突判定を行う
-			
-			//// 衝突しているとき
-			//else if (WallAndHit(m_playerPos) == true) {
-			//	FindPlayerFlag = true;
-			//}
-
 			return WallAndHit(m_playerPos);
 		}
 	}
@@ -135,9 +136,10 @@ bool Enemy::WallAndHit(Vector3 pos)
 	end.setIdentity();
 
 	// 始点はエネミーの座標
-	start.setOrigin(btVector3(m_position.x, m_position.y + 70.0f, m_position.z));
-	// 終点はプレイヤーの座標
-	end.setOrigin(btVector3(pos.x, pos.y + 70.0f, pos.z));
+	start.setOrigin(btVector3(m_position.x, m_position.y + 20.0f, m_position.z));
+
+	// 終点はプレイヤーの座標 (突進時は始点の少し前)
+	end.setOrigin(btVector3(pos.x, m_position.y + 20.0f, pos.z));
 
 	SweepResultWall callback;
 
@@ -148,6 +150,9 @@ bool Enemy::WallAndHit(Vector3 pos)
 	// 壁と衝突した
 	if (callback.isHit == true) {
 		// プレイヤーは見つかっていない
+		if (m_ActState == EnEnemyActState::CHARGE) {
+			int hoge = 0;
+		}
 		return false;
 	}
 
@@ -379,6 +384,26 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
+	// 壁に衝突したとき
+
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 diff = playerPos - m_position;
+	// 正規化
+	diff.Normalize();
+
+	// 壁に衝突したとき
+	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
+	if (Enemy::WallAndHit(m_position + (diff * ADD_LENGTH)) == false) {
+		move = 0.0f;
+		CalculatedFlag = false;
+
+		m_ActState = BACKBASEDON;		// 状態を移行
+		return;
+	}
+	else {
+		move = 1.0f;
+	}
+
 	// 回転
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
@@ -394,8 +419,8 @@ void Enemy::Act_Charge(float time)
 		if (CalculatedFlag == false) {
 
 			// 座標を参照
-			playerPos = m_playerManagement->GetPosition();
 			enemyPos = m_position;
+			playerPos = m_playerManagement->GetPosition();
 
 			// 何度も実行しないようにtrueにする
 			CalculatedFlag = true;
@@ -409,7 +434,7 @@ void Enemy::Act_Charge(float time)
 
 		// 移動速度に加算
 		Vector3 moveSpeed = diff * (MOVE_SPEED * 1.5f);
-		m_position += moveSpeed;
+		m_position += moveSpeed * move;
 		// 総移動距離を計算
 		sumPos += moveSpeed;
 
@@ -462,9 +487,16 @@ void Enemy::Act_Call()
 	}
 }
 
+void Enemy::Act_Called()
+{
+	// 歩きアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+}
+
 void Enemy::Act_Loss()
 {
 	addTimer[1] = 0.0f;	// タイマーをリセット
+	addTimer[2] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
 
 	// 直近のパスを検索
 	// floatに最大値を格納
