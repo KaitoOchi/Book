@@ -23,6 +23,14 @@ namespace nsBookEngine {
 		~PointLight();
 
 		/// <summary>
+		/// ポイントライトの番号を設定
+		/// </summary>
+		void SetNumber(const int num)
+		{
+			m_ptNum = num;
+		}
+
+		/// <summary>
 		/// 座標を設定。
 		/// </summary>
 		void SetPosition(const Vector3& pos)
@@ -31,7 +39,7 @@ namespace nsBookEngine {
 			//g_camera3D->GetViewMatrix().Apply(m_pointLig.ptPosition);
 		}
 
-		/// <sSummary>
+		/// <summary>
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
@@ -88,5 +96,6 @@ namespace nsBookEngine {
 
 	private:
 		pointLight m_pointLig;
+		int m_ptNum = 0;
 	};
 }
