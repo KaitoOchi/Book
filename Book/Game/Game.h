@@ -5,8 +5,9 @@ class Player2D;
 class GameCamera;
 class MiniMap;
 class BackGround;
+class Enemy;
 class Enemy_Normal;
-class Enemy_Serch;
+class Enemy_Search;
 class TransparentBox;
 class Enemy_Charge;
 class PlayerManagement;
@@ -61,9 +62,12 @@ private:
 	LevelRender m_levelRender;
 	MiniMap* m_miniMap = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
-	Enemy_Serch* m_enemySerch = nullptr;
+	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
+
+	std::vector<Enemy*> m_enemyList;
+
 	TransparentBox *m_trans = nullptr;
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
@@ -71,8 +75,6 @@ private:
 	Gost* m_gost = nullptr;
 	
 	PointLight m_pointLight;
-
-	
 
 };
 

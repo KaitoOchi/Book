@@ -4,12 +4,14 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
-#define SEACH_DECISION 300.0f * 300.0f						// ベクトルを作成する範囲
+#define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
+#define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
 
 namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
+	const float		CALL_DISTANCE = 300.0f;					// 呼ぶことができる範囲
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -24,8 +26,8 @@ namespace
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//���C�g�̃J���[
-	const float		LIGHTRANGE = 300.0f;						//���C�g�̉e���͈�
-	const float		LIGHTPOSITION = 40.0f;						//���C�g�̃|�W�V����
+	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
+	const float		LIGHTPOSITION = 40.0f;					//���C�g�̃|�W�V����
 }
 
 Enemy::Enemy()
@@ -43,7 +45,7 @@ bool Enemy::Start()
 	m_Vicount = VIGILANCETIME;
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
-	// スフィアコライダーを初期化
+	// �X�t�B�A�R���C�_�[�������
 	m_sphereCollider.Create(1.0f);
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -54,9 +56,16 @@ bool Enemy::Start()
 	return true;
 }
 
-bool Enemy::SeachPlayer()
+void Enemy::Rotation(Vector3 rot)
 {
-	// 視野角の処理
+	// 回転
+	m_rotation.SetRotationYFromDirectionXZ(rot);
+	m_enemyRender.SetRotation(m_rotation);
+}
+
+bool Enemy::Act_SeachPlayer()
+{
+	// 索敵
 	// trueのときプレイヤーを発見している
 
 	m_forward = Vector3::AxisZ;
@@ -66,17 +75,23 @@ bool Enemy::SeachPlayer()
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 
-	// プレイヤーにある程度近いとき
+	// ベクトルが一定の長さ以下のとき
 	if (diff.LengthSq() <= SEACH_DECISION) {
-		// エネミーからプレイヤーへ向かうベクトルを正規化
+		// 正規化
 		diff.Normalize();
-		// エネミーの正面ベクトル、エネミーからプレイヤーへ向かうベクトルの内積を計算
+		// 内積を計算
 		float cos = m_forward.Dot(diff);
-		// 内積から角度を計算
+		// 角度を計算
 		float angle = acosf(cos);
-		// 角度が視野角より狭いとき
+		// 角度が視野角内のとき
 		if (angle <= (FIELDOF_VIEW) {
-			// 壁との衝突判定を行う
+			// 衝突判定を行う
+			
+			//// 衝突しているとき
+			//else if (WallAndHit(m_playerPos) == true) {
+			//	FindPlayerFlag = true;
+			//}
+
 			return WallAndHit(m_playerPos);
 		}
 	}
@@ -84,20 +99,20 @@ bool Enemy::SeachPlayer()
 	return false;
 }
 
-// 衝突した際に呼ばれる関数オブジェクト(壁用)
+// 衝突したときに呼ばれる関数オブジェクト(壁用)
 struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 {
 	bool isHit = false;		// 衝突フラグ
 
 	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
-		// 壁と衝突していないとき
+		// 壁とぶつかっていなかったら
 		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
 			// 衝突したのは壁ではない
 			return 0.0f;
 		}
 
-		// 壁と衝突したとき
+		// 壁とぶつかったら
 		// フラグをtrueにする
 		isHit = true;
 		return 0.0f;
@@ -106,9 +121,6 @@ struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 
 bool Enemy::WallAndHit(Vector3 pos)
 {
-	// 障害物を考慮した視野角の処理
-	// プレイヤーを発見したときtrueを返す
-
 	btTransform start, end;
 
 	start.setIdentity();
@@ -122,7 +134,7 @@ bool Enemy::WallAndHit(Vector3 pos)
 	SweepResultWall callback;
 
 	// コライダーを始点から終点まで動かして、
-	// 衝突するかどうかを調べる
+	// 衝突するかどうか調べる
 	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
 
 	// 壁と衝突した
@@ -132,39 +144,41 @@ bool Enemy::WallAndHit(Vector3 pos)
 	}
 
 	// 壁と衝突していない
+	// プレイヤーを見つけた
 	return true;
 }
 
-bool Enemy::CatchPlayer()
+bool Enemy::Act_CatchPlayer()
 {
-	// プレイヤーを確保する処理
-	// trueのときプレイヤーを確保している
+	// プレイヤーを捕まえる処理
+	// trueのときプレイヤーを捕まえた
 
-	// エネミーからプレイヤーへ向かうベクトルを計算する
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ベクトルの長さを求める
+	// 長さを計算する
 	float length = diff.Length();
 
-	// ベクトルが一定以下のとき
+	// 一定の長さのとき
 	if (length <= CATCH_DECISION) {
-		// 捕まえる処理を行う
+		// 捕まえる
 		return true;
 	}
 
 	return false;
 }
 
-void Enemy::HitFlashBullet()
+void Enemy::Act_HitFlashBullet()
 {
 	// 閃光弾が当たったとき
-	// trueなら当たった
+	// trueのとき当たった
+
 	if (HitFlashBulletFlag == true) {
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER) == true) {
 			HitFlashBulletFlag = false;		// フラグを降ろす
-			addTimer = 0.0f;				// 加算用タイマーをリセット
+			addTimer = 0.0f;				// タイマーをリセット
 
 		}
 		// そうでないとき
@@ -177,41 +191,17 @@ void Enemy::HitFlashBullet()
 
 void Enemy::Act_Craw()
 {
-	// パス移動
+	// 巡回
 	
-	// 追跡から状態を切り替えたとき
-	//if (ChangeCrawFlag == true) {
-
-	//	// 一番近いパスを探す
-	//	for (int i = 1; i <= m_pointList.size(); i++) {
-
-	//		m_point = &m_pointList[i];
-	//		Vector3 diff = m_point->s_position - m_position;
-
-	//		for (int j = i + 1; j <= m_pointList.size(); j++) {
-
-	//			m_point = &m_pointList[j];
-	//			Vector3 diff2 = m_point->s_position - m_position;
-
-	//			// 長さを比較
-	//			// diff2が長いとき
-	//			if (diff.Length() < diff2.Length()) {
-	//				// numberを格納する
-	//				m_point->s_number = j;
-	//			}
-	//		}
-	//	}
-	//}
-	
-	// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
-	// 距離が一定以内なら目的地とするポイントを変更する
+	// 長さが一定のとき
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// 現在の目的地のポイントが配列の最後のとき
-		if (ChangeCrawFlag == false && m_point->s_number == m_pointList.size()) {
-			// 一番最初のポイントを目的地とする
+		// パスが最後のとき
+		if (m_point->s_number == m_pointList.size()) {
+			// 最初の値を渡す
 			m_point = &m_pointList[0];
 		}
 		// そうでないとき
@@ -219,56 +209,54 @@ void Enemy::Act_Craw()
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer = 0.0f;	// 加算用タイマーをリセット
+		addTimer = 0.0f;	// タイマーをリセット
 	}
-	
-	// フラグを戻す
-	//ChangeCrawFlag = false;
 
-	// 目標とするポイントの座標から、現在の座標を引いたベクトル
+	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_point->s_position - m_position;
 	// 正規化
 	moveSpeed.Normalize();
-	// ベクトルにスカラーを乗算
+	// 回転を教える
 	moveSpeed *= MOVE_SPEED;
+	Rotation(moveSpeed);
 
 	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER) == true) {
-		// 待機アニメーションを再生
+		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
-		// 座標に加算する
+		// 座標に加算
 		m_position += moveSpeed;
 	}
 	// そうでないとき
 	else {
-		// 歩きアニメーションを再生
+		// 待機アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// 経過時間を加算
+	// タイマーを加算
 	NaviTimer += g_gameTime->GetFrameDeltaTime();
-
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
 		return;
 	}
 
-	// ナビメッシュでの移動
-	// プレイヤーの座標を獲得する
+	// ナビメッシュ
+
+	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
 
-	bool isEnd;							// パス移動が終了した際のフラグ
+	bool isEnd;							// フラグ
 
 	// パス検索
 	m_pathFiding.Execute(
 		m_path,							// 構築されたパスの格納先
 		m_nvmMesh,						// ナビメッシュ
 		m_position,						// 開始座標
-		m_playerPos,					// 目標地点
+		m_playerPos,					// 移動目標座標
 		PhysicsWorld::GetInstance(),	// 物理エンジン
 		AI_RADIUS,						// AIエージェントの半径
 		AI_HIGH							// AIエージェントの高さ
@@ -276,53 +264,235 @@ void Enemy::Act_Tracking()
 
 	// パス上を移動する
 	m_position = m_path.Move(
-		m_position,						// 移動させる座標
+		m_position,						// 座標
 		MOVE_SPEED,						// 移動速度
-		isEnd							// 終了時にtrueを格納するフラグ
+		isEnd							// 移動したときtrue
 	);
 
-	// 歩行アニメーションを再生
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 moveSpeed = m_playerPos - m_position;
+
+	float angle = atan2(-moveSpeed.x, moveSpeed.z);
+	Quaternion rot = Quaternion::Identity;
+	rot.SetRotationY(-angle);
+
+	// 回転を教える
+	m_enemyRender.SetRotation(rot);
+
+	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+}
+
+void Enemy::Pass(int PassState)
+{
+	switch (PassState)
+	{
+		// 縦
+	case LINE_VERTICAL:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		break;
+		// 横
+	case LINE_HORIZONTAL:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		break;
+		// 右回り(正方形)
+	case SQUARE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// 左回り(正方形)
+	case SQUARE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),4 });
+		break;
+		// (右に)直角
+	case ANGLE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
+		break;
+		// (左に)直角
+	case ANGLE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - 500.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z - 500.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 500.0f),4 });
+		break;
+		// 右回り(長方形)
+	case RECTANGLE_RIGHT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f ,m_position.y,m_position.z + 300.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x - 500.0f,m_position.y,m_position.z),4 });
+		break;
+		// 左回り(長方形)
+	case RECTANGLE_LEFT:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + 300.0f),2 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f ,m_position.y,m_position.z + 300.0f),3 });
+		m_pointList.push_back({ Vector3(m_position.x + 500.0f,m_position.y,m_position.z),4 });
+	}
 }
 
 void Enemy::Act_Access()
 {
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// ベクトルの長さ
+	// 長さを計算
 	float length = diff.Length();
+	// 回転を教える
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
+	Rotation(rot);
 
-	// ベクトルが一定以下のとき
+	// 長さが一定のとき
 	if (length <= SEACH_DECISION) {
-		// ベクトルを正規化
+		// 正規化
 		diff.Normalize();
-		// エネミーの座標に加算
-		m_position += diff * MOVE_SPEED;
+		// 移動速度に加算
+		Vector3 moveSpeed = diff * MOVE_SPEED;
+		m_position += moveSpeed;
+
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 	}
 
 }
 
+void Enemy::Act_Charge(float time)
+{
+	// 回転
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
+	Rotation(rot);
+
+	// 待機アニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+
+	// タイマーがtrueのとき
+	if (Act_Stop(time) == true) {
+
+		// 一度だけ実行する
+		if (CalculatedFlag == false) {
+
+			// 座標を参照
+			playerPos = m_playerManagement->GetPosition();
+			enemyPos = m_position;
+
+			// 何度も実行しないようにtrueにする
+			CalculatedFlag = true;
+		}
+
+		// エネミーからプレイヤーへ向かうベクトル
+		Vector3 diff = playerPos - enemyPos;
+		diff.Normalize();
+		// 回転
+		Rotation(diff);
+
+		// 移動速度に加算
+		Vector3 moveSpeed = diff * MOVE_SPEED;
+		m_position += moveSpeed;
+		// 装移動距離を計算
+		sumPos += moveSpeed;
+
+		// 歩きアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+		// 長さが一定以上のとき
+		if (sumPos.Length() > MOVING_DISTANCE) {
+			
+			m_position = m_position;	// 座標を固定
+
+			addTimer = 0.0f;			// タイマーをリセット
+			sumPos = Vector3::Zero;		// 移動距離をリセット
+			CalculatedFlag = false;		// フラグを降ろす
+
+			// プレイヤーが視野角内にいるとき
+			if (Act_SeachPlayer() == true) {
+				return;
+			}
+
+			// いないときは巡回状態に戻る
+			m_ActState = BACKBASEDON;
+		}
+	}
+}
+
+void Enemy::Act_Call()
+{
+	// 周りの敵を呼ぶ処理
+
+	// えねみーのリストを検索
+	// ベクトルを計算して一定以内のとき正規化、移動速度を加算する
+
+
+}
+
+void Enemy::Act_Loss()
+{
+	addTimer = 0.0f;	// タイマーをリセット
+
+	// 直近のパスを検索
+	// floatに最大値を格納
+	float NowTargetDiff = D3D12_FLOAT32_MAX;
+	int NowTargetNum = -1;
+
+	// パスの個数文回す
+	for (int i = 0; i < m_pointList.size(); i++) {
+
+		m_point = &m_pointList[i];
+		Vector3 diff = m_point->s_position - m_position;
+		float length = diff.Length();
+
+		// 再度計算した長さが現在保存している長さより短いとき
+		if (NowTargetDiff > length) {
+			// 値を更新する
+			NowTargetNum = i;
+			NowTargetDiff = length;
+		}
+	}
+
+	// 最短のパスの情報を渡す
+	m_point = &m_pointList[NowTargetNum];
+
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 moveSpeed = m_point->s_position - m_position;
+	// 正規化
+	moveSpeed.Normalize();
+	// 移動速度に乗算
+	moveSpeed *= MOVE_SPEED;
+	// 回転
+	Rotation(moveSpeed);
+
+	return;
+}
+
 void Enemy::Act_Limit()
 {
-	// 一定の距離には近づかない
+	// 近づける距離
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 
-	// 長さが一定以下のとき
-	if ( diff.Length() <= ACT_LIMIT) {
-		// 動かないようにする
+	// 長さが一定以内のとき
+	if ( diff.Length() < ACT_LIMIT) {
+		// 座標を固定
 		m_position = m_position;
 	}
 }
 
 bool Enemy::Act_Stop(float time)
 {
-	// 経過時間を加算
+	// フレームを加算
 	addTimer += g_gameTime->GetFrameDeltaTime();
 
-	// 加算された時間が一定以上になったとき
+	// タイマーが一定以上になったら
 	if (time <= addTimer) {
 		return true;
 	}
@@ -337,7 +507,7 @@ void Enemy::SpotLight_New(Vector3 position)
 	m_spotLight.SetRange(LIGHTRANGE);
 	m_spotLight.SetAngle(ANGLE);
 	Vector3 forward = Vector3::AxisY;
-	//ライトの方向設定
+	//���C�g�̕����ݒ�
 	m_spotLight.SetDirection(forward);
 	m_spotLight.Update();
 }
@@ -345,17 +515,17 @@ void Enemy::SpotLight_New(Vector3 position)
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
 	lightpos.y = LIGHTPOSITION;
-	//Y軸
+	//Y��
 	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//プレイヤーの正面
+	//�v���C���[�̐���
 	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
 	lightrotaition.Apply(m_front);
-	//その二つの垂直なベクトル
+	//���̓�̐����ȃx�N�g��
 	Vector3 m_vertical = Cross(m_Yup, m_front);
 	Quaternion m_SitenRot;
-	//その垂直なベクトルを元にクォータニオンを作る
+	//���̐����ȃx�N�g������ɃN�H�[�^�j�I������
 	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ベクトルにクォータニオンを加算する
+	//�x�N�g���ɃN�H�[�^�j�I������Z����
 	m_SitenRot.Apply(m_front);
 	m_spotLight.SetDirection(m_front);
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)

@@ -3,15 +3,15 @@
 
 #include "PlayerManagement.h"
 #include "Enemy_Normal.h"
-#include "Enemy_Serch.h"
+#include "Enemy_Search.h"
+#include "Enemy_Charge.h"
 
 namespace
 {
-	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// ãƒãƒƒãƒ—ã®ä¸­å¿ƒ
-	const float		MAP_RADIUS = 150.0f;									// ãƒãƒƒãƒ—ã®åŠå¾„
-	const float		LIMITED_RANGE_IMAGE = 500.0f;							// ãƒãƒƒãƒ—ã®ç¯„å›²
-	const float		ALPHA = 0.75f;											// Î±å€¤
-	const int		ENEMY_NUM = 2;											// ã‚¨ãƒãƒŸãƒ¼ã®ç·æ•°
+	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// ƒ}ƒbƒv‚Ì’†S
+	const float		MAP_RADIUS = 140.0f;									// ƒ}ƒbƒv‚Ì”¼Œa
+	const float		LIMITED_RANGE_IMAGE = 500.0f;							// ƒ}ƒbƒv‚Ì”ÍˆÍ
+	const float		ALPHA = 0.75f;											// ƒ¿’l
 }
 
 MiniMap::MiniMap()
@@ -24,65 +24,67 @@ MiniMap::~MiniMap()
 
 bool MiniMap::Start()
 {
-	// ãƒ™ãƒ¼ã‚¹
+	// ƒ}ƒbƒv‰æ‘œ
 	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
 	//m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
 
-	// ãƒ™ãƒ¼ã‚¹ã®è£…é£¾
+	// ƒAƒEƒgƒ‰ƒCƒ“
 	m_OutLineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);
 	m_OutLineSpriteRender.SetPosition({ 640.0f, -210.0f, 0.0f });
 	m_OutLineSpriteRender.Update();
 
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+	// ƒvƒŒƒCƒ„[
 	m_PlayerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
 
-	// ã‚¨ãƒãƒŸãƒ¼
+	// ƒGƒlƒ~[
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		m_EnemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
 	}
 
-	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ¢ã™
+	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’T‚·
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
-	m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
-
-	m_enemySerch = FindGO<Enemy_Serch>("enemySerch");
+	//m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
+	m_enemySearch = FindGO<Enemy_Search>("enemySearch");
+	m_enemyCharge = FindGO<Enemy_Charge>("enemyCharge");
 
 	return true;
 }
 
 void MiniMap::Update()
 {
+	// ƒ}ƒbƒvÀ•W‚É•ÏŠ·
 	//DrawMap(m_enemyNormal->GetPosition(),0);
-	DrawMap(m_enemySerch->GetPosition(), 1);
+	DrawMap(m_enemySearch->GetPosition(), 1);
+	DrawMap(m_enemyCharge->GetPosition(), 2);
 
+	// XV
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		m_EnemySpriteRender[i].Update();
 	}
-	
+
 	m_PlayerSpriteRender.Update();
 	m_SpriteRender.Update();
 }
 
-void MiniMap::DrawMap(Vector3 pos, int num)
+void MiniMap::DrawMap(Vector3 enemyPos, int num)
 {
-	// åº§æ¨™ã‚’å–å¾—
+	// ƒvƒŒƒCƒ„[‚ÌÀ•W
 	Vector3 playerPos = m_playerManagement->GetPosition();
-	Vector3 enemy_NormalPos = pos;
 
 	Vector3 mapPos;
 
-	// ãƒãƒƒãƒ—ã«è¡¨ç¤ºã™ã‚‹ç¯„å›²ã«æ•µãŒã„ãŸã‚‰
-	if (WorldPositionConvertToMapPosition(playerPos, enemy_NormalPos, mapPos)) {
+	// ƒ}ƒbƒv‚É•\¦‚·‚é”ÍˆÍ‚É“G‚ª‚¢‚½‚ç
+	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
 
-		// spriteRenderã«åº§æ¨™ã‚’è¨­å®š
+		// spriteRender‚ÉÀ•W‚ğİ’è
 		m_EnemySpriteRender[num].SetPosition(mapPos);
-		// ãƒãƒƒãƒ—ã«è¡¨ç¤ºã™ã‚‹
+		// ƒ}ƒbƒv‚É•\¦‚·‚é
 		m_isImage[num] = true;
 	}
-	// ãƒãƒƒãƒ—ã«è¡¨ç¤ºã™ã‚‹æ•µãŒã„ãªã‹ã£ãŸã‚‰
+	// ƒ}ƒbƒv‚É•\¦‚·‚é“G‚ª‚¢‚È‚©‚Á‚½‚ç
 	else {
 		m_isImage[num] = false;
 	}
@@ -90,56 +92,56 @@ void MiniMap::DrawMap(Vector3 pos, int num)
 
 const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition,Vector3 worldPosition,Vector3& mapPosition) 
 {
-	// Yåº§æ¨™ã¯ãƒãƒƒãƒ—ã¨ã¯é–¢ä¿‚ãªã„ã®ã§0.0fã‚’è¨­å®š
+	// YÀ•W‚Íƒ}ƒbƒv‚Æ‚ÍŠÖŒW‚È‚¢‚Ì‚Å0.0f‚ğİ’è
 	worldCenterPosition.y = 0.0f;
 	worldPosition.y = 0.0f;
 
-	// ä¸­å¿ƒåº§æ¨™ã‹ã‚‰è¡¨ç¤ºã—ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åº§æ¨™ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
+	// ’†S‚ÌÀ•W‚©‚ç•\¦‚µ‚½‚¢ƒIƒuƒWƒFƒNƒg‚ÌÀ•W‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ğŒvZ
 	Vector3 diff = worldPosition - worldCenterPosition;
 
-	// è¨ˆç®—ã—ãŸãƒ™ã‚¯ãƒˆãƒ«ãŒä¸€å®šä»¥ä¸Šé›¢ã‚Œã¦ã„ãŸã‚‰
+	// 	ŒvZ‚µ‚½ƒxƒNƒgƒ‹‚ªˆê’èˆÈã—£‚ê‚Ä‚¢‚½‚ç
 	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
-		// ç¯„å›²å¤–ã«å­˜åœ¨ã—ã¦ã„ã‚‹ã®ã§ãƒãƒƒãƒ—ã«è¡¨ç¤ºã—ãªã„
+		// ”ÍˆÍŠO‚É‘¶İ‚µ‚Ä‚¢‚é‚Ì‚Åƒ}ƒbƒv‚É•\¦‚µ‚È‚¢
 		return false;
 	}
 
 	
 
-	//ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
+	// ƒxƒNƒgƒ‹‚Ì’·‚³‚ğæ“¾‚·‚é
 	float length = diff.Length();
 
-	//ã‚«ãƒ¡ãƒ©ã®å‰æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰ã€‚
-	//ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆã€‚
+	// ƒJƒƒ‰‚Ì‘O•ûŒüƒxƒNƒgƒ‹‚©‚çA
+	// Y²•ûŒü‚Ì‰ñ“]ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬‚·‚é
 	Vector3 forward = g_camera3D->GetForward();
 	Quaternion rot;
 	rot.SetRotationY(atan2(-forward.x, forward.z));
 
-	//ãƒ™ã‚¯ãƒˆãƒ«ã«ã‚«ãƒ¡ãƒ©ã®å›è»¢ã‚’é©ç”¨ã€‚
+	// ƒxƒNƒgƒ‹‚ÉƒJƒƒ‰‚Ì‰ñ“]‚ğ“K—p
 	rot.Apply(diff);
 
-	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã€‚
+	// ƒxƒNƒgƒ‹‚ğ³‹K‰»
 	diff.Normalize();
 
-	//ãƒãƒƒãƒ—ã®å¤§ãã•/è·é›¢åˆ¶é™ã§ã€‚
-	//ãƒ™ã‚¯ãƒˆãƒ«ã‚’ãƒãƒƒãƒ—åº§æ¨™ç³»ã«å¤‰æ›ã™ã‚‹ã€‚
+	// ƒ}ƒbƒv‚Ì‘å‚«‚³/”ÍˆÍ‚ÅA
+	// ƒxƒNƒgƒ‹‚ğƒ}ƒbƒvÀ•WŒn‚É•ÏŠ·‚·‚é
 	diff *= length * MAP_RADIUS / LIMITED_RANGE_IMAGE;
 
-	//ãƒãƒƒãƒ—ã®ä¸­å¤®åº§æ¨™ã¨ä¸Šè¨˜ãƒ™ã‚¯ãƒˆãƒ«ã‚’åŠ ç®—ã™ã‚‹ã€‚
+	// ƒ}ƒbƒv‚Ì’†‰›À•W‚Æã‹LƒxƒNƒgƒ‹‚ğ‰ÁZ‚·‚é
 	mapPosition = Vector3(CENTER_POSITION.x + diff.x, CENTER_POSITION.y + diff.z, 0.0f);
 	return true;
 }
 
 void MiniMap::Render(RenderContext& rc)
 {
-	// æç”»
+	// •`‰æ
 	m_SpriteRender.Draw(rc);
 	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
 	for (int i = 0; i < ENEMY_NUM; i++) {
-		// ã‚¨ãƒãƒŸãƒ¼ãŒè¿‘ãã«ã„ãªã„ã¨ã
+		// ”ÍˆÍ“à‚Ì‚Æ‚«
 		if (m_isImage[i] == true) {
-			// è¿‘ãã«ã„ã‚‹ã¨ãã¯æç”»ã™ã‚‹
+			// •`‰æ‚·‚é
 			m_EnemySpriteRender[i].Draw(rc);
 		}
 	}
