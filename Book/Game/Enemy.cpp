@@ -65,7 +65,7 @@ bool Enemy::Start()
 	// 各タイマーのリセット
 	for (int i = 0; i < 3; i++) {
 		// 0が閃光弾。1が巡回。2を突進用として用意
-		addTimer[i] = 0.0f;
+		m_addTimer[i] = 0.0f;
 	}
 
 	return true;
@@ -76,6 +76,52 @@ void Enemy::Rotation(Vector3 rot)
 	// 回転
 	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
+}
+
+void Enemy::Nav(Vector3 pos)
+{
+	// タイマーを加算
+	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
+
+	// 一定時間以下のときreturn
+	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
+		return;
+	}
+
+	// ナビメッシュ
+	bool isEnd;							// フラグ
+
+	// パス検索
+	m_pathFiding.Execute(
+		m_path,							// 構築されたパスの格納先
+		m_nvmMesh,						// ナビメッシュ
+		m_position,						// 開始座標
+		pos,							// 移動目標座標
+		PhysicsWorld::GetInstance(),	// 物理エンジン
+		AI_RADIUS,						// AIエージェントの半径
+		AI_HIGH							// AIエージェントの高さ
+	);
+
+	// パス上を移動する
+	m_position = m_path.Move(
+		m_position,						// 座標
+		MOVE_SPEED,						// 移動速度
+		isEnd							// 移動したときtrue
+	);
+
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 moveSpeed = m_playerPos - m_position;
+
+	// 回転を教える
+	float angle = atan2(-moveSpeed.x, moveSpeed.z);
+	Quaternion rot = Quaternion::Identity;
+	rot.SetRotationY(-angle);
+
+	// 回転を教える
+	m_enemyRender.SetRotation(rot);
+
+	// 歩きアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
 bool Enemy::Act_SeachPlayer()
@@ -188,13 +234,13 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
-			HitFlashBulletFlag = false;		// フラグを降ろす
-			addTimer[0] = 0.0f;				// タイマーをリセット
+			m_HitFlashBulletFlag = false;		// フラグを降ろす
+			m_addTimer[0] = 0.0f;				// タイマーをリセット
 
 		}
 		// そうでないとき
@@ -225,7 +271,7 @@ void Enemy::Act_Craw()
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		addTimer[1] = 0.0f;	// タイマーをリセット
+		m_addTimer[1] = 0.0f;	// タイマーをリセット
 	}
 
 	// エネミーからプレイヤーへ向かうベクトル
@@ -252,48 +298,10 @@ void Enemy::Act_Craw()
 
 void Enemy::Act_Tracking()
 {
-	// タイマーを加算
-	NaviTimer += g_gameTime->GetFrameDeltaTime();
-
-	// 一定時間以下のときreturn
-	if (CALCULATIONNAVI_TIMER >= NaviTimer) {
-		return;
-	}
-
-	// ナビメッシュ
-
 	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
-
-	bool isEnd;							// フラグ
-
-	// パス検索
-	m_pathFiding.Execute(
-		m_path,							// 構築されたパスの格納先
-		m_nvmMesh,						// ナビメッシュ
-		m_position,						// 開始座標
-		m_playerPos,					// 移動目標座標
-		PhysicsWorld::GetInstance(),	// 物理エンジン
-		AI_RADIUS,						// AIエージェントの半径
-		AI_HIGH							// AIエージェントの高さ
-	);
-
-	// パス上を移動する
-	m_position = m_path.Move(
-		m_position,						// 座標
-		MOVE_SPEED,						// 移動速度
-		isEnd							// 移動したときtrue
-	);
-
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = m_playerPos - m_position;
-
-	float angle = atan2(-moveSpeed.x, moveSpeed.z);
-	Quaternion rot = Quaternion::Identity;
-	rot.SetRotationY(-angle);
-
-	// 回転を教える
-	m_enemyRender.SetRotation(rot);
+	// ナビメッシュを作成
+	Nav(m_playerPos);
 
 	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
@@ -387,21 +395,21 @@ void Enemy::Act_Charge(float time)
 	// 壁に衝突したとき
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = playerPos - m_position;
+	Vector3 diff = m_playerPos - m_position;
 	// 正規化
 	diff.Normalize();
 
 	// 壁に衝突したとき
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
 	if (Enemy::WallAndHit(m_position + (diff * ADD_LENGTH)) == false) {
-		move = 0.0f;
-		CalculatedFlag = false;
+		m_move = 0.0f;
+		m_CalculatedFlag = false;
 
 		m_ActState = BACKBASEDON;		// 状態を移行
 		return;
 	}
 	else {
-		move = 1.0f;
+		m_move = 1.0f;
 	}
 
 	// 回転
@@ -416,39 +424,39 @@ void Enemy::Act_Charge(float time)
 	if (Act_Stop(time,2) == true) {
 
 		// 一度だけ実行する
-		if (CalculatedFlag == false) {
+		if (m_CalculatedFlag == false) {
 
 			// 座標を参照
-			enemyPos = m_position;
-			playerPos = m_playerManagement->GetPosition();
+			m_enemyPos = m_position;
+			m_playerPos2 = m_playerManagement->GetPosition();
 
 			// 何度も実行しないようにtrueにする
-			CalculatedFlag = true;
+			m_CalculatedFlag = true;
 		}
 
 		// エネミーからプレイヤーへ向かうベクトル
-		Vector3 diff = playerPos - enemyPos;
+		Vector3 diff = m_playerPos2 - m_enemyPos;
 		diff.Normalize();
 		// 回転
 		Rotation(diff);
 
 		// 移動速度に加算
 		Vector3 moveSpeed = diff * (MOVE_SPEED * 1.5f);
-		m_position += moveSpeed * move;
+		m_position += moveSpeed * m_move;
 		// 総移動距離を計算
-		sumPos += moveSpeed;
+		m_sumPos += moveSpeed;
 
 		// 歩きアニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
 		// 長さが一定以上のとき
-		if (sumPos.Length() > MOVING_DISTANCE) {
+		if (m_sumPos.Length() > MOVING_DISTANCE) {
 			
 			m_position = m_position;	// 座標を固定
 
-			addTimer[2] = 0.0f;			// タイマーをリセット
-			sumPos = Vector3::Zero;		// 移動距離をリセット
-			CalculatedFlag = false;		// フラグを降ろす
+			m_addTimer[2] = 0.0f;			// タイマーをリセット
+			m_sumPos = Vector3::Zero;		// 移動距離をリセット
+			m_CalculatedFlag = false;		// フラグを降ろす
 
 			// プレイヤーが視野角内にいるとき
 			if (Act_SeachPlayer() == true) {
@@ -464,6 +472,14 @@ void Enemy::Act_Call()
 {
 	// 周りの敵を呼ぶ処理
 
+	// 自身の座標格納用
+	Vector3 myPos = Vector3::Zero;
+
+	// 回転を教える
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
+	Rotation(rot);
+
 	// エネミーのリストを検索
 	for (int i = 0; i < enemyList.size(); i++) {
 
@@ -474,7 +490,8 @@ void Enemy::Act_Call()
 		// 長さが一定以内のとき
 		if (length > 100.0f && length < CALL_DISTANCE) {
 
-			enemyList[i]->m_ActState = CALLED;
+			enemyList[i]->m_ActState = CALLED;		// 行動パターンを変更する
+			enemyList[i]->m_setPos = m_position;	// 自身の座標を目標地点として渡す
 
 			// 正規化
 			diff.Normalize();
@@ -489,14 +506,39 @@ void Enemy::Act_Call()
 
 void Enemy::Act_Called()
 {
+	// ナビメッシュを作成
+	Nav(m_setPos);
+
 	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
+bool Enemy::Act_CallEnd()
+{
+	// エネミーのリストを検索
+	for (int i = 0; i < enemyList.size(); i++) {
+
+		// 各エネミーから該当エネミーへ向かうベクトル
+		Vector3 diff = m_position - enemyList[i]->m_position;
+		float length = diff.Length();
+
+		// 行動パターンがCALLのとき
+		if (enemyList[i]->m_ActState == CALL) {
+
+			enemyList[i]->m_ActState = CRAW;		// 行動パターンを変更する
+
+			m_fontRender.SetText(L"callend");
+			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+		}
+	}
+
+	return true;
+}
+
 void Enemy::Act_Loss()
 {
-	addTimer[1] = 0.0f;	// タイマーをリセット
-	addTimer[2] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
+	m_addTimer[1] = 0.0f;	// タイマーをリセット
+	m_addTimer[2] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
 
 	// 直近のパスを検索
 	// floatに最大値を格納
@@ -549,10 +591,10 @@ void Enemy::Act_Limit()
 bool Enemy::Act_Stop(float time,int i)
 {
 	// フレームを加算
-	addTimer[i] += g_gameTime->GetFrameDeltaTime();
+	m_addTimer[i] += g_gameTime->GetFrameDeltaTime();
 
 	// タイマーが一定以上になったら
-	if (time <= addTimer[i]) {
+	if (time <= m_addTimer[i]) {
 		return true;
 	}
 

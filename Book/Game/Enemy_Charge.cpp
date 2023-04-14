@@ -99,7 +99,7 @@ void Enemy_Charge::Update_OnCraw()
 	}
 
 	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
 }
@@ -112,7 +112,7 @@ void Enemy_Charge::Update_OnCharge()
 										// ŠÖ”“à‚Å„‰ñó‘Ô‚É–ß‚éˆ—‚ğ‹Lq
 
 	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
 }
@@ -127,6 +127,11 @@ void Enemy_Charge::Update_OnBackBasedOn()
 void Enemy_Charge::Update_OnCalled()
 {
 	Enemy::Act_Called();
+
+	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚Æ‚«
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = CHARGE;
+	}
 }
 
 void Enemy_Charge::Update_OnConfusion()
@@ -136,7 +141,7 @@ void Enemy_Charge::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-	if (HitFlashBulletFlag == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

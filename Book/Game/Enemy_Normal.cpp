@@ -115,6 +115,11 @@ void Enemy_Normal::Update_OnTracking()
 void Enemy_Normal::Update_OnCalled()
 {
 	Enemy::Act_Called();
+
+	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚Æ‚«
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = TRACKING;
+	}
 }
 
 void Enemy_Normal::Update_OnBackBasedOn()
@@ -128,7 +133,7 @@ void Enemy_Normal::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
-	if (HitFlashBulletFlag == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }
