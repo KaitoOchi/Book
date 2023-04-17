@@ -40,7 +40,7 @@ bool Game::Start()
 	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	NewGO<GameUI>(0, "gameUI");
-	NewGO<LightSensor>(0, "lightSensor");
+	//NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);

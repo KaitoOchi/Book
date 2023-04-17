@@ -77,9 +77,13 @@ public:
 	/// <param name="CRAW">巡回</param>
 	/// <param name="TRACKING">追跡</param>
 	/// <param name="SEARCH">待機</param>
+	/// <param name="CALL">周りの敵を呼ぶ</param>
+	/// <param name="CALLED">CALL時にSearch以外が実行</param>
+	/// <param name="CALLEND">視野角内にプレイヤーが存在しないとき実行</param>
 	/// <param name="CHARGE">突進</param>
 	/// <param name="BACKBASEDON">巡回状態に戻る</param>
 	/// <param name="CONFUSION">錯乱</param>
+	/// <param name="CATCH">捕獲</param>
 	EnEnemyActState m_ActState = CRAW;
 
 	// 指定できるパス移動

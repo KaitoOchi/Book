@@ -22,7 +22,7 @@ namespace
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 	const float		ACT_LIMIT = 300.0f;						// プレイヤーに近づける範囲
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
-	const float		ADD_LENGTH = 45.0f;						// 突進時に追加する長さ
+	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
@@ -50,7 +50,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(17.0f);
+	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -196,9 +196,9 @@ bool Enemy::WallAndHit(Vector3 pos)
 	// 壁と衝突した
 	if (callback.isHit == true) {
 		// プレイヤーは見つかっていない
-		if (m_ActState == EnEnemyActState::CHARGE) {
-			int hoge = 0;
-		}
+		//if (m_ActState == EnEnemyActState::CHARGE) {
+		//	int hoge = 0;
+		//}
 		return false;
 	}
 
@@ -392,8 +392,7 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
-	// 壁に衝突したとき
-
+	// 壁に衝突する判定
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 	// 正規化
@@ -499,7 +498,6 @@ void Enemy::Act_Call()
 			enemyList[i]->m_position += diff * MOVE_SPEED;
 
 			m_fontRender.SetText(L"call");
-			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 		}
 	}
 }
@@ -523,12 +521,11 @@ bool Enemy::Act_CallEnd()
 		float length = diff.Length();
 
 		// 行動パターンがCALLのとき
-		if (enemyList[i]->m_ActState == CALL) {
+		if (enemyList[i]->m_ActState == CALLED) {
 
-			enemyList[i]->m_ActState = CRAW;		// 行動パターンを変更する
+			enemyList[i]->m_ActState = BACKBASEDON;		// 行動パターンを変更する
 
 			m_fontRender.SetText(L"callend");
-			m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 		}
 	}
 
