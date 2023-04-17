@@ -18,11 +18,6 @@ cbuffer ShadowCB : register(b1) {
 }
 */
 
-cbuffer A : register(b1)
-{
-    int a;
-}
-
 
 // 頂点シェーダーへの入力
 struct SVSIn

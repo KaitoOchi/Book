@@ -54,10 +54,10 @@ cbuffer LightCb : register(b1) {
 	DirectionLig dirLig;
 
 	//ポイントライト用の定数バッファ
-	PointLig ptLig;
+	PointLig ptLig[4];
 
 	//スポットライト用の定数バッファ
-	SpotLig spLig;
+	SpotLig spLig[4];
 		
 	//半球ライト用の定数バッファ
 	HemiLig hemiLig;
@@ -66,6 +66,7 @@ cbuffer LightCb : register(b1) {
 	float4x4 mLVP;			
 
 	int ptNum;
+	int spNum;
 }
 
 
@@ -317,46 +318,53 @@ float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal)
 /// </summary>
 float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 {
-	//サーフェイスに入射するポイントライトの光の向きを計算
-	float3 ligDir = psIn.worldPos - ptLig.ptPosition;
-	//正規化する
-	ligDir = normalize(ligDir);
+	float3 finalPtLig;
 
-	//減衰無しのLambert拡散反射光を計算する
-	float3 diffPoint = CalcLambertDiffuse(
-		ligDir,
-		ptLig.ptColor,
-		normal
-	);
+	for(int i = 0; i <= ptNum; i++){
 
-	//減衰なしのPhong鏡面反射光を計算する
-	float3 specPoint = CalcPhongSpecular(
-		ligDir,
-		ptLig.ptColor,
-		psIn.worldPos,
-		normal
-	);
+		//サーフェイスに入射するポイントライトの光の向きを計算
+		float3 ligDir = psIn.worldPos - ptLig[i].ptPosition;
+		//正規化する
+		ligDir = normalize(ligDir);
 
-	//距離による影響率を計算する
-	//ポイントライトとの距離を計算する
-	float distance = length(psIn.worldPos - ptLig.ptPosition);
+		//減衰無しのLambert拡散反射光を計算する
+		float3 diffPoint = CalcLambertDiffuse(
+			ligDir,
+			ptLig[i].ptColor,
+			normal
+		);
 
-	//影響率は距離に比例して小さくなっていく
-	float affect = 1.0f - 1.0f / ptLig.ptRange * distance;
+		//減衰なしのPhong鏡面反射光を計算する
+		float3 specPoint = CalcPhongSpecular(
+			ligDir,
+			ptLig[i].ptColor,
+			psIn.worldPos,
+			normal
+		);
 
-	//影響率がマイナスにならないように補正をかける
-	if (affect < 0.0f) {
-		affect = 0.0f;
+		//距離による影響率を計算する
+		//ポイントライトとの距離を計算する
+		float distance = length(psIn.worldPos - ptLig[i].ptPosition);
+
+		//影響率は距離に比例して小さくなっていく
+		float affect = 1.0f - 1.0f / ptLig[i].ptRange * distance;
+
+		//影響率がマイナスにならないように補正をかける
+		if (affect < 0.0f) {
+			affect = 0.0f;
+		}
+
+		//影響を指数関数的にする
+		affect = pow(affect, 3.0f);
+
+		//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
+		diffPoint *= affect;
+		specPoint *= affect;
+
+		finalPtLig += diffPoint + specPoint;
 	}
 
-	//影響を指数関数的にする
-	affect = pow(affect, 3.0f);
-
-	//拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
-	diffPoint *= affect;
-	specPoint *= affect;
-
-	return diffPoint + specPoint;
+	return finalPtLig;
 }
 
 
@@ -365,63 +373,69 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 /// </summary>
 float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 {
-	//ピクセルの座標 - スポットライトの座標を計算
-	float3 ligDir = psIn.worldPos - spLig.spPosition;
-	//正規化して大きさ1のベクトルにする
-	ligDir = normalize(ligDir);
+	float3 finalspLig;
 
-	//減衰無しのLambert拡散反射光を計算する
-	float3 diffSpotLight = CalcLambertDiffuse(
-		ligDir,
-		spLig.spColor,
-		normal
-	);
+	for(int i = 0; i <= 3; i++){
 
-	//減衰無しのPhong鏡面反射光を計算する
-	float3 specSpotLight = CalcPhongSpecular(
-		ligDir,
-		spLig.spColor,
-		psIn.worldPos,
-		normal
-	);
+		//ピクセルの座標 - スポットライトの座標を計算
+		float3 ligDir = psIn.worldPos - spLig[i].spPosition;
+		//正規化して大きさ1のベクトルにする
+		ligDir = normalize(ligDir);
 
-	//スポットライトとの距離を計算する
-	float3 distance = length(psIn.worldPos - spLig.spPosition);
+		//減衰無しのLambert拡散反射光を計算する
+		float3 diffSpotLight = CalcLambertDiffuse(
+			ligDir,
+			spLig[i].spColor,
+			normal
+		);
 
-	//影響率は距離に比例して小さくなっていく
-	float affect = 1.0f - 1.0f / spLig.spRange * distance;
+		//減衰無しのPhong鏡面反射光を計算する
+		float3 specSpotLight = CalcPhongSpecular(
+			ligDir,
+			spLig[i].spColor,
+			psIn.worldPos,
+			normal
+		);
 
-	//影響力がマイナスにならないように補正をかける
-	if (affect < 0.0f) {
-		affect = 0.0f;
+		//スポットライトとの距離を計算する
+		float3 distance = length(psIn.worldPos - spLig[i].spPosition);
+
+		//影響率は距離に比例して小さくなっていく
+		float affect = 1.0f - 1.0f / spLig[i].spRange * distance;
+
+		//影響力がマイナスにならないように補正をかける
+		if (affect < 0.0f) {
+			affect = 0.0f;
+		}
+		//影響の仕方を指数関数的にする
+		affect = pow(affect, 3.0f);
+
+		//影響率を乗算して反射光を弱める
+		diffSpotLight *= affect;
+		specSpotLight *= affect;
+
+		//入射光と射出方向の角度を求める
+		float angle = dot(ligDir, spLig[i].spDirection);
+		angle = abs(acos(angle));
+
+		//角度による影響率を求める
+		affect = 1.0f - 1.0f / spLig[i].spAngle * angle;
+
+		//影響率がマイナスにならないように補正をかける
+		if (affect < 0.0f) {
+			affect = 0.0f;
+		}
+		//影響の仕方を指数関数的にする
+		affect = pow(affect, 0.5f);
+
+		//角度による影響率を反射光に乗算して、影響を弱める
+		diffSpotLight *= affect;
+		specSpotLight *= affect;
+
+		finalspLig += diffSpotLight + specSpotLight;
 	}
-	//影響の仕方を指数関数的にする
-	affect = pow(affect, 3.0f);
 
-	//影響率を乗算して反射光を弱める
-	diffSpotLight *= affect;
-	specSpotLight *= affect;
-
-	//入射光と射出方向の角度を求める
-	float angle = dot(ligDir, spLig.spDirection);
-	angle = abs(acos(angle));
-
-	//角度による影響率を求める
-	affect = 1.0f - 1.0f / spLig.spAngle * angle;
-
-	//影響率がマイナスにならないように補正をかける
-	if (affect < 0.0f) {
-		affect = 0.0f;
-	}
-	//影響の仕方を指数関数的にする
-	affect = pow(affect, 0.5f);
-
-	//角度による影響率を反射光に乗算して、影響を弱める
-	diffSpotLight *= affect;
-	specSpotLight *= affect;
-
-	return diffSpotLight + specSpotLight;
-
+	return finalspLig;
 }
 
 

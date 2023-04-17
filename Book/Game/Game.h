@@ -74,7 +74,8 @@ private:
 	Treasure* m_treaSure = nullptr;
 	Gost* m_gost = nullptr;
 	
-	PointLight m_pointLight;
+	PointLight m_pointLight[4];
+	SpotLight m_spotLight;
 
 };
 

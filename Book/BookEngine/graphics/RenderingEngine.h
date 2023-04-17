@@ -28,11 +28,12 @@ namespace nsBookEngine {
 		struct LightCB
 		{
 			DirectionLight::directionLight directionLig;
-			PointLight::pointLight pointLig;
-			SpotLight::spotLight spotLig;
+			PointLight::pointLight pointLig[4];
+			SpotLight::spotLight spotLig[4];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
 			int ptNum;											//ポイントライトの数
+			int spNum;											//スポットライトの数
 		};
 
 		//スプライト用の構造体
@@ -106,22 +107,24 @@ namespace nsBookEngine {
 		void SetPointLight(const int ptNum, PointLight::pointLight& ptlig)
 		{
 			//GetLightCB().pointLig = ptlig.GetPointLig();
-			GetLightCB().pointLig.ptPosition = ptlig.ptPosition;
-			GetLightCB().pointLig.ptColor = ptlig.ptColor;
-			GetLightCB().pointLig.ptRange = ptlig.ptRange;
+			GetLightCB().pointLig[ptNum].ptPosition = ptlig.ptPosition;
+			GetLightCB().pointLig[ptNum].ptColor = ptlig.ptColor;
+			GetLightCB().pointLig[ptNum].ptRange = ptlig.ptRange;
+			GetLightCB().ptNum = ptNum;
 		}
 
 		/// <summary>
 		/// スポットライトの設定。
 		/// </summary>
 		/// <param name="spLig"></param>
-		void SetSpotLight(SpotLight::spotLight& spLig)
+		void SetSpotLight(const int spNum, SpotLight::spotLight& spLig)
 		{
-			GetLightCB().spotLig.spPosition = spLig.spPosition;
-			GetLightCB().spotLig.spColor = spLig.spColor;
-			GetLightCB().spotLig.spRange = spLig.spRange;
-			GetLightCB().spotLig.spDirection = spLig.spDirection;
-			GetLightCB().spotLig.spAngle = spLig.spAngle;
+			GetLightCB().spotLig[spNum].spPosition = spLig.spPosition;
+			GetLightCB().spotLig[spNum].spColor = spLig.spColor;
+			GetLightCB().spotLig[spNum].spRange = spLig.spRange;
+			GetLightCB().spotLig[spNum].spDirection = spLig.spDirection;
+			GetLightCB().spotLig[spNum].spAngle = spLig.spAngle;
+			GetLightCB().spNum = spNum;
 		}
 
 		/// <summary>
