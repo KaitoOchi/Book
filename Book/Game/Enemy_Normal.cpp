@@ -44,18 +44,27 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	switch (m_ActState) {
+		// „‰ñ
 	case CRAW:
 		Update_OnCraw();
 		break;
+		// ’ÇÕ
 	case TRACKING:
 		Update_OnTracking();
 		break;
+		// ŒÄ‚Î‚ê‚½‚Æ‚«
+	case CALLED:
+		Update_OnCalled();
+		break;
+		// „‰ñó‘Ô‚É–ß‚é
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
+		// ö—
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
+		// •ßŠl
 	case CATCH:
 		Update_OnCatch();
 		break;
@@ -103,6 +112,16 @@ void Enemy_Normal::Update_OnTracking()
 	}
 }
 
+void Enemy_Normal::Update_OnCalled()
+{
+	Enemy::Act_Called();
+
+	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚Æ‚«
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = TRACKING;
+	}
+}
+
 void Enemy_Normal::Update_OnBackBasedOn()
 {
 	Enemy::Act_Loss();					// ’ÇÕs“®‚©‚ç‚ÌØ‚è‘Ö‚¦
@@ -114,15 +133,15 @@ void Enemy_Normal::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
-	if (HitFlashBulletFlag == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }
 
 void Enemy_Normal::Update_OnCatch()
 {
-	m_fontRender.SetText(L"‚Â‚©‚Ü‚¦‚½");
-	m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+
+	Enemy::Act_CatchPlayer();
 
 	m_ActState = CRAW;
 }

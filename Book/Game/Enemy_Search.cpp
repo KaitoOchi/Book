@@ -34,26 +34,65 @@ void Enemy_Search::Update()
 	case SEARCH:
 		Update_OnSearch();
 		break;
+	case CALL:
+		Update_OnCall();
+		break;
+	case CALLEND:
+		Update_OnCallEnd();
+		break;
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
 	}
 
+	m_enemyRender.SetRotation(m_rot);
+
+	Enemy::SpotLight_Serch(m_rot, m_position);
+
+	// 更新
 	m_enemyRender.Update();
 }
 
 void Enemy_Search::Update_OnSearch()
 {
 	// 索敵
-
 	Rotaition();
 
-	m_enemyRender.SetRotation(m_rot);
-	Enemy::SpotLight_Serch(m_rot, m_position);
+	// 閃光弾が当たったとき
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+
+	// 視野角内にプレイヤーが存在するとき
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = CALL;
+	}
+}
+
+void Enemy_Search::Update_OnCall()
+{
+	// 周りの敵を呼ぶ
+	Enemy::Act_Call();
 
 	// 閃光弾が当たったとき
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
+	}
+
+	// 視野角内にプレイヤーが存在しないとき
+	if (Enemy::Act_SeachPlayer() == false) {
+		m_ActState = CALLEND;
+	}
+}
+
+void Enemy_Search::Update_OnCallEnd()
+{
+	Rotaition();
+	Enemy::Act_CallEnd();
+
+	// エネミーを元に戻す
+	if (Enemy::Act_CallEnd() == true) {
+		m_ActState = SEARCH;
 	}
 }
 
@@ -63,7 +102,7 @@ void Enemy_Search::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();
 
 	// 硬直が解けているとき
-	if (HitFlashBulletFlag == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = SEARCH;
 	}
 }
@@ -103,4 +142,5 @@ void Enemy_Search::Rotaition()
 void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
+	m_fontRender.Draw(rc);
 }

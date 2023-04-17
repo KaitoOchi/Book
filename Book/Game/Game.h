@@ -42,6 +42,13 @@ public:
 		m_enGameState_GameOver,//ゲームオーバー
 		m_enGameState_GameBuck//タイトルに戻る
 	};
+
+	// エネミーのリストを返す
+	std::vector<Enemy*> GetEnemyList()
+	{
+		return m_enemyList;
+	}
+
 private:
 	/// <summary>
 	/// クリアステートに遷移

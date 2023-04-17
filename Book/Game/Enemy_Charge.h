@@ -13,6 +13,7 @@ public:
 	void Animation();					// アニメーション
 	void Update_OnCraw();				// 巡回
 	void Update_OnCharge();				// 突進
+	void Update_OnCalled();				// CALL時に実行
 	void Update_OnBackBasedOn();		// 巡回状態に戻る
 	void Update_OnConfusion();			// 錯乱
 private:
