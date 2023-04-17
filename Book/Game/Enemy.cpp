@@ -507,6 +507,13 @@ void Enemy::Act_Called()
 
 	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+	// 自身から目標へ向かうベクトル
+	Vector3 diff = m_setPos - m_position;
+
+	if (diff.Length() <= CALL_DISTANCE_MIN) {
+		m_position = m_position;
+	}
 }
 
 bool Enemy::Act_CallEnd()
