@@ -12,6 +12,13 @@ cbuffer ModelCb : register(b0){
 	float4x4 mProj;
 };
 
+struct PointLig
+{
+	float3 ptPosition;		//ポイントライトの位置
+	float3 ptColor;			//ポイントライトのカラー
+	float ptRange;			//ポイントライトの影響範囲
+};
+
 //ライト用の定数バッファ
 cbuffer LightCb : register(b1) {
 
@@ -38,7 +45,8 @@ cbuffer LightCb : register(b1) {
 	float3 skyColor;		//天球ライト
 	float3 groundNormal;	//地面の法線
 
-	float4x4 mLVP;
+	float3 lightPos;		//ライトの座標
+	float4x4 mLVP;			//ライトビュープロジェクション行列
 }
 
 
@@ -129,9 +137,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 
+    float4 worldPos = mul(mWorld, vsIn.pos);
 	psIn.pos = mul(m, vsIn.pos);
 	psIn.worldPos = mul(m, vsIn.pos);
-    float4 worldPos = mul(mWorld, vsIn.pos);
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 
@@ -145,8 +153,11 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//カメラ空間の法線を求める
 	psIn.normalInView = mul(mView, psIn.normal);
 
-	//ライトビュースクリーン空間の座標を計算する
+    //ライトビュースクリーン空間の座標を計算する
     psIn.posInLVP = mul(mLVP, worldPos);
+
+    //頂点のライトから見た深度値を計算する
+    psIn.posInLVP.z = length(worldPos.xyz - lightPos) / 1000.0f;
 
 	psIn.uv = vsIn.uv;
 
@@ -461,6 +472,9 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 	return t;
 }
 
+/// <summary>
+/// シャドウを計算
+/// </summary>
 float4 ShadowMap(SPSIn psIn, float4 albedo)
 {
     //ライトビュースクリーン空間からUV空間に座標変換
@@ -469,24 +483,36 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
     shadowMapUV += 0.5f;
 
     //ライトビュースクリーン空間でのZ値を計算する
-    float zInLVP = psIn.posInLVP.z / psIn.posInLVP.w;
+    float zInLVP = psIn.posInLVP.z;
 
     if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
         && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
     {
-		//PCFの実装
-		//遮蔽率を取得
-		float shadow = g_shadowMap.SampleCmpLevelZero(
-			g_shadowMapSampler,
-			shadowMapUV,
-			zInLVP
-		);
+		//VSMの実装
+		//シャドウマップから値をサンプリング
+		float2 shadowValue = g_shadowMap.Sample(g_sampler,shadowMapUV).xy;
 
-		//シャドウカラーを計算
-		float3 shadowColor = albedo.xyz * 0.5f;
+		//このピクセルが遮蔽されているか調べる
+		if(zInLVP > shadowValue.r && zInLVP <= 1.0f){
 
-		//遮蔽率を使って線形補間
-		albedo.xyz = lerp( albedo.xyz, shadowColor, shadow);
+			//遮蔽されているなら、チェビシェフの不等式を利用して光が当たる確率を求める
+			float depth_sq = shadowValue.x * shadowValue.x;
+
+			//分散が大きいほど、varianceの数値は大きくなる
+			float variance = min( max(shadowValue.y - depth_sq, 0.0001f), 1.0f);
+
+			//このピクセルのライトから見た深度地とシャドウマップの平均の深度地の差を求める
+			float md = zInLVP - shadowValue.x;
+
+			//光が届く確率を求める
+			float lit_factor = variance / (variance + md * md);
+
+			//シャドウカラーを求める
+			float3 shadowColor = albedo.xyz * 0.5f;
+
+			//光が当たる確率を使って通常カラーとシャドウカラーを線形補間
+			albedo.xyz = lerp( shadowColor, albedo.xyz, lit_factor);
+		}
     }
 
 	return albedo;

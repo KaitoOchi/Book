@@ -8,11 +8,22 @@
 #include "graphics/light/HemiSphereLight.h"
 #include "graphics/postEffect/Bloom.h"
 
+#define MAX_POINT_LIGHT 4;
+#define MAX_SPOT_LIGHT 4;
+
 namespace nsBookEngine {
 
 	class RenderingEngine
 	{
 	public:
+		//シャドウマップ用の構造体
+		struct ShadowParamCB
+		{
+			Vector3 lightPos = Vector3::Zero;
+			float pad0;
+			Matrix mLVP = g_matIdentity;
+		};
+
 		//ライト用の構造体
 		struct LightCB
 		{
@@ -20,7 +31,7 @@ namespace nsBookEngine {
 			PointLight::pointLight pointLig;
 			SpotLight::spotLight spotLig;
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
-			Matrix mLVP;
+			ShadowParamCB shadowCB;
 		};
 
 		//スプライト用の構造体
@@ -91,7 +102,7 @@ namespace nsBookEngine {
 		/// ポイントライトの設定。
 		/// </summary>
 		/// <param name="ptlig"></param>
-		void SetPointLight(PointLight::pointLight& ptlig)
+		void SetPointLight(const int ptNum, PointLight::pointLight& ptlig)
 		{
 			//GetLightCB().pointLig = ptlig.GetPointLig();
 			GetLightCB().pointLig.ptPosition = ptlig.ptPosition;
@@ -139,6 +150,11 @@ namespace nsBookEngine {
 			return m_spriteCB;
 		}
 
+		Vector3& GetLightPos()
+		{
+			return m_lightCB.shadowCB.lightPos;
+		}
+
 		/// <summary>
 		/// シャドウマップ用レンダーターゲットを取得。
 		/// </summary>
@@ -146,6 +162,15 @@ namespace nsBookEngine {
 		RenderTarget& GetShadowRenderTarget()
 		{
 			return m_shadowMapRenderTarget;
+		}
+
+		/// <summary>
+		/// シャドウマップ用ガウシアンブラーを取得。
+		/// </summary>
+		/// <returns></returns>
+		GaussianBlur& GetShadowBlur()
+		{
+			return m_shadowBlur;
 		}
 
 		/// <summary>
@@ -215,6 +240,7 @@ namespace nsBookEngine {
 		Sprite m_copyMainRtToFrameBufferSprite;                         //メインレンダーターゲットのスプライト
 		
 		RenderTarget m_shadowMapRenderTarget;							//シャドウマップ用のレンダーターゲット
+		GaussianBlur m_shadowBlur;										//シャドウ用のガウシアンブラー
 		
 		std::vector<IRenderer*> m_renderObjects;
 

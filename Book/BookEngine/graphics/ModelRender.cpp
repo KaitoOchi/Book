@@ -77,11 +77,13 @@ namespace nsBookEngine {
 
 		if (isShadowReceiver) {
 			modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
-			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowRenderTarget().GetRenderTargetTexture();
+			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowBlur().GetBokeTexture();
 		}
 		else {
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		}
+
+		modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
 
 		if (m_skeleton.IsInited()) {
 			//スケルトンを指定する。
@@ -93,19 +95,24 @@ namespace nsBookEngine {
 
 
 		if (isShadow) {
+			ModelInitData shadowModelInitData;
+
 			//シャドウ用のモデルを初期化
-			modelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
-			modelInitData.m_tkmFilePath = tkmFilePath;
-			modelInitData.m_modelUpAxis = modelUpAxis;
-			modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
+			shadowModelInitData.m_tkmFilePath = tkmFilePath;
+			shadowModelInitData.m_modelUpAxis = modelUpAxis;
+			shadowModelInitData.m_expandConstantBuffer = (void*)&RenderingEngine::GetInstance()->GetLightPos();
+			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightPos());
+
+			shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 
 			if (m_skeleton.IsInited()) {
 				//スケルトンを指定する。
-				modelInitData.m_skeleton = &m_skeleton;
-				modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+				shadowModelInitData.m_skeleton = &m_skeleton;
+				shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 			}
 
-			m_shadowModel.Init(modelInitData);
+			m_shadowModel.Init(shadowModelInitData);
 		}
 	}
 

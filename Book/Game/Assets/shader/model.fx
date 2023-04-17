@@ -38,7 +38,8 @@ cbuffer LightCb : register(b1) {
 	float3 skyColor;		//天球ライト
 	float3 groundNormal;	//地面の法線
 
-	float4x4 mLVP;
+	float3 lightPos;
+	float4x4 mLVP;			
 }
 
 
