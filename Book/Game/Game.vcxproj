@@ -236,6 +236,7 @@
     <ClCompile Include="Enemy_Charge.cpp" />
     <ClCompile Include="Enemy_Normal.cpp" />
     <ClCompile Include="Enemy_Search.cpp" />
+    <ClCompile Include="FlashBom.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="Enemy_Charge.h" />
     <ClInclude Include="Enemy_Normal.h" />
     <ClInclude Include="Enemy_Search.h" />
+    <ClInclude Include="FlashBom.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
