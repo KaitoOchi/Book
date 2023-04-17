@@ -6,6 +6,7 @@
 
 class PlayerManagement;
 class GameUI;
+class Game;
 class Enemy :public IGameObject
 {
 public:
@@ -16,17 +17,20 @@ public:
 
 	bool WallAndHit(Vector3 pos);		// 壁と衝突したかどうかの処理
 	void Rotation(Vector3 rot);			// 回転処理
+	void Nav(Vector3 pos);				// ナビメッシュを行う処理
 	void Act_Craw();					// 巡回行動
 	void Act_Tracking();				// 追跡行動
 	void Act_Access();					// 接近行動
 	void Act_Charge(float time);		// 突進行動
+	void Act_Call();					// 敵を呼ぶ行動
+	void Act_Called();					// 呼ばれた時の行動
+	bool Act_CallEnd();					// 視野角内にプレイヤーが存在しないときの行動
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
-	bool Act_Stop(float time);			// 行動停止
+	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
-	void Act_Call();					// 周りの敵を呼ぶ
 	void SpotLight_New(Vector3 position);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
@@ -59,6 +63,9 @@ public:
 		CRAW,			// 巡回
 		TRACKING,		// 追跡
 		SEARCH,			// 索敵
+		CALL,			// 周りの敵を呼ぶ
+		CALLED,			// CALL時にSearch以外が実行
+		CALLEND,		// 視野角内にプレイヤーが存在しないとき実行
 		CHARGE,			// 突進
 		BACKBASEDON,	// 巡回状態に戻る
 		CONFUSION,		// 錯乱
@@ -70,9 +77,13 @@ public:
 	/// <param name="CRAW">巡回</param>
 	/// <param name="TRACKING">追跡</param>
 	/// <param name="SEARCH">待機</param>
+	/// <param name="CALL">周りの敵を呼ぶ</param>
+	/// <param name="CALLED">CALL時にSearch以外が実行</param>
+	/// <param name="CALLEND">視野角内にプレイヤーが存在しないとき実行</param>
 	/// <param name="CHARGE">突進</param>
 	/// <param name="BACKBASEDON">巡回状態に戻る</param>
 	/// <param name="CONFUSION">錯乱</param>
+	/// <param name="CATCH">捕獲</param>
 	EnEnemyActState m_ActState = CRAW;
 
 	// 指定できるパス移動
@@ -128,7 +139,7 @@ public:
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHitFlashBullet(bool b) {
-		b = HitFlashBulletFlag;
+		b = m_HitFlashBulletFlag;
 	};
 
 	/// <summary>
@@ -160,21 +171,23 @@ protected:
 		int s_number;						// ポイントの番号
 	};
 
+	std::vector<Point> m_pointList;			// ポイント構造体の配列
+	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
+
 	TknFile m_tknFile;						// tknファイル
 	PhysicsStaticObject m_bgObject;			// 静的物理オブジェクト
 	nsAI::NaviMesh m_nvmMesh;				// ナビメッシュ
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
 
-	std::vector<Point> m_pointList;			// ポイント構造体の配列
-	Point* m_point = nullptr;				// ポイント構造体のポインタ、現在の目的地になる
+	std::vector<Enemy*> enemyList;			// エネミーのリスト
 
 	PlayerManagement* m_playerManagement = nullptr;
 	GameUI* m_gameUI = nullptr;
+	Game* m_game = nullptr;
 
-	CharacterController m_characterController;
-
-	SphereCollider m_sphereCollider;
+	CharacterController m_characterController;	// キャラクターコントローラー
+	SphereCollider m_sphereCollider;			// スフィアコライダー
 
 	FontRender m_fontRender;				// フォントレンダー
 
@@ -185,16 +198,18 @@ protected:
 
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
-	bool HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool FindPlayerFlag = false;			
-	bool CalculatedFlag = false;			// 突進用フラグ
+	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool m_FindPlayerFlag = false;			
+	bool m_CalculatedFlag = false;			// 突進用フラグ
 
-	float addTimer = 0.0f;					// 加算するタイマー
-	float NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
+	float m_addTimer[3];					// 加算するタイマー。処理ごとに配列を作成
+	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
+	float m_move = 1.0f;
 
-	Vector3 playerPos = Vector3::Zero;		// 突進用
-	Vector3 enemyPos = Vector3::Zero;
-	Vector3 sumPos = Vector3::Zero;			// 総移動距離
+	Vector3 m_playerPos2 = Vector3::Zero;	// 突進用。プレイヤーの座標
+	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
+	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
+	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト

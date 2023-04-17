@@ -4,7 +4,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
-	const float		STOP_TIMER = 5.0f;				// 溜め時間
+	const float		STOP_TIMER = 3.0f;				// 溜め時間
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -57,8 +57,14 @@ void Enemy_Charge::Update()
 	case CHARGE:
 		Update_OnCharge();
 		break;
+		// 呼ばれたとき
+	case CALLED:
+		Update_OnCalled();
+		break;
+		// 巡回状態に戻る
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
+		break;
 		// 錯乱
 	case CONFUSION:
 		Update_OnConfusion();
@@ -93,7 +99,7 @@ void Enemy_Charge::Update_OnCraw()
 	}
 
 	// 閃光弾が当たったとき
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
 }
@@ -106,7 +112,7 @@ void Enemy_Charge::Update_OnCharge()
 										// 関数内で巡回状態に戻る処理を記述
 
 	// 閃光弾が当たったとき
-	if (HitFlashBulletFlag == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
 }
@@ -114,9 +120,18 @@ void Enemy_Charge::Update_OnCharge()
 void Enemy_Charge::Update_OnBackBasedOn()
 {
 	// 突進⇒巡回への切り替え
-
 	Enemy::Act_Loss();					// 追跡行動からの切り替え
 	m_ActState = CRAW;
+}
+
+void Enemy_Charge::Update_OnCalled()
+{
+	Enemy::Act_Called();
+
+	// 視野角にプレイヤーがいるとき
+	if (Enemy::Act_SeachPlayer() == true) {
+		m_ActState = CHARGE;
+	}
 }
 
 void Enemy_Charge::Update_OnConfusion()
@@ -126,7 +141,7 @@ void Enemy_Charge::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
 
 	// 閃光弾に当たっていないとき
-	if (HitFlashBulletFlag == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

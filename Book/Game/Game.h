@@ -44,6 +44,12 @@ public:
 		m_enGameState_GameBuck//タイトルに戻る
 	};
 	EnGameState m_gameState = m_enGameState_DuringGamePlay;//現在のステートの管理
+
+	// エネミーのリストを返す
+	std::vector<Enemy*> GetEnemyList()
+	{
+		return m_enemyList;
+	}
 private:
 	/// <summary>
 	/// クリアステートに遷移

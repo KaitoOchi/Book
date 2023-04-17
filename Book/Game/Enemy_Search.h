@@ -12,6 +12,8 @@ public:
 	void Render(RenderContext& rc);
 
 	void Update_OnSearch();				// õ“G
+	void Update_OnCall();				// ü‚è‚Ì“G‚ğŒÄ‚Ô
+	void Update_OnCallEnd();			// ŒÄ‚Ôs“®‚ÌI—¹
 	void Update_OnConfusion();			// ö—
 		
 private:

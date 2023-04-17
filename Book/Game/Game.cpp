@@ -16,8 +16,7 @@
 #include "LightSensor.h"
 #include "Wall.h"
 #include "Treasure.h"
-#include "Ghost.h"
-
+#include "Gost.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -26,20 +25,10 @@ Game::Game()
 
 Game::~Game()
 {
-	//プレイヤーの削除
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
-	DeleteGO(m_playerManagement);
-	//エネミーの削除
-	DeleteGO(m_enemyCharge);
-	DeleteGO(m_enemyNormal);
-	DeleteGO(m_enemySearch);
-	//ゲームオブジェクトの削除
 	DeleteGO(m_gamecamera);
-	DeleteGO(m_backGround);
-	DeleteGO(m_miniMap);
-	DeleteGO(m_gameUI);
-	DeleteGO(m_ghost);
+
 }
 
 bool Game::Start()
@@ -50,8 +39,15 @@ bool Game::Start()
 	//NewGO<Sensor>(0, "sensor");
 	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_gameUI=NewGO<GameUI>(0, "gameUI");
+	NewGO<GameUI>(0, "gameUI");
 	//NewGO<LightSensor>(0, "lightSensor");
+	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
+	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+	//m_stageModelRender.SetRotation(Quaternion::Identity);
+	//m_stageModelRender.SetScale(Vector3::One);
+	//m_stageModelRender.Update();
+	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
+
 	LevelDesign();
 	m_pointLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
 	m_pointLight.SetRange(100.0f);
@@ -63,16 +59,29 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽf・ｽU・ｽC・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	// レベルデザイン処理
 	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
-		//・ｽ・ｽ・ｽO・ｽ・ｽunityChan・ｽﾈゑｿｽ
+		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
+			//m_mirror = NewGO<Mirror>(0, "mirror");
+
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemyNormal);
+
+			// パス移動の指定
+			m_enemyNormal->Pass(0);
 
 			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			m_enemyCharge->SetPosition(objData.position);
 			m_enemyCharge->SetRotation(objData.rotation);
 			m_enemyCharge->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemyCharge);
 
 			// パス移動の指定
 			m_enemyCharge->Pass(7);
@@ -126,7 +135,7 @@ void Game::LevelDesign()
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
 			// Enemyのリストに追加
-			m_enemyList.push_back(m_enemyCharge);
+			m_enemyList.push_back(m_enemySearch);
 		}
 
 		//名前がbackgroundなら
@@ -155,11 +164,15 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
+			// Enemyのリストに追加
+			m_enemyList.push_back(m_enemySearch);
 
 			return true;
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
-			m_player3D->m_ghostpositions.push_back(objData.position);
+
+			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
+			//m_trans->SetPosition(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
@@ -172,10 +185,10 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"gost") == true) {
 
-			m_ghost = NewGO<Ghost>(0, "ghost");
-			m_ghost->SetPosition(objData.position);
-			m_ghost->SetScale(objData.scale);
-			m_ghost->SetRotation(objData.rotation);
+			m_gost = NewGO<Gost>(0, "gost");
+			m_gost->SetPosition(objData.position);
+			m_gost->SetScale(objData.scale);
+			m_gost->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
@@ -193,23 +206,21 @@ void Game::LevelDesign()
 
 void Game::Update()
 {
+	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
+	if (diff.LengthSq() <= 120.0f*120.0f)
+	{
+		m_gameState = m_enGameState_GameClear;
+	}
+		
 	MnageState();
 
 	m_pointLight.Update();
 }
-void Game::Clearable()
-{
-	Vector3 diff = m_playerManagement->GetPosition() - GetClearPosition();
-	if (diff.LengthSq() <= 120.0f * 120.0f)
-	{
-		m_gameState = m_enGameState_GameClear;
-	}
-
-}
 void Game::ClearState()
 {
-	NewGO<Title>(0, "title");
-	DeleteGO(this);
+	//NewGO<Title>(0, "title");
+	//DeleteGO(this);
+	int a = 0;
 }
 
 void Game::MnageState()
@@ -220,9 +231,6 @@ void Game::MnageState()
 		break;
 	case Game::m_enGameState_GameClear:
 		ClearState();
-		break;
-	case Game::m_enGameState_GameClearable:
-		Clearable();
 		break;
 	case Game::m_enGameState_GameOver:
 		break;
