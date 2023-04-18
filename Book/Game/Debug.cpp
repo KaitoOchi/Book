@@ -2,8 +2,8 @@
 #include "Debug.h"
 
 #include "Mirror.h"
-#include "SenSor.h"
-#include "LightSensor.h"
+#include "Object/SenSor.h"
+#include "Object/LightSensor.h"
 
 
 #include "level3DRender/LevelRender.h"
