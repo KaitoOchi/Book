@@ -8,12 +8,12 @@ class BackGround;
 class Enemy;
 class Enemy_Normal;
 class Enemy_Search;
-class TransparentBox;
 class Enemy_Charge;
 class PlayerManagement;
 class Wall;
 class Treasure;
-class Gost;
+class Ghost;
+class GameUI;
 class Game : public IGameObject
 {
 public:
@@ -38,28 +38,33 @@ public:
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//ゲームプレイ中
+		m_enGameState_GameClearable,//ゲームクリア条件達成
 		m_enGameState_GameClear,//ゲームクリア
 		m_enGameState_GameOver,//ゲームオーバー
 		m_enGameState_GameBuck//タイトルに戻る
 	};
+	EnGameState m_gameState = m_enGameState_DuringGamePlay;//現在のステートの管理
 
 	// エネミーのリストを返す
 	std::vector<Enemy*> GetEnemyList()
 	{
 		return m_enemyList;
 	}
-
 private:
 	/// <summary>
 	/// クリアステートに遷移
 	/// </summary>
 	void ClearState();
+	/// <summary>
+	/// クリア可能ステートに遷移
+	/// </summary>
+	void Clearable();
 
 	/// <summary>
 	/// ステートの切替
 	/// </summary>
 	void MnageState();
-	EnGameState m_gameState=m_enGameState_DuringGamePlay;//現在のステートの管理
+	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
 	Player3D* m_player3D = nullptr;//3Dプレイヤー
@@ -74,13 +79,14 @@ private:
 	BackGround* m_backGround = nullptr;
 
 	std::vector<Enemy*> m_enemyList;
+	
 
-	TransparentBox *m_trans = nullptr;
+
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
-	Gost* m_gost = nullptr;
-	
+	Ghost* m_ghost = nullptr;
+	GameUI* m_gameUI = nullptr;
 	PointLight m_pointLight;
 
 };

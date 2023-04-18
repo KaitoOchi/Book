@@ -56,11 +56,7 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="GameUI.cpp" />
-    <ClCompile Include="TransparentBox.cpp" />
     <ClCompile Include="Enemy_Charge.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Serch.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -71,7 +67,10 @@
     </ClCompile>
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Treasure.cpp" />
-    <ClCompile Include="Gost.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Enemy_Search.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="FlashBom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -114,10 +113,6 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="GameUI.h" />
-    <ClInclude Include="TransparentBox.h" />
-    <ClInclude Include="Enemy_Serch.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy_Charge.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -129,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Treasure.h" />
-    <ClInclude Include="Gost.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Enemy_Search.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="FlashBom.h" />
   </ItemGroup>
 </Project>

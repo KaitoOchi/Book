@@ -7,7 +7,7 @@ namespace
 {
 	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//注視点から視点までのベクトルを設定。
 
-	const float TAGETUP = 100.0f;//注視点を上げれる
+	const float TAGETUP = 10.0f;//注視点を上げれる
 
 	const float FRONTO = 20.0f;//カメラの前方向の量を変更できる
 	const float YUP = -0.5f;//カメラの上方向の限界
@@ -40,11 +40,9 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	SetPosition(m_playerManagement->GetPosition());
+	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//プレイヤーの足元からちょっと上を注視点とする
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
-	m_target += g_camera3D->GetForward() * FRONTO;
-
 	m_toCameraPosOld = m_toCameraPos;
 	//右ステックで回す
 	float x = g_pad[0]->GetRStickXF();
@@ -82,7 +80,7 @@ void GameCamera::UpdatePositionAndTarget()
 	//	//上向きすぎ
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
-	if (g_pad[0]->IsTrigger(enButtonLB1))
+	if (g_pad[0]->IsTrigger(enButtonLB2))
 	{
 		m_toCameraPos.Set(BEKUTORU);
 	}
