@@ -139,8 +139,16 @@ public:
 	/// </summary>
 	/// <param name="">”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</param>
 	void SetHitFlashBullet(bool b) {
-		b = m_HitFlashBulletFlag;
+		m_HitFlashBulletFlag = b;
 	};
+
+	/// <summary>
+	/// ‘MŒõ’e‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©•Ô‚·
+	/// </summary>
+	/// <returns></returns>
+	bool GetHitFlushBullet() {
+		return m_HitFlashBulletFlag;
+	}
 
 	/// <summary>
 	/// À•W‚ğæ“¾‚·‚é
