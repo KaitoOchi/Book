@@ -85,7 +85,7 @@ private:
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
-	Gost* m_gost = nullptr;
+	Ghost* m_ghost = nullptr;
 	
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;

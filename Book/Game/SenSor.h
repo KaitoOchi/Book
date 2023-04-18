@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 
+class GameUI;
+
 class Sensor : public Object
 {
 public:
@@ -15,7 +17,8 @@ private:
 	/// 当たり判定の処理。
 	/// </summary>
 	void Hit() override;
-	
+
 private:
+	GameUI* m_gameUI = nullptr;;
 };
 

@@ -245,6 +245,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="Mirror.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="LightSensor.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Mirror.h" />
     <ClInclude Include="Object.h" />
