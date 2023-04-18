@@ -32,167 +32,65 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Normal.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="LightSensor.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Player2D.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Player3D.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerManagement.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="SenSor.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Charge.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Search.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Mirror.cpp">
-      <Filter>Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="FlashBom.cpp">
-      <Filter>Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Item</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>GameManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>GameManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GameUI.cpp">
-      <Filter>GameManager</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniMap.cpp">
-      <Filter>GameManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Ghost.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
+    <ClCompile Include="Enemy\Enemy.cpp" />
+    <ClCompile Include="Enemy\Enemy_Charge.cpp" />
+    <ClCompile Include="Enemy\Enemy_Normal.cpp" />
+    <ClCompile Include="Enemy\Enemy_Search.cpp" />
+    <ClCompile Include="Item\FlashBom.cpp" />
+    <ClCompile Include="Item\Item.cpp" />
+    <ClCompile Include="Object\LightSensor.cpp" />
+    <ClCompile Include="Object\Object.cpp" />
+    <ClCompile Include="Object\SenSor.cpp" />
+    <ClCompile Include="Object\Treasure.cpp" />
+    <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Player\Player2D.cpp" />
+    <ClCompile Include="Player\Player3D.cpp" />
+    <ClCompile Include="Player\PlayerManagement.cpp" />
+    <ClCompile Include="Scene\Game.cpp" />
+    <ClCompile Include="Scene\Title.cpp" />
+    <ClCompile Include="Stage\BackGround.cpp" />
+    <ClCompile Include="Stage\Ghost.cpp" />
+    <ClCompile Include="Stage\Wall.cpp" />
+    <ClCompile Include="UI\GameUI.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Normal.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="LightSensor.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Player2D.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Player3D.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerManagement.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="SenSor.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Charge.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy_Search.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Mirror.h">
-      <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="FlashBom.h">
-      <Filter>Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Item</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>GameManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>GameManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GameUI.h">
-      <Filter>GameManager</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniMap.h">
-      <Filter>GameManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="BackGround.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Ghost.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
+    <ClInclude Include="Enemy\Enemy.h" />
+    <ClInclude Include="Enemy\Enemy_Charge.h" />
+    <ClInclude Include="Enemy\Enemy_Normal.h" />
+    <ClInclude Include="Enemy\Enemy_Search.h" />
+    <ClInclude Include="Item\FlashBom.h" />
+    <ClInclude Include="Item\Item.h" />
+    <ClInclude Include="Object\LightSensor.h" />
+    <ClInclude Include="Object\Object.h" />
+    <ClInclude Include="Object\SenSor.h" />
+    <ClInclude Include="Object\Treasure.h" />
+    <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\Player2D.h" />
+    <ClInclude Include="Player\Player3D.h" />
+    <ClInclude Include="Player\PlayerManagement.h" />
+    <ClInclude Include="Scene\Game.h" />
+    <ClInclude Include="Scene\Title.h" />
+    <ClInclude Include="Stage\BackGround.h" />
+    <ClInclude Include="Stage\Ghost.h" />
+    <ClInclude Include="Stage\Wall.h" />
+    <ClInclude Include="UI\GameUI.h" />
+    <ClInclude Include="UI\MiniMap.h" />
   </ItemGroup>
 </Project>
