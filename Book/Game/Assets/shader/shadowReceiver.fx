@@ -157,7 +157,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 
-    float4 worldPos = mul(mWorld, vsIn.pos);
+    float4 worldPos = mul(m, vsIn.pos);
 	psIn.pos = mul(m, vsIn.pos);
 	psIn.worldPos = mul(m, vsIn.pos);
 	psIn.pos = mul(mView, psIn.pos);
@@ -167,8 +167,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.normal = mul(m, vsIn.normal);
 
 	//ワールド空間に変換
-	psIn.tangent = normalize(mul(mWorld, vsIn.tangent));
-	psIn.biNormal = normalize(mul(mWorld, vsIn.biNormal));
+	psIn.tangent = normalize(mul(m, vsIn.tangent));
+	psIn.biNormal = normalize(mul(m, vsIn.biNormal));
 
 	//カメラ空間の法線を求める
 	psIn.normalInView = mul(mView, psIn.normal);
@@ -205,7 +205,7 @@ float4 PSMain(SPSIn In) : SV_Target0
 	// G-Bufferの内容を使ってライティング
     float4 albedo = g_albedo.Sample(g_sampler, In.uv);
 
-	if(albedo.r == 0.0f, albedo.g == 0.0f, albedo.b == 0.0f){
+	if(albedo.r == 0.0f && albedo.g == 0.0f && albedo.b == 0.0f){
 		clip(-1);
 	}
 
@@ -229,7 +229,7 @@ float4 PSMain(SPSIn In) : SV_Target0
 
 
 	//最終的な反射光にリムライトの反射光を合算する
-	float3 limColor = dirLig.dirColor;// * limPower ;
+	float3 limColor = dirLig.dirColor * limPower ;
 
 	//ディレクションライト、ポイントライト、スポットライト、環境光、リムライト、半球ライトを足して、最終的な光を求める
 	float3 lig = directionLight 
@@ -239,10 +239,8 @@ float4 PSMain(SPSIn In) : SV_Target0
 				+ limColor																							
 				+ hemiLight;
 
-	float4 albedoColor = albedo;
-
 	//シャドウマップを求める
-	float4 shadowMap = ShadowMap(In, albedoColor);
+	float4 shadowMap = ShadowMap(In, albedo);
 
 	shadowMap.xyz *= lig;
 
@@ -319,7 +317,7 @@ float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal)
 /// </summary>
 float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 {
-	float3 finalPtLig;
+	float3 finalPtLig = (0.0f, 0.0f, 0.0f);
 
 	for(int i = 0; i <= ptNum; i++){
 
@@ -374,9 +372,9 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 /// </summary>
 float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 {
-	float3 finalspLig;
+	float3 finalspLig = (0.0f, 0.0f, 0.0f);
 
-	for(int i = 0; i <= 3; i++){
+	for(int i = 0; i <= spNum; i++){
 
 		//ピクセルの座標 - スポットライトの座標を計算
 		float3 ligDir = psIn.worldPos - spLig[i].spPosition;
@@ -417,6 +415,16 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 
 		//入射光と射出方向の角度を求める
 		float angle = dot(ligDir, spLig[i].spDirection);
+
+		//acos関数は-1.0f～1.0fの範囲内に収めないといけない
+		if(angle < -1.0f){
+			angle = -1.0f;
+		}
+
+		if(angle > 1.0f){
+			angle = 1.0f;
+		}
+
 		angle = abs(acos(angle));
 
 		//角度による影響率を求める

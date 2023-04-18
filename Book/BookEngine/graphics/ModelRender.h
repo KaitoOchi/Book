@@ -84,6 +84,14 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// 座標の取得。
+		/// </summary>
+		const Vector3& GetPosition()
+		{
+			return m_position;
+		}
+
+		/// <summary>
 		/// 回転の設定。
 		/// </summary>
 		/// <param name="rot"></param>

@@ -1,23 +1,22 @@
- struct SSkinVSIn{
-	int4  Indices  	: BLENDINDICES0;
-    float4 Weights  : BLENDWEIGHT0;
-};
- 
- // モデル用の定数バッファー
+// モデル用の定数バッファー
 cbuffer ModelCb : register(b0)
 {
     float4x4 mWorld;
     float4x4 mView;
     float4x4 mProj;
-};
-/*
-//ライト用の定数バッファ
-cbuffer ShadowCB : register(b1) {
-
-	float3 lightPos;		//ライトの座標
 }
-*/
 
+//シャドウ用の定数バッファ
+cbuffer ShadowCB : register(b1)
+{
+	float3 lightPos;
+    float4x4 mLVP;
+}
+
+struct SSkinVSIn{
+	int4  Indices  	: BLENDINDICES0;
+    float4 Weights  : BLENDWEIGHT0;
+};
 
 // 頂点シェーダーへの入力
 struct SVSIn
@@ -27,6 +26,7 @@ struct SVSIn
     float2 uv : TEXCOORD0;  // UV座標
     SSkinVSIn skinVert;				//スキン用のデータ。
 };
+
 // ピクセルシェーダーへの入力
 struct SPSIn
 {
@@ -39,7 +39,6 @@ struct SPSIn
 ///////////////////////////////////////////////////
 // グローバル変数
 ///////////////////////////////////////////////////
-
 Texture2D<float4> g_albedo : register(t0);      // アルベドマップ
 Texture2D<float4> g_shadowMap : register(t10);  // シャドウマップ
 
@@ -68,7 +67,7 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// <summary>
 /// 頂点シェーダー
 /// <summary>
-SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
+SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 {
 	SPSIn psIn;
 	float4x4 m;
@@ -86,7 +85,7 @@ SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
     psIn.normal = mul(m, vsIn.normal);
 
     //頂点のライトから見た深度値と、ライトから見た深度値の2乗を計算する
-    psIn.depth.x = length(worldPos - (600, 800, 600)) / 1000.0f;
+    psIn.depth.x = length(worldPos - lightPos) / 1000.0f;
     psIn.depth.y = psIn.depth.x * psIn.depth.x;
 
     psIn.uv = vsIn.uv;
@@ -94,10 +93,14 @@ SPSIn VSMain(SVSIn vsIn, uniform bool hasSkin)
     return psIn;
 }
 
+SPSIn VSMain(SVSIn vsIn)
+{
+    return VSMainCore(vsIn, false);
+}
 
 SPSIn VSSkinMain(SVSIn vsIn)
 {
-    return VSMain(vsIn, true);
+    return VSMainCore(vsIn, true);
 }
 
 /// <summary>

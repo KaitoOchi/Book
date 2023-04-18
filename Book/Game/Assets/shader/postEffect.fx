@@ -85,6 +85,6 @@ float4 SetColor(float4 color)
 	color.g = 1.0f;
 	color.b = 1.0f;
 	}
-
+	
 	return color;
 }

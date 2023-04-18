@@ -154,7 +154,7 @@ namespace nsBookEngine {
 			return m_spriteCB;
 		}
 
-		const Vector3& GetLightPos()
+		Vector3& GetShadowCB()
 		{
 			return m_lightCB.shadowCB.lightPos;
 		}

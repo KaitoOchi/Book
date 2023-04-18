@@ -505,7 +505,7 @@ void Enemy::SpotLight_New(Vector3 position)
 	Vector3 forward = Vector3::AxisY;
 
 	m_spotLight.SetSpotLight(
-		0,
+		1,
 		position,
 		LIGHTCOLOR,
 		LIGHTRANGE,

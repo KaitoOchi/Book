@@ -99,8 +99,8 @@ namespace nsBookEngine {
 			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
 			shadowModelInitData.m_tkmFilePath = tkmFilePath;
 			shadowModelInitData.m_modelUpAxis = modelUpAxis;
-			shadowModelInitData.m_expandConstantBuffer = (void*)&RenderingEngine::GetInstance()->GetLightPos();
-			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightPos());
+			shadowModelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetShadowCB();
+			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetShadowCB());
 
 			shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 
