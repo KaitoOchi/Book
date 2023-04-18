@@ -60,9 +60,6 @@
     <ClCompile Include="Enemy_Charge.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy_Serch.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -72,6 +69,9 @@
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Gost.cpp" />
+    <ClCompile Include="Enemy_Search.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -115,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="TransparentBox.h" />
-    <ClInclude Include="Enemy_Serch.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy_Charge.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -130,5 +127,8 @@
     <ClInclude Include="Wall.h" />
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Gost.h" />
+    <ClInclude Include="Enemy_Search.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

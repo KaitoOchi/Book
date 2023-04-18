@@ -234,6 +234,12 @@ float4 PSMain(SPSIn In) : SV_Target0
 				+ limColor																							
 				+ hemiLight;
 
+	if(lig.r > 50.0f && lig.g > 50.0f && lig.b > 50.0f){
+		lig.r = 50.0f;
+		lig.g = 50.0f;
+		lig.b = 50.0f;
+	}
+
 	float4 albedoColor = albedo;
 	albedoColor.xyz *= lig;
 
@@ -463,7 +469,8 @@ float CalcLim(float3 dirDirection, float3 normal, float3 normalInView)
 
 	//最終的なリムの強さを求める
 	float limPow = power1 * power2;
-	limPow = pow(limPow, 1.3f);
+
+	limPow = pow(limPow, 2.0f);
 
 	return limPow;
 }

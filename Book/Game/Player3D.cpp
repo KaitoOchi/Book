@@ -54,7 +54,7 @@ bool Player3D::Start()
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	//ƒ‚ƒfƒ‹‚ð“Ç‚Ýž‚Þ
-	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, false, D3D12_CULL_MODE_NONE);
+	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);

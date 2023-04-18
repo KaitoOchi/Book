@@ -30,8 +30,8 @@ namespace nsBookEngine {
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClip = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadow = true,
-			bool isShadowReceiver = true,
+			bool isShadow = false,
+			bool isShadowReceiver = false,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
 			int maxInstance = 1);
 

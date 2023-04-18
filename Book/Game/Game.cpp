@@ -20,7 +20,7 @@
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -36,7 +36,7 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	//NewGO<Sensor>(0, "sensor");
+	NewGO<Sensor>(0, "sensor");
 	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	NewGO<GameUI>(0, "gameUI");
