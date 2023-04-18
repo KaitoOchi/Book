@@ -11,9 +11,10 @@
 namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		ADD_SPEED = 1.5f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
-	const float		CALL_DISTANCE_MIN = 60.0f;				// 呼ぶことができる最小値
+	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -106,7 +107,7 @@ void Enemy::Nav(Vector3 pos)
 	// パス上を移動する
 	m_position = m_path.Move(
 		m_position,						// 座標
-		MOVE_SPEED,						// 移動速度
+		MOVE_SPEED* ADD_SPEED,			// 移動速度
 		isEnd							// 移動したときtrue
 	);
 
@@ -304,8 +305,8 @@ void Enemy::Act_Tracking()
 	// ナビメッシュを作成
 	Nav(m_playerPos);
 
-	// 歩きアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	// 走るアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
 }
 
 void Enemy::Pass(int PassState)
@@ -441,13 +442,13 @@ void Enemy::Act_Charge(float time)
 		Rotation(diff);
 
 		// 移動速度に加算
-		Vector3 moveSpeed = diff * (MOVE_SPEED * 1.5f);
+		Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
 		m_position += moveSpeed * m_move;
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
 
-		// 歩きアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		// 走るアニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
 
 		// 長さが一定以上のとき
 		if (m_sumPos.Length() > MOVING_DISTANCE) {
@@ -489,7 +490,6 @@ void Enemy::Act_Call()
 			if (length <= CALL_DISTANCE_MIN) {
 
 				m_ActState = CALLEND;
-				m_fontRender.SetText(L"callend");
 				return;
 			}
 
@@ -510,8 +510,8 @@ void Enemy::Act_Called()
 	// 目標地点へ向かうナビメッシュを作成
 	Nav(m_setPos);
 
-	// 歩きアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	// 走るアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
 
 	// 自身から目標へ向かうベクトル
 	Vector3 diff = m_setPos - m_position;
@@ -520,6 +520,8 @@ void Enemy::Act_Called()
 	if (diff.Length() <= CALL_DISTANCE_MIN) {
 		// 移動を停止する
 		m_position = m_position;
+		// 待機アニメーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 	}
 }
 
@@ -531,6 +533,8 @@ bool Enemy::Act_CallEnd()
 		//// 各エネミーから該当エネミーへ向かうベクトル
 		//Vector3 diff = m_position - enemyList[i]->m_position;
 		//float length = diff.Length();
+
+		m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
 		if (enemyList[i]->m_ActState == CALLED) {
