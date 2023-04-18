@@ -1,4 +1,6 @@
 #pragma once
+
+
 class Title :public IGameObject
 {
 public:
@@ -6,6 +8,8 @@ public:
 	~Title();
 	bool Start();
 	void Update();
-	SpriteRender m_titleRender;
 	void Render(RenderContext &rc);
+
+private:
+	SpriteRender m_titleRender;
 };
