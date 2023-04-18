@@ -7,6 +7,7 @@ BackGround::BackGround()
 
 BackGround::~BackGround()
 {
+
 }
 
 bool BackGround::Start()

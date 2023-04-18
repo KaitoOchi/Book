@@ -1,18 +1,16 @@
 ﻿#pragma once
-#include "Player.h"
 #include "Player2D.h"
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class TransparentBox;
-class Gost;
-class PlayerManagement:public Player
+class Ghost;
+class PlayerManagement:public IGameObject
 {
 public:
 	PlayerManagement();
 	~PlayerManagement();
 	bool Start();
-	void Update();
+	void Update()override;
 	void PlayerChange();
 	void PlayerChange2D();
 	void PlayerChange3D();
@@ -36,9 +34,9 @@ public:
 
 
 	//キャラコンの取得
-	void SetCharacon(CharacterController* m_characon)
+	void SetCharacon(CharacterController* m_chara)
 	{
-		m_setChara = m_characon;
+		m_characon = m_chara;
 	}
 	CharacterController* GetCharacon()
 	{
@@ -52,23 +50,20 @@ public:
 	void ProcessCommonStateTransition();
 	enum EnMnagementState
 	{
+		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
 		m_enPlayer_2DChanging,//2Dに切替中
 		m_enPlayer_3DChanging,//3Dに切替中
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
 
-	/// <summary>
-	/// 透明ブロックの当たり判定
-	/// </summary>
-	void GostHit();
-
 private:
+	Vector3 m_ghostPosition=Vector3::Zero;
 	
 	Vector3 m_position = Vector3::Zero;
-	CharacterController* m_setChara = nullptr;
+	CharacterController* m_characon = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
-	TransparentBox* m_trans = nullptr;
-	Gost* m_gost = nullptr;
+	Ghost* m_ghost = nullptr;
+	float YLstickamount = 0;
 };
 

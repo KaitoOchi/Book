@@ -16,21 +16,25 @@ public:
 	/// キャラコンの作成の関数
 	/// </summary>
 	void CreatCharcon();
+
+	void SetPushPosition(const Vector3 pushpos)
+	{
+		m_pushPosition = pushpos;
+	}
+	const Vector3 GetPushPosition()const
+	{
+		return m_pushPosition;
+	}
+
 private:
-	ModelRender m_model3DRender;//3Dモデル
-	//アニメーション
-	enum EnAnimationClip {
-		m_enAnimationClip_Idle,//待機アニメーション
-		m_enAnimationClip_Walk,//歩きアニメーション
-		m_enAnimationClip_Run,//走るアニメーション
-		m_enAnimationClip_Jump,//ジャンプアニメーション
-		m_enAnimationClip_Jumpend,//ジャンプ終わりアニメーション
-		m_enAnimationClip_Down,//ダウンアニメーション
-		m_enAnimationClip_Throw,//投げるアニメーション
-		m_enAnimationClip_Num,//アニメーションの数
-	};
-	AnimationClip m_animationClips[m_enAnimationClip_Num];
 	PlayerManagement* m_playerManagement = nullptr;
 
+	//透明座標に動かす
+	Vector3 m_pushPosition = Vector3::Zero;
+	Vector3 m_pushRotPos = Vector3::Zero;
+
+	float m_pushRot;
+	float senkeiPos = 0.0f;
+	float senkeiTime = 1.0f;
 };
 
