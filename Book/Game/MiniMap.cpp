@@ -10,7 +10,7 @@ namespace
 {
 	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
 	const float		MAP_RADIUS = 140.0f;									// マップの半径
-	const float		LIMITED_RANGE_IMAGE = 500.0f;							// マップの範囲
+	const float		LIMITED_RANGE_IMAGE = 650.0f;							// マップの範囲
 	const float		ALPHA = 0.75f;											// α値
 }
 
