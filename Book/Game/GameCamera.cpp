@@ -43,8 +43,6 @@ void GameCamera::UpdatePositionAndTarget()
 	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//プレイヤーの足元からちょっと上を注視点とする
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
-	m_target += g_camera3D->GetForward() * FRONTO;
-
 	m_toCameraPosOld = m_toCameraPos;
 	//右ステックで回す
 	float x = g_pad[0]->GetRStickXF();
