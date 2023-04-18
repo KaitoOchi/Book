@@ -149,7 +149,7 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		/*if (objData.EqualObjectName(L"box") == true) {
+		if (objData.EqualObjectName(L"box") == true) {
 
 			m_wall = NewGO<Wall>(0, "wall");
 			m_wall ->SetPosition(objData.position);
@@ -157,7 +157,7 @@ void Game::LevelDesign()
 			m_wall->SetScale(objData.scale);
 
 			return true;
-		}*/
+		}
 		if (objData.EqualObjectName(L"unityChan") == true) {
 
 			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");

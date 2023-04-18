@@ -11,6 +11,7 @@ Wall::~Wall()
 bool Wall::Start()
 {
 	m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+	//m_wallRender.Init("Assets/modelData/level_test/wall1.tkm", 0, 0, enModelUpAxisZ, false, true, D3D12_CULL_MODE_NONE);
 	m_wallRender.SetPosition(m_position);
 	m_wallRender.SetScale(m_scale);
 	m_wallRender.SetRotation(m_rotation);
