@@ -16,7 +16,7 @@
 #include "LightSensor.h"
 #include "Wall.h"
 #include "Treasure.h"
-#include "Gost.h"
+#include "Ghost.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -223,10 +223,10 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"gost") == true) {
 
-			m_gost = NewGO<Gost>(0, "gost");
-			m_gost->SetPosition(objData.position);
-			m_gost->SetScale(objData.scale);
-			m_gost->SetRotation(objData.rotation);
+			m_ghost = NewGO<Ghost>(0, "ghost");
+			m_ghost->SetPosition(objData.position);
+			m_ghost->SetScale(objData.scale);
+			m_ghost->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {

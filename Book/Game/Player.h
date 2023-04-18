@@ -1,10 +1,11 @@
 #pragma once
 class PlayerManagement;
 class GameCamera;
+class Ghost;
 class Player : public IGameObject
 {
 public:
-	enum EnPlayerState{
+	enum EnPlayerState {
 		m_enPlayer_Idle,		//待機中
 		m_enPlayer_walk,		//歩く
 		m_enPlayer_Run,			//走る
@@ -15,7 +16,7 @@ public:
 		m_enPlayer_3DChanging,	//3Dに切替中
 		m_enPlayer_Found,		//見つかる
 		m_enPlayer_Caught,		//捕まった
-		m_enPlayer_GostHit,		//透明ブロックに当たる
+		m_enPlayer_Downh,		//気絶中
 		m_enPlayer_Clear,		//ゲームクリア
 		m_enPlayer_GameOver,	//ゲームオーバー
 		m_enPlayer3D_Throw,		//投げる
@@ -23,6 +24,9 @@ public:
 		m_enPlayer3D_Push,		//押す
 
 	};
+
+	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
+
 	Player();
 	virtual ~Player();
 	virtual bool Start();
@@ -54,12 +58,37 @@ public:
 		return m_collisionObject;
 	}
 
+
+
+	/// <summary>
+	///透明ポジションの設定
+	/// </summary>
+	/// <returns></returns>
+	void SetGhostPosition(const Vector3 ghostpos)
+	{
+		m_setGhostpos = ghostpos;
+	}
+
+	const Vector3 GetGhostPosition()const
+	{
+		return m_setGhostpos;
+	}
+
+	/// <summary>
+	/// 透明ブロックの当たり判定
+	/// </summary>
+	void GhostHit();
+	std::vector<Vector3> m_ghostpositions;
+	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
 protected:
 	virtual void Update();
 	void Move();
 	void Jump();
 	void Rotation();
 	virtual void Animation();
+	void Animation3D();
+	void Animation2D();
+
 	/// <summary>
 	/// 各ステートの遷移処理
 	/// </summary>
@@ -117,6 +146,10 @@ protected:
 	/// </summary>
 	void ProcessFoundStateTransition();
 	/// <summary>
+	/// 気絶ステートの遷移処理
+	/// </summary>
+	void ProcessDownStateTransition();
+	/// <summary>
 	/// 捕まるステートの遷移処理
 	/// </summary>
 	void ProcessCaughtStateTransition();
@@ -128,6 +161,20 @@ protected:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition();
+	
+	//アニメーション
+	enum EnAnimationClip {
+		m_enAnimationClip_Idle,//待機アニメーション
+		m_enAnimationClip_Walk,//歩きアニメーション
+		m_enAnimationClip_Run,//走るアニメーション
+		m_enAnimationClip_Jump,//ジャンプアニメーション
+		m_enAnimationClip_Jumpend,//ジャンプ終わりアニメーション
+		m_enAnimationClip_Down,//ダウンアニメーション
+		m_enAnimationClip_Throw,//投げるアニメーション
+		m_enAnimationClip_Num,//アニメーションの数
+	};
+	AnimationClip m_animationClips[m_enAnimationClip_Num];
+	
 	
 	bool m_characonState = true;								//キャラコンを作るかどうか
 
@@ -142,9 +189,14 @@ protected:
 	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
 	Quaternion m_rotation;										//回転
 	CharacterController *m_characon;							//キャラコン
-	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
+	Ghost* m_ghost = nullptr;
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
+
+	Vector3 m_ghostPosition = Vector3::Zero;
+	Vector3 m_setGhostpos=Vector3::Zero;
+	
+
 };

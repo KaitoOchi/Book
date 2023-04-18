@@ -56,7 +56,6 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="GameUI.cpp" />
-    <ClCompile Include="TransparentBox.cpp" />
     <ClCompile Include="Enemy_Charge.cpp">
       <Filter>Actor</Filter>
     </ClCompile>

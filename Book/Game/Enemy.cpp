@@ -12,7 +12,8 @@ namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
-	const float		CALL_DISTANCE = 350.0f;					// 呼ぶことができる範囲
+	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
+	const float		CALL_DISTANCE_MIN = 100.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
 	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
@@ -27,9 +28,9 @@ namespace
 	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 75.0f, 90.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(100.0f, 1.0f, 1.0f);			//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(50.0f, 0.0f, 0.0f);		//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
-	const float		LIGHTPOSITION = 40.0f;					//���C�g�̃|�W�V����
+	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 }
 
 Enemy::Enemy()
@@ -474,11 +475,6 @@ void Enemy::Act_Call()
 	// 自身の座標格納用
 	Vector3 myPos = Vector3::Zero;
 
-	// 回転を教える
-	Vector3 rot = m_playerManagement->GetPosition() - m_position;
-	rot.Normalize();
-	Rotation(rot);
-
 	// エネミーのリストを検索
 	for (int i = 0; i < enemyList.size(); i++) {
 
@@ -487,16 +483,18 @@ void Enemy::Act_Call()
 		float length = diff.Length();
 
 		// 長さが一定以内のとき
-		if (length > 100.0f && length < CALL_DISTANCE) {
+		if (length > CALL_DISTANCE_MIN && length < CALL_DISTANCE_MAX) {
 
 			enemyList[i]->m_ActState = CALLED;		// 行動パターンを変更する
 			enemyList[i]->m_setPos = m_position;	// 自身の座標を目標地点として渡す
 
-			// 正規化
-			diff.Normalize();
-			// 移動速度を加算
-			enemyList[i]->m_position += diff * MOVE_SPEED;
-
+			if (length >= CALL_DISTANCE_MIN) {
+				// 正規化
+				diff.Normalize();
+				// 移動速度を加算
+				enemyList[i]->m_position += diff * MOVE_SPEED;
+			}
+			
 			m_fontRender.SetText(L"call");
 		}
 	}
@@ -509,6 +507,13 @@ void Enemy::Act_Called()
 
 	// 歩きアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+	// 自身から目標へ向かうベクトル
+	Vector3 diff = m_setPos - m_position;
+
+	if (diff.Length() <= CALL_DISTANCE_MIN) {
+		m_position = m_position;
+	}
 }
 
 bool Enemy::Act_CallEnd()

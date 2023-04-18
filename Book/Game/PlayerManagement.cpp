@@ -2,8 +2,7 @@
 #include "Player2D.h"
 #include"Player3D.h"
 #include "PlayerManagement.h"
-#include "Gost.h"
-#include "TransparentBox.h"
+#include "Ghost.h"
 PlayerManagement::PlayerManagement()
 {
 
@@ -14,10 +13,9 @@ PlayerManagement::~PlayerManagement()
 }
 bool PlayerManagement::Start()
 {
+	m_ghost = FindGO<Ghost>("ghost");
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
-	m_trans = FindGO<TransparentBox>("transparentBox");
-	m_gost = FindGO<Gost>("gost");
 	return true;
 }
 void PlayerManagement::Update()
@@ -68,16 +66,13 @@ void PlayerManagement::PlayerChange3D()
 	SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーが埋まっているなら
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
-			if (m_gost->m_physicsGhostObj.IsSelf(contactObject) == true)
+			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
-				GostHit();
+				m_player3D->GhostHit();
+				m_player3D->SetPushPosition(m_player3D->GetPosition());
+				m_player3D->m_ghostHit = false;
 			}
 		});
 	//プレイヤーを３Dにする
 	m_enMnanagementState = m_enPlayer_3DChanging;
-}
-
-void PlayerManagement::GostHit()
-{
-	m_player3D->SetPosition(Vector3::Zero);
 }

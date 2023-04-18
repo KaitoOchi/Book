@@ -8,12 +8,12 @@ class BackGround;
 class Enemy;
 class Enemy_Normal;
 class Enemy_Search;
-class TransparentBox;
 class Enemy_Charge;
 class PlayerManagement;
 class Wall;
 class Treasure;
-class Gost;
+class Ghost;
+class GameUI;
 class Game : public IGameObject
 {
 public:
@@ -22,9 +22,9 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-	void LevelDesign();			// ƒXƒe[ƒW‚ÌƒŒƒxƒ‹ƒfƒUƒCƒ“‚Ìˆ—
+	void LevelDesign();			// ï¿½Xï¿½eï¿½[ï¿½Wï¿½Ìƒï¿½ï¿½xï¿½ï¿½ï¿½fï¿½Uï¿½Cï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 
-	//ƒNƒŠƒAÀ•W‚ğ•Ô‚·
+	//ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Wï¿½ï¿½Ô‚ï¿½
 	Vector3 GetClearPosition()
 	{
 		return m_position;
@@ -37,33 +37,38 @@ public:
 	Vector3 m_position = Vector3::Zero;
 	enum EnGameState
 	{
-		m_enGameState_DuringGamePlay,//ƒQ[ƒ€ƒvƒŒƒC’†
-		m_enGameState_GameClear,//ƒQ[ƒ€ƒNƒŠƒA
-		m_enGameState_GameOver,//ƒQ[ƒ€ƒI[ƒo[
-		m_enGameState_GameBuck//ƒ^ƒCƒgƒ‹‚É–ß‚é
+		m_enGameState_DuringGamePlay,//ï¿½Qï¿½[ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½
+		m_enGameState_GameClearable,//ï¿½Qï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½
+		m_enGameState_GameClear,//ï¿½Qï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
+		m_enGameState_GameOver,//ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[
+		m_enGameState_GameBuck//ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½É–ß‚ï¿½
 	};
+	EnGameState m_gameState = m_enGameState_DuringGamePlay;//ï¿½ï¿½ï¿½İ‚ÌƒXï¿½eï¿½[ï¿½gï¿½ÌŠÇ—ï¿½
 
-	// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚ğ•Ô‚·
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½Ìƒï¿½ï¿½Xï¿½gï¿½ï¿½Ô‚ï¿½
 	std::vector<Enemy*> GetEnemyList()
 	{
 		return m_enemyList;
 	}
-
 private:
 	/// <summary>
-	/// ƒNƒŠƒAƒXƒe[ƒg‚É‘JˆÚ
+	/// ï¿½Nï¿½ï¿½ï¿½Aï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
 	/// </summary>
 	void ClearState();
+	/// <summary>
+	/// ï¿½Nï¿½ï¿½ï¿½Aï¿½Â”\ï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
+	/// </summary>
+	void Clearable();
 
 	/// <summary>
-	/// ƒXƒe[ƒg‚ÌØ‘Ö
+	/// ï¿½Xï¿½eï¿½[ï¿½gï¿½ÌØ‘ï¿½
 	/// </summary>
 	void MnageState();
-	EnGameState m_gameState=m_enGameState_DuringGamePlay;//Œ»İ‚ÌƒXƒe[ƒg‚ÌŠÇ—
+	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
-	Player3D* m_player3D = nullptr;//3DƒvƒŒƒCƒ„[
-	Player2D* m_player2D = nullptr;//2DƒvƒŒƒCƒ„[
+	Player3D* m_player3D = nullptr;//3Dï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[
+	Player2D* m_player2D = nullptr;//2Dï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[
 	GameCamera* m_gamecamera = nullptr;
 
 	LevelRender m_levelRender;
@@ -74,8 +79,9 @@ private:
 	BackGround* m_backGround = nullptr;
 
 	std::vector<Enemy*> m_enemyList;
+	
 
-	TransparentBox *m_trans = nullptr;
+
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;

@@ -5,15 +5,15 @@
 #include"PlayerManagement.h"
 namespace
 {
-	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//’‹“_‚©‚ç‹“_‚Ü‚Å‚ÌƒxƒNƒgƒ‹‚ğİ’èB
+	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ç‹ï¿½_ï¿½Ü‚Å‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½İ’ï¿½B
 
-	const float TAGETUP = 100.0f;//’‹“_‚ğã‚°‚ê‚é
+	const float TAGETUP = 10.0f;//ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ã‚°ï¿½ï¿½ï¿½
 
-	const float FRONTO = 20.0f;//ƒJƒƒ‰‚Ì‘O•ûŒü‚Ì—Ê‚ğ•ÏX‚Å‚«‚é
-	const float YUP = -0.5f;//ƒJƒƒ‰‚Ìã•ûŒü‚ÌŒÀŠE
-	const float YDOWN = 0.8f;//ƒJƒƒ‰‚Ì‰º•ûŒü‚ÌŒÀŠE
-	const float XRIGHT = 0.5f;//ƒJƒƒ‰‚Ì‰E•ûŒü‚ÌŒÀŠE
-	const float XLEFT = -0.9f;//ƒJƒƒ‰‚Ì¶•ûŒü‚ÌŒÀŠE
+	const float FRONTO = 20.0f;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‘Oï¿½ï¿½ï¿½ï¿½ï¿½Ì—Ê‚ï¿½ÏXï¿½Å‚ï¿½ï¿½ï¿½
+	const float YUP = -0.5f;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½E
+	const float YDOWN = 0.8f;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½E
+	const float XRIGHT = 0.5f;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‰Eï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½E
+	const float XLEFT = -0.9f;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒï¿½ï¿½E
 }
 GameCamera::GameCamera()
 {
@@ -25,70 +25,68 @@ GameCamera::~GameCamera()
 }
 bool GameCamera::Start()
 {
-	//’‹“_‚©‚ç‹“_‚Ü‚Å‚ÌƒxƒNƒgƒ‹‚ğİ’è
+	//ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ç‹ï¿½_ï¿½Ü‚Å‚Ìƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	m_toCameraPos.Set(BEKUTORU);
-	//ƒvƒŒƒCƒ„[ŠÇ—‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ç—ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½X
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	return true;
 }
 void GameCamera::Update()
 {
-	//‹“_‚Æ’‹“_‚ÌXV
+	//ï¿½ï¿½ï¿½_ï¿½Æ’ï¿½ï¿½ï¿½ï¿½_ï¿½ÌXï¿½V
 	UpdatePositionAndTarget();
-	//ƒJƒƒ‰‚ÌXV
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌXï¿½V
 	g_camera3D->Update();
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	SetPosition(m_playerManagement->GetPosition());
-	//ƒvƒŒƒCƒ„[‚Ì‘«Œ³‚©‚ç‚¿‚å‚Á‚Æã‚ğ’‹“_‚Æ‚·‚é
+	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç‚¿ï¿½ï¿½ï¿½ï¿½Æï¿½ğ’ï¿½ï¿½_ï¿½Æ‚ï¿½ï¿½ï¿½
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
-	//m_target += g_camera3D->GetForward() * FRONTO;
-
 	m_toCameraPosOld = m_toCameraPos;
-	//‰EƒXƒeƒbƒN‚Å‰ñ‚·
+	//ï¿½Eï¿½Xï¿½eï¿½bï¿½Nï¿½Å‰ï¿½
 	float x = g_pad[0]->GetRStickXF();
 	float y = g_pad[0]->GetRStickYF();
-	//Y²ü‚è‚Ì‰ñ“]
+	//Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½]
 	Quaternion qRot;
 	qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
 	qRot.Apply(m_toCameraPos);
-	//X²ü‚è‚Ì‰ñ“]
+	//Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½]
 	/*Vector3 axisX;
 	axisX.Cross(Vector3::AxisY, m_toCameraPos);
 	axisX.Normalize();
 	qRot.SetRotationDeg(axisX,1.5f * y);
 	qRot.Apply(m_toCameraPos);*/
-	//ƒJƒƒ‰‚Ì‰ñ“]‚ÌãŒÀ‚ğƒ`ƒFƒbƒN‚·‚éB
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½]ï¿½Ìï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½B
 	Vector3 toPosDir = m_toCameraPos;
 	toPosDir.Normalize();
 	//if (toPosDir.y < YUP)
 	//{
-	//	//ãŒü‚«‚·‚¬
+	//	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
 	//else if (toPosDir.y > YDOWN)
 	//{
-	//	//ãŒü‚«‚·‚¬
+	//	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
 	//if (toPosDir.x > XRIGHT)
 	//{
-	//	//ãŒü‚«‚·‚¬
+	//	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
 	//else if (toPosDir.x < XLEFT)
 	//{
-	//	//ãŒü‚«‚·‚¬
+	//	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
-	if (g_pad[0]->IsTrigger(enButtonLB1))
+	if (g_pad[0]->IsTrigger(enButtonLB2))
 	{
 		m_toCameraPos.Set(BEKUTORU);
 	}
-	//‹“_‚ÌŒvZ
+	//ï¿½ï¿½ï¿½_ï¿½ÌŒvï¿½Z
 	Vector3 pos = m_target + m_toCameraPos;
-	//ƒJƒƒ‰‚É’‹“_‚Æ‹“_‚ğİ’è‚·‚é
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½É’ï¿½ï¿½ï¿½ï¿½_ï¿½Æï¿½ï¿½_ï¿½ï¿½İ’è‚·ï¿½ï¿½
 	g_camera3D->SetPosition(pos);
 	g_camera3D->SetTarget(m_target);
 

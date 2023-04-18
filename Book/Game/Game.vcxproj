@@ -236,11 +236,13 @@
     <ClCompile Include="Enemy_Charge.cpp" />
     <ClCompile Include="Enemy_Normal.cpp" />
     <ClCompile Include="Enemy_Search.cpp" />
+    <ClCompile Include="FlashBom.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameUI.cpp" />
-    <ClCompile Include="Gost.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -259,7 +261,6 @@
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Title.cpp" />
-    <ClCompile Include="TransparentBox.cpp" />
     <ClCompile Include="Treasure.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -270,11 +271,13 @@
     <ClInclude Include="Enemy_Charge.h" />
     <ClInclude Include="Enemy_Normal.h" />
     <ClInclude Include="Enemy_Search.h" />
+    <ClInclude Include="FlashBom.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameUI.h" />
-    <ClInclude Include="Gost.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Mirror.h" />
@@ -287,7 +290,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Title.h" />
-    <ClInclude Include="TransparentBox.h" />
     <ClInclude Include="Treasure.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
