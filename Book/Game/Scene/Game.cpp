@@ -210,7 +210,8 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-			m_player3D->SetPushPosition(objData.position);
+			m_player3D->m_ghostpositions.push_back(objData.position);
+			ghostkazu++;
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {

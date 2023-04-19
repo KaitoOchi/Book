@@ -90,5 +90,6 @@ private:
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 
+	int ghostkazu = 0;
 };
 
