@@ -10,7 +10,8 @@ Wall::~Wall()
 }
 bool Wall::Start()
 {
-	m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+	//m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+	m_wallRender.Init("Assets/modelData/level_test/wall1.tkm");
 	m_wallRender.SetPosition(m_position);
 	m_wallRender.SetScale(m_scale);
 	m_wallRender.SetRotation(m_rotation);

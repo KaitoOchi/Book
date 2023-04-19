@@ -22,7 +22,7 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
-	Enemy::SpotLight_New(m_position);
+	Enemy::SpotLight_New(m_position,3);
 
 	m_ActState = SEARCH;	// 行動パターンを設定。基本がCRAWのため。
 
@@ -142,5 +142,5 @@ void Enemy_Search::Rotaition()
 void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
-	m_fontRender.Draw(rc);
+	//m_fontRender.Draw(rc);
 }

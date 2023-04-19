@@ -88,6 +88,10 @@ protected:
 	virtual void Animation();
 	void Animation3D();
 	void Animation2D();
+	/// <summary>
+	/// アイテムの切替
+	/// </summary>
+	void ItemChange();
 
 	/// <summary>
 	/// 各ステートの遷移処理
@@ -175,6 +179,14 @@ protected:
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 	
+	//アイテムの切替
+	enum EnItemState
+	{
+		m_enItem_No,			//何も持っていない
+		m_enItem_Flash,			//閃光弾			
+		m_enItem_SoundBom		//音爆弾
+	};
+	EnItemState m_enItemState = m_enItemState;
 	
 	bool m_characonState = true;								//キャラコンを作るかどうか
 

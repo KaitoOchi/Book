@@ -28,10 +28,11 @@ public:
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
+	void Act_HitSoundBullet();			// 閃光弾が当たったときの処理
 	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
-	void SpotLight_New(Vector3 position);
+	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
 
@@ -139,8 +140,40 @@ public:
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHitFlashBullet(bool b) {
-		b = m_HitFlashBulletFlag;
+		m_HitFlashBulletFlag = b;
 	};
+
+	/// <summary>
+	/// 閃光弾に当たったかどうか返す
+	/// </summary>
+	/// <returns></returns>
+	bool GetHitFlushBullet() {
+		return m_HitFlashBulletFlag;
+	}
+
+	/// <summary>
+	/// 被弾フラグ設定用。必要なければ消去
+	/// </summary>
+	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
+	void SetHitSoundBullet(bool b) {
+		m_HitSoundBulletFlag = b;
+	};
+
+	/// <summary>
+	/// アイテムの座標を設定する
+	/// </summary>
+	/// <returns></returns>
+	bool GetHitSoundBullet() {
+		return m_HitSoundBulletFlag;
+	}
+
+	/// <summary>
+	/// アイテムの座標を渡す
+	/// </summary>
+	/// <returns></returns>
+	bool SetItemPos(Vector3 pos) {
+		m_itemPos = pos;
+	}
 
 	/// <summary>
 	/// 座標を取得する
@@ -199,6 +232,7 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool m_HitSoundBulletFlag = false;		// 音爆弾
 	bool m_FindPlayerFlag = false;			
 	bool m_CalculatedFlag = false;			// 突進用フラグ
 
@@ -210,6 +244,7 @@ protected:
 	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
+	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
