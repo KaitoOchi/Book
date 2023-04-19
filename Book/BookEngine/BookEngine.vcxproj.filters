@@ -27,9 +27,6 @@
     <ClInclude Include="graphics\light\PointLight.h">
       <Filter>graphics\light</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\light\SceneLight.h">
-      <Filter>graphics\light</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\light\HemiSphereLight.h">
       <Filter>graphics\light</Filter>
     </ClInclude>
@@ -44,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="collision\CollisionObject.h">
       <Filter>collision</Filter>
+    </ClInclude>
+    <ClInclude Include="level2DRender\Level2DRender.h">
+      <Filter>level2DRender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -76,9 +76,6 @@
     <ClCompile Include="graphics\light\PointLight.cpp">
       <Filter>graphics\light</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\light\SceneLight.cpp">
-      <Filter>graphics\light</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\light\HemiSphereLight.cpp">
       <Filter>graphics\light</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="graphics\PostEffect\Bloom.cpp">
       <Filter>graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="level2DRender\Level2DRender.cpp">
+      <Filter>level2DRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +107,9 @@
     </Filter>
     <Filter Include="collision\geometry">
       <UniqueIdentifier>{56103c67-a932-4d99-9301-55d7626719f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="level2DRender">
+      <UniqueIdentifier>{b8bf0235-ce9a-42ad-92ae-a37ba578dd04}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

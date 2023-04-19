@@ -181,12 +181,12 @@
     <ClInclude Include="graphics\light\DirectionLight.h" />
     <ClInclude Include="graphics\light\HemiSphereLight.h" />
     <ClInclude Include="graphics\light\PointLight.h" />
-    <ClInclude Include="graphics\light\SceneLight.h" />
     <ClInclude Include="graphics\light\SpotLight.h" />
     <ClInclude Include="graphics\ModelRender.h" />
     <ClInclude Include="graphics\PostEffect\Bloom.h" />
     <ClInclude Include="graphics\RenderingEngine.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
+    <ClInclude Include="level2DRender\Level2DRender.h" />
     <ClInclude Include="level3DRender\LevelRender.h" />
     <ClInclude Include="level3DRender\MapChipRender.h" />
   </ItemGroup>
@@ -202,12 +202,12 @@
     <ClCompile Include="graphics\light\DirectionLight.cpp" />
     <ClCompile Include="graphics\light\HemiSphereLight.cpp" />
     <ClCompile Include="graphics\light\PointLight.cpp" />
-    <ClCompile Include="graphics\light\SceneLight.cpp" />
     <ClCompile Include="graphics\light\SpotLight.cpp" />
     <ClCompile Include="graphics\ModelRender.cpp" />
     <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
     <ClCompile Include="graphics\RenderingEngine.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
+    <ClCompile Include="level2DRender\Level2DRender.cpp" />
     <ClCompile Include="level3DRender\LevelRender.cpp" />
     <ClCompile Include="level3DRender\MapChipRender.cpp" />
   </ItemGroup>

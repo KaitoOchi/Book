@@ -7,9 +7,7 @@
 namespace nsBookEngine {
 
 	BookEngine* BookEngine::m_instance = nullptr;
-	//SceneLight* g_sceneLight = nullptr;
 	BookEngine* g_bookEngine = nullptr;
-	SceneLight* g_sceneLight = nullptr;
 
 	void BookEngine::Init(const InitData& initData)
 	{
