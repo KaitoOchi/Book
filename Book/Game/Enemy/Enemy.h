@@ -31,7 +31,7 @@ public:
 	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
-	void SpotLight_New(Vector3 position);
+	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
 

@@ -37,6 +37,7 @@ bool Enemy_Normal::Start()
 	Enemy::Start();
 
 	m_point = &m_pointList[0];
+	Enemy::SpotLight_New(m_position, 1);
 
 	return true;
 }
@@ -78,6 +79,8 @@ void Enemy_Normal::Update()
 	// キャラクターコントローラーをモデルの位置と同期
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
+
+	Enemy::SpotLight_Serch(m_rotation, m_position);
 
 	m_enemyRender.Update();	// 更新
 }
