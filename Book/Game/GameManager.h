@@ -3,6 +3,15 @@
 class GameManager
 {
 public:
+	/// <summary>
+	/// セーブデータの構造体
+	/// </summary>
+	struct SaveData {
+		float bgm = 0.1f;
+		float sfx = 0.1f;
+	};
+
+public:
 	GameManager();
 	~GameManager();
 
@@ -33,11 +42,45 @@ public:
 
 
 	/// <summary>
+	/// データのセーブ。
+	/// </summary>
+	/// <param name="data"></param>
+	void DataSave(const SaveData& data)
+	{
+		//セーブする
+		FILE* fp = fopen("saveData.bin", "wb");
+		fwrite((void*)&data, sizeof(data), 1, fp);
+		fclose(fp);
+
+		m_saveData = data;
+	}
+
+	/// <summary>
+	/// データのロード。
+	/// </summary>
+	/// <returns></returns>
+	SaveData& DataLoad()
+	{
+		FILE* fp = fopen("saveData.bin", "rb");
+		if (fp != NULL) {
+			fread((void*)&m_saveData, sizeof(m_saveData), 1, fp);
+			fclose(fp);
+		}
+
+		return m_saveData;
+	}
+
+
+	/// <summary>
 	/// 更新処理。
 	/// </summary>
 	void Update();
+
 	bool m_posState = true;
+
 private:
 	static GameManager* m_instance;
+
+	SaveData m_saveData;
 };
 

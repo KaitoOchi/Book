@@ -48,6 +48,8 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
+	m_modelRender.Init("Assets/modelData/wall1.tkm");
+
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
@@ -288,4 +290,6 @@ void Game::MnageState()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
+
+	m_modelRender.Draw(rc);
 }
