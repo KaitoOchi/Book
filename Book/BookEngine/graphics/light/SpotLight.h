@@ -22,7 +22,35 @@ namespace nsBookEngine {
 	public:
 		SpotLight();
 		~SpotLight();
-		void Render(RenderContext& rc);
+
+		/// <summary>
+		/// スポットライトを設定。
+		/// </summary>
+		/// <param name="num">番号</param>
+		/// <param name="pos">座標</param>
+		/// <param name="color">カラー</param>
+		/// <param name="range">影響範囲</param>
+		/// <param name="range">方向</param>
+		/// <param name="range">射出角度</param>
+		void SetSpotLight(const int num, const Vector3& pos, const Vector3& color, const float range, const Vector3& dir, const float angle)
+		{
+			SetNumber(num);
+			SetPosition(pos);
+			SetColor(color);
+			SetRange(range);
+			SetDirection(dir);
+			SetAngle(angle);
+			Update();
+		}
+
+		/// <summary>
+		/// 番号を設定。
+		/// </summary>
+		/// <returns></returns>
+		void SetNumber(const int num)
+		{
+			m_spNum = num;
+		}
 
 		/// <summary>
 		/// 座標を設定。
@@ -136,6 +164,7 @@ namespace nsBookEngine {
 
 	private:
 		spotLight m_spotLig;
+		int m_spNum = 0;
 	};
 
 }

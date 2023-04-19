@@ -14,7 +14,7 @@ namespace nsBookEngine{
 
 	void SpotLight::Update()
 	{
-		RenderingEngine::GetInstance()->SetSpotLight(m_spotLig);
+		RenderingEngine::GetInstance()->SetSpotLight(m_spNum, m_spotLig);
 	}
 
 	const bool SpotLight::IsHit(const Vector3& playerPos)

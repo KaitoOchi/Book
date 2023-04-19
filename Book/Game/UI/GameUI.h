@@ -20,6 +20,7 @@ private:
 	FontRender m_timeFontRender;
 	PlayerManagement* m_playerManagement;
 	float m_timer = 0.0f;
+	float m_vigilanceTime = 0.0f;
 	float m_gage = 0.0f;
 	int m_vigilanceGage=1;
 	int m_Gitgage = 0;

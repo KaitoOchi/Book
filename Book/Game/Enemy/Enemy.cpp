@@ -615,14 +615,16 @@ bool Enemy::Act_Stop(float time,int i)
 
 void Enemy::SpotLight_New(Vector3 position)
 {
-	m_spotLight.SetPosition(position);
-	m_spotLight.SetColor(LIGHTCOLOR);
-	m_spotLight.SetRange(LIGHTRANGE);
-	m_spotLight.SetAngle(ANGLE);
 	Vector3 forward = Vector3::AxisY;
-	//���C�g�̕����ݒ�
-	m_spotLight.SetDirection(forward);
-	m_spotLight.Update();
+
+	m_spotLight.SetSpotLight(
+		1,
+		position,
+		LIGHTCOLOR,
+		LIGHTRANGE,
+		forward,
+		ANGLE
+	);
 }
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)

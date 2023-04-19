@@ -10,6 +10,7 @@ namespace
 	const float     XSIZE = 553.0f;										//横の大きさ
 	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
 	const float		TIME_MAX = 180.0f;									//最大残り時間
+	const float		VIGILANCE_TIME_MAX = 2.0f;							//警戒値の最大時間
 }
 
 GameUI::GameUI()
@@ -74,6 +75,10 @@ void GameUI::Time()
 	wchar_t debugText[255];
 	swprintf_s(debugText, 255, L"Time %d:%05.02f", m, s);
 	m_timeFontRender.SetText(debugText);
+
+
+	//警戒値のクールダウンを設定
+	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
 }
 void GameUI::ChangeGage()
 {
@@ -94,12 +99,19 @@ void GameUI::ChangeGage()
 }
 void GameUI::Vigilance(int GageUp)
 {
+	//クールダウンがまだなら
+	if (m_vigilanceTime > 0.0f) {
+		return;
+	}
+
 	m_vigilanceGage += GageUp;
 	if (m_vigilanceGage != m_Gitgage)
 	{
 		m_Gitgage = m_vigilanceGage;
 		VigilanceChange();
 	}
+
+	m_vigilanceTime = VIGILANCE_TIME_MAX;
 }
 void GameUI::VigilanceChange()
 {

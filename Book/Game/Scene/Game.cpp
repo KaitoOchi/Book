@@ -20,7 +20,7 @@
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -36,7 +36,7 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	//NewGO<Sensor>(0, "sensor");
+	NewGO<Sensor>(0, "sensor");
 	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	NewGO<GameUI>(0, "gameUI");
@@ -48,10 +48,48 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
+	m_pointLight[0].SetPointLight(
+		0,
+		Vector3::Zero,
+		{ 10.0f, 0.0f, 0.0f },
+		100.0f
+	);
+
+	m_pointLight[1].SetPointLight(
+		1,
+		Vector3::Zero,
+		{ 00.0f, 10.0f, 0.0f },
+		50.0f
+	);
+
+	m_pointLight[2].SetPointLight(
+		2,
+		Vector3::Zero,
+		{ 0.0f, 0.0f, 10.0f },
+		100.0f
+	);
+
+	m_pointLight[3].SetPointLight(
+		3,
+		Vector3::Zero,
+		{ 10.0f, 0.0f, 0.0f },
+		150.0f
+	);
+
 	LevelDesign();
-	m_pointLight.SetColor(Vector3(10.0f, 0.0f, 0.0f));
-	m_pointLight.SetRange(100.0f);
-	m_pointLight.Update();
+
+	for (int i = 0; i < 4; i++) {
+		m_pointLight[i].Update();
+	}
+
+	m_spotLight.SetSpotLight(
+		0,
+		{ 0.0f, 40.0f, 0.0f },
+		{ 0.0f, 10.0f, 0.0f },
+		400.0f,
+		Vector3::AxisZ,
+		45.0f
+	);
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
@@ -195,7 +233,9 @@ void Game::LevelDesign()
 
 			SetClearPosition(objData.position);
 
-			m_pointLight.SetPosition(Vector3(m_position.x, m_position.y + 10.0f, m_position.z));
+			for (int i = 0; i < 4; i++) {
+				m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
+			}
 			return true;
 		}
 
@@ -214,7 +254,11 @@ void Game::Update()
 		
 	MnageState();
 
-	m_pointLight.Update();
+	for (int i = 0; i < 4; i++) {
+		m_pointLight[i].Update();
+	}
+
+	m_spotLight.Update();
 }
 void Game::ClearState()
 {
