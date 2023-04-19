@@ -11,7 +11,7 @@
 namespace
 {
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 1.5f;						// 乗算速度
+	const float		ADD_SPEED = 1.3f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
@@ -55,8 +55,8 @@ bool Enemy::Start()
 	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
-	//m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
-	m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
+	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
+	//m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -613,12 +613,12 @@ bool Enemy::Act_Stop(float time,int i)
 	return false;
 }
 
-void Enemy::SpotLight_New(Vector3 position)
+void Enemy::SpotLight_New(Vector3 position, int num)
 {
 	Vector3 forward = Vector3::AxisY;
 
 	m_spotLight.SetSpotLight(
-		1,
+		num,
 		position,
 		LIGHTCOLOR,
 		LIGHTRANGE,
