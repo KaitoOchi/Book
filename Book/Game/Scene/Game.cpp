@@ -53,14 +53,14 @@ bool Game::Start()
 	m_pointLight.SetRange(100.0f);
 	m_pointLight.Update();
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level_test/wall_test.tkl", [&](LevelObjectData& objData) {
 
 		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
