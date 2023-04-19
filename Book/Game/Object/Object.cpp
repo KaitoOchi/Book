@@ -38,7 +38,3 @@ void Object::Collision()
 		Hit();
 	}
 }
-
-void Object::Hit()
-{
-}

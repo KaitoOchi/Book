@@ -21,7 +21,7 @@ namespace nsBookEngine {
 		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//環境光の設定
-		SetAmbient(0.3f);
+		SetAmbient(0.4f);
 
 		//半球光の設定
 		SetHemiSphereLight(
@@ -32,6 +32,8 @@ namespace nsBookEngine {
 
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
+
+
 
 		//メインレンダーターゲットを設定
 		m_mainRenderTarget.Create(
@@ -44,7 +46,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(0.5f);
+		SetBloomThreshold(0.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -90,13 +92,16 @@ namespace nsBookEngine {
 	void RenderingEngine::InitShadowMapRenderTarget()
 	{
 		// カメラの位置を設定。これはライトの位置
-		m_lightCamera.SetPosition(600, 800, 600);
+		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget().x + 50.0f, g_camera3D->GetTarget().y + 600.0f, g_camera3D->GetTarget().z + 50.0f));
 
 		// カメラの注視点を設定。これがライトが照らしている場所
-		m_lightCamera.SetTarget(0, 0, 0);
+		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget().x, g_camera3D->GetTarget().y - 100.0f, g_camera3D->GetTarget().z));
 
 		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
-		m_lightCamera.SetUp(1, -1, 1);
+		m_lightCamera.SetUp(0, 1, 0);
+
+		//画角を設定
+		m_lightCamera.SetViewAngle(g_camera3D->GetViewAngle());
 
 		m_lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Perspective);
 		m_lightCamera.Update();
@@ -108,8 +113,8 @@ namespace nsBookEngine {
 		//シャドウマップ用レンダーターゲットの初期化
 		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		m_shadowMapRenderTarget.Create(
-			2048,
-			2048,
+			8184,
+			8184,
 			1,
 			1,
 			DXGI_FORMAT_R32G32_FLOAT,
@@ -140,9 +145,10 @@ namespace nsBookEngine {
 	void RenderingEngine::RenderShadowMap(RenderContext& rc)
 	{
 		// カメラの位置を設定
-		m_lightCamera.SetPosition(Vector3(g_camera3D->GetPosition().x + 400.0f, g_camera3D->GetPosition().y + 200.0f, g_camera3D->GetPosition().z + 400.0f));
-		m_lightCamera.SetTarget(g_camera3D->GetTarget());
+		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget().x + 1024.0f, g_camera3D->GetTarget().y + 2192.0f, g_camera3D->GetTarget().z + 1024.0f));
+		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget().x + 0.0f, g_camera3D->GetTarget().y - 100.0f, g_camera3D->GetTarget().z + 0.0f));
 		m_lightCamera.Update();
+
 		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 		m_lightCB.shadowCB.lightPos = m_lightCamera.GetPosition();
 

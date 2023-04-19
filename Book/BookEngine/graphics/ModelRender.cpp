@@ -83,8 +83,6 @@ namespace nsBookEngine {
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		}
 
-		modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
-
 		if (m_skeleton.IsInited()) {
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
@@ -101,8 +99,8 @@ namespace nsBookEngine {
 			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
 			shadowModelInitData.m_tkmFilePath = tkmFilePath;
 			shadowModelInitData.m_modelUpAxis = modelUpAxis;
-			shadowModelInitData.m_expandConstantBuffer = (void*)&RenderingEngine::GetInstance()->GetLightPos();
-			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightPos());
+			shadowModelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetShadowCB();
+			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetShadowCB());
 
 			shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 

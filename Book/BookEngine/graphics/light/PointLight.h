@@ -23,6 +23,22 @@ namespace nsBookEngine {
 		~PointLight();
 
 		/// <summary>
+		/// ポイントライトを設定。
+		/// </summary>
+		/// <param name="num">番号</param>
+		/// <param name="pos">座標</param>
+		/// <param name="color">カラー</param>
+		/// <param name="range">影響範囲</param>
+		void SetPointLight(const int num, const Vector3& pos, const Vector3& color, const float range)
+		{
+			SetNumber(num);
+			SetPosition(pos);
+			SetColor(color);
+			SetRange(range);
+			Update();
+		}
+
+		/// <summary>
 		/// ポイントライトの番号を設定
 		/// </summary>
 		void SetNumber(const int num)
