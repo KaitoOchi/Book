@@ -150,6 +150,20 @@ void Player::Rotation()
 	m_rotation.SetRotationY(-angle);
 }
 
+void Player::ItemChange()
+{
+	if (g_pad[0]->IsTrigger(enButtonRight))
+	{
+		//‘MŒõ’e‚ğ‚Á‚Ä‚¢‚é
+		m_enItemState = m_enItem_Flash;
+	}
+	if (g_pad[0]->IsTrigger(enButtonLeft))
+	{
+		//‰¹”š’e‚ğ‚Á‚Ä‚¢‚é
+		m_enItemState = m_enItem_SoundBom;
+	}
+}
+
 void Player::GhostHit()
 {
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
