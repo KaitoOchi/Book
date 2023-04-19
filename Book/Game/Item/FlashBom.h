@@ -1,6 +1,7 @@
 #pragma once
 #include "Item.h"
 class Game;
+
 class FlashBom:public Item
 {
 public:

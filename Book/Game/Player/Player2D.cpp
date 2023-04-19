@@ -50,7 +50,7 @@ void Player2D::Update()
 	angle = atan2(m_moveSpeed.z, -m_moveSpeed.x);
 
 	Player::Update();
-	Animation();
+	
 	Rotation2D();
 	m_characon->SetPosition(m_position);
 	m_characon->SetRotaition(m_rotation);

@@ -112,6 +112,7 @@
     <ClCompile Include="Scene\Menu.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Item\SoundBom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -192,5 +193,6 @@
     <ClInclude Include="Scene\Menu.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Item\SoundBom.h" />
   </ItemGroup>
 </Project>

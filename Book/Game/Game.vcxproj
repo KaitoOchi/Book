@@ -252,6 +252,7 @@
     <ClCompile Include="Scene\Game.cpp" />
     <ClCompile Include="Scene\Menu.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
+    <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
     <ClCompile Include="Stage\Ghost.cpp" />
     <ClCompile Include="Stage\Wall.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="Scene\Game.h" />
     <ClInclude Include="Scene\Menu.h" />
     <ClInclude Include="Scene\Title.h" />
+    <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Ghost.h" />
     <ClInclude Include="Stage\Wall.h" />

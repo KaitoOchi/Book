@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 class PlayerManagement;
+class FlashBom;
 class Player3D :public Player
 {
 public:
@@ -28,6 +29,12 @@ public:
 
 private:
 	PlayerManagement* m_playerManagement = nullptr;
+	FlashBom* m_flashBom = nullptr;
+
+
+	//アニメーションイベント用の関数
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
+	bool m_isThrowing = false;
 
 	//透明座標に動かす
 	Vector3 m_pushPosition = Vector3::Zero;

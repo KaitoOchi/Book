@@ -17,6 +17,7 @@
 #include "Wall.h"
 #include "Treasure.h"
 #include "Ghost.h"
+#include "FlashBom.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -47,7 +48,7 @@ bool Game::Start()
 	//m_stageModelRender.SetScale(Vector3::One);
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
-
+	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
@@ -211,7 +212,6 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
 			m_player3D->m_ghostpositions.push_back(objData.position);
-			ghostkazu++;
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
