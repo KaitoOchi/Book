@@ -139,7 +139,7 @@ void Game::LevelDesign()
 		//}
 
 		//–¼‘O‚ªbackground‚È‚ç
-		if (objData.EqualObjectName(L"debug") == true) {
+		if (objData.EqualObjectName(L"base") == true) {
 
 			// ”wŒi‚ğ¶¬
 			m_backGround = NewGO<BackGround>(0, "backGround");
