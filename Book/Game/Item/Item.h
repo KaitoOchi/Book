@@ -32,7 +32,10 @@ protected:
 	Player3D* m_player3D = nullptr;
 	Vector3 EffecrRange = Vector3::Zero;
 
-	std::vector<Enemy*> GetHitEnemyList()
+	SphereCollider m_sphereCollider;					//スフィアコライダー
+	RigidBody m_rigidBody;								//動態
+
+	std::vector<Enemy*> GetHitEnemyList()				//アイテム範囲のエネミーを取得する
 	{
 		return m_HitEnemyList;
 	}
