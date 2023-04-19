@@ -98,7 +98,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
 
 		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -210,8 +210,7 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
-			//m_trans->SetPosition(objData.position);
+			m_player3D->SetPushPosition(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
