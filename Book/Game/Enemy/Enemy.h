@@ -151,6 +151,22 @@ public:
 	}
 
 	/// <summary>
+	/// 被弾フラグ設定用。必要なければ消去
+	/// </summary>
+	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
+	void SetHitSoundBullet(bool b) {
+		m_HitSoundBulletFlag = b;
+	};
+
+	/// <summary>
+	/// 音爆弾に当たったかどうか返す
+	/// </summary>
+	/// <returns></returns>
+	bool GetHitSoundBullet() {
+		return m_HitSoundBulletFlag;
+	}
+
+	/// <summary>
 	/// 座標を取得する
 	/// </summary>
 	const Vector3& GetPosition() const {
@@ -207,6 +223,7 @@ protected:
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool m_HitSoundBulletFlag = false;		// 音爆弾
 	bool m_FindPlayerFlag = false;			
 	bool m_CalculatedFlag = false;			// 突進用フラグ
 
