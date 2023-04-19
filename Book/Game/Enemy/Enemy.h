@@ -159,11 +159,19 @@ public:
 	};
 
 	/// <summary>
-	/// 音爆弾に当たったかどうか返す
+	/// アイテムの座標を設定する
 	/// </summary>
 	/// <returns></returns>
 	bool GetHitSoundBullet() {
 		return m_HitSoundBulletFlag;
+	}
+
+	/// <summary>
+	/// アイテムの座標を渡す
+	/// </summary>
+	/// <returns></returns>
+	bool SetHitSoundBullet(Vector3 pos) {
+		m_itemPos = pos;
 	}
 
 	/// <summary>
@@ -235,6 +243,7 @@ protected:
 	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
+	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
