@@ -11,28 +11,19 @@ public:
 	virtual bool Start();
 	virtual void Update();
 	/// <summary>
-	/// アイテムの切替
+	/// アイテムが当たったかどうか
 	/// </summary>
-	void ItemChange();
-	/// <summary>
-	/// アイテムの範囲
-	/// </summary>
-	void ItemRange();
-	virtual void ItemEffect() = 0;
+	virtual void ItemHit() = 0;
 protected:
-	enum EnItemState
-	{
-		m_enItem_No,			//何も持っていない
-		m_enItem_Flash,			//閃光弾			
-		m_enItem_SoundBom		//音爆弾
-	};
-	EnItemState m_enItemState = m_enItemState;
+
 	Game* m_game=nullptr;
 	PlayerManagement* m_playerManagement=nullptr;
 	Player3D* m_player3D = nullptr;
 	Vector3 EffecrRange = Vector3::Zero;
 
-	std::vector<Enemy*> GetHitEnemyList()
+	
+
+	std::vector<Enemy*> GetHitEnemyList()				//アイテム範囲のエネミーを取得する
 	{
 		return m_HitEnemyList;
 	}

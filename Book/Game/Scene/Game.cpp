@@ -36,7 +36,7 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	//NewGO<Sensor>(0, "sensor");
+	NewGO<Sensor>(0, "sensor");
 	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	NewGO<GameUI>(0, "gameUI");
@@ -91,15 +91,14 @@ bool Game::Start()
 		45.0f
 	);
 
-	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)
-/*	m_levelRender.Init("Assets/modelData/level_test/wall_test.tkl", [&](LevelObjectData& objData)*/ {
+	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
 
 		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -178,8 +177,7 @@ void Game::LevelDesign()
 		//}
 
 		//名前がbackgroundなら
-		if (objData.EqualObjectName(L"debug") == true)
-			/*(objData.EqualObjectName(L"base") == true)*/ {
+		if (objData.EqualObjectName(L"debug") == true) {
 
 			// 背景を生成
 			m_backGround = NewGO<BackGround>(0, "backGround");
@@ -212,8 +210,8 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-			//m_trans = NewGO<TransparentBox>(0, "transparentBox");
-			//m_trans->SetPosition(objData.position);
+			m_player3D->m_ghostpositions.push_back(objData.position);
+			ghostkazu++;
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
