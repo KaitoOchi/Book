@@ -170,7 +170,7 @@ public:
 	/// アイテムの座標を渡す
 	/// </summary>
 	/// <returns></returns>
-	bool SetHitSoundBullet(Vector3 pos) {
+	bool SetItemPos(Vector3 pos) {
 		m_itemPos = pos;
 	}
 
