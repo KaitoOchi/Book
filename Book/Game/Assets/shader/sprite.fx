@@ -6,7 +6,7 @@ cbuffer cb : register(b0)
 
 cbuffer SpriteCB : register(b1)
 {
-    float clipSize;
+    float clipSize = 0.0f;
 };
 
 struct VSInput
@@ -34,10 +34,9 @@ PSInput VSMain(VSInput In)
 
 float4 PSMain(PSInput In) : SV_Target0
 {
-    // step-7 G-Bufferの内容を使ってライティング
     float4 albedo = albedoTexture.Sample(Sampler, In.uv);
 
-	clip(In.pos.y - clipSize);
+    clip(In.pos.y - clipSize);
 
     return albedo;
 }

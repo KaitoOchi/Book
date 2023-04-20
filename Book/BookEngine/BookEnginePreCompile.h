@@ -11,5 +11,4 @@ using namespace nsK2EngineLow;
 #include "graphics/ModelRender.h"
 #include "graphics/SpriteRender.h"
 #include "graphics/FontRender.h"
-#include "graphics/light/SceneLight.h"
 #include "Level3DRender/LevelRender.h"

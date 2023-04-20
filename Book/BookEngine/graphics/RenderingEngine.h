@@ -39,7 +39,7 @@ namespace nsBookEngine {
 		//スプライト用の構造体
 		struct SpriteCB
 		{
-			float clipSize;
+			float clipSize = 0.0f;
 		};
 
 	private:

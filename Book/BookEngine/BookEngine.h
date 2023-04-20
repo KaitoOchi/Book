@@ -67,5 +67,4 @@ namespace nsBookEngine {
 
 	// グローバルなアクセスポイント。
 	extern BookEngine* g_bookEngine;
-	//extern SceneLight* g_sceneLight;
 }

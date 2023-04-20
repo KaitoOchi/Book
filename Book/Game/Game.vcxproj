@@ -114,7 +114,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../BookEngine/;$(ProjectDir)../k2EngineLow/;$(ProjectDir)../k2EngineLow/ExEngine/;$(ProjectDir)../k2EngineLow/ExEngine/bulletPhysics/src;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/Effekseer;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/EffekseerRendererDX12;$(ProjectDir)..\k2EngineLow\ExEngine\Photon;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../BookEngine/;$(ProjectDir)../k2EngineLow/;$(ProjectDir)../k2EngineLow/ExEngine/;$(ProjectDir)../k2EngineLow/ExEngine/bulletPhysics/src;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/Effekseer;$(ProjectDir)../k2EngineLow/ExEngine/effekseer/install_msvc2019/include/EffekseerRendererDX12;$(ProjectDir)..\k2EngineLow\ExEngine\Photon;$(ProjectDir)UI/;$(ProjectDir)Stage/;$(ProjectDir)Scene/;$(ProjectDir)Item/;$(ProjectDir)Object/;$(ProjectDir)Player/;$(ProjectDir)Enemy/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)../exlib/$(Platform)\$(Configuration)\;$(ProjectDir)..\k2EngineLow\ExEngine\DirectXTK\Bin\Desktop_2019_Win10\$(Platform)\$(Configuration)\;$(ProjectDir)..\k2EngineLow\ExEngine\effekseer/install_msvc2019/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">
@@ -250,7 +250,6 @@
     <ClCompile Include="Player\Player3D.cpp" />
     <ClCompile Include="Player\PlayerManagement.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
-    <ClCompile Include="Scene\Menu.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
@@ -286,7 +285,6 @@
     <ClInclude Include="Player\Player3D.h" />
     <ClInclude Include="Player\PlayerManagement.h" />
     <ClInclude Include="Scene\Game.h" />
-    <ClInclude Include="Scene\Menu.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\BackGround.h" />

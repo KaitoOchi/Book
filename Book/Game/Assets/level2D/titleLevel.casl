@@ -1,0 +1,4 @@
+3
+4,base,42,../../Game/Assets/sprite/UI/title/base.png,0.0,1.1368683772161603e-13,1728,972,10,0.9,0.9,0.5,0.5,8,base.dds
+6,button,44,../../Game/Assets/sprite/UI/title/button.png,5.7692307692308304,-200.0,517,135,10,0.9,0.9,0.5,0.5,10,button.dds
+5,title,43,../../Game/Assets/sprite/UI/title/title.png,-343.46153846153845,241.1538461538462,1035,480,10,0.9,0.9,0.5,0.5,9,title.dds
