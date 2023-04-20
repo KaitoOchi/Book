@@ -40,6 +40,10 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
+	if (m_playerManagement->IsDead())
+	{
+		return;
+	}
 	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//�v���C���[�̑������炿����Ə�𒍎��_�Ƃ���
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
