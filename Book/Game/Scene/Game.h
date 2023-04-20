@@ -50,6 +50,7 @@ public:
 	{
 		return m_enemyList;
 	}
+
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -90,11 +91,7 @@ private:
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 
-<<<<<<< HEAD
 	int ghostkazu = 0;
-=======
 	ModelRender m_modelRender;
-
->>>>>>> c36f4e6e8cc10a999e08bb789bee79fa9a692e09
 };
 
