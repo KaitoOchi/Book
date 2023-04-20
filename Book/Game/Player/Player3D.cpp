@@ -15,9 +15,13 @@ Player3D::Player3D()
 }
 Player3D::~Player3D()
 {
-	delete(m_characon);
-	delete(m_modelRender);
-	delete(m_collisionObject);
+	if (IsActive())
+	{
+		delete(m_characon);
+		delete(m_modelRender);		
+	}
+	DeleteGO(m_collisionObject);
+
 }
 bool Player3D::Start()
 {

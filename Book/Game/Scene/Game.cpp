@@ -27,16 +27,20 @@ Game::Game()
 
 Game::~Game()
 {
-	//プレイヤー
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
 	//エネミー
+	DeleteGO(m_enemyNormal);
+	DeleteGO(m_enemyCharge);
+	DeleteGO(m_enemySearch);
 
-
-
-	
+	//オブジェクト
+	DeleteGO(FindGO<Sensor>("sensor"));
+	DeleteGO(FindGO<GameUI>("gameUI"));
+	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+	DeleteGO(m_backGround);
 	//アイテム
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
