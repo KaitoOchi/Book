@@ -95,6 +95,11 @@ bool Game::Start()
 	);
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
+
+
+	//フェードの処理
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
 	return true;
 }
 
@@ -246,10 +251,6 @@ void Game::LevelDesign()
 		return true;
 		}
 	);
-
-	//フェードの処理
-	m_fade = FindGO<Fade>("fade");
-	m_fade->StartFadeIn();
 }
 
 void Game::Update()

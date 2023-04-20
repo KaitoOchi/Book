@@ -8,8 +8,8 @@
 
 namespace
 {
-	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 4 };		//各ステートの縦カーソル最大値
-	const int CURSOR_HORIZONTAL_MAX[10] = { 0, 10, 10, 2, 1 };	//各設定の横カーソル最大値
+	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 4 };				//各ステートの縦カーソル最大値
+	const int CURSOR_HORIZONTAL_MAX[10] = { 0, 100, 100, 2, 1 };	//各設定の横カーソル最大値
 }
 
 
@@ -25,30 +25,17 @@ Title::~Title()
 
 bool Title::Start()
 {
-	for (int i = 0; i < 10; i++) {
-		//BGM音量の画像を設定
-		m_bgmSpriteRender[i].Init("Assets/sprite/UI/cautionTimeGauge/gaugeCount.DDS", 83.0f, 100.0f);
-		m_bgmSpriteRender[i].SetPosition(Vector3(50.0f * i, 300.0f, 0.0f));
-		m_bgmSpriteRender[i].Update();
+	InitSprite();
 
-		//SFX音量の画像を設定
-		m_sfxSpriteRender[i].Init("Assets/sprite/UI/cautionTimeGauge/gaugeCount.DDS", 83.0f, 100.0f);
-		m_sfxSpriteRender[i].SetPosition(Vector3(50.0f * i, 100.0f, 0.0f));
-		m_sfxSpriteRender[i].Update();
-	}
+	m_settingFontRender.SetText(L"BGM\n\n\n\nSFX\n\n\n\nFrame_Rate\n\n\n\nSETTING_B");
+	m_settingFontRender.SetPosition(Vector3(-300.0f, 200.0f, 0.0f));
 
-	Init2DLevel();
-
-	m_settingFontRender.SetText(L"BGM\n\nSFX\n\nFrame_Rate\n\nSETTING_B");
-	m_settingFontRender.SetPosition(Vector3(-300.0f, 400.0f, 0.0f));
-
-	m_cursorFontRender.SetText(L">");
+	m_frameFontRender.SetPosition(Vector3(0.0f, -150.0f, 0.0f));
 
 	m_debugFontRender.SetPosition(Vector3(500.0f, 200.0f, 0.0f));
 
 	//セーブデータのロード
 	m_saveData = GameManager::GetInstance()->DataLoad();
-
 	SetDataArray();
 
 	//フェードの処理
@@ -58,7 +45,7 @@ bool Title::Start()
 	return true;
 }
 
-void Title::Init2DLevel()
+void Title::InitSprite()
 {
 	//背景を設定
 	m_backGroundSpriteRender.Init("Assets/sprite/UI/title/base.DDS", 1728.0f, 972.0f);
@@ -85,7 +72,6 @@ void Title::Init2DLevel()
 		}
 		return false;
 	});
-
 	delete m_level2DRender;
 	m_level2DRender = new Level2DRender;
 
@@ -115,13 +101,27 @@ void Title::Init2DLevel()
 		m_menuSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_menuSpriteRender[i].Update();
 	}
-
 	delete m_level2DRender;
 
 	//ガイド画面の設定
 	m_guideSpriteRender.Init("Assets/sprite/UI/guide/guide_add.DDS", 1920.0f, 1080.0f);
 	m_guideSpriteRender.SetScale(Vector3(0.9f, 0.9f, 0.0f));
 	m_guideSpriteRender.Update();
+
+	//BGM音量の画像を設定
+	m_bgmSpriteRender.Init("Assets/sprite/UI/cautionTimeGauge/gaugeCount.DDS", 10.0f, 50.0f);
+	m_bgmSpriteRender.SetPosition(Vector3(50.0f, 125.0f, 0.0f));
+	m_bgmSpriteRender.SetPivot(Vector2(0.0f, 0.5f));
+	m_bgmSpriteRender.Update();
+
+	//SFX音量の画像を設定
+	m_sfxSpriteRender.Init("Assets/sprite/UI/cautionTimeGauge/gaugeCount.DDS", 10.0f, 50.0f);
+	m_sfxSpriteRender.SetPosition(Vector3(50.0f, 0.0f, 0.0f));
+	m_sfxSpriteRender.SetPivot(Vector2(0.0f, 0.5f));
+	m_sfxSpriteRender.Update();
+
+	//カーソル画像の設定
+	m_cursorSpriteRender.Init("Assets/sprite/UI/title/tryangle.DDS", 131.0f, 135.0f);
 }
 
 void Title::Update()
@@ -134,6 +134,9 @@ void Title::Update()
 
 	//ステートの遷移処理
 	ManageState();
+
+
+	m_cursorSpriteRender.Update();
 
 
 	wchar_t debugText[255];
@@ -174,7 +177,11 @@ void Title::Input()
 		else {
 			m_titleState--;
 		}
+
+		m_cursor_vertical = 1;
 	}
+	//範囲外にはみ出さないようにする
+	m_titleState = min(max(m_titleState, 0), 4);
 
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
@@ -186,15 +193,35 @@ void Title::Input()
 		m_cursor_vertical++;
 		ValueUpdate(true);
 	}
-	//左ボタンが押されたら
-	else if (g_pad[0]->IsTrigger(enButtonLeft)) {
-		m_cursor_horizontal--;
-		ValueUpdate(false);
-	}
-	//右ボタンが押されたら
-	else if (g_pad[0]->IsTrigger(enButtonRight)) {
-		m_cursor_horizontal++;
-		ValueUpdate(false);
+
+	//設定画面なら
+	if (m_titleState == 4) {
+
+		//BGM、SFX設定なら
+		if (m_cursor_vertical == 1 || m_cursor_vertical == 2) {
+			//左ボタンが押されたら
+			if (g_pad[0]->IsPress(enButtonLeft)) {
+				m_cursor_horizontal--;
+				ValueUpdate(false);
+			}
+			//右ボタンが押されたら
+			else if (g_pad[0]->IsPress(enButtonRight)) {
+				m_cursor_horizontal++;
+				ValueUpdate(false);
+			}
+		}
+		else {
+			//左ボタンが押されたら
+			if (g_pad[0]->IsTrigger(enButtonLeft)) {
+				m_cursor_horizontal--;
+				ValueUpdate(false);
+			}
+			//右ボタンが押されたら
+			else if (g_pad[0]->IsTrigger(enButtonRight)) {
+				m_cursor_horizontal++;
+				ValueUpdate(false);
+			}
+		}
 	}
 }
 
@@ -233,8 +260,13 @@ void Title::Animation()
 	m_alpha = fabsf(-pow(m_timer, 2.0f) + (2 * m_timer));
 	m_alpha = min(m_alpha, 1.0f);
 
+	if (m_titleState == 1 || m_titleState == 4) {
+		m_alpha *= 3.0f;
+		m_alpha = max(m_alpha, 1.0f);
+	}
+
 	//透明度を変更
-	m_cursorFontRender.SetColor(Vector4(m_alpha, m_alpha, m_alpha, m_alpha));
+	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
 }
 
 void Title::ManageState()
@@ -276,7 +308,7 @@ void Title::TitleScreen()
 
 void Title::MenuScreen()
 {
-	m_cursorFontRender.SetPosition(Vector3(-800.0f, m_menuSpriteRender[m_cursor_vertical - 1].GetPosition().y, 0.0f));
+	m_cursorSpriteRender.SetPosition(Vector3(-700.0f, m_menuSpriteRender[m_cursor_vertical - 1].GetPosition().y, 0.0f));
 }
 
 void Title::StartScreen()
@@ -307,7 +339,12 @@ void Title::SettingScreen()
 	);
 	m_frameFontRender.SetText(m_frameText);
 
-	m_cursorFontRender.SetPosition(Vector3(-300.0f, 350.0f + (-100.0f * m_cursor_vertical), 0.0f));
+	m_cursorSpriteRender.SetPosition(Vector3(-300.0f, 300.0f + (-150.0f * m_cursor_vertical), 0.0f));
+
+	m_bgmSpriteRender.SetScale(Vector3(m_saveDataArray[0], 1.0f, 0.0f));
+	m_bgmSpriteRender.Update();
+	m_sfxSpriteRender.SetScale(Vector3(m_saveDataArray[1], 1.0f, 0.0f));
+	m_sfxSpriteRender.Update();
 }
 
 void Title::Render(RenderContext &rc)
@@ -327,7 +364,7 @@ void Title::Render(RenderContext &rc)
 		for (int i = 0; i < 3; i++) {
 			m_menuSpriteRender[i].Draw(rc);
 		}
-		m_cursorFontRender.Draw(rc);
+		m_cursorSpriteRender.Draw(rc);
 		break;
 
 	//ゲームスタート画面なら
@@ -342,15 +379,10 @@ void Title::Render(RenderContext &rc)
 	//設定画面なら
 	case 4:
 		m_settingFontRender.Draw(rc);
-		m_cursorFontRender.Draw(rc);
+		m_cursorSpriteRender.Draw(rc);
 
-		for (int i = 0; i < m_saveDataArray[0]; i++) {
-			m_bgmSpriteRender[i].Draw(rc);
-		}
-
-		for (int i = 0; i < m_saveDataArray[1]; i++) {
-			m_sfxSpriteRender[i].Draw(rc);
-		}
+		m_bgmSpriteRender.Draw(rc);
+		m_sfxSpriteRender.Draw(rc);
 
 		m_frameFontRender.Draw(rc);
 		break;

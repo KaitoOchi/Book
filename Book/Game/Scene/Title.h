@@ -16,9 +16,9 @@ public:
 private:
 
 	/// <summary>
-	/// レベルの初期化処理。
+	/// スプライトの初期化処理。
 	/// </summary>
-	void Init2DLevel();
+	void InitSprite();
 
 	/// <summary>
 	/// 入力処理。
@@ -65,8 +65,8 @@ private:
 	/// </summary>
 	void SetDataArray()
 	{
-		m_saveDataArray[0] = m_saveData.bgm * 10;
-		m_saveDataArray[1] = m_saveData.sfx * 10;
+		m_saveDataArray[0] = m_saveData.bgm * 100;
+		m_saveDataArray[1] = m_saveData.sfx * 100;
 
 		float frame = m_saveData.frameRate - 60.0f;
 		for (int i = 0; i < 2; i++) {
@@ -84,8 +84,8 @@ private:
 	/// </summary>
 	void SetSaveData()
 	{
-		m_saveData.bgm = (float)m_saveDataArray[0] / 10.0f;
-		m_saveData.sfx = (float)m_saveDataArray[1] / 10.0f;
+		m_saveData.bgm = (float)m_saveDataArray[0] / 100.0f;
+		m_saveData.sfx = (float)m_saveDataArray[1] / 100.0f;
 		m_saveData.frameRate = 60 + (m_saveDataArray[2] * 30);
 		GameManager::GetInstance()->DataSave(m_saveData);
 	}
@@ -97,12 +97,13 @@ private:
 	SpriteRender	m_menuSpriteRender[3];			//メニュー画像
 	SpriteRender	m_guideSpriteRender;			//操作方法画像
 
-	SpriteRender	m_bgmSpriteRender[10];			//BGMのメーター
-	SpriteRender	m_sfxSpriteRender[10];			//SFXのメーター
+	SpriteRender	m_bgmSpriteRender;			//BGMのメーター
+	SpriteRender	m_sfxSpriteRender;			//SFXのメーター
 	FontRender		m_frameFontRender;				//フレームレートの表示
 
+	SpriteRender	m_cursorSpriteRender;		//カーソル画像
+
 	FontRender		m_settingFontRender;
-	FontRender		m_cursorFontRender;
 
 	FontRender		m_debugFontRender;
 

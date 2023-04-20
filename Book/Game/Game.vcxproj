@@ -249,6 +249,7 @@
     <ClCompile Include="Player\Player2D.cpp" />
     <ClCompile Include="Player\Player3D.cpp" />
     <ClCompile Include="Player\PlayerManagement.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="Player\Player3D.h" />
     <ClInclude Include="Player\PlayerManagement.h" />
     <ClInclude Include="Scene\Game.h" />
+    <ClInclude Include="Scene\Result.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Ghost.h" />
