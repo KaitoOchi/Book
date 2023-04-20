@@ -17,6 +17,8 @@
 #include "Wall.h"
 #include "Treasure.h"
 #include "Ghost.h"
+#include "FlashBom.h"
+#include "SoundBom.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -25,10 +27,19 @@ Game::Game()
 
 Game::~Game()
 {
+	//プレイヤー
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
-	DeleteGO(m_gamecamera);
+	DeleteGO(m_playerManagement);
+	//エネミー
 
+
+
+	
+	DeleteGO(m_gamecamera);
+	//アイテム
+	DeleteGO(m_soundBom);
+	DeleteGO(m_flahBom);
 }
 
 bool Game::Start()
@@ -47,9 +58,8 @@ bool Game::Start()
 	//m_stageModelRender.SetScale(Vector3::One);
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
-
-	m_modelRender.Init("Assets/modelData/wall1.tkm");
-
+	m_flahBom = NewGO<FlashBom>(0, "flashBom");
+	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
@@ -213,7 +223,6 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
 			m_player3D->m_ghostpositions.push_back(objData.position);
-			ghostkazu++;
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
@@ -265,8 +274,8 @@ void Game::Update()
 }
 void Game::ClearState()
 {
-	//NewGO<Title>(0, "title");
-	//DeleteGO(this);
+	NewGO<Title>(0, "title");
+	DeleteGO(this);
 	int a = 0;
 }
 
@@ -290,6 +299,4 @@ void Game::MnageState()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
-
-	m_modelRender.Draw(rc);
 }

@@ -45,6 +45,7 @@ void Player::Animation3D()
 	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
+	
 }
 void Player::Animation2D()
 {
@@ -70,9 +71,10 @@ void Player::Update()
 		Move();
 		Jump();
 		Rotation();
+		ItemChange();
 	}
 	
-	
+	Animation();
 	ManageState();
 
 }
@@ -247,14 +249,6 @@ void Player::ProcessDownStateTransition()
 	//ステートの遷移
 	ProcessCommonStateTransition();
 }
-void Player::Process2DChangingStateTransition()
-{
-	
-}
-void Player::Process3DChangingStateTransition()
-{
-	
-}
 void Player::ProcessThrowStateTransition()
 {
 	//速度を初期化
@@ -311,6 +305,8 @@ void Player::ManageState()
 		break;
 	}
 }
+
+
 void Player::Animation()
 {
 }

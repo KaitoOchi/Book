@@ -9,7 +9,7 @@ public:
 	Item();
 	virtual ~Item();
 	virtual bool Start();
-	virtual void Update();
+	void Update();
 	/// <summary>
 	/// ƒAƒCƒeƒ€‚ª“–‚½‚Á‚½‚©‚Ç‚¤‚©
 	/// </summary>

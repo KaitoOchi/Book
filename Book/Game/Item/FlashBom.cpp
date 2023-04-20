@@ -3,6 +3,10 @@
 #include "Enemy.h"
 #include "Game.h"
 #include "PlayerManagement.h"
+namespace
+{
+	const float FLASHRANGE = 60.0f;
+}
 FlashBom::FlashBom()
 {
 
@@ -50,7 +54,7 @@ void FlashBom::ItemHit()
 	for (int i = 0; m_game->GetEnemyList().size(); i++)
 	{
 		Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-        if (diff.Length() < pow(60.0f, 2.0f))
+        if (diff.Length() < pow(FLASHRANGE, 2.0f))
 		{
 			btTransform start, end;
 			start.setIdentity();
