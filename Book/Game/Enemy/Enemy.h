@@ -196,6 +196,14 @@ public:
 		return m_rotation;
 	}
 
+	/// <summary>
+	/// 発見した回数を返す
+	/// </summary>
+	/// <returns></returns>
+	const int GetFindCounter() const {
+		return m_FindPlayerCounter;
+	}
+
 protected:
 
 	// パス移動用のポイント構造体
@@ -250,4 +258,7 @@ protected:
 	SpotLight m_spotLight;					//スポットライト
 
 	float m_Vicount;						//警戒度を一定回数増やす
+
+	bool m_CountFlag = false;				// カウントするフラグ
+	int m_FindPlayerCounter = 0;			// プレイヤーを発見した回数
 };
