@@ -14,6 +14,8 @@ class Wall;
 class Treasure;
 class Ghost;
 class GameUI;
+class FlashBom;
+class SoundBom;
 class Game : public IGameObject
 {
 public:
@@ -78,7 +80,9 @@ private:
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 	BackGround* m_backGround = nullptr;
-
+	FlashBom* m_flahBom = nullptr;
+	SoundBom* m_soundBom = nullptr;
+	
 	std::vector<Enemy*> m_enemyList;
 	
 
@@ -91,7 +95,13 @@ private:
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 
+<<<<<<< HEAD
 	int ghostkazu = 0;
 	ModelRender m_modelRender;
+=======
+	ModelRender m_modelRender;
+
+
+>>>>>>> 969b3483fd48080918c42d4079bb82c19f02a299
 };
 

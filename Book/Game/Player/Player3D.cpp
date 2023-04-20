@@ -3,6 +3,8 @@
 #include"Player2D.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
+#include "FlashBom.h"
+#include "SoundBom.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
@@ -13,16 +15,27 @@ Player3D::Player3D()
 }
 Player3D::~Player3D()
 {
-	delete(m_characon);
-	delete(m_modelRender);
-	delete(m_collisionObject);
+	if (IsActive())
+	{
+		delete(m_characon);
+		delete(m_modelRender);		
+	}
+	DeleteGO(m_collisionObject);
+
 }
 bool Player3D::Start()
 {
 	m_characon = new CharacterController;
 	Player::Start();
+	
+	//閃光弾の呼び出し
+	m_flashBom = FindGO<FlashBom>("flashBom");
+	//音爆弾の呼び出し
+	m_soundBom = FindGO<SoundBom>("soundBom");
+
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
+	
 	//キャラコンやコリジョンの作成
 	m_characon->Init(BOXSIZE, m_position);
 	m_collisionObject->CreateBox(
@@ -33,15 +46,23 @@ bool Player3D::Start()
 	m_collisionObject->SetIsEnableAutoDelete(false);
 
 	m_modelRender= new ModelRender;
+	
 	//マネジメントの呼び出し
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_playerManagement->SetCharacon(m_characon);
+	
 	//モデルを読み込む
 	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);
 	m_modelRender->Update();
+
+	m_modelRender->AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName)
+		{
+			OnAnimationEvent(clipName, eventName);
+		});
+
 
 	m_playerManagement->SetCharacon(m_characon);
 	return true;
@@ -59,7 +80,6 @@ void Player3D::Update()
 		//atn2で３Dの回転を求める
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 		Player::Update();
-		Animation();
 		//アイテムを投げる
 		if (g_pad[0]->IsTrigger(enButtonRB1) && m_playerState != m_enAnimationClip_Jump)
 		{
@@ -75,6 +95,7 @@ void Player3D::Update()
 		m_modelRender->Update();
 		m_collisionObject->Update();
 	}
+	//壁に埋まっているなら
 	else
 	{
 		senkeiPos += g_gameTime->GetFrameDeltaTime()*1.5f;
@@ -138,10 +159,33 @@ void Player3D::Animation()
 		break;
 	case Player::m_enPlayer3D_Throw:
 		m_modelRender->PlayAnimation(m_enAnimationClip_Throw, 0.5f);
+
 		break;
 	default:
 		break;
 	}
+}
+
+void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	(void)clipName;
+	//キーの名前がAttack_Startの時
+	if (wcscmp(eventName, L"Attack_Start") == 0)
+	{
+		switch (m_enItemState)
+		{
+		case Player::m_enItem_Flash:
+			m_flashBom->Activate();
+			break;
+		case Player::m_enItem_SoundBom:
+			m_soundBom->Activate();
+			break;
+		default:
+			break;
+		}
+		
+	}
+
 }
 void Player3D::Render(RenderContext& rc)
 {

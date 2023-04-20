@@ -16,6 +16,9 @@
     <Filter Include="Item">
       <UniqueIdentifier>{bd67bd32-bfbf-45aa-8d3e-ed3527243a12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameManager">
+      <UniqueIdentifier>{9ffeba6f-bd38-4048-9a38-5697b091add3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Stage">
       <UniqueIdentifier>{961b002f-58e2-490c-8daa-934cd5869318}</UniqueIdentifier>
     </Filter>
@@ -106,6 +109,10 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Menu.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\SoundBom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -183,5 +190,9 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Menu.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\SoundBom.h" />
   </ItemGroup>
 </Project>
