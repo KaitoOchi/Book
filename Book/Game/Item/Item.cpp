@@ -24,7 +24,3 @@ void Item::Update()
 {
 	ItemHit();
 }
-void Item::ItemHit()
-{
-
-}

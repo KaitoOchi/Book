@@ -4,6 +4,7 @@
 #include "GameCamera.h"
 #include "PlayerManagement.h"
 #include "FlashBom.h"
+#include "SoundBom.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
@@ -25,6 +26,8 @@ bool Player3D::Start()
 	
 	//閃光弾の呼び出し
 	m_flashBom = FindGO<FlashBom>("flashBom");
+	//音爆弾の呼び出し
+	m_soundBom = FindGO<SoundBom>("soundBom");
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -161,11 +164,22 @@ void Player3D::Animation()
 
 void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
-	//	(void)clipName;
+	(void)clipName;
 	//キーの名前がAttack_Startの時
 	if (wcscmp(eventName, L"Attack_Start") == 0)
 	{
-		m_flashBom->Activate();
+		switch (m_enItemState)
+		{
+		case Player::m_enItem_Flash:
+			m_flashBom->Activate();
+			break;
+		case Player::m_enItem_SoundBom:
+			m_soundBom->Activate();
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 }

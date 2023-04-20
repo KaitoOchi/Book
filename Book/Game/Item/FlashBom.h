@@ -8,7 +8,7 @@ public:
 	FlashBom();
 	~FlashBom()override;
 	bool Start()override;
-	void Update()override;
+	void Update();
 	void ItemHit()override;
 private:
 	SphereCollider m_sphereCollider;					//スフィアコライダー

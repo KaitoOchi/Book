@@ -3,6 +3,10 @@
 #include "PlayerManagement.h"
 #include "Game.h"
 #include "Enemy.h"
+namespace
+{
+	const float SOUNDRANGE = 120.0f;
+}
 SoundBom::SoundBom()
 {
 
@@ -27,7 +31,7 @@ void SoundBom::ItemHit()
 	for (int i = 0; m_game->GetEnemyList().size(); i++)
 	{
 		Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-		if (diff.Length() < pow(120.0f, 2.0f))
+		if (diff.Length() < pow(SOUNDRANGE, 2.0f))
 		{
 			m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
 		}

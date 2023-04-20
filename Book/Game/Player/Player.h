@@ -181,7 +181,7 @@ protected:
 		m_enItem_Flash,			//‘MŒõ’e			
 		m_enItem_SoundBom		//‰¹”š’e
 	};
-	EnItemState m_enItemState = m_enItemState;
+	EnItemState m_enItemState = m_enItem_Flash;
 	
 	bool m_characonState = true;								//ƒLƒƒƒ‰ƒRƒ“‚ğì‚é‚©‚Ç‚¤‚©
 

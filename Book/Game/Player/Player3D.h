@@ -2,6 +2,7 @@
 #include "Player.h"
 class PlayerManagement;
 class FlashBom;
+class SoundBom;
 class Player3D :public Player
 {
 public:
@@ -30,7 +31,7 @@ public:
 private:
 	PlayerManagement* m_playerManagement = nullptr;
 	FlashBom* m_flashBom = nullptr;
-
+	SoundBom* m_soundBom = nullptr;
 
 	//アニメーションイベント用の関数
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);

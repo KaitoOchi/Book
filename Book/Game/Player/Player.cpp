@@ -71,6 +71,7 @@ void Player::Update()
 		Move();
 		Jump();
 		Rotation();
+		ItemChange();
 	}
 	
 	Animation();
