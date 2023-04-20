@@ -34,7 +34,7 @@ PSInput VSMain(VSInput In)
 
 float4 PSMain(PSInput In) : SV_Target0
 {
-    float4 albedo = albedoTexture.Sample(Sampler, In.uv);
+    float4 albedo = albedoTexture.Sample(Sampler, In.uv) * mulColor;
 
     clip(In.pos.y - clipSize);
 

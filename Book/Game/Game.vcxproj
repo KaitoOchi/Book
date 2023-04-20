@@ -261,6 +261,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="UI\Fade.cpp" />
     <ClCompile Include="UI\GameUI.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
   </ItemGroup>
@@ -290,6 +291,7 @@
     <ClInclude Include="Stage\Wall.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\Fade.h" />
     <ClInclude Include="UI\GameUI.h" />
     <ClInclude Include="UI\MiniMap.h" />
   </ItemGroup>

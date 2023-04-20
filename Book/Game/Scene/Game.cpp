@@ -17,6 +17,7 @@
 #include "Wall.h"
 #include "Treasure.h"
 #include "Ghost.h"
+#include "Fade.h"
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -213,7 +214,7 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
 
 			m_player3D->m_ghostpositions.push_back(objData.position);
-			ghostkazu++;
+			//ghostkazu++;
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
@@ -245,6 +246,10 @@ void Game::LevelDesign()
 		return true;
 		}
 	);
+
+	//フェードの処理
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
 }
 
 void Game::Update()

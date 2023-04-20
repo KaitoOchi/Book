@@ -9,6 +9,7 @@ public:
 	struct SaveData {
 		float bgm = 0.1f;
 		float sfx = 0.1f;
+		int frameRate = 60;
 	};
 
 public:
@@ -53,6 +54,9 @@ public:
 		fclose(fp);
 
 		m_saveData = data;
+
+		//フレームレートの設定
+		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
 	}
 
 	/// <summary>
@@ -67,9 +71,11 @@ public:
 			fclose(fp);
 		}
 
+		//フレームレートの設定
+		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
+
 		return m_saveData;
 	}
-
 
 	/// <summary>
 	/// 更新処理。

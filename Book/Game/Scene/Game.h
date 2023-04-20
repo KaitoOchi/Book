@@ -14,6 +14,7 @@ class Wall;
 class Treasure;
 class Ghost;
 class GameUI;
+class Fade;
 class Game : public IGameObject
 {
 public:
@@ -86,15 +87,11 @@ private:
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
+	Fade* m_fade = nullptr;
 	
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 
-<<<<<<< HEAD
-	int ghostkazu = 0;
-=======
 	ModelRender m_modelRender;
-
->>>>>>> c36f4e6e8cc10a999e08bb789bee79fa9a692e09
 };
 
