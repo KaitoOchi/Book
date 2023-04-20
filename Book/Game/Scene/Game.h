@@ -95,13 +95,6 @@ private:
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 
-<<<<<<< HEAD
-	int ghostkazu = 0;
 	ModelRender m_modelRender;
-=======
-	ModelRender m_modelRender;
-
-
->>>>>>> 969b3483fd48080918c42d4079bb82c19f02a299
 };
 

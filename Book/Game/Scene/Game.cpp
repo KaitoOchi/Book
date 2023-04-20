@@ -62,14 +62,12 @@ bool Game::Start()
 	//m_stageModelRender.SetScale(Vector3::One);
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
-<<<<<<< HEAD
 
 	//m_modelRender.Init("Assets/modelData/wall1.tkm");
 
-=======
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
->>>>>>> 969b3483fd48080918c42d4079bb82c19f02a299
+
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
@@ -120,7 +118,8 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_stage.tkl", [&](LevelObjectData& objData) {
+	//m_levelRender.Init("Assets/modelData/level_test/level_stage.tkl", [&](LevelObjectData& objData)
+		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
 
 		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -199,7 +198,8 @@ void Game::LevelDesign()
 		//}
 
 		//名前がbackgroundなら
-		if (objData.EqualObjectName(L"base") == true) {
+		//if (objData.EqualObjectName(L"base") == true)
+			if (objData.EqualObjectName(L"debug") == true) {
 			// 背景を生成
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
@@ -338,9 +338,9 @@ void Game::Update()
 }
 void Game::ClearState()
 {
-	NewGO<Title>(0, "title");
-	DeleteGO(this);
-	int a = 0;
+	//NewGO<Title>(0, "title");
+	//DeleteGO(this);
+	//int a = 0;
 }
 
 void Game::MnageState()
