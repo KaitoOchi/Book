@@ -3,6 +3,8 @@
 #include "GameCamera.h"
 #include "PlayerManagement.h"
 #include "Ghost.h"
+#include "Star.h"
+#include "Game.h"
 namespace
 {
 	const float WALK = 40.0f;//歩き時の乗算量
@@ -26,6 +28,8 @@ bool Player::Start()
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_ghost = FindGO<Ghost>("ghost");
+	m_star = FindGO<Star>("star");
+	m_game = FindGO<Game>("game");
 	return true;
 }
 void Player::Animation3D()
@@ -76,6 +80,13 @@ void Player::Update()
 		Jump();
 		Rotation();
 		ItemChange();
+		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
+			m_Player_Act&&
+			m_playerState!=m_enPlayer_Jump)
+		{
+			Throw();
+		}
+		m_Player_Act = true;
 	}
 	
 	Animation();
@@ -133,6 +144,7 @@ void Player::Jump()
 		{
 			//ジャンプをする
 			m_moveSpeed.y = JUMPVOLUM;
+			m_Player_Act = false;
 
 		}
 	}
@@ -168,6 +180,10 @@ void Player::ItemChange()
 		//音爆弾を持っている
 		m_enItemState = m_enItem_SoundBom;
 	}
+}
+
+void Player::Throw()
+{
 }
 
 void Player::GhostHit()
@@ -251,8 +267,8 @@ void Player::ProcessChangeStateTransition()
 void Player::ProcessDownStartStateTransition()
 {
 	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
+	m_moveSpeed.x *= 0;
+	m_moveSpeed.z *= 0;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
@@ -261,12 +277,18 @@ void Player::ProcessDownStartStateTransition()
 }
 void Player::ProcessDownStateTransition()
 {
+	auto laststar = m_game->GetEnemyList().size() - 1;
+	//☆をアクティブにする
+	m_game->GetStarList()[laststar]->Activate();
+	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
+	m_game->GetStarList()[laststar]->ModelRenderUpdate();
 	m_downTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_downTime<0.0f)
 	{
 		//ステートの遷移
 		m_playerState = m_enPlayer_DownEnd;
 		m_downTime = 3.0f;
+		m_game->GetStarList()[laststar]->Deactivate();
 	}
 }
 void Player::ProcessDownEndStateTransition()

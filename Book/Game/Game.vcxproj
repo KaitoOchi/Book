@@ -257,6 +257,7 @@
     <ClCompile Include="Stage\BackGround.cpp" />
     <ClCompile Include="Stage\Ghost.cpp" />
     <ClCompile Include="Stage\Wall.cpp" />
+    <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -295,6 +296,7 @@
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Ghost.h" />
     <ClInclude Include="Stage\Wall.h" />
+    <ClInclude Include="UI\Star.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="UI\Fade.h" />

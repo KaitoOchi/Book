@@ -5,6 +5,7 @@
 #include "PlayerManagement.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
+#include "Star.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
@@ -81,10 +82,7 @@ void Player3D::Update()
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 		Player::Update();
 		//アイテムを投げる
-		if (g_pad[0]->IsTrigger(enButtonRB1) && m_playerState != m_enAnimationClip_Jump)
-		{
-			Throw();
-		}
+		
 		//プレイヤーの移動を継承する。
 		//キャラコンで座標を移動させる。
 		m_characon->SetPosition(m_position);

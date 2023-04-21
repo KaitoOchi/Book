@@ -110,9 +110,9 @@
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Result.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
+    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
+    <ClCompile Include="Scene\Result.cpp" />
+    <ClCompile Include="UI\Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -197,5 +197,7 @@
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy\Enemy_Clear.h" />
+    <ClInclude Include="UI\Star.h" />
   </ItemGroup>
 </Project>

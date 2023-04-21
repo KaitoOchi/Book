@@ -18,6 +18,7 @@ class GameUI;
 class FlashBom;
 class SoundBom;
 class Fade;
+class Star;
 class Game : public IGameObject
 {
 public:
@@ -54,6 +55,15 @@ public:
 	{
 		return m_enemyList;
 	}
+
+	/// <summary>
+	/// 星の情報を取得
+	/// </summary>
+	/// <returns></returns>
+	std::vector<Star*> GetStarList()
+	{
+		return m_starList;
+	}
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -89,7 +99,7 @@ private:
 	
 	std::vector<Enemy*> m_enemyList;
 	
-
+	std::vector<Star*>m_starList;
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Wall* m_wall = nullptr;
@@ -97,6 +107,8 @@ private:
 	Ghost* m_ghost = nullptr;
 	Fade* m_fade = nullptr;
 	
+	Star* m_star = nullptr;
+
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
 

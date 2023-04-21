@@ -22,6 +22,7 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
+#include "Star.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -56,9 +57,12 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
-	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
-	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
+	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	NewGO<GameUI>(0, "gameUI");
+
+	
+	
 	//NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -115,6 +119,12 @@ bool Game::Start()
 	//・ｽt・ｽF・ｽ[・ｽh・ｽﾌ擾ｿｽ・ｽ・ｽ
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
+	for (int i = 0; i <= m_enemyList.size(); i++)
+	{
+		m_star = NewGO<Star>(0, "star");
+		m_starList.push_back(m_star);
+	}
+
 	return true;
 }
 

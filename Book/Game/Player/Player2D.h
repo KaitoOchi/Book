@@ -10,6 +10,7 @@ public:
 	void Update()override;
 	void PlayerChang();
 	void Rotation2D();
+	void Throw()override;
 	/// <summary>
 	/// ƒLƒƒƒ‰ƒRƒ“‚Ìì¬‚ÌŠÖ”
 	/// </summary>
