@@ -158,6 +158,20 @@ void Title::InitSprite()
 			m_settingGaugeSpriteRender[3].SetPosition(objData.position);
 			return true;
 		}
+		else if (objData.EqualObjectName("text") == true) {
+			//テキストの設定
+			m_settingTextSpriteRender[0].Init("Assets/sprite/UI/setting/BGM_text.DDS", 380.0f, 28.0f);
+			m_settingTextSpriteRender[1].Init("Assets/sprite/UI/setting/SE_text.DDS", 227.0f, 28.0f);
+			m_settingTextSpriteRender[2].Init("Assets/sprite/UI/setting/FPS_text.DDS", 457.0f, 27.0f);
+			m_settingTextSpriteRender[3].Init("Assets/sprite/UI/setting/BGM_text.DDS", 380.0f, 28.0f);
+
+			for (int i = 0; i < 4; i++) {
+				m_settingTextSpriteRender[i].SetPosition(objData.position);
+				m_settingTextSpriteRender[i].SetScale(objData.scale);
+				m_settingTextSpriteRender[i].Update();
+			}
+			return true;
+		}
 		return false;
 	});
 	delete m_level2DRender;
@@ -172,7 +186,7 @@ void Title::InitSprite()
 	//BGMとSFX音量の画像を設定
 	for (int i = 0; i < 2; i++) {
 		m_gaugeSpriteRender[i].Init("Assets/sprite/UI/setting/gauge.DDS", 10.0f, 50.0f);
-		m_gaugeSpriteRender[i].SetPosition(Vector3(-200.0f, 250.0f - (i * 200.0f), 0.0f));
+		m_gaugeSpriteRender[i].SetPosition(Vector3(-203.0f, 250.0f - (i * 200.0f), 0.0f));
 		m_gaugeSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_gaugeSpriteRender[i].Update();
 	}
@@ -403,11 +417,18 @@ void Title::StartScreen()
 
 void Title::SettingScreen()
 {
-	m_cursorSpriteRender.SetPosition(Vector3(-500.0f, 450.0f + (-200.0f * m_cursor_vertical), 0.0f));
+	if (m_cursor_vertical == 3) {
+		//FPSの設定
+		m_cursorSpriteRender.SetPosition(Vector3(-200.0f + (m_cursor_horizontal * 225.0f), -150.0f, 0.0f));
+	}
+	else {
+		//音量の設定
+		m_cursorSpriteRender.SetPosition(Vector3(-500.0f, 450.0f + (-200.0f * m_cursor_vertical), 0.0f));
+	}
 
 	//BGMとSFX音量のゲージを変更
 	for (int i = 0; i < 2; i++) {
-		m_gaugeSpriteRender[i].SetScale(Vector3(m_saveDataArray[i], 1.0f, 0.0f));
+		m_gaugeSpriteRender[i].SetScale(Vector3(m_saveDataArray[i] / 1.65f, 1.0f, 0.0f));
 		m_gaugeSpriteRender[i].Update();
 	}
 }
@@ -443,15 +464,16 @@ void Title::Render(RenderContext &rc)
 
 	//設定画面なら
 	case 4:
+		for (int i = 0; i < 2; i++) {
+			m_gaugeSpriteRender[i].Draw(rc);
+		}
+
 		for (int i = 0; i < 4; i++) {
 			m_settingSpriteRender[i].Draw(rc);
 			m_settingGaugeSpriteRender[i].Draw(rc);
 		}
-
-		for (int i = 0; i < 2; i++) {
-			m_gaugeSpriteRender[i].Draw(rc);
-		}
 		m_cursorSpriteRender.Draw(rc);
+		m_settingTextSpriteRender[m_cursor_vertical -1].Draw(rc);
 		break;
 	}
 

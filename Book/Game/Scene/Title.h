@@ -130,6 +130,7 @@ private:
 	SpriteRender			m_settingSpriteRender[4];		//設定画像
 	SpriteRender			m_settingGaugeSpriteRender[4];	//設定画面の枠組み画像
 	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
+	SpriteRender			m_settingTextSpriteRender[4];	//設定の説明画像
 	SpriteRender			m_cursorSpriteRender;			//カーソル画像
 
 	FontRender				m_debugFontRender;
