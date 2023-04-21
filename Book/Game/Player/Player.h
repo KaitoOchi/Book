@@ -85,7 +85,7 @@ protected:
 	void Move();
 	void Jump();
 	void Rotation();
-	virtual void Animation();
+	virtual void Animation()=0;
 	void Animation3D();
 	void Animation2D();
 	/// <summary>
@@ -125,14 +125,6 @@ protected:
 	/// 変更ステートの遷移処理
 	/// </summary>
 	void ProcessChangeStateTransition();
-	/// <summary>
-	/// 2Dに切替中ステートの遷移処理
-	/// </summary>
-	void Process2DChangingStateTransition();
-	/// <summary>
-	/// 3Dに切替中ステートの遷移処理
-	/// </summary>
-	void Process3DChangingStateTransition();
 	/// <summary>
 	/// 投げるステートの遷移処理
 	/// </summary>
@@ -178,6 +170,9 @@ protected:
 		m_enAnimationClip_Num,//アニメーションの数
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
+
+	
+
 	
 	//アイテムの切替
 	enum EnItemState
@@ -186,7 +181,7 @@ protected:
 		m_enItem_Flash,			//閃光弾			
 		m_enItem_SoundBom		//音爆弾
 	};
-	EnItemState m_enItemState = m_enItemState;
+	EnItemState m_enItemState = m_enItem_Flash;
 	
 	bool m_characonState = true;								//キャラコンを作るかどうか
 
