@@ -127,12 +127,11 @@ private:
 	SpriteRender			m_pressSpriteRender;			//press画像
 	SpriteRender			m_menuSpriteRender[3];			//メニュー画像
 	SpriteRender			m_guideSpriteRender;			//操作方法画像
-	SpriteRender			m_bgmSpriteRender;				//BGMのメーター
-	SpriteRender			m_sfxSpriteRender;				//SFXのメーター
-	FontRender				m_frameFontRender;				//フレームレートの表示
+	SpriteRender			m_settingSpriteRender[4];		//設定画像
+	SpriteRender			m_settingGaugeSpriteRender[4];	//設定画面の枠組み画像
+	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
 	SpriteRender			m_cursorSpriteRender;			//カーソル画像
 
-	FontRender				m_settingFontRender;
 	FontRender				m_debugFontRender;
 
 	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
