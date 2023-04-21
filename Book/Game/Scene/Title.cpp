@@ -5,10 +5,12 @@
 #include "Fade.h"
 #include "Game.h"
 
+//#include "sound/SoundSource.h"
+//#include "sound/SoundEngine.h"
 
 namespace
 {
-	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 4 };				//各ステートの縦カーソル最大値
+	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 4 };			//各ステートの縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[10] = { 0, 100, 100, 2, 1 };	//各設定の横カーソル最大値
 }
 
@@ -41,6 +43,11 @@ bool Title::Start()
 	//フェードの処理
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
+
+	//決定時の音
+	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/shot.wav");
+	//キャンセル時の音
+	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/shot.wav");
 
 	return true;
 }
@@ -157,9 +164,14 @@ void Title::Input()
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_titleState = m_cursor_vertical + 1;
-		m_cursor_vertical = 1;
-		ValueUpdate(true);
+		if (m_titleState <= 1) {
+
+			m_titleState = m_cursor_vertical + 1;
+			m_cursor_vertical = 1;
+			ValueUpdate(true);
+
+			IsCanPlaySound(true);
+		}
 	}
 	//Bボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonB))
@@ -171,6 +183,7 @@ void Title::Input()
 			SetDataArray();
 		}
 
+		//メニュー画面以降なら
 		if (m_titleState >= 2) {
 			m_titleState = 1;
 			m_cursor_vertical = 1;
@@ -179,9 +192,9 @@ void Title::Input()
 			m_titleState--;
 			m_cursor_vertical = 0;
 		}
+
+		IsCanPlaySound(false);
 	}
-	//範囲外にはみ出さないようにする
-	m_titleState = min(max(m_titleState, 0), 4);
 
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
@@ -227,6 +240,9 @@ void Title::Input()
 
 void Title::ValueUpdate(bool vertical)
 {
+	int cursor_v = m_cursor_vertical;
+	int cursor_h = m_cursor_horizontal;
+
 	//範囲外にはみ出さないようにする
 	m_cursor_vertical = min(max(m_cursor_vertical, 1), CURSOR_VERTICAL_MAX[m_titleState]);
 	m_cursor_horizontal = min(max(m_cursor_horizontal, 0), CURSOR_HORIZONTAL_MAX[m_cursor_vertical]);
@@ -237,6 +253,13 @@ void Title::ValueUpdate(bool vertical)
 	}
 	//設定画面なら
 	else if (m_titleState == 4) {
+
+		//音を鳴らす
+		if (m_cursor_vertical == cursor_v || 
+			m_cursor_horizontal == cursor_h)
+		{
+			Sound(2);
+		}
 
 		//今保持している設定の値に移動する
 		if (vertical) {

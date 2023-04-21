@@ -90,37 +90,59 @@ private:
 		GameManager::GetInstance()->DataSave(m_saveData);
 	}
 
+	/// <summary>
+	/// 効果音を鳴らせるかどうか。
+	/// </summary>
+	/// <param name="sound">鳴らしたい効果音の番号。</param>
+	void IsCanPlaySound(const bool sound)
+	{
+		int title = m_titleState;
+		m_titleState = min(max(m_titleState, 0), 4);
+
+		if (m_titleState == title) {
+			Sound(sound);
+		}
+	}
+
+	/// <summary>
+	/// 効果音を鳴らす処理。
+	/// </summary>
+	/// <param name="num">鳴らしたい効果音の番号。</param>
+	void Sound(const int num)
+	{
+		/*
+
+		//射撃音を出す
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(num);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+
+		*/
+	}
+
 private:
-	SpriteRender	m_backGroundSpriteRender;		//背景画像
-	SpriteRender	m_titleSpriteRender;			//タイトル画像
-	SpriteRender	m_pressSpriteRender;			//press画像
-	SpriteRender	m_menuSpriteRender[3];			//メニュー画像
-	SpriteRender	m_guideSpriteRender;			//操作方法画像
+	SpriteRender			m_backGroundSpriteRender;		//背景画像
+	SpriteRender			m_titleSpriteRender;			//タイトル画像
+	SpriteRender			m_pressSpriteRender;			//press画像
+	SpriteRender			m_menuSpriteRender[3];			//メニュー画像
+	SpriteRender			m_guideSpriteRender;			//操作方法画像
+	SpriteRender			m_bgmSpriteRender;				//BGMのメーター
+	SpriteRender			m_sfxSpriteRender;				//SFXのメーター
+	FontRender				m_frameFontRender;				//フレームレートの表示
+	SpriteRender			m_cursorSpriteRender;			//カーソル画像
 
-	SpriteRender	m_bgmSpriteRender;			//BGMのメーター
-	SpriteRender	m_sfxSpriteRender;			//SFXのメーター
-	FontRender		m_frameFontRender;				//フレームレートの表示
+	FontRender				m_settingFontRender;
+	FontRender				m_debugFontRender;
 
-	SpriteRender	m_cursorSpriteRender;		//カーソル画像
-
-	FontRender		m_settingFontRender;
-
-	FontRender		m_debugFontRender;
-
-	Level2DRender* m_level2DRender = nullptr;
-
-	GameManager::SaveData m_saveData;
-
-	Fade* m_fade = nullptr;
-
-	bool m_isWaitFadeOut = false;
-
-	int				m_titleState = 0;			//タイトルステート
-	int				m_cursor_vertical = 0;		//縦カーソル
-	int				m_cursor_horizontal = 0;	//横カーソル
-
-	int m_saveDataArray[4];		//セーブデータの一時的な配列
-
-	float m_alpha = 0.0f;		//色のアルファ値
-	float m_timer = 0.0f;		//時間
+	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
+	Fade*					m_fade = nullptr;				//フェードクラス
+	GameManager::SaveData	m_saveData;
+	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
+	int						m_titleState = 0;				//タイトルステート
+	int						m_cursor_vertical = 0;			//縦カーソル
+	int						m_cursor_horizontal = 0;		//横カーソル
+	int						m_saveDataArray[4];				//セーブデータの一時的な配列
+	float					m_alpha = 0.0f;					//色のアルファ値
+	float					m_timer = 0.0f;					//時間
 };
