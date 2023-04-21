@@ -64,7 +64,29 @@ void Result::GameClear()
 
 void Result::GameOver()
 {
+	if (g_pad[0]->IsTrigger(enButtonDown)) {
+		m_cursor++;
+	}
+	else if (g_pad[0]->IsTrigger(enButtonUp)) {
+		m_cursor--;
+	}
 
+	m_cursor = min(max(m_cursor, 0), 1);
+
+	//ŽžŠÔ‚Ìˆ—
+	m_timer += g_gameTime->GetFrameDeltaTime();
+	if (m_timer > 1.0f)
+		m_timer = -0.5f;
+
+	// -t^2 + 2t
+	m_alpha = fabsf(-pow(m_timer, 2.0f) + (2 * m_timer));
+	m_alpha = min(m_alpha, 1.0f);
+	m_alpha *= 3.0f;
+	m_alpha = max(m_alpha, 1.0f);
+
+	m_cursorSpriteRender.SetPosition(Vector3(-730.0f, 90.0f + (m_cursor * -240.0f), 0.0f));
+	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
+	m_cursorSpriteRender.Update();
 }
 
 void Result::Render(RenderContext& rc)
