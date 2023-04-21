@@ -223,6 +223,16 @@ void Game::LevelDesign()
 
 			return true;
 		}
+		// –¼‘O‚ªbox‚Ì‚Æ‚«
+		if (objData.EqualObjectName(L"box2") == true) {
+			// •Ç‚ğ¶¬
+			m_wall = NewGO<Wall>(0, "wall");
+			m_wall->SetPosition(objData.position);
+			m_wall->SetRotation(objData.rotation);
+			m_wall->SetScale(objData.scale);
+
+			return true;
+		}
 		//// –¼‘O‚ªgap‚Ì‚Æ‚«
 		//if (objData.EqualObjectName(L"gap") == true) {
 		//	// Œ„ŠÔ‚ğ¶¬‚·‚é

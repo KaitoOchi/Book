@@ -85,6 +85,10 @@ void Wall::SetModel_withGap(int num)
 
 void Wall::Update()
 {
+	m_wallRender.SetPosition(m_position);
+	m_wallRender.SetScale(m_scale);
+	m_wallRender.SetRotation(m_rotation);
+
 	m_wallRender.Update();
 }
 void Wall::Render(RenderContext& rc)
