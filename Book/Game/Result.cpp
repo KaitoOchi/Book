@@ -2,6 +2,7 @@
 #include "Result.h"
 
 #include "Fade.h"
+#include "Title.h"
 
 Result::Result()
 {
@@ -39,15 +40,20 @@ void Result::Update()
 {
 	switch (m_resultState)
 	{
-	//ゲームクリアなら
+		//ゲームクリアなら
 	case enState_GameClear:
 		GameClear();
 		break;
 
-	//ゲームオーバーなら
+		//ゲームオーバーなら
 	case enState_GameOver:
 		GameOver();
 		break;
+	}
+
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		NewGO<Title>(0, "title");
+		DeleteGO(this);
 	}
 }
 
