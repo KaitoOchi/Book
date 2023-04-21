@@ -109,10 +109,8 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Menu.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Item\SoundBom.cpp" />
+    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -190,9 +188,7 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Menu.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Item\SoundBom.h" />
+    <ClInclude Include="Enemy\Enemy_Clear.h" />
   </ItemGroup>
 </Project>

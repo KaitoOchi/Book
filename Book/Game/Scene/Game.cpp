@@ -12,6 +12,7 @@
 #include "Enemy_Normal.h"
 #include "Enemy_Search.h"
 #include "Enemy_Charge.h"
+#include "Enemy_Clear.h"
 #include "BackGround.h"
 #include "LightSensor.h"
 #include "Wall.h"
@@ -19,6 +20,7 @@
 #include "Ghost.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
+
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
@@ -34,7 +36,7 @@ Game::~Game()
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
-
+	DeleteGO(m_enemyClear);
 	//オブジェクト
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
@@ -107,7 +109,7 @@ bool Game::Start()
 		45.0f
 	);
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
@@ -130,15 +132,15 @@ void Game::LevelDesign()
 			// パス移動の指定
 			m_enemyNormal->Pass(0);
 
-			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			m_enemyCharge->SetPosition(objData.position);
-			m_enemyCharge->SetRotation(objData.rotation);
-			m_enemyCharge->SetScale(objData.scale);
+			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			m_enemyClear->SetPosition(objData.position);
+			m_enemyClear->SetRotation(objData.rotation);
+			m_enemyClear->SetScale(objData.scale);
 			// Enemyのリストに追加
-			m_enemyList.push_back(m_enemyCharge);
+			m_enemyList.push_back(m_enemyClear);
 
 			// パス移動の指定
-			m_enemyCharge->Pass(7);
+			m_enemyClear->Pass(7);
 
 			return true;
 		}
@@ -263,7 +265,7 @@ void Game::LevelDesign()
 void Game::Update()
 {
 	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
-	if (diff.LengthSq() <= 120.0f*120.0f)
+	if (diff.LengthSq() <= 120.0f*120.0f&&m_gameState==m_enGameState_GameClearable)
 	{
 		m_gameState = m_enGameState_GameClear;
 	}
@@ -280,7 +282,7 @@ void Game::ClearState()
 {
 	NewGO<Title>(0, "title");
 	DeleteGO(this);
-	int a = 0;
+
 }
 
 void Game::MnageState()
