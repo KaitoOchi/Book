@@ -22,7 +22,7 @@
 Game::Game()
 {
 	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -118,8 +118,8 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	//m_levelRender.Init("Assets/modelData/level_test/level_stage.tkl", [&](LevelObjectData& objData)
-		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+/*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 
 		// 名前がunityChanなら
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -163,6 +163,7 @@ void Game::LevelDesign()
 		//	m_enemyNormal->Pass(0);
 		//	// Enemyのリストに追加
 		//	m_enemyList.push_back(m_enemyNormal);
+		//	 return true;
 		//}
 
 		//// 名前が EnemyCharge なら
@@ -180,6 +181,8 @@ void Game::LevelDesign()
 		//	m_enemyCharge->Pass(7);
 		//	// Enemyのリストに追加
 		//	m_enemyList.push_back(m_enemyCharge);
+		// 
+		//	return true;
 		//}
 
 		//// 名前が EnemySearch なら
@@ -195,11 +198,13 @@ void Game::LevelDesign()
 		//	m_enemySearch->SetScale(objData.scale);
 		//	// Enemyのリストに追加
 		//	m_enemyList.push_back(m_enemySearch);
+		// 
+		//	return true;
 		//}
 
 		//名前がbackgroundなら
-		//if (objData.EqualObjectName(L"base") == true)
-			if (objData.EqualObjectName(L"debug") == true) {
+		if (objData.EqualObjectName(L"base") == true)
+/*			if (objData.EqualObjectName(L"debug") == true)*/ {
 			// 背景を生成
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
@@ -212,67 +217,56 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"box") == true) {
 			// 壁を生成
 			m_wall = NewGO<Wall>(0, "wall");
-			//m_wall->SetWallModel(0);
 			m_wall ->SetPosition(objData.position);
 			m_wall->SetRotation(objData.rotation);
 			m_wall->SetScale(objData.scale);
 
 			return true;
 		}
-		// 名前がgapのとき
-		if (objData.EqualObjectName(L"gap") == true) {
-			// 隙間を生成する
-			m_wall = NewGO<Wall>(0, "wall");
-			//m_wall->SetWallModel(1);
-			m_wall->SetPosition(objData.position);
-			m_wall->SetRotation(objData.rotation);
-			m_wall->SetScale(objData.scale);
+		//// 名前がgapのとき
+		//if (objData.EqualObjectName(L"gap") == true) {
+		//	// 隙間を生成する
+		//	m_wall = NewGO<Wall>(0, "wall");
+		//	//m_wall->SetWallModel(1);
+		//	m_wall->SetPosition(objData.position);
+		//	m_wall->SetRotation(objData.rotation);
+		//	m_wall->SetScale(objData.scale);
 
-			return true;
-		}
-		// 名前がdecorationのとき
-		if (objData.EqualObjectName(L"decoration") == true) {
-			// 障害物を生成
-			m_wall = NewGO<Wall>(0, "wall");
-			//m_wall->SetWallModel(0);
-			m_wall->SetPosition(objData.position);
-			m_wall->SetRotation(objData.rotation);
-			m_wall->SetScale(objData.scale);
+		//	return true;
+		//}
+		//// 名前がdecorationのとき
+		//if (objData.EqualObjectName(L"decoration") == true) {
+		//	// 障害物を生成
+		//	m_wall = NewGO<Wall>(0, "wall");
+		//	//m_wall->SetWallModel(0);
+		//	m_wall->SetPosition(objData.position);
+		//	m_wall->SetRotation(objData.rotation);
+		//	m_wall->SetScale(objData.scale);
 
-			return true;
-		}
-		// 名前がstartのとき
-		if (objData.EqualObjectName(L"start") == true) {
-			// スタートを生成
-			m_wall = NewGO<Wall>(0, "wall");
-			//m_wall->SetWallModel(0);
-			m_wall->SetPosition(objData.position);
-			m_wall->SetRotation(objData.rotation);
-			m_wall->SetScale(objData.scale);
+		//	return true;
+		//}
+		//// 名前がstartのとき
+		//if (objData.EqualObjectName(L"start") == true) {
+		//	// スタートを生成
+		//	m_wall = NewGO<Wall>(0, "wall");
+		//	//m_wall->SetWallModel(0);
+		//	m_wall->SetPosition(objData.position);
+		//	m_wall->SetRotation(objData.rotation);
+		//	m_wall->SetScale(objData.scale);
 
-			return true;
-		}
-		// 名前がgoalのとき
-		if (objData.EqualObjectName(L"goal") == true) {
-			// ゴールを生成
-			m_wall = NewGO<Wall>(0, "wall");
-			//m_wall->SetWallModel(0);
-			m_wall->SetPosition(objData.position);
-			m_wall->SetRotation(objData.rotation);
-			m_wall->SetScale(objData.scale);
+		//	return true;
+		//}
+		//// 名前がgoalのとき
+		//if (objData.EqualObjectName(L"goal") == true) {
+		//	// ゴールを生成
+		//	m_wall = NewGO<Wall>(0, "wall");
+		//	//m_wall->SetWallModel(0);
+		//	m_wall->SetPosition(objData.position);
+		//	m_wall->SetRotation(objData.rotation);
+		//	m_wall->SetScale(objData.scale);
 
-			return true;
-		}
-		// 名前がtreasureのとき
-		if (objData.EqualObjectName(L"treasure") == true) {
-			// お宝を生成
-			m_wall = NewGO<Wall>(0, "wall");
-			m_wall->SetPosition(objData.position);
-			m_wall->SetRotation(objData.rotation);
-			m_wall->SetScale(objData.scale);
-
-			return true;
-		}
+		//	return true;
+		//}
 		if (objData.EqualObjectName(L"unityChan") == true) {
 
 			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
