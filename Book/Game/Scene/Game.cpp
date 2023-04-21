@@ -24,13 +24,8 @@
 #include "Result.h"
 Game::Game()
 {
-<<<<<<< HEAD
-	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-=======
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
->>>>>>> 5d94c35bb6b38252b864766151efaf18c58dbcd7
 }
 
 Game::~Game()
@@ -121,25 +116,18 @@ bool Game::Start()
 	);
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
-<<<<<<< HEAD
-=======
 	//・ｽt・ｽF・ｽ[・ｽh・ｽﾌ擾ｿｽ・ｽ・ｽ
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
->>>>>>> 5d94c35bb6b38252b864766151efaf18c58dbcd7
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
 void Game::LevelDesign()
 {
-<<<<<<< HEAD
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
 /*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
-=======
-	// ・ｽ・ｽ・ｽx・ｽ・ｽ・ｽf・ｽU・ｽC・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
-	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
->>>>>>> 5d94c35bb6b38252b864766151efaf18c58dbcd7
 
 		// ・ｽ・ｽ・ｽO・ｽ・ｽunityChan・ｽﾈゑｿｽ
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -220,17 +208,10 @@ void Game::LevelDesign()
 		//	return true;
 		//}
 
-<<<<<<< HEAD
 		//名前がbackgroundなら
 		if (objData.EqualObjectName(L"base") == true)
 /*			if (objData.EqualObjectName(L"debug") == true)*/ {
 			// 背景を生成
-=======
-		//・ｽ・ｽ・ｽO・ｽ・ｽbackground・ｽﾈゑｿｽ
-		if (objData.EqualObjectName(L"debug") == true) {
-
-			// ・ｽw・ｽi・ｽｶ撰ｿｽ
->>>>>>> 5d94c35bb6b38252b864766151efaf18c58dbcd7
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
@@ -367,15 +348,9 @@ void Game::Update()
 }
 void Game::ClearState()
 {
-<<<<<<< HEAD
-	//NewGO<Title>(0, "title");
-	//DeleteGO(this);
-	//int a = 0;
-=======
 	NewGO<Result>(0, "result");
 	DeleteGO(this);
 
->>>>>>> 5d94c35bb6b38252b864766151efaf18c58dbcd7
 }
 
 void Game::MnageState()
