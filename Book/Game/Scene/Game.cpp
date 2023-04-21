@@ -21,6 +21,7 @@
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Fade.h"
+#include "Result.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -282,7 +283,7 @@ void Game::Update()
 }
 void Game::ClearState()
 {
-	NewGO<Title>(0, "title");
+	NewGO<Result>(0, "result");
 	DeleteGO(this);
 
 }

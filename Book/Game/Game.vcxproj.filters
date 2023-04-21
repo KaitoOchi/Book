@@ -111,6 +111,8 @@
     </ClCompile>
     <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
+    <ClCompile Include="Scene\Result.cpp" />
+    <ClCompile Include="UI\Fade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -190,5 +192,7 @@
     </ClInclude>
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Enemy\Enemy_Clear.h" />
+    <ClInclude Include="Scene\Result.h" />
+    <ClInclude Include="UI\Fade.h" />
   </ItemGroup>
 </Project>
