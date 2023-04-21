@@ -48,14 +48,17 @@ private:
 	};
 
 private:
-	SpriteRender	m_backGroundSpriteRender;		//背景画像
-	SpriteRender	m_cursorSpriteRender;			//カーソル
+	SpriteRender	m_backGroundSpriteRender;				//背景画像
+	SpriteRender	m_cursorSpriteRender;					//カーソル
 
-	ResultState		m_resultState = enState_GameOver;					//リザルトステート
+	ResultState		m_resultState = enState_GameOver;		//リザルトステート
 
-	Fade* m_fade = nullptr;
+	Fade*			m_fade = nullptr;						//フェードクラス
 
-	int				m_vigilance = 0;				//警戒度
-	float			m_clearTime = 0.0f;				//クリアタイム
+	int				m_vigilance = 0;						//警戒度
+	int				m_cursor = 0;							//カーソル
+	float			m_clearTime = 0.0f;						//クリアタイム
+	float m_timer = 0.0f;
+	float m_alpha = 0.0f;
 };
 

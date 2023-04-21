@@ -16,9 +16,6 @@
     <Filter Include="Item">
       <UniqueIdentifier>{bd67bd32-bfbf-45aa-8d3e-ed3527243a12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameManager">
-      <UniqueIdentifier>{9ffeba6f-bd38-4048-9a38-5697b091add3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Stage">
       <UniqueIdentifier>{961b002f-58e2-490c-8daa-934cd5869318}</UniqueIdentifier>
     </Filter>
@@ -110,9 +107,12 @@
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Item\SoundBom.cpp" />
-    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
-    <ClCompile Include="Scene\Result.cpp" />
-    <ClCompile Include="UI\Fade.cpp" />
+    <ClCompile Include="UI\Fade.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -191,8 +191,11 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Item\SoundBom.h" />
-    <ClInclude Include="Enemy\Enemy_Clear.h" />
-    <ClInclude Include="Scene\Result.h" />
-    <ClInclude Include="UI\Fade.h" />
+    <ClInclude Include="UI\Fade.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Result.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

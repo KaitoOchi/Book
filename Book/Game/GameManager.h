@@ -13,6 +13,17 @@ public:
 	};
 
 public:
+	/// <summary>
+	/// ゲーム状態の列挙型
+	/// </summary>
+	enum EnGameState
+	{
+		enState_Title,
+		enState_Game,
+		enState_Result
+	};
+
+public:
 	GameManager();
 	~GameManager();
 
@@ -78,15 +89,37 @@ public:
 	}
 
 	/// <summary>
+	/// BGMを鳴らす処理。
+	/// </summary>
+	/// <param name="num">鳴らしたい音の番号</param>
+	void SetBGM(const int num)
+	{
+		m_bgm = NewGO<SoundSource>(0);
+		m_bgm->Init(num);
+		m_bgm->SetVolume(m_saveData.bgm);
+		m_bgm->Play(true);
+	}
+
+	/// <summary>
+	/// SFXの音量を取得。
+	/// </summary>
+	/// <returns></returns>
+	const float& GetSFX()
+	{
+		return m_saveData.sfx;
+	}
+
+	/// <summary>
 	/// 更新処理。
 	/// </summary>
 	void Update();
 
-	bool m_posState = true;
-
 private:
-	static GameManager* m_instance;
+	static GameManager*		m_instance;			//インスタンス
+	SaveData				m_saveData;			//セーブデータの構造体
+	EnGameState				m_gameState;		//ゲームステート
+	SoundSource*			m_bgm = nullptr;	//BGM
 
-	SaveData m_saveData;
+	bool					m_posState = true;	//ポーズ中かどうか
 };
 
