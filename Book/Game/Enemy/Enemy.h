@@ -41,7 +41,8 @@ public:
 	{
 		Normal,
 		Charge,
-		Search
+		Search,
+		Clear
 	};
 	EnemyType m_enemyType;
 

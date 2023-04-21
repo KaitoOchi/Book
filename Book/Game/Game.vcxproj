@@ -235,6 +235,7 @@
     <ClCompile Include="Enemy\Enemy_Charge.cpp" />
     <ClCompile Include="Enemy\Enemy_Normal.cpp" />
     <ClCompile Include="Enemy\Enemy_Search.cpp" />
+    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Item\FlashBom.cpp" />
@@ -249,6 +250,7 @@
     <ClCompile Include="Player\Player2D.cpp" />
     <ClCompile Include="Player\Player3D.cpp" />
     <ClCompile Include="Player\PlayerManagement.cpp" />
+    <ClCompile Include="Scene\Result.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Item\SoundBom.cpp" />
@@ -262,6 +264,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="UI\Fade.cpp" />
     <ClCompile Include="UI\GameUI.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
   </ItemGroup>
@@ -271,6 +274,7 @@
     <ClInclude Include="Enemy\Enemy_Charge.h" />
     <ClInclude Include="Enemy\Enemy_Normal.h" />
     <ClInclude Include="Enemy\Enemy_Search.h" />
+    <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Item\FlashBom.h" />
@@ -285,6 +289,7 @@
     <ClInclude Include="Player\Player3D.h" />
     <ClInclude Include="Player\PlayerManagement.h" />
     <ClInclude Include="Scene\Game.h" />
+    <ClInclude Include="Scene\Result.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\BackGround.h" />
@@ -292,6 +297,7 @@
     <ClInclude Include="Stage\Wall.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\Fade.h" />
     <ClInclude Include="UI\GameUI.h" />
     <ClInclude Include="UI\MiniMap.h" />
   </ItemGroup>

@@ -18,6 +18,9 @@ Player2D::~Player2D()
 {
 	if (IsActive())
 	{
+
+		delete(m_characon);
+		delete(m_modelRender);
 	}
 }
 bool Player2D::Start()
@@ -48,7 +51,7 @@ void Player2D::Update()
 	}
 
 	//atan2を使用して回転角度を求める
-	angle = atan2(m_moveSpeed.z, -m_moveSpeed.x);
+	angle = atan2(-m_moveSpeed.z, -m_moveSpeed.x);
 
 	Player::Update();
 	

@@ -1,0 +1,6 @@
+5
+4,base,42,../../Game/Assets/sprite/UI/title/base.png,0.0,1.1368683772161603e-13,1728,972,10,0.9,0.9,0.5,0.5,8,base.dds
+6,title2,44,../../Game/Assets/sprite/UI/title/title2.png,-628.8461538461537,346.153846153846,462,274,10,1.0,1.0,0.5,0.5,10,title2.dds
+9,gameStart,47,../../Game/Assets/sprite/UI/title/gameStart.png,-750.0,50.0,461,135,10,1.0,1.0,0.0,0.5,13,gameStart.dds
+5,guide,43,../../Game/Assets/sprite/UI/title/guide.png,-750.0,-100.0,647,138,10,1.0,1.0,0.0,0.5,9,guide.dds
+7,setting,45,../../Game/Assets/sprite/UI/title/setting.png,-750.0,-250.0,494,135,10,1.0,1.0,0.0,0.5,11,setting.dds

@@ -7,6 +7,9 @@ jump_end
 →最高到達点～着地まで。
 jump_startの後に再生してください。
 
+sleep
+→sleep_start、sleep_endの間を補完するようなアニメーションです。
+
 use
 →アイテム使用。
 
