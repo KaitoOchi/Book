@@ -173,12 +173,12 @@ void Title::Input()
 
 		if (m_titleState >= 2) {
 			m_titleState = 1;
+			m_cursor_vertical = 1;
 		}
 		else {
 			m_titleState--;
+			m_cursor_vertical = 0;
 		}
-
-		m_cursor_vertical = 1;
 	}
 	//”ÍˆÍŠO‚É‚Í‚İo‚³‚È‚¢‚æ‚¤‚É‚·‚é
 	m_titleState = min(max(m_titleState, 0), 4);

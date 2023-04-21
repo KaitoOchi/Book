@@ -19,6 +19,7 @@
 #include "Ghost.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
+#include "Fade.h"
 Game::Game()
 {
 	//�E��E��E��E��E�蔻�E��E��E�L�E��E��E��E�

@@ -16,6 +16,7 @@ class Ghost;
 class GameUI;
 class FlashBom;
 class SoundBom;
+class Fade;
 class Game : public IGameObject
 {
 public:
