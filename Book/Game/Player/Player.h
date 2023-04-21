@@ -16,7 +16,9 @@ public:
 		m_enPlayer_3DChanging,	//3Dに切替中
 		m_enPlayer_Found,		//見つかる
 		m_enPlayer_Caught,		//捕まった
-		m_enPlayer_Downh,		//気絶中
+		m_enPlayer_DownStart,	//気絶スタート
+		m_enPlayer_Down,		//気絶中
+		m_enPlayer_DownEnd,		//気絶解除
 		m_enPlayer_Clear,		//ゲームクリア
 		m_enPlayer_GameOver,	//ゲームオーバー
 		m_enPlayer3D_Throw,		//投げる
@@ -80,6 +82,9 @@ public:
 	void GhostHit();
 	std::vector<Vector3> m_ghostpositions;
 	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
+
+	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
+
 protected:
 	virtual void Update();
 	void Move();
@@ -144,7 +149,15 @@ protected:
 	/// <summary>
 	/// 気絶ステートの遷移処理
 	/// </summary>
+	void ProcessDownStartStateTransition();
+	/// <summary>
+	/// 気絶ステートの遷移処理
+	/// </summary>
 	void ProcessDownStateTransition();
+	/// <summary>
+	/// 気絶ステートの遷移処理
+	/// </summary>
+	void ProcessDownEndStateTransition();
 	/// <summary>
 	/// 捕まるステートの遷移処理
 	/// </summary>
@@ -157,17 +170,19 @@ protected:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition();
-	
+
 	//アニメーション
 	enum EnAnimationClip {
-		m_enAnimationClip_Idle,//待機アニメーション
-		m_enAnimationClip_Walk,//歩きアニメーション
-		m_enAnimationClip_Run,//走るアニメーション
-		m_enAnimationClip_Jump,//ジャンプアニメーション
-		m_enAnimationClip_Jumpend,//ジャンプ終わりアニメーション
-		m_enAnimationClip_Down,//ダウンアニメーション
-		m_enAnimationClip_Throw,//投げるアニメーション
-		m_enAnimationClip_Num,//アニメーションの数
+		m_enAnimationClip_Idle,				//待機アニメーション
+		m_enAnimationClip_Walk,				//歩きアニメーション
+		m_enAnimationClip_Run,				//走るアニメーション
+		m_enAnimationClip_Jump,				//ジャンプアニメーション
+		m_enAnimationClip_Jumpend,			//ジャンプ終わりアニメーション
+		m_enAnimationClip_DownStart,		//ダウン開始
+		m_enAnimationClip_Down,				//ダウンアニメーション
+		m_enAnimationClip_DownEnd,			//ダウン終了
+		m_enAnimationClip_Throw,			//投げるアニメーション
+		m_enAnimationClip_Num,				//アニメーションの数
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 
@@ -204,6 +219,11 @@ protected:
 
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;
+
+	float m_downTime = 3.0f;									//気絶時間
+
 	
+	
+
 
 };
