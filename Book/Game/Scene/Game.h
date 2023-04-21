@@ -17,6 +17,7 @@ class Ghost;
 class GameUI;
 class FlashBom;
 class SoundBom;
+class Fade;
 class Game : public IGameObject
 {
 public:
@@ -94,6 +95,7 @@ private:
 	Wall* m_wall = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
+	Fade* m_fade = nullptr;
 	
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;

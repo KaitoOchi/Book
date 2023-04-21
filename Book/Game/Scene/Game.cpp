@@ -20,10 +20,10 @@
 #include "Ghost.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
-
+#include "Fade.h"
 Game::Game()
 {
-	//・ｽ・ｽ・ｽ・ｽ・ｽ阡ｻ・ｽ・ｽ・ｽL・ｽ・ｽ・ｽ・ｽ
+	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
@@ -32,18 +32,19 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-	//エネミー
+	//・ｽG・ｽl・ｽ~・ｽ[
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
 	DeleteGO(m_enemyClear);
 	//オブジェクト
+	//・ｽI・ｽu・ｽW・ｽF・ｽN・ｽg
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
-	//アイテム
+	//・ｽA・ｽC・ｽe・ｽ・ｽ
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 }
@@ -110,15 +111,18 @@ bool Game::Start()
 	);
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//・ｽt・ｽF・ｽ[・ｽh・ｽﾌ擾ｿｽ・ｽ・ｽ
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
 	return true;
 }
 
 void Game::LevelDesign()
 {
-	// レベルデザイン処理
+	// ・ｽ・ｽ・ｽx・ｽ・ｽ・ｽf・ｽU・ｽC・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
 	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
 
-		// 名前がunityChanなら
+		// ・ｽ・ｽ・ｽO・ｽ・ｽunityChan・ｽﾈゑｿｽ
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
@@ -126,12 +130,11 @@ void Game::LevelDesign()
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
-			// Enemyのリストに追加
+			// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
 			m_enemyList.push_back(m_enemyNormal);
 
-			// パス移動の指定
+			// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
 			m_enemyNormal->Pass(0);
-
 			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			m_enemyClear->SetPosition(objData.position);
 			m_enemyClear->SetRotation(objData.rotation);
@@ -141,63 +144,62 @@ void Game::LevelDesign()
 
 			// パス移動の指定
 			m_enemyClear->Pass(7);
-
 			return true;
 		}
 
-		//// 名前が EnemyNormal なら
+		//// ・ｽ・ｽ・ｽO・ｽ・ｽ EnemyNormal ・ｽﾈゑｿｽ
 		//if (objData.ForwardMatchName(L"EnemyNormal") == true) {
 
-		//	// エネミーを生成
+		//	// ・ｽG・ｽl・ｽ~・ｽ[・ｽｶ撰ｿｽ
 		//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-		//	// 自身が Normal であると教える
+		//	// ・ｽ・ｽ・ｽg・ｽ・ｽ Normal ・ｽﾅゑｿｽ・ｽ・ｽﾆ具ｿｽ・ｽ・ｽ・ｽ・ｽ
 		//	m_enemyNormal->m_enemyType = Enemy::Normal;
-		//	// 座標、回転、スケールの設定
+		//	// ・ｽ・ｽ・ｽW・ｽA・ｽ・ｽ]・ｽA・ｽX・ｽP・ｽ[・ｽ・ｽ・ｽﾌ設抵ｿｽ
 		//	m_enemyNormal->SetPosition(objData.position);
 		//	m_enemyNormal->SetRotation(objData.rotation);
 		//	m_enemyNormal->SetScale(objData.scale);
-		//	// パス移動の指定
+		//	// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
 		//	m_enemyNormal->Pass(0);
-		//	// Enemyのリストに追加
+		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
 		//	m_enemyList.push_back(m_enemyNormal);
 		//}
 
-		//// 名前が EnemyCharge なら
+		//// ・ｽ・ｽ・ｽO・ｽ・ｽ EnemyCharge ・ｽﾈゑｿｽ
 		//if (objData.ForwardMatchName(L"EnemyCharge") == true) {
 
-		//	// エネミーを生成
+		//	// ・ｽG・ｽl・ｽ~・ｽ[・ｽｶ撰ｿｽ
 		//	m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-		//	// 自身が Charge であると教える
+		//	// ・ｽ・ｽ・ｽg・ｽ・ｽ Charge ・ｽﾅゑｿｽ・ｽ・ｽﾆ具ｿｽ・ｽ・ｽ・ｽ・ｽ
 		//	m_enemyCharge->m_enemyType = Enemy::Charge;
-		//	// 座標、回転、スケールの設定
+		//	// ・ｽ・ｽ・ｽW・ｽA・ｽ・ｽ]・ｽA・ｽX・ｽP・ｽ[・ｽ・ｽ・ｽﾌ設抵ｿｽ
 		//	m_enemyCharge->SetPosition(objData.position);
 		//	m_enemyCharge->SetRotation(objData.rotation);
 		//	m_enemyCharge->SetScale(objData.scale);
-		//	// パス移動の指定
+		//	// ・ｽp・ｽX・ｽﾚ難ｿｽ・ｽﾌ指・ｽ・ｽ
 		//	m_enemyCharge->Pass(7);
-		//	// Enemyのリストに追加
+		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
 		//	m_enemyList.push_back(m_enemyCharge);
 		//}
 
-		//// 名前が EnemySearch なら
+		//// ・ｽ・ｽ・ｽO・ｽ・ｽ EnemySearch ・ｽﾈゑｿｽ
 		//if(objData.ForwardMatchName(L"EnemySearch") == true) {
 
-		//	// エネミーを生成
+		//	// ・ｽG・ｽl・ｽ~・ｽ[・ｽｶ撰ｿｽ
 		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-		//	// 自身が Charge であると教える
+		//	// ・ｽ・ｽ・ｽg・ｽ・ｽ Charge ・ｽﾅゑｿｽ・ｽ・ｽﾆ具ｿｽ・ｽ・ｽ・ｽ・ｽ
 		//	m_enemySearch->m_enemyType = Enemy::Search;
-		//	// 座標、回転、スケールの設定
+		//	// ・ｽ・ｽ・ｽW・ｽA・ｽ・ｽ]・ｽA・ｽX・ｽP・ｽ[・ｽ・ｽ・ｽﾌ設抵ｿｽ
 		//	m_enemySearch->SetPosition(objData.position);
 		//	m_enemySearch->SetRotation(objData.rotation);
 		//	m_enemySearch->SetScale(objData.scale);
-		//	// Enemyのリストに追加
+		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
 		//	m_enemyList.push_back(m_enemySearch);
 		//}
 
-		//名前がbackgroundなら
+		//・ｽ・ｽ・ｽO・ｽ・ｽbackground・ｽﾈゑｿｽ
 		if (objData.EqualObjectName(L"debug") == true) {
 
-			// 背景を生成
+			// ・ｽw・ｽi・ｽｶ撰ｿｽ
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
@@ -205,7 +207,7 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		// 名前がboxのとき
+		// ・ｽ・ｽ・ｽO・ｽ・ｽbox・ｽﾌとゑｿｽ
 		if (objData.EqualObjectName(L"box") == true) {
 
 			m_wall = NewGO<Wall>(0, "wall");
@@ -221,7 +223,7 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
-			// Enemyのリストに追加
+			// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
 			m_enemyList.push_back(m_enemySearch);
 
 			return true;
