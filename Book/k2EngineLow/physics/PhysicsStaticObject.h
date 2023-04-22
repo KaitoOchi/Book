@@ -47,6 +47,11 @@ namespace nsK2EngineLow {
 		{
 			m_rigidBody.Release();
 		}
+
+		RigidBody* GetRigidBody() {
+			return &m_rigidBody;
+		}
+
 	private:
 		MeshCollider m_meshCollider;		//メッシュコライダー。
 		RigidBody m_rigidBody;				//剛体。

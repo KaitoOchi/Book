@@ -17,10 +17,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
 	//NewGO<Title>(0, "title");
-	//NewGO<Game>(0, "game");
+	NewGO<Game>(0, "game");
 	//NewGO<Debug>(0, "debug");
-	NewGO<Result>(0, "result");
-	NewGO<Fade>(2, "fade");
+	//NewGO<Result>(0, "result");
+	//NewGO<Fade>(2, "fade");
 
 	RenderingEngine::GetInstance()->Init();
 
