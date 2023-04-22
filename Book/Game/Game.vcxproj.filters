@@ -106,12 +106,17 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Result.cpp">
+    <ClCompile Include="Scene\Result.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy_Clear.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\SoundBom.cpp">
+      <Filter>Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,12 +195,17 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="UI\Fade.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy_Clear.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\SoundBom.h">
+      <Filter>Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

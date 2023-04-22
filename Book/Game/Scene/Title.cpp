@@ -192,7 +192,17 @@ void Title::InitSprite()
 	}
 
 	//カーソル画像の設定
-	m_cursorSpriteRender.Init("Assets/sprite/UI/title/tryangle.DDS", 131.0f, 135.0f);
+	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
+
+	//ボタン画像の設定
+	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Abutton.DDS", 287.0f, 152.0f);
+	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
+
+	for (int i = 0; i < 2; i++) {
+		m_buttonSpriteRender[i].SetPosition(Vector3(-700.0f, -400.0f, 0.0f));
+		m_buttonSpriteRender[i].Update();
+	}
+
 }
 
 void Title::Update()
@@ -451,6 +461,7 @@ void Title::Render(RenderContext &rc)
 			m_menuSpriteRender[i].Draw(rc);
 		}
 		m_cursorSpriteRender.Draw(rc);
+		m_buttonSpriteRender[0].Draw(rc);
 		break;
 
 	//ゲームスタート画面なら
@@ -460,6 +471,7 @@ void Title::Render(RenderContext &rc)
 	//操作方法画面なら
 	case 3:
 		m_guideSpriteRender.Draw(rc);
+		m_buttonSpriteRender[1].Draw(rc);
 		break;
 
 	//設定画面なら
@@ -474,6 +486,7 @@ void Title::Render(RenderContext &rc)
 		}
 		m_cursorSpriteRender.Draw(rc);
 		m_settingTextSpriteRender[m_cursor_vertical -1].Draw(rc);
+		m_buttonSpriteRender[1].Draw(rc);
 		break;
 	}
 
