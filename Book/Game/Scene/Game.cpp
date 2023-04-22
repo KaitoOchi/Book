@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Game.h"
 #include"Player3D.h"
 #include"Player2D.h"
@@ -24,7 +24,7 @@
 #include "Result.h"
 Game::Game()
 {
-	//E½EE½E½EE½E½EE½E½EE½E½EE½è”»E½EE½E½EE½E½EE½LE½EE½E½EE½E½EE½E½EE½
+	//ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½é˜¡ï½»ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½Lãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½ãƒ»ï½½Eãƒ»ï½½
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
@@ -33,19 +33,19 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-	//E½GE½lE½~E½[
+	//ãƒ»ï½½Gãƒ»ï½½lãƒ»ï½½~ãƒ»ï½½[
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
 	DeleteGO(m_enemyClear);
-	//ƒIƒuƒWƒFƒNƒg
-	//E½IE½uE½WE½FE½NE½g
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	//ãƒ»ï½½Iãƒ»ï½½uãƒ»ï½½Wãƒ»ï½½Fãƒ»ï½½Nãƒ»ï½½g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
-	//E½AE½CE½eE½E½
+	//ãƒ»ï½½Aãƒ»ï½½Cãƒ»ï½½eãƒ»ï½½ãƒ»ï½½
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 }
@@ -116,7 +116,7 @@ bool Game::Start()
 	);
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
-	//E½tE½FE½[E½hE½Ìï¿½E½E½
+	//ãƒ»ï½½tãƒ»ï½½Fãƒ»ï½½[ãƒ»ï½½hãƒ»ï½½ï¾Œæ“¾ï½¿ï½½ãƒ»ï½½ãƒ»ï½½
 	//m_fade = FindGO<Fade>("fade");
 	//m_fade->StartFadeIn();
 	// 
@@ -126,162 +126,190 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	// ƒŒƒxƒ‹ƒfƒUƒCƒ“ˆ—
+	// ãƒ¬ãƒ™ãƒ«ãƒ‡ã‚¶ã‚¤ãƒ³å‡¦ç†
 	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
 /*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
+		// ï¿½Eï¿½ï¿½Eï¿½ï¿½Eï¿½Oï¿½Eï¿½ï¿½Eï¿½unityChanï¿½Eï¿½È‚ï¿½
 
-		// –¼‘O‚ª Normal ‚Ì‚Æ‚«
-		{
-		if (objData.ForwardMatchName(L"Normal_0") == true) {
+		if (objData.ForwardMatchName(L"FootmanHP") == true) {
+			//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			// ƒGƒlƒ~[‚ğ¶¬
+			// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
+			// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
 			m_enemyNormal->m_enemyType = Enemy::Normal;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
+			// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
-			// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
+			// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
 			m_enemyNormal->Pass(0);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
+			// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
 			m_enemyList.push_back(m_enemyNormal);
-			return true;
-		}
-		if (objData.ForwardMatchName(L"Normal_2") == true) {
-			// ƒGƒlƒ~[‚ğ¶¬
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-			m_enemyNormal->m_enemyType = Enemy::Normal;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
-			// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-			m_enemyNormal->Pass(2);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			m_enemyList.push_back(m_enemyNormal);
-			return true;
-		}
-		if (objData.ForwardMatchName(L"Normal_4") == true) {
-			// ƒGƒlƒ~[‚ğ¶¬
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-			m_enemyNormal->m_enemyType = Enemy::Normal;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
-			// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-			m_enemyNormal->Pass(4);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			m_enemyList.push_back(m_enemyNormal);
-			return true;
-		}
-		if (objData.ForwardMatchName(L"Normal_5") == true) {
-			// ƒGƒlƒ~[‚ğ¶¬
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-			m_enemyNormal->m_enemyType = Enemy::Normal;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
-			// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-			m_enemyNormal->Pass(5);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			m_enemyList.push_back(m_enemyNormal);
-			return true;
-		}
-		if (objData.ForwardMatchName(L"Normal_6") == true) {
-			// ƒGƒlƒ~[‚ğ¶¬
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-			m_enemyNormal->m_enemyType = Enemy::Normal;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
-			// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-			m_enemyNormal->Pass(6);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			m_enemyList.push_back(m_enemyNormal);
-			return true;
-		}
-		}
-		
 
-		// –¼‘O‚ª Charge ‚Ì‚Æ‚«
+			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			m_enemyClear->SetPosition(objData.position);
+			m_enemyClear->SetRotation(objData.rotation);
+			m_enemyClear->SetScale(objData.scale);
+			// Enemyï¿½Ìƒï¿½ï¿½Xï¿½gï¿½É’Ç‰ï¿½
+			m_enemyList.push_back(m_enemyClear);
+
+			// ï¿½pï¿½Xï¿½Ú“ï¿½ï¿½Ìwï¿½ï¿½
+			m_enemyClear->Pass(7);
+
+			return true;
+		}
+
+		//// åå‰ãŒ Normal ã®ã¨ã
+		//{
+			//if (objData.ForwardMatchName(L"Normal_0") == true) {
+
+			//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->SetPosition(objData.position);
+			//	m_enemyNormal->SetRotation(objData.rotation);
+			//	m_enemyNormal->SetScale(objData.scale);
+			//	// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//	m_enemyNormal->Pass(0);
+			//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//	m_enemyList.push_back(m_enemyNormal);
+			//	return true;
+			//}
+			//if (objData.ForwardMatchName(L"Normal_2") == true) {
+			//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->SetPosition(objData.position);
+			//	m_enemyNormal->SetRotation(objData.rotation);
+			//	m_enemyNormal->SetScale(objData.scale);
+			//	// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//	m_enemyNormal->Pass(2);
+			//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//	m_enemyList.push_back(m_enemyNormal);
+			//	return true;
+			//}
+			//if (objData.ForwardMatchName(L"Normal_4") == true) {
+			//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->SetPosition(objData.position);
+			//	m_enemyNormal->SetRotation(objData.rotation);
+			//	m_enemyNormal->SetScale(objData.scale);
+			//	// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//	m_enemyNormal->Pass(4);
+			//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//	m_enemyList.push_back(m_enemyNormal);
+			//	return true;
+			//}
+			//if (objData.ForwardMatchName(L"Normal_5") == true) {
+			//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->SetPosition(objData.position);
+			//	m_enemyNormal->SetRotation(objData.rotation);
+			//	m_enemyNormal->SetScale(objData.scale);
+			//	// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//	m_enemyNormal->Pass(5);
+			//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//	m_enemyList.push_back(m_enemyNormal);
+			//	return true;
+			//}
+			//if (objData.ForwardMatchName(L"Normal_6") == true) {
+			//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//	m_enemyNormal->SetPosition(objData.position);
+			//	m_enemyNormal->SetRotation(objData.rotation);
+			//	m_enemyNormal->SetScale(objData.scale);
+			//	// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//	m_enemyNormal->Pass(6);
+			//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//	m_enemyList.push_back(m_enemyNormal);
+			//	return true;
+			//}
+		//}
+
+		//// åå‰ãŒ Charge ã®ã¨ã
+		//{
+			//	if (objData.ForwardMatchName(L"Charge_0") == true) {
+			//		// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//		m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			//		// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->m_enemyType = Enemy::Charge;
+			//		// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->SetPosition(objData.position);
+			//		m_enemyCharge->SetRotation(objData.rotation);
+			//		m_enemyCharge->SetScale(objData.scale);
+			//		// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//		m_enemyCharge->Pass(0);
+			//		// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//		m_enemyList.push_back(m_enemyCharge);
+			//		return true;
+			//	}
+			//	if (objData.ForwardMatchName(L"Charge_4") == true) {
+			//		// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//		m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			//		// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->m_enemyType = Enemy::Charge;
+			//		// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->SetPosition(objData.position);
+			//		m_enemyCharge->SetRotation(objData.rotation);
+			//		m_enemyCharge->SetScale(objData.scale);
+			//		// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//		m_enemyCharge->Pass(0);
+			//		// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//		m_enemyList.push_back(m_enemyCharge);
+			//		return true;
+			//	}
+			//	if (objData.ForwardMatchName(L"Charge_5") == true) {
+			//		// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+			//		m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			//		// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->m_enemyType = Enemy::Charge;
+			//		// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+			//		m_enemyCharge->SetPosition(objData.position);
+			//		m_enemyCharge->SetRotation(objData.rotation);
+			//		m_enemyCharge->SetScale(objData.scale);
+			//		// ãƒ‘ã‚¹ç§»å‹•ã®é †è·¯ã‚’æŒ‡å®š
+			//		m_enemyCharge->Pass(5);
+			//		// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+			//		m_enemyList.push_back(m_enemyCharge);
+			//		return true;
+			//	}
+		//}
+
+		//// åå‰ãŒ Search ã®ã¨ã
+		//if (objData.ForwardMatchName(L"Search") == true) {
+		//	// ã‚¨ãƒãƒŸãƒ¼ã‚’ç”Ÿæˆ
+		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+		//	// è‡ªèº«ã®å±æ€§ã‚’æ•™ãˆã‚‹
+		//	m_enemySearch->m_enemyType = Enemy::Search;
+		//	// åº§æ¨™ãƒ»å›è»¢ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ•™ãˆã‚‹
+		//	m_enemySearch->SetPosition(objData.position);
+		//	m_enemySearch->SetRotation(objData.rotation);
+		//	m_enemySearch->SetScale(objData.scale);
+		//	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹
+		//	m_enemyList.push_back(m_enemySearch);
+		//	return true;
+		//}
+
+		// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ãƒ¬ãƒ™ãƒ«
 		{
-			if (objData.ForwardMatchName(L"Charge_0") == true) {
-				// ƒGƒlƒ~[‚ğ¶¬
-				m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-				// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-				m_enemyCharge->m_enemyType = Enemy::Charge;
-				// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-				m_enemyCharge->SetPosition(objData.position);
-				m_enemyCharge->SetRotation(objData.rotation);
-				m_enemyCharge->SetScale(objData.scale);
-				// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-				m_enemyCharge->Pass(0);
-				// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-				m_enemyList.push_back(m_enemyCharge);
-				return true;
-			}
-			if (objData.ForwardMatchName(L"Charge_4") == true) {
-				// ƒGƒlƒ~[‚ğ¶¬
-				m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-				// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-				m_enemyCharge->m_enemyType = Enemy::Charge;
-				// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-				m_enemyCharge->SetPosition(objData.position);
-				m_enemyCharge->SetRotation(objData.rotation);
-				m_enemyCharge->SetScale(objData.scale);
-				// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-				m_enemyCharge->Pass(0);
-				// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-				m_enemyList.push_back(m_enemyCharge);
-				return true;
-			}
-			if (objData.ForwardMatchName(L"Charge_5") == true) {
-				// ƒGƒlƒ~[‚ğ¶¬
-				m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-				// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-				m_enemyCharge->m_enemyType = Enemy::Charge;
-				// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-				m_enemyCharge->SetPosition(objData.position);
-				m_enemyCharge->SetRotation(objData.rotation);
-				m_enemyCharge->SetScale(objData.scale);
-				// ƒpƒXˆÚ“®‚Ì‡˜H‚ğw’è
-				m_enemyCharge->Pass(5);
-				// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-				m_enemyList.push_back(m_enemyCharge);
-				return true;
-			}
-		}
-		
-
-		// –¼‘O‚ª Search ‚Ì‚Æ‚«
-		if (objData.ForwardMatchName(L"Search") == true) {
-			// ƒGƒlƒ~[‚ğ¶¬
-			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-			// ©g‚Ì‘®«‚ğ‹³‚¦‚é
-			m_enemySearch->m_enemyType = Enemy::Search;
-			// À•WE‰ñ“]EƒXƒP[ƒ‹‚ğ‹³‚¦‚é
-			m_enemySearch->SetPosition(objData.position);
-			m_enemySearch->SetRotation(objData.rotation);
-			m_enemySearch->SetScale(objData.scale);
-			// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚É’Ç‰Á‚·‚é
-			m_enemyList.push_back(m_enemySearch);
-			return true;
-		}
-
-		// ƒXƒe[ƒW‚ÌƒŒƒxƒ‹
-		{
-			//–¼‘O‚ªbackground‚È‚ç
+			//åå‰ãŒbackgroundãªã‚‰
 			if (objData.EqualObjectName(L"base") == true)
 				/*			if (objData.EqualObjectName(L"debug") == true)*/ {
-				// ”wŒi‚ğ¶¬
+				// èƒŒæ™¯ã‚’ç”Ÿæˆ
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);
 				m_backGround->SetRotation(objData.rotation);
@@ -289,9 +317,9 @@ void Game::LevelDesign()
 
 				return true;
 			}
-			// –¼‘O‚ªbox‚È‚ç
+			// åå‰ãŒboxãªã‚‰
 			if (objData.EqualObjectName(L"box") == true) {
-				// •Ç‚ğ¶¬
+				// å£ã‚’ç”Ÿæˆ
 				m_wall = NewGO<Wall>(0, "wall");
 				m_wall->SetPosition(objData.position);
 				m_wall->SetRotation(objData.rotation);
@@ -299,9 +327,9 @@ void Game::LevelDesign()
 
 				return true;
 			}
-			//// –¼‘O‚ªgap‚Ì‚Æ‚«
+			//// åå‰ãŒgapã®ã¨ã
 			//if (objData.EqualObjectName(L"gap") == true) {
-			//	// Œ„ŠÔ‚ğ¶¬‚·‚é
+			//	// éš™é–“ã‚’ç”Ÿæˆã™ã‚‹
 			//	m_wall = NewGO<Wall>(0, "wall");
 			//	//m_wall->SetWallModel(1);
 			//	m_wall->SetPosition(objData.position);
@@ -310,9 +338,9 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-			//// –¼‘O‚ªdecoration‚Ì‚Æ‚«
+			//// åå‰ãŒdecorationã®ã¨ã
 			//if (objData.EqualObjectName(L"decoration") == true) {
-			//	// áŠQ•¨‚ğ¶¬
+			//	// éšœå®³ç‰©ã‚’ç”Ÿæˆ
 			//	m_wall = NewGO<Wall>(0, "wall");
 			//	//m_wall->SetWallModel(0);
 			//	m_wall->SetPosition(objData.position);
@@ -321,9 +349,9 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-			//// –¼‘O‚ªstart‚Ì‚Æ‚«
+			//// åå‰ãŒstartã®ã¨ã
 			//if (objData.EqualObjectName(L"start") == true) {
-			//	// ƒXƒ^[ƒg‚ğ¶¬
+			//	// ã‚¹ã‚¿ãƒ¼ãƒˆã‚’ç”Ÿæˆ
 			//	m_wall = NewGO<Wall>(0, "wall");
 			//	//m_wall->SetWallModel(0);
 			//	m_wall->SetPosition(objData.position);
@@ -332,9 +360,9 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-			//// –¼‘O‚ªgoal‚Ì‚Æ‚«
+			//// åå‰ãŒgoalã®ã¨ã
 			//if (objData.EqualObjectName(L"goal") == true) {
-			//	// ƒS[ƒ‹‚ğ¶¬
+			//	// ã‚´ãƒ¼ãƒ«ã‚’ç”Ÿæˆ
 			//	m_wall = NewGO<Wall>(0, "wall");
 			//	//m_wall->SetWallModel(0);
 			//	m_wall->SetPosition(objData.position);
@@ -352,7 +380,7 @@ void Game::LevelDesign()
 		//	m_enemySearch->SetPosition(objData.position);
 		//	m_enemySearch->SetRotation(objData.rotation);
 		//	m_enemySearch->SetScale(objData.scale);
-		//	// EnemyE½ÌE¿½E½XE½gE½É’Ç‰ï¿½
+		//	// Enemyãƒ»ï½½ï¾Œãƒ»ï½¿ï½½ãƒ»ï½½Xãƒ»ï½½gãƒ»ï½½ï¾‰è¿½ä¼šï½¿ï½½
 		//	m_enemyList.push_back(m_enemySearch);
 
 		//	return true;
