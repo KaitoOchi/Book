@@ -56,6 +56,8 @@ public:
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
 
+	bool m_GameStartState = false;								//ゲームが始まっているかどうか
+
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
 	
@@ -65,5 +67,7 @@ private:
 	Player3D* m_player3D = nullptr;
 	Ghost* m_ghost = nullptr;
 	float YLstickamount = 0;
+
+	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
 };
 

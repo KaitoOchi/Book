@@ -12,6 +12,7 @@
 #include "Enemy_Normal.h"
 #include "Enemy_Search.h"
 #include "Enemy_Charge.h"
+#include "Enemy_Clear.h"
 #include "BackGround.h"
 #include "LightSensor.h"
 #include "Wall.h"
@@ -20,9 +21,10 @@
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Fade.h"
+#include "Result.h"
 Game::Game()
 {
-	//�E��E��E��E��E�蔻�E��E��E�L�E��E��E��E�
+	//�E�E�E��E�E�E��E�E�E��E�E�E��E�E�E�蔻�E�E�E��E�E�E��E�E�E�L�E�E�E��E�E�E��E�E�E��E�E�E�
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
@@ -31,18 +33,19 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-	//�G�l�~�[
+	//�E�G�E�l�E�~�E�[
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
-
+	DeleteGO(m_enemyClear);
 	//�I�u�W�F�N�g
+	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
-	//�A�C�e��
+	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 }
@@ -108,9 +111,8 @@ bool Game::Start()
 		45.0f
 	);
 
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
-
-	//�t�F�[�h�̏���
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 	return true;
@@ -118,10 +120,10 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
-	// ���x���f�U�C������
+	// �E��E��E�x�E��E��E�f�E�U�E�C�E��E��E��E��E��E�
 	m_levelRender.Init("Assets/modelData/level/debug_1.tkl", [&](LevelObjectData& objData) {
 
-		// ���O��unityChan�Ȃ�
+		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 		if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//m_mirror = NewGO<Mirror>(0, "mirror");
 
@@ -129,78 +131,76 @@ void Game::LevelDesign()
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
-			// Enemy�̃��X�g�ɒǉ�
+			// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 			m_enemyList.push_back(m_enemyNormal);
 
-			// �p�X�ړ��̎w��
+			// �E�p�E�X�E�ړ��E�̎w�E��E�
 			m_enemyNormal->Pass(0);
-
-			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			m_enemyCharge->SetPosition(objData.position);
-			m_enemyCharge->SetRotation(objData.rotation);
-			m_enemyCharge->SetScale(objData.scale);
+			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			m_enemyClear->SetPosition(objData.position);
+			m_enemyClear->SetRotation(objData.rotation);
+			m_enemyClear->SetScale(objData.scale);
 			// Enemy�̃��X�g�ɒǉ�
-			m_enemyList.push_back(m_enemyCharge);
+			m_enemyList.push_back(m_enemyClear);
 
 			// �p�X�ړ��̎w��
-			m_enemyCharge->Pass(7);
-
+			m_enemyClear->Pass(7);
 			return true;
 		}
 
-		//// ���O�� EnemyNormal �Ȃ�
+		//// �E��E��E�O�E��E� EnemyNormal �E�Ȃ�
 		//if (objData.ForwardMatchName(L"EnemyNormal") == true) {
 
-		//	// �G�l�~�[�𐶐�
+		//	// �E�G�E�l�E�~�E�[�E�𐶐�
 		//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-		//	// ���g�� Normal �ł���Ƌ�����
+		//	// �E��E��E�g�E��E� Normal �E�ł��E��E�Ƌ��E��E��E��E�
 		//	m_enemyNormal->m_enemyType = Enemy::Normal;
-		//	// ���W�A��]�A�X�P�[���̐ݒ�
+		//	// �E��E��E�W�E�A�E��E�]�E�A�E�X�E�P�E�[�E��E��E�̐ݒ�
 		//	m_enemyNormal->SetPosition(objData.position);
 		//	m_enemyNormal->SetRotation(objData.rotation);
 		//	m_enemyNormal->SetScale(objData.scale);
-		//	// �p�X�ړ��̎w��
+		//	// �E�p�E�X�E�ړ��E�̎w�E��E�
 		//	m_enemyNormal->Pass(0);
-		//	// Enemy�̃��X�g�ɒǉ�
+		//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 		//	m_enemyList.push_back(m_enemyNormal);
 		//}
 
-		//// ���O�� EnemyCharge �Ȃ�
+		//// �E��E��E�O�E��E� EnemyCharge �E�Ȃ�
 		//if (objData.ForwardMatchName(L"EnemyCharge") == true) {
 
-		//	// �G�l�~�[�𐶐�
+		//	// �E�G�E�l�E�~�E�[�E�𐶐�
 		//	m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-		//	// ���g�� Charge �ł���Ƌ�����
+		//	// �E��E��E�g�E��E� Charge �E�ł��E��E�Ƌ��E��E��E��E�
 		//	m_enemyCharge->m_enemyType = Enemy::Charge;
-		//	// ���W�A��]�A�X�P�[���̐ݒ�
+		//	// �E��E��E�W�E�A�E��E�]�E�A�E�X�E�P�E�[�E��E��E�̐ݒ�
 		//	m_enemyCharge->SetPosition(objData.position);
 		//	m_enemyCharge->SetRotation(objData.rotation);
 		//	m_enemyCharge->SetScale(objData.scale);
-		//	// �p�X�ړ��̎w��
+		//	// �E�p�E�X�E�ړ��E�̎w�E��E�
 		//	m_enemyCharge->Pass(7);
-		//	// Enemy�̃��X�g�ɒǉ�
+		//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 		//	m_enemyList.push_back(m_enemyCharge);
 		//}
 
-		//// ���O�� EnemySearch �Ȃ�
+		//// �E��E��E�O�E��E� EnemySearch �E�Ȃ�
 		//if(objData.ForwardMatchName(L"EnemySearch") == true) {
 
-		//	// �G�l�~�[�𐶐�
+		//	// �E�G�E�l�E�~�E�[�E�𐶐�
 		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-		//	// ���g�� Charge �ł���Ƌ�����
+		//	// �E��E��E�g�E��E� Charge �E�ł��E��E�Ƌ��E��E��E��E�
 		//	m_enemySearch->m_enemyType = Enemy::Search;
-		//	// ���W�A��]�A�X�P�[���̐ݒ�
+		//	// �E��E��E�W�E�A�E��E�]�E�A�E�X�E�P�E�[�E��E��E�̐ݒ�
 		//	m_enemySearch->SetPosition(objData.position);
 		//	m_enemySearch->SetRotation(objData.rotation);
 		//	m_enemySearch->SetScale(objData.scale);
-		//	// Enemy�̃��X�g�ɒǉ�
+		//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 		//	m_enemyList.push_back(m_enemySearch);
 		//}
 
-		//���O��background�Ȃ�
+		//�E��E��E�O�E��E�background�E�Ȃ�
 		if (objData.EqualObjectName(L"debug") == true) {
 
-			// �w�i�𐶐�
+			// �E�w�E�i�E�𐶐�
 			m_backGround = NewGO<BackGround>(0, "backGround");
 			m_backGround->SetPosition(objData.position);
 			m_backGround->SetRotation(objData.rotation);
@@ -208,7 +208,7 @@ void Game::LevelDesign()
 
 			return true;
 		}
-		// ���O��box�̂Ƃ�
+		// �E��E��E�O�E��E�box�E�̂Ƃ�
 		if (objData.EqualObjectName(L"box") == true) {
 
 			m_wall = NewGO<Wall>(0, "wall");
@@ -224,7 +224,7 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
-			// Enemy�̃��X�g�ɒǉ�
+			// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 			m_enemyList.push_back(m_enemySearch);
 
 			return true;
@@ -268,7 +268,7 @@ void Game::LevelDesign()
 void Game::Update()
 {
 	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
-	if (diff.LengthSq() <= 120.0f*120.0f)
+	if (diff.LengthSq() <= 120.0f*120.0f&&m_gameState==m_enGameState_GameClearable)
 	{
 		m_gameState = m_enGameState_GameClear;
 	}
@@ -283,9 +283,9 @@ void Game::Update()
 }
 void Game::ClearState()
 {
-	NewGO<Title>(0, "title");
+	NewGO<Result>(0, "result");
 	DeleteGO(this);
-	int a = 0;
+
 }
 
 void Game::MnageState()

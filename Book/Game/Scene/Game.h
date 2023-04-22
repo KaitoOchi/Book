@@ -9,6 +9,7 @@ class Enemy;
 class Enemy_Normal;
 class Enemy_Search;
 class Enemy_Charge;
+class Enemy_Clear;
 class PlayerManagement;
 class Wall;
 class Treasure;
@@ -41,7 +42,7 @@ public:
 	enum EnGameState
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
-		m_enGameState_GameClearable,//�Q�[���N���A����B��
+		m_enGameState_GameClearable,//クリア可能
 		m_enGameState_GameClear,//�Q�[���N���A
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
@@ -79,7 +80,10 @@ private:
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
+	Enemy_Clear* m_enemyClear = nullptr;
+	
 	BackGround* m_backGround = nullptr;
+	
 	FlashBom* m_flahBom = nullptr;
 	SoundBom* m_soundBom = nullptr;
 	

@@ -235,6 +235,7 @@
     <ClCompile Include="Enemy\Enemy_Charge.cpp" />
     <ClCompile Include="Enemy\Enemy_Normal.cpp" />
     <ClCompile Include="Enemy\Enemy_Search.cpp" />
+    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Item\FlashBom.cpp" />
@@ -249,7 +250,7 @@
     <ClCompile Include="Player\Player2D.cpp" />
     <ClCompile Include="Player\Player3D.cpp" />
     <ClCompile Include="Player\PlayerManagement.cpp" />
-    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Scene\Result.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Item\SoundBom.cpp" />
@@ -273,6 +274,7 @@
     <ClInclude Include="Enemy\Enemy_Charge.h" />
     <ClInclude Include="Enemy\Enemy_Normal.h" />
     <ClInclude Include="Enemy\Enemy_Search.h" />
+    <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Item\FlashBom.h" />

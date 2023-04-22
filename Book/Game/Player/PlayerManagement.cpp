@@ -20,7 +20,16 @@ bool PlayerManagement::Start()
 }
 void PlayerManagement::Update()
 {
-	PlayerChange();
+	m_startTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_startTime < 0.0f)
+	{
+		m_GameStartState = true;
+	}
+	if (m_player3D->m_Player_Act&&m_GameStartState==true)
+	{
+		PlayerChange();
+	}
+	
 }
 void PlayerManagement::ProcessCommonStateTransition()
 {

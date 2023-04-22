@@ -41,8 +41,12 @@ void Player::Animation3D()
 	m_animationClips[m_enAnimationClip_Jump].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Jumpend].Load("Assets/animData/player/jump_end.tka");
 	m_animationClips[m_enAnimationClip_Jumpend].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/die.tka");
-	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_DownStart].Load("Assets/animData/player/sleep_start.tka");
+	m_animationClips[m_enAnimationClip_DownStart].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/sleep.tka");
+	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(true);
+	m_animationClips[m_enAnimationClip_DownEnd].Load("Assets/animData/player/sleep_end.tka");
+	m_animationClips[m_enAnimationClip_DownEnd].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	
@@ -66,8 +70,8 @@ void Player::Animation2D()
 }
 void Player::Update()
 {
-	//投げているときに行動出来ないようにする
-	if (m_playerState!=m_enPlayer3D_Throw) {
+	//行動できるなら
+	if (m_Player_Act&&m_playerManagement->m_GameStartState==true) {
 		Move();
 		Jump();
 		Rotation();
@@ -244,20 +248,47 @@ void Player::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
+void Player::ProcessDownStartStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Down;
+	}
+}
 void Player::ProcessDownStateTransition()
 {
-	//ステートの遷移
-	ProcessCommonStateTransition();
+	m_downTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_downTime<0.0f)
+	{
+		//ステートの遷移
+		m_playerState = m_enPlayer_DownEnd;
+		m_downTime = 3.0f;
+	}
+}
+void Player::ProcessDownEndStateTransition()
+{
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートの遷移
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
 }
 void Player::ProcessThrowStateTransition()
 {
 	//速度を初期化
 	m_moveSpeed.x *= SPEEDDOWN;
 	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
 		//ステートを遷移する。
 		ProcessCommonStateTransition();
+		m_Player_Act = true;
 	}
 }
 void Player::ManageState()
@@ -299,8 +330,17 @@ void Player::ManageState()
 		ProcessThrowStateTransition();
 		break;
 		//気絶しているとき
-	case m_enPlayer_Downh:
+	case m_enPlayer_DownStart:
+		ProcessDownStartStateTransition();
+
+		//気絶しているとき
+	case m_enPlayer_Down:
 		ProcessDownStateTransition();
+		break;
+		//気絶しているとき
+	case m_enPlayer_DownEnd:
+		ProcessDownEndStateTransition();
+		break;
 	default:
 		break;
 	}
