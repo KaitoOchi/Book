@@ -110,10 +110,6 @@ bool Game::Start()
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 
-	m_modelRender.Init("Assets/modelData/level_test/wall1.tkm");
-	m_modelRender.SetPosition(Vector3(0.0f, 50.0f, 0.0f));
-	m_modelRender.Update();
-
 	//�t�F�[�h�̏���
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
@@ -312,5 +308,4 @@ void Game::MnageState()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
-	m_modelRender.Draw(rc);
 }
