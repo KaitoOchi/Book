@@ -228,6 +228,10 @@ void Title::Input()
 	//Bボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonB))
 	{
+		if (m_titleState_tmp == 0) {
+			return;
+		}
+
 		//設定画面なら
 		if (m_titleState_tmp == 4) {
 			//保存して閉じる
@@ -323,6 +327,7 @@ void Title::ValueUpdate(bool vertical)
 		//配列に値を保存する
 		else {
 			m_saveDataArray[m_cursor_vertical - 1] = m_cursor_horizontal;
+			GameManager::GetInstance()->SetVolume(m_saveDataArray[0], m_saveDataArray[1]);
 		}
 	}
 }
@@ -368,6 +373,7 @@ void Title::ManageState()
 
 	//操作方法画面なら
 	case 3:
+		HowToScreen();
 		break;
 
 	//設定画面なら
@@ -407,6 +413,11 @@ void Title::StartScreen()
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
 	}
+}
+
+void Title::HowToScreen()
+{
+
 }
 
 void Title::SettingScreen()

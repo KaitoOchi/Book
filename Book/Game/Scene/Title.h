@@ -61,6 +61,11 @@ private:
 	void StartScreen();
 
 	/// <summary>
+	/// à–¾‰æ–Ê‚Ìˆ—B
+	/// </summary>
+	void HowToScreen();
+
+	/// <summary>
 	/// İ’è‰æ–Ê‚Ìˆ—B
 	/// </summary>
 	void SettingScreen();

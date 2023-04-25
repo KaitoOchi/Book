@@ -29,6 +29,10 @@ bool GameCamera::Start()
 	m_toCameraPos.Set(BEKUTORU);
 	//�v���C���[�Ǘ��̃C���X�^���X
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+
+	g_camera3D->SetNear(300.0f);
+	g_camera3D->SetFar(3000.0f);
+
 	return true;
 }
 void GameCamera::Update()

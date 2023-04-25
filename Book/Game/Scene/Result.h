@@ -72,8 +72,9 @@ private:
 	SpriteRender	m_stateSpriteRender;					//ステート文字画像
 	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
+	FontRender		m_messageFontRender;					//リザルトメッセージ
 
-	ResultState		m_resultState = enState_GameOver;		//リザルトステート
+	ResultState		m_resultState = enState_GameClear;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
 

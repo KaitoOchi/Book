@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Wall.h"
 
+#include "PlayerManagement.h"
+
 namespace
 {
 	const int GAP_SUM = 1;		// Œ„ŠÔ‚ ‚è‚ÌŽí—Þ
@@ -17,9 +19,11 @@ Wall::~Wall()
 }
 bool Wall::Start()
 {
+	m_player = FindGO<PlayerManagement>("playerManagement");
+
 	//SetWallModel(ModelState);
 
-	m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+	m_wallRender.Init("Assets/modelData/level_test/box.tkm", 0, 0, enModelUpAxisZ, 1, 1);
 	m_wallRender.SetPosition(m_position);
 	m_wallRender.SetScale(m_scale);
 	m_wallRender.SetRotation(m_rotation);
@@ -89,13 +93,11 @@ void Wall::SetModel_withGap(int num)
 
 void Wall::Update()
 {
-	m_wallRender.SetPosition(m_position);
-	m_wallRender.SetScale(m_scale);
-	m_wallRender.SetRotation(m_rotation);
-
-	m_wallRender.Update();
 }
 void Wall::Render(RenderContext& rc)
 {
-	m_wallRender.Draw(rc);
+	Vector3 diff = m_player->GetPosition() - m_position;
+	if (diff.Length() < 1500.0f) {
+		m_wallRender.Draw(rc);
+	}
 }

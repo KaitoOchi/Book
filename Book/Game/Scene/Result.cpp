@@ -32,9 +32,9 @@ bool Result::Start()
 		m_stateSpriteRender.Init("Assets/sprite/UI/result/missionComplete!.DDS", 864.0f, 146.0f);
 		m_stateSpriteRender.SetPosition(Vector3(-400.0f, 400.0f, 0.0f));
 		//詳細画像の設定
-		m_explainSpriteRender[0].Init("Assets/sprite/UI/result/light.DDS", 879.0f, 1024.0f);
+		m_explainSpriteRender[0].Init("Assets/sprite/UI/result/result_text.DDS", 879.0f, 1024.0f);
 		m_explainSpriteRender[0].SetPosition(Vector3(300.0f, 0.0f, 0.0f));
-		m_explainSpriteRender[1].Init("Assets/sprite/UI/result/rank.DDS", 879.0f, 1024.0f);
+		m_explainSpriteRender[1].Init("Assets/sprite/UI/result/result_rank.DDS", 879.0f, 1024.0f);
 		m_explainSpriteRender[1].SetPosition(Vector3(300.0f, 0.0f, 0.0f));
 		//待機時間の設定
 		m_canInputTime = CAN_INPUT_GAMECLEAR;
@@ -65,6 +65,10 @@ bool Result::Start()
 	}
 
 	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
+
+	//m_messageFontRender.SetText(m_resultMessage);
+	m_messageFontRender.SetText(L"A");
+	m_messageFontRender.SetPosition(Vector3(-300.0f, 0.0f, 0.0f));
 
 	//フェードの処理
 	m_fade = FindGO<Fade>("fade");
@@ -99,8 +103,10 @@ void Result::Update()
 
 		return;
 	}
+	else {
 
-	Input();
+		Input();
+	}
 
 	switch (m_resultState)
 	{
@@ -170,7 +176,7 @@ void Result::Render(RenderContext& rc)
 
 	//ゲームクリアなら
 	if (m_resultState == enState_GameClear) {
-
+		m_messageFontRender.Draw(rc);
 	}
 	//ゲームオーバーなら
 	else {
@@ -179,4 +185,5 @@ void Result::Render(RenderContext& rc)
 
 	m_explainSpriteRender[0].Draw(rc);
 	m_explainSpriteRender[1].Draw(rc);
+
 }
