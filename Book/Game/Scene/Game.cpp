@@ -25,8 +25,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -34,19 +33,19 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-
+	//�E�G�E�l�E�~�E�[
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
 	DeleteGO(m_enemyClear);
-
-	//オブジェクト
+	//�I�u�W�F�N�g
+	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
-
+	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 }
@@ -117,9 +116,11 @@ bool Game::Start()
 	);
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
-	//�E�t�E�F�E�[�E�h�E�̏��E��E�
-	m_fade = FindGO<Fade>("fade");
-	m_fade->StartFadeIn();
+	//・ｽt・ｽF・ｽ[・ｽh・ｽﾌ擾ｿｽ・ｽ・ｽ
+	//m_fade = FindGO<Fade>("fade");
+	//m_fade->StartFadeIn();
+	// 
+	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
@@ -130,19 +131,22 @@ void Game::LevelDesign()
 		/*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 			// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
-			//// �E��E��E�O�E��E�unityChan�E�Ȃ�
 			//if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//	//m_mirror = NewGO<Mirror>(0, "mirror");
 
+			//	// エネミーを生成
 			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			//	// 自身の属性を教える
+			//	m_enemyNormal->m_enemyType = Enemy::Normal;
+			//	// 座標・回転・スケールを教える
 			//	m_enemyNormal->SetPosition(objData.position);
 			//	m_enemyNormal->SetRotation(objData.rotation);
 			//	m_enemyNormal->SetScale(objData.scale);
-			//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
+			//	// パス移動の順路を指定
+			//	m_enemyNormal->Pass(0);
+			//	// エネミーのリストに追加する
 			//	m_enemyList.push_back(m_enemyNormal);
 
-			//	// �E�p�E�X�E�ړ��E�̎w�E��E�
-			//	m_enemyNormal->Pass(0);
 			//	m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			//	m_enemyClear->SetPosition(objData.position);
 			//	m_enemyClear->SetRotation(objData.rotation);
@@ -152,6 +156,7 @@ void Game::LevelDesign()
 
 			//	// �p�X�ړ��̎w��
 			//	m_enemyClear->Pass(7);
+
 			//	return true;
 			//}
 
@@ -227,7 +232,6 @@ void Game::LevelDesign()
 				if (objData.EqualObjectName(L"box") == true) {
 					// 壁を生成
 					m_wall = NewGO<Wall>(0, "wall");
-					m_wall->SetWallModel(0);
 					m_wall->SetPosition(objData.position);
 					m_wall->SetRotation(objData.rotation);
 					m_wall->SetScale(objData.scale);
@@ -264,6 +268,23 @@ void Game::LevelDesign()
 				//	m_wall->SetPosition(objData.position);
 				//	m_wall->SetRotation(objData.rotation);
 				//	m_wall->SetScale(objData.scale);
+
+				//	return true;
+				//}
+				//// 名前がgoalのとき
+				//if (objData.EqualObjectName(L"goal") == true) {
+				//	// ゴールを生成
+				//	m_wall = NewGO<Wall>(0, "wall");
+				//	//m_wall->SetWallModel(0);
+				//	m_wall->SetPosition(objData.position);
+				//	m_wall->SetRotation(objData.rotation);
+				//	m_wall->SetScale(objData.scale);
+
+				//	return true;
+				//}
+			}
+
+
 			//if (objData.EqualObjectName(L"unityChan") == true) {
 
 			//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
@@ -275,39 +296,39 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-				if (objData.EqualObjectName(L"debugtoumei") == true) {
+			if (objData.EqualObjectName(L"debugtoumei") == true) {
 
-					m_player3D->m_ghostpositions.push_back(objData.position);
-					return true;
-				}
-				if (objData.EqualObjectName(L"item") == true) {
+				m_player3D->m_ghostpositions.push_back(objData.position);
+				return true;
+			}
+			if (objData.EqualObjectName(L"item") == true) {
 
-					m_treaSure = NewGO<Treasure>(0, "treaSure");
-					m_treaSure->SetPosition(objData.position);
-					m_treaSure->SetScale(objData.scale);
-					m_treaSure->SetRotation(objData.rotation);
-					return true;
-				}
-				if (objData.EqualObjectName(L"gost") == true) {
+				m_treaSure = NewGO<Treasure>(0, "treaSure");
+				m_treaSure->SetPosition(objData.position);
+				m_treaSure->SetScale(objData.scale);
+				m_treaSure->SetRotation(objData.rotation);
+				return true;
+			}
+			if (objData.EqualObjectName(L"gost") == true) {
 
-					m_ghost = NewGO<Ghost>(0, "ghost");
-					m_ghost->SetPosition(objData.position);
-					m_ghost->SetScale(objData.scale);
-					m_ghost->SetRotation(objData.rotation);
-					return true;
-				}
-				if (objData.EqualObjectName(L"clear") == true) {
+				m_ghost = NewGO<Ghost>(0, "ghost");
+				m_ghost->SetPosition(objData.position);
+				m_ghost->SetScale(objData.scale);
+				m_ghost->SetRotation(objData.rotation);
+				return true;
+			}
+			if (objData.EqualObjectName(L"clear") == true) {
 
-					SetClearPosition(objData.position);
+				SetClearPosition(objData.position);
 
-					for (int i = 0; i < 4; i++) {
-						m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
-					}
-					return true;
+				for (int i = 0; i < 4; i++) {
+					m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
 				}
 				return true;
 			}
-		});
+			return true;
+		}
+	);
 }
 
 void Game::Update()

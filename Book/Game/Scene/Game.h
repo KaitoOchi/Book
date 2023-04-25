@@ -100,5 +100,7 @@ private:
 	
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
+
+	ModelRender m_modelRender;
 };
 
