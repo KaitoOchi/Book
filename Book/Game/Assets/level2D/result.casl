@@ -1,8 +1,9 @@
-7
+8
 4,base,43,../../Game/Assets/sprite/UI/result/base.png,0.0,1.1368683772161603e-13,1728,972,10,0.9,0.9,0.5,0.5,8,base.dds
 11,result_rank,50,../../Game/Assets/sprite/UI/result/result_rank.png,465.3846153846155,-24.999999999999886,731,834,10,1.0,1.0,0.5,0.5,15,result_rank.dds
-11,result_text,50,../../Game/Assets/sprite/UI/result/result_text.png,-326.9230769230769,-203.84615384615392,774,321,10,1.0,1.0,0.5,0.5,15,result_text.dds
 16,missionComplete!,55,../../Game/Assets/sprite/UI/result/missionComplete!.png,-405.7692307692307,405.76923076923083,855,146,10,1.0,1.0,0.5,0.5,20,missionComplete!.dds
-5,light,44,../../Game/Assets/sprite/UI/result/light.png,50.0,-85.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
-5,light,44,../../Game/Assets/sprite/UI/result/light.png,50.0,-190.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
-5,light,44,../../Game/Assets/sprite/UI/result/light.png,50.0,-320.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
+11,result_text,50,../../Game/Assets/sprite/UI/result/result_text.png,-300.0,-100.0,774,439,10,1.0,1.0,0.5,0.5,15,result_text.dds
+5,light,44,../../Game/Assets/sprite/UI/result/light.png,-150.0,44.99999999999994,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
+5,light,44,../../Game/Assets/sprite/UI/result/light.png,-150.0,-60.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
+5,light,44,../../Game/Assets/sprite/UI/result/light.png,-150.0,-160.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds
+5,light,44,../../Game/Assets/sprite/UI/result/light.png,-150.0,-290.0,99,93,10,0.1,0.1,1.0,0.5,9,light.dds

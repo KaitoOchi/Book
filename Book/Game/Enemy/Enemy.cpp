@@ -4,6 +4,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Game.h"
+#include "GameManager.h"
 
 #define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
 #define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
@@ -213,6 +214,7 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 	// 壁と衝突していない
 	// プレイヤーを見つけた
+	GameManager::GetInstance()->AddSearchNum();
 	return true;
 }
 

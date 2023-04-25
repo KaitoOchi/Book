@@ -16,13 +16,8 @@ public:
 	/// リザルトを設定。
 	/// </summary>
 	/// <param name="isClear">クリアしたかどうか。falseでゲームオーバー。</param>
-	/// <param name="vigilance">警戒度。</param>
-	/// <param name="clearTime">クリアタイム。</param>
-	void SetResult(const bool isClear = false, const int vigilance = 99, const float clearTime = 99.0f)
+	void SetResult(const bool isClear)
 	{
-		m_vigilance = vigilance;
-		m_clearTime = clearTime;
-
 		if (isClear)
 			m_resultState = enState_GameClear;
 		else
@@ -30,6 +25,17 @@ public:
 	}
 
 private:
+
+	/// <summary>
+	/// ゲームクリア時の初期化処理。
+	/// </summary>
+	void InitGameClear();
+
+	/// <summary>
+	/// ゲームオーバー時の初期化処理。
+	/// </summary>
+	void InitGameOver();
+
 	/// <summary>
 	/// 入力処理。
 	/// </summary>
@@ -73,7 +79,7 @@ private:
 	SpriteRender	m_stateSpriteRender;					//ステート文字画像
 	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
-	FontRender		m_messageFontRender;					//リザルトメッセージ
+	FontRender		m_messageFontRender[4];					//スコアメッセージ
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 
@@ -84,11 +90,10 @@ private:
 	Vector3			m_fontPosition[4];						//文字を出す座標
 
 	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
-	int				m_vigilance = 0;						//警戒度
 	int				m_cursor = 0;							//カーソル
-	float			m_clearTime = 0.0f;						//クリアタイム
-	float			m_timer = 0.0f;
-	float			m_alpha = 0.0f;
+	int				m_score[4];								//クリア時のスコア
+	float			m_timer = 0.0f;							//タイマー
+	float			m_alpha = 0.0f;							//透明度
 	float			m_canInputTime = 0.0f;					//入力可能時間
 };
 
