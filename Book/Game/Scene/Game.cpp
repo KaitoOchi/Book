@@ -23,6 +23,8 @@
 #include "Fade.h"
 #include "Result.h"
 #include "Star.h"
+#include <random>
+#include"Gage.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -60,7 +62,7 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	NewGO<GameUI>(0, "gameUI");
-
+	NewGO<Gage>(0,"gage");
 	
 	
 	//NewGO<LightSensor>(0, "lightSensor");
@@ -75,28 +77,28 @@ bool Game::Start()
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
-		{ 10.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 0.0f },
 		100.0f
 	);
 
 	m_pointLight[1].SetPointLight(
 		1,
 		Vector3::Zero,
-		{ 00.0f, 10.0f, 0.0f },
-		50.0f
+		{ 0.0f, 0.0f, 0.0f },
+		100.0f
 	);
 
 	m_pointLight[2].SetPointLight(
 		2,
 		Vector3::Zero,
-		{ 0.0f, 0.0f, 10.0f },
+		{ 0.0f, 0.0f, 0.0f },
 		100.0f
 	);
 
 	m_pointLight[3].SetPointLight(
 		3,
 		Vector3::Zero,
-		{ 10.0f, 0.0f, 0.0f },
+		{ 0.0f, 50.0f, 0.0f },
 		150.0f
 	);
 
@@ -125,6 +127,12 @@ bool Game::Start()
 		m_starList.push_back(m_star);
 	}
 
+	//ランダムな値を生成する
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int>dist(0, 3);
+	m_lightNumber = dist(mt);
+	m_position = m_pointLight[m_lightNumber].GetPosition();
 	return true;
 }
 
@@ -261,12 +269,9 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
-
-			SetClearPosition(objData.position);
-
-			for (int i = 0; i < 4; i++) {
-				m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
-			}
+			m_clearList.push_back(objData.position);
+			m_pointLight[lights].SetPosition(Vector3(objData.position.x,objData.position.y+50.0f,objData.position.z));
+			lights += 1;
 			return true;
 		}
 
@@ -277,10 +282,9 @@ void Game::LevelDesign()
 
 void Game::Update()
 {
-	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
-	if (diff.LengthSq() <= 120.0f*120.0f&&m_gameState==m_enGameState_GameClearable)
+	if (m_gameState==m_enGameState_GameClearable)
 	{
-		m_gameState = m_enGameState_GameClear;
+		Clearable();
 	}
 		
 	MnageState();
@@ -288,9 +292,16 @@ void Game::Update()
 	for (int i = 0; i < 4; i++) {
 		m_pointLight[i].Update();
 	}
-
-	m_spotLight.Update();
 }
+void Game::Clearable()
+{
+	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
+	if (diff.LengthSq() <= 120.0f * 120.0f)
+	{
+		m_gameState = m_enGameState_GameClear;
+	}
+}
+
 void Game::ClearState()
 {
 	NewGO<Result>(0, "result");

@@ -113,6 +113,7 @@
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="Scene\Result.cpp" />
     <ClCompile Include="UI\Star.cpp" />
+    <ClCompile Include="UI\Gage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -199,5 +200,6 @@
     </ClInclude>
     <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="UI\Star.h" />
+    <ClInclude Include="UI\Gage.h" />
   </ItemGroup>
 </Project>

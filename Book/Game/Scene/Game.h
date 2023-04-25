@@ -64,6 +64,16 @@ public:
 	{
 		return m_starList;
 	}
+
+
+	//クリア座標の取得
+	std::vector<Vector3>m_clearList;
+
+	//ライトの生成
+	PointLight m_pointLight[4];
+	SpotLight m_spotLight;
+	int lights = 0;
+	int m_lightNumber = 0;
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -109,8 +119,7 @@ private:
 	
 	Star* m_star = nullptr;
 
-	PointLight m_pointLight[4];
-	SpotLight m_spotLight;
+	
 
 	ModelRender m_modelRender;
 

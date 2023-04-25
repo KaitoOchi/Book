@@ -4,7 +4,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const Vector3 STARSCALE{ 0.1f,0.1f,0.1f };
+	const Vector3 STARSCALE{ 5.0f,5.0f,5.0f };
 }
 Star::Star()
 {
@@ -18,7 +18,7 @@ Star::~Star()
 
 bool Star::Start()
 {
-	m_starRender.Init("Assets/modelData/Status/star/star.tkm");
+	m_starRender.Init("Assets/modelData/object/takara/item.tkm");
 	m_starRender.SetPosition(m_position);
 	m_starRender.SetScale(STARSCALE);
 	m_starRender.Update();
@@ -29,14 +29,14 @@ bool Star::Start()
 void Star::Update()
 {
 	Rotaition();
-	m_starRender.SetPosition(GetPosition());
+	m_starRender.SetPosition(Vector3(m_position.x,m_position.y+=100.0f,m_position.z));
 	m_starRender.Update();
 }
 
 void Star::Rotaition()
 {
 	//ÅôÇâÒÇµë±ÇØÇÈ
-	m_rot.SetRotationDegY(2.0f);
+	m_rot.AddRotationDegY(2.0f);
 	m_starRender.SetRotation(m_rot);
 }
 

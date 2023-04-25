@@ -192,7 +192,7 @@ void Title::InitSprite()
 	}
 
 	//ƒJ[ƒ\ƒ‹‰æ‘œ‚Ìİ’è
-	m_cursorSpriteRender.Init("Assets/sprite/UI/title/tryangle.DDS", 131.0f, 135.0f);
+	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
 }
 
 void Title::Update()

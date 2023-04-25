@@ -10,7 +10,6 @@ namespace
 	const float     XSIZE = 553.0f;										//横の大きさ
 	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
 	const float		TIME_MAX = 180.0f;									//最大残り時間
-	const float		VIGILANCE_TIME_MAX = 2.0f;							//警戒値の最大時間
 }
 
 GameUI::GameUI()
@@ -111,7 +110,7 @@ void GameUI::Vigilance(int GageUp)
 		VigilanceChange();
 	}
 
-	m_vigilanceTime = VIGILANCE_TIME_MAX;
+	
 }
 void GameUI::VigilanceChange()
 {
@@ -157,5 +156,5 @@ void GameUI::Render(RenderContext& rc)
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
 	m_timeFontRender.Draw(rc);
-	m_vigilanceRender.Draw(rc);
+	//m_vigilanceRender.Draw(rc);
 }

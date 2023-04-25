@@ -153,6 +153,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Jump, 0.8f);
 		break;
 	case Player::m_enPlayer_Jumpend:
+		m_modelRender->PlayAnimation(m_enAnimationClip_Jumpend, 0.8f);
 		break;
 	case Player::m_enPlayer_Change:
 		break;

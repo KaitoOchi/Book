@@ -250,13 +250,19 @@ void Player::ProcessRunStateTransition()
 }
 void Player::ProcessJumpStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Jumpend;
+	}
 }
 void Player::ProcessJumpendStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
+	if (m_modelRender->IsPlayingAniamtion() == false&&m_characon->IsOnGround())
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+	
 }
 void Player::ProcessChangeStateTransition()
 {
