@@ -267,15 +267,15 @@ void Game::LevelDesign()
 				//	return true;
 				//}
 
-				if (objData.EqualObjectName(L"post") == true) {
-					// スタートを生成
-					m_wall = NewGO<Wall>(0, "wall");
-					m_wall->SetWallModel(5);
-					m_wall->SetPosition(objData.position);
-					m_wall->SetRotation(objData.rotation);
-					m_wall->SetScale(objData.scale);
-					return true;
-				}
+				//if (objData.EqualObjectName(L"post") == true) {
+				//	// スタートを生成
+				//	m_wall = NewGO<Wall>(0, "wall");
+				//	m_wall->SetWallModel(5);
+				//	m_wall->SetPosition(objData.position);
+				//	m_wall->SetRotation(objData.rotation);
+				//	m_wall->SetScale(objData.scale);
+				//	return true;
+				//}
 
 			}
 
