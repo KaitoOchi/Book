@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha, const bool isClip)
+	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha, const int clipMode)
 	{
 		SpriteInitData initData;
 		///DDSファイルのファイルパスを指定する
@@ -15,12 +15,26 @@ namespace nsBookEngine {
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alpha;
 
-		if (isClip) {
+		if (clipMode == 1) {
+			initData.m_vsEntryPointFunc = "VSMain1";
+			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
-
-		///Sprite初期化オブジェクトを使用して、Spriteを初期化する
+		else if (clipMode == 2) {
+			initData.m_vsEntryPointFunc = "VSMain2";
+			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
+		else if (clipMode == 3) {
+			initData.m_vsEntryPointFunc = "VSMain3";
+			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
+		
+		///Sprite初期化オブジェ1クトを使用して、Spriteを初期化する
 		m_sprite.Init(initData);
 	}
 
