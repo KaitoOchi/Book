@@ -38,8 +38,8 @@ bool Enemy_Clear::Start()
 	// パス移動
 	m_point = &m_pointList[0];
 
-	// 視野を作成
-	Enemy::SpotLight_New(m_position, 2);// パス移動
+	//// 視野を作成
+	//Enemy::SpotLight_New(m_position, 2);
 
 	return true;
 }

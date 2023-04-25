@@ -57,9 +57,9 @@ namespace nsBookEngine {
 				levelObjData.position.y = levelObjData.position.z;
 				levelObjData.position.z = -fix;
 
-				/*fix = levelObjData.rotation.z;
+				fix = levelObjData.rotation.z;
 				levelObjData.rotation.z = levelObjData.rotation.y;
-				levelObjData.rotation.z = fix;*/
+				levelObjData.rotation.y = fix;
 
 				std::swap(levelObjData.scale.y, levelObjData.scale.z);
 

@@ -7,6 +7,11 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+
+	void SetModel(int num);
+	void SetModel_withPainting(int num);	// 絵画あり
+	void SetModel_withGap(int num);			// 隙間あり
+
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -39,6 +44,20 @@ public:
 	Vector3 m_position = Vector3::Zero;
 	Vector3 m_scale = Vector3::Zero;
 	Quaternion m_rotation;
+
+
+	/// <summary>
+	/// 壁のモデルを設定する
+	/// </summary>
+	/// <param name="0">基本</param>
+	/// <param name="1">絵画あり</param>
+	/// <param name = "2">隙間あり</param>
+	/// <param name = "3">スタート</param>
+	/// <param name="4">ゴール</param>
+	void SetWallModel(int num) {
+		ModelState = num;
+	}
+
 private:
 	PhysicsStaticObject m_physicsStaticObj;
 	PhysicsBoxObject m_physicsBoxObj;
@@ -55,5 +74,19 @@ private:
 	float posY;
 	float posZ;
 	Vector3 m_boxSize = Vector3::Zero;//ボックスコライダーの作成
+
+	/// <summary>
+	/// 壁の種類を設定する。
+	/// </summary>
+	enum enWallModel {
+		NORMAL,				// 基本の壁
+		WITH_PANINTING,		// 絵画あり
+		WITH_GAP,			// 隙間あり
+		START,				// スタート
+		GOAL				// ゴール
+	};
+	enWallModel m_enWallModel = NORMAL;
+
+	int ModelState = 0;						// モデルを指定する
 };
 

@@ -54,6 +54,7 @@ public:
 	{
 		return m_enemyList;
 	}
+
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -99,5 +100,10 @@ private:
 	
 	PointLight m_pointLight[4];
 	SpotLight m_spotLight;
+<<<<<<< HEAD
+
+	ModelRender m_modelRender;
+=======
+>>>>>>> 3f57ebccb9b1317a9dc34e9b55ac6665b9f837d2
 };
 

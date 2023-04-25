@@ -37,7 +37,7 @@ bool Enemy_Normal::Start()
 	Enemy::Start();
 
 	m_point = &m_pointList[0];
-	Enemy::SpotLight_New(m_position, 1);
+	//Enemy::SpotLight_New(m_position, 3);
 
 	return true;
 }
