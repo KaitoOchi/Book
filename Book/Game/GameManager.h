@@ -103,10 +103,8 @@ public:
 	/// <summary>
 	/// ‰¹—Ê‚ğ•ÏX‚·‚éB
 	/// </summary>
-	void SetVolume(const float& bgm, const float& sfx)
+	void SetVolume()
 	{
-		m_saveData.bgm = bgm;
-		m_saveData.sfx = sfx;
 		m_bgm->SetVolume(m_saveData.bgm);
 	}
 

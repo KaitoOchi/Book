@@ -329,7 +329,8 @@ void Title::ValueUpdate(bool vertical)
 		//”z—ñ‚É’l‚ð•Û‘¶‚·‚é
 		else {
 			m_saveDataArray[m_cursor_vertical - 1] = m_cursor_horizontal;
-			GameManager::GetInstance()->SetVolume(m_saveDataArray[0], m_saveDataArray[1]);
+			SetSaveData();
+			GameManager::GetInstance()->SetVolume();
 		}
 	}
 }
