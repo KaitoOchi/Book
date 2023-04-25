@@ -33,8 +33,8 @@ namespace nsBookEngine {
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
-
-		///Sprite初期化オブジェクトを使用して、Spriteを初期化する
+		
+		///Sprite初期化オブジェ1クトを使用して、Spriteを初期化する
 		m_sprite.Init(initData);
 	}
 
