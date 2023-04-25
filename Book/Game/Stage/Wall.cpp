@@ -5,8 +5,8 @@
 
 namespace
 {
-	const int GAP_SUM = 1;		// Œ„ŠÔ‚ ‚è‚Ìí—Ş
-	const int PAINT_SUM = 1;	// ŠG‰æ‚ ‚è‚Ìí—Ş
+	const int GAP_SUM = 1;		// ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½Ìï¿½ï¿½
+	const int PAINT_SUM = 1;	// ï¿½Gï¿½æ‚ ï¿½ï¿½Ìï¿½ï¿½
 }
 
 Wall::Wall()
@@ -30,10 +30,10 @@ bool Wall::Start()
 	
 	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
 	m_physicsBoxObj.Create(m_position, m_rotation);
-	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ƒRƒŠƒWƒ‡ƒ“‘®«‚ğİ’è
+	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 
 	//m_physicsStaticObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix());
-	//m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ƒRƒŠƒWƒ‡ƒ“‘®«‚ğİ’è
+	//m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 	//m_physicsStaticObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
 
 	m_wallRender.Update();
@@ -43,37 +43,39 @@ bool Wall::Start()
 
 void Wall::SetModel(int num)
 {
-	// •Ï”‚ğ‰Šú‰»
+	// ï¿½Ïï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	int hoge = 0;
 
-	// •Ç‚Ìƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
+	// ï¿½Ç‚Ìƒï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
 	switch (num)
 	{
-	case NORMAL:
+	case 0:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
-	case WITH_PANINTING:
-		// ƒ‰ƒ“ƒ_ƒ€‚É’l‚ğ•Ô‚·
+	case 1:
+		// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É’lï¿½ï¿½Ô‚ï¿½
 		hoge = rand() % PAINT_SUM;
 		SetModel_withPainting(hoge);
 		break;
-	case WITH_GAP:
-		// ƒ‰ƒ“ƒ_ƒ€‚É’l‚ğ•Ô‚·
+	case 2:
+		// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É’lï¿½ï¿½Ô‚ï¿½
 		hoge = rand() % GAP_SUM;
 		SetModel_withGap(hoge);
 		break;
-	case START:
+	case 3:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
-	case GOAL:
+	case 4:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
+	case 5:
+		m_wallRender.Init("Assets/modelData/level_test/post.tkm");
 	}
 }
 
 void Wall::SetModel_withPainting(int num)
 {
-	// ƒ‚ƒfƒ‹—pˆÓ‚µ‚Ä‚È‚¢‚Ì‚Å‚Ü‚¾B
+	// ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½pï¿½Ó‚ï¿½ï¿½Ä‚È‚ï¿½ï¿½Ì‚Å‚Ü‚ï¿½ï¿½B
 }
 
 void Wall::SetModel_withGap(int num)

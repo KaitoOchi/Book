@@ -49,6 +49,8 @@ bool Title::Start()
 	//‘I‘ğ‚Ì‰¹
 	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/shot.wav");
 
+	GameManager::GetInstance()->SetBGM(0);
+
 	return true;
 }
 

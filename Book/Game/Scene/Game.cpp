@@ -130,22 +130,19 @@ void Game::LevelDesign()
 		/*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 			// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
+			//// �E��E��E�O�E��E�unityChan�E�Ȃ�
 			//if (objData.ForwardMatchName(L"FootmanHP") == true) {
 			//	//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			//	// エネミーを生成
 			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//	// 自身の属性を教える
-			//	m_enemyNormal->m_enemyType = Enemy::Normal;
-			//	// 座標・回転・スケールを教える
 			//	m_enemyNormal->SetPosition(objData.position);
 			//	m_enemyNormal->SetRotation(objData.rotation);
 			//	m_enemyNormal->SetScale(objData.scale);
-			//	// パス移動の順路を指定
-			//	m_enemyNormal->Pass(0);
-			//	// エネミーのリストに追加する
+			//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
 			//	m_enemyList.push_back(m_enemyNormal);
 
+			//	// �E�p�E�X�E�ړ��E�̎w�E��E�
+			//	m_enemyNormal->Pass(0);
 			//	m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			//	m_enemyClear->SetPosition(objData.position);
 			//	m_enemyClear->SetRotation(objData.rotation);
@@ -155,7 +152,6 @@ void Game::LevelDesign()
 
 			//	// �p�X�ړ��̎w��
 			//	m_enemyClear->Pass(7);
-
 			//	return true;
 			//}
 
@@ -231,6 +227,7 @@ void Game::LevelDesign()
 				if (objData.EqualObjectName(L"box") == true) {
 					// 壁を生成
 					m_wall = NewGO<Wall>(0, "wall");
+					m_wall->SetWallModel(0);
 					m_wall->SetPosition(objData.position);
 					m_wall->SetRotation(objData.rotation);
 					m_wall->SetScale(objData.scale);
