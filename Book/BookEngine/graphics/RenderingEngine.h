@@ -39,7 +39,9 @@ namespace nsBookEngine {
 		//スプライト用の構造体
 		struct SpriteCB
 		{
-			float clipSize = 0.0f;
+			Vector3 clipSize;
+			float pad;
+			int clipMode = 0;
 		};
 
 	private:

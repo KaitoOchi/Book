@@ -29,8 +29,8 @@ bool Result::Start()
 		//”wŒi‰æ‘œ‚Ìİ’è
 		m_backGroundSpriteRender.Init("Assets/sprite/UI/result/base.DDS", 1920.0f, 1080.0f);
 		//ƒ^ƒCƒgƒ‹‰æ‘œ‚Ìİ’è
-		m_stateSpriteRender.Init("Assets/sprite/UI/result/missionComplete!.DDS", 1153.0f, 168.0f);
-		m_stateSpriteRender.SetPosition(Vector3(-300.0f, 400.0f, 0.0f));
+		m_stateSpriteRender.Init("Assets/sprite/UI/result/missionComplete!.DDS", 864.0f, 146.0f);
+		m_stateSpriteRender.SetPosition(Vector3(-400.0f, 400.0f, 0.0f));
 		//Ú×‰æ‘œ‚Ìİ’è
 		m_explainSpriteRender[0].Init("Assets/sprite/UI/result/light.DDS", 879.0f, 1024.0f);
 		m_explainSpriteRender[0].SetPosition(Vector3(300.0f, 0.0f, 0.0f));
@@ -44,8 +44,8 @@ bool Result::Start()
 		//”wŒi‰æ‘œ‚Ìİ’è
 		m_backGroundSpriteRender.Init("Assets/sprite/UI/gameOver/base.DDS", 1920.0f, 1080.0f);
 		//ƒ^ƒCƒgƒ‹‰æ‘œ‚Ìİ’è
-		m_stateSpriteRender.Init("Assets/sprite/UI/gameOver/gameOver.DDS", 989.0f, 202.0f);
-		m_stateSpriteRender.SetPosition(Vector3(-350.0f, 380.0f, 0.0f));
+		m_stateSpriteRender.Init("Assets/sprite/UI/gameOver/gameOver.DDS", 516.0f, 138.0f);
+		m_stateSpriteRender.SetPosition(Vector3(-550.0f, 400.0f, 0.0f));
 		//Ú×‰æ‘œ‚Ìİ’è
 		m_explainSpriteRender[0].Init("Assets/sprite/UI/gameOver/retry.DDS", 317.0f, 149.0f);
 		m_explainSpriteRender[0].SetPosition(Vector3(-600.0f, 90.0f, 0.0f));
@@ -57,8 +57,6 @@ bool Result::Start()
 		m_canInputTime = CAN_INPUT_GAMEOVER;
 		break;
 	}
-
-	m_stateSpriteRender.SetScale(Vector3(0.9f, 0.9f, 0.0f));
 	m_stateSpriteRender.Update();
 
 	for (int i = 0; i < 2; i++) {

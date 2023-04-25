@@ -21,6 +21,11 @@ private:
 	void InitSprite();
 
 	/// <summary>
+	/// ステートの遷移中の処理。
+	/// </summary>
+	void StateChange();
+
+	/// <summary>
 	/// 入力処理。
 	/// </summary>
 	void Input();
@@ -96,8 +101,8 @@ private:
 	/// <param name="sound">鳴らしたい効果音の番号。</param>
 	void IsCanPlaySound(const bool sound)
 	{
-		int title = m_titleState;
-		m_titleState = min(max(m_titleState, 0), 4);
+		int title = m_titleState_tmp;
+		title = min(max(m_titleState, 0), 4);
 
 		if (m_titleState == title) {
 			Sound(sound);
@@ -125,25 +130,31 @@ private:
 	SpriteRender			m_backGroundSpriteRender;		//背景画像
 	SpriteRender			m_titleSpriteRender;			//タイトル画像
 	SpriteRender			m_pressSpriteRender;			//press画像
-	SpriteRender			m_menuSpriteRender[3];			//メニュー画像
+	SpriteRender			m_menuSpriteRender;				//メニュー画像
 	SpriteRender			m_guideSpriteRender;			//操作方法画像
-	SpriteRender			m_settingSpriteRender[4];		//設定画像
-	SpriteRender			m_settingGaugeSpriteRender[4];	//設定画面の枠組み画像
+	SpriteRender			m_settingSpriteRender;			//設定画像
 	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
-	SpriteRender			m_settingTextSpriteRender[4];	//設定の説明画像
+	SpriteRender			m_settingTextSpriteRender[3];	//設定の説明画像
 	SpriteRender			m_cursorSpriteRender;			//カーソル画像
 	SpriteRender			m_buttonSpriteRender[2];		//ボタン画像
+
+	std::vector<SpriteRender*> m_sprites;					//SpriteRenderのベクター型
 
 	FontRender				m_debugFontRender;
 
 	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
 	Fade*					m_fade = nullptr;				//フェードクラス
 	GameManager::SaveData	m_saveData;
+	bool					m_isWaitState = false;			//ステートの遷移中かどうか
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 	int						m_titleState = 0;				//タイトルステート
+	int						m_titleState_tmp = 0;			//タイトルステートの一時的変数
 	int						m_cursor_vertical = 0;			//縦カーソル
 	int						m_cursor_horizontal = 0;		//横カーソル
 	int						m_saveDataArray[4];				//セーブデータの一時的な配列
 	float					m_alpha = 0.0f;					//色のアルファ値
 	float					m_timer = 0.0f;					//時間
+	float					m_animTime = 1.0f;				//アニメーション時間
+
+	Vector3 a;
 };

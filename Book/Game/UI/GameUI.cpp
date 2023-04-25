@@ -29,12 +29,12 @@ bool GameUI::Start()
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 	//ƒQ[ƒW‚Ì˜g‰æ‘œ‚ÌÝ’è
-	m_gageFrameSpriteRender.Init("Assets/sprite/UI/gageFrame_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans, false);
+	m_gageFrameSpriteRender.Init("Assets/sprite/UI/gageFrame_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans);
 	m_gageFrameSpriteRender.SetPosition(GAGE_SPRITE_POSITION);
 	m_gageFrameSpriteRender.Update();
 
 	//ƒQ[ƒW‰æ‘œ‚ÌÝ’è
-	m_gageSpriteRender.Init("Assets/sprite/UI/gage_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans, true);
+	m_gageSpriteRender.Init("Assets/sprite/UI/gage_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans, 1);
 	m_gageSpriteRender.SetPosition(GAGE_SPRITE_POSITION);
 	m_gageSpriteRender.Update();
 
@@ -85,7 +85,7 @@ void GameUI::ChangeGage()
 	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging && m_gage > 0) {
 		//Œ¸‚ç‚·
 		m_gage -= 1.0f;
-		RenderingEngine::GetInstance()->GetSpriteCB().clipSize = GAGE_MAX - m_gage;
+		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
 	else if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
@@ -94,7 +94,7 @@ void GameUI::ChangeGage()
 	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
 		//‘‚â‚·
 		m_gage += 2.0f;
-		RenderingEngine::GetInstance()->GetSpriteCB().clipSize = GAGE_MAX - m_gage;
+		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
 }
 void GameUI::Vigilance(int GageUp)
