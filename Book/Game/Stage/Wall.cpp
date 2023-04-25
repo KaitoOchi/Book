@@ -17,12 +17,7 @@ Wall::~Wall()
 }
 bool Wall::Start()
 {
-	//SetWallModel(ModelState);
-
-	m_wallRender.Init("Assets/modelData/level_test/box.tkm");
-	m_wallRender.SetPosition(m_position);
-	m_wallRender.SetScale(m_scale);
-	m_wallRender.SetRotation(m_rotation);
+	SetWallModel(ModelState);
 	
 	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
 	m_physicsBoxObj.Create(m_position, m_rotation);
@@ -64,6 +59,8 @@ void Wall::SetModel(int num)
 	case GOAL:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
+	case POST:
+		m_wallRender.Init("Assets/modelData/level_test/post.tkm");
 	}
 }
 

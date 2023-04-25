@@ -75,18 +75,6 @@ private:
 	float posZ;
 	Vector3 m_boxSize = Vector3::Zero;//ボックスコライダーの作成
 
-	/// <summary>
-	/// 壁の種類を設定する。
-	/// </summary>
-	enum enWallModel {
-		NORMAL,				// 基本の壁
-		WITH_PANINTING,		// 絵画あり
-		WITH_GAP,			// 隙間あり
-		START,				// スタート
-		GOAL				// ゴール
-	};
-	enWallModel m_enWallModel = NORMAL;
-
 	int ModelState = 0;						// モデルを指定する
 };
 
