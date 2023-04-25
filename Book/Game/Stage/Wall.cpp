@@ -20,10 +20,6 @@ bool Wall::Start()
 	//SetWallModel(ModelState);
 
 	m_wallRender.Init("Assets/modelData/level_test/box.tkm");
-	m_wallRender.SetPosition(m_position);
-	m_wallRender.SetScale(m_scale);
-	m_wallRender.SetRotation(m_rotation);
-	
 	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
 	m_physicsBoxObj.Create(m_position, m_rotation);
 	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// コリジョン属性を設定
@@ -45,25 +41,27 @@ void Wall::SetModel(int num)
 	// 壁のモデルを読み込む
 	switch (num)
 	{
-	case NORMAL:
+	case 0:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
-	case WITH_PANINTING:
+	case 1:
 		// ランダムに値を返す
 		hoge = rand() % PAINT_SUM;
 		SetModel_withPainting(hoge);
 		break;
-	case WITH_GAP:
+	case 2:
 		// ランダムに値を返す
 		hoge = rand() % GAP_SUM;
 		SetModel_withGap(hoge);
 		break;
-	case START:
+	case 3:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
-	case GOAL:
+	case 4:
 		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
 		break;
+	case 5:
+		m_wallRender.Init("Assets/modelData/level_test/post.tkm");
 	}
 }
 
