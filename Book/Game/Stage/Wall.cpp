@@ -1,5 +1,14 @@
 #include "stdafx.h"
 #include "Wall.h"
+
+#include "PlayerManagement.h"
+
+namespace
+{
+	const int GAP_SUM = 1;		// ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ÌŽï¿½ï¿½
+	const int PAINT_SUM = 1;	// ï¿½Gï¿½æ‚ ï¿½ï¿½ÌŽï¿½ï¿½
+}
+
 Wall::Wall()
 {
 
@@ -10,25 +19,87 @@ Wall::~Wall()
 }
 bool Wall::Start()
 {
-	//m_wallRender.Init("Assets/modelData/level_test/box.tkm");
-	m_wallRender.Init("Assets/modelData/level_test/wall1.tkm");
+	m_player = FindGO<PlayerManagement>("playerManagement");
+
+	//SetWallModel(ModelState);
+
+	m_wallRender.Init("Assets/modelData/level_test/box.tkm", 0, 0, enModelUpAxisZ, 1, 1);
 	m_wallRender.SetPosition(m_position);
 	m_wallRender.SetScale(m_scale);
 	m_wallRender.SetRotation(m_rotation);
-
-	m_physicsStaticObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix());
-	m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ƒRƒŠƒWƒ‡ƒ“‘®«‚ðÝ’è
 	
-	/*m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
-	m_physicsBoxObj.Create(m_position, m_rotation);*/
+	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
+	m_physicsBoxObj.Create(m_position, m_rotation);
+	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý’ï¿½
+
+	//m_physicsStaticObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix());
+	//m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý’ï¿½
+	//m_physicsStaticObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
+
 	m_wallRender.Update();
+
 	return true;
 }
+
+void Wall::SetModel(int num)
+{
+	// ï¿½Ïï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int hoge = 0;
+
+	// ï¿½Ç‚Ìƒï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Ç‚Ýï¿½ï¿½ï¿½
+	switch (num)
+	{
+	case 0:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	case 1:
+		// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É’lï¿½ï¿½Ô‚ï¿½
+		hoge = rand() % PAINT_SUM;
+		SetModel_withPainting(hoge);
+		break;
+	case 2:
+		// ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½É’lï¿½ï¿½Ô‚ï¿½
+		hoge = rand() % GAP_SUM;
+		SetModel_withGap(hoge);
+		break;
+	case 3:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	case 4:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	case 5:
+		m_wallRender.Init("Assets/modelData/level_test/post.tkm");
+	}
+}
+
+void Wall::SetModel_withPainting(int num)
+{
+	// ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½pï¿½Ó‚ï¿½ï¿½Ä‚È‚ï¿½ï¿½Ì‚Å‚Ü‚ï¿½ï¿½B
+}
+
+void Wall::SetModel_withGap(int num)
+{
+	switch (num) {
+	case 0:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	case 1:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	case 2:
+		m_wallRender.Init("Assets/modelData/level_test/box.tkm");
+		break;
+	}
+}
+
 void Wall::Update()
 {
-	m_wallRender.Update();
 }
 void Wall::Render(RenderContext& rc)
 {
-	m_wallRender.Draw(rc);
+	Vector3 diff = m_player->GetPosition() - m_position;
+	if (diff.Length() < 1500.0f) {
+		m_wallRender.Draw(rc);
+	}
 }

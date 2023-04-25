@@ -40,8 +40,8 @@ bool Enemy_Charge::Start()
 	// ƒpƒXˆÚ“®
 	m_point = &m_pointList[0];
 
-	// ‹–ì‚ğì¬
-	Enemy::SpotLight_New(m_position,2);
+	//// ‹–ì‚ğì¬
+	//Enemy::SpotLight_New(m_position, 1);
 
 	return true;
 }

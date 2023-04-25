@@ -30,6 +30,11 @@ public:
 
 private:
 	/// <summary>
+	/// 入力処理。
+	/// </summary>
+	void Input();
+
+	/// <summary>
 	/// ゲームクリア処理。
 	/// </summary>
 	void GameClear();
@@ -38,6 +43,21 @@ private:
 	/// ゲームオーバー処理。
 	/// </summary>
 	void GameOver();
+
+	/// <summary>
+	/// 待機時間が終了したかどうか
+	/// </summary>
+	/// <returns></returns>
+	const bool& IsEndAnimation()
+	{
+		if (m_canInputTime < 0.0f) {
+			return true;
+		}
+		else {
+			m_canInputTime -= g_gameTime->GetFrameDeltaTime();
+			return false;
+		}
+	}
 
 private:
 	//リザルトステート
@@ -49,16 +69,21 @@ private:
 
 private:
 	SpriteRender	m_backGroundSpriteRender;				//背景画像
+	SpriteRender	m_stateSpriteRender;					//ステート文字画像
+	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
+	FontRender		m_messageFontRender;					//リザルトメッセージ
 
-	ResultState		m_resultState = enState_GameOver;		//リザルトステート
+	ResultState		m_resultState = enState_GameClear;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
 
+	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
 	int				m_vigilance = 0;						//警戒度
 	int				m_cursor = 0;							//カーソル
 	float			m_clearTime = 0.0f;						//クリアタイム
-	float m_timer = 0.0f;
-	float m_alpha = 0.0f;
+	float			m_timer = 0.0f;
+	float			m_alpha = 0.0f;
+	float			m_canInputTime = 0.0f;					//入力可能時間
 };
 

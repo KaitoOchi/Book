@@ -13,7 +13,7 @@ namespace nsBookEngine {
 		/// <param name="w">画像の横幅。</param>
 		/// <param name="h">画像の縦幅。</param>
 		/// <param name="alpha">デフォルトは半透明合成。</param>
-		void Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha = AlphaBlendMode_Trans, const bool isClip = false);
+		void Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha = AlphaBlendMode_Trans, const int clipMode = 0);
 
 		/// <summary>
 		/// 座標を設定。zは0.0f固定。

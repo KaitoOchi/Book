@@ -506,6 +506,13 @@ float3 CalcNormal(SPSIn psIn)
 
 	newNormal = (newNormal / 2.0f) + 0.5f;
 
+	if(newNormal.x >= 0.0f && newNormal.x <= 0.0f){
+		
+	}
+	else{
+		newNormal = (0.0f, 0.0f, 0.0f);
+	}
+
 	return newNormal;
 }
 

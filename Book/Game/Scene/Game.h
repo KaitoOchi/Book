@@ -116,13 +116,12 @@ private:
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
 	Fade* m_fade = nullptr;
-	
+
 	Star* m_star = nullptr;
 
 	
 
 	ModelRender m_modelRender;
-
 
 };
 

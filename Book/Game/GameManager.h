@@ -89,7 +89,7 @@ public:
 	}
 
 	/// <summary>
-	/// BGMを鳴らす処理。
+	/// BGMを鳴らす。
 	/// </summary>
 	/// <param name="num">鳴らしたい音の番号</param>
 	void SetBGM(const int num)
@@ -98,6 +98,26 @@ public:
 		m_bgm->Init(num);
 		m_bgm->SetVolume(m_saveData.bgm);
 		m_bgm->Play(true);
+	}
+
+	/// <summary>
+	/// 音量を変更する。
+	/// </summary>
+	void SetVolume()
+	{
+		m_bgm->SetVolume(m_saveData.bgm);
+	}
+
+	/// <summary>
+	/// BGMを削除する
+	/// </summary>
+	void DeleteBGM()
+	{
+		if (m_isDeleteBGM) {
+			return;
+		}
+		m_isDeleteBGM = true;
+		m_timer = m_saveData.bgm;
 	}
 
 	/// <summary>
@@ -115,11 +135,24 @@ public:
 	void Update();
 
 private:
-	static GameManager*		m_instance;			//インスタンス
-	SaveData				m_saveData;			//セーブデータの構造体
-	EnGameState				m_gameState;		//ゲームステート
-	SoundSource*			m_bgm = nullptr;	//BGM
+	/// <summary>
+	/// ポーズ処理。
+	/// </summary>
+	void Pause();
 
-	bool					m_posState = true;	//ポーズ中かどうか
+	/// <summary>
+	/// BGMの削除処理。
+	/// </summary>
+	void DeletingBGM();
+
+private:
+	static GameManager*		m_instance;					//インスタンス
+	SaveData				m_saveData;					//セーブデータの構造体
+	EnGameState				m_gameState;				//ゲームステート
+	SoundSource*			m_bgm = nullptr;			//BGM
+
+	bool					m_posState = true;			//ポーズ中かどうか
+	bool					m_isDeleteBGM = false;		//BGMの削除中かどうか
+	float					m_timer = 0.0f;				//タイマー
 };
 

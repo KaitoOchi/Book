@@ -21,7 +21,7 @@ namespace nsBookEngine {
 		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
 
 		//環境光の設定
-		SetAmbient(0.4f);
+		SetAmbient(0.7f);
 
 		//半球光の設定
 		SetHemiSphereLight(
@@ -48,7 +48,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(0.0f);
+		SetBloomThreshold(10.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
