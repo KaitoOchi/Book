@@ -23,19 +23,50 @@ Result::~Result()
 
 bool Result::Start()
 {
+	int lightNum = 0;
+
 	switch (m_resultState)
 	{
 	case enState_GameClear:
 		//背景画像の設定
 		m_backGroundSpriteRender.Init("Assets/sprite/UI/result/base.DDS", 1920.0f, 1080.0f);
-		//タイトル画像の設定
-		m_stateSpriteRender.Init("Assets/sprite/UI/result/missionComplete!.DDS", 864.0f, 146.0f);
-		m_stateSpriteRender.SetPosition(Vector3(-400.0f, 400.0f, 0.0f));
-		//詳細画像の設定
-		m_explainSpriteRender[0].Init("Assets/sprite/UI/result/result_text.DDS", 879.0f, 1024.0f);
-		m_explainSpriteRender[0].SetPosition(Vector3(300.0f, 0.0f, 0.0f));
-		m_explainSpriteRender[1].Init("Assets/sprite/UI/result/result_rank.DDS", 879.0f, 1024.0f);
-		m_explainSpriteRender[1].SetPosition(Vector3(300.0f, 0.0f, 0.0f));
+
+		//レベルのデータを使用してタイトル画像を読み込む。
+		m_level2DRender.Init("Assets/level2D/result.casl", [&](Level2DObjectData& objData) {
+			//名前が一致していたら。
+			if (objData.EqualObjectName("missionComplete!") == true) {
+				//文字画像を設定
+				m_stateSpriteRender.Init(objData.ddsFilePath, objData.width, objData.height);
+				m_stateSpriteRender.SetPosition(objData.position);
+				m_stateSpriteRender.Update();
+				return true;
+			}
+			else if (objData.EqualObjectName("result_rank") == true) {
+				m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
+				m_explainSpriteRender[0].SetPosition(objData.position);
+				m_explainSpriteRender[0].Update();
+				return true;
+			}
+			else if (objData.EqualObjectName("result_text") == true) {
+				m_explainSpriteRender[1].Init(objData.ddsFilePath, objData.width, objData.height);
+				m_explainSpriteRender[1].SetPosition(objData.position);
+				m_explainSpriteRender[1].Update();
+				return true;
+			}
+			else if (objData.EqualObjectName("result_text") == true) {
+				m_explainSpriteRender[1].Init(objData.ddsFilePath, objData.width, objData.height);
+				m_explainSpriteRender[1].SetPosition(objData.position);
+				m_explainSpriteRender[1].Update();
+				return true;
+			}
+			else if (objData.EqualObjectName("light") == true) {
+				m_fontPosition[lightNum] = objData.position;
+				lightNum++;
+				return true;
+			}
+			return false;
+		});
+
 		//待機時間の設定
 		m_canInputTime = CAN_INPUT_GAMECLEAR;
 		break;

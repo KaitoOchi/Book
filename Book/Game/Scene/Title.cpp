@@ -234,14 +234,6 @@ void Title::Input()
 			return;
 		}
 
-		//設定画面なら
-		if (m_titleState_tmp == 4) {
-			//保存して閉じる
-			SetSaveData();
-			SetDataArray();
-			m_isWaitState = true;
-		}
-
 		//メニュー画面以降なら
 		if (m_titleState_tmp >= 2) {
 			m_titleState_tmp = 1;
@@ -329,6 +321,7 @@ void Title::ValueUpdate(bool vertical)
 		//配列に値を保存する
 		else {
 			m_saveDataArray[m_cursor_vertical - 1] = m_cursor_horizontal;
+			//保存する
 			SetSaveData();
 			GameManager::GetInstance()->SetVolume();
 		}

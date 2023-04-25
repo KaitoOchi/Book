@@ -1,4 +1,5 @@
 #pragma once
+#include "level2DRender/Level2DRender.h"
 
 class Fade;
 
@@ -74,9 +75,13 @@ private:
 	SpriteRender	m_cursorSpriteRender;					//カーソル
 	FontRender		m_messageFontRender;					//リザルトメッセージ
 
+	Level2DRender	m_level2DRender;						//レベル2Dレンダー
+
 	ResultState		m_resultState = enState_GameClear;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
+
+	Vector3			m_fontPosition[4];						//文字を出す座標
 
 	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
 	int				m_vigilance = 0;						//警戒度
