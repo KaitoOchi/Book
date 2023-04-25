@@ -34,7 +34,7 @@ namespace
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
 	const float		ADD_MOVE_MIN = 100.0f;
-	const float		ADD_MOVE_LONG = 200.0f;
+	const float		ADD_MOVE_LONG = 400.0f;
 }
 
 Enemy::Enemy()
@@ -73,6 +73,9 @@ bool Enemy::Start()
 		// 0が閃光弾。1が巡回。2を突進用として用意
 		m_addTimer[i] = 0.0f;
 	}
+
+	// 視野を作成
+	Enemy::SpotLight_New(m_position, m_spotNum);
 
 	return true;
 }
@@ -339,7 +342,7 @@ void Enemy::Pass(int PassState)
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
 		break;
 		// (右に)直角
 	case ANGLE_RIGHT:

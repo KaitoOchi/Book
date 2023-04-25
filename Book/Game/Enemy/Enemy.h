@@ -205,6 +205,11 @@ public:
 		return m_FindPlayerCounter;
 	}
 
+	// スポットライトの番号を教える
+	void AddSpotLightNum() {
+		m_spotNum++;
+	}
+
 protected:
 
 	// パス移動用のポイント構造体
@@ -261,5 +266,7 @@ protected:
 	float m_Vicount;						//警戒度を一定回数増やす
 
 	bool m_CountFlag = false;				// カウントするフラグ
-	int m_FindPlayerCounter = 0;			// プレイヤーを発見した回数
+
+	int m_FindPlayerCounter = 1;			// プレイヤーを発見した回数
+	int m_spotNum = 1;						// スポットライトの個数
 };
