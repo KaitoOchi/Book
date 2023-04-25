@@ -26,10 +26,11 @@ bool Wall::Start()
 	
 	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(),m_scale);
 	m_physicsBoxObj.Create(m_position, m_rotation);
+	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// コリジョン属性を設定
 
-	m_physicsStaticObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix());
-	m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// コリジョン属性を設定
-	m_physicsStaticObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
+	//m_physicsStaticObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix());
+	//m_physicsStaticObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// コリジョン属性を設定
+	//m_physicsStaticObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
 
 	m_wallRender.Update();
 
