@@ -116,10 +116,10 @@ bool Game::Start()
 	);
 
 	//・ｽt・ｽF・ｽ[・ｽh・ｽﾌ擾ｿｽ・ｽ・ｽ
-	//m_fade = FindGO<Fade>("fade");
-	//m_fade->StartFadeIn();
-	// 
-	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
+	 
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	return true;
 }
 
