@@ -26,6 +26,16 @@ public:
 
 private:
 	/// <summary>
+	/// スコアの計算処理。
+	/// </summary>
+	void InitScore();
+
+	/// <summary>
+	/// スプライトの計算処理。
+	/// </summary>
+	void InitSprite();
+
+	/// <summary>
 	/// ゲームクリア時の初期化処理。
 	/// </summary>
 	void InitGameClear();
@@ -79,11 +89,13 @@ private:
 	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
 	SpriteRender	m_rankSpriteRender;						//ランク画像
+	SpriteRender	m_failedSpriteRender;					//failed文字
 	FontRender		m_messageFontRender[4];					//スコアメッセージ
+	FontRender		m_scoreFontRender;						//スコアフォント
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 
-	ResultState		m_resultState = enState_GameClear;		//リザルトステート
+	ResultState		m_resultState = enState_GameOver;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
 

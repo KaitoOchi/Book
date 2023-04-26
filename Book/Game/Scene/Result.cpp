@@ -8,8 +8,7 @@
 
 namespace
 {
-	const float CAN_INPUT_GAMECLEAR = 6.0f;							//ゲームクリア時の入力可能時間
-	const float CAN_INPUT_GAMEOVER = 2.0f;							//ゲームオーバー時の入力可能時間
+	const float CAN_INPUT = 6.0f;									//入力可能時間
 	const float	ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };	//表示可能になる時間
 	const char RANK[4] = { 'A', 'B', 'C', 'D' };					//ランク一覧
 	const int SCORE_RANK[4] = { 5000, 4000, 3000, 2000 };			//ランクの条件
@@ -27,6 +26,10 @@ Result::~Result()
 
 bool Result::Start()
 {
+	InitSprite();
+
+	InitScore();
+
 	switch (m_resultState)
 	{
 	//ゲームクリアなら
@@ -40,6 +43,9 @@ bool Result::Start()
 		break;
 	}
 
+	//待機時間の設定
+	m_canInputTime = CAN_INPUT;
+
 	//フェードの処理
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
@@ -49,50 +55,12 @@ bool Result::Start()
 
 void Result::InitGameClear()
 {
-	int lightNum = 0;
 
+}
+
+void Result::InitScore()
+{
 	GameUI* gameUI = FindGO<GameUI>("gameUI");
-
-	//背景画像の設定
-	m_backGroundSpriteRender.Init("Assets/sprite/UI/result/base.DDS", 1920.0f, 1080.0f);
-
-	//ボタンの設定
-	m_cursorSpriteRender.Init("Assets/sprite/UI/title/button.DDS", 640.0f, 150.0f);
-	m_cursorSpriteRender.SetPosition(Vector3(0.0f, -400.0f, 0.0f));
-	m_cursorSpriteRender.Update();
-
-	//レベルのデータを使用してタイトル画像を読み込む
-	m_level2DRender.Init("Assets/level2D/result.casl", [&](Level2DObjectData& objData) {
-		//名前が一致していたら。
-		if (objData.EqualObjectName("missionComplete!") == true) {
-			//文字画像を設定
-			m_stateSpriteRender.Init(objData.ddsFilePath, objData.width, objData.height);
-			m_stateSpriteRender.SetPosition(objData.position);
-			m_stateSpriteRender.Update();
-			return true;
-		}
-		else if (objData.EqualObjectName("result_rank") == true) {
-			m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
-			m_explainSpriteRender[0].SetPosition(objData.position);
-			return true;
-		}
-		else if (objData.EqualObjectName("result_text") == true) {
-			m_explainSpriteRender[1].Init(objData.ddsFilePath, objData.width, objData.height);
-			m_explainSpriteRender[1].SetPosition(objData.position);
-			return true;
-		}
-		else if (objData.EqualObjectName("light") == true) {
-			m_fontPosition[lightNum] = objData.position;
-			lightNum++;
-			return true;
-		}
-		return false;
-	});
-
-	for (int i = 0; i < 2; i++) {
-		m_explainSpriteRender[i].SetScale(Vector3(0.9f, 0.9f, 0.0f));
-		m_explainSpriteRender[i].Update();
-	}
 
 	//リザルトを保存
 	//m_score[0] = gameUI->GetTime();
@@ -101,12 +69,12 @@ void Result::InitGameClear()
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
 	//m_score[2] = 5;
 	m_score[3] = (m_score[0] * 10) +
-				 (m_score[1] * 5000) + 
-				 (m_score[2] * -500);
+		(m_score[1] * 5000) +
+		(m_score[2] * -500);
 
 	char rank = 'D';
 	//スコアからランクを設定
-	for(int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) {
 		//スコアのほうが上なら
 		if (m_score[3] > SCORE_RANK[i]) {
 			rank = RANK[i];
@@ -165,37 +133,76 @@ void Result::InitGameClear()
 		m_messageFontRender[i].SetShadowParam(true, 1.5, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
-	//待機時間の設定
-	m_canInputTime = CAN_INPUT_GAMECLEAR;
+	//金額の設定
+	wchar_t text[255];
+	swprintf_s(text, 255,
+		L"$%d",
+		m_score[3]
+	);
+	m_scoreFontRender.SetText(text);
+	m_scoreFontRender.SetPosition(Vector3(425.0f, -225.0f, 0.0f));
+	m_scoreFontRender.SetScale(2.0f);
+	m_scoreFontRender.SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_scoreFontRender.SetShadowParam(true, 0.5f, Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+}
+
+void Result::InitSprite()
+{
+	int lightNum = 0;
+
+	//背景画像の設定
+	m_backGroundSpriteRender.Init("Assets/sprite/UI/result/base.DDS", 1920.0f, 1080.0f);
+
+	//ボタンの設定
+	m_cursorSpriteRender.Init("Assets/sprite/UI/title/button.DDS", 640.0f, 150.0f);
+	m_cursorSpriteRender.SetPosition(Vector3(0.0f, -400.0f, 0.0f));
+	m_cursorSpriteRender.Update();
+
+	//レベルのデータを使用してタイトル画像を読み込む
+	m_level2DRender.Init("Assets/level2D/result.casl", [&](Level2DObjectData& objData) {
+		//名前が一致していたら。
+		if (objData.EqualObjectName("missionComplete!") == true) {
+			//文字画像を設定
+			m_stateSpriteRender.Init(objData.ddsFilePath, objData.width, objData.height);
+			m_stateSpriteRender.SetPosition(objData.position);
+			m_stateSpriteRender.Update();
+			return true;
+		}
+		else if (objData.EqualObjectName("result_rank") == true) {
+			m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
+			m_explainSpriteRender[0].SetPosition(objData.position);
+
+			Quaternion rot;
+			rot.SetRotationZ(Math::DegToRad(-30.0f));
+
+			m_failedSpriteRender.Init("Assets/sprite/UI/result/failed!.DDS", 497.0f, 170.0f);
+			m_failedSpriteRender.SetPosition(objData.position);
+			m_failedSpriteRender.SetRotation(rot);
+			m_failedSpriteRender.Update();
+			return true;
+		}
+		else if (objData.EqualObjectName("result_text") == true) {
+			m_explainSpriteRender[1].Init(objData.ddsFilePath, objData.width, objData.height);
+			m_explainSpriteRender[1].SetPosition(objData.position);
+			return true;
+		}
+		else if (objData.EqualObjectName("light") == true) {
+			m_fontPosition[lightNum] = objData.position;
+			lightNum++;
+			return true;
+		}
+		return false;
+		});
+
+	for (int i = 0; i < 2; i++) {
+		m_explainSpriteRender[i].SetScale(Vector3(0.9f, 0.9f, 0.0f));
+		m_explainSpriteRender[i].Update();
+	}
 }
 
 void Result::InitGameOver()
 {
-	//背景画像の設定
-	m_backGroundSpriteRender.Init("Assets/sprite/UI/gameOver/base.DDS", 1920.0f, 1080.0f);
 
-	//カーソルの設定
-	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
-
-	//タイトル画像の設定
-	m_stateSpriteRender.Init("Assets/sprite/UI/gameOver/gameOver.DDS", 516.0f, 138.0f);
-	m_stateSpriteRender.SetPosition(Vector3(-550.0f, 400.0f, 0.0f));
-	m_stateSpriteRender.Update();
-
-	//詳細画像の設定
-	m_explainSpriteRender[0].Init("Assets/sprite/UI/gameOver/retry.DDS", 317.0f, 149.0f);
-	m_explainSpriteRender[0].SetPosition(Vector3(-600.0f, 90.0f, 0.0f));
-	m_explainSpriteRender[1].Init("Assets/sprite/UI/gameOver/giveup.DDS", 481.0f, 152.0f);
-	m_explainSpriteRender[1].SetPosition(Vector3(-600.0f, -150.0f, 0.0f));
-
-	for (int i = 0; i < 2; i++) {
-		m_explainSpriteRender[i].SetPosition(Vector3(-600.0f, 90.0f + (-150.0f * i), 0.0f));
-		m_explainSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
-		m_explainSpriteRender[i].Update();
-	}
-
-	//待機時間の設定
-	m_canInputTime = CAN_INPUT_GAMEOVER;
 }
 
 void Result::Update()
@@ -206,22 +213,11 @@ void Result::Update()
 
 	//フェードの待機時間
 	if (m_isWaitFadeOut) {
-
 		//フェードをし終えたら
 		if (!m_fade->IsFade()) {
-			//シーン遷移
-			if (m_resultState == enState_GameClear) {
-				NewGO<Title>(0, "title");
-			}
-			else if (m_cursor == 0) {
-				NewGO<Game>(0, "game");
-			}
-			else {
-				NewGO<Title>(0, "title");
-			}
+			NewGO<Title>(0, "title");
 			DeleteGO(this);
 		}
-
 		return;
 	}
 	else {
@@ -231,18 +227,7 @@ void Result::Update()
 	//時間の処理
 	m_timer += g_gameTime->GetFrameDeltaTime();
 
-	switch (m_resultState)
-	{
-		//ゲームクリアなら
-	case enState_GameClear:
-		GameClear();
-		break;
-
-		//ゲームオーバーなら
-	case enState_GameOver:
-		GameOver();
-		break;
-	}
+	GameClear();
 }
 
 void Result::Input()
@@ -250,8 +235,8 @@ void Result::Input()
 	//Aボタンを押したら
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 
-		//クリアステートで、表示が全て完了していなら
-		if (m_resultState == enState_GameClear && m_timer < ENABLE_TIME[4]) {
+		//表示が全て完了していなら
+		if (m_timer < ENABLE_TIME[4]) {
 			//表示をスキップする
 			m_timer = ENABLE_TIME[4];
 		}
@@ -260,19 +245,6 @@ void Result::Input()
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
 		}
-	}
-
-	//ゲームオーバーステートなら
-	if (m_resultState == enState_GameOver) {
-
-		//十字ボタンを押したら
-		if (g_pad[0]->IsTrigger(enButtonDown)) {
-			m_cursor++;
-		}
-		else if (g_pad[0]->IsTrigger(enButtonUp)) {
-			m_cursor--;
-		}
-		m_cursor = min(max(m_cursor, 0), 1);
 	}
 }
 
@@ -328,24 +300,20 @@ void Result::Render(RenderContext& rc)
 		return;
 	}
 
-	//ゲームクリアなら
-	if (m_resultState == enState_GameClear) {
-
-		for (int i = 0; i < 4; i++) {
-			if(m_timer > ENABLE_TIME[i])
-				m_messageFontRender[i].Draw(rc);
-		}
-
-		if (m_timer >= ENABLE_TIME[4]) {
-			m_explainSpriteRender[0].Draw(rc);
-			m_rankSpriteRender.Draw(rc);
-			m_cursorSpriteRender.Draw(rc);
-		}
+	for (int i = 0; i < 4; i++) {
+		if (m_timer > ENABLE_TIME[i])
+			m_messageFontRender[i].Draw(rc);
 	}
-	//ゲームオーバーなら
-	else {
-		m_cursorSpriteRender.Draw(rc);
+
+	if (m_timer >= ENABLE_TIME[4]) {
 		m_explainSpriteRender[0].Draw(rc);
+		m_scoreFontRender.Draw(rc);
+		m_rankSpriteRender.Draw(rc);
+		m_cursorSpriteRender.Draw(rc);
+
+		if(m_resultState == enState_GameOver)
+			m_failedSpriteRender.Draw(rc);
 	}
+
 	m_explainSpriteRender[1].Draw(rc);
 }
