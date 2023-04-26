@@ -145,8 +145,8 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-		/*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
+	//m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+			m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData){
 			// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
 			//// �E��E��E�O�E��E�unityChan�E�Ȃ�
@@ -230,10 +230,9 @@ void Game::LevelDesign()
 			//}
 
 			// ステージのレベル
-			{
 				//名前がbackgroundなら
-				if (objData.EqualObjectName(L"base") == true)
-					/*			if (objData.EqualObjectName(L"debug") == true)*/ {
+				//if (objData.EqualObjectName(L"base") == true)
+				if (objData.EqualObjectName(L"debug") == true) {
 					// 背景を生成
 					m_backGround = NewGO<BackGround>(0, "backGround");
 					m_backGround->SetPosition(objData.position);
@@ -294,12 +293,11 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-				if (objData.EqualObjectName(L"debugtoumei") == true) {
-
-					m_player3D->m_ghostpositions.push_back(objData.position);
-					return true;
-				}
-				if (objData.EqualObjectName(L"item") == true) {
+		if (objData.EqualObjectName(L"debugtoumei") == true) {
+			m_player3D->m_ghostpositions.push_back(objData.position);
+			return true;
+		}
+		if (objData.EqualObjectName(L"item") == true) {
 			m_treaSure = NewGO<Treasure>(0, "treaSure");
 			m_treaSure->SetPosition(objData.position);
 			m_treaSure->SetScale(objData.scale);

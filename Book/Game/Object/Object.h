@@ -79,8 +79,15 @@ public:
 	{
 		return m_isActive;
 	}
-	
+	enum EnHitState {
+		m_enObject_null,		//“–‚½‚Á‚Ä‚¢‚é
+		m_enObject_hit,			//“–‚½‚Á‚Ä‚¢‚È‚¢
+	};
+	EnHitState m_HitState = m_enObject_null;
+
+
 protected:
+
 	/// <summary>
 	/// “–‚½‚è”»’è‚Ìˆ—B
 	/// </summary>
@@ -96,7 +103,7 @@ protected:
 	CollisionObject*	m_collisionObject = nullptr;
 	PlayerManagement*	m_player = nullptr;
 	Game*				m_game = nullptr;
-	Player3D* m_player3d = nullptr;
+	Player3D*			m_player3d = nullptr;
 	Vector3				m_position	= Vector3::Zero;
 	Quaternion			m_rotation	= Quaternion::Identity;
 	Vector3				m_scale		= Vector3::One;

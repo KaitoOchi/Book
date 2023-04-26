@@ -111,7 +111,7 @@ void Player3D::Update()
 		{
 			senkeiPos = 0.0f;
 			m_ghostHit = true;
-			m_playerState = m_enPlayer_DownStart;
+			m_playerState = m_enPlayer_Down;
 		}
 	}
 
@@ -160,19 +160,14 @@ void Player3D::Animation()
 	case Player::m_enPlayer3D_Throw:
 		m_modelRender->PlayAnimation(m_enAnimationClip_Throw, 0.5f);
 		break;
-	case Player::m_enPlayer_DownStart:
-		m_modelRender->PlayAnimation(m_enAnimationClip_DownStart, 0.5f);
+	case Player::m_enPlayer_Down:
 		//プレイヤーを押し出す方向に回転させる
 		m_pushRotPos = GetPushPosition() - GetGhostPosition();
 		m_pushRot = atan2(-m_pushRotPos.x, m_pushRotPos.z);
 		m_rotation.SetRotationY(m_pushRot);
 		m_modelRender->SetRotation(m_rotation);
-		break;
-	case Player::m_enPlayer_Down:
+		m_modelRender->SetAnimationSpeed(0.6f);
 		m_modelRender->PlayAnimation(m_enAnimationClip_Down, 0.5f);
-		break;
-	case Player::m_enPlayer_DownEnd:
-		m_modelRender->PlayAnimation(m_enAnimationClip_DownEnd, 0.5f);
 		break;
 	default:
 		break;

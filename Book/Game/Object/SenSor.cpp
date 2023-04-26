@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Sensor.h"
 
-#include "GameUI.h"
+#include "Gage.h"
 
 namespace
 {
-	const int GAGE = 1;		//上昇する警戒値
+	const int GAGE = 2;		//上昇する警戒値
 }
 
 
@@ -22,7 +22,7 @@ Sensor::~Sensor()
 bool Sensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
-	m_gameUI = FindGO<GameUI>("gameUI");
+	m_gage= FindGO<Gage>("gage");
 
 	m_position = Vector3(200.0f, 10.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 50.0f);
@@ -49,7 +49,7 @@ void Sensor::Update()
 void Sensor::Hit()
 {
 	//プレイヤーと接触
-	m_gameUI->Vigilance(GAGE);
+	m_gage->GageUp(GAGE);
 }
 
 void Sensor::Render(RenderContext& rc)

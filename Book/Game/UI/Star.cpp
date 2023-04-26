@@ -4,7 +4,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const Vector3 STARSCALE{ 5.0f,5.0f,5.0f };
+	const Vector3 STARSCALE{ 0.1f,0.1f,0.10f };
 }
 Star::Star()
 {
@@ -18,7 +18,7 @@ Star::~Star()
 
 bool Star::Start()
 {
-	m_starRender.Init("Assets/modelData/object/takara/item.tkm");
+	m_starRender.Init("Assets/modelData/Status/star/star.tkm");
 	m_starRender.SetPosition(m_position);
 	m_starRender.SetScale(STARSCALE);
 	m_starRender.Update();
