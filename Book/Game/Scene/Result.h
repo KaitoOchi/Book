@@ -80,6 +80,7 @@ private:
 	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
 	FontRender		m_messageFontRender[4];					//スコアメッセージ
+	FontRender		m_rankFontRender;						//ランク文字
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 

@@ -70,6 +70,8 @@ void Result::InitGameClear()
 		else if (objData.EqualObjectName("result_rank") == true) {
 			m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
 			m_explainSpriteRender[0].SetPosition(objData.position);
+
+			m_rankFontRender.SetPosition(objData.position);
 			return true;
 		}
 		else if (objData.EqualObjectName("result_text") == true) {
@@ -95,6 +97,12 @@ void Result::InitGameClear()
 	m_score[0] = 99.0f;
 	m_score[1] = 1.0f;
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
+
+	//ランク表示の設定
+	m_rankFontRender.SetText(L"A");
+	m_rankFontRender.SetScale(5.0f);
+	m_rankFontRender.SetColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_rankFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	//スコア文字の設定
 	for (int i = 0; i < 4; i++) {
@@ -189,9 +197,16 @@ void Result::Input()
 	//Aボタンを押したら
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 
-		//フェードを始める
-		m_isWaitFadeOut = true;
-		m_fade->StartFadeOut();
+		//クリアステートで、表示が全て完了していなら
+		if (m_resultState == enState_GameClear && m_timer < ENABLE_TIME[4]) {
+			//表示をスキップする
+			m_timer = ENABLE_TIME[4];
+		}
+		else {
+			//フェードを始める
+			m_isWaitFadeOut = true;
+			m_fade->StartFadeOut();
+		}
 	}
 
 	//十字ボタンを押したら
@@ -245,8 +260,10 @@ void Result::Render(RenderContext& rc)
 				m_messageFontRender[i].Draw(rc);
 		}
 
-		if(m_timer > ENABLE_TIME[4])
+		if (m_timer > ENABLE_TIME[4]) {
 			m_explainSpriteRender[0].Draw(rc);
+			m_rankFontRender.Draw(rc);
+		}
 	}
 	//ゲームオーバーなら
 	else {
