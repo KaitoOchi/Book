@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Treasure.h"
 #include "Game.h"
+#include <random>
+
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,50.0f,50.0f };
@@ -32,6 +34,8 @@ bool Treasure::Start()
 	m_collisionObject->SetIsEnableAutoDelete(false);
 	m_collisionObject->SetName("otakara");
 
+	
+
 
 	m_collisionObject->Update();
 	m_modelRender.Update();
@@ -53,6 +57,10 @@ void Treasure::Hit()
 	{
 		m_player3d->m_enPlayer3D_Steal;
 		m_game->m_gameState = m_game->m_enGameState_GameClearable;
+		m_game->m_pointLight[m_game->m_lightNumber].SetColor(Vector3(50.0f, 0.0f, 0.0f));
+		m_game->m_pointLight[m_game->m_lightNumber].Update();
+
+
 		DeleteGO(this);
 	}
 }

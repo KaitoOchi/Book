@@ -2,6 +2,8 @@
 class PlayerManagement;
 class GameCamera;
 class Ghost;
+class Star;
+class Game;
 class Player : public IGameObject
 {
 public:
@@ -84,12 +86,13 @@ public:
 	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
 
 	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
-
+	
 protected:
 	virtual void Update();
 	void Move();
 	void Jump();
 	void Rotation();
+	virtual void Throw()=0;
 	virtual void Animation()=0;
 	void Animation3D();
 	void Animation2D();
@@ -211,11 +214,18 @@ protected:
 	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
 	Quaternion m_rotation;										//回転
 	CharacterController *m_characon;							//キャラコン
+	
+	
 	Ghost* m_ghost = nullptr;
+	Game* m_game = nullptr;
+	
+	
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
+	Star* m_star = nullptr;										//星
+
 
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;

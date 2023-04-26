@@ -157,5 +157,5 @@ void GameUI::Render(RenderContext& rc)
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
 	//m_timeFontRender.Draw(rc);
-	m_vigilanceRender.Draw(rc);
+	//m_vigilanceRender.Draw(rc);
 }

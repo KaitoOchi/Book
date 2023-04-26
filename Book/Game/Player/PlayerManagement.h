@@ -31,7 +31,11 @@ public:
 	{
 		m_position = m_pos;
 	}
-
+	void SetPlayer2DAND3D(Player3D* player3d,Player2D* player2d)
+	{
+		m_player2D = player2d;
+		m_player3D = player3d;
+	}
 
 	//キャラコンの取得
 	void SetCharacon(CharacterController* m_chara)
