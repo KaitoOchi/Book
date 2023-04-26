@@ -32,6 +32,9 @@ bool Title::Start()
 {
 	InitSprite();
 
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm");
+
+	//デバッグ用
 	m_debugFontRender.SetPosition(Vector3(500.0f, 200.0f, 0.0f));
 
 	//セーブデータのロード
@@ -449,6 +452,7 @@ void Title::Render(RenderContext &rc)
 	case 0:
 		m_pressSpriteRender.Draw(rc);
 		m_titleSpriteRender.Draw(rc);
+		m_playerModelRender.Draw(rc);
 		break;
 
 	//メニュー画面なら

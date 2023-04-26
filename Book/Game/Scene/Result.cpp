@@ -8,7 +8,7 @@
 
 namespace
 {
-	const float CAN_INPUT_GAMECLEAR = 5.0f;							//ゲームクリア時の入力可能時間
+	const float CAN_INPUT_GAMECLEAR = 6.0f;							//ゲームクリア時の入力可能時間
 	const float CAN_INPUT_GAMEOVER = 2.0f;							//ゲームオーバー時の入力可能時間
 	const float	ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };	//表示可能になる時間
 	const char RANK[4] = { 'A', 'B', 'C', 'D' };					//ランク一覧
@@ -74,9 +74,6 @@ void Result::InitGameClear()
 		else if (objData.EqualObjectName("result_rank") == true) {
 			m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
 			m_explainSpriteRender[0].SetPosition(objData.position);
-
-			m_rankSpriteRender.SetPosition(objData.position);
-			m_rankSpriteRender.Update();
 			return true;
 		}
 		else if (objData.EqualObjectName("result_text") == true) {
@@ -128,6 +125,8 @@ void Result::InitGameClear()
 
 	//ランク表示の設定
 	m_rankSpriteRender.Init(finalFilePath, 306.0f, 312.0f);
+	m_rankSpriteRender.SetPosition(Vector3(250.0f, -150.0f, 0.0f));
+	m_rankSpriteRender.Update();
 
 	int m = m_score[0] / 60;
 	int s = m_score[0] % 60;
@@ -263,14 +262,18 @@ void Result::Input()
 		}
 	}
 
-	//十字ボタンを押したら
-	if (g_pad[0]->IsTrigger(enButtonDown)) {
-		m_cursor++;
+	//ゲームオーバーステートなら
+	if (m_resultState == enState_GameOver) {
+
+		//十字ボタンを押したら
+		if (g_pad[0]->IsTrigger(enButtonDown)) {
+			m_cursor++;
+		}
+		else if (g_pad[0]->IsTrigger(enButtonUp)) {
+			m_cursor--;
+		}
+		m_cursor = min(max(m_cursor, 0), 1);
 	}
-	else if (g_pad[0]->IsTrigger(enButtonUp)) {
-		m_cursor--;
-	}
-	m_cursor = min(max(m_cursor, 0), 1);
 }
 
 void Result::GameClear()
@@ -288,6 +291,15 @@ void Result::GameClear()
 	//ボタンを点滅させる
 	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
 	m_cursorSpriteRender.Update();
+
+	if (m_timer > 5.0f && m_timer < 6.0f && m_cursor == 0) {
+		//ランクを表示する
+		m_rankSpriteRender.SetScale(Vector3(1.0f, 1.0f, 1.0f) * (7.0f - m_timer));
+		m_rankSpriteRender.Update();
+
+		if (m_timer > 5.9f)
+			m_cursor = 1;
+	}
 }
 
 void Result::GameOver()
