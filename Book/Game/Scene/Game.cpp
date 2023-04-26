@@ -22,6 +22,10 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
+#include "Star.h"
+#include <random>
+#include"Gage.h"
+#include "Star.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -57,9 +61,12 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	NewGO<Sensor>(0, "sensor");
-	m_playerManagement=NewGO<PlayerManagement>(0,"playerManagement");
-	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
+	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	NewGO<GameUI>(0, "gameUI");
+	NewGO<Gage>(0,"gage");
+	
+	
 	//NewGO<LightSensor>(0, "lightSensor");
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -76,28 +83,28 @@ bool Game::Start()
 	m_pointLight[0].SetPointLight(
 		0,
 		Vector3::Zero,
-		{ 10.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 0.0f },
 		100.0f
 	);
 
 	m_pointLight[1].SetPointLight(
 		1,
 		Vector3::Zero,
-		{ 00.0f, 10.0f, 0.0f },
-		50.0f
+		{ 0.0f, 0.0f, 0.0f },
+		100.0f
 	);
 
 	m_pointLight[2].SetPointLight(
 		2,
 		Vector3::Zero,
-		{ 0.0f, 0.0f, 10.0f },
+		{ 0.0f, 0.0f, 0.0f },
 		100.0f
 	);
 
 	m_pointLight[3].SetPointLight(
 		3,
 		Vector3::Zero,
-		{ 10.0f, 0.0f, 0.0f },
+		{ 0.0f, 50.0f, 0.0f },
 		150.0f
 	);
 
@@ -120,14 +127,26 @@ bool Game::Start()
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
+	for (int i = 0; i <= m_enemyList.size(); i++)
+	{
+		m_star = NewGO<Star>(0, "star");
+		m_starList.push_back(m_star);
+	}
+
+	//�����_���Ȓl�𐶐�����
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int>dist(0, 3);
+	m_lightNumber = dist(mt);
+	m_position = m_pointLight[m_lightNumber].GetPosition();
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-		/*		m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
+	//m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+			m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData){
 			// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
 			//// �E��E��E�O�E��E�unityChan�E�Ȃ�
@@ -211,10 +230,9 @@ void Game::LevelDesign()
 			//}
 
 			// ステージのレベル
-			{
 				//名前がbackgroundなら
-				if (objData.EqualObjectName(L"base") == true)
-					/*			if (objData.EqualObjectName(L"debug") == true)*/ {
+				//if (objData.EqualObjectName(L"base") == true)
+				if (objData.EqualObjectName(L"debug") == true) {
 					// 背景を生成
 					m_backGround = NewGO<BackGround>(0, "backGround");
 					m_backGround->SetPosition(objData.position);
@@ -275,47 +293,40 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
-				if (objData.EqualObjectName(L"debugtoumei") == true) {
+		if (objData.EqualObjectName(L"debugtoumei") == true) {
+			m_player3D->m_ghostpositions.push_back(objData.position);
+			return true;
+		}
+		if (objData.EqualObjectName(L"item") == true) {
+			m_treaSure = NewGO<Treasure>(0, "treaSure");
+			m_treaSure->SetPosition(objData.position);
+			m_treaSure->SetScale(objData.scale);
+			m_treaSure->SetRotation(objData.rotation);
+			return true;
+		}
+		if (objData.EqualObjectName(L"gost") == true) {
 
-					m_player3D->m_ghostpositions.push_back(objData.position);
-					return true;
-				}
-				if (objData.EqualObjectName(L"item") == true) {
-
-					m_treaSure = NewGO<Treasure>(0, "treaSure");
-					m_treaSure->SetPosition(objData.position);
-					m_treaSure->SetScale(objData.scale);
-					m_treaSure->SetRotation(objData.rotation);
-					return true;
-				}
-				if (objData.EqualObjectName(L"gost") == true) {
-
-					m_ghost = NewGO<Ghost>(0, "ghost");
-					m_ghost->SetPosition(objData.position);
-					m_ghost->SetScale(objData.scale);
-					m_ghost->SetRotation(objData.rotation);
-					return true;
-				}
-				if (objData.EqualObjectName(L"clear") == true) {
-
-					SetClearPosition(objData.position);
-
-					for (int i = 0; i < 4; i++) {
-						m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
-					}
-					return true;
-				}
-				return true;
-			}
+			m_ghost = NewGO<Ghost>(0, "ghost");
+			m_ghost->SetPosition(objData.position);
+			m_ghost->SetScale(objData.scale);
+			m_ghost->SetRotation(objData.rotation);
+			return true;
+		}
+		if (objData.EqualObjectName(L"clear") == true) {
+			m_clearList.push_back(objData.position);
+			m_pointLight[lights].SetPosition(Vector3(objData.position.x,objData.position.y+50.0f,objData.position.z));
+			lights += 1;
+			return true;
+		}
+		return true;
 		});
 }
 
 void Game::Update()
 {
-	Vector3 diff = m_playerManagement->GetPosition()- GetClearPosition();
-	if (diff.LengthSq() <= 120.0f*120.0f&&m_gameState==m_enGameState_GameClearable)
+	if (m_gameState==m_enGameState_GameClearable)
 	{
-		m_gameState = m_enGameState_GameClear;
+		Clearable();
 	}
 		
 	MnageState();
@@ -323,9 +334,16 @@ void Game::Update()
 	for (int i = 0; i < 4; i++) {
 		m_pointLight[i].Update();
 	}
-
-	m_spotLight.Update();
 }
+void Game::Clearable()
+{
+	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
+	if (diff.LengthSq() <= 120.0f * 120.0f)
+	{
+		m_gameState = m_enGameState_GameClear;
+	}
+}
+
 void Game::ClearState()
 {
 	NewGO<Result>(0, "result");

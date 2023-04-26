@@ -11,7 +11,7 @@ public:
 	bool Start()override;
 	void Update()override;
 	void Animation()override;
-	void Throw();
+	void Throw()override;
 	void PlayerChang();
 	void Render(RenderContext& rc);
 	/// <summary>
