@@ -197,14 +197,6 @@ public:
 		return m_rotation;
 	}
 
-	/// <summary>
-	/// 発見した回数を返す
-	/// </summary>
-	/// <returns></returns>
-	const int GetFindCounter() const {
-		return m_FindPlayerCounter;
-	}
-
 	// スポットライトの番号を教える
 	void AddSpotLightNum() {
 		m_spotNum++;
