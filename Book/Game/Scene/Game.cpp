@@ -160,60 +160,60 @@ void Game::LevelDesign()
 			//	return true;
 			//}
 
-			//// 名前が Normal のとき
-			//if (objData.EqualObjectName(L"Normal") == true) {
-			//	// エネミーを生成
-			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//	// 自身の属性を教える
-			//	m_enemyNormal->m_enemyType = Enemy::Normal;
-			//	// 座標・回転・スケールを教える
-			//	m_enemyNormal->SetPosition(objData.position);
-			//	m_enemyNormal->SetRotation(objData.rotation);
-			//	m_enemyNormal->SetScale(objData.scale);
-			//	// パス移動の順路を指定
-			//	m_enemyNormal->Pass(0);
-			//	// スポットライトの数を加算
-			//	m_enemyNormal->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemyNormal);
-			//	return true;
-			//}
+			// 名前が Normal のとき
+			if (objData.EqualObjectName(L"Normal") == true) {
+				// エネミーを生成
+				m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+				// 自身の属性を教える
+				m_enemyNormal->m_enemyType = Enemy::Normal;
+				// 座標・回転・スケールを教える
+				m_enemyNormal->SetPosition(objData.position);
+				m_enemyNormal->SetRotation(objData.rotation);
+				m_enemyNormal->SetScale(objData.scale);
+				// パス移動の順路を指定
+				m_enemyNormal->Pass(0);
+				// スポットライトの数を加算
+				m_enemyNormal->AddSpotLightNum();
+				// エネミーのリストに追加する
+				m_enemyList.push_back(m_enemyNormal);
+				return true;
+			}
 
-			//// 名前が Charge のとき
-			//if (objData.EqualObjectName(L"Charge") == true) {
-			//	// エネミーを生成
-			//	m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			//	// 自身の属性を教える
-			//	m_enemyCharge->m_enemyType = Enemy::Charge;
-			//	// 座標・回転・スケールを教える
-			//	m_enemyCharge->SetPosition(objData.position);
-			//	m_enemyCharge->SetRotation(objData.rotation);
-			//	m_enemyCharge->SetScale(objData.scale);
-			//	// パス移動の順路を指定
-			//	m_enemyCharge->Pass(0);
-			//	// スポットライトの数を加算
-			//	m_enemyCharge->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemyCharge);
-			//	return true;
-			//}
+			// 名前が Charge のとき
+			if (objData.EqualObjectName(L"Charge") == true) {
+				// エネミーを生成
+				m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+				// 自身の属性を教える
+				m_enemyCharge->m_enemyType = Enemy::Charge;
+				// 座標・回転・スケールを教える
+				m_enemyCharge->SetPosition(objData.position);
+				m_enemyCharge->SetRotation(objData.rotation);
+				m_enemyCharge->SetScale(objData.scale);
+				// パス移動の順路を指定
+				m_enemyCharge->Pass(0);
+				// スポットライトの数を加算
+				m_enemyCharge->AddSpotLightNum();
+				// エネミーのリストに追加する
+				m_enemyList.push_back(m_enemyCharge);
+				return true;
+			}
 
-			//// 名前が Search のとき
-			//if (objData.EqualObjectName(L"Search") == true) {
-			//	// エネミーを生成
-			//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-			//	// 自身の属性を教える
-			//	m_enemySearch->m_enemyType = Enemy::Search;
-			//	// 座標・回転・スケールを教える
-			//	m_enemySearch->SetPosition(objData.position);
-			//	m_enemySearch->SetRotation(objData.rotation);
-			//	m_enemySearch->SetScale(objData.scale);
-			//	// スポットライトの数を加算
-			//	m_enemySearch->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemySearch);
-			//	return true;
-			//}
+			// 名前が Search のとき
+			if (objData.EqualObjectName(L"Search") == true) {
+				// エネミーを生成
+				m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+				// 自身の属性を教える
+				m_enemySearch->m_enemyType = Enemy::Search;
+				// 座標・回転・スケールを教える
+				m_enemySearch->SetPosition(objData.position);
+				m_enemySearch->SetRotation(objData.rotation);
+				m_enemySearch->SetScale(objData.scale);
+				// スポットライトの数を加算
+				m_enemySearch->AddSpotLightNum();
+				// エネミーのリストに追加する
+				m_enemyList.push_back(m_enemySearch);
+				return true;
+			}
 
 			// ステージのレベル
 			{
