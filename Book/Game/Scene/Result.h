@@ -25,7 +25,6 @@ public:
 	}
 
 private:
-
 	/// <summary>
 	/// ゲームクリア時の初期化処理。
 	/// </summary>
@@ -79,8 +78,8 @@ private:
 	SpriteRender	m_stateSpriteRender;					//ステート文字画像
 	SpriteRender	m_explainSpriteRender[2];				//詳細画像
 	SpriteRender	m_cursorSpriteRender;					//カーソル
+	SpriteRender	m_rankSpriteRender;						//ランク画像
 	FontRender		m_messageFontRender[4];					//スコアメッセージ
-	FontRender		m_rankFontRender;						//ランク文字
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 
