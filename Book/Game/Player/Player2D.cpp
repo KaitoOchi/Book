@@ -3,6 +3,7 @@
 #include "Player3D.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
+#include "Star.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 20.0f,120.0f,2.0f };//ボックスコライダーの大きさ
@@ -148,4 +149,9 @@ void Player2D::Animation()
 void Player2D::Render(RenderContext& rc)
 {
 	m_modelRender->Draw(rc);
+}
+
+void Player2D::Throw()
+{
+
 }

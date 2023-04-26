@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-class GameUI;
+class Gage;
 
 class Sensor : public Object
 {
@@ -19,6 +19,6 @@ private:
 	void Hit() override;
 
 private:
-	GameUI* m_gameUI = nullptr;;
+	Gage* m_gage = nullptr;;
 };
 

@@ -3,6 +3,9 @@
 #include "GameCamera.h"
 #include "PlayerManagement.h"
 #include "Ghost.h"
+#include "Star.h"
+#include "Game.h"
+#include "Enemy.h"
 namespace
 {
 	const float WALK = 40.0f;//歩き時の乗算量
@@ -26,6 +29,8 @@ bool Player::Start()
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_ghost = FindGO<Ghost>("ghost");
+	m_star = FindGO<Star>("star");
+	m_game = FindGO<Game>("game");
 	return true;
 }
 void Player::Animation3D()
@@ -41,13 +46,11 @@ void Player::Animation3D()
 	m_animationClips[m_enAnimationClip_Jump].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Jumpend].Load("Assets/animData/player/jump_end.tka");
 	m_animationClips[m_enAnimationClip_Jumpend].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_DownStart].Load("Assets/animData/player/sleep_start.tka");
-	m_animationClips[m_enAnimationClip_DownStart].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/sleep.tka");
-	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_DownEnd].Load("Assets/animData/player/sleep_end.tka");
+	m_animationClips[m_enAnimationClip_Down].Load("Assets/animData/player/confusion.tka");
+	m_animationClips[m_enAnimationClip_Down].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_DownEnd].Load("Assets/animData/player/idle_act.tka");
 	m_animationClips[m_enAnimationClip_DownEnd].SetLoopFlag(false);
-	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/use2.tka");
+	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/attack.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
 	
 }
@@ -76,6 +79,13 @@ void Player::Update()
 		Jump();
 		Rotation();
 		ItemChange();
+		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
+			m_Player_Act&&
+			m_playerState!=m_enPlayer_Jump)
+		{
+			Throw();
+		}
+		m_Player_Act = true;
 	}
 	
 	Animation();
@@ -133,6 +143,7 @@ void Player::Jump()
 		{
 			//ジャンプをする
 			m_moveSpeed.y = JUMPVOLUM;
+			m_Player_Act = false;
 
 		}
 	}
@@ -168,6 +179,10 @@ void Player::ItemChange()
 		//音爆弾を持っている
 		m_enItemState = m_enItem_SoundBom;
 	}
+}
+
+void Player::Throw()
+{
 }
 
 void Player::GhostHit()
@@ -234,13 +249,19 @@ void Player::ProcessRunStateTransition()
 }
 void Player::ProcessJumpStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Jumpend;
+	}
 }
 void Player::ProcessJumpendStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
+	if (m_modelRender->IsPlayingAniamtion() == false&&m_characon->IsOnGround())
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+	
 }
 void Player::ProcessChangeStateTransition()
 {
@@ -250,10 +271,7 @@ void Player::ProcessChangeStateTransition()
 }
 void Player::ProcessDownStartStateTransition()
 {
-	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
-	m_Player_Act = false;
+	
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
 		m_playerState = m_enPlayer_Down;
@@ -261,18 +279,18 @@ void Player::ProcessDownStartStateTransition()
 }
 void Player::ProcessDownStateTransition()
 {
-	m_downTime -= g_gameTime->GetFrameDeltaTime();
-	if (m_downTime<0.0f)
-	{
-		//ステートの遷移
-		m_playerState = m_enPlayer_DownEnd;
-		m_downTime = 3.0f;
-	}
-}
-void Player::ProcessDownEndStateTransition()
-{
+
+	//速度を初期化
+	m_moveSpeed.x = 0;
+	m_moveSpeed.z = 0;
+	auto laststar = m_game->GetEnemyList().size() ;
+	//☆をアクティブにする
+	m_game->GetStarList()[laststar]->Activate();
+	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
+		//ステートの遷移
+		m_game->GetStarList()[laststar]->Deactivate();
 		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
@@ -330,16 +348,8 @@ void Player::ManageState()
 		ProcessThrowStateTransition();
 		break;
 		//気絶しているとき
-	case m_enPlayer_DownStart:
-		ProcessDownStartStateTransition();
-
-		//気絶しているとき
 	case m_enPlayer_Down:
 		ProcessDownStateTransition();
-		break;
-		//気絶しているとき
-	case m_enPlayer_DownEnd:
-		ProcessDownEndStateTransition();
 		break;
 	default:
 		break;
