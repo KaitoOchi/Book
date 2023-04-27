@@ -118,10 +118,5 @@ private:
 	Fade* m_fade = nullptr;
 
 	Star* m_star = nullptr;
-
-	
-
-	ModelRender m_modelRender;
-
 };
 

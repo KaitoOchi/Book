@@ -135,11 +135,21 @@ namespace nsBookEngine {
 
 		RenderShadowMap(rc);
 
-		ForwardRendering(rc);
+		if (m_isLate) {
 
-		m_bloom.Render(rc, m_mainRenderTarget);
+			Render2D(rc);
+			
+			m_bloom.Render(rc, m_mainRenderTarget);
 
-		Render2D(rc);
+			ForwardRendering(rc);
+		}
+		else {
+			ForwardRendering(rc);
+
+			m_bloom.Render(rc, m_mainRenderTarget);
+
+			Render2D(rc);
+		}
 
 		m_renderObjects.clear();
 	}
@@ -192,37 +202,8 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Render2D(RenderContext& rc)
 	{
-		BeginGPUEvent("Render2D");
-		////�����_�����O�^�[�Q�b�g�Ƃ��ė��p�ł���܂ő҂B
-		////PRESENT����RENDERTARGET�ցB
-		//rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
-
-		//// �����_�����O�^�[�Q�b�g��ݒ�
-		//rc.SetRenderTargetAndViewport(m_2DRenderTarget);
-
-		//// �����_�����O�^�[�Q�b�g��N���A
-		//rc.ClearRenderTargetView(m_2DRenderTarget);
-
-		//m_mainSprite.Draw(rc);
-
-		//描画処理
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRender2D(rc);
 		}
-
-		////RENDERTARGET����PRESENT�ցB
-		//rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
-		////PRESENT����RENDERTARGET�ցB
-		//rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
-
-		//// �����_�����O�^�[�Q�b�g��ݒ�
-		//rc.SetRenderTargetAndViewport(m_mainRenderTarget);
-
-		//m_2DSprite.Draw(rc);
-
-		////RENDERTARGET����PRESENT�ցB
-		//rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
-
-		EndGPUEvent();
 	}
 }

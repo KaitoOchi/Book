@@ -9,7 +9,21 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+
+	/// <summary>
+	/// 警戒値を上昇する。
+	/// </summary>
+	/// <param name="GageUp"></param>
 	void Vigilance(int GageUp);
+
+	/// <summary>
+	/// タイムを取得。
+	/// </summary>
+	const float GetTime()
+	{
+		return m_timer;
+	}
+
 private:
 	void Time();
 	void ChangeGage();
