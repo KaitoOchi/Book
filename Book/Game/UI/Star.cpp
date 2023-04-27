@@ -29,14 +29,14 @@ bool Star::Start()
 void Star::Update()
 {
 	Rotaition();
-	m_starRender.SetPosition(Vector3(m_position.x,m_position.y+=100.0f,m_position.z));
+	m_starRender.SetPosition(Vector3(m_position.x,m_position.y+=120.0f,m_position.z));
 	m_starRender.Update();
 }
 
 void Star::Rotaition()
 {
 	//ÅôÇâÒÇµë±ÇØÇÈ
-	m_rot.AddRotationDegY(2.0f);
+	m_rot.AddRotationDegY(4.0f);
 	m_starRender.SetRotation(m_rot);
 }
 

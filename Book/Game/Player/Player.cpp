@@ -112,7 +112,7 @@ void Player::Move()
 	cameraRight.y = 0.0f;
 	cameraRight.Normalize();
 	//もしAボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonA))
+	if (g_pad[0]->IsPress(enButtonA)&& m_characon->IsOnGround() == true)
 	{
 		//ダッシュをさせる
 		//左ステックと走る速度を乗算する
@@ -249,6 +249,11 @@ void Player::ProcessRunStateTransition()
 }
 void Player::ProcessJumpStateTransition()
 {
+	//if (m_playerManagement->m_enMnanagementState = m_playerManagement->m_enPlayer_2DChanging)
+	//{
+	//	//ステートを遷移する。
+	//	ProcessCommonStateTransition();
+	//}
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
 		m_playerState = m_enPlayer_Jumpend;
