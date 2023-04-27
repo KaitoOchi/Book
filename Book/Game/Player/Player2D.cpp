@@ -105,6 +105,7 @@ void Player2D::Animation()
 		if (i >= 29)
 		{
 			i = 0;
+			JUMPVALUE = 90;
 		}
 		break;
 	case Player::m_enPlayer_walk:
@@ -113,6 +114,7 @@ void Player2D::Animation()
 		if (WALKVALUE >= 89)
 		{
 			WALKVALUE = 30;
+			JUMPVALUE = 90;
 		}
 		break;
 	case Player::m_enPlayer_Run:
@@ -122,17 +124,19 @@ void Player2D::Animation()
 		if (RUBVALUM >= 8.8)
 		{
 			RUBVALUM = 3;
+			JUMPVALUE = 90;
 		}
 		break;
 	case Player::m_enPlayer_Jump:
+	case Player::m_enPlayer_Jumpend:
 		j = JUMPVALUE / 10;
 		JUMPVALUE++;
 		if (JUMPVALUE >= 130)
 		{
-			JUMPVALUE = 90;
+			JUMPVALUE = 130;
 		}
 		break;
-	case Player::m_enPlayer_Jumpend:
+	
 		break;
 	case Player::m_enPlayer_Change:
 		break;

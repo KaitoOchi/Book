@@ -29,7 +29,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -64,7 +64,7 @@ bool Game::Start()
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	NewGO<GameUI>(0, "gameUI");
-	NewGO<Gage>(0,"gage");
+	//NewGO<Gage>(0,"gage");
 	
 	
 	//NewGO<LightSensor>(0, "lightSensor");
@@ -101,12 +101,6 @@ bool Game::Start()
 		100.0f
 	);
 
-	m_pointLight[3].SetPointLight(
-		3,
-		Vector3::Zero,
-		{ 0.0f, 50.0f, 0.0f },
-		150.0f
-	);
 
 	LevelDesign();
 
@@ -145,8 +139,8 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	//m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
 		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -236,8 +230,8 @@ void Game::LevelDesign()
 		// ステージのレベル
 		{
 			//名前がbackgroundなら
-			//if (objData.EqualObjectName(L"base") == true)
-			if (objData.EqualObjectName(L"debug") == true) {
+			if (objData.EqualObjectName(L"base") == true)
+			/*if (objData.EqualObjectName(L"debug") == true)*/ {
 				// 背景を生成
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);

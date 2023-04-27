@@ -5,7 +5,8 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const float FLASHRANGE = 300.0f;			//フラッシュの効果範囲
+	const Vector3 LIGHTNO = Vector3::Zero;
+	const float FLASHRANGE = 600.0f;			//フラッシュの効果範囲
 	const float MAXRANGE = 2000.0f;				//ポイントライトの範囲
 	const float MAXALPHA = 0.9;					//α値の範囲
 	const float MAXAMBIENT = 10.0f;				//環境の強さ
@@ -23,8 +24,7 @@ bool FlashBom::Start()
 	Item::Start();
 	m_sphereCollider.Create(1.0f);
 	//ポイントライト
-	m_pointLight.SetColor(Vector3(0.0f,0.0f,0.0f));
-	m_pointLight.SetRange(MAXRANGE);
+	m_pointLight.SetPointLight(4, m_position, LIGHTNO, MAXRANGE);
 	m_pointLight.Update();
 	
 	//フラッシュ
@@ -78,11 +78,10 @@ void FlashBom::ItemHit()
 			start.setIdentity();
 			end.setIdentity();
 			Vector3 enemyPosition = m_game->GetEnemyList()[i]->GetPosition();
-			Vector3 playerPosition = m_playerManagement->GetPosition();
-			//始点はプレイヤーの座標
-			start.setOrigin(btVector3(playerPosition.x, playerPosition.y, playerPosition.z));
+			//始点はアイテムの座標
+			start.setOrigin(btVector3(m_position.x, 10.0f, m_position.z));
 			//終点はエネミーの座標
-			end.setOrigin(btVector3(enemyPosition.x, enemyPosition.y, enemyPosition.z));
+			end.setOrigin(btVector3(enemyPosition.x, 10.0f, enemyPosition.z));
 			SweepResyltWall callback;
 			//コライダーを始点から終点までを動かして。
 			//衝突するかどうか調べる
@@ -90,7 +89,7 @@ void FlashBom::ItemHit()
             //壁と衝突した
 			if (callback.isHit == true)
 			{
-				//プレイヤーは見つかっていない
+				//エネミーが壁の向こういる
 				return;
 			}
 			//壁と衝突していない
