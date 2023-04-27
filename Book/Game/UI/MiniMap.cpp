@@ -5,6 +5,8 @@
 #include "Enemy_Normal.h"
 #include "Enemy_Search.h"
 #include "Enemy_Charge.h"
+#include "Game.h"
+#include "Enemy.h"
 
 namespace
 {
@@ -24,6 +26,13 @@ MiniMap::~MiniMap()
 
 bool MiniMap::Start()
 {
+	// インスタンスを探す
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_game = FindGO<Game>("game");
+	// エネミーのリストを持ってくる
+	m_enemyList = m_game->GetEnemyList();
+
+	// 画像を用意する
 	// マップ画像
 	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_SpriteRender.SetPosition(CENTER_POSITION);
@@ -39,29 +48,19 @@ bool MiniMap::Start()
 	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
 
 	// エネミー
-	for (int i = 0; i < ENEMY_NUM; i++) {
+	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_EnemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
 	}
-
-	// インスタンスを探す
-	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-
-	//m_enemyNormal = FindGO<Enemy_Normal>("enemyNormal");
-	m_enemySearch = FindGO<Enemy_Search>("enemySearch");
-	m_enemyCharge = FindGO<Enemy_Charge>("enemyCharge");
 
 	return true;
 }
 
 void MiniMap::Update()
 {
-	// マップ座標に変換
-	//DrawMap(m_enemyNormal->GetPosition(),0);
-	DrawMap(m_enemySearch->GetPosition(), 1);
-	DrawMap(m_enemyCharge->GetPosition(), 2);
-
-	// 更新
-	for (int i = 0; i < ENEMY_NUM; i++) {
+	for (int i = 0; i < m_enemyList.size(); i++) {
+		// マップ座標に変換
+		DrawMap(m_enemyList[i]->GetPosition(), i);
+		// 更新
 		m_EnemySpriteRender[i].Update();
 	}
 
@@ -138,7 +137,7 @@ void MiniMap::Render(RenderContext& rc)
 	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
-	for (int i = 0; i < ENEMY_NUM; i++) {
+	for (int i = 0; i < m_enemyList.size(); i++) {
 		// 範囲内のとき
 		if (m_isImage[i] == true) {
 			// 描画する

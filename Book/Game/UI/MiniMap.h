@@ -4,10 +4,12 @@ class PlayerManagement;
 class Enemy_Normal;
 class Enemy_Search;
 class Enemy_Charge;
+class Game;
+class Enemy;
 
 namespace
 {
-	const int ENEMY_NUM = 3;							// 表示するエネミーの総数
+	const int ENEMY_NUM = 50;							// 表示するかどうかのフラグ用。多めに用意する。
 }
 
 class MiniMap:public IGameObject
@@ -50,6 +52,9 @@ private:
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
+	Game* m_game = nullptr;
+
+	std::vector<Enemy*> m_enemyList;				// エネミーのリスト
 
 	bool m_isImage[ENEMY_NUM];						// 表示するかどうかのフラグ。エネミーの数分用意する
 };
