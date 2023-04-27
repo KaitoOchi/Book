@@ -10,6 +10,7 @@ namespace
 	const Vector3 MODELSIZE{ 1.0f,1.0f,1.0f };
 	int WALKVALUE = 30;
 	int JUMPVALUE = 90;
+	float RUBVALUM = 3.0f;
 }
 Player2D::Player2D()
 {
@@ -115,6 +116,13 @@ void Player2D::Animation()
 		}
 		break;
 	case Player::m_enPlayer_Run:
+		//歩くアニメーションを早くする
+		j = RUBVALUM;
+		RUBVALUM += 0.2;
+		if (RUBVALUM >= 8.8)
+		{
+			RUBVALUM = 3;
+		}
 		break;
 	case Player::m_enPlayer_Jump:
 		j = JUMPVALUE / 10;

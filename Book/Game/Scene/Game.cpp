@@ -63,6 +63,7 @@ bool Game::Start()
 	NewGO<Sensor>(0, "sensor");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
+	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
 	
@@ -77,7 +78,7 @@ bool Game::Start()
 
 	//m_modelRender.Init("Assets/modelData/wall1.tkm");
 
-	m_flahBom = NewGO<FlashBom>(0, "flashBom");
+	
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 	m_pointLight[0].SetPointLight(
