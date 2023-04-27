@@ -63,7 +63,7 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	NewGO<GameUI>(0, "gameUI");
-	NewGO<Gage>(0,"gage");
+	//NewGO<Gage>(0,"gage");
 	
 	
 	//NewGO<LightSensor>(0, "lightSensor");
@@ -124,13 +124,13 @@ bool Game::Start()
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
-	m_fade = FindGO<Fade>("fade");
-	m_fade->StartFadeIn();
-	for (int i = 0; i <= m_enemyList.size(); i++)
-	{
-		m_star = NewGO<Star>(0, "star");
-		m_starList.push_back(m_star);
-	}
+	//m_fade = FindGO<Fade>("fade");
+	//m_fade->StartFadeIn();
+	//for (int i = 0; i <= m_enemyList.size(); i++)
+	//{
+	//	m_star = NewGO<Star>(0, "star");
+	//	m_starList.push_back(m_star);
+	//}
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
@@ -144,8 +144,8 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	//m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
+	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+/*	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
 		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -235,8 +235,8 @@ void Game::LevelDesign()
 		// ステージのレベル
 		{
 			//名前がbackgroundなら
-			//if (objData.EqualObjectName(L"base") == true)
-			if (objData.EqualObjectName(L"debug") == true) {
+			if (objData.EqualObjectName(L"base") == true)
+		/*	if (objData.EqualObjectName(L"debug") == true)*/ {
 				// 背景を生成
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);
@@ -319,7 +319,7 @@ void Game::LevelDesign()
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
-		if (objData.EqualObjectName(L"item") == true) {
+		if (objData.EqualObjectName(L"otakara") == true) {
 
 			m_treaSure = NewGO<Treasure>(0, "treaSure");
 			m_treaSure->SetPosition(objData.position);
