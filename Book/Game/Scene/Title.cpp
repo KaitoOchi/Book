@@ -384,6 +384,10 @@ void Title::ManageState()
 
 void Title::TitleScreen()
 {
+	m_titleSpriteRender.SetPosition(Vector3(-340.0f, 250.0f, 0.0f));
+	m_titleSpriteRender.SetScale(Vector3(1.0f, 1.0f, 0.0f));
+	m_titleSpriteRender.Update();
+
 	//透明度を変更
 	m_pressSpriteRender.SetMulColor(Vector4(m_alpha, m_alpha, m_alpha, m_alpha));
 	m_pressSpriteRender.Update();
@@ -391,6 +395,10 @@ void Title::TitleScreen()
 
 void Title::MenuScreen()
 {
+	m_titleSpriteRender.SetPosition(Vector3(-675.0f, 400.0f, 0.0f));
+	m_titleSpriteRender.SetScale(Vector3(0.25f, 0.25f, 0.0f));
+	m_titleSpriteRender.Update();
+
 	if (!m_isWaitState || m_animTime < 0.0f) {
 		m_cursorSpriteRender.SetPosition(Vector3(-725.0f,  475.0f + (m_cursor_vertical * -235.0f), 0.0f));
 		m_cursorSpriteRender.Update();
@@ -458,6 +466,7 @@ void Title::Render(RenderContext &rc)
 	//メニュー画面なら
 	case 1:
 		m_menuSpriteRender.Draw(rc);
+		m_titleSpriteRender.Draw(rc);
 		m_buttonSpriteRender[0].Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
 		break;

@@ -368,9 +368,9 @@ void Game::Clearable()
 
 void Game::ClearState()
 {
-	NewGO<Result>(0, "result");
+	Result* result = NewGO<Result>(0, "result");
+	result->SetResult(true);
 	DeleteGO(this);
-
 }
 
 void Game::MnageState()
