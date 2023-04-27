@@ -32,6 +32,9 @@ bool Title::Start()
 {
 	InitSprite();
 
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm");
+
+	//デバッグ用
 	m_debugFontRender.SetPosition(Vector3(500.0f, 200.0f, 0.0f));
 
 	//セーブデータのロード
@@ -234,14 +237,6 @@ void Title::Input()
 			return;
 		}
 
-		//設定画面なら
-		if (m_titleState_tmp == 4) {
-			//保存して閉じる
-			SetSaveData();
-			SetDataArray();
-			m_isWaitState = true;
-		}
-
 		//メニュー画面以降なら
 		if (m_titleState_tmp >= 2) {
 			m_titleState_tmp = 1;
@@ -329,6 +324,7 @@ void Title::ValueUpdate(bool vertical)
 		//配列に値を保存する
 		else {
 			m_saveDataArray[m_cursor_vertical - 1] = m_cursor_horizontal;
+			//保存する
 			SetSaveData();
 			GameManager::GetInstance()->SetVolume();
 		}
@@ -456,6 +452,7 @@ void Title::Render(RenderContext &rc)
 	case 0:
 		m_pressSpriteRender.Draw(rc);
 		m_titleSpriteRender.Draw(rc);
+		m_playerModelRender.Draw(rc);
 		break;
 
 	//メニュー画面なら

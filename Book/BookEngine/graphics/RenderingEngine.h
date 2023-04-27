@@ -188,6 +188,14 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// スプライトとモデルの描画順を変更
+		/// </summary>
+		void SetIsLate(const bool isLate)
+		{
+			m_isLate = isLate;
+		}
+
+		/// <summary>
 		/// 初期化処理。
 		/// </summary>
 		void Init();
@@ -230,26 +238,28 @@ namespace nsBookEngine {
 	private:
 		static RenderingEngine* m_instance;
 
-		LightCB m_lightCB;
-		SpriteCB m_spriteCB;
+		LightCB					m_lightCB;							//ライト用の構造体
+		SpriteCB				m_spriteCB;							//スプライト用の構造体
 
-		DirectionLight m_directionLig;
-		HemiSphereLight m_hemiSphereLig;
+		DirectionLight			m_directionLig;						//ディレクショナルライトの構造体
+		HemiSphereLight			m_hemiSphereLig;					//半球ライトの構造体
 
-		Bloom m_bloom;
+		Bloom					m_bloom;							//ブルーム
 
-		RenderTarget m_mainRenderTarget;								//メインレンダーターゲット
+		RenderTarget			m_mainRenderTarget;					//メインレンダーターゲット
 
-		RenderTarget m_2DRenderTarget;                                  //2Dレンダーターゲット
-		Sprite m_2DSprite;                                              //2Dスプライト
-		Sprite m_mainSprite;
-		Sprite m_copyMainRtToFrameBufferSprite;                         //メインレンダーターゲットのスプライト
+		RenderTarget			m_2DRenderTarget;					//2Dレンダーターゲット
+		Sprite					m_2DSprite;                         //2Dスプライト
+		Sprite					m_mainSprite;
+		Sprite					m_copyMainRtToFrameBufferSprite;    //メインレンダーターゲットのスプライト
 		
-		RenderTarget m_shadowMapRenderTarget;							//シャドウマップ用のレンダーターゲット
-		GaussianBlur m_shadowBlur;										//シャドウ用のガウシアンブラー
+		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
+		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
 		
-		std::vector<IRenderer*> m_renderObjects;
+		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 
-		Camera m_lightCamera;
+		Camera					m_lightCamera;						//ライトカメラ
+
+		bool					m_isLate = false;					//描画順の変更
 	};
 }

@@ -130,6 +130,23 @@ public:
 	}
 
 	/// <summary>
+	/// 発見された数を加算。
+	/// </summary>
+	void AddSearchNum()
+	{
+		m_searchNum++;
+	}
+
+	/// <summary>
+	/// 発見された数を取得。
+	/// </summary>
+	/// <returns></returns>
+	const int GetSearchNum()
+	{
+		return m_searchNum;
+	}
+
+	/// <summary>
 	/// 更新処理。
 	/// </summary>
 	void Update();
@@ -153,6 +170,7 @@ private:
 
 	bool					m_posState = true;			//ポーズ中かどうか
 	bool					m_isDeleteBGM = false;		//BGMの削除中かどうか
+	int						m_searchNum = 0;			//敵に見つかった回数
 	float					m_timer = 0.0f;				//タイマー
 };
 
