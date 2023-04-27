@@ -9,11 +9,11 @@
 
 
 /// <summary>
-/// ƒƒCƒ“ŠÖ”
+/// ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Öï¿½
 /// </summary>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	// ƒQ[ƒ€‚Ì‰Šú‰»B
+	// ï¿½Qï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
 	NewGO<Title>(0, "title");
@@ -24,7 +24,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	RenderingEngine::GetInstance()->Init();
 
-	// ‚±‚±‚©‚çƒQ[ƒ€ƒ‹[ƒvB
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½vï¿½B
 	while (DispatchWindowMessage())
 	{
 		BookEngine::GetInstance()->Execute();

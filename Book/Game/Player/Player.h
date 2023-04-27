@@ -231,9 +231,4 @@ protected:
 	Vector3 m_setGhostpos=Vector3::Zero;
 
 	float m_downTime = 3.0f;									//‹CâŠÔ
-
-	
-	
-
-
 };

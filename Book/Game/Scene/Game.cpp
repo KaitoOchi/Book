@@ -29,8 +29,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -38,19 +37,19 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-
+	//�E�G�E�l�E�~�E�[
 	DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
 	DeleteGO(m_enemyClear);
-
-	//オブジェクト
+	//�I�u�W�F�N�g
+	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
-
+	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 }
@@ -146,158 +145,182 @@ void Game::LevelDesign()
 {
 	// レベルデザイン処理
 	//m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-			m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData){
-			// �E��E��E�O�E��E�unityChan�E�Ȃ�
+	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData) {
+		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
-			//// �E��E��E�O�E��E�unityChan�E�Ȃ�
-			//if (objData.ForwardMatchName(L"FootmanHP") == true) {
-			//	//m_mirror = NewGO<Mirror>(0, "mirror");
+		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
+		//	//m_mirror = NewGO<Mirror>(0, "mirror");
 
-			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//	m_enemyNormal->SetPosition(objData.position);
-			//	m_enemyNormal->SetRotation(objData.rotation);
-			//	m_enemyNormal->SetScale(objData.scale);
-			//	// Enemy�E�́E���E�X�E�g�E�ɒǉ�
-			//	m_enemyList.push_back(m_enemyNormal);
+		//	// エネミーを生成
+		//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+		//	// 自身の属性を教える
+		//	m_enemyNormal->m_enemyType = Enemy::Normal;
+		//	// 座標・回転・スケールを教える
+		//	m_enemyNormal->SetPosition(objData.position);
+		//	m_enemyNormal->SetRotation(objData.rotation);
+		//	m_enemyNormal->SetScale(objData.scale);
+		//	// パス移動の順路を指定
+		//	m_enemyNormal->Pass(0);
+		//	// エネミーのリストに追加する
+		//	m_enemyList.push_back(m_enemyNormal);
 
-			//	// �E�p�E�X�E�ړ��E�̎w�E��E�
-			//	m_enemyNormal->Pass(0);
-			//	m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
-			//	m_enemyClear->SetPosition(objData.position);
-			//	m_enemyClear->SetRotation(objData.rotation);
-			//	m_enemyClear->SetScale(objData.scale);
-			//	// Enemy�̃��X�g�ɒǉ�
-			//	m_enemyList.push_back(m_enemyClear);
+		//	m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+		//	m_enemyClear->SetPosition(objData.position);
+		//	m_enemyClear->SetRotation(objData.rotation);
+		//	m_enemyClear->SetScale(objData.scale);
+		//	// Enemy�̃��X�g�ɒǉ�
+		//	m_enemyList.push_back(m_enemyClear);
 
-			//	// �p�X�ړ��̎w��
-			//	m_enemyClear->Pass(7);
-			//	return true;
-			//}
+		//	// �p�X�ړ��̎w��
+		//	m_enemyClear->Pass(7);
 
-			//// 名前が Normal のとき
-			//if (objData.EqualObjectName(L"Normal") == true) {
-			//	// エネミーを生成
-			//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-			//	// 自身の属性を教える
-			//	m_enemyNormal->m_enemyType = Enemy::Normal;
-			//	// 座標・回転・スケールを教える
-			//	m_enemyNormal->SetPosition(objData.position);
-			//	m_enemyNormal->SetRotation(objData.rotation);
-			//	m_enemyNormal->SetScale(objData.scale);
-			//	// パス移動の順路を指定
-			//	m_enemyNormal->Pass(0);
-			//	// スポットライトの数を加算
-			//	m_enemyNormal->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemyNormal);
-			//	return true;
-			//}
+		//	return true;
+		//}
 
-			//// 名前が Charge のとき
-			//if (objData.EqualObjectName(L"Charge") == true) {
-			//	// エネミーを生成
-			//	m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
-			//	// 自身の属性を教える
-			//	m_enemyCharge->m_enemyType = Enemy::Charge;
-			//	// 座標・回転・スケールを教える
-			//	m_enemyCharge->SetPosition(objData.position);
-			//	m_enemyCharge->SetRotation(objData.rotation);
-			//	m_enemyCharge->SetScale(objData.scale);
-			//	// パス移動の順路を指定
-			//	m_enemyCharge->Pass(0);
-			//	// スポットライトの数を加算
-			//	m_enemyCharge->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemyCharge);
-			//	return true;
-			//}
+		// 名前が Normal のとき
+		if (objData.EqualObjectName(L"Normal") == true) {
+			// エネミーを生成
+			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			// 自身の属性を教える
+			m_enemyNormal->m_enemyType = Enemy::Normal;
+			// 座標・回転・スケールを教える
+			m_enemyNormal->SetPosition(objData.position);
+			m_enemyNormal->SetRotation(objData.rotation);
+			m_enemyNormal->SetScale(objData.scale);
+			// パス移動の順路を指定
+			m_enemyNormal->Pass(0);
+			// スポットライトの数を加算
+			m_enemyNormal->AddSpotLightNum();
+			// エネミーのリストに追加する
+			m_enemyList.push_back(m_enemyNormal);
+			return true;
+		}
 
-			//// 名前が Search のとき
-			//if (objData.EqualObjectName(L"Search") == true) {
-			//	// エネミーを生成
-			//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-			//	// 自身の属性を教える
-			//	m_enemySearch->m_enemyType = Enemy::Search;
-			//	// 座標・回転・スケールを教える
-			//	m_enemySearch->SetPosition(objData.position);
-			//	m_enemySearch->SetRotation(objData.rotation);
-			//	m_enemySearch->SetScale(objData.scale);
-			//	// スポットライトの数を加算
-			//	m_enemySearch->AddSpotLightNum();
-			//	// エネミーのリストに追加する
-			//	m_enemyList.push_back(m_enemySearch);
-			//	return true;
-			//}
+		// 名前が Charge のとき
+		if (objData.EqualObjectName(L"Charge") == true) {
+			// エネミーを生成
+			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			// 自身の属性を教える
+			m_enemyCharge->m_enemyType = Enemy::Charge;
+			// 座標・回転・スケールを教える
+			m_enemyCharge->SetPosition(objData.position);
+			m_enemyCharge->SetRotation(objData.rotation);
+			m_enemyCharge->SetScale(objData.scale);
+			// パス移動の順路を指定
+			m_enemyCharge->Pass(0);
+			// スポットライトの数を加算
+			m_enemyCharge->AddSpotLightNum();
+			// エネミーのリストに追加する
+			m_enemyList.push_back(m_enemyCharge);
+			return true;
+		}
 
-			// ステージのレベル
-				//名前がbackgroundなら
-				//if (objData.EqualObjectName(L"base") == true)
-				if (objData.EqualObjectName(L"debug") == true) {
-					// 背景を生成
-					m_backGround = NewGO<BackGround>(0, "backGround");
-					m_backGround->SetPosition(objData.position);
-					m_backGround->SetRotation(objData.rotation);
-					m_backGround->SetScale(objData.scale);
+		// 名前が Search のとき
+		if (objData.EqualObjectName(L"Search") == true) {
+			// エネミーを生成
+			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			// 自身の属性を教える
+			m_enemySearch->m_enemyType = Enemy::Search;
+			// 座標・回転・スケールを教える
+			m_enemySearch->SetPosition(objData.position);
+			m_enemySearch->SetRotation(objData.rotation);
+			m_enemySearch->SetScale(objData.scale);
+			// スポットライトの数を加算
+			m_enemySearch->AddSpotLightNum();
+			// エネミーのリストに追加する
+			m_enemyList.push_back(m_enemySearch);
+			return true;
+		}
 
-					return true;
-				}
-				// 名前がboxなら
-				if (objData.EqualObjectName(L"box") == true) {
-					// 壁を生成
-					m_wall = NewGO<Wall>(0, "wall");
-					m_wall->SetWallModel(0);
-					m_wall->SetPosition(objData.position);
-					m_wall->SetRotation(objData.rotation);
-					m_wall->SetScale(objData.scale);
+		// ステージのレベル
+		{
+			//名前がbackgroundなら
+			//if (objData.EqualObjectName(L"base") == true)
+			if (objData.EqualObjectName(L"debug") == true) {
+				// 背景を生成
+				m_backGround = NewGO<BackGround>(0, "backGround");
+				m_backGround->SetPosition(objData.position);
+				m_backGround->SetRotation(objData.rotation);
+				m_backGround->SetScale(objData.scale);
 
-					return true;
-				}
-				//// 名前がgapのとき
-				//if (objData.EqualObjectName(L"gap") == true) {
-				//	// 隙間を生成する
-				//	m_wall = NewGO<Wall>(0, "wall");
-				//	//m_wall->SetWallModel(1);
-				//	m_wall->SetPosition(objData.position);
-				//	m_wall->SetRotation(objData.rotation);
-				//	m_wall->SetScale(objData.scale);
+				return true;
+			}
+			// 名前がboxなら
+			if (objData.EqualObjectName(L"box") == true) {
+				// 壁を生成
+				m_wall = NewGO<Wall>(0, "wall");
+				m_wall->SetPosition(objData.position);
+				m_wall->SetRotation(objData.rotation);
+				m_wall->SetScale(objData.scale);
 
-				//	return true;
-				//}
-				//// 名前がdecorationのとき
-				//if (objData.EqualObjectName(L"decoration") == true) {
-				//	// 障害物を生成
-				//	m_wall = NewGO<Wall>(0, "wall");
-				//	//m_wall->SetWallModel(0);
-				//	m_wall->SetPosition(objData.position);
-				//	m_wall->SetRotation(objData.rotation);
-				//	m_wall->SetScale(objData.scale);
-
-				//	return true;
-				//}
-				//// 名前がstartのとき
-				//if (objData.EqualObjectName(L"start") == true) {
-				//	// スタートを生成
-				//	m_wall = NewGO<Wall>(0, "wall");
-				//	//m_wall->SetWallModel(0);
-				//	m_wall->SetPosition(objData.position);
-				//	m_wall->SetRotation(objData.rotation);
-				//	m_wall->SetScale(objData.scale);
-			//if (objData.EqualObjectName(L"unityChan") == true) {
-
-			//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-			//	m_enemySearch->SetPosition(objData.position);
-			//	m_enemySearch->SetRotation(objData.rotation);
-			//	m_enemySearch->SetScale(objData.scale);
-			//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
-			//	m_enemyList.push_back(m_enemySearch);
+				return true;
+			}
+			//// 名前がgapのとき
+			//if (objData.EqualObjectName(L"gap") == true) {
+			//	// 隙間を生成する
+			//	m_wall = NewGO<Wall>(0, "wall");
+			//	//m_wall->SetWallModel(1);
+			//	m_wall->SetPosition(objData.position);
+			//	m_wall->SetRotation(objData.rotation);
+			//	m_wall->SetScale(objData.scale);
 
 			//	return true;
 			//}
+			//// 名前がdecorationのとき
+			//if (objData.EqualObjectName(L"decoration") == true) {
+			//	// 障害物を生成
+			//	m_wall = NewGO<Wall>(0, "wall");
+			//	//m_wall->SetWallModel(0);
+			//	m_wall->SetPosition(objData.position);
+			//	m_wall->SetRotation(objData.rotation);
+			//	m_wall->SetScale(objData.scale);
+
+			//	return true;
+			//}
+			//// 名前がstartのとき
+			//if (objData.EqualObjectName(L"start") == true) {
+			//	// スタートを生成
+			//	m_wall = NewGO<Wall>(0, "wall");
+			//	//m_wall->SetWallModel(0);
+			//	m_wall->SetPosition(objData.position);
+			//	m_wall->SetRotation(objData.rotation);
+			//	m_wall->SetScale(objData.scale);
+
+			//	return true;
+			//}
+			//// 名前がgoalのとき
+			//if (objData.EqualObjectName(L"goal") == true) {
+			//	// ゴールを生成
+			//	m_wall = NewGO<Wall>(0, "wall");
+			//	//m_wall->SetWallModel(0);
+			//	m_wall->SetPosition(objData.position);
+			//	m_wall->SetRotation(objData.rotation);
+			//	m_wall->SetScale(objData.scale);
+
+			//	return true;
+			//}
+		}
+
+
+		//if (objData.EqualObjectName(L"unityChan") == true) {
+
+		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+		//	m_enemySearch->SetPosition(objData.position);
+		//	m_enemySearch->SetRotation(objData.rotation);
+		//	m_enemySearch->SetScale(objData.scale);
+		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
+		//	m_enemyList.push_back(m_enemySearch);
+
+		//	return true;
+		//}
+
 		if (objData.EqualObjectName(L"debugtoumei") == true) {
+
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"item") == true) {
+
 			m_treaSure = NewGO<Treasure>(0, "treaSure");
 			m_treaSure->SetPosition(objData.position);
 			m_treaSure->SetScale(objData.scale);
@@ -313,13 +336,17 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
-			m_clearList.push_back(objData.position);
-			m_pointLight[lights].SetPosition(Vector3(objData.position.x,objData.position.y+50.0f,objData.position.z));
-			lights += 1;
+
+			SetClearPosition(objData.position);
+
+			for (int i = 0; i < 4; i++) {
+				m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
+			}
 			return true;
 		}
 		return true;
-		});
+		}
+	);
 }
 
 void Game::Update()
