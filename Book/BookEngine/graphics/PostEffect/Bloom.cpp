@@ -110,8 +110,10 @@ namespace nsBookEngine {
 		rc.WaitUntilToPossibleSetRenderTarget(mainRenderTarget);
 		// レンダリングターゲットを設定
 		rc.SetRenderTargetAndViewport(mainRenderTarget);
+
 		// 最終合成
 		m_finalSprite.Draw(rc);
+
 		// レンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
 

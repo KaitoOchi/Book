@@ -36,16 +36,6 @@ private:
 	void InitSprite();
 
 	/// <summary>
-	/// ゲームクリア時の初期化処理。
-	/// </summary>
-	void InitGameClear();
-
-	/// <summary>
-	/// ゲームオーバー時の初期化処理。
-	/// </summary>
-	void InitGameOver();
-
-	/// <summary>
 	/// 入力処理。
 	/// </summary>
 	void Input();
@@ -79,8 +69,8 @@ private:
 	//リザルトステート
 	enum ResultState
 	{
-		enState_GameClear,
-		enState_GameOver
+		enState_GameOver,
+		enState_GameClear
 	};
 
 private:
@@ -95,7 +85,7 @@ private:
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 
-	ResultState		m_resultState = enState_GameOver;		//リザルトステート
+	ResultState		m_resultState = enState_GameClear;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
 

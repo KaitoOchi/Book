@@ -8,10 +8,12 @@
 
 namespace
 {
-	const float CAN_INPUT = 6.0f;									//入力可能時間
-	const float	ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };	//表示可能になる時間
-	const char RANK[4] = { 'A', 'B', 'C', 'D' };					//ランク一覧
-	const int SCORE_RANK[4] = { 5000, 4000, 3000, 2000 };			//ランクの条件
+	const char		RANK[4] = { 'A', 'B', 'C', 'D' };						//ランク一覧
+	const wchar_t* GET_TREASURE_TEXT[2] = {L"    FAILED", L" SUCCUESS!" };	//宝を取得したかどうかのテキスト
+	const int		SCORE_RANK[4] = { 100000, 80000, 60000, 50000 };				//ランクの条件
+	const float		CAN_INPUT = 6.0f;										//入力可能時間
+	const float		ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };		//表示可能になる時間
+	const Vector3	GAMEOVER_SPRITE_POS = { -150.0f, 0.0f, 0.0f };			//ゲームオーバー画像の座標
 }
 
 Result::Result()
@@ -30,19 +32,6 @@ bool Result::Start()
 
 	InitScore();
 
-	switch (m_resultState)
-	{
-	//ゲームクリアなら
-	case enState_GameClear:
-		InitGameClear();
-		break;
-
-	//ゲームオーバーなら
-	case enState_GameOver:
-		InitGameOver();
-		break;
-	}
-
 	//待機時間の設定
 	m_canInputTime = CAN_INPUT;
 
@@ -53,11 +42,6 @@ bool Result::Start()
 	return true;
 }
 
-void Result::InitGameClear()
-{
-
-}
-
 void Result::InitScore()
 {
 	GameUI* gameUI = FindGO<GameUI>("gameUI");
@@ -65,14 +49,14 @@ void Result::InitScore()
 	//リザルトを保存
 	//m_score[0] = gameUI->GetTime();
 	m_score[0] = 180;
-	m_score[1] = 1;
+	m_score[1] = m_resultState;
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
 	//m_score[2] = 5;
-	m_score[3] = (m_score[0] * 10) +
-		(m_score[1] * 5000) +
+	m_score[3] = (m_score[0] * 100) +
+		(m_score[1] * 50000) +
 		(m_score[2] * -500);
 
-	char rank = 'D';
+	char rank = 'E';
 	//スコアからランクを設定
 	for (int i = 0; i < 4; i++) {
 		//スコアのほうが上なら
@@ -114,7 +98,8 @@ void Result::InitScore()
 
 		case 1:
 			swprintf_s(text, 255,
-				L"  SUCCESS!"
+				L"%s",
+				GET_TREASURE_TEXT[m_resultState]
 			);
 			break;
 
@@ -163,18 +148,25 @@ void Result::InitSprite()
 		//名前が一致していたら。
 		if (objData.EqualObjectName("missionComplete!") == true) {
 			//文字画像を設定
-			m_stateSpriteRender.Init(objData.ddsFilePath, objData.width, objData.height);
-			m_stateSpriteRender.SetPosition(objData.position);
+			if (m_resultState == enState_GameClear) {
+				m_stateSpriteRender.Init(objData.ddsFilePath, objData.width, objData.height);
+				m_stateSpriteRender.SetPosition(objData.position);
+			}
+			else {
+				m_stateSpriteRender.Init("Assets/sprite/UI/gameOver/gameover.DDS", 516.0f, 138.0f);
+				m_stateSpriteRender.SetPosition(objData.position + GAMEOVER_SPRITE_POS);
+			}
 			m_stateSpriteRender.Update();
 			return true;
 		}
 		else if (objData.EqualObjectName("result_rank") == true) {
+			//ランク画像を設定
 			m_explainSpriteRender[0].Init(objData.ddsFilePath, objData.width, objData.height);
 			m_explainSpriteRender[0].SetPosition(objData.position);
 
 			Quaternion rot;
 			rot.SetRotationZ(Math::DegToRad(-30.0f));
-
+			//失敗時の画像を設定
 			m_failedSpriteRender.Init("Assets/sprite/UI/result/failed!.DDS", 497.0f, 170.0f);
 			m_failedSpriteRender.SetPosition(objData.position);
 			m_failedSpriteRender.SetRotation(rot);
@@ -182,11 +174,13 @@ void Result::InitSprite()
 			return true;
 		}
 		else if (objData.EqualObjectName("result_text") == true) {
+			//スコア画像を設定
 			m_explainSpriteRender[1].Init(objData.ddsFilePath, objData.width, objData.height);
 			m_explainSpriteRender[1].SetPosition(objData.position);
 			return true;
 		}
 		else if (objData.EqualObjectName("light") == true) {
+			//スコアを表示する位置を設定
 			m_fontPosition[lightNum] = objData.position;
 			lightNum++;
 			return true;
@@ -198,11 +192,6 @@ void Result::InitSprite()
 		m_explainSpriteRender[i].SetScale(Vector3(0.9f, 0.9f, 0.0f));
 		m_explainSpriteRender[i].Update();
 	}
-}
-
-void Result::InitGameOver()
-{
-
 }
 
 void Result::Update()

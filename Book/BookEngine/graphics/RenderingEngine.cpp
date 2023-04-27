@@ -138,10 +138,10 @@ namespace nsBookEngine {
 		if (m_isLate) {
 
 			Render2D(rc);
+			
+			m_bloom.Render(rc, m_mainRenderTarget);
 
 			ForwardRendering(rc);
-			
-			//m_bloom.Render(rc, m_mainRenderTarget);
 		}
 		else {
 			ForwardRendering(rc);
