@@ -85,7 +85,7 @@ private:
 
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
 
-	ResultState		m_resultState = enState_GameClear;		//リザルトステート
+	ResultState		m_resultState = enState_GameOver;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
 
