@@ -478,6 +478,18 @@ void Enemy::Act_Charge(float time)
 	}
 }
 
+void Enemy::SearchPass(EnEnemyActState state)
+{
+	// 経路探索をしない
+	Vector3 diff = m_playerManagement->GetPosition() - m_position;
+	if (diff.Length() < 1500.0f) {
+		m_ActState = state;
+	}
+	else {
+		m_ActState = NOOP;
+	}
+}
+
 void Enemy::Act_Call()
 {
 	// 周りの敵を呼ぶ処理

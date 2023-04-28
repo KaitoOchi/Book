@@ -30,6 +30,8 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
+	Enemy::SearchPass(SEARCH);
+
 	switch (m_ActState) {
 	case SEARCH:
 		Update_OnSearch();
@@ -42,6 +44,10 @@ void Enemy_Search::Update()
 		break;
 	case CONFUSION:
 		Update_OnConfusion();
+		break;
+		// ‰½‚à‚µ‚È‚¢
+	case NOOP:
+		return;
 		break;
 	}
 
