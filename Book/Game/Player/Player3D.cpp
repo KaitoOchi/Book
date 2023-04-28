@@ -6,9 +6,12 @@
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Star.h"
+#include "Enemy.h"
+#include "Game.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
+	const float SPEEDDOWN = 0.8;//速度減速率
 }
 Player3D::Player3D()
 {
@@ -203,11 +206,112 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 
 }
 
+void Player3D::ProcessIdleStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessWalkStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessRunStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessJumpStateTransition()
+{
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Jumpend;
+
+	}
+}
+void Player3D::ProcessJumpendStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+
+}
+void Player3D::ProcessChangeStateTransition()
+{
+
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessDownStartStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Down;
+	}
+}
+void Player3D::ProcessDownStateTransition()
+{
+
+	//速度を初期化
+	m_moveSpeed.x = 0;
+	m_moveSpeed.z = 0;
+	auto laststar = m_game->GetEnemyList().size();
+	//☆をアクティブにする
+	m_game->GetStarList()[laststar]->Activate();
+	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+
+		//ステートの遷移
+		m_game->GetStarList()[laststar]->Deactivate();
+		//ステートの遷移
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+void Player3D::ProcessThrowStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+void Player3D::ProcessStealStateTransition()
+{
+
+}
+
+void Player3D::ProcessFoundStateTransition()
+{
+
+}
+
+void Player3D::ProcessCaughtStateTransition()
+{
+
+}
+
+void Player3D::ProcessClearStateTransition()
+{
 
 
+}
+
+void Player3D::ProcessGameOverStateTransition()
+{
 
 
-
+}
 void Player3D::Render(RenderContext& rc)
 {
 	m_modelRender->Draw(rc);

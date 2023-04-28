@@ -255,84 +255,43 @@ void Player::ProcessCommonStateTransition()
 }
 void Player::ProcessIdleStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessWalkStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessRunStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessJumpStateTransition()
 {
-	if (m_modelRender->IsPlayingAniamtion() == false )
-	{
-		m_playerState = m_enPlayer_Jumpend;
-
-	}
 }
 void Player::ProcessJumpendStateTransition()
 {
-	
-	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
-	{
-		//ステートを遷移する。
-		ProcessCommonStateTransition();
-	}
-	
 }
 void Player::ProcessChangeStateTransition()
 {
-
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessDownStartStateTransition()
 {
-	
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		m_playerState = m_enPlayer_Down;
-	}
 }
 void Player::ProcessDownStateTransition()
 {
-
-	//速度を初期化
-	m_moveSpeed.x = 0;
-	m_moveSpeed.z = 0;
-	auto laststar = m_game->GetEnemyList().size() ;
-	//☆をアクティブにする
-	m_game->GetStarList()[laststar]->Activate();
-	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		
-		//ステートの遷移
-		m_game->GetStarList()[laststar]->Deactivate();
-		//ステートの遷移
-		ProcessCommonStateTransition();
-		m_Player_Act = true;
-	}
 }
 void Player::ProcessThrowStateTransition()
 {
-	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
-	m_Player_Act = false;
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		//ステートを遷移する。
-		ProcessCommonStateTransition();
-		m_Player_Act = true;
-	}
 }
+void Player::ProcessCaughtStateTransition()
+{
+}
+
+void Player::ProcessClearStateTransition()
+{
+}
+
+void Player::ProcessGameOverStateTransition()
+{
+}
+
 void Player::ManageState()
 {
 	switch (m_playerState)
