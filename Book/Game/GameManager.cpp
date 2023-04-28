@@ -17,23 +17,7 @@ GameManager::~GameManager()
 
 void GameManager::Update()
 {
-	Pause();
-
 	DeletingBGM();
-}
-
-void GameManager::Pause()
-{
-	//ゲーム中なら
-	if (m_gameState == enState_Game) {
-
-		//ポーズボタンの設定
-		if (g_pad[0]->IsTrigger(enButtonStart))
-		{
-			m_posState = !m_posState;
-			GameObjectManager::GetInstance()->SetStop(m_posState);
-		}
-	}
 }
 
 void GameManager::DeletingBGM()

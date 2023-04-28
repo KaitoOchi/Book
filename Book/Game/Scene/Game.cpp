@@ -26,6 +26,7 @@
 #include <random>
 #include"Gage.h"
 #include "Star.h"
+#include "Pause.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -72,6 +73,8 @@ bool Game::Start()
 	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
 	ligSensor->SetMaxTime(5.0f);
 	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
+
+	NewGO<Pause>(0, "pause");
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));

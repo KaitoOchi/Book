@@ -16,8 +16,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// �Q�[���̏������B
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
 
-	//NewGO<Title>(0, "title");
-	NewGO<Game>(0, "game");
+	NewGO<Title>(0, "title");
+	//NewGO<Game>(0, "game");
 	//NewGO<Debug>(0, "debug");
 	//NewGO<Result>(0, "result");
 

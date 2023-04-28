@@ -89,11 +89,18 @@ void Title::InitSprite()
 	m_menuSpriteRender.Init("Assets/sprite/UI/title/title_2_all.DDS", 1920.0f, 1080.0f);
 	m_sprites.push_back(&m_menuSpriteRender);
 
-	//ƒKƒCƒh‰æ–Ê‚Ìİ’è
-	m_guideSpriteRender.Init("Assets/sprite/UI/guide/guide_add.DDS", 1920.0f, 1080.0f);
-	m_guideSpriteRender.SetScale(Vector3(0.9f, 0.9f, 0.0f));
-	m_guideSpriteRender.Update();
-	m_sprites.push_back(&m_guideSpriteRender);
+	//ƒKƒCƒh”wŒi‰æ–Ê‚Ìİ’è
+	m_guideBackSpriteRender.Init("Assets/sprite/UI/guide/guide_all2.DDS", 1536.0f, 891.0f);
+	m_guideBackSpriteRender.SetPosition(Vector3(-50.0f, 35.0f, 0.0f));
+	m_guideBackSpriteRender.Update();
+	m_sprites.push_back(&m_guideBackSpriteRender);
+
+	m_guideSpriteRender[0].Init("Assets/sprite/UI/guide/guide_playguide.DDS", 1403.0f, 637.0f);
+	m_guideSpriteRender[0].SetPosition(Vector3(0.0f, -10.0f, 0.0f));
+	m_guideSpriteRender[0].Update();
+	m_sprites.push_back(&m_guideSpriteRender[0]);
+
+
 
 	//İ’è‰æ–Ê‚Ìİ’è
 	m_settingSpriteRender.Init("Assets/sprite/UI/title/setting_all.DDS", 1920.0f, 1080.0f);
@@ -477,7 +484,8 @@ void Title::Render(RenderContext &rc)
 
 	//‘€ì•û–@‰æ–Ê‚È‚ç
 	case 3:
-		m_guideSpriteRender.Draw(rc);
+		m_guideBackSpriteRender.Draw(rc);
+		m_guideSpriteRender[0].Draw(rc);
 		m_buttonSpriteRender[1].Draw(rc);
 		break;
 
