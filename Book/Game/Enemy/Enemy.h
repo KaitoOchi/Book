@@ -204,6 +204,15 @@ public:
 	void AddSpotLightNum() {
 		m_spotNum++;
 	}
+	//------------------------------------------
+	//エネミーの前方向を求める
+	const Vector3 GetFoward()const
+	{
+		return m_forward;
+	}
+
+	Vector3 m_foward=Vector3::AxisZ;
+	//--------------------------------------------
 
 protected:
 

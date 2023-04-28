@@ -19,6 +19,7 @@ class FlashBom;
 class SoundBom;
 class Fade;
 class Star;
+class Pause;
 class Game : public IGameObject
 {
 public:

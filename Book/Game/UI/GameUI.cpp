@@ -3,7 +3,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const Vector3	GAGE_SPRITE_POSITION = { -700.0f, 300.0f, 0.0f };	//ゲージ画像の位置
+	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
 	const Vector3	TIME_FONT_POSITION = { -100.0f, 500.0f, 0.0f };		//タイムの位置
 	const Vector3   VIGILANCE_POSITION = { 500.0f,350.0f,0.0f };
 	const float		YSIZE = 154.0f;										//縦の大きさ
@@ -49,6 +49,7 @@ bool GameUI::Start()
 	m_vigilanceRender.SetPosition(VIGILANCE_POSITION);
 	m_vigilanceRender.Update();
 
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
 	return true;
 }
@@ -56,8 +57,8 @@ bool GameUI::Start()
 void GameUI::Update()
 {
 	Time();
+
 	ChangeGage();
-	
 }
 
 void GameUI::Time()
@@ -82,9 +83,27 @@ void GameUI::Time()
 }
 void GameUI::ChangeGage()
 {
+	//ゲージが満タンなら
+	if (m_gage != GAGE_MAX) {
+		m_gaugeTimer += g_gameTime->GetFrameDeltaTime();
+		m_gaugeTimer = min(m_gaugeTimer, 1.0f);
+	}
+	else {
+		m_gaugeTimer -= g_gameTime->GetFrameDeltaTime();
+		m_gaugeTimer = max(m_gaugeTimer, 0.0f);
+	}
+
+	//ゲージ画像を移動
+	m_gageFrameSpriteRender.SetPosition(GAGE_SPRITE_POSITION + Vector3(m_gaugeTimer * 200.0f, 0.0f, 0.0f));
+	m_gageFrameSpriteRender.Update();
+	m_gageSpriteRender.SetPosition(GAGE_SPRITE_POSITION + Vector3(m_gaugeTimer * 200.0f, 0.0f, 0.0f));
+	m_gageSpriteRender.Update();
+
+
 	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging && m_gage > 0) {
 		//減らす
 		m_gage -= 1.0f;
+		m_gage = max(m_gage, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
 	else if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging)
@@ -94,6 +113,7 @@ void GameUI::ChangeGage()
 	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
 		//増やす
 		m_gage += 2.0f;
+		m_gage = min(m_gage, GAGE_MAX);
 		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
 }
@@ -156,6 +176,7 @@ void GameUI::Render(RenderContext& rc)
 {
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
+
 	//m_timeFontRender.Draw(rc);
 	//m_vigilanceRender.Draw(rc);
 }

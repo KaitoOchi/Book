@@ -89,11 +89,18 @@ void Title::InitSprite()
 	m_menuSpriteRender.Init("Assets/sprite/UI/title/title_2_all.DDS", 1920.0f, 1080.0f);
 	m_sprites.push_back(&m_menuSpriteRender);
 
-	//ガイド画面の設定
-	m_guideSpriteRender.Init("Assets/sprite/UI/guide/guide_add.DDS", 1920.0f, 1080.0f);
-	m_guideSpriteRender.SetScale(Vector3(0.9f, 0.9f, 0.0f));
-	m_guideSpriteRender.Update();
-	m_sprites.push_back(&m_guideSpriteRender);
+	//ガイド背景画面の設定
+	m_guideBackSpriteRender.Init("Assets/sprite/UI/guide/guide_all2.DDS", 1536.0f, 891.0f);
+	m_guideBackSpriteRender.SetPosition(Vector3(-50.0f, 35.0f, 0.0f));
+	m_guideBackSpriteRender.Update();
+	m_sprites.push_back(&m_guideBackSpriteRender);
+
+	m_guideSpriteRender[0].Init("Assets/sprite/UI/guide/guide_playguide.DDS", 1403.0f, 637.0f);
+	m_guideSpriteRender[0].SetPosition(Vector3(0.0f, -10.0f, 0.0f));
+	m_guideSpriteRender[0].Update();
+	m_sprites.push_back(&m_guideSpriteRender[0]);
+
+
 
 	//設定画面の設定
 	m_settingSpriteRender.Init("Assets/sprite/UI/title/setting_all.DDS", 1920.0f, 1080.0f);
@@ -384,6 +391,10 @@ void Title::ManageState()
 
 void Title::TitleScreen()
 {
+	m_titleSpriteRender.SetPosition(Vector3(-340.0f, 250.0f, 0.0f));
+	m_titleSpriteRender.SetScale(Vector3(1.0f, 1.0f, 0.0f));
+	m_titleSpriteRender.Update();
+
 	//透明度を変更
 	m_pressSpriteRender.SetMulColor(Vector4(m_alpha, m_alpha, m_alpha, m_alpha));
 	m_pressSpriteRender.Update();
@@ -391,6 +402,10 @@ void Title::TitleScreen()
 
 void Title::MenuScreen()
 {
+	m_titleSpriteRender.SetPosition(Vector3(-675.0f, 400.0f, 0.0f));
+	m_titleSpriteRender.SetScale(Vector3(0.25f, 0.25f, 0.0f));
+	m_titleSpriteRender.Update();
+
 	if (!m_isWaitState || m_animTime < 0.0f) {
 		m_cursorSpriteRender.SetPosition(Vector3(-725.0f,  475.0f + (m_cursor_vertical * -235.0f), 0.0f));
 		m_cursorSpriteRender.Update();
@@ -458,6 +473,7 @@ void Title::Render(RenderContext &rc)
 	//メニュー画面なら
 	case 1:
 		m_menuSpriteRender.Draw(rc);
+		m_titleSpriteRender.Draw(rc);
 		m_buttonSpriteRender[0].Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
 		break;
@@ -468,7 +484,8 @@ void Title::Render(RenderContext &rc)
 
 	//操作方法画面なら
 	case 3:
-		m_guideSpriteRender.Draw(rc);
+		m_guideBackSpriteRender.Draw(rc);
+		m_guideSpriteRender[0].Draw(rc);
 		m_buttonSpriteRender[1].Draw(rc);
 		break;
 

@@ -30,8 +30,8 @@ namespace nsBookEngine {
 		/// <param name="pos">座標</param>
 		/// <param name="color">カラー</param>
 		/// <param name="range">影響範囲</param>
-		/// <param name="range">方向</param>
-		/// <param name="range">射出角度</param>
+		/// <param name="dir">方向</param>
+		/// <param name="angle">射出角度</param>
 		void SetSpotLight(const int num, const Vector3& pos, const Vector3& color, const float range, const Vector3& dir, const float angle)
 		{
 			SetNumber(num);
@@ -65,7 +65,7 @@ namespace nsBookEngine {
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPositoin()
+		const Vector3& GetPosition()
 		{
 			return m_spotLig.spPosition;
 		}

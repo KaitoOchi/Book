@@ -183,10 +183,12 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 		switch (m_enItemState)
 		{
 		case Player::m_enItem_Flash:
-			m_flashBom->Activate();
+			m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
+			m_flashBom->SetItemPosition(m_position);
 			break;
 		case Player::m_enItem_SoundBom:
 			m_soundBom->Activate();
+			m_soundBom->SetItemPosition(m_position);
 			break;
 		default:
 			break;

@@ -69,7 +69,7 @@ void Ghost::CreateGhostBox()
 		m_rotation,
 		m_boxSize
 	);
-	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Wall);
+	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Ground);
 }
 void Ghost::Update()
 {

@@ -36,7 +36,7 @@ namespace nsBookEngine {
 
 
 		//メインレンダーターゲットを設定
-		float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -54,6 +54,8 @@ namespace nsBookEngine {
 		Init2DRenderTarget();
 
 		InitShadowMapRenderTarget();
+
+		InitOffscreenRendering();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -128,6 +130,18 @@ namespace nsBookEngine {
 		m_shadowBlur.Init(&m_shadowMapRenderTarget.GetRenderTargetTexture());
 	}
 
+	void RenderingEngine::InitOffscreenRendering()
+	{
+		m_offscreenRenderTarget.Create(
+			1280,
+			720,
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_D32_FLOAT
+		);
+	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		//視点の位置を設定する
@@ -147,6 +161,9 @@ namespace nsBookEngine {
 			ForwardRendering(rc);
 
 			m_bloom.Render(rc, m_mainRenderTarget);
+
+			//ここでエフェクトドロー。
+			EffectEngine::GetInstance()->Draw();
 
 			Render2D(rc);
 		}
@@ -198,6 +215,29 @@ namespace nsBookEngine {
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 
 		EndGPUEvent();
+	}
+
+	void RenderingEngine::OffscreenRendering(RenderContext& rc, ModelRender& model)
+	{
+		//レンダリングターゲットをoffscreenRenderTargetに変更する
+		RenderTarget* rtArray[] = { &m_offscreenRenderTarget };
+
+		rc.WaitUntilToPossibleSetRenderTargets(1, rtArray);
+
+		rc.SetRenderTargets(1, rtArray);
+
+		rc.ClearRenderTargetViews(1, rtArray);
+
+		//プレイヤーを描画する
+		model.Draw(rc);
+
+		rc.WaitUntilFinishDrawingToRenderTargets(1, rtArray);
+
+		//画面に表示されるレンダリングターゲットに戻す
+		rc.SetRenderTarget(
+			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+		);
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)

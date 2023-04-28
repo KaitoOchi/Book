@@ -26,10 +26,11 @@
 #include <random>
 #include"Gage.h"
 #include "Star.h"
+#include "Pause.h"
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -62,11 +63,19 @@ bool Game::Start()
 	NewGO<Sensor>(0, "sensor");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
+	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	NewGO<GameUI>(0, "gameUI");
 	//NewGO<Gage>(0,"gage");
 	
 	
-	//NewGO<LightSensor>(0, "lightSensor");
+	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
+	ligSensor->SetPosition(Vector3(-80.0f, 100.0f, 0.0f));
+	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
+	ligSensor->SetMaxTime(5.0f);
+	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
+
+	NewGO<Pause>(0, "pause");
+
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
@@ -76,7 +85,7 @@ bool Game::Start()
 
 	//m_modelRender.Init("Assets/modelData/wall1.tkm");
 
-	m_flahBom = NewGO<FlashBom>(0, "flashBom");
+	
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 	m_pointLight[0].SetPointLight(
@@ -100,12 +109,6 @@ bool Game::Start()
 		100.0f
 	);
 
-	m_pointLight[3].SetPointLight(
-		3,
-		Vector3::Zero,
-		{ 0.0f, 50.0f, 0.0f },
-		150.0f
-	);
 
 	LevelDesign();
 
@@ -124,13 +127,13 @@ bool Game::Start()
 
 	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
-	//m_fade = FindGO<Fade>("fade");
-	//m_fade->StartFadeIn();
-	//for (int i = 0; i <= m_enemyList.size(); i++)
-	//{
-	//	m_star = NewGO<Star>(0, "star");
-	//	m_starList.push_back(m_star);
-	//}
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
+	for (int i = 0; i <= m_enemyList.size(); i++)
+	{
+		m_star = NewGO<Star>(0, "star");
+		m_starList.push_back(m_star);
+	}
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
@@ -145,7 +148,7 @@ void Game::LevelDesign()
 {
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
-/*	m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
+	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
 		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
@@ -236,7 +239,7 @@ void Game::LevelDesign()
 		{
 			//名前がbackgroundなら
 			if (objData.EqualObjectName(L"base") == true)
-		/*	if (objData.EqualObjectName(L"debug") == true)*/ {
+			/*if (objData.EqualObjectName(L"debug") == true)*/ {
 				// 背景を生成
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);
@@ -319,7 +322,7 @@ void Game::LevelDesign()
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
-		if (objData.EqualObjectName(L"otakara") == true) {
+		if (objData.EqualObjectName(L"item") == true) {
 
 			m_treaSure = NewGO<Treasure>(0, "treaSure");
 			m_treaSure->SetPosition(objData.position);
@@ -373,9 +376,9 @@ void Game::Clearable()
 
 void Game::ClearState()
 {
-	NewGO<Result>(0, "result");
+	Result* result = NewGO<Result>(0, "result");
+	result->SetResult(true);
 	DeleteGO(this);
-
 }
 
 void Game::MnageState()
