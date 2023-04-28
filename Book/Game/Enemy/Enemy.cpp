@@ -78,6 +78,11 @@ bool Enemy::Start()
 	// 視野を作成
 	Enemy::SpotLight_New(m_position, m_spotNum);
 
+	//----------------------------------------------
+	m_foward = Vector3::AxisZ;
+	m_rotation.Apply(m_foward);
+	//----------------------------------------------
+
 	return true;
 }
 
@@ -86,6 +91,13 @@ void Enemy::Rotation(Vector3 rot)
 	// 回転
 	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
+
+	//---------------------------------------------
+	//エネミーの前ベクトルを求める
+	m_forward = Vector3::AxisZ;
+	m_rotation.Apply(m_forward);
+	//---------------------------------------------
+
 }
 
 void Enemy::Nav(Vector3 pos)
