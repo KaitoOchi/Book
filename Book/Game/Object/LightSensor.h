@@ -4,22 +4,90 @@
 class LightSensor : public Object
 {
 public:
+	//ライトセンサーの移動状態
+	enum LightSensorState
+	{
+		enState_Move,
+		enState_Rotate,
+	};
+
+public:
 	LightSensor();
 	~LightSensor();
 	bool Start() override;
 	void Update() override;
-	void Render(RenderContext& rc);
 
-protected:
+public:
+	
 	/// <summary>
-	/// 当たったときの処理。
+	/// ステートを設定。
 	/// </summary>
-	void Hit() override;
+	void SetState(const LightSensorState& state)
+	{
+		m_lightSensorState = state;
+	}
 
-	SpotLight m_spotLight;
+	/// <summary>
+	/// 方向を設定。
+	/// </summary>
+	void SetDirection(const Vector3& dir)
+	{
+		m_direction = dir;
+	}
 
-	float m_angle = 25.0f;
+	/// <summary>
+	/// 移動速度を設定。
+	/// </summary>
+	void SetMoveSpeed(const Vector3& movSpd)
+	{
+		m_moveSpeed = movSpd;
+	}
 
-	FontRender m_fontRender;
+	/// <summary>
+	/// 放射角度を設定。
+	/// </summary>
+	void SetAngle(const float angle)
+	{
+		m_angle = angle;
+	}
+
+	/// <summary>
+	/// 最大時間を設定。
+	/// </summary>
+	void SetMaxTime(const float time)
+	{
+		m_maxTime = time;
+	}
+
+private:
+	/// <summary>
+	/// タイムの計測処理。
+	/// </summary>
+	void Time();
+
+	/// <summary>
+	/// 移動処理。
+	/// </summary>
+	void Move();
+
+	/// <summary>
+	/// 回転処理。
+	/// </summary>
+	void Rotate();
+
+	void Hit() override
+	{
+
+	}
+
+private:
+	SpotLight			m_spotLight;			//スポットライト
+	LightSensorState	m_lightSensorState = enState_Move;
+	Vector3				m_direction;			//方向
+	Vector3				m_moveSpeed;			//移動速度
+	bool				m_isTimeOver = false;	//タイムを超えたか
+	float				m_angle = 25.0f;		//放射角度
+	float				m_timer = 0.0f;			//時間
+	float				m_maxTime = 5.0f;		//最大時間
 };
 

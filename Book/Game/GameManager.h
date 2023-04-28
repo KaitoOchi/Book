@@ -163,14 +163,14 @@ private:
 	void DeletingBGM();
 
 private:
-	static GameManager*		m_instance;					//インスタンス
-	SaveData				m_saveData;					//セーブデータの構造体
-	EnGameState				m_gameState;				//ゲームステート
-	SoundSource*			m_bgm = nullptr;			//BGM
+	static GameManager*		m_instance;						//インスタンス
+	SaveData				m_saveData;						//セーブデータの構造体
+	EnGameState				m_gameState = enState_Title;	//ゲームステート
+	SoundSource*			m_bgm = nullptr;				//BGM
 
-	bool					m_posState = true;			//ポーズ中かどうか
-	bool					m_isDeleteBGM = false;		//BGMの削除中かどうか
-	int						m_searchNum = 0;			//敵に見つかった回数
-	float					m_timer = 0.0f;				//タイマー
+	bool					m_posState = false;				//ポーズ中かどうか
+	bool					m_isDeleteBGM = false;			//BGMの削除中かどうか
+	int						m_searchNum = 0;				//敵に見つかった回数
+	float					m_timer = 0.0f;					//タイマー
 };
 

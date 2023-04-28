@@ -25,15 +25,26 @@ public:
 	}
 
 private:
+	/// <summary>
+	/// 時間計測処理。
+	/// </summary>
 	void Time();
+
+	/// <summary>
+	/// ゲージの変更処理。
+	/// </summary>
 	void ChangeGage();
+
+	/// <summary>
+	/// 警戒度の変更処理。
+	/// </summary>
 	void VigilanceChange();
 
 private:
-	SpriteRender		m_gageFrameSpriteRender;
-	SpriteRender		m_gageSpriteRender;
-	SpriteRender		m_vigilanceRender;
-	FontRender			m_timeFontRender;
+	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
+	SpriteRender		m_gageSpriteRender;				//ゲージ画像
+	SpriteRender		m_vigilanceRender;				//警戒度画像
+	FontRender			m_timeFontRender;				//タイム文字
 	PlayerManagement*	m_playerManagement;
 	int					m_vigilanceGage = 1;			//警戒度
 	int					m_Gitgage = 0;

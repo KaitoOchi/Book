@@ -28,15 +28,10 @@ void GameManager::Pause()
 	if (m_gameState == enState_Game) {
 
 		//ポーズボタンの設定
-		if (g_pad[0]->IsTrigger(enButtonStart) && m_posState == true)
+		if (g_pad[0]->IsTrigger(enButtonStart))
 		{
-			GameObjectManager::GetInstance()->SetStop(true);
-			m_posState = false;
-		}
-		else if (g_pad[0]->IsTrigger(enButtonStart) && m_posState == false)
-		{
-			GameObjectManager::GetInstance()->SetStop(false);
-			m_posState = true;
+			m_posState = !m_posState;
+			GameObjectManager::GetInstance()->SetStop(m_posState);
 		}
 	}
 }

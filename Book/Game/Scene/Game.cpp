@@ -29,7 +29,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -66,7 +66,12 @@ bool Game::Start()
 	NewGO<Gage>(0,"gage");
 	
 	
-	//NewGO<LightSensor>(0, "lightSensor");
+	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
+	ligSensor->SetPosition(Vector3(-80.0f, 100.0f, 0.0f));
+	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
+	ligSensor->SetMaxTime(5.0f);
+	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
+
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);

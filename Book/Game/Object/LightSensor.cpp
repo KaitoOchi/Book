@@ -17,74 +17,85 @@ LightSensor::~LightSensor()
 bool LightSensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
-
-	m_position = Vector3(-80.0f, 100.0f, 0.0f);
-	m_scale = Vector3(1.0f, 1.0f, 1.0f);
-
 	m_isActive = false;
 
-	m_spotLight.SetPosition(m_position);
-	m_spotLight.SetColor(Vector3(50.0f, 0.0f, 0.0f));
-	m_spotLight.SetRange(500.0f);
-	m_spotLight.SetDirection(Vector3(1.0f, -1.0f, 1.0f));
-	m_spotLight.SetAngle(m_angle);
-	//m_spotLight.SetCollisionObject(m_player->GetPosition());
-	m_spotLight.Update();
+	//スポットライトを設定
+	m_spotLight.SetSpotLight(
+		1,
+		m_position,
+		Vector3(10.0f, 0.0f, 0.0f),
+		500.0f,
+		m_direction,
+		m_angle
+	);
 
 	return true;
 }
 
 void LightSensor::Update()
 {
-	m_position.x += g_pad[0]->GetLStickXF();
+	Time();
 
-	if (g_pad[0]->IsPress(enButtonB)) {
-		m_position.y += g_pad[0]->GetLStickYF();
+	switch (m_lightSensorState)
+	{
+	case enState_Move:
+		Move();
+		break;
+
+	case enState_Rotate:
+		Rotate();
+		break;
 	}
-	else {
-		m_position.z += g_pad[0]->GetLStickYF();
-	}
-	m_spotLight.SetAngle(m_angle);
-	m_spotLight.SetPosition(m_position);
 
-	Quaternion qRotY;
-	qRotY.SetRotationY(g_pad[0]->GetRStickXF() * 0.01f);
-	qRotY.Apply(m_spotLight.GetDirection());
-
-	Vector3 rotAxis;
-	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
-	Quaternion qRotX;
-	qRotX.SetRotation(rotAxis, g_pad[0]->GetRStickYF() * 0.01f);
-
-	qRotX.Apply(m_spotLight.GetDirection());
-
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
-
-	m_spotLight.Update();
-
-	wchar_t debugText[255];
-	swprintf_s(debugText, 255, L"Angle:%.2f \nX:%.2f \nY:%.2f \nZ:%.2f",
-		m_spotLight.GetAngle(), m_spotLight.GetDirection().x, m_spotLight.GetDirection().y, m_spotLight.GetDirection().z);
-	m_fontRender.SetText(debugText);
-
-	Vector3 playerPos = Vector3(100.0f, 0.0f, 0.0f);
-
-	if (m_spotLight.IsHit(playerPos))
+	//ライトの中にプレイヤーが入ったら
+	if (m_spotLight.IsHit(m_player->GetPosition()))
 	{
 		int i = 0;
 	}
 }
 
-void LightSensor::Hit()
+void LightSensor::Time()
 {
+	//最大時間、最小時間を超えたら
+	if (m_timer > m_maxTime) {
+		m_isTimeOver = true;
+	}
+	else if (m_timer < -m_maxTime) {
+		m_isTimeOver = false;
+	}
 
+	//タイムの増減
+	if (m_isTimeOver) {
+		m_timer -= g_gameTime->GetFrameDeltaTime();
+	}
+	else {
+		m_timer += g_gameTime->GetFrameDeltaTime();
+	}
 }
 
-void LightSensor::Render(RenderContext& rc)
+void LightSensor::Move()
 {
-	if (m_isActive)
-		m_modelRender.Draw(rc);
+	//スポットライトの位置を設定
+	Vector3 pos = m_spotLight.GetPosition();
+	pos += m_moveSpeed * (m_timer / 100.0f);
 
-	//m_fontRender.Draw(rc);
+	m_spotLight.SetPosition(pos);
+	m_spotLight.Update();
+}
+
+void LightSensor::Rotate()
+{
+	//Y軸周りの回転
+	Quaternion qRotY;
+	qRotY.SetRotationY(m_timer * 0.001f);
+	qRotY.Apply(m_spotLight.GetDirection());
+
+	//外積を求める
+	Vector3 rotAxis;
+	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
+
+	Quaternion qRot;
+	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
+
+	m_spotLight.Update();
 }
