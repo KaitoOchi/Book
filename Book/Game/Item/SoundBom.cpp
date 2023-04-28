@@ -28,7 +28,7 @@ void SoundBom::Update()
 void SoundBom::ItemHit()
 {
 	//近くにいるエネミーたちを探す
-	for (int i = 0; m_game->GetEnemyList().size(); i++)
+	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
 		Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
 		if (diff.Length() < pow(SOUNDRANGE, 2.0f))

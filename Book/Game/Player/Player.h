@@ -4,6 +4,7 @@ class GameCamera;
 class Ghost;
 class Star;
 class Game;
+class Treasure;  
 class Player : public IGameObject
 {
 public:
@@ -225,10 +226,11 @@ protected:
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 	Star* m_star = nullptr;										//星
-
+	Treasure* m_treasure = nullptr;
 
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;
 
 	float m_downTime = 3.0f;									//気絶時間
+
 };

@@ -63,8 +63,8 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
-	NewGO<GameUI>(0, "gameUI");
-	//NewGO<Gage>(0,"gage");
+	m_gameUI=NewGO<GameUI>(0, "gameUI");
+	NewGO<Gage>(0,"gage");
 	
 	
 	//NewGO<LightSensor>(0, "lightSensor");
@@ -104,7 +104,7 @@ bool Game::Start()
 
 	LevelDesign();
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
 
@@ -133,6 +133,9 @@ bool Game::Start()
 	std::uniform_int_distribution<int>dist(0, 3);
 	m_lightNumber = dist(mt);
 	m_position = m_pointLight[m_lightNumber].GetPosition();
+
+
+	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
 	return true;
 }
 
@@ -314,7 +317,7 @@ void Game::LevelDesign()
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
-		if (objData.EqualObjectName(L"item") == true) {
+		if (objData.EqualObjectName(L"otakara") == true) {
 
 			m_treaSure = NewGO<Treasure>(0, "treaSure");
 			m_treaSure->SetPosition(objData.position);
@@ -356,6 +359,8 @@ void Game::Update()
 	for (int i = 0; i < 4; i++) {
 		m_pointLight[i].Update();
 	}
+
+
 }
 void Game::Clearable()
 {
@@ -364,6 +369,11 @@ void Game::Clearable()
 	{
 		m_gameState = m_enGameState_GameClear;
 	}
+	if (m_gameUI->m_timer <= 0.0f)
+	{
+		m_gameState = m_enGameState_GameClear;
+	}
+	
 }
 
 void Game::ClearState()

@@ -19,6 +19,7 @@ class FlashBom;
 class SoundBom;
 class Fade;
 class Star;
+class GameUI;
 class Game : public IGameObject
 {
 public:
@@ -40,7 +41,7 @@ public:
 	}
 	
 	Vector3 m_position = Vector3::Zero;
-	enum EnGameState
+	enum EnGameSceneState
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
 		m_enGameState_GameClearable,//クリア可能
@@ -48,7 +49,7 @@ public:
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
 	};
-	EnGameState m_gameState = m_enGameState_DuringGamePlay;//���݂̃X�e�[�g�̊Ǘ�
+	EnGameSceneState m_gameState = m_enGameState_DuringGamePlay;//���݂̃X�e�[�g�̊Ǘ�
 
 	// �G�l�~�[�̃��X�g��Ԃ�
 	std::vector<Enemy*> GetEnemyList()
@@ -116,7 +117,7 @@ private:
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
 	Fade* m_fade = nullptr;
-
+	GameUI* m_gameUI = nullptr;
 	Star* m_star = nullptr;
 };
 

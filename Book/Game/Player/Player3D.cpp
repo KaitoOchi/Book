@@ -34,6 +34,8 @@ bool Player3D::Start()
 	//音爆弾の呼び出し
 	m_soundBom = FindGO<SoundBom>("soundBom");
 
+
+
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
 	
@@ -71,6 +73,7 @@ bool Player3D::Start()
 
 void Player3D::Update()
 {
+
 	if (GetCharacon() == nullptr)
 	{
 		return;
@@ -80,9 +83,10 @@ void Player3D::Update()
 	{
 		//atn2で３Dの回転を求める
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+		//プレイヤーの処理を呼び出す
 		Player::Update();
-		//アイテムを投げる
 		
+
 		//プレイヤーの移動を継承する。
 		//キャラコンで座標を移動させる。
 		m_characon->SetPosition(m_position);
@@ -150,6 +154,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Run, 0.1f);
 		break;
 	case Player::m_enPlayer_Jump:
+		m_modelRender->SetAnimationSpeed(1.5f);
 		m_modelRender->PlayAnimation(m_enAnimationClip_Jump, 0.8f);
 		break;
 	case Player::m_enPlayer_Jumpend:
@@ -197,6 +202,12 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 	}
 
 }
+
+
+
+
+
+
 void Player3D::Render(RenderContext& rc)
 {
 	m_modelRender->Draw(rc);

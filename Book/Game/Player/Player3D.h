@@ -32,6 +32,7 @@ private:
 	PlayerManagement* m_playerManagement = nullptr;
 	FlashBom* m_flashBom = nullptr;
 	SoundBom* m_soundBom = nullptr;
+	
 
 	//アニメーションイベント用の関数
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);

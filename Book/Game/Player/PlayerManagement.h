@@ -55,12 +55,15 @@ public:
 	enum EnMnagementState
 	{
 		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
-		m_enPlayer_2DChanging,//2Dに切替中
-		m_enPlayer_3DChanging,//3Dに切替中
+		m_enPlayer_Changing,  //切替中
+		m_enPlayer_2DChanging,//2Dプレイヤー
+		m_enPlayer_3DChanging,//3Dプレイヤー
 	};
 	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
 
 	bool m_GameStartState = false;								//ゲームが始まっているかどうか
+
+	void Changing();
 
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
@@ -73,5 +76,7 @@ private:
 	float YLstickamount = 0;
 
 	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
+
+	float m_changeTime = 5.0f;									//プレイヤーを切り替える時間
 };
 

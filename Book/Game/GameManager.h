@@ -147,6 +147,16 @@ public:
 	}
 
 	/// <summary>
+	/// ステートの切替
+	/// </summary>
+	/// <param name="gamestate"></param>
+	void SetGameState(const EnGameState	gamestate)
+	{
+		m_gameState = gamestate;
+	}
+
+
+	/// <summary>
 	/// 更新処理。
 	/// </summary>
 	void Update();

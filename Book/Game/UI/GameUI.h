@@ -1,6 +1,7 @@
 #pragma once
 
 class PlayerManagement;
+class Game;
 class GameUI : public IGameObject	
 {
 public:
@@ -23,23 +24,27 @@ public:
 	{
 		return m_timer;
 	}
-
+	float				m_timer = 0.0f;					//タイマー
 private:
 	void Time();
 	void ChangeGage();
 	void VigilanceChange();
-
+	void TimeMove();
 private:
 	SpriteRender		m_gageFrameSpriteRender;
 	SpriteRender		m_gageSpriteRender;
 	SpriteRender		m_vigilanceRender;
 	FontRender			m_timeFontRender;
 	PlayerManagement*	m_playerManagement;
+	Game*				m_game;
 	int					m_vigilanceGage = 1;			//警戒度
 	int					m_Gitgage = 0;
-	float				m_timer = 0.0f;					//タイマー
+	
 	float				m_vigilanceTime = 0.0f;			//警戒度用のタイマー
 	float				m_gage = 0.0f;					//MPゲージ
 	float				m_gaugeTimer = 0.0f;			//ゲージ用のタイマー
+
+	float				m_timePosition = 0.0f;			//タイムの座標
+
 };
 

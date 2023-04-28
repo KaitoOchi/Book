@@ -49,7 +49,7 @@ void Treasure::Update()
 void Treasure::Hit()
 {
 
-	if (g_pad[0]->IsPress(enButtonX)&&m_gagecount<=GAGESIZE)
+	if (g_pad[0]->IsPress(enButtonB)&&m_gagecount<=GAGESIZE)
 	{
 		m_gagecount += g_gameTime->GetFrameDeltaTime();
 	}

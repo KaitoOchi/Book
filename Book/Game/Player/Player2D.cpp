@@ -100,31 +100,34 @@ void Player2D::Animation()
 	switch (m_playerState)
 	{
 	case Player::m_enPlayer_Idle:
+		JUMPVALUE = 90;
 		j = i / 10;
 		i++;
 		if (i >= 29)
 		{
 			i = 0;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_walk:
+		JUMPVALUE = 90;
 		j = WALKVALUE / 10;
 		WALKVALUE++;
 		if (WALKVALUE >= 89)
 		{
 			WALKVALUE = 30;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_Run:
 		//歩くアニメーションを早くする
 		j = RUBVALUM;
+
 		RUBVALUM += 0.2;
 		if (RUBVALUM >= 8.8)
 		{
 			RUBVALUM = 3;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_Jump:
