@@ -444,6 +444,7 @@ void Game::GameFade()
 			//フェードインの処理
 			m_fade->StartFadeIn();
 			m_isWaitFadeOut = false;
+			DeleteGO(this);
 		}
 	}
 	else {
@@ -451,10 +452,4 @@ void Game::GameFade()
 		m_fade->StartFadeOut();
 	}
 	return;
-}
-
-void Game::DeleteGame()
-{
-	m_fade->StartFadeIn();
-	DeleteGO(this);
 }
