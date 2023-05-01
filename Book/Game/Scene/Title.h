@@ -132,26 +132,31 @@ private:
 	}
 
 private:
+	enum EnAnimationClip {
+		animationClip_Idle,
+		animationClip_Put,
+		animationClip_Num,
+	};
+	AnimationClip m_animationClips[animationClip_Num];
+
+private:
 	ModelRender				m_backGroundModelRender;		//背景モデル
 	ModelRender				m_playerModelRender;			//プレイヤーモデル
 	SpriteRender			m_titleSpriteRender;			//タイトル画像
 	SpriteRender			m_pressSpriteRender;			//press画像
 	SpriteRender			m_menuSpriteRender;				//メニュー画像
 	SpriteRender			m_guideBackSpriteRender;		//遊び方背景画像
-	SpriteRender			m_guideSpriteRender[2];			
+	SpriteRender			m_guideSpriteRender[2];			//ガイド画像
 	SpriteRender			m_settingSpriteRender;			//設定画像
 	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
 	SpriteRender			m_settingTextSpriteRender[3];	//設定の説明画像
 	SpriteRender			m_cursorSpriteRender;			//カーソル画像
 	SpriteRender			m_buttonSpriteRender[2];		//ボタン画像
-
 	std::vector<SpriteRender*> m_sprites;					//SpriteRenderのベクター型
-
-	FontRender				m_debugFontRender;
 
 	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
 	Fade*					m_fade = nullptr;				//フェードクラス
-	GameManager::SaveData	m_saveData;
+	GameManager::SaveData	m_saveData;						//セーブデータの構造体
 	bool					m_isWaitState = false;			//ステートの遷移中かどうか
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 	int						m_titleState = 0;				//タイトルステート

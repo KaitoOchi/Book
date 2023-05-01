@@ -610,6 +610,7 @@ float4 Outline(SPSIn psIn, float4 shadowMap)
 	for(int  i= 0; i < 8; i++){
 		depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
 	}
+	depth2 /= 8.0f;
 
 	//自身の深度値と近傍8テクセルの深度値の差を調べる
 	if(abs(depth - depth2) > 0.00005f){
