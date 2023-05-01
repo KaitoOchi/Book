@@ -16,6 +16,11 @@
 #include "BackGround.h"
 #include "LightSensor.h"
 #include "Stage/Wall/Wall.h"
+#include "Stage/Wall/Wall_Decoration.h"
+#include "Stage/Wall/Wall_Door.h"
+#include "Stage/Wall/Wall_Gap.h"
+#include "Stage/Wall/Wall_Normal.h"
+#include "Stage/Wall/Wall_Post.h"
 #include "Treasure.h"
 #include "Ghost.h"
 #include "FlashBom.h"
@@ -275,16 +280,29 @@ void Game::LevelDesign()
 
 				return true;
 			}
+
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
 				// 壁を生成
-				m_wall = NewGO<Wall>(0, "wall");
-				m_wall->SetPosition(objData.position);
-				m_wall->SetRotation(objData.rotation);
-				m_wall->SetScale(objData.scale);
+				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				m_normal->SetPosition(objData.position);
+				m_normal->SetRotation(objData.rotation);
+				m_normal->SetScale(objData.scale);
 
 				return true;
 			}
+
+			//名前がpostなら
+			if (objData.EqualObjectName(L"post") == true) {
+				// 壁を生成
+				m_post = NewGO<Wall_Post>(0, "wall_Post");
+				m_post->SetPosition(objData.position);
+				m_post->SetRotation(objData.rotation);
+				m_post->SetScale(objData.scale);
+
+				return true;
+			}
+
 			//// 名前がgapのとき
 			//if (objData.EqualObjectName(L"gap") == true) {
 			//	// 隙間を生成する
@@ -296,6 +314,7 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
+			
 			//// 名前がdecorationのとき
 			//if (objData.EqualObjectName(L"decoration") == true) {
 			//	// 障害物を生成
@@ -307,6 +326,7 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
+			
 			//// 名前がstartのとき
 			//if (objData.EqualObjectName(L"start") == true) {
 			//	// スタートを生成
@@ -318,6 +338,7 @@ void Game::LevelDesign()
 
 			//	return true;
 			//}
+			
 			//// 名前がgoalのとき
 			//if (objData.EqualObjectName(L"goal") == true) {
 			//	// ゴールを生成

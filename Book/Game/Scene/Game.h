@@ -12,6 +12,11 @@ class Enemy_Charge;
 class Enemy_Clear;
 class PlayerManagement;
 class Wall;
+class Wall_Decoration;
+class Wall_Door;
+class Wall_Gap;
+class Wall_Normal;
+class Wall_Post;
 class Treasure;
 class Ghost;
 class GameUI;
@@ -109,6 +114,8 @@ private:
 
 	LevelRender m_levelRender;
 	MiniMap* m_miniMap = nullptr;
+
+	// エネミー
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
@@ -124,9 +131,17 @@ private:
 	std::vector<Star*>m_starList;
 
 	PlayerManagement* m_playerManagement = nullptr;
+
+	// ステージ
 	Wall* m_wall = nullptr;
+	Wall_Decoration* m_decoration = nullptr;
+	Wall_Door* m_door = nullptr;
+	Wall_Gap* m_gap = nullptr;
+	Wall_Normal* m_normal = nullptr;
+	Wall_Post* m_post = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
+
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Star* m_star = nullptr;
