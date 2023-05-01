@@ -59,6 +59,21 @@ Game::~Game()
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
+
+	//DeleteGO(FindGO<Pause>("pause"));
+
+
+	switch (m_nextScene) {
+	case 1:
+		//リトライ画面へ移行
+		NewGO<Game>(0, "game");
+		break;
+
+	case 2:
+		//タイトル画面へ移行
+		NewGO<Title>(0, "title");
+		break;
+	}
 }
 	
 
@@ -370,6 +385,15 @@ void Game::Update()
 	{
 		Clearable();
 	}
+
+	//フェードアウトの待機時間
+	if (m_isWaitFadeOut) {
+		//フェードアウトし終えたら
+		if (!m_fade->IsFade()) {
+			m_isWaitFadeOut = false;
+			DeleteGO(this);
+		}
+	}
 		
 	MnageState();
 
@@ -430,31 +454,15 @@ void Game::MnageState()
 		break;
 	}
 }
+
+void Game::GameFade(const int nextScene)
+{
+	m_nextScene = nextScene;
+	m_isWaitFadeOut = true;
+	m_fade->StartFadeOut();
+}
+
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
-}
-
-void Game::GameFade()
-{
-	//フェードアウトの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードアウトし終えたら
-		if (!m_fade->IsFade()) {
-			//フェードインの処理
-			m_fade->StartFadeIn();
-			m_isWaitFadeOut = false;
-		}
-	}
-	else {
-		m_isWaitFadeOut = true;
-		m_fade->StartFadeOut();
-	}
-	return;
-}
-
-void Game::DeleteGame()
-{
-	m_fade->StartFadeIn();
-	DeleteGO(this);
 }

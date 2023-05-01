@@ -80,7 +80,7 @@ public:
 	/// <summary>
 	/// ゲームのフェード処理
 	/// </summary>
-	void GameFade();
+	void GameFade(const int nextScene);
 
 
 private:
@@ -132,5 +132,6 @@ private:
 	Star* m_star = nullptr;
 
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
-};
+	int						m_nextScene = 0;				//次に移行するシーン
+};	
 
