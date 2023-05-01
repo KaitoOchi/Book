@@ -24,5 +24,5 @@ bool Wall_Door::Start()
 
 void Wall_Door::Render(RenderContext&rc)
 {
-	m_wallRender.Draw(rc);
+	Wall::Render(rc);
 }

@@ -71,10 +71,6 @@ void Enemy_Charge::Update()
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
-		// 何もしない
-	case NOOP:
-		return;
-		break;
 	}
 
 	Animation();	// アニメーション

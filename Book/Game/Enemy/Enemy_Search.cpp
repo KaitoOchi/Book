@@ -45,10 +45,6 @@ void Enemy_Search::Update()
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
-		// ‰½‚à‚µ‚È‚¢
-	case NOOP:
-		return;
-		break;
 	}
 
 	m_enemyRender.SetRotation(m_rot);
