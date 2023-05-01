@@ -23,5 +23,5 @@ bool Wall_Gap::Start()
 
 void Wall_Gap::Render(RenderContext& rc)
 {
-	m_wallRender.Draw(rc);
+	Wall::Render(rc);
 }

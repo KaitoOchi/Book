@@ -24,5 +24,5 @@ bool Wall_Normal::Start()
 
 void Wall_Normal::Render(RenderContext& rc)
 {
-	m_wallRender.Draw(rc);
+	Wall::Render(rc);
 }

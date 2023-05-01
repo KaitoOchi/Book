@@ -179,7 +179,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -280,6 +280,16 @@ void Game::LevelDesign()
 
 				return true;
 			}
+
+			// 名前がwallなら
+			if (objData.EqualObjectName(L"wall") == true) {
+				// 壁を生成
+				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				m_normal->SetPosition(objData.position);
+				m_normal->SetRotation(objData.rotation);
+				m_normal->SetScale(objData.scale);
+			}
+
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
 				// 壁を生成
@@ -298,6 +308,17 @@ void Game::LevelDesign()
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
+
+				return true;
+			}
+
+			// 名前がpostのとき
+			if (objData.EqualObjectName(L"post") == true) {
+				// 隙間を生成する
+				m_post = NewGO<Wall_Post>(0, "wall_Post");
+				m_post->SetPosition(objData.position);
+				m_post->SetRotation(objData.rotation);
+				m_post->SetScale(objData.scale);
 
 				return true;
 			}

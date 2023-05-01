@@ -110,7 +110,6 @@
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="Scene\Result.cpp">
@@ -136,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="Stage\Wall\Wall_Post.cpp">
       <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy_Clear.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,7 +220,6 @@
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="UI\Star.h" />
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\Pause.h">
@@ -241,6 +242,9 @@
     </ClInclude>
     <ClInclude Include="Stage\Wall\Wall_Post.h">
       <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy_Clear.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

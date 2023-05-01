@@ -24,5 +24,5 @@ bool Wall_Decoration::Start()
 
 void Wall_Decoration::Render(RenderContext& rc)
 {
-	m_wallRender.Draw(rc);
+	Wall::Render(rc);
 }
