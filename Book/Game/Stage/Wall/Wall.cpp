@@ -21,6 +21,9 @@ bool Wall::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
 
+	m_wallRender.SetPosition(m_position);
+	m_wallRender.SetRotation(m_rotation);
+	m_wallRender.SetScale(m_scale);
 	m_wallRender.Update();
 
 	return true;

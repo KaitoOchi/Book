@@ -33,24 +33,22 @@ namespace nsK2EngineLow {
 			return m_rigidBody.GetBody();
 		}
 		/// <summary>
-		/// 剛体を取得
-		/// </summary>
-		RigidBody* GetRigidBody() {
-			return &m_rigidBody;
-		}
-		/// <summary>
 		/// 剛体を破棄。
 		/// </summary>
 		void Release()
 		{
 			m_rigidBody.Release();
 		}
+
+		RigidBody* GetRigidBody() {
+			return &m_rigidBody;
+		}
 	/// <summary>
 	///colliderの作成
 	///  <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	/// </summary>
-		void Create(const Vector3 size, const Vector3 pos, const Quaternion rot);
+		void Create(const Vector3 scale, const Vector3 pos, const Quaternion rot);
 	private:
 		typedef std::vector<Vector3>		VertexBuffer;		//頂点バッファ。
 		typedef std::vector<unsigned int>	IndexBuffer;		//インデックスバッファ。

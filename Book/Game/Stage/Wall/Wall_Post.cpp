@@ -24,5 +24,5 @@ bool Wall_Post::Start()
 
 void Wall_Post::Render(RenderContext& rc) 
 {
-	m_wallRender.Draw(rc);
+	Wall::Render(rc);
 }

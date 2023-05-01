@@ -71,10 +71,6 @@ void Enemy_Normal::Update()
 	case CATCH:
 		Update_OnCatch();
 		break;
-		// 何もしない
-	case NOOP:
-		return;
-		break;
 	}
 
 	Animation();					// アニメーション
