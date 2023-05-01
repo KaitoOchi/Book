@@ -25,7 +25,7 @@ public:
 	};
 
 	EnFlashState m_FlashState = m_enFlash_No;
-
+	int m_flashCount = 5;						//フラッシュボムの所持数
 private:
 	/// <summary>
 	/// フラッシュの効果
@@ -50,6 +50,7 @@ private:
 	/// </summary>
 	void ProcessEndState();
 
+
 	SpriteRender m_flashRender;
 
 	SphereCollider m_sphereCollider;					//スフィアコライダー
@@ -59,5 +60,6 @@ private:
 	float m_range=0;
 	float m_alpha=0;
 	float m_ambient=0;
+	float m_color = 0;
 };
 

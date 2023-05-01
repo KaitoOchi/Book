@@ -6,7 +6,7 @@ class Object : public IGameObject
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object();
 	virtual bool Start();
 	virtual void Update() = 0;
 
@@ -83,8 +83,14 @@ public:
 		m_enObject_null,		//“–‚½‚Á‚Ä‚¢‚é
 		m_enObject_hit,			//“–‚½‚Á‚Ä‚¢‚È‚¢
 	};
+
+
 	EnHitState m_HitState = m_enObject_null;
 
+    CollisionObject* GetCollision()
+	{
+		return m_collisionObject;
+	}
 
 protected:
 
