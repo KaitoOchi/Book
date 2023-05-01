@@ -78,6 +78,7 @@ namespace nsBookEngine {
 		if (isShadowReceiver) {
 			modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
 			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowBlur().GetBokeTexture();
+			modelInitData.m_expandShaderResoruceView[1] = &RenderingEngine::GetInstance()->GetMainRenderTarget();
 		}
 		else {
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";

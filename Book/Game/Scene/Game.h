@@ -20,6 +20,7 @@ class SoundBom;
 class Fade;
 class Star;
 class GameUI;
+class Pause;
 class Game : public IGameObject
 {
 public:
@@ -77,9 +78,9 @@ public:
 	int m_lightNumber = 0;
 public:
 	/// <summary>
-	/// 別のクラスでゲームを消す
+	/// ゲームのフェード処理
 	/// </summary>
-	void DeleteGame();
+	void GameFade();
 
 
 private:
@@ -97,10 +98,7 @@ private:
 	/// </summary>
 	void MnageState();
 
-	/// <summary>
-	/// ゲームのフェード処理
-	/// </summary>
-	void GameFade();
+	
 
 	
 	ModelRender m_stageModelRender;

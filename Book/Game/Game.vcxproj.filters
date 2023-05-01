@@ -111,9 +111,14 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
-    <ClCompile Include="Scene\Result.cpp" />
     <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
+    <ClCompile Include="Scene\Result.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Pause.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -201,5 +206,8 @@
     <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="UI\Star.h" />
     <ClInclude Include="UI\Gage.h" />
+    <ClInclude Include="UI\Pause.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

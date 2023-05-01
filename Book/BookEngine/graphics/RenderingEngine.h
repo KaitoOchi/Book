@@ -140,6 +140,14 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// ブルームの閾値を設定。
+		/// </summary>
+		void SetBloomThreshold(const float threshold)
+		{
+			m_bloom.SetThreshold(threshold);
+		}
+
+		/// <summary>
 		/// ライト用の構造体を取得。
 		/// </summary>
 		LightCB& GetLightCB()
@@ -161,6 +169,11 @@ namespace nsBookEngine {
 			return m_lightCB.shadowCB.lightPos;
 		}
 
+		Texture& GetMainRenderTarget()
+		{
+			return m_mainRenderTarget.GetRenderTargetTexture();;
+		}
+
 		/// <summary>
 		/// シャドウマップ用レンダーターゲットを取得。
 		/// </summary>
@@ -180,12 +193,17 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ブルームの閾値を設定。
+		/// オフスクリーンレンダリング用のレンダーターゲットを取得。
 		/// </summary>
-		void SetBloomThreshold(const float threshold)
+		RenderTarget& GetOffscreenRenderTarget()
 		{
-			m_bloom.SetThreshold(threshold);
+			return m_offscreenRenderTarget;
 		}
+
+		/// <summary>
+		/// オフスクリーンレンダリングの描画処理。
+		/// </summary>
+		void OffscreenRendering(RenderContext& rc, ModelRender& model);
 
 		/// <summary>
 		/// スプライトとモデルの描画順を変更
@@ -216,6 +234,11 @@ namespace nsBookEngine {
 		/// シャドウマップ用のレンダーターゲットを初期化。
 		/// </summary>
 		void InitShadowMapRenderTarget();
+
+		/// <summary>
+		/// オフスクリーンレンダリングを初期化。
+		/// </summary>
+		void InitOffscreenRendering();
 
 		/// <summary>
 		/// シャドウマップの描画処理。
@@ -255,6 +278,8 @@ namespace nsBookEngine {
 		
 		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
+
+		RenderTarget m_offscreenRenderTarget;
 		
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 

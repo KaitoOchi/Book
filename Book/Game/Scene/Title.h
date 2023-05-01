@@ -132,13 +132,13 @@ private:
 	}
 
 private:
+	ModelRender				m_backGroundModelRender;		//背景モデル
 	ModelRender				m_playerModelRender;			//プレイヤーモデル
-
-	SpriteRender			m_backGroundSpriteRender;		//背景画像
 	SpriteRender			m_titleSpriteRender;			//タイトル画像
 	SpriteRender			m_pressSpriteRender;			//press画像
 	SpriteRender			m_menuSpriteRender;				//メニュー画像
-	SpriteRender			m_guideSpriteRender;			//操作方法画像
+	SpriteRender			m_guideBackSpriteRender;		//遊び方背景画像
+	SpriteRender			m_guideSpriteRender[2];			
 	SpriteRender			m_settingSpriteRender;			//設定画像
 	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
 	SpriteRender			m_settingTextSpriteRender[3];	//設定の説明画像
