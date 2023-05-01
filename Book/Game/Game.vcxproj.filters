@@ -103,9 +103,6 @@
     <ClCompile Include="Stage\Ghost.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Wall.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -209,9 +206,6 @@
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Ghost.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\Wall.h">
       <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="Object\Treasure.h">

@@ -263,7 +263,6 @@
     <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
     <ClCompile Include="Stage\Ghost.cpp" />
-    <ClCompile Include="Stage\Wall.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -310,7 +309,6 @@
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Ghost.h" />
-    <ClInclude Include="Stage\Wall.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\Star.h" />
     <ClInclude Include="stdafx.h" />
