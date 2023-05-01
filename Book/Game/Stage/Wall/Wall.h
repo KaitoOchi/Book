@@ -10,8 +10,6 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-
-	void SetModel(int num);
 	void CreateBoxObj();		// “–‚½‚è”»’è‚ğì¬
 
 	//À•W‚Ìæ“¾

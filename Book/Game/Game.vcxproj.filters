@@ -28,6 +28,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{13f84b40-ece6-4d8a-9ce9-d5fe6a3729fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage\Wall">
+      <UniqueIdentifier>{9f242b58-30ab-45b1-a8f9-0acbc4e036dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -100,9 +103,6 @@
     <ClCompile Include="Stage\Ghost.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Wall.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -118,6 +118,24 @@
     </ClCompile>
     <ClCompile Include="UI\Pause.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Decoration.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Door.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Gap.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Normal.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Post.cpp">
+      <Filter>Stage\Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,9 +208,6 @@
     <ClInclude Include="Stage\Ghost.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\Wall.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -208,6 +223,24 @@
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\Pause.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Decoration.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Door.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Gap.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Normal.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Post.h">
+      <Filter>Stage\Wall</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

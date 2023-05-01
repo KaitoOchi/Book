@@ -236,6 +236,12 @@
     <ClCompile Include="Enemy\Enemy_Normal.cpp" />
     <ClCompile Include="Enemy\Enemy_Search.cpp" />
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
+    <ClCompile Include="Stage\Wall\Wall.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Decoration.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Door.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Gap.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Normal.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Post.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -257,7 +263,6 @@
     <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Stage\BackGround.cpp" />
     <ClCompile Include="Stage\Ghost.cpp" />
-    <ClCompile Include="Stage\Wall.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -278,6 +283,12 @@
     <ClInclude Include="Enemy\Enemy_Normal.h" />
     <ClInclude Include="Enemy\Enemy_Search.h" />
     <ClInclude Include="Enemy\Enemy_Clear.h" />
+    <ClInclude Include="Stage\Wall\Wall.h" />
+    <ClInclude Include="Stage\Wall\Wall_Decoration.h" />
+    <ClInclude Include="Stage\Wall\Wall_Door.h" />
+    <ClInclude Include="Stage\Wall\Wall_Gap.h" />
+    <ClInclude Include="Stage\Wall\Wall_Normal.h" />
+    <ClInclude Include="Stage\Wall\Wall_Post.h" />
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
@@ -298,7 +309,6 @@
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\BackGround.h" />
     <ClInclude Include="Stage\Ghost.h" />
-    <ClInclude Include="Stage\Wall.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\Star.h" />
     <ClInclude Include="stdafx.h" />
