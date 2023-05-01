@@ -73,10 +73,6 @@ void Enemy_Clear::Update()
 		Update_OnCatch();
 
 		break;
-		// ‰½‚à‚µ‚È‚¢
-	case NOOP:
-		return;
-		break;
 	}
 	Animation();
 	ClearChange();
