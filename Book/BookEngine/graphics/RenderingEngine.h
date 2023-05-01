@@ -169,6 +169,11 @@ namespace nsBookEngine {
 			return m_lightCB.shadowCB.lightPos;
 		}
 
+		Texture& GetMainRenderTarget()
+		{
+			return m_mainRenderTarget.GetRenderTargetTexture();;
+		}
+
 		/// <summary>
 		/// シャドウマップ用レンダーターゲットを取得。
 		/// </summary>

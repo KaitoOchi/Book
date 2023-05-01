@@ -85,7 +85,6 @@ void Pause::PauseScreen()
 
 			break;
 		case 2:
-			DeleteGO(this);
 			break;
 		}
 	}

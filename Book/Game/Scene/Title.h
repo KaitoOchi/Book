@@ -132,9 +132,8 @@ private:
 	}
 
 private:
+	ModelRender				m_backGroundModelRender;		//背景モデル
 	ModelRender				m_playerModelRender;			//プレイヤーモデル
-
-	SpriteRender			m_backGroundSpriteRender;		//背景画像
 	SpriteRender			m_titleSpriteRender;			//タイトル画像
 	SpriteRender			m_pressSpriteRender;			//press画像
 	SpriteRender			m_menuSpriteRender;				//メニュー画像

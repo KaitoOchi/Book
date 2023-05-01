@@ -32,7 +32,10 @@ bool Title::Start()
 {
 	InitSprite();
 
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm");
+	//カメラの設定
+	g_camera3D->SetPosition({ 0.0f, 0.0f, -600.0f });
+	g_camera3D->SetTarget({ 0.0f, 00.0f, 0.0f });
+	g_camera3D->Update();
 
 	//デバッグ用
 	m_debugFontRender.SetPosition(Vector3(500.0f, 200.0f, 0.0f));
@@ -60,7 +63,14 @@ bool Title::Start()
 void Title::InitSprite()
 {
 	//背景を設定
-	m_backGroundSpriteRender.Init("Assets/sprite/UI/title/base.DDS", 1728.0f, 972.0f);
+	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, D3D12_CULL_MODE_FRONT);
+	m_backGroundModelRender.SetPosition(Vector3(0.0f, 0.0f, 335.0f));
+	m_backGroundModelRender.Update();
+
+	//プレイヤーモデルを設定
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm");
+	m_playerModelRender.SetPosition(Vector3(100.0f, -100.0f, -400.0f));
+	m_playerModelRender.Update();
 
 	m_level2DRender = new Level2DRender;
 	//レベルのデータを使用してタイトル画像を読み込む。
@@ -459,7 +469,7 @@ void Title::SettingScreen()
 
 void Title::Render(RenderContext &rc)
 {
-	m_backGroundSpriteRender.Draw(rc);
+	m_backGroundModelRender.Draw(rc);
 
 	switch (m_titleState)
 	{
@@ -474,6 +484,7 @@ void Title::Render(RenderContext &rc)
 	case 1:
 		m_menuSpriteRender.Draw(rc);
 		m_titleSpriteRender.Draw(rc);
+		m_playerModelRender.Draw(rc);
 		m_buttonSpriteRender[0].Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
 		break;
