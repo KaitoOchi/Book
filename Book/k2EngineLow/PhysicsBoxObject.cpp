@@ -60,11 +60,16 @@ namespace nsK2EngineLow {
 		m_boxSize.y = posY * scale.y;
 		m_boxSize.z = posZ * scale.z;
 		m_boxCollider.Create(m_boxSize);
+
+		rbInfo.collider = &m_boxCollider;
+		rbInfo.mass = 0.0f;
+		m_rigidBody.Init(rbInfo);
 		
 	}
-	void PhysicsBoxObject::Create(const Vector3 pos, const Quaternion rot)
+	void PhysicsBoxObject::Create(const Vector3 scale, const Vector3 pos, const Quaternion rot)
 	{
-		
+		m_boxCollider.Create(scale);
+
 		rbInfo.collider = &m_boxCollider;
 		rbInfo.mass = 0.0f;
 		m_rigidBody.Init(rbInfo);
