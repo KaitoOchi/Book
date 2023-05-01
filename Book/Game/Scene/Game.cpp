@@ -15,7 +15,7 @@
 #include "Enemy_Clear.h"
 #include "BackGround.h"
 #include "LightSensor.h"
-#include "Wall.h"
+#include "Stage/Wall/Wall.h"
 #include "Treasure.h"
 #include "Ghost.h"
 #include "FlashBom.h"

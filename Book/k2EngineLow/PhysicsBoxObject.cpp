@@ -62,7 +62,7 @@ namespace nsK2EngineLow {
 		m_boxCollider.Create(m_boxSize);
 		
 	}
-	void PhysicsBoxObject::Create(const Vector3 pos, const Quaternion rot)
+	void PhysicsBoxObject::Create(const Vector3 size, const Vector3 pos, const Quaternion rot)
 	{
 		
 		rbInfo.collider = &m_boxCollider;
