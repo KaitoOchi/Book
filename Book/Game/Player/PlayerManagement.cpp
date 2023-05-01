@@ -54,6 +54,12 @@ void PlayerManagement::PlayerChange()
 		}
 	}
 }
+
+void PlayerManagement::Changing()
+{
+
+}
+
 void PlayerManagement::PlayerChange2D()
 {
 	m_player2D->Activate();//プレイヤー2Dをアクティブにする

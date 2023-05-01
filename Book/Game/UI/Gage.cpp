@@ -103,22 +103,28 @@ void Gage::GageUp(int GageUp)
 }
 void Gage::GageDown()
 {
-	for (int i = 0; m_game->GetEnemyList().size(); i++)
+	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
-		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->TRACKING)
+		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->TRACKING||
+			m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CHARGE)
 		{
+			m_HitTime = 5.0f;
 			return;
 		}
 	}
-	m_vigilaceDownTime -= g_gameTime->GetFrameDeltaTime();
-
-	if (m_vigilaceDownTime < 0.0f)
+	m_HitTime-= g_gameTime->GetFrameDeltaTime();
+	if (m_HitTime < 0.0f)
 	{
-		if (m_vigilanceGage < 11)
+		m_vigilaceDownTime -= g_gameTime->GetFrameDeltaTime();
+
+		if (m_vigilaceDownTime < 0.0f)
 		{
-			m_vigilanceGage -= 1;
+			if (m_vigilanceGage < 11)
+			{
+				m_vigilanceGage -= 1;
+			}
+			m_vigilaceDownTime = 2.0f;
 		}
-		m_vigilaceDownTime = 2.0f;
 	}
 }
 

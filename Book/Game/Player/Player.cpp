@@ -6,6 +6,8 @@
 #include "Star.h"
 #include "Game.h"
 #include "Enemy.h"
+#include "Treasure.h"
+
 namespace
 {
 	const float WALK = 40.0f;//歩き時の乗算量
@@ -31,6 +33,8 @@ bool Player::Start()
 	m_ghost = FindGO<Ghost>("ghost");
 	m_star = FindGO<Star>("star");
 	m_game = FindGO<Game>("game");
+	//お宝の呼び出し
+	m_treasure = FindGO<Treasure>("treaSure");
 	return true;
 }
 void Player::Animation3D()
@@ -73,12 +77,29 @@ void Player::Animation2D()
 }
 void Player::Update()
 {
+	m_treasure = FindGO<Treasure>("treaSure");
 	//行動できるなら
-	if (m_Player_Act&&m_playerManagement->m_GameStartState==true) {
+	if (m_Player_Act&&m_playerManagement->m_GameStartState==true
+		) {
 		Move();
-		Jump();
 		Rotation();
 		ItemChange();
+		//2Dならお宝の近くに居てもジャンプさせる
+		if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging)
+		{
+			Jump();
+		}
+		else if (m_Player_Act && m_playerManagement->m_GameStartState == true)
+		{
+			//お宝のコリジョンがない時は普通にジャンプさせる
+			if (m_treasure->GetCollision() == nullptr ||
+				m_collisionObject->IsHit(m_treasure->GetCollision())==false)
+			{
+				Jump();
+			}
+		}
+
+
 		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
 			m_Player_Act&&
 			m_playerState!=m_enPlayer_Jump)
@@ -234,86 +255,43 @@ void Player::ProcessCommonStateTransition()
 }
 void Player::ProcessIdleStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessWalkStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessRunStateTransition()
 {
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessJumpStateTransition()
 {
-	//if (m_playerManagement->m_enMnanagementState = m_playerManagement->m_enPlayer_2DChanging)
-	//{
-	//	//ステートを遷移する。
-	//	ProcessCommonStateTransition();
-	//}
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		m_playerState = m_enPlayer_Jumpend;
-	}
 }
 void Player::ProcessJumpendStateTransition()
 {
-	if (m_modelRender->IsPlayingAniamtion() == false&&m_characon->IsOnGround())
-	{
-		//ステートを遷移する。
-		ProcessCommonStateTransition();
-	}
-	
 }
 void Player::ProcessChangeStateTransition()
 {
-
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
 }
 void Player::ProcessDownStartStateTransition()
 {
-	
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		m_playerState = m_enPlayer_Down;
-	}
 }
 void Player::ProcessDownStateTransition()
 {
-
-	//速度を初期化
-	m_moveSpeed.x = 0;
-	m_moveSpeed.z = 0;
-	auto laststar = m_game->GetEnemyList().size() ;
-	//☆をアクティブにする
-	m_game->GetStarList()[laststar]->Activate();
-	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		//ステートの遷移
-		m_game->GetStarList()[laststar]->Deactivate();
-		//ステートの遷移
-		ProcessCommonStateTransition();
-		m_Player_Act = true;
-	}
 }
 void Player::ProcessThrowStateTransition()
 {
-	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
-	m_Player_Act = false;
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		//ステートを遷移する。
-		ProcessCommonStateTransition();
-		m_Player_Act = true;
-	}
 }
+void Player::ProcessCaughtStateTransition()
+{
+}
+
+void Player::ProcessClearStateTransition()
+{
+}
+
+void Player::ProcessGameOverStateTransition()
+{
+}
+
 void Player::ManageState()
 {
 	switch (m_playerState)

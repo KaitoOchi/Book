@@ -19,6 +19,7 @@ class FlashBom;
 class SoundBom;
 class Fade;
 class Star;
+class GameUI;
 class Pause;
 class Game : public IGameObject
 {
@@ -41,7 +42,7 @@ public:
 	}
 	
 	Vector3 m_position = Vector3::Zero;
-	enum EnGameState
+	enum EnGameSceneState
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
 		m_enGameState_GameClearable,//クリア可能
@@ -49,7 +50,7 @@ public:
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
 	};
-	EnGameState m_gameState = m_enGameState_DuringGamePlay;//���݂̃X�e�[�g�̊Ǘ�
+	EnGameSceneState m_gameState = m_enGameState_DuringGamePlay;//���݂̃X�e�[�g�̊Ǘ�
 
 	// �G�l�~�[�̃��X�g��Ԃ�
 	std::vector<Enemy*> GetEnemyList()
@@ -75,6 +76,13 @@ public:
 	SpotLight m_spotLight;
 	int lights = 0;
 	int m_lightNumber = 0;
+public:
+	/// <summary>
+	/// ゲームのフェード処理
+	/// </summary>
+	void GameFade();
+
+
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -89,6 +97,9 @@ private:
 	/// �X�e�[�g�̐ؑ�
 	/// </summary>
 	void MnageState();
+
+	
+
 	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
@@ -117,7 +128,9 @@ private:
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
 	Fade* m_fade = nullptr;
-
+	GameUI* m_gameUI = nullptr;
 	Star* m_star = nullptr;
+
+	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 };
 

@@ -47,8 +47,9 @@ private:
 	float m_vigilanceTime = 2.0f;					//警戒度に入るクールタイム
 	int m_vigilanceGage = 8;						//警戒度ゲージ量
 
-	float m_Color=0.7f;							//警戒度カラー						
+	float m_Color=0.7f;								//警戒度カラー						
 
+	float m_HitTime = 5.0f;
 	float m_vigilaceDownTime = 2.0f;				//警戒度を下げるクールタイム
 
 	Game* m_game = nullptr;

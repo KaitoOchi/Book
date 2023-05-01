@@ -33,8 +33,22 @@ void Object::Collision()
 	}
 
 	//“–‚½‚è”»’è
-	if (m_collisionObject->IsHit(*m_player->GetCharacon())) {
+	switch (m_player->m_enMnanagementState)
+	{
+	case PlayerManagement::m_enPlayer_3DChanging:
+		if (m_collisionObject->IsHit(*m_player->GetPlayer3D()->GetCharacon())) {
 
-		Hit();
+			Hit();
+		}
+		break;
+	case PlayerManagement::m_enPlayer_2DChanging:
+		if (m_collisionObject->IsHit(*m_player->GetPlayer2D()->GetCharacon())) {
+
+			Hit();
+		}
+		break;
+	default:
+		break;
 	}
+	
 }

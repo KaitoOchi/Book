@@ -98,8 +98,21 @@ void Wall::Update()
 }
 void Wall::Render(RenderContext& rc)
 {
-	Vector3 diff = m_player->GetPosition() - m_position;
-	if (diff.Length() < 1500.0f) {
-		m_wallRender.Draw(rc);
+	Vector3 diff;
+	switch (m_player->m_enMnanagementState)
+	{
+	case PlayerManagement::m_enPlayer_3DChanging:
+		diff = m_player->GetPlayer3D()->GetPosition() - m_position;
+		if (diff.Length() < 1500.0f) {
+			m_wallRender.Draw(rc);
+		}
+		break;
+	case PlayerManagement::m_enPlayer_2DChanging:
+		diff = m_player->GetPlayer2D()->GetPosition() - m_position;
+		if (diff.Length() < 1500.0f) {
+			m_wallRender.Draw(rc);
+		}
+		break;
 	}
+	
 }

@@ -4,6 +4,7 @@ class GameCamera;
 class Ghost;
 class Star;
 class Game;
+class Treasure;  
 class Player : public IGameObject
 {
 public:
@@ -105,74 +106,81 @@ protected:
 	/// 各ステートの遷移処理
 	/// </summary>
 	void ManageState();
+	
 	/// <summary>
 	/// 共通のステート遷移処理
 	/// </summary>
 	void ProcessCommonStateTransition();
+	
 	/// <summary>
 	/// 待機ステートの遷移処理
 	/// </summary>
-	void ProcessIdleStateTransition();
+	virtual void ProcessIdleStateTransition()=0;
+	
 	/// <summary>
 	/// 移動ステートの遷移処理
 	/// </summary>
-	void ProcessWalkStateTransition();
+	virtual void ProcessWalkStateTransition()=0;
+	
 	/// <summary>
 	/// ダッシュステートの遷移処理
 	/// </summary>
-	void ProcessRunStateTransition();
+	virtual void ProcessRunStateTransition()=0;
+	
 	/// <summary>
 	/// ジャンプステートの遷移処理
 	/// </summary>
-	void ProcessJumpStateTransition();
+	virtual void ProcessJumpStateTransition()=0;
+	
 	/// <summary>
 	/// ジャンプ終わりステートの遷移処理
 	/// </summary>
-	void ProcessJumpendStateTransition();
+	virtual void ProcessJumpendStateTransition()=0;
+	
 	/// <summary>
 	/// 変更ステートの遷移処理
 	/// </summary>
-	void ProcessChangeStateTransition();
+	virtual void ProcessChangeStateTransition()=0;
+
 	/// <summary>
 	/// 投げるステートの遷移処理
 	/// </summary>
-	void ProcessThrowStateTransition();
+	virtual void ProcessThrowStateTransition()=0;
+
 	/// <summary>
 	/// 盗むステートの遷移処理
 	/// </summary>
-	void ProcessStealStateTransition();
-	/// <summary>
-	/// 押すステートの遷移処理
-	/// </summary>
-	void ProcessPushStateTransition();
+	virtual void ProcessStealStateTransition()=0;
+
 	/// <summary>
 	/// 見つかるステートの遷移処理
 	/// </summary>
-	void ProcessFoundStateTransition();
+	virtual void ProcessFoundStateTransition()=0;
+
 	/// <summary>
 	/// 気絶ステートの遷移処理
 	/// </summary>
-	void ProcessDownStartStateTransition();
+	virtual void ProcessDownStartStateTransition()=0;
+
 	/// <summary>
 	/// 気絶ステートの遷移処理
 	/// </summary>
-	void ProcessDownStateTransition();
-	/// <summary>
-	/// 気絶ステートの遷移処理
-	/// </summary>
-	void ProcessDownEndStateTransition();
+	virtual void ProcessDownStateTransition()=0;
+
 	/// <summary>
 	/// 捕まるステートの遷移処理
 	/// </summary>
-	void ProcessCaughtStateTransition();
+	virtual void ProcessCaughtStateTransition()=0;
+
 	/// <summary>
 	/// ゲームクリアステートの遷移処理
 	/// </summary>
-	void ProcessClearStateTransition();
+	virtual void ProcessClearStateTransition()=0;
+
 	/// <summary>
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
-	void ProcessGameOverStateTransition();
+	virtual void ProcessGameOverStateTransition()=0;
 
 	//アニメーション
 	enum EnAnimationClip {
@@ -225,10 +233,11 @@ protected:
 	GameCamera* gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 	Star* m_star = nullptr;										//星
-
+	Treasure* m_treasure = nullptr;
 
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;
 
 	float m_downTime = 3.0f;									//気絶時間
+
 };

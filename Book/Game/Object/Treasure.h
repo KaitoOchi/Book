@@ -4,7 +4,7 @@ class Treasure :public Object
 {
 public:
 	Treasure();
-	~Treasure();
+	~Treasure()override;
 	bool Start()override ;
 	void Update()override;
 	void Render(RenderContext& rc);
