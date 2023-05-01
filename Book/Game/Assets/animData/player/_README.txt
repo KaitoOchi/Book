@@ -31,3 +31,7 @@ use2
 
 confution
 →damegeの抜き出し。混乱用です。
+
+
+
+a

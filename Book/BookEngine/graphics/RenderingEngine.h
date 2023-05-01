@@ -164,9 +164,22 @@ namespace nsBookEngine {
 			return m_spriteCB;
 		}
 
+		/// <summary>
+		/// シャドウ用の構造体を取得。
+		/// </summary>
+		/// <returns></returns>
 		Vector3& GetShadowCB()
 		{
 			return m_lightCB.shadowCB.lightPos;
+		}
+
+		/// <summary>
+		/// メインレンダーターゲットのテクスチャを取得。
+		/// </summary>
+		/// <returns></returns>
+		Texture& GetMainRenderTarget()
+		{
+			return m_mainRenderTarget.GetRenderTargetTexture();
 		}
 
 		/// <summary>

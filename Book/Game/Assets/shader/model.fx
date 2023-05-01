@@ -200,7 +200,7 @@ float4 PSMain(SPSIn In) : SV_Target0
 	// G-Bufferの内容を使ってライティング
     float4 albedo = g_albedo.Sample(g_sampler, In.uv);
 
-	if(albedo.r == 0.0f && albedo.g == 0.0f && albedo.b == 0.0f){
+	if(albedo.a == 0.0f){
 		clip(-1);
 	}
 

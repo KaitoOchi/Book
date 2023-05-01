@@ -4,6 +4,8 @@
 #include "GameCamera.h"
 #include "PlayerManagement.h"
 #include "Star.h"
+#include "Enemy.h"
+#include "Game.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 20.0f,120.0f,2.0f };//ボックスコライダーの大きさ
@@ -11,6 +13,7 @@ namespace
 	int WALKVALUE = 30;
 	int JUMPVALUE = 90;
 	float RUBVALUM = 3.0f;
+	const float SPEEDDOWN = 0.8;//速度減速率
 }
 Player2D::Player2D()
 {
@@ -100,31 +103,34 @@ void Player2D::Animation()
 	switch (m_playerState)
 	{
 	case Player::m_enPlayer_Idle:
+		JUMPVALUE = 90;
 		j = i / 10;
 		i++;
 		if (i >= 29)
 		{
 			i = 0;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_walk:
+		JUMPVALUE = 90;
 		j = WALKVALUE / 10;
 		WALKVALUE++;
 		if (WALKVALUE >= 89)
 		{
 			WALKVALUE = 30;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_Run:
 		//歩くアニメーションを早くする
 		j = RUBVALUM;
+
 		RUBVALUM += 0.2;
 		if (RUBVALUM >= 8.8)
 		{
 			RUBVALUM = 3;
-			JUMPVALUE = 90;
+			
 		}
 		break;
 	case Player::m_enPlayer_Jump:
@@ -157,7 +163,118 @@ void Player2D::Animation()
 	}
 	m_modelRender->GetModel().ChangeAlbedoMap("", m_player2D[j]);
 }
-	
+
+void Player2D::ProcessIdleStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player2D::ProcessWalkStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player2D::ProcessRunStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player2D::ProcessJumpStateTransition()
+{
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Jumpend;
+
+	}
+}
+void Player2D::ProcessJumpendStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+
+}
+void Player2D::ProcessChangeStateTransition()
+{
+
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player2D::ProcessDownStartStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Down;
+	}
+}
+void Player2D::ProcessDownStateTransition()
+{
+
+	//速度を初期化
+	m_moveSpeed.x = 0;
+	m_moveSpeed.z = 0;
+	auto laststar = m_game->GetEnemyList().size();
+	//☆をアクティブにする
+	m_game->GetStarList()[laststar]->Activate();
+	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+
+		//ステートの遷移
+		m_game->GetStarList()[laststar]->Deactivate();
+		//ステートの遷移
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+void Player2D::ProcessThrowStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+
+void Player2D::ProcessFoundStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
+void Player2D::ProcessStealStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
+void Player2D::ProcessCaughtStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
+void Player2D::ProcessClearStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
+void Player2D::ProcessGameOverStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+
 void Player2D::Render(RenderContext& rc)
 {
 	m_modelRender->Draw(rc);
@@ -165,5 +282,4 @@ void Player2D::Render(RenderContext& rc)
 
 void Player2D::Throw()
 {
-
 }

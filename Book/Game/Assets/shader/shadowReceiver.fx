@@ -96,7 +96,8 @@ struct SPSIn{
 	float2 uv 			: TEXCOORD0;	//uv座標。
 	float3 worldPos		: TEXCOORD1;	//ワールド座標
 	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
-	float4 posInLVP 	: TEXCOORD3;    // ライトビュースクリーン空間でのピクセルの座標
+	float4 posInLVP 	: TEXCOORD3;    //ライトビュースクリーン空間でのピクセルの座標
+	float4 posInProj	: TEXCOORD4;	//頂点の正規化スクリーン座標系
 };
 
 ////////////////////////////////////////////////
@@ -106,6 +107,7 @@ Texture2D<float4> g_albedo : register(t0);					//アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);				//法線マップ
 Texture2D<float4> g_specularMap : register(t2);				//スペキュラマップ
 Texture2D<float4> g_shadowMap : register(t10); 				// シャドウマップ
+Texture2D<float4> g_depthTexture : register(t11);			//深度テクスチャ
 
 StructuredBuffer<float4x4> g_boneMatrix : register(t3);		//ボーン行列。
 sampler g_sampler : register(s0);							//サンプラステート。
@@ -124,6 +126,7 @@ float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, f
 float3 CalcNormal(SPSIn psIn);
 float3 CalcSpecular(float3 normal, float3 worldPos);
 float4 ShadowMap(SPSIn psIn, float4 albedo);
+float4 Outline(SPSIn psIn, float4 shadowMap);
 
 /// <summary>
 //スキン行列を計算する。
@@ -179,6 +182,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     //頂点のライトから見た深度値を計算する
     psIn.posInLVP.z = length(worldPos.xyz - lightPos) / 1000.0f;
 
+	//頂点の正規化スクリーン座標系の座標をピクセルシェーダーにわたす
+	psIn.posInProj = psIn.pos;
+	psIn.posInProj.xy /= psIn.posInProj.w;
+
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -205,7 +212,7 @@ float4 PSMain(SPSIn In) : SV_Target0
 	// G-Bufferの内容を使ってライティング
     float4 albedo = g_albedo.Sample(g_sampler, In.uv);
 
-	if(albedo.r == 0.0f && albedo.g == 0.0f && albedo.b == 0.0f){
+	if(albedo.a == 0.0f){
 		clip(-1);
 	}
 
@@ -249,6 +256,9 @@ float4 PSMain(SPSIn In) : SV_Target0
 	float4 shadowMap = ShadowMap(In, albedo);
 
 	shadowMap.xyz *= lig;
+
+	//輪郭線を求める
+	//float4 outline = Outline(In, shadowMap);
 
 	return shadowMap;
 }
@@ -570,4 +580,44 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
     }
 
 	return albedo;
+}
+
+/// <summary>
+/// 輪郭線を計算
+/// </summary>
+float4 Outline(SPSIn psIn, float4 shadowMap)
+{
+	//近傍8テクセルの深度値を計算して、エッジを抽出する
+	float2 uv = psIn.posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+
+	//近傍8テクセルへのUVオフセット
+	float2 uvOffset[8] = {
+        float2(            0.0f,  1.0f / 720.0f),
+        float2(            0.0f, -1.0f / 720.0f),
+        float2(  1.0f / 1280.0f,           0.0f),
+        float2( -1.0f / 1280.0f,           0.0f),
+        float2(  1.0f / 1280.0f,  1.0f / 720.0f),
+        float2( -1.0f / 1280.0f,  1.0f / 720.0f),
+        float2(  1.0f / 1280.0f, -1.0f / 720.0f),
+        float2( -1.0f / 1280.0f, -1.0f / 720.0f)
+    };
+
+	//このピクセルの深度値を取得
+	float depth = g_depthTexture.Sample(g_sampler, uv).x;
+
+	//近傍8テクセルの深度値の平均値を計算する
+	float depth2 = 0.0f;
+	for(int  i= 0; i < 8; i++){
+		depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
+	}
+	depth2 /= 8.0f;
+
+	//自身の深度値と近傍8テクセルの深度値の差を調べる
+	if(abs(depth - depth2) > 0.00005f){
+		//深度値が結構違う場合はピクセルカラーを黒にする
+		return float4( 0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	//違う場合は通常テクスチャ
+	return shadowMap;
 }

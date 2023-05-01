@@ -6,9 +6,12 @@
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Star.h"
+#include "Enemy.h"
+#include "Game.h"
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
+	const float SPEEDDOWN = 0.8;//速度減速率
 }
 Player3D::Player3D()
 {
@@ -33,6 +36,8 @@ bool Player3D::Start()
 	m_flashBom = FindGO<FlashBom>("flashBom");
 	//音爆弾の呼び出し
 	m_soundBom = FindGO<SoundBom>("soundBom");
+
+
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -71,6 +76,7 @@ bool Player3D::Start()
 
 void Player3D::Update()
 {
+
 	if (GetCharacon() == nullptr)
 	{
 		return;
@@ -80,9 +86,10 @@ void Player3D::Update()
 	{
 		//atn2で３Dの回転を求める
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+		//プレイヤーの処理を呼び出す
 		Player::Update();
-		//アイテムを投げる
 		
+
 		//プレイヤーの移動を継承する。
 		//キャラコンで座標を移動させる。
 		m_characon->SetPosition(m_position);
@@ -150,6 +157,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Run, 0.1f);
 		break;
 	case Player::m_enPlayer_Jump:
+		m_modelRender->SetAnimationSpeed(1.5f);
 		m_modelRender->PlayAnimation(m_enAnimationClip_Jump, 0.8f);
 		break;
 	case Player::m_enPlayer_Jumpend:
@@ -183,8 +191,12 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 		switch (m_enItemState)
 		{
 		case Player::m_enItem_Flash:
-			m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
-			m_flashBom->SetItemPosition(m_position);
+			if (m_flashBom->m_flashCount > 0)
+			{
+				m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
+				m_flashBom->SetItemPosition(m_position);
+			}
+			
 			break;
 		case Player::m_enItem_SoundBom:
 			m_soundBom->Activate();
@@ -195,6 +207,113 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 		}
 		
 	}
+
+}
+
+void Player3D::ProcessIdleStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessWalkStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessRunStateTransition()
+{
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessJumpStateTransition()
+{
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Jumpend;
+
+	}
+}
+void Player3D::ProcessJumpendStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+	}
+
+}
+void Player3D::ProcessChangeStateTransition()
+{
+
+	//ステートを遷移する。
+	ProcessCommonStateTransition();
+}
+void Player3D::ProcessDownStartStateTransition()
+{
+
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Down;
+	}
+}
+void Player3D::ProcessDownStateTransition()
+{
+
+	//速度を初期化
+	m_moveSpeed.x = 0;
+	m_moveSpeed.z = 0;
+	auto laststar = m_game->GetEnemyList().size();
+	//☆をアクティブにする
+	m_game->GetStarList()[laststar]->Activate();
+	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+
+		//ステートの遷移
+		m_game->GetStarList()[laststar]->Deactivate();
+		//ステートの遷移
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+void Player3D::ProcessThrowStateTransition()
+{
+	//速度を初期化
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+		m_Player_Act = true;
+	}
+}
+void Player3D::ProcessStealStateTransition()
+{
+
+}
+
+void Player3D::ProcessFoundStateTransition()
+{
+
+}
+
+void Player3D::ProcessCaughtStateTransition()
+{
+
+}
+
+void Player3D::ProcessClearStateTransition()
+{
+
+
+}
+
+void Player3D::ProcessGameOverStateTransition()
+{
+
 
 }
 void Player3D::Render(RenderContext& rc)

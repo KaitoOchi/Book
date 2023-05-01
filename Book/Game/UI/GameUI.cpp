@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
+#include "Game.h"
 namespace
 {
 	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
@@ -9,8 +10,12 @@ namespace
 	const float		YSIZE = 154.0f;										//縦の大きさ
 	const float     XSIZE = 553.0f;										//横の大きさ
 	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
-	const float		TIME_MAX = 180.0f;									//最大残り時間
+	const float		TIME_MAX = 300.0f;									//最大残り時間
 	const float		VIGILANCE_TIME_MAX = 2.0f;							//警戒値の最大時間
+	const float		MAXTIMEYPOSITION = 800.0f;							//タイムの一番大きい座標
+	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
+	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
+
 }
 
 GameUI::GameUI()
@@ -26,6 +31,7 @@ GameUI::~GameUI()
 bool GameUI::Start()
 {
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
+	m_game = FindGO<Game>("game");
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 	//ゲージの枠画像の設定
@@ -51,13 +57,18 @@ bool GameUI::Start()
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
+	m_timePosition = MAXTIMEYPOSITION;
+
 	return true;
 }
 
 void GameUI::Update()
 {
-	Time();
-
+	if (m_game->m_gameState == m_game->m_enGameState_GameClearable)
+	{
+		Time();
+		TimeMove();
+	}
 	ChangeGage();
 }
 
@@ -73,6 +84,11 @@ void GameUI::Time()
 	//ミリ秒を計算
 	s += m_timer - (int)m_timer;
 
+	if (m <= 1)
+	{
+		m_timeFontRender.SetColor(Vector4{ 1.0f, 0.0f, 0.0f, 1.0f });
+	}
+
 	wchar_t debugText[255];
 	swprintf_s(debugText, 255, L"Time %d:%05.02f", m, s);
 	m_timeFontRender.SetText(debugText);
@@ -80,6 +96,13 @@ void GameUI::Time()
 
 	//警戒値のクールダウンを設定
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
+}
+
+void GameUI::TimeMove()
+{
+	m_timePosition -= 100 * g_gameTime->GetFrameDeltaTime();
+	m_timePosition=max(m_timePosition, SETTIMEYPOSITION);
+	m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION,m_timePosition,0.0f });
 }
 void GameUI::ChangeGage()
 {
@@ -177,6 +200,10 @@ void GameUI::Render(RenderContext& rc)
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
 
-	//m_timeFontRender.Draw(rc);
+	if (m_game->m_gameState == m_game->m_enGameState_GameClearable)
+	{
+		m_timeFontRender.Draw(rc);
+
+	}
 	//m_vigilanceRender.Draw(rc);
 }

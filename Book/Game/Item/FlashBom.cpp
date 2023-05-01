@@ -6,10 +6,12 @@
 namespace
 {
 	const Vector3 LIGHTNO = Vector3::Zero;
-	const float FLASHRANGE = 600.0f;			//フラッシュの効果範囲
+	const float FLASHRANGE = 300.0f;			//フラッシュの効果範囲
 	const float MAXRANGE = 2000.0f;				//ポイントライトの範囲
 	const float MAXALPHA = 0.9;					//α値の範囲
 	const float MAXAMBIENT = 10.0f;				//環境の強さ
+	const float MAXCOLOR = 10.0f;
+	
 }
 FlashBom::FlashBom()
 {
@@ -22,9 +24,9 @@ FlashBom::~FlashBom()
 bool FlashBom::Start()
 {
 	Item::Start();
-	m_sphereCollider.Create(1.0f);
+	m_sphereCollider.Create(0.1f);
 	//ポイントライト
-	m_pointLight.SetPointLight(4, m_position, LIGHTNO, MAXRANGE);
+	m_pointLight.SetPointLight(3, m_position, LIGHTNO, MAXRANGE);
 	m_pointLight.Update();
 	
 	//フラッシュ
@@ -56,10 +58,13 @@ struct SweepResyltWall :public btCollisionWorld::ConvexResultCallback
 void FlashBom::Update()
 {
 	ManageState();
-	if (m_FlashState != m_enFlash_No&&m_FlashState!=m_enFlash_Start)
+	if (m_FlashState == m_enFlash_Flashing)
 	{
 		FlashEffect();
 	}
+	m_ambient = max(m_ambient, 0.7f);
+	RenderingEngine::GetInstance()->SetAmbient(m_ambient);
+
 }
 void FlashBom::ItemHit()
 {
@@ -69,7 +74,7 @@ void FlashBom::ItemHit()
 	m_pointLight.Update();
 
 	//近くにいるエネミーたちを探す
-	for (int i = 0; m_game->GetEnemyList().size(); i++)
+	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
 		Vector3 diff = m_position - m_game->GetEnemyList()[i]->GetPosition();
         if (diff.Length() < pow(FLASHRANGE, 2.0f))
@@ -79,9 +84,9 @@ void FlashBom::ItemHit()
 			end.setIdentity();
 			Vector3 enemyPosition = m_game->GetEnemyList()[i]->GetPosition();
 			//始点はアイテムの座標
-			start.setOrigin(btVector3(m_position.x, 10.0f, m_position.z));
+			start.setOrigin(btVector3(m_position.x, m_position.y + 10.0f, m_position.z));
 			//終点はエネミーの座標
-			end.setOrigin(btVector3(enemyPosition.x, 10.0f, enemyPosition.z));
+			end.setOrigin(btVector3(enemyPosition.x, m_position.y + 10.0f, enemyPosition.z));
 			SweepResyltWall callback;
 			//コライダーを始点から終点までを動かして。
 			//衝突するかどうか調べる
@@ -90,7 +95,7 @@ void FlashBom::ItemHit()
 			if (callback.isHit == true)
 			{
 				//エネミーが壁の向こういる
-				return;
+				continue;
 			}
 			//壁と衝突していない
 			//次にエネミーがこちらの法を向いているか調べる
@@ -116,13 +121,15 @@ void FlashBom::FlashEffect()
 	m_range -= (MAXRANGE / 100.0f);
 	m_alpha-= (MAXALPHA / 100.0f);
 	m_ambient -=(MAXAMBIENT / 100.0f+0.7);
+	m_color -= (MAXCOLOR / 100.0f);
 	
 
 	m_flashRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
 	
 	RenderingEngine::GetInstance()->SetAmbient(m_ambient);
 	
-	m_pointLight.SetRange(m_range);
+	m_color = max(m_color, 1.0f);
+	m_pointLight.SetPointLight(3, m_position, Vector3(m_color, m_color, m_color), m_range);
 	m_pointLight.Update();
 }
 
@@ -130,39 +137,57 @@ void FlashBom::SetFlashEffect()
 {
 	RenderingEngine::GetInstance()->SetAmbient(10.0f);
 	//ポイントライトの初期化
-	m_pointLight.SetColor(Vector3(10.0f, 10.0f, 10.0f));
+	m_color = MAXCOLOR;
+	m_pointLight.SetPointLight(3,m_position, Vector3(m_color, m_color, m_color),m_range);
 	m_pointLight.Update();
 	//フラッシュ時の値を入れる
 	m_alpha = MAXALPHA;
 	m_range = MAXRANGE;
 	m_ambient = MAXAMBIENT;
+	
 }
 
 void FlashBom::ProcessStartState()
 {
-	//開始時に必要な物を呼ぶ
-	SetFlashEffect();
-	ItemHit();
-	m_FlashState = m_enFlash_Flashing;
+	m_flashCount -= 1;
+	if (m_flashCount > 0)
+	{
+		//開始時に必要な物を呼ぶ
+
+		SetFlashEffect();
+		ItemHit();
+		m_FlashState = m_enFlash_Flashing;
+	}
+	else
+	{
+		m_FlashState = m_enFlash_Flashing;
+	}
+	
 }
 
 void FlashBom::ProcessFlashingState()
 {
 	if (m_alpha <= 0.0f && m_range <= 0.0f)
 	{
-		m_pointLight.SetRange(0.0f);
-		m_pointLight.SetColor(Vector3(0.0f, 0.0f, 0.0f));
+		m_pointLight.SetPointLight(3, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 		m_pointLight.Update();
 		m_alpha = 0.0f;
 		RenderingEngine::GetInstance()->SetAmbient(0.7f);
 		m_FlashState = m_enFlash_No;
 	}
-
 }
 
 void FlashBom::ProcessEndState()
 {
+	if (m_alpha <= 0.0f && m_range <= 0.0f)
+	{
+		m_pointLight.SetPointLight(3, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
+		m_pointLight.Update();
+		m_alpha = 0.0f;
+		RenderingEngine::GetInstance()->SetAmbient(0.7f);
+		m_FlashState = m_enFlash_No;
 
+	}
 }
 
 void FlashBom::ManageState()
@@ -174,6 +199,9 @@ void FlashBom::ManageState()
 		break;
 	case FlashBom::m_enFlash_Flashing:
 		ProcessFlashingState();
+		break;
+	case FlashBom::m_enFlash_End:
+		ProcessEndState();
 		break;
 	case FlashBom::m_enFlash_No:
 		break;
