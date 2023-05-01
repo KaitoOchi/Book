@@ -5,15 +5,11 @@
 #include "Fade.h"
 #include "Game.h"
 
-//#include "sound/SoundSource.h"
-//#include "sound/SoundEngine.h"
-
 namespace
 {
 	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 3 };		//各ステートの縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[4] = { 0, 100, 100, 2};		//各設定の横カーソル最大値
 }
-
 
 Title::Title()
 {
@@ -36,9 +32,6 @@ bool Title::Start()
 	g_camera3D->SetPosition({ 0.0f, 0.0f, -600.0f });
 	g_camera3D->SetTarget({ 0.0f, 00.0f, 0.0f });
 	g_camera3D->Update();
-
-	//デバッグ用
-	m_debugFontRender.SetPosition(Vector3(500.0f, 200.0f, 0.0f));
 
 	//セーブデータのロード
 	m_saveData = GameManager::GetInstance()->DataLoad();
@@ -68,9 +61,19 @@ void Title::InitSprite()
 	m_backGroundModelRender.Update();
 
 	//プレイヤーモデルを設定
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm");
+	m_animationClips[animationClip_Idle].Load("Assets/animData/player/idle.tka");
+	m_animationClips[animationClip_Idle].SetLoopFlag(true);
+	m_animationClips[animationClip_Put].Load("Assets/animData/player/idle_act.tka");
+	m_animationClips[animationClip_Put].SetLoopFlag(false);
+
+	Quaternion rot;
+	rot.AddRotationY(Math::DegToRad(-120.0f));
+
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ);
 	m_playerModelRender.SetPosition(Vector3(100.0f, -100.0f, -400.0f));
+	m_playerModelRender.SetRotation(rot);
 	m_playerModelRender.Update();
+
 
 	m_level2DRender = new Level2DRender;
 	//レベルのデータを使用してタイトル画像を読み込む。
@@ -157,25 +160,21 @@ void Title::InitSprite()
 
 void Title::Update()
 {
-	wchar_t debugText[255];
-	swprintf_s(debugText, 255,
-		L"STATE:%d \nTMP:%d \nCURSOR_V:%d \nCURSOR_H:%d \nalpha:%.2f",
-		m_titleState,
-		m_titleState_tmp,
-		m_cursor_vertical,
-		m_cursor_horizontal,
-		m_animTime
-	);
-	m_debugFontRender.SetText(debugText);
-
 	//ステートの遷移処理
 	ManageState();
 
 	if (m_isWaitState) {
 		//ステートの遷移中の処理。
 		StateChange();
+
+		m_playerModelRender.PlayAnimation(animationClip_Put, 0.5f);
+		m_playerModelRender.Update();
 		return;
+
 	}
+
+	m_playerModelRender.PlayAnimation(animationClip_Idle, 0.5f);
+	m_playerModelRender.Update();
 
 	//入力処理
 	Input();
@@ -462,7 +461,6 @@ void Title::SettingScreen()
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = 590.0f + (m_saveDataArray[1] * 7.5f);
 	//BGMとSFX音量のゲージを変更
 	for (int i = 0; i < 2; i++) {
-		//m_gaugeSpriteRender[i].SetScale(Vector3(m_saveDataArray[i] / 1.35f, 1.0f, 0.0f));
 		m_gaugeSpriteRender[i].Update();
 	}
 }
@@ -512,6 +510,4 @@ void Title::Render(RenderContext &rc)
 		m_cursorSpriteRender.Draw(rc);
 		break;
 	}
-
-	m_debugFontRender.Draw(rc);
 }
