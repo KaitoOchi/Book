@@ -48,6 +48,8 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	Enemy::SearchPass(CRAW);
+
 	switch (m_ActState) {
 		// èÑâÒ
 	case CRAW:
@@ -68,6 +70,10 @@ void Enemy_Charge::Update()
 		// çˆóê
 	case CONFUSION:
 		Update_OnConfusion();
+		break;
+		// âΩÇ‡ÇµÇ»Ç¢
+	case NOOP:
+		return;
 		break;
 	}
 
@@ -175,6 +181,5 @@ void Enemy_Charge::Animation()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	// ï`âÊ
 	m_enemyRender.Draw(rc);
 }

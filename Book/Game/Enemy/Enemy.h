@@ -28,14 +28,13 @@ public:
 	void Act_Loss();					// 見失ったときの処理
 	void Act_Limit();					// 一定以内には近づかないための処理
 	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
-	void Act_HitSoundBullet();			// 閃光弾が当たったときの処理
+	void Act_HitSoundBullet();			// 音爆弾が当たったときの処理
 	bool Act_Stop(float time,int i);	// 行動停止
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
 	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
-
 
 	enum EnemyType
 	{
@@ -71,7 +70,8 @@ public:
 		CHARGE,			// 突進
 		BACKBASEDON,	// 巡回状態に戻る
 		CONFUSION,		// 錯乱
-		CATCH			// 捕獲
+		CATCH,			// 捕獲
+		NOOP			// 何もしない
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -86,7 +86,10 @@ public:
 	/// <param name="BACKBASEDON">巡回状態に戻る</param>
 	/// <param name="CONFUSION">錯乱</param>
 	/// <param name="CATCH">捕獲</param>
+	/// <param name="NOOP">何もしない</param>
 	EnEnemyActState m_ActState = CRAW;
+
+	void SearchPass(EnEnemyActState state);
 
 	// 指定できるパス移動
 	enum EnEnemyPassState
