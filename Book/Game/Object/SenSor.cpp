@@ -16,7 +16,7 @@ Sensor::Sensor()
 
 Sensor::~Sensor()
 {
-
+	DeleteGO(m_collisionObject);
 }
 
 bool Sensor::Start()

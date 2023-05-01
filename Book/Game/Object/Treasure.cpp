@@ -61,7 +61,7 @@ void Treasure::Hit()
 		m_game->m_pointLight[m_game->m_lightNumber].Update();
 
 
-		DeleteGO(this);
+		Deactivate();
 	}
 }
 

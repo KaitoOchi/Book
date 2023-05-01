@@ -64,7 +64,16 @@ public:
 	bool m_GameStartState = false;								//ゲームが始まっているかどうか
 
 	void Changing();
+public:
+	Player3D* GetPlayer3D()
+	{
+		return m_player3D;
+	}
 
+	Player2D* GetPlayer2D()
+	{
+		return m_player2D;
+	}
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
 	

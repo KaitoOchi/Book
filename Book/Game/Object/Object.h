@@ -6,7 +6,7 @@ class Object : public IGameObject
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object();
 	virtual bool Start();
 	virtual void Update() = 0;
 

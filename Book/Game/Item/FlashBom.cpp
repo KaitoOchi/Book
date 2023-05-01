@@ -10,7 +10,8 @@ namespace
 	const float MAXRANGE = 2000.0f;				//ポイントライトの範囲
 	const float MAXALPHA = 0.9;					//α値の範囲
 	const float MAXAMBIENT = 10.0f;				//環境の強さ
-	int FLASHBOMCOUNT = 5;						//フラッシュボムの所持数
+	const float MAXCOLOR = 10.0f;
+	
 }
 FlashBom::FlashBom()
 {
@@ -61,6 +62,9 @@ void FlashBom::Update()
 	{
 		FlashEffect();
 	}
+	m_ambient = max(m_ambient, 0.7f);
+	RenderingEngine::GetInstance()->SetAmbient(m_ambient);
+
 }
 void FlashBom::ItemHit()
 {
@@ -117,13 +121,15 @@ void FlashBom::FlashEffect()
 	m_range -= (MAXRANGE / 100.0f);
 	m_alpha-= (MAXALPHA / 100.0f);
 	m_ambient -=(MAXAMBIENT / 100.0f+0.7);
+	m_color -= (MAXCOLOR / 100.0f);
 	
 
 	m_flashRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
 	
 	RenderingEngine::GetInstance()->SetAmbient(m_ambient);
 	
-	m_pointLight.SetRange(m_range);
+	m_color = max(m_color, 1.0f);
+	m_pointLight.SetPointLight(3, m_position, Vector3(m_color, m_color, m_color), m_range);
 	m_pointLight.Update();
 }
 
@@ -131,20 +137,23 @@ void FlashBom::SetFlashEffect()
 {
 	RenderingEngine::GetInstance()->SetAmbient(10.0f);
 	//ポイントライトの初期化
-	m_pointLight.SetColor(Vector3(10.0f, 10.0f, 10.0f));
+	m_color = MAXCOLOR;
+	m_pointLight.SetPointLight(3,m_position, Vector3(m_color, m_color, m_color),m_range);
 	m_pointLight.Update();
 	//フラッシュ時の値を入れる
 	m_alpha = MAXALPHA;
 	m_range = MAXRANGE;
 	m_ambient = MAXAMBIENT;
+	
 }
 
 void FlashBom::ProcessStartState()
 {
-	if (FLASHBOMCOUNT > 0)
+	m_flashCount -= 1;
+	if (m_flashCount > 0)
 	{
 		//開始時に必要な物を呼ぶ
-		FLASHBOMCOUNT -= 1;
+
 		SetFlashEffect();
 		ItemHit();
 		m_FlashState = m_enFlash_Flashing;
@@ -153,26 +162,32 @@ void FlashBom::ProcessStartState()
 	{
 		m_FlashState = m_enFlash_Flashing;
 	}
+	
 }
 
 void FlashBom::ProcessFlashingState()
 {
 	if (m_alpha <= 0.0f && m_range <= 0.0f)
 	{
-		m_pointLight.SetRange(0.0f);
-		m_pointLight.SetColor(Vector3(0.0f, 0.0f, 0.0f));
+		m_pointLight.SetPointLight(3, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 		m_pointLight.Update();
 		m_alpha = 0.0f;
 		RenderingEngine::GetInstance()->SetAmbient(0.7f);
 		m_FlashState = m_enFlash_No;
-		
 	}
-
 }
 
 void FlashBom::ProcessEndState()
 {
+	if (m_alpha <= 0.0f && m_range <= 0.0f)
+	{
+		m_pointLight.SetPointLight(3, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
+		m_pointLight.Update();
+		m_alpha = 0.0f;
+		RenderingEngine::GetInstance()->SetAmbient(0.7f);
+		m_FlashState = m_enFlash_No;
 
+	}
 }
 
 void FlashBom::ManageState()
@@ -184,6 +199,9 @@ void FlashBom::ManageState()
 		break;
 	case FlashBom::m_enFlash_Flashing:
 		ProcessFlashingState();
+		break;
+	case FlashBom::m_enFlash_End:
+		ProcessEndState();
 		break;
 	case FlashBom::m_enFlash_No:
 		break;

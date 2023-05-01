@@ -7,7 +7,7 @@ class Sensor : public Object
 {
 public:
 	Sensor();
-	~Sensor();
+	~Sensor()override;
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc);

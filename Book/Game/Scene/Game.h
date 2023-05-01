@@ -75,6 +75,13 @@ public:
 	SpotLight m_spotLight;
 	int lights = 0;
 	int m_lightNumber = 0;
+public:
+	/// <summary>
+	/// 別のクラスでゲームを消す
+	/// </summary>
+	void DeleteGame();
+
+
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -89,6 +96,12 @@ private:
 	/// �X�e�[�g�̐ؑ�
 	/// </summary>
 	void MnageState();
+
+	/// <summary>
+	/// ゲームのフェード処理
+	/// </summary>
+	void GameFade();
+
 	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
@@ -119,5 +132,7 @@ private:
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Star* m_star = nullptr;
+
+	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 };
 

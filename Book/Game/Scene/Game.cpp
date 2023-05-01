@@ -38,21 +38,28 @@ Game::~Game()
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
 	//�E�G�E�l�E�~�E�[
-	DeleteGO(m_enemyNormal);
+	for (int i = 0; i < m_enemyList.size(); i++)
+	{
+		DeleteGO(m_enemyList[i]);
+	}
+	/*DeleteGO(m_enemyNormal);
 	DeleteGO(m_enemyCharge);
 	DeleteGO(m_enemySearch);
-	DeleteGO(m_enemyClear);
+	DeleteGO(m_enemyClear);*/
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(FindGO<GameUI>("gameUI"));
+	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 	DeleteGO(m_backGround);
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
+	DeleteGO(m_treaSure);
 }
+	
 
 bool Game::Start()
 {
@@ -84,21 +91,21 @@ bool Game::Start()
 		0,
 		Vector3::Zero,
 		{ 0.0f, 0.0f, 0.0f },
-		100.0f
+		200.0f
 	);
 
 	m_pointLight[1].SetPointLight(
 		1,
 		Vector3::Zero,
 		{ 0.0f, 0.0f, 0.0f },
-		100.0f
+		200.0f
 	);
 
 	m_pointLight[2].SetPointLight(
 		2,
 		Vector3::Zero,
 		{ 0.0f, 0.0f, 0.0f },
-		100.0f
+		200.0f
 	);
 
 
@@ -121,6 +128,8 @@ bool Game::Start()
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
+	
+	
 	for (int i = 0; i <= m_enemyList.size(); i++)
 	{
 		m_star = NewGO<Star>(0, "star");
@@ -338,7 +347,7 @@ void Game::LevelDesign()
 			SetClearPosition(objData.position);
 
 			for (int i = 0; i < 4; i++) {
-				m_pointLight[i].SetPosition(Vector3(m_position.x + (i * 100), m_position.y + 10.0f, m_position.z));
+				m_pointLight[i].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
 			}
 			return true;
 		}
@@ -356,7 +365,7 @@ void Game::Update()
 		
 	MnageState();
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
 
@@ -364,6 +373,7 @@ void Game::Update()
 }
 void Game::Clearable()
 {
+	
 	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
@@ -378,9 +388,21 @@ void Game::Clearable()
 
 void Game::ClearState()
 {
-	Result* result = NewGO<Result>(0, "result");
-	result->SetResult(true);
-	DeleteGO(this);
+	//フェードの待機時間
+	if (m_isWaitFadeOut) {
+		//フェードし終えたら
+		if (!m_fade->IsFade()) {
+			//ゲーム画面へ遷移
+			Result* result = NewGO<Result>(0, "result");
+			result->SetResult(true);
+			DeleteGO(this);
+		}
+	}
+	else {
+		m_isWaitFadeOut = true;
+		m_fade->StartFadeOut();
+	}
+
 }
 
 void Game::MnageState()
@@ -403,4 +425,28 @@ void Game::MnageState()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
+}
+
+void Game::GameFade()
+{
+	//フェードアウトの待機時間
+	if (m_isWaitFadeOut) {
+		//フェードアウトし終えたら
+		if (!m_fade->IsFade()) {
+			//フェードインの処理
+			m_fade->StartFadeIn();
+			m_isWaitFadeOut = false;
+		}
+	}
+	else {
+		m_isWaitFadeOut = true;
+		m_fade->StartFadeOut();
+	}
+	return;
+}
+
+void Game::DeleteGame()
+{
+	m_fade->StartFadeIn();
+	DeleteGO(this);
 }
