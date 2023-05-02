@@ -139,6 +139,8 @@
     <ClCompile Include="Enemy\Enemy_Clear.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\PhysicsGhost.cpp" />
+    <ClCompile Include="Stage\GhostBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -246,5 +248,7 @@
     <ClInclude Include="Enemy\Enemy_Clear.h">
       <Filter>Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\PhysicsGhost.h" />
+    <ClInclude Include="Stage\GhostBox.h" />
   </ItemGroup>
 </Project>

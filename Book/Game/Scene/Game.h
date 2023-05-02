@@ -26,6 +26,8 @@ class Fade;
 class Star;
 class GameUI;
 class Pause;
+class GhostBox;
+class PhysicsGhost;
 class Game : public IGameObject
 {
 public:
@@ -146,6 +148,9 @@ private:
 	Wall_Post* m_post = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
+	PhysicsGhost* m_physicsGhost = nullptr;
+	GhostBox* m_ghostBox = nullptr;
+
 
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
