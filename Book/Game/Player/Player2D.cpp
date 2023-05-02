@@ -263,6 +263,11 @@ void Player2D::ProcessCaughtStateTransition()
 	ProcessCommonStateTransition();
 }
 
+void Player2D::ProcessCatchingStateTransition()
+{
+
+}
+
 void Player2D::ProcessClearStateTransition()
 {
 	//ステートを遷移する。

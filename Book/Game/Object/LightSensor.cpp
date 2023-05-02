@@ -47,10 +47,23 @@ void LightSensor::Update()
 		break;
 	}
 
-	//ライトの中にプレイヤーが入ったら
-	if (m_spotLight.IsHit(m_player->GetPosition()))
+	//当たり判定
+	switch (m_player->m_enMnanagementState)
 	{
-		int i = 0;
+	case PlayerManagement::m_enPlayer_3DChanging:
+		if (m_spotLight.IsHit(m_player->GetPlayer3D()->GetPosition())) {
+
+			int i = 0;
+		}
+		break;
+	case PlayerManagement::m_enPlayer_2DChanging:
+		if (m_spotLight.IsHit(m_player->GetPlayer2D()->GetPosition())) {
+
+			int i = 0;
+		}
+		break;
+	default:
+		break;
 	}
 }
 

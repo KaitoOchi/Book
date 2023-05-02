@@ -43,10 +43,6 @@ Game::~Game()
 	{
 		DeleteGO(m_enemyList[i]);
 	}
-	/*DeleteGO(m_enemyNormal);
-	DeleteGO(m_enemyCharge);
-	DeleteGO(m_enemySearch);
-	DeleteGO(m_enemyClear);*/
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
@@ -59,23 +55,30 @@ Game::~Game()
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
+}
 
-	//DeleteGO(FindGO<Pause>("pause"));
-
-
+void Game::GameDelete(const int nextScene)
+{		
+	m_nextScene = nextScene;
+	m_isWaitFadeOut = true;	
+	m_fade->StartFadeOut();
+}
+	
+void Game::GamePos()
+{
 	switch (m_nextScene) {
 	case 1:
 		//リトライ画面へ移行
 		NewGO<Game>(0, "game");
 		break;
-
 	case 2:
 		//タイトル画面へ移行
 		NewGO<Title>(0, "title");
 		break;
+	default:
+		break;
 	}
 }
-	
 
 bool Game::Start()
 {
@@ -368,10 +371,8 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"clear") == true) {
 
 			SetClearPosition(objData.position);
-
-			for (int i = 0; i < 4; i++) {
-				m_pointLight[i].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
-			}
+			m_pointLight[lights].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
+			lights++;
 			return true;
 		}
 		return true;
@@ -380,27 +381,31 @@ void Game::LevelDesign()
 }
 
 void Game::Update()
-{
-	if (m_gameState==m_enGameState_GameClearable)
-	{
-		Clearable();
-	}
-
-	//フェードアウトの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードアウトし終えたら
-		if (!m_fade->IsFade()) {
-			m_isWaitFadeOut = false;
-			DeleteGO(this);
-		}
-	}
-		
+{		
 	MnageState();
 
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
 
+	//フェードの待機時間
+	if (m_isWaitFadeOut) {
+		//フェードし終えたら
+		if (!m_fade->IsFade()) {
+
+			if (m_gameState != m_enGameState_GameFade)
+			{
+				GamePos();
+			}
+			else
+			{
+				NewGO<Result>(0, "result");
+			}
+			DeleteGO(FindGO<Pause>("pause"));
+			DeleteGO(this);
+		}
+	}
+	
 
 }
 void Game::Clearable()
@@ -409,42 +414,32 @@ void Game::Clearable()
 	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
-		m_gameState = m_enGameState_GameClear;
+		GameDelete(0);
+		m_gameState = m_enGameState_GameFade;
+	
 	}
 	if (m_gameUI->m_timer <= 0.0f)
 	{
-		m_gameState = m_enGameState_GameClear;
+		m_gameState = m_enGameState_GameFade;
 	}
 	
 }
 
 void Game::ClearState()
 {
-	//フェードの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードし終えたら
-		if (!m_fade->IsFade()) {
-			//ゲーム画面へ遷移
-			Result* result = NewGO<Result>(0, "result");
-			result->SetResult(true);
-			DeleteGO(this);
-		}
-	}
-	else {
-		m_isWaitFadeOut = true;
-		m_fade->StartFadeOut();
-	}
-
+	
 }
 
 void Game::MnageState()
 {
 	switch (m_gameState)
 	{
+	case Game::m_enGameState_GameClearable:
+		Clearable();
+		break;
 	case Game::m_enGameState_DuringGamePlay:
 		break;
-	case Game::m_enGameState_GameClear:
-		ClearState();
+	case Game::m_enGameState_GameFade:
 		break;
 	case Game::m_enGameState_GameOver:
 		break;
@@ -453,13 +448,6 @@ void Game::MnageState()
 	default:
 		break;
 	}
-}
-
-void Game::GameFade(const int nextScene)
-{
-	m_nextScene = nextScene;
-	m_isWaitFadeOut = true;
-	m_fade->StartFadeOut();
 }
 
 void Game::Render(RenderContext& rc)

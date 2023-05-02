@@ -19,6 +19,7 @@ public:
 		m_enPlayer_3DChanging,	//3Dに切替中
 		m_enPlayer_Found,		//見つかる
 		m_enPlayer_Caught,		//捕まった
+		m_enPlayer_Catching,	//捕まっている
 		m_enPlayer_DownStart,	//気絶スタート
 		m_enPlayer_Down,		//気絶中
 		m_enPlayer_DownEnd,		//気絶解除
@@ -93,6 +94,11 @@ protected:
 	void Move();
 	void Jump();
 	void Rotation();
+	/// <summary>
+	/// 捕まった判定
+	/// </summary>
+	void PlayerCatch();
+
 	virtual void Throw()=0;
 	virtual void Animation()=0;
 	void Animation3D();
@@ -173,6 +179,12 @@ protected:
 	virtual void ProcessCaughtStateTransition()=0;
 
 	/// <summary>
+	/// 捕まった後の処理
+	/// </summary>
+	virtual void ProcessCatchingStateTransition() = 0;
+
+
+	/// <summary>
 	/// ゲームクリアステートの遷移処理
 	/// </summary>
 	virtual void ProcessClearStateTransition()=0;
@@ -194,6 +206,8 @@ protected:
 		m_enAnimationClip_DownEnd,			//ダウン終了
 		m_enAnimationClip_Throw,			//投げるアニメーション
 		m_enAnimationClip_Num,				//アニメーションの数
+		m_enAnimationClip_CaughtStart,		//捕まった時のスタートアニメーション
+		m_enAnimationClip_Caught,			//捕まった時のアニメーション
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 

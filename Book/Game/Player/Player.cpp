@@ -56,7 +56,10 @@ void Player::Animation3D()
 	m_animationClips[m_enAnimationClip_DownEnd].SetLoopFlag(false);
 	m_animationClips[m_enAnimationClip_Throw].Load("Assets/animData/player/attack.tka");
 	m_animationClips[m_enAnimationClip_Throw].SetLoopFlag(false);
-	
+	m_animationClips[m_enAnimationClip_CaughtStart].Load("Assets/animData/player/sleep_start.tka");
+	m_animationClips[m_enAnimationClip_CaughtStart].SetLoopFlag(false);
+	m_animationClips[m_enAnimationClip_Caught].Load("Assets/animData/player/sleep.tka");
+	m_animationClips[m_enAnimationClip_Caught].SetLoopFlag(true);
 }
 void Player::Animation2D()
 {
@@ -97,6 +100,14 @@ void Player::Update()
 			{
 				Jump();
 			}
+			//お宝のコリジョンに当たった時に重力も消えてしまうため
+			if (m_collisionObject->IsHit(m_treasure->GetCollision()) == true &&
+				m_characon->IsOnGround() == false)
+			{
+				//重力を発生させる
+				m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
+			}
+
 		}
 
 
@@ -108,7 +119,7 @@ void Player::Update()
 		}
 		m_Player_Act = true;
 	}
-	
+	PlayerCatch();
 	Animation();
 	ManageState();
 
@@ -222,6 +233,18 @@ void Player::GhostHit()
 
 	
 }
+
+void Player::PlayerCatch()
+{
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	{
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH)
+		{
+			m_playerState = m_enPlayer_Caught;
+		}
+	}
+}
+
 void Player::ProcessCommonStateTransition()
 {
 	if (GetCharacon() == nullptr)
@@ -253,6 +276,9 @@ void Player::ProcessCommonStateTransition()
 	}
 
 }
+
+
+
 void Player::ProcessIdleStateTransition()
 {
 }
@@ -270,6 +296,10 @@ void Player::ProcessJumpendStateTransition()
 }
 void Player::ProcessChangeStateTransition()
 {
+}
+void Player::ProcessCatchingStateTransition()
+{
+
 }
 void Player::ProcessDownStartStateTransition()
 {
@@ -333,6 +363,11 @@ void Player::ManageState()
 		//気絶しているとき
 	case m_enPlayer_Down:
 		ProcessDownStateTransition();
+		break;
+	case m_enPlayer_Caught:
+		ProcessCaughtStateTransition();
+	case m_enPlayer_Catching:
+		ProcessCatchingStateTransition();
 		break;
 	default:
 		break;
