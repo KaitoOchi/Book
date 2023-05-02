@@ -22,7 +22,8 @@ namespace nsBookEngine {
 		/// <param name="numAnimationClip">アニメーションの数。</param>
 		/// <param name="enModelUpAxis">モデルの上方向。</param>
 		/// <param name="isShadow">trueなら影を与える。</param>
-		/// <param name="isShadow">trueなら影を落とす。</param>
+		/// <param name="isShadowReceiver">trueなら影を落とす。</param>
+		/// <param name="outlineMode">1でプレイヤー、2で敵の輪郭線</param>
 		/// <param name="isFrontCullingOnDrawShadowMap">カリングモード。</param>
 		/// <param name="maxInstance">インスタンスの数。</param>
 		void Init(
@@ -32,7 +33,7 @@ namespace nsBookEngine {
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
 			const bool isShadow = false,
 			const bool isShadowReceiver = false,
-			const bool isOutline = false,
+			const int outlineMode = 0,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
 			int maxInstance = 1);
 
@@ -199,7 +200,7 @@ namespace nsBookEngine {
 			EnModelUpAxis modelUpAxis,
 			const bool isShadow,
 			const bool isShadowReceiver,
-			const bool isOutline,
+			const int outlineMode,
 			D3D12_CULL_MODE cullMode
 		);
 

@@ -147,9 +147,9 @@ namespace nsBookEngine {
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 
-		RenderShadowMap(rc);
-
 		ZPrepass(rc);
+
+		RenderShadowMap(rc);
 
 		if (m_isLate) {
 

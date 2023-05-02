@@ -18,7 +18,7 @@ Enemy_Search::~Enemy_Search()
 bool Enemy_Search::Start()
 {
 	Enemy::Start();
-	m_enemyRender.Init("Assets/modelData/unityChan.tkm", 0, 0, enModelUpAxisZ, true, true, true);
+	m_enemyRender.Init("Assets/modelData/unityChan.tkm", 0, 0, enModelUpAxisZ, true, true, 2);
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);

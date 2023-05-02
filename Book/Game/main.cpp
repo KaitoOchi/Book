@@ -21,7 +21,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//NewGO<Debug>(0, "debug");
 	//NewGO<Result>(0, "result");
 
-	NewGO<Fade>(2, "fade");
+	NewGO<Fade>(9, "fade");
 
 	RenderingEngine::GetInstance()->Init();
 
