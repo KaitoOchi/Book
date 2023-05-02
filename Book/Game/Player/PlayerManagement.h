@@ -46,6 +46,22 @@ public:
 	{
 		return m_characon;
 	}
+
+	/// <summary>
+	/// ゲーム開始前のステートを設定。
+	/// </summary>
+	void SetGameState(const bool state)
+	{
+		m_GameStartState = state;
+	}
+
+	/// <summary>
+	/// ゲーム開始前のステートを取得。
+	/// </summary>
+	const bool GetGameState()
+	{
+		return m_GameStartState;
+	}
 	
 	
 	enum EnManagementState
@@ -56,8 +72,6 @@ public:
 		m_enPlayer_3DChanging,//3Dプレイヤー
 	};
 	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
-
-	bool m_GameStartState = false;								//ゲームが始まっているかどうか
 
 public:
 	Player3D* GetPlayer3D()
@@ -87,6 +101,8 @@ private:
 	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
 
 	float m_changeTime = 5.0f;									//プレイヤーを切り替える時間
+
+	bool m_GameStartState = false;								//ゲームが始まっているかどうか
 private:
 	
 };
