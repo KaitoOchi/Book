@@ -23,6 +23,16 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
+		/// ZPrepaass描画パスから呼ばれる処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		/// <returns></returns>
+		virtual void OnRenderToZPrepass(RenderContext& rc)
+		{
+
+		}
+
+		/// <summary>
 		/// G-Buffer描画パスから呼ばれる処理。
 		/// </summary>
 		virtual void OnRenderToGBuffer(RenderContext& rc)

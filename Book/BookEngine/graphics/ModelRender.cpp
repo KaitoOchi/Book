@@ -20,8 +20,9 @@ namespace nsBookEngine {
 		AnimationClip* animationClips,
 		int numAnimationClips,
 		EnModelUpAxis enModelUpAxis,
-		bool isShadow,
-		bool isShadowReceiver,
+		const bool isShadow,
+		const bool isShadowReceiver,
+		const bool isOutline,
 		D3D12_CULL_MODE cullMode,
 		int maxInstance)
 	{
@@ -32,7 +33,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis, isShadow, isShadowReceiver, cullMode);
+		InitModel(filePath, enModelUpAxis, isShadow, isShadowReceiver, isOutline, cullMode);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -64,6 +65,7 @@ namespace nsBookEngine {
 		EnModelUpAxis modelUpAxis,
 		const bool isShadow,
 		const bool isShadowReceiver,
+		const bool isOutline,
 		D3D12_CULL_MODE cullMode
 	)
 	{
@@ -74,11 +76,11 @@ namespace nsBookEngine {
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
 		modelInitData.m_cullMode = cullMode;
+		modelInitData.m_expandShaderResoruceView[1] = &RenderingEngine::GetInstance()->GetZPrepassDepthTexture();
 
 		if (isShadowReceiver) {
 			modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
 			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowBlur().GetBokeTexture();
-			modelInitData.m_expandShaderResoruceView[1] = &RenderingEngine::GetInstance()->GetMainRenderTarget();
 		}
 		else {
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
@@ -113,6 +115,24 @@ namespace nsBookEngine {
 
 			m_shadowModel.Init(shadowModelInitData);
 		}
+
+		if (isOutline) {
+			ModelInitData modelInitData;
+			modelInitData.m_tkmFilePath = tkmFilePath;
+			modelInitData.m_modelUpAxis = modelUpAxis;
+			modelInitData.m_fxFilePath = "Assets/shader/zprepass.fx";
+			modelInitData.m_vsSkinEntryPointFunc = "VSMain";
+			//modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+
+
+			if (m_skeleton.IsInited()) {
+				//スケルトンを指定する。
+				modelInitData.m_skeleton = &m_skeleton;
+				modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+			}
+
+			m_zprepassModel.Init(modelInitData);
+		}
 	}
 
 
@@ -123,6 +143,9 @@ namespace nsBookEngine {
 		}
 		if (m_shadowModel.IsInited()) {
 			m_shadowModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
+		if (m_zprepassModel.IsInited()) {
+			m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
 	}
 
@@ -146,6 +169,13 @@ namespace nsBookEngine {
 	{
 		if (m_shadowModel.IsInited()) {
 			m_shadowModel.Draw(rc, camera, 1);
+		}
+	}
+
+	void ModelRender::OnRenderToZPrepass(RenderContext& rc)
+	{
+		if (m_zprepassModel.IsInited()) {
+			m_zprepassModel.Draw(rc);
 		}
 	}
 

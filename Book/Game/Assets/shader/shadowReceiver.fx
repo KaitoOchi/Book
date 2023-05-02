@@ -184,7 +184,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 
 	//頂点の正規化スクリーン座標系の座標をピクセルシェーダーにわたす
 	psIn.posInProj = psIn.pos;
-	psIn.posInProj.xy /= psIn.posInProj.w;
 
 	psIn.uv = vsIn.uv;
 
@@ -257,10 +256,9 @@ float4 PSMain(SPSIn In) : SV_Target0
 
 	shadowMap.xyz *= lig;
 
-	//輪郭線を求める
-	//float4 outline = Outline(In, shadowMap);
+	float4 outline = Outline(In, shadowMap);
 
-	return shadowMap;
+	return outline;
 }
 
 /// <summary>
@@ -583,41 +581,44 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
 }
 
 /// <summary>
-/// 輪郭線を計算
+/// モデル用のピクセルシェーダーのエントリーポイント
 /// </summary>
 float4 Outline(SPSIn psIn, float4 shadowMap)
 {
-	//近傍8テクセルの深度値を計算して、エッジを抽出する
-	float2 uv = psIn.posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+    // 近傍8テクセルの深度値を計算して、エッジを抽出する
+    // 正規化スクリーン座標系からUV座標系に変換する
+    float2 uv = (psIn.posInProj.xy / psIn.posInProj.w) * float2( 0.5f, -0.5f) + 0.5f;
 
-	//近傍8テクセルへのUVオフセット
-	float2 uvOffset[8] = {
-        float2(            0.0f,  1.0f / 720.0f),
-        float2(            0.0f, -1.0f / 720.0f),
-        float2(  1.0f / 1280.0f,           0.0f),
-        float2( -1.0f / 1280.0f,           0.0f),
-        float2(  1.0f / 1280.0f,  1.0f / 720.0f),
-        float2( -1.0f / 1280.0f,  1.0f / 720.0f),
-        float2(  1.0f / 1280.0f, -1.0f / 720.0f),
-        float2( -1.0f / 1280.0f, -1.0f / 720.0f)
+    // 近傍8テクセルへのUVオフセット
+    float2 uvOffset[8] = {
+        float2(           0.0f,  1.0f / 720.0f), //上
+        float2(           0.0f, -1.0f / 720.0f), //下
+        float2( 1.0f / 1280.0f,           0.0f), //右
+        float2(-1.0f / 1280.0f,           0.0f), //左
+        float2( 1.0f / 1280.0f,  1.0f / 720.0f), //右上
+        float2(-1.0f / 1280.0f,  1.0f / 720.0f), //左上
+        float2( 1.0f / 1280.0f, -1.0f / 720.0f), //右下
+        float2(-1.0f / 1280.0f, -1.0f / 720.0f)  //左下
     };
 
-	//このピクセルの深度値を取得
-	float depth = g_depthTexture.Sample(g_sampler, uv).x;
+    // このピクセルの深度値を取得
+    float depth = g_depthTexture.Sample(g_sampler, uv).x;
 
-	//近傍8テクセルの深度値の平均値を計算する
-	float depth2 = 0.0f;
-	for(int  i= 0; i < 8; i++){
-		depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
-	}
-	depth2 /= 8.0f;
+    // 近傍8テクセルの深度値の平均値を計算する
+    float depth2 = 0.0f;
+    for( int i = 0; i < 8; i++)
+    {
+        depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
+    }
+    depth2 /= 8.0f;
 
-	//自身の深度値と近傍8テクセルの深度値の差を調べる
-	if(abs(depth - depth2) > 0.00005f){
-		//深度値が結構違う場合はピクセルカラーを黒にする
-		return float4( 0.0f, 0.0f, 0.0f, 1.0f);
-	}
+    // 自身の深度値と近傍8テクセルの深度値の差を調べる
+    if(abs(depth - depth2) > 0.15f)
+    {
+        // 深度値が結構違う場合はピクセルカラーを黒にする
+        return float4( 0.0f, 0.0f, 0.0f, 1.0f);
+    }
 
-	//違う場合は通常テクスチャ
-	return shadowMap;
+    // 普通のテクスチャ
+    return shadowMap;
 }
