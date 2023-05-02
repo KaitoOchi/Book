@@ -15,7 +15,12 @@
 #include "Enemy_Clear.h"
 #include "BackGround.h"
 #include "LightSensor.h"
-#include "Wall.h"
+#include "Stage/Wall/Wall.h"
+#include "Stage/Wall/Wall_Decoration.h"
+#include "Stage/Wall/Wall_Door.h"
+#include "Stage/Wall/Wall_Gap.h"
+#include "Stage/Wall/Wall_Normal.h"
+#include "Stage/Wall/Wall_Post.h"
 #include "Treasure.h"
 #include "Ghost.h"
 #include "FlashBom.h"
@@ -177,7 +182,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/level_test.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -278,54 +283,75 @@ void Game::LevelDesign()
 
 				return true;
 			}
+
+			// 名前がwallなら
+			if (objData.EqualObjectName(L"wall") == true) {
+				// 壁を生成
+				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				m_normal->SetPosition(objData.position);
+				m_normal->SetRotation(objData.rotation);
+				m_normal->SetScale(objData.scale);
+			}
+
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
 				// 壁を生成
-				m_wall = NewGO<Wall>(0, "wall");
-				m_wall->SetPosition(objData.position);
-				m_wall->SetRotation(objData.rotation);
-				m_wall->SetScale(objData.scale);
+				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				m_normal->SetPosition(objData.position);
+				m_normal->SetRotation(objData.rotation);
+				m_normal->SetScale(objData.scale);
 
 				return true;
 			}
-			//// 名前がgapのとき
-			//if (objData.EqualObjectName(L"gap") == true) {
-			//	// 隙間を生成する
-			//	m_wall = NewGO<Wall>(0, "wall");
-			//	//m_wall->SetWallModel(1);
-			//	m_wall->SetPosition(objData.position);
-			//	m_wall->SetRotation(objData.rotation);
-			//	m_wall->SetScale(objData.scale);
 
-			//	return true;
-			//}
-			//// 名前がdecorationのとき
-			//if (objData.EqualObjectName(L"decoration") == true) {
-			//	// 障害物を生成
-			//	m_wall = NewGO<Wall>(0, "wall");
-			//	//m_wall->SetWallModel(0);
-			//	m_wall->SetPosition(objData.position);
-			//	m_wall->SetRotation(objData.rotation);
-			//	m_wall->SetScale(objData.scale);
+			// 名前がgapのとき
+			if (objData.EqualObjectName(L"gap") == true) {
+				// 隙間を生成する
+				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->SetPosition(objData.position);
+				m_gap->SetRotation(objData.rotation);
+				m_gap->SetScale(objData.scale);
 
-			//	return true;
-			//}
-			//// 名前がstartのとき
-			//if (objData.EqualObjectName(L"start") == true) {
-			//	// スタートを生成
-			//	m_wall = NewGO<Wall>(0, "wall");
-			//	//m_wall->SetWallModel(0);
-			//	m_wall->SetPosition(objData.position);
-			//	m_wall->SetRotation(objData.rotation);
-			//	m_wall->SetScale(objData.scale);
+				return true;
+			}
 
-			//	return true;
-			//}
+			// 名前がpostのとき
+			if (objData.EqualObjectName(L"post") == true) {
+				// 隙間を生成する
+				m_post = NewGO<Wall_Post>(0, "wall_Post");
+				m_post->SetPosition(objData.position);
+				m_post->SetRotation(objData.rotation);
+				m_post->SetScale(objData.scale);
+
+				return true;
+			}
+
+			// 名前がdecorationのとき
+			if (objData.EqualObjectName(L"decoration") == true) {
+				// 障害物を生成
+				m_decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
+				m_decoration->SetPosition(objData.position);
+				m_decoration->SetRotation(objData.rotation);
+				m_decoration->SetScale(objData.scale);
+
+				return true;
+			}
+
+			// 名前がstartのとき
+			if (objData.EqualObjectName(L"start") == true) {
+				// スタートを生成
+				m_door = NewGO<Wall_Door>(0, "wall_Door");
+				m_door->SetPosition(objData.position);
+				m_door->SetRotation(objData.rotation);
+				m_door->SetScale(objData.scale);
+
+				return true;
+			}
+
 			//// 名前がgoalのとき
 			//if (objData.EqualObjectName(L"goal") == true) {
 			//	// ゴールを生成
 			//	m_wall = NewGO<Wall>(0, "wall");
-			//	//m_wall->SetWallModel(0);
 			//	m_wall->SetPosition(objData.position);
 			//	m_wall->SetRotation(objData.rotation);
 			//	m_wall->SetScale(objData.scale);
