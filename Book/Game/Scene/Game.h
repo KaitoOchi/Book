@@ -51,7 +51,7 @@ public:
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
 		m_enGameState_GameClearable,//クリア可能
-		m_enGameState_GameClear,//�Q�[���N���A
+		m_enGameState_GameFade,//�Q�[���N���A
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
 	};
@@ -82,12 +82,15 @@ public:
 	int lights = 0;
 	int m_lightNumber = 0;
 public:
+
 	/// <summary>
-	/// ゲームのフェード処理
+	/// 別のところで消去する
 	/// </summary>
-	void GameFade(const int nextScene);
-
-
+	void GameDelete(const int nextScene);
+	/// <summary>
+	/// ポーズ画面の切替
+	/// </summary>
+	void GamePos();
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -129,6 +132,8 @@ private:
 	std::vector<Enemy*> m_enemyList;
 	
 	std::vector<Star*>m_starList;
+
+	std::vector<Wall*>m_wallList;
 
 	PlayerManagement* m_playerManagement = nullptr;
 

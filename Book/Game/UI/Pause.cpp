@@ -82,10 +82,10 @@ void Pause::PauseScreen()
 			m_pauseState = enState_FadeIn;
 			break;
 		case 1:
-			m_game->GameFade(1);
+			m_game->GameDelete(1);
 			break;
 		case 2:
-			m_game->GameFade(2);
+			m_game->GameDelete(2);
 			break;
 		}
 	}

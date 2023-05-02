@@ -74,6 +74,12 @@ private:
 	/// 捕まるステートの遷移処理
 	/// </summary>
 	void ProcessCaughtStateTransition()override;
+
+	/// <summary>
+	/// 捕まった後の処理
+	/// </summary>
+	void ProcessCatchingStateTransition()override;
+
 	/// <summary>
 	/// ゲームクリアステートの遷移処理
 	/// </summary>

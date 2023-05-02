@@ -31,15 +31,11 @@ void PlayerManagement::Update()
 	}
 	
 }
-void PlayerManagement::ProcessCommonStateTransition()
-{
-
-}
 void PlayerManagement::PlayerChange()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
-		switch (m_enMnanagementState)
+		switch (m_enMananagementState)
 		{
 			//2Dの場合3Dを呼び出す
 		case PlayerManagement::m_enPlayer_2DChanging:
@@ -55,9 +51,21 @@ void PlayerManagement::PlayerChange()
 	}
 }
 
-void PlayerManagement::Changing()
+void PlayerManagement::SetChange(EnManagementState manaState)
 {
-
+	switch (manaState)
+	{
+		//2Dの場合3Dを呼び出す
+	case PlayerManagement::m_enPlayer_3DChanging:
+		PlayerChange3D();
+		break;
+		//3Dの場合2Dを呼び出す
+	case PlayerManagement::m_enPlayer_2DChanging:
+		PlayerChange2D();
+		break;
+	default:
+		break;
+	}
 }
 
 void PlayerManagement::PlayerChange2D()
@@ -69,7 +77,7 @@ void PlayerManagement::PlayerChange2D()
 	m_player2D->CreatCharcon();//キャラコンを生成する
 	SetCharacon(m_player2D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーを2Dにする
-	m_enMnanagementState = m_enPlayer_2DChanging;
+	m_enMananagementState = m_enPlayer_2DChanging;
 }
 void PlayerManagement::PlayerChange3D()
 {
@@ -89,5 +97,5 @@ void PlayerManagement::PlayerChange3D()
 			}
 		});
 	//プレイヤーを３Dにする
-	m_enMnanagementState = m_enPlayer_3DChanging;
+	m_enMananagementState = m_enPlayer_3DChanging;
 }
