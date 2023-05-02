@@ -45,6 +45,8 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
+	Enemy::SearchPass(CRAW);
+
 	switch (m_ActState) {
 		// èÑâÒ
 	case CRAW:
@@ -69,6 +71,7 @@ void Enemy_Clear::Update()
 		// ïﬂäl
 	case CATCH:
 		Update_OnCatch();
+
 		break;
 	}
 	Animation();

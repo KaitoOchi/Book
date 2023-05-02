@@ -48,6 +48,8 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	Enemy::SearchPass(CRAW);
+
 	switch (m_ActState) {
 		// „‰ñ
 	case CRAW:
@@ -175,6 +177,5 @@ void Enemy_Charge::Animation()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	// •`‰æ
 	m_enemyRender.Draw(rc);
 }

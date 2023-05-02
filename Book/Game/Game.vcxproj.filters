@@ -28,6 +28,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{13f84b40-ece6-4d8a-9ce9-d5fe6a3729fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage\Wall">
+      <UniqueIdentifier>{f93d61f6-9cc6-40db-87a0-3d709abd5a9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -100,9 +103,6 @@
     <ClCompile Include="Stage\Ghost.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Wall.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -110,7 +110,6 @@
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="UI\Star.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="Scene\Result.cpp">
@@ -118,6 +117,27 @@
     </ClCompile>
     <ClCompile Include="UI\Pause.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Decoration.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Door.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Gap.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Normal.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Post.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy_Clear.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,9 +210,6 @@
     <ClInclude Include="Stage\Ghost.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\Wall.h">
-      <Filter>Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -203,11 +220,31 @@
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="UI\Star.h" />
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\Pause.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Decoration.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Door.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Gap.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Normal.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Post.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy_Clear.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
