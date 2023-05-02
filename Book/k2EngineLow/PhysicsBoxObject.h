@@ -33,15 +33,17 @@ namespace nsK2EngineLow {
 			return m_rigidBody.GetBody();
 		}
 		/// <summary>
+		/// „‘Ì‚ğæ“¾
+		/// </summary>
+		RigidBody* GetRigidBody() {
+			return &m_rigidBody;
+		}
+		/// <summary>
 		/// „‘Ì‚ğ”jŠüB
 		/// </summary>
 		void Release()
 		{
 			m_rigidBody.Release();
-		}
-
-		RigidBody* GetRigidBody() {
-			return &m_rigidBody;
 		}
 	/// <summary>
 	///collider‚Ìì¬

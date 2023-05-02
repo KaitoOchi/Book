@@ -33,7 +33,7 @@ void Wall::CreateBoxObj()
 {
 	// 当たり判定を作成する
 	m_physicsBoxObj.CreateFromModel(m_wallRender.GetModel(), m_wallRender.GetModel().GetWorldMatrix(), m_scale);
-	//m_physicsBoxObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
+	m_physicsBoxObj.GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
 	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// �R���W����������ݒ�	
 }
 
