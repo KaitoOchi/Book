@@ -23,7 +23,7 @@ bool Wall::Start()
 
 	//SetWallModel(ModelState);
 
-	m_wallRender.Init("Assets/modelData/level_test/box.tkm", 0, 0, enModelUpAxisZ, true, false);
+	m_wallRender.Init("Assets/modelData/level_test/box.tkm", 0, 0, enModelUpAxisZ, true, true, false);
 	m_wallRender.SetPosition(m_position);
 	m_wallRender.SetScale(m_scale);
 	m_wallRender.SetRotation(m_rotation);

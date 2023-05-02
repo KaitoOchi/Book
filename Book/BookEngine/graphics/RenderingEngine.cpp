@@ -55,7 +55,7 @@ namespace nsBookEngine {
 
 		InitShadowMapRenderTarget();
 
-		InitOffscreenRendering();
+		InitZPrepassRenderTarget();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -130,14 +130,14 @@ namespace nsBookEngine {
 		m_shadowBlur.Init(&m_shadowMapRenderTarget.GetRenderTargetTexture());
 	}
 
-	void RenderingEngine::InitOffscreenRendering()
+	void RenderingEngine::InitZPrepassRenderTarget()
 	{
-		m_offscreenRenderTarget.Create(
-			1280,
-			720,
+		m_zprepassRenderTarget.Create(
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_R32G32_FLOAT,
 			DXGI_FORMAT_D32_FLOAT
 		);
 	}
@@ -148,6 +148,8 @@ namespace nsBookEngine {
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 
 		RenderShadowMap(rc);
+
+		ZPrepass(rc);
 
 		if (m_isLate) {
 
@@ -198,6 +200,24 @@ namespace nsBookEngine {
 
 	}
 
+	void RenderingEngine::ZPrepass(RenderContext& rc)
+	{
+		// レンダリングターゲットとして設定できるようになるまで待つ
+		rc.WaitUntilToPossibleSetRenderTarget(m_zprepassRenderTarget);
+
+		// レンダリングターゲットを設定
+		rc.SetRenderTargetAndViewport(m_zprepassRenderTarget);
+
+		// レンダリングターゲットをクリア
+		rc.ClearRenderTargetView(m_zprepassRenderTarget);
+
+		for (auto& renderObj : m_renderObjects) {
+			renderObj->OnRenderToZPrepass(rc);
+		}
+
+		rc.WaitUntilFinishDrawingToRenderTarget(m_zprepassRenderTarget);
+	}
+
 	void RenderingEngine::ForwardRendering(RenderContext& rc)
 	{
 		BeginGPUEvent("ForwardRendering");
@@ -215,29 +235,6 @@ namespace nsBookEngine {
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 
 		EndGPUEvent();
-	}
-
-	void RenderingEngine::OffscreenRendering(RenderContext& rc, ModelRender& model)
-	{
-		//レンダリングターゲットをoffscreenRenderTargetに変更する
-		RenderTarget* rtArray[] = { &m_offscreenRenderTarget };
-
-		rc.WaitUntilToPossibleSetRenderTargets(1, rtArray);
-
-		rc.SetRenderTargets(1, rtArray);
-
-		rc.ClearRenderTargetViews(1, rtArray);
-
-		//プレイヤーを描画する
-		model.Draw(rc);
-
-		rc.WaitUntilFinishDrawingToRenderTargets(1, rtArray);
-
-		//画面に表示されるレンダリングターゲットに戻す
-		rc.SetRenderTarget(
-			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
-			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
-		);
 	}
 
 	void RenderingEngine::Render2D(RenderContext& rc)
