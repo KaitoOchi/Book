@@ -23,6 +23,8 @@
 #include "Stage/Wall/Wall_Post.h"
 #include "Treasure.h"
 #include "Ghost.h"
+#include "GhostBox.h"
+#include "PhysicsGhost.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Fade.h"
@@ -395,10 +397,10 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"gost") == true) {
 
-			m_ghost = NewGO<Ghost>(0, "ghost");
-			m_ghost->SetPosition(objData.position);
-			m_ghost->SetScale(objData.scale);
-			m_ghost->SetRotation(objData.rotation);
+			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
+			m_physicsGhost->SetPosition(objData.position);
+			m_physicsGhost->SetScale(objData.scale);
+			m_physicsGhost->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {

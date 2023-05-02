@@ -3,7 +3,7 @@
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class Ghost;
+class PhysicsGhost;
 class PlayerManagement:public IGameObject
 {
 public:
@@ -81,7 +81,7 @@ private:
 	CharacterController* m_characon = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
-	Ghost* m_ghost = nullptr;
+	PhysicsGhost* m_physicsghost = nullptr;
 	float YLstickamount = 0;
 
 	float m_startTime = 2.0f;									//ゲームが始まるまでの時間

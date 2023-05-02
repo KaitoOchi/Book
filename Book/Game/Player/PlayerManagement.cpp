@@ -2,7 +2,7 @@
 #include "Player2D.h"
 #include"Player3D.h"
 #include "PlayerManagement.h"
-#include "Ghost.h"
+#include "PhysicsGhost.h"
 PlayerManagement::PlayerManagement()
 {
 
@@ -13,7 +13,7 @@ PlayerManagement::~PlayerManagement()
 }
 bool PlayerManagement::Start()
 {
-	m_ghost = FindGO<Ghost>("ghost");
+	m_physicsghost = FindGO<PhysicsGhost>("physicsGhost");
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
 	return true;
@@ -89,7 +89,7 @@ void PlayerManagement::PlayerChange3D()
 	SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーが埋まっているなら
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
-			if (m_ghost->m_physicsGhostObj.IsSelf(contactObject) == true)
+			if (m_physicsghost->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
 				m_player3D->GhostHit();
 				m_player3D->SetPushPosition(m_player3D->GetPosition());
