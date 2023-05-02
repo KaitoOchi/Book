@@ -123,17 +123,17 @@ void GameUI::ChangeGage()
 	m_gageSpriteRender.Update();
 
 
-	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging && m_gage > 0) {
+	if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging && m_gage > 0) {
 		//Œ¸‚ç‚·
 		m_gage -= 1.0f;
 		m_gage = max(m_gage, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
-	else if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging)
+	else if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
 		m_playerManagement->PlayerChange3D();
 	}
-	if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
+	if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
 		//‘‚â‚·
 		m_gage += 2.0f;
 		m_gage = min(m_gage, GAGE_MAX);

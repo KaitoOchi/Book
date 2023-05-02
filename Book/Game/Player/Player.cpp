@@ -88,7 +88,7 @@ void Player::Update()
 		Rotation();
 		ItemChange();
 		//2D‚È‚ç‚¨•ó‚Ì‹ß‚­‚É‹‚Ä‚àƒWƒƒƒ“ƒv‚³‚¹‚é
-		if (m_playerManagement->m_enMnanagementState == m_playerManagement->m_enPlayer_2DChanging)
+		if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 		{
 			Jump();
 		}

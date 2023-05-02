@@ -48,7 +48,7 @@ void LightSensor::Update()
 	}
 
 	//“–‚½‚è”»’è
-	switch (m_player->m_enMnanagementState)
+	switch (m_player->m_enMananagementState)
 	{
 	case PlayerManagement::m_enPlayer_3DChanging:
 		if (m_spotLight.IsHit(m_player->GetPlayer3D()->GetPosition())) {

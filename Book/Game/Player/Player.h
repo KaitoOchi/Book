@@ -201,13 +201,12 @@ protected:
 		m_enAnimationClip_Run,				//走るアニメーション
 		m_enAnimationClip_Jump,				//ジャンプアニメーション
 		m_enAnimationClip_Jumpend,			//ジャンプ終わりアニメーション
-		m_enAnimationClip_DownStart,		//ダウン開始
 		m_enAnimationClip_Down,				//ダウンアニメーション
 		m_enAnimationClip_DownEnd,			//ダウン終了
 		m_enAnimationClip_Throw,			//投げるアニメーション
-		m_enAnimationClip_Num,				//アニメーションの数
 		m_enAnimationClip_CaughtStart,		//捕まった時のスタートアニメーション
 		m_enAnimationClip_Caught,			//捕まった時のアニメーション
+		m_enAnimationClip_Num,				//アニメーションの数
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 

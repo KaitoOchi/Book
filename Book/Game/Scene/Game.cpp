@@ -40,9 +40,7 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_player3D);
-	DeleteGO(m_player2D);
-	DeleteGO(m_playerManagement);
+
 	//�E�G�E�l�E�~�E�[
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
@@ -55,11 +53,19 @@ Game::~Game()
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+	//壁や床の削除
 	DeleteGO(m_backGround);
+	for (int i = 0; i < m_wallList.size(); i++)
+	{
+		DeleteGO(m_wallList[i]);
+	}
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
+	DeleteGO(m_player3D);
+	DeleteGO(m_player2D);
+	DeleteGO(m_playerManagement);
 }
 
 void Game::GameDelete(const int nextScene)
@@ -291,6 +297,7 @@ void Game::LevelDesign()
 				m_normal->SetPosition(objData.position);
 				m_normal->SetRotation(objData.rotation);
 				m_normal->SetScale(objData.scale);
+				m_wallList.emplace_back(m_normal);
 			}
 
 			// 名前がboxなら
@@ -300,7 +307,7 @@ void Game::LevelDesign()
 				m_normal->SetPosition(objData.position);
 				m_normal->SetRotation(objData.rotation);
 				m_normal->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_normal);
 				return true;
 			}
 
@@ -311,7 +318,7 @@ void Game::LevelDesign()
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_gap);
 				return true;
 			}
 
@@ -322,7 +329,7 @@ void Game::LevelDesign()
 				m_post->SetPosition(objData.position);
 				m_post->SetRotation(objData.rotation);
 				m_post->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_post);
 				return true;
 			}
 
@@ -333,7 +340,7 @@ void Game::LevelDesign()
 				m_decoration->SetPosition(objData.position);
 				m_decoration->SetRotation(objData.rotation);
 				m_decoration->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_decoration);
 				return true;
 			}
 
@@ -344,7 +351,7 @@ void Game::LevelDesign()
 				m_door->SetPosition(objData.position);
 				m_door->SetRotation(objData.rotation);
 				m_door->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_door);
 				return true;
 			}
 

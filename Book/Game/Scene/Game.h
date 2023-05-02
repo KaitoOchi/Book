@@ -133,6 +133,8 @@ private:
 	
 	std::vector<Star*>m_starList;
 
+	std::vector<Wall*>m_wallList;
+
 	PlayerManagement* m_playerManagement = nullptr;
 
 	// ステージ
