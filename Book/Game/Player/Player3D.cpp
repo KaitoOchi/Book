@@ -177,6 +177,12 @@ void Player3D::Animation()
 		m_modelRender->SetAnimationSpeed(0.6f);
 		m_modelRender->PlayAnimation(m_enAnimationClip_Down, 0.5f);
 		break;
+	case Player::m_enPlayer_Caught:
+		m_modelRender->PlayAnimation(m_enAnimationClip_CaughtStart,0.5);
+		break;
+	case Player::m_enPlayer_Catching:
+		m_modelRender->PlayAnimation(m_enAnimationClip_Caught, 0.5);
+		break;
 	default:
 		break;
 	}
@@ -302,6 +308,25 @@ void Player3D::ProcessFoundStateTransition()
 
 void Player3D::ProcessCaughtStateTransition()
 {
+	//‘¬“x‚ð‰Šú‰»
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Catching;
+	}
+}
+
+void Player3D::ProcessCatchingStateTransition()
+{
+	m_catchTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_catchTime < 0.0f)
+	{
+		m_game->m_gameState = m_game->m_enGameState_GameFade;
+		m_game->GameDelete(0);
+		m_catchTime = 2.0f;
+	}
 
 }
 
