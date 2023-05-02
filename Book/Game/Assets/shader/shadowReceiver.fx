@@ -215,7 +215,7 @@ SPSIn VSSkinMain( SVSIn vsIn )
 /// </summary>
 SPSIn VSSkinPlayer( SVSIn vsIn ) 
 {
-	return VSMainCore(vsIn, true, float4(0.5f, 0.5f, 1.0f, 1.0f));
+	return VSMainCore(vsIn, true, float4(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 /// <summary>

@@ -242,6 +242,7 @@
     <ClCompile Include="Stage\Wall\Wall_Gap.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Normal.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Post.cpp" />
+    <ClCompile Include="UI\CountDown.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Stage\Wall\Wall_Gap.h" />
     <ClInclude Include="Stage\Wall\Wall_Normal.h" />
     <ClInclude Include="Stage\Wall\Wall_Post.h" />
+    <ClInclude Include="UI\CountDown.h" />
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />

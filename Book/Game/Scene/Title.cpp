@@ -56,7 +56,7 @@ bool Title::Start()
 void Title::InitSprite()
 {
 	//îwåiÇê›íË
-	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, D3D12_CULL_MODE_FRONT);
+	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, 0, D3D12_CULL_MODE_FRONT);
 	m_backGroundModelRender.SetPosition(Vector3(0.0f, 0.0f, 335.0f));
 	m_backGroundModelRender.Update();
 

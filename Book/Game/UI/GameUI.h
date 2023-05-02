@@ -24,7 +24,7 @@ public:
 	{
 		return m_timer;
 	}
-	float				m_timer = 0.0f;					//タイマー
+
 private:
 	/// <summary>
 	/// 時間計測処理。
@@ -50,7 +50,7 @@ private:
 	Game*				m_game;
 	int					m_vigilanceGage = 1;			//警戒度
 	int					m_Gitgage = 0;
-	
+	float				m_timer = 0.0f;					//タイマー
 	float				m_vigilanceTime = 0.0f;			//警戒度用のタイマー
 	float				m_gage = 0.0f;					//MPゲージ
 	float				m_gaugeTimer = 0.0f;			//ゲージ用のタイマー

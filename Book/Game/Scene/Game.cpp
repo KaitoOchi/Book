@@ -32,6 +32,9 @@
 #include"Gage.h"
 #include "Star.h"
 #include "Pause.h"
+#include "CountDown.h"
+
+
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -49,7 +52,7 @@ Game::~Game()
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
-	DeleteGO(FindGO<GameUI>("gameUI"));
+	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
@@ -100,8 +103,9 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
-	m_gameUI=NewGO<GameUI>(0, "gameUI");
+	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
+	NewGO<CountDown>(0, "countDown");
 	
 	
 	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
@@ -432,7 +436,8 @@ void Game::Update()
 			}
 			else
 			{
-				NewGO<Result>(0, "result");
+				Result* result = NewGO<Result>(0, "result");
+				result->SetTime(m_gameUI->GetTime());
 			}
 			DeleteGO(FindGO<Pause>("pause"));
 			DeleteGO(this);
@@ -451,7 +456,7 @@ void Game::Clearable()
 		m_gameState = m_enGameState_GameFade;
 	
 	}
-	if (m_gameUI->m_timer <= 0.0f)
+	if (m_gameUI->GetTime() <= 0.0f)
 	{
 		m_gameState = m_enGameState_GameFade;
 	}
