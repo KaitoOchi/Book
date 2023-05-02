@@ -5,9 +5,20 @@ class Ghost:public IGameObject
 {
 public:
 	Ghost();
-	~Ghost();
+	virtual ~Ghost();
 	bool Start();
 	void Update();
+
+	/// <summary>
+	/// どのオブジェクトを作成するか
+	/// </summary>
+	enum EnGhostObject
+	{
+		m_enGhostObje_physicsGhost,		//ゴーストオブジェクト
+		m_enGhostObje_boxCollider,		//ボックスコライダー
+	};
+
+public:
 	void CreateGhostBox();
 	/// <summary>
 	/// 座標を設定。
@@ -62,7 +73,7 @@ public:
 	{
 		return m_scale;
 	}
-	PhysicsGhostObject m_physicsGhostObj;
+	
 
 	/// <summary>
 	/// 透明座標を設定。
@@ -83,7 +94,7 @@ public:
 	}
 
 	
-private:
+protected:
 	Vector3 m_position = Vector3::Zero;
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_scale = Vector3::Zero;

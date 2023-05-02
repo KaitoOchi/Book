@@ -14,7 +14,6 @@ bool Ghost::Start()
 	m_modelRender.Init("Assets/modelData/level/box.tkm");
 	m_modelRender.Update();
 	CreateGhostBox();
-	
 	return true;
 }
 void Ghost::CreateGhostBox()
@@ -64,12 +63,7 @@ void Ghost::CreateGhostBox()
 	m_boxSize.x = posX * m_scale.x;
 	m_boxSize.y = posY * m_scale.y;
 	m_boxSize.z = posZ * m_scale.z;
-	m_physicsGhostObj.CreateBox(
-		m_position,
-		m_rotation,
-		m_boxSize
-	);
-	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Ground);
+	
 }
 void Ghost::Update()
 {
