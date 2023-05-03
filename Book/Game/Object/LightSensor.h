@@ -53,14 +53,6 @@ public:
 	}
 
 	/// <summary>
-	/// 回転を取得。
-	/// </summary>
-	const Quaternion GetRotation()
-	{
-		return m_rotation;
-	}
-
-	/// <summary>
 	/// 最大時間を設定。
 	/// </summary>
 	void SetMaxTime(const float time)
@@ -93,7 +85,6 @@ private:
 	SpotLight			m_spotLight;			//スポットライト
 	Gage*				m_gage = nullptr;		//ゲームUI
 	LightSensorState	m_lightSensorState = enState_Move;
-	Quaternion			m_rotation;				//回転
 	Vector3				m_direction;			//方向
 	Vector3				m_moveSpeed;			//移動速度
 	bool				m_isTimeOver = false;	//タイムを超えたか
