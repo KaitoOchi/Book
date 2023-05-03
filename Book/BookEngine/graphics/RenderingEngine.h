@@ -29,7 +29,7 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig[4];
-			SpotLight::spotLight spotLig[16];
+			SpotLight::spotLight spotLig[20];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
 			int ptNum;											//ポイントライトの数

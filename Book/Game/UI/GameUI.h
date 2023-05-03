@@ -12,12 +12,6 @@ public:
 	void Render(RenderContext& rc);
 
 	/// <summary>
-	/// 警戒値を上昇する。
-	/// </summary>
-	/// <param name="GageUp"></param>
-	void Vigilance(int GageUp);
-
-	/// <summary>
 	/// タイムを取得。
 	/// </summary>
 	const float GetTime()
@@ -37,14 +31,12 @@ private:
 	void ChangeGage();
 
 	/// <summary>
-	/// 警戒度の変更処理。
+	/// 時間の移動処理。
 	/// </summary>
-	void VigilanceChange();
 	void TimeMove();
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
 	SpriteRender		m_gageSpriteRender;				//ゲージ画像
-	SpriteRender		m_vigilanceRender;				//警戒度画像
 	FontRender			m_timeFontRender;				//タイム文字
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
