@@ -79,6 +79,7 @@ public:
 	{
 		return m_isActive;
 	}
+
 	enum EnHitState {
 		m_enObject_null,		//“–‚½‚Á‚Ä‚¢‚é
 		m_enObject_hit,			//“–‚½‚Á‚Ä‚¢‚È‚¢

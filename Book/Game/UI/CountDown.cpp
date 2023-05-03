@@ -27,12 +27,12 @@ bool CountDown::Start()
 
 void CountDown::Update()
 {
-	m_timer += g_gameTime->GetFrameDeltaTime();
+	m_timer -= g_gameTime->GetFrameDeltaTime();
 
-	if (m_timer > 1.0f) {
+	if (m_timer < 0.0f) {
 		//カウントを進めてタイムをリセットする
 		m_count--;
-		m_timer = 0.0f;
+		m_timer = 1.0f;
 
 		if (m_count < 0) {
 			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
@@ -42,9 +42,11 @@ void CountDown::Update()
 		}
 	}
 
-	//カウント画像の設定
-	m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
-	m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer));
+	if (m_timer > 0.5f) {
+		//カウント画像の設定
+		m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
+	}
+	m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f - m_timer));
 	m_countDownSpriteRender[m_count].Update();
 }
 

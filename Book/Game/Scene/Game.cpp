@@ -14,7 +14,6 @@
 #include "Enemy_Charge.h"
 #include "Enemy_Clear.h"
 #include "BackGround.h"
-#include "LightSensor.h"
 #include "Stage/Wall/Wall.h"
 #include "Stage/Wall/Wall_Decoration.h"
 #include "Stage/Wall/Wall_Door.h"
@@ -35,6 +34,7 @@
 #include "Star.h"
 #include "Pause.h"
 #include "CountDown.h"
+#include "SecurityCamera.h"
 
 
 Game::Game()
@@ -108,15 +108,10 @@ bool Game::Start()
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
-	
-	
-	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
-	ligSensor->SetPosition(Vector3(-80.0f, 100.0f, 0.0f));
-	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
-	ligSensor->SetMaxTime(5.0f);
-	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
 
 	NewGO<Pause>(0, "pause");
+
+	NewGO<SecurityCamera>(0, "securityCamera");
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));

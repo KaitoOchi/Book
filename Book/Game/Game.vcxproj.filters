@@ -148,6 +148,11 @@
     <ClCompile Include="UI\CountDown.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\GhostBox.cpp" />
+    <ClCompile Include="Stage\PhysicsGhost.cpp" />
+    <ClCompile Include="Object\SecurityCamera.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -263,6 +268,11 @@
     </ClInclude>
     <ClInclude Include="UI\CountDown.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\GhostBox.h" />
+    <ClInclude Include="Stage\PhysicsGhost.h" />
+    <ClInclude Include="Object\SecurityCamera.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

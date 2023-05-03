@@ -107,8 +107,7 @@ void LightSensor::Rotate()
 	Vector3 rotAxis;
 	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
 
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
+	m_rotation.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
 
 	m_spotLight.Update();
 }
