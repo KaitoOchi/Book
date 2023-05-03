@@ -43,8 +43,6 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	Enemy::SearchPass(CRAW);
-
 	switch (m_ActState) {
 		// èÑâÒ
 	case CRAW:

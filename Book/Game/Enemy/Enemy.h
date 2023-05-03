@@ -271,5 +271,5 @@ protected:
 
 	bool m_CountFlag = false;				// カウントするフラグ
 
-	int m_spotNum = 1;						// スポットライトの個数
+	int m_spotNum = 0;						// スポットライトの個数
 };

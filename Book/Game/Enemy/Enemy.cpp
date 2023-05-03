@@ -59,7 +59,7 @@ bool Enemy::Start()
 	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
-	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
+	//m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 	//m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
 
 	// インスタンスを探す
