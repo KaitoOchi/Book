@@ -126,7 +126,7 @@ namespace nsBookEngine {
 			GetLightCB().spotLig[spNum].spRange = spLig.spRange;
 			GetLightCB().spotLig[spNum].spDirection = spLig.spDirection;
 			GetLightCB().spotLig[spNum].spAngle = spLig.spAngle;
-			GetLightCB().spNum = spNum;
+			//GetLightCB().spNum = spNum;
 		}
 
 		/// <summary>

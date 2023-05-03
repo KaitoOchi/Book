@@ -201,8 +201,8 @@ public:
 	}
 
 	// スポットライトの番号を教える
-	void AddSpotLightNum() {
-		m_spotNum++;
+	void SetSpotLigNum(int num) {
+		m_spotNum = num;
 	}
 	//------------------------------------------
 	//エネミーの前方向を求める

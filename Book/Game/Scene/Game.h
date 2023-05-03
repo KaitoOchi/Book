@@ -158,5 +158,7 @@ private:
 
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 	int						m_nextScene = 0;				//次に移行するシーン
+
+	int						m_spotLigNum = 1;				// エネミー用スポットライトの数
 };	
 

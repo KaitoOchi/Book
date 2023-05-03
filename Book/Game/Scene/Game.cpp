@@ -122,7 +122,6 @@ bool Game::Start()
 
 	//m_modelRender.Init("Assets/modelData/wall1.tkm");
 
-	
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 	m_pointLight[0].SetPointLight(
@@ -183,6 +182,7 @@ bool Game::Start()
 
 
 	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
+	RenderingEngine::GetInstance()->GetLightCB().spNum = 16;
 	return true;
 }
 
@@ -232,6 +232,9 @@ void Game::LevelDesign()
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
+
+			m_enemyNormal->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// パス移動の順路を指定
 			m_enemyNormal->Pass(0);
 			// エネミーのリストに追加する
@@ -249,6 +252,9 @@ void Game::LevelDesign()
 			m_enemyCharge->SetPosition(objData.position);
 			m_enemyCharge->SetRotation(objData.rotation);
 			m_enemyCharge->SetScale(objData.scale);
+
+			m_enemyCharge->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// パス移動の順路を指定
 			m_enemyCharge->Pass(0);
 			// エネミーのリストに追加する
@@ -266,6 +272,9 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
+
+			m_enemySearch->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemySearch);
 			return true;
