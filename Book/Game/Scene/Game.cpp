@@ -224,8 +224,6 @@ void Game::LevelDesign()
 			m_enemyNormal->SetScale(objData.scale);
 			// パス移動の順路を指定
 			m_enemyNormal->Pass(0);
-			// スポットライトの数を加算
-			m_enemyNormal->AddSpotLightNum();
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyNormal);
 			return true;
@@ -243,8 +241,6 @@ void Game::LevelDesign()
 			m_enemyCharge->SetScale(objData.scale);
 			// パス移動の順路を指定
 			m_enemyCharge->Pass(0);
-			// スポットライトの数を加算
-			m_enemyCharge->AddSpotLightNum();
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyCharge);
 			return true;
@@ -260,8 +256,6 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
-			// スポットライトの数を加算
-			m_enemySearch->AddSpotLightNum();
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemySearch);
 			return true;

@@ -22,7 +22,6 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
-	//Enemy::SpotLight_New(m_position, 4);
 
 	m_ActState = SEARCH;	// 行動パターンを設定。基本がCRAWのため。
 
@@ -47,11 +46,9 @@ void Enemy_Search::Update()
 		break;
 	}
 
-	m_enemyRender.SetRotation(m_rot);
-
 	Enemy::SpotLight_Serch(m_rot, m_position);
-
 	// 更新
+	m_enemyRender.SetRotation(m_rot);
 	m_enemyRender.Update();
 }
 
