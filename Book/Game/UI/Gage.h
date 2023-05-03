@@ -10,12 +10,13 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	/// </summary>
-	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
-	void GageUp(int GageUp);
-private:
 	/// <summary>
 	/// Œx‰ú“x‚ğã‚°‚é
+	/// </summary>
+	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
+	void GageUp(const int GageUp);
+
+private:
 	
 	/// <summary>
 	/// Œx‰ú“x‚ğ‰º‚°‚é

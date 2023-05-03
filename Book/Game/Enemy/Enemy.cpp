@@ -2,7 +2,7 @@
 #include "Enemy.h"
 
 #include "PlayerManagement.h"
-#include "GameUI.h"
+#include "Gage.h"
 #include "Game.h"
 #include "GameManager.h"
 
@@ -64,7 +64,7 @@ bool Enemy::Start()
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_gameUI = FindGO<GameUI>("gameUI");
+	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
 	// gameで設定したエネミーのリストを取得する
 	enemyList = m_game->GetEnemyList();
@@ -688,7 +688,7 @@ void Enemy::VigilanceCount()
 	if (m_Vicount <= 0.0f)
 	{
 		//ステートの遷移
-		m_gameUI->Vigilance(1);
+		m_gage->GageUp(1);
 		m_Vicount = VIGILANCETIME;
 	}
 }

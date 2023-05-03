@@ -2,6 +2,7 @@
 #include "LightSensor.h"
 
 #include "PlayerManagement.h"
+#include "Gage.h"
 
 
 LightSensor::LightSensor()
@@ -17,6 +18,7 @@ LightSensor::~LightSensor()
 bool LightSensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
+	m_gage = FindGO<Gage>("gage");
 	m_isActive = false;
 
 	//スポットライトを設定
@@ -53,13 +55,13 @@ void LightSensor::Update()
 	case PlayerManagement::m_enPlayer_3DChanging:
 		if (m_spotLight.IsHit(m_player->GetPlayer3D()->GetPosition())) {
 
-			int i = 0;
+			m_gage->GageUp(1);
 		}
 		break;
 	case PlayerManagement::m_enPlayer_2DChanging:
 		if (m_spotLight.IsHit(m_player->GetPlayer2D()->GetPosition())) {
 
-			int i = 0;
+			m_gage->GageUp(1);
 		}
 		break;
 	default:
@@ -100,7 +102,7 @@ void LightSensor::Rotate()
 {
 	//Y軸周りの回転
 	Quaternion qRotY;
-	qRotY.SetRotationY(m_timer * 0.001f);
+	qRotY.SetRotationY(m_timer * 0.005f);
 	qRotY.Apply(m_spotLight.GetDirection());
 
 	//外積を求める

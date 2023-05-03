@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+class Gage;
 
 class LightSensor : public Object
 {
@@ -90,6 +91,7 @@ private:
 
 private:
 	SpotLight			m_spotLight;			//スポットライト
+	Gage*				m_gage = nullptr;		//ゲームUI
 	LightSensorState	m_lightSensorState = enState_Move;
 	Quaternion			m_rotation;				//回転
 	Vector3				m_direction;			//方向

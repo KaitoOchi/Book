@@ -5,7 +5,7 @@
 #include "AI/PathFinding/PathFinding.h"
 
 class PlayerManagement;
-class GameUI;
+class Gage;
 class Game;
 class Enemy :public IGameObject
 {
@@ -234,7 +234,7 @@ protected:
 	std::vector<Enemy*> enemyList;			// エネミーのリスト
 
 	PlayerManagement* m_playerManagement = nullptr;
-	GameUI* m_gameUI = nullptr;
+	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
 
 	CharacterController m_characterController;	// キャラクターコントローラー
