@@ -14,7 +14,7 @@ Wall_Gap::~Wall_Gap()
 bool Wall_Gap::Start()
 {
 	// ƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
-	m_wallRender.Init("Assets/modelData/level_test/tkm/wall1.tkm", 0, 0, enModelUpAxisZ, 1, 1);
+	m_wallRender.Init("Assets/modelData/level_test/tkm/wall1.tkm", 0, 0, enModelUpAxisZ, true, true, 0);
 
 	Wall::Start();
 

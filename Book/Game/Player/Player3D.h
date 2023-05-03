@@ -45,6 +45,9 @@ private:
 	float m_pushRot;
 	float senkeiPos = 0.0f;
 	float senkeiTime = 1.0f;
+
+	float m_catchTime = 2.0f;
+
 private:
 	/// <summary>
 	/// 待機ステートの遷移処理
@@ -95,6 +98,13 @@ private:
 	/// 捕まるステートの遷移処理
 	/// </summary>
 	void ProcessCaughtStateTransition()override;
+	
+	/// <summary>
+	/// 捕まった後の処理
+	/// </summary>
+	void ProcessCatchingStateTransition()override;
+
+
 	/// <summary>
 	/// ゲームクリアステートの遷移処理
 	/// </summary>

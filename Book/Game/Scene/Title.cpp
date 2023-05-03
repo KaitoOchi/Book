@@ -56,7 +56,7 @@ bool Title::Start()
 void Title::InitSprite()
 {
 	//背景を設定
-	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, D3D12_CULL_MODE_FRONT);
+	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, 0, D3D12_CULL_MODE_FRONT);
 	m_backGroundModelRender.SetPosition(Vector3(0.0f, 0.0f, 335.0f));
 	m_backGroundModelRender.Update();
 
@@ -108,10 +108,15 @@ void Title::InitSprite()
 	m_guideBackSpriteRender.Update();
 	m_sprites.push_back(&m_guideBackSpriteRender);
 
+	//ガイド画面の設定
 	m_guideSpriteRender[0].Init("Assets/sprite/UI/guide/guide_playguide.DDS", 1403.0f, 637.0f);
-	m_guideSpriteRender[0].SetPosition(Vector3(0.0f, -10.0f, 0.0f));
-	m_guideSpriteRender[0].Update();
-	m_sprites.push_back(&m_guideSpriteRender[0]);
+	m_guideSpriteRender[1].Init("Assets/sprite/UI/guide/rule.DDS", 1141.0f, 541.0f);
+
+	for (int i = 0; i < 2; i++) {
+		m_guideSpriteRender[i].SetPosition(Vector3(0.0f, -10.0f, 0.0f));
+		m_guideSpriteRender[i].Update();
+		m_sprites.push_back(&m_guideSpriteRender[i]);
+	}
 
 
 
@@ -167,6 +172,7 @@ void Title::Update()
 		//ステートの遷移中の処理。
 		StateChange();
 
+		m_playerModelRender.SetAnimationSpeed(0.7);
 		m_playerModelRender.PlayAnimation(animationClip_Put, 0.5f);
 		m_playerModelRender.Update();
 		return;
@@ -494,7 +500,7 @@ void Title::Render(RenderContext &rc)
 	//操作方法画面なら
 	case 3:
 		m_guideBackSpriteRender.Draw(rc);
-		m_guideSpriteRender[0].Draw(rc);
+		m_guideSpriteRender[1].Draw(rc);
 		m_buttonSpriteRender[1].Draw(rc);
 		break;
 

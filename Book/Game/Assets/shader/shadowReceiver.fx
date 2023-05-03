@@ -57,7 +57,7 @@ cbuffer LightCb : register(b1) {
 	PointLig ptLig[4];
 
 	//スポットライト用の定数バッファ
-	SpotLig spLig[4];
+	SpotLig spLig[16];
 		
 	//半球ライト用の定数バッファ
 	HemiLig hemiLig;
@@ -98,6 +98,7 @@ struct SPSIn{
 	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
 	float4 posInLVP 	: TEXCOORD3;    //ライトビュースクリーン空間でのピクセルの座標
 	float4 posInProj	: TEXCOORD4;	//頂点の正規化スクリーン座標系
+	float4 outlineColor : COLOR0;		//輪郭線の色
 };
 
 ////////////////////////////////////////////////
@@ -150,7 +151,7 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// <summary>
 /// 頂点シェーダーのコア関数。
 /// </summary>
-SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
+SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 {
 	SPSIn psIn;
 	float4x4 m;
@@ -184,7 +185,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 
 	//頂点の正規化スクリーン座標系の座標をピクセルシェーダーにわたす
 	psIn.posInProj = psIn.pos;
-	psIn.posInProj.xy /= psIn.posInProj.w;
+
+	//輪郭線の色を設定
+	psIn.outlineColor = olColor;
 
 	psIn.uv = vsIn.uv;
 
@@ -194,9 +197,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 /// <summary>
 /// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 /// </summary>
-SPSIn VSMain(SVSIn vsIn)
+SPSIn VSMain( SVSIn vsIn )
 {
-	return VSMainCore(vsIn, false);
+	return VSMainCore(vsIn, false, float4(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 /// <summary>
@@ -204,7 +207,23 @@ SPSIn VSMain(SVSIn vsIn)
 /// </summary>
 SPSIn VSSkinMain( SVSIn vsIn ) 
 {
-	return VSMainCore(vsIn, true);
+	return VSMainCore(vsIn, true, float4(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+/// <summary>
+/// プレイヤー用のエントリー関数。
+/// </summary>
+SPSIn VSSkinPlayer( SVSIn vsIn ) 
+{
+	return VSMainCore(vsIn, true, float4(1.0f, 1.0f, 1.0f, 1.0f));
+}
+
+/// <summary>
+/// エネミー用のエントリー関数。
+/// </summary>
+SPSIn VSSkinEnemy( SVSIn vsIn ) 
+{
+	return VSMainCore(vsIn, true, float4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 float4 PSMain(SPSIn In) : SV_Target0
@@ -257,10 +276,9 @@ float4 PSMain(SPSIn In) : SV_Target0
 
 	shadowMap.xyz *= lig;
 
-	//輪郭線を求める
-	//float4 outline = Outline(In, shadowMap);
+	float4 outline = Outline(In, shadowMap);
 
-	return shadowMap;
+	return outline;
 }
 
 /// <summary>
@@ -583,41 +601,48 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
 }
 
 /// <summary>
-/// 輪郭線を計算
+/// モデル用のピクセルシェーダーのエントリーポイント
 /// </summary>
 float4 Outline(SPSIn psIn, float4 shadowMap)
 {
-	//近傍8テクセルの深度値を計算して、エッジを抽出する
-	float2 uv = psIn.posInProj.xy * float2(0.5f, -0.5f) + 0.5f;
+	if(psIn.outlineColor.w == 0.0f){
+		return shadowMap;
+	}
 
-	//近傍8テクセルへのUVオフセット
-	float2 uvOffset[8] = {
-        float2(            0.0f,  1.0f / 720.0f),
-        float2(            0.0f, -1.0f / 720.0f),
-        float2(  1.0f / 1280.0f,           0.0f),
-        float2( -1.0f / 1280.0f,           0.0f),
-        float2(  1.0f / 1280.0f,  1.0f / 720.0f),
-        float2( -1.0f / 1280.0f,  1.0f / 720.0f),
-        float2(  1.0f / 1280.0f, -1.0f / 720.0f),
-        float2( -1.0f / 1280.0f, -1.0f / 720.0f)
+    // 近傍8テクセルの深度値を計算して、エッジを抽出する
+    // 正規化スクリーン座標系からUV座標系に変換する
+    float2 uv = (psIn.posInProj.xy / psIn.posInProj.w) * float2( 0.5f, -0.5f) + 0.5f;
+
+    // 近傍8テクセルへのUVオフセット
+    float2 uvOffset[8] = {
+        float2(           0.0f,  1.0f / 720.0f), //上
+        float2(           0.0f, -1.0f / 720.0f), //下
+        float2( 1.0f / 1280.0f,           0.0f), //右
+        float2(-1.0f / 1280.0f,           0.0f), //左
+        float2( 1.0f / 1280.0f,  1.0f / 720.0f), //右上
+        float2(-1.0f / 1280.0f,  1.0f / 720.0f), //左上
+        float2( 1.0f / 1280.0f, -1.0f / 720.0f), //右下
+        float2(-1.0f / 1280.0f, -1.0f / 720.0f)  //左下
     };
 
-	//このピクセルの深度値を取得
-	float depth = g_depthTexture.Sample(g_sampler, uv).x;
+    // このピクセルの深度値を取得
+    float depth = g_depthTexture.Sample(g_sampler, uv).x;
 
-	//近傍8テクセルの深度値の平均値を計算する
-	float depth2 = 0.0f;
-	for(int  i= 0; i < 8; i++){
-		depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
-	}
-	depth2 /= 8.0f;
+    // 近傍8テクセルの深度値の平均値を計算する
+    float depth2 = 0.0f;
+    for( int i = 0; i < 8; i++)
+    {
+        depth2 += g_depthTexture.Sample(g_sampler, uv + uvOffset[i]).x;
+    }
+    depth2 /= 8.0f;
 
-	//自身の深度値と近傍8テクセルの深度値の差を調べる
-	if(abs(depth - depth2) > 0.00005f){
-		//深度値が結構違う場合はピクセルカラーを黒にする
-		return float4( 0.0f, 0.0f, 0.0f, 1.0f);
-	}
+    // 自身の深度値と近傍8テクセルの深度値の差を調べる
+    if(abs(depth - depth2) > 0.05f)
+    {
+        // 深度値が結構違う場合はピクセルカラーを黒にする
+        return psIn.outlineColor;
+    }
 
-	//違う場合は通常テクスチャ
-	return shadowMap;
+    // 普通のテクスチャ
+    return shadowMap;
 }

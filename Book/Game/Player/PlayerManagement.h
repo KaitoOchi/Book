@@ -3,7 +3,7 @@
 #include "Player3D.h"
 class Player2D;
 class Player3D;
-class Ghost;
+class PhysicsGhost;
 class PlayerManagement:public IGameObject
 {
 public:
@@ -20,7 +20,7 @@ public:
 	const Vector3& GetPosition()const
 	{
 		// 今アクティブなプレイヤーの座標を返す
-		if (m_enMnanagementState == m_enPlayer_3DChanging) {
+		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPosition();
 		}
 		else {
@@ -46,24 +46,33 @@ public:
 	{
 		return m_characon;
 	}
-	
-	
+
 	/// <summary>
-	/// 共通のステート遷移処理
+	/// ゲーム開始前のステートを設定。
 	/// </summary>
-	void ProcessCommonStateTransition();
-	enum EnMnagementState
+	void SetGameState(const bool state)
+	{
+		m_GameStartState = state;
+	}
+
+	/// <summary>
+	/// ゲーム開始前のステートを取得。
+	/// </summary>
+	const bool GetGameState()
+	{
+		return m_GameStartState;
+	}
+	
+	
+	enum EnManagementState
 	{
 		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
 		m_enPlayer_Changing,  //切替中
 		m_enPlayer_2DChanging,//2Dプレイヤー
 		m_enPlayer_3DChanging,//3Dプレイヤー
 	};
-	EnMnagementState m_enMnanagementState = m_enPlayer_3DChanging;//３D状態
+	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
 
-	bool m_GameStartState = false;								//ゲームが始まっているかどうか
-
-	void Changing();
 public:
 	Player3D* GetPlayer3D()
 	{
@@ -74,6 +83,11 @@ public:
 	{
 		return m_player2D;
 	}
+
+	/// <summary>
+	/// 外部から切替を行う
+	/// </summary>
+	void SetChange(EnManagementState manaState);
 private:
 	Vector3 m_ghostPosition=Vector3::Zero;
 	
@@ -81,11 +95,15 @@ private:
 	CharacterController* m_characon = nullptr;
 	Player2D* m_player2D = nullptr;
 	Player3D* m_player3D = nullptr;
-	Ghost* m_ghost = nullptr;
+	PhysicsGhost* m_physicsghost = nullptr;
 	float YLstickamount = 0;
 
 	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
 
 	float m_changeTime = 5.0f;									//プレイヤーを切り替える時間
+
+	bool m_GameStartState = false;								//ゲームが始まっているかどうか
+private:
+	
 };
 

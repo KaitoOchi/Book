@@ -22,7 +22,8 @@ namespace nsBookEngine {
 		/// <param name="numAnimationClip">アニメーションの数。</param>
 		/// <param name="enModelUpAxis">モデルの上方向。</param>
 		/// <param name="isShadow">trueなら影を与える。</param>
-		/// <param name="isShadow">trueなら影を落とす。</param>
+		/// <param name="isShadowReceiver">trueなら影を落とす。</param>
+		/// <param name="outlineMode">1でプレイヤー、2で敵の輪郭線</param>
 		/// <param name="isFrontCullingOnDrawShadowMap">カリングモード。</param>
 		/// <param name="maxInstance">インスタンスの数。</param>
 		void Init(
@@ -30,8 +31,9 @@ namespace nsBookEngine {
 			AnimationClip* animationClip = nullptr,
 			int numAnimationClip = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadow = false,
-			bool isShadowReceiver = false,
+			const bool isShadow = false,
+			const bool isShadowReceiver = false,
+			const int outlineMode = 0,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
 			int maxInstance = 1);
 
@@ -198,6 +200,7 @@ namespace nsBookEngine {
 			EnModelUpAxis modelUpAxis,
 			const bool isShadow,
 			const bool isShadowReceiver,
+			const int outlineMode,
 			D3D12_CULL_MODE cullMode
 		);
 
@@ -207,6 +210,10 @@ namespace nsBookEngine {
 		/// </summary>
 		/// <param name="rc"></param>
 		void OnRenderShadowMap(RenderContext& rc, Camera& camera) override;
+		/// <summary>
+		/// ZPrepassの描画処理。
+		/// </summary>
+		void OnRenderToZPrepass(RenderContext& rc) override;
 		/// <summary>
 		/// フォワードレンダリングの描画処理。
 		/// </summary>
@@ -223,6 +230,7 @@ namespace nsBookEngine {
 		Animation		m_animation;
 		Model			m_model;
 		Model			m_shadowModel;
+		Model			m_zprepassModel;
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
 		bool			m_isShadowCaster = true;

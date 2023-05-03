@@ -29,7 +29,7 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig[4];
-			SpotLight::spotLight spotLig[4];
+			SpotLight::spotLight spotLig[16];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
 			int ptNum;											//ポイントライトの数
@@ -174,12 +174,12 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// メインレンダーターゲットのテクスチャを取得。
+		/// ZPrepassレンダーターゲットテクスチャを取得。
 		/// </summary>
 		/// <returns></returns>
-		Texture& GetMainRenderTarget()
+		Texture& GetZPrepassDepthTexture()
 		{
-			return m_mainRenderTarget.GetRenderTargetTexture();
+			return m_zprepassRenderTarget.GetRenderTargetTexture();
 		}
 
 		/// <summary>
@@ -199,19 +199,6 @@ namespace nsBookEngine {
 		{
 			return m_shadowBlur;
 		}
-
-		/// <summary>
-		/// オフスクリーンレンダリング用のレンダーターゲットを取得。
-		/// </summary>
-		RenderTarget& GetOffscreenRenderTarget()
-		{
-			return m_offscreenRenderTarget;
-		}
-
-		/// <summary>
-		/// オフスクリーンレンダリングの描画処理。
-		/// </summary>
-		void OffscreenRendering(RenderContext& rc, ModelRender& model);
 
 		/// <summary>
 		/// スプライトとモデルの描画順を変更
@@ -244,15 +231,20 @@ namespace nsBookEngine {
 		void InitShadowMapRenderTarget();
 
 		/// <summary>
-		/// オフスクリーンレンダリングを初期化。
+		/// ZPrepass用のレンダーターゲットを初期化。
 		/// </summary>
-		void InitOffscreenRendering();
+		void InitZPrepassRenderTarget();
 
 		/// <summary>
 		/// シャドウマップの描画処理。
 		/// </summary>
 		/// <param name="rc"></param>
 		void RenderShadowMap(RenderContext& rc);
+
+		/// <summary>
+		/// ZPrepassの描画処理。
+		/// </summary>
+		void ZPrepass(RenderContext& rc);
 
 		/// <summary>
 		/// フォワードレンダリングの描画処理。
@@ -286,11 +278,8 @@ namespace nsBookEngine {
 		
 		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
-
-		RenderTarget m_offscreenRenderTarget;
-		
+		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
-
 		Camera					m_lightCamera;						//ライトカメラ
 
 		bool					m_isLate = false;					//描画順の変更

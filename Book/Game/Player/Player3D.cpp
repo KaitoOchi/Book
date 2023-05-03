@@ -58,7 +58,7 @@ bool Player3D::Start()
 	m_playerManagement->SetCharacon(m_characon);
 	
 	//ƒ‚ƒfƒ‹‚ð“Ç‚Ýž‚Þ
-	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, D3D12_CULL_MODE_NONE);
+	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, 1, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);
@@ -176,6 +176,12 @@ void Player3D::Animation()
 		m_modelRender->SetRotation(m_rotation);
 		m_modelRender->SetAnimationSpeed(0.6f);
 		m_modelRender->PlayAnimation(m_enAnimationClip_Down, 0.5f);
+		break;
+	case Player::m_enPlayer_Caught:
+		m_modelRender->PlayAnimation(m_enAnimationClip_CaughtStart,0.5);
+		break;
+	case Player::m_enPlayer_Catching:
+		m_modelRender->PlayAnimation(m_enAnimationClip_Caught, 0.5);
 		break;
 	default:
 		break;
@@ -302,6 +308,25 @@ void Player3D::ProcessFoundStateTransition()
 
 void Player3D::ProcessCaughtStateTransition()
 {
+	//‘¬“x‚ð‰Šú‰»
+	m_moveSpeed.x *= SPEEDDOWN;
+	m_moveSpeed.z *= SPEEDDOWN;
+	m_Player_Act = false;
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		m_playerState = m_enPlayer_Catching;
+	}
+}
+
+void Player3D::ProcessCatchingStateTransition()
+{
+	m_catchTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_catchTime < 0.0f)
+	{
+		m_game->m_gameState = m_game->m_enGameState_GameFade;
+		m_game->GameDelete(0);
+		m_catchTime = 2.0f;
+	}
 
 }
 

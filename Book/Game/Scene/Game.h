@@ -26,6 +26,8 @@ class Fade;
 class Star;
 class GameUI;
 class Pause;
+class GhostBox;
+class PhysicsGhost;
 class Game : public IGameObject
 {
 public:
@@ -51,7 +53,7 @@ public:
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
 		m_enGameState_GameClearable,//クリア可能
-		m_enGameState_GameClear,//�Q�[���N���A
+		m_enGameState_GameFade,//�Q�[���N���A
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
 	};
@@ -82,12 +84,15 @@ public:
 	int lights = 0;
 	int m_lightNumber = 0;
 public:
+
 	/// <summary>
-	/// ゲームのフェード処理
+	/// 別のところで消去する
 	/// </summary>
-	void GameFade(const int nextScene);
-
-
+	void GameDelete(const int nextScene);
+	/// <summary>
+	/// ポーズ画面の切替
+	/// </summary>
+	void GamePos();
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -130,6 +135,8 @@ private:
 	
 	std::vector<Star*>m_starList;
 
+	std::vector<Wall*>m_wallList;
+
 	PlayerManagement* m_playerManagement = nullptr;
 
 	// ステージ
@@ -141,6 +148,9 @@ private:
 	Wall_Post* m_post = nullptr;
 	Treasure* m_treaSure = nullptr;
 	Ghost* m_ghost = nullptr;
+	PhysicsGhost* m_physicsGhost = nullptr;
+	GhostBox* m_ghostBox = nullptr;
+
 
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;

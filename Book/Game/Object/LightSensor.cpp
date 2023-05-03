@@ -47,10 +47,23 @@ void LightSensor::Update()
 		break;
 	}
 
-	//ライトの中にプレイヤーが入ったら
-	if (m_spotLight.IsHit(m_player->GetPosition()))
+	//当たり判定
+	switch (m_player->m_enMananagementState)
 	{
-		int i = 0;
+	case PlayerManagement::m_enPlayer_3DChanging:
+		if (m_spotLight.IsHit(m_player->GetPlayer3D()->GetPosition())) {
+
+			int i = 0;
+		}
+		break;
+	case PlayerManagement::m_enPlayer_2DChanging:
+		if (m_spotLight.IsHit(m_player->GetPlayer2D()->GetPosition())) {
+
+			int i = 0;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -94,8 +107,7 @@ void LightSensor::Rotate()
 	Vector3 rotAxis;
 	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
 
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
+	m_rotation.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
 
 	m_spotLight.Update();
 }

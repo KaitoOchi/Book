@@ -14,7 +14,6 @@
 #include "Enemy_Charge.h"
 #include "Enemy_Clear.h"
 #include "BackGround.h"
-#include "LightSensor.h"
 #include "Stage/Wall/Wall.h"
 #include "Stage/Wall/Wall_Decoration.h"
 #include "Stage/Wall/Wall_Door.h"
@@ -23,6 +22,8 @@
 #include "Stage/Wall/Wall_Post.h"
 #include "Treasure.h"
 #include "Ghost.h"
+#include "GhostBox.h"
+#include "PhysicsGhost.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
 #include "Fade.h"
@@ -32,6 +33,10 @@
 #include"Gage.h"
 #include "Star.h"
 #include "Pause.h"
+#include "CountDown.h"
+#include "SecurityCamera.h"
+
+
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -40,47 +45,56 @@ Game::Game()
 
 Game::~Game()
 {
-	DeleteGO(m_player3D);
-	DeleteGO(m_player2D);
-	DeleteGO(m_playerManagement);
+
 	//�E�G�E�l�E�~�E�[
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
 		DeleteGO(m_enemyList[i]);
 	}
-	/*DeleteGO(m_enemyNormal);
-	DeleteGO(m_enemyCharge);
-	DeleteGO(m_enemySearch);
-	DeleteGO(m_enemyClear);*/
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
-	DeleteGO(FindGO<GameUI>("gameUI"));
+	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+	//壁や床の削除
 	DeleteGO(m_backGround);
+	for (int i = 0; i < m_wallList.size(); i++)
+	{
+		DeleteGO(m_wallList[i]);
+	}
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
+	DeleteGO(m_player3D);
+	DeleteGO(m_player2D);
+	DeleteGO(m_playerManagement);
+}
 
-	//DeleteGO(FindGO<Pause>("pause"));
-
-
+void Game::GameDelete(const int nextScene)
+{		
+	m_nextScene = nextScene;
+	m_isWaitFadeOut = true;	
+	m_fade->StartFadeOut();
+}
+	
+void Game::GamePos()
+{
 	switch (m_nextScene) {
 	case 1:
 		//リトライ画面へ移行
 		NewGO<Game>(0, "game");
 		break;
-
 	case 2:
 		//タイトル画面へ移行
 		NewGO<Title>(0, "title");
 		break;
+	default:
+		break;
 	}
 }
-	
 
 bool Game::Start()
 {
@@ -91,17 +105,13 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
-	m_gameUI=NewGO<GameUI>(0, "gameUI");
+	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
-	
-	
-	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
-	ligSensor->SetPosition(Vector3(-80.0f, 100.0f, 0.0f));
-	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
-	ligSensor->SetMaxTime(5.0f);
-	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
+	NewGO<CountDown>(0, "countDown");
 
 	NewGO<Pause>(0, "pause");
+
+	NewGO<SecurityCamera>(0, "securityCamera");
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -282,6 +292,7 @@ void Game::LevelDesign()
 				m_normal->SetPosition(objData.position);
 				m_normal->SetRotation(objData.rotation);
 				m_normal->SetScale(objData.scale);
+				m_wallList.emplace_back(m_normal);
 			}
 
 			// 名前がboxなら
@@ -291,7 +302,7 @@ void Game::LevelDesign()
 				m_normal->SetPosition(objData.position);
 				m_normal->SetRotation(objData.rotation);
 				m_normal->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_normal);
 				return true;
 			}
 
@@ -302,7 +313,7 @@ void Game::LevelDesign()
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_gap);
 				return true;
 			}
 
@@ -313,7 +324,7 @@ void Game::LevelDesign()
 				m_post->SetPosition(objData.position);
 				m_post->SetRotation(objData.rotation);
 				m_post->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_post);
 				return true;
 			}
 
@@ -324,7 +335,7 @@ void Game::LevelDesign()
 				m_decoration->SetPosition(objData.position);
 				m_decoration->SetRotation(objData.rotation);
 				m_decoration->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_decoration);
 				return true;
 			}
 
@@ -335,7 +346,7 @@ void Game::LevelDesign()
 				m_door->SetPosition(objData.position);
 				m_door->SetRotation(objData.rotation);
 				m_door->SetScale(objData.scale);
-
+				m_wallList.emplace_back(m_door);
 				return true;
 			}
 
@@ -379,19 +390,17 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"gost") == true) {
 
-			m_ghost = NewGO<Ghost>(0, "ghost");
-			m_ghost->SetPosition(objData.position);
-			m_ghost->SetScale(objData.scale);
-			m_ghost->SetRotation(objData.rotation);
+			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
+			m_physicsGhost->SetPosition(objData.position);
+			m_physicsGhost->SetScale(objData.scale);
+			m_physicsGhost->SetRotation(objData.rotation);
 			return true;
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
 
 			SetClearPosition(objData.position);
-
-			for (int i = 0; i < 4; i++) {
-				m_pointLight[i].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
-			}
+			m_pointLight[lights].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
+			lights++;
 			return true;
 		}
 		return true;
@@ -400,27 +409,32 @@ void Game::LevelDesign()
 }
 
 void Game::Update()
-{
-	if (m_gameState==m_enGameState_GameClearable)
-	{
-		Clearable();
-	}
-
-	//フェードアウトの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードアウトし終えたら
-		if (!m_fade->IsFade()) {
-			m_isWaitFadeOut = false;
-			DeleteGO(this);
-		}
-	}
-		
+{		
 	MnageState();
 
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
 
+	//フェードの待機時間
+	if (m_isWaitFadeOut) {
+		//フェードし終えたら
+		if (!m_fade->IsFade()) {
+
+			if (m_gameState != m_enGameState_GameFade)
+			{
+				GamePos();
+			}
+			else
+			{
+				Result* result = NewGO<Result>(0, "result");
+				result->SetTime(m_gameUI->GetTime());
+			}
+			DeleteGO(FindGO<Pause>("pause"));
+			DeleteGO(this);
+		}
+	}
+	
 
 }
 void Game::Clearable()
@@ -429,42 +443,32 @@ void Game::Clearable()
 	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
-		m_gameState = m_enGameState_GameClear;
+		GameDelete(0);
+		m_gameState = m_enGameState_GameFade;
+	
 	}
-	if (m_gameUI->m_timer <= 0.0f)
+	if (m_gameUI->GetTime() <= 0.0f)
 	{
-		m_gameState = m_enGameState_GameClear;
+		m_gameState = m_enGameState_GameFade;
 	}
 	
 }
 
 void Game::ClearState()
 {
-	//フェードの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードし終えたら
-		if (!m_fade->IsFade()) {
-			//ゲーム画面へ遷移
-			Result* result = NewGO<Result>(0, "result");
-			result->SetResult(true);
-			DeleteGO(this);
-		}
-	}
-	else {
-		m_isWaitFadeOut = true;
-		m_fade->StartFadeOut();
-	}
-
+	
 }
 
 void Game::MnageState()
 {
 	switch (m_gameState)
 	{
+	case Game::m_enGameState_GameClearable:
+		Clearable();
+		break;
 	case Game::m_enGameState_DuringGamePlay:
 		break;
-	case Game::m_enGameState_GameClear:
-		ClearState();
+	case Game::m_enGameState_GameFade:
 		break;
 	case Game::m_enGameState_GameOver:
 		break;
@@ -473,13 +477,6 @@ void Game::MnageState()
 	default:
 		break;
 	}
-}
-
-void Game::GameFade(const int nextScene)
-{
-	m_nextScene = nextScene;
-	m_isWaitFadeOut = true;
-	m_fade->StartFadeOut();
 }
 
 void Game::Render(RenderContext& rc)

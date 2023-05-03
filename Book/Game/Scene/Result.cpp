@@ -4,7 +4,6 @@
 #include "Fade.h"
 #include "Title.h"
 #include "Game.h"
-#include "GameUI.h"
 
 namespace
 {
@@ -44,11 +43,7 @@ bool Result::Start()
 
 void Result::InitScore()
 {
-	GameUI* gameUI = FindGO<GameUI>("gameUI");
-
 	//ƒŠƒUƒ‹ƒg‚ð•Û‘¶
-	//m_score[0] = gameUI->GetTime();
-	m_score[0] = 180;
 	m_score[1] = m_resultState;
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
 	//m_score[2] = 5;
