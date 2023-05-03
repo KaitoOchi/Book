@@ -353,7 +353,7 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 {
 	float3 finalPtLig = (0.0f, 0.0f, 0.0f);
 
-	for(int i = 0; i <= ptNum; i++){
+	for(int i = 0; i < ptNum; i++){
 
 		//サーフェイスに入射するポイントライトの光の向きを計算
 		float3 ligDir = psIn.worldPos - ptLig[i].ptPosition;
@@ -408,7 +408,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 {
 	float3 finalspLig = (0.0f, 0.0f, 0.0f);
 
-	for(int i = 0; i <= spNum; i++){
+	for(int i = 0; i < spNum; i++){
 
 		//ピクセルの座標 - スポットライトの座標を計算
 		float3 ligDir = psIn.worldPos - spLig[i].spPosition;

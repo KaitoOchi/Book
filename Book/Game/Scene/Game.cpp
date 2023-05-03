@@ -111,8 +111,6 @@ bool Game::Start()
 
 	NewGO<Pause>(0, "pause");
 
-	NewGO<SecurityCamera>(0, "securityCamera");
-
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
