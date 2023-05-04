@@ -44,8 +44,6 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
-	//Enemy::SearchPass(CRAW);
-
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (Enemy::GetHitFlushBullet() == true) {
 		m_ActState = CONFUSION;

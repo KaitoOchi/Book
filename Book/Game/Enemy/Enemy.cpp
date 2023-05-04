@@ -132,7 +132,7 @@ void Enemy::Nav(Vector3 pos)
 	);
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = m_playerPos - m_position;
+	Vector3 moveSpeed = pos - m_position;
 
 	// 回転を教える
 	float angle = atan2(-moveSpeed.x, moveSpeed.z);

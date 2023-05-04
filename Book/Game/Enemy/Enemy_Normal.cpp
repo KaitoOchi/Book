@@ -43,9 +43,7 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	//Enemy::SearchPass(CRAW);
-
-		// ‘MŒõ’e‚É“–‚½‚Á‚½
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (Enemy::GetHitFlushBullet() == true) {
 		m_ActState = CONFUSION;
 	}
