@@ -21,7 +21,7 @@ Result::Result()
 	g_soundEngine->ResistWaveFileBank(4, "Assets/sound/result/dramroll.wav");
 
 	//‘¾ŒÛ‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(5, "Assets/sound/result/ddn.wav");
+	g_soundEngine->ResistWaveFileBank(5, "Assets/sound/result/cymbal.wav");
 }
 
 Result::~Result()
