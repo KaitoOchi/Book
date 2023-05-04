@@ -29,7 +29,7 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig[4];
-			SpotLight::spotLight spotLig[4];
+			SpotLight::spotLight spotLig[20];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
 			int ptNum;											//ポイントライトの数
@@ -112,7 +112,6 @@ namespace nsBookEngine {
 			GetLightCB().pointLig[ptNum].ptPosition = ptlig.ptPosition;
 			GetLightCB().pointLig[ptNum].ptColor = ptlig.ptColor;
 			GetLightCB().pointLig[ptNum].ptRange = ptlig.ptRange;
-			GetLightCB().ptNum = ptNum;
 		}
 
 		/// <summary>
@@ -126,7 +125,6 @@ namespace nsBookEngine {
 			GetLightCB().spotLig[spNum].spRange = spLig.spRange;
 			GetLightCB().spotLig[spNum].spDirection = spLig.spDirection;
 			GetLightCB().spotLig[spNum].spAngle = spLig.spAngle;
-			GetLightCB().spNum = spNum;
 		}
 
 		/// <summary>

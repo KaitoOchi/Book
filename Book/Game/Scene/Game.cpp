@@ -14,7 +14,6 @@
 #include "Enemy_Charge.h"
 #include "Enemy_Clear.h"
 #include "BackGround.h"
-#include "LightSensor.h"
 #include "Stage/Wall/Wall.h"
 #include "Stage/Wall/Wall_Decoration.h"
 #include "Stage/Wall/Wall_Door.h"
@@ -34,6 +33,10 @@
 #include"Gage.h"
 #include "Star.h"
 #include "Pause.h"
+#include "CountDown.h"
+#include "SecurityCamera.h"
+
+
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
@@ -51,7 +54,7 @@ Game::~Game()
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
-	DeleteGO(FindGO<GameUI>("gameUI"));
+	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
@@ -102,15 +105,9 @@ bool Game::Start()
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
-	m_gameUI=NewGO<GameUI>(0, "gameUI");
+	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
-	
-	
-	LightSensor* ligSensor = NewGO<LightSensor>(0, "lightSensor");
-	ligSensor->SetPosition(Vector3(-80.0f, 100.0f, 0.0f));
-	ligSensor->SetDirection(Vector3(0.75f, -1.0f, 0.0f));
-	ligSensor->SetMaxTime(5.0f);
-	ligSensor->SetMoveSpeed(Vector3(10.0f, 0.0f, 0.0f));
+	NewGO<CountDown>(0, "countDown");
 
 	NewGO<Pause>(0, "pause");
 
@@ -440,7 +437,8 @@ void Game::Update()
 			}
 			else
 			{
-				NewGO<Result>(0, "result");
+				Result* result = NewGO<Result>(0, "result");
+				result->SetTime(m_gameUI->GetTime());
 			}
 			DeleteGO(FindGO<Pause>("pause"));
 			DeleteGO(this);
@@ -459,7 +457,7 @@ void Game::Clearable()
 		m_gameState = m_enGameState_GameFade;
 	
 	}
-	if (m_gameUI->m_timer <= 0.0f)
+	if (m_gameUI->GetTime() <= 0.0f)
 	{
 		m_gameState = m_enGameState_GameFade;
 	}

@@ -82,7 +82,7 @@ void Player::Update()
 {
 	m_treasure = FindGO<Treasure>("treaSure");
 	//行動できるなら
-	if (m_Player_Act&&m_playerManagement->m_GameStartState==true
+	if (m_Player_Act&&m_playerManagement->GetGameState()
 		) {
 		Move();
 		Rotation();
@@ -92,7 +92,7 @@ void Player::Update()
 		{
 			Jump();
 		}
-		else if (m_Player_Act && m_playerManagement->m_GameStartState == true)
+		else if (m_Player_Act && m_playerManagement->GetGameState())
 		{
 			//お宝のコリジョンがない時は普通にジャンプさせる
 			if (m_treasure->GetCollision() == nullptr ||

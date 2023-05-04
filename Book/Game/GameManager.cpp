@@ -7,7 +7,7 @@ GameManager* GameManager::m_instance = nullptr;
 
 GameManager::GameManager()
 {
-	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/sound_test.wav");
+	g_soundEngine->ResistWaveFileBank(10, "Assets/sound/sound_test.wav");
 }
 
 GameManager::~GameManager()

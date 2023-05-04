@@ -62,7 +62,6 @@ bool Enemy::Start()
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_gameUI = FindGO<GameUI>("gameUI");
 	m_game = FindGO<Game>("game");
 	m_gage = FindGO<Gage>("gage");
 	// gameで設定したエネミーのリストを取得する

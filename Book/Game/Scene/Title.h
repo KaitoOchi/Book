@@ -120,15 +120,11 @@ private:
 	/// <param name="num">鳴らしたい効果音の番号。</param>
 	void Sound(const int num)
 	{
-		/*
-
 		//射撃音を出す
 		SoundSource* se = NewGO<SoundSource>(0);
 		se->Init(num);
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
-
-		*/
 	}
 
 private:
@@ -167,6 +163,4 @@ private:
 	float					m_alpha = 0.0f;					//色のアルファ値
 	float					m_timer = 0.0f;					//時間
 	float					m_animTime = 1.0f;				//アニメーション時間
-
-	Vector3 a;
 };

@@ -41,14 +41,15 @@ bool Title::Start()
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 
-	//決定時の音
-	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/shot.wav");
 	//キャンセル時の音
-	g_soundEngine->ResistWaveFileBank(1, "Assets/sound/shot.wav");
+	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/title/cancel.wav");
+	//決定時の音
+	g_soundEngine->ResistWaveFileBank(1, "Assets/sound/title/enter.wav");
 	//選択時の音
-	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/shot.wav");
+	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/title/select.wav");
 
-	GameManager::GetInstance()->SetBGM(0);
+	//BGMを鳴らす
+	GameManager::GetInstance()->SetBGM(10);
 
 	return true;
 }
@@ -56,7 +57,7 @@ bool Title::Start()
 void Title::InitSprite()
 {
 	//背景を設定
-	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, D3D12_CULL_MODE_FRONT);
+	m_backGroundModelRender.Init("Assets/modelData/title/title_model.tkm", 0, 0, enModelUpAxisZ, false, false, 0, D3D12_CULL_MODE_FRONT);
 	m_backGroundModelRender.SetPosition(Vector3(0.0f, 0.0f, 335.0f));
 	m_backGroundModelRender.Update();
 
@@ -325,15 +326,21 @@ void Title::ValueUpdate(bool vertical)
 	m_cursor_vertical = min(max(m_cursor_vertical, 1), CURSOR_VERTICAL_MAX[m_titleState_tmp]);
 	m_cursor_horizontal = min(max(m_cursor_horizontal, 0), CURSOR_HORIZONTAL_MAX[m_cursor_vertical]);
 
-	//ゲームスタート画面なら
-	if (m_titleState_tmp == 2) {
+	//メニュー画面なら
+	if (m_titleState_tmp == 1) {
 
+		//音を鳴らす
+		if (m_cursor_vertical == cursor_v &&
+			m_cursor_horizontal == cursor_h)
+		{
+			Sound(2);
+		}
 	}
 	//設定画面なら
 	else if (m_titleState_tmp == 4) {
 
 		//音を鳴らす
-		if (m_cursor_vertical == cursor_v || 
+		if (m_cursor_vertical == cursor_v &&
 			m_cursor_horizontal == cursor_h)
 		{
 			Sound(2);
@@ -441,6 +448,9 @@ void Title::StartScreen()
 	else {
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
+
+		//BGMを止める
+		GameManager::GetInstance()->DeleteBGM();
 	}
 }
 

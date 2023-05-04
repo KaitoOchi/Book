@@ -24,6 +24,11 @@ public:
 			m_resultState = enState_GameOver;
 	}
 
+	void SetTime(const float time)
+	{
+		m_score[0] = time;
+	}
+
 private:
 	/// <summary>
 	/// スコアの計算処理。

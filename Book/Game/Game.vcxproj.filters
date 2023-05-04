@@ -106,12 +106,9 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Star.cpp" />
-    <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="Scene\Result.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -139,8 +136,23 @@
     <ClCompile Include="Enemy\Enemy_Clear.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\PhysicsGhost.cpp" />
+    <ClCompile Include="Item\SoundBom.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Star.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Gage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\CountDown.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="Stage\GhostBox.cpp" />
+    <ClCompile Include="Stage\PhysicsGhost.cpp" />
+    <ClCompile Include="Object\SecurityCamera.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -215,15 +227,12 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="UI\Fade.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Star.h" />
-    <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\Pause.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -248,7 +257,22 @@
     <ClInclude Include="Enemy\Enemy_Clear.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\PhysicsGhost.h" />
+    <ClInclude Include="Item\SoundBom.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Star.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Gage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\CountDown.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="Stage\GhostBox.h" />
+    <ClInclude Include="Stage\PhysicsGhost.h" />
+    <ClInclude Include="Object\SecurityCamera.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

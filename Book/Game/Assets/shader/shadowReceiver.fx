@@ -57,7 +57,7 @@ cbuffer LightCb : register(b1) {
 	PointLig ptLig[4];
 
 	//スポットライト用の定数バッファ
-	SpotLig spLig[4];
+	SpotLig spLig[20];
 		
 	//半球ライト用の定数バッファ
 	HemiLig hemiLig;
@@ -98,6 +98,7 @@ struct SPSIn{
 	float3 normalInView : TEXCOORD2;	//カメラ空間の法線
 	float4 posInLVP 	: TEXCOORD3;    //ライトビュースクリーン空間でのピクセルの座標
 	float4 posInProj	: TEXCOORD4;	//頂点の正規化スクリーン座標系
+	float4 outlineColor : COLOR0;		//輪郭線の色
 };
 
 ////////////////////////////////////////////////
@@ -150,7 +151,7 @@ float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 /// <summary>
 /// 頂点シェーダーのコア関数。
 /// </summary>
-SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
+SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 {
 	SPSIn psIn;
 	float4x4 m;
@@ -185,6 +186,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	//頂点の正規化スクリーン座標系の座標をピクセルシェーダーにわたす
 	psIn.posInProj = psIn.pos;
 
+	//輪郭線の色を設定
+	psIn.outlineColor = olColor;
+
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -193,9 +197,9 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 /// <summary>
 /// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 /// </summary>
-SPSIn VSMain(SVSIn vsIn)
+SPSIn VSMain( SVSIn vsIn )
 {
-	return VSMainCore(vsIn, false);
+	return VSMainCore(vsIn, false, float4(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
 /// <summary>
@@ -203,7 +207,23 @@ SPSIn VSMain(SVSIn vsIn)
 /// </summary>
 SPSIn VSSkinMain( SVSIn vsIn ) 
 {
-	return VSMainCore(vsIn, true);
+	return VSMainCore(vsIn, true, float4(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+/// <summary>
+/// プレイヤー用のエントリー関数。
+/// </summary>
+SPSIn VSSkinPlayer( SVSIn vsIn ) 
+{
+	return VSMainCore(vsIn, true, float4(1.0f, 1.0f, 1.0f, 1.0f));
+}
+
+/// <summary>
+/// エネミー用のエントリー関数。
+/// </summary>
+SPSIn VSSkinEnemy( SVSIn vsIn ) 
+{
+	return VSMainCore(vsIn, true, float4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 float4 PSMain(SPSIn In) : SV_Target0
@@ -333,7 +353,7 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 {
 	float3 finalPtLig = (0.0f, 0.0f, 0.0f);
 
-	for(int i = 0; i <= ptNum; i++){
+	for(int i = 0; i < ptNum; i++){
 
 		//サーフェイスに入射するポイントライトの光の向きを計算
 		float3 ligDir = psIn.worldPos - ptLig[i].ptPosition;
@@ -388,7 +408,7 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 {
 	float3 finalspLig = (0.0f, 0.0f, 0.0f);
 
-	for(int i = 0; i <= spNum; i++){
+	for(int i = 0; i < spNum; i++){
 
 		//ピクセルの座標 - スポットライトの座標を計算
 		float3 ligDir = psIn.worldPos - spLig[i].spPosition;
@@ -585,6 +605,10 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
 /// </summary>
 float4 Outline(SPSIn psIn, float4 shadowMap)
 {
+	if(psIn.outlineColor.w == 0.0f){
+		return shadowMap;
+	}
+
     // 近傍8テクセルの深度値を計算して、エッジを抽出する
     // 正規化スクリーン座標系からUV座標系に変換する
     float2 uv = (psIn.posInProj.xy / psIn.posInProj.w) * float2( 0.5f, -0.5f) + 0.5f;
@@ -613,10 +637,10 @@ float4 Outline(SPSIn psIn, float4 shadowMap)
     depth2 /= 8.0f;
 
     // 自身の深度値と近傍8テクセルの深度値の差を調べる
-    if(abs(depth - depth2) > 0.15f)
+    if(abs(depth - depth2) > 0.05f)
     {
         // 深度値が結構違う場合はピクセルカラーを黒にする
-        return float4( 0.0f, 0.0f, 0.0f, 1.0f);
+        return psIn.outlineColor;
     }
 
     // 普通のテクスチャ
