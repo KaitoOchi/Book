@@ -186,7 +186,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test3.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test01.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -291,7 +291,7 @@ void Game::LevelDesign()
 			m_enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyClear->Pass(6);
+			m_enemyClear->Pass(4);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyClear);
 			return true;

@@ -80,6 +80,7 @@ void Enemy_Charge::Update()
 		// ‰¹”š’e‚ðŽg—p‚µ‚½‚Æ‚«
 	case LISTEN:
 		UpDate_OnListen();
+		break;
 		// •ßŠl
 	case CATCH:
 		Update_OnCatch();

@@ -70,9 +70,13 @@ void Enemy_Normal::Update()
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
-		// ö—
+		// ‘MŒõ’e‚É“–‚½‚Á‚½
 	case CONFUSION:
 		Update_OnConfusion();
+		break;
+		// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
+	case LISTEN:
+		UpDate_OnListen();
 		break;
 		// •ßŠl
 	case CATCH:
