@@ -37,10 +37,8 @@ void PlayerManagement::Update()
 		return;
 	}
 
-	if (m_player3D->m_Player_Act)
-	{
-		Input();
-	}
+	Input();
+	
 	
 }
 void PlayerManagement::Input()
@@ -53,7 +51,7 @@ void PlayerManagement::Input()
 		case PlayerManagement::m_enPlayer_2DChanging:
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
-			m_player3D->SetMoveSpeed(Vector3::Zero);
+			m_player2D->SetMoveSpeed(Vector3::Zero);
 			break;
 			//3D‚Ìê‡2D‚ğŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_3DChanging:
@@ -115,10 +113,12 @@ void PlayerManagement::IsChanging()
 			//2D‚Ìê‡3D‚ğŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_3DChanging:
 			PlayerChange3D();
+			m_player3D->m_Player_Act = true;
 			break;
 			//3D‚Ìê‡2D‚ğŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_2DChanging:
 			PlayerChange2D();
+			m_player2D->m_Player_Act = true;
 			break;
 		default:
 			break;

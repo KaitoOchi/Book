@@ -7,7 +7,6 @@ GhostBox::GhostBox()
 
 GhostBox::~GhostBox()
 {
-
 }
 
 bool GhostBox::Start()
