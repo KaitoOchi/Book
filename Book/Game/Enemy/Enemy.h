@@ -34,9 +34,7 @@ public:
 	/// <summary>
 	/// ナビメッシュを作成する
 	/// </summary>
-	/// <param name="pos">目標地点</param>
-	/// <param name="flag">trueのとき走る</param>
-	void Nav(Vector3 pos,bool flag);
+	void Nav(Vector3 pos);
 	/// <summary>
 	/// 巡回行動
 	/// </summary>

@@ -217,7 +217,7 @@ void Game::LevelDesign()
 		//}
 
 		// 名前が Normal のとき
-		if (objData.EqualObjectName(L"unityChan") == true) {
+		if (objData.EqualObjectName(L"Normal") == true) {
 			 //エネミーを生成
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
@@ -271,6 +271,26 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemySearch);
+			return true;
+		}
+
+		// 名前が Clear のとき
+		if (objData.EqualObjectName(L"Clear") == true) {
+			// エネミーを生成
+			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			// 自身の属性を教える
+			m_enemyClear->m_enemyType = Enemy::Clear;
+			// 座標・回転・スケールを教える
+			m_enemyClear->SetPosition(objData.position);
+			m_enemyClear->SetRotation(objData.rotation);
+			m_enemyClear->SetScale(objData.scale);
+
+			m_enemyClear->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			// パス移動の順路を指定
+			m_enemyClear->Pass(6);
+			// エネミーのリストに追加する
+			m_enemyList.push_back(m_enemyClear);
 			return true;
 		}
 

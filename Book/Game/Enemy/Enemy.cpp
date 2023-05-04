@@ -100,7 +100,7 @@ void Enemy::Rotation(Vector3 rot)
 
 }
 
-void Enemy::Nav(Vector3 pos, bool flag)
+void Enemy::Nav(Vector3 pos)
 {
 	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
@@ -124,22 +124,12 @@ void Enemy::Nav(Vector3 pos, bool flag)
 		AI_HIGH							// AIエージェントの高さ
 	);
 
-	if (flag == true) {
-		// パス上を走って移動する
-		m_position = m_path.Move(
-			m_position,						// 座標
-			MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
-			isEnd							// 移動したときtrue
-		);
-	}
-	else {
-		// パス上を歩いて移動する
-		m_position = m_path.Move(
-			m_position,						// 座標
-			MOVE_SPEED,						// 移動速度（パス移動よりも速め）
-			isEnd							// 移動したときtrue
-		);
-	}
+	// パス上を走って移動する
+	m_position = m_path.Move(
+		m_position,						// 座標
+		MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
+		isEnd							// 移動したときtrue
+	);
 
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_playerPos - m_position;
@@ -348,7 +338,7 @@ bool Enemy::Act_HitSoundBullet()
 		// 一定範囲内より小さいとき
 		if (length < CALL_DISTANCE_MAX) {
 			// アイテムの座標を基にしてナビメッシュを作成
-			Nav(m_itemPos,true);
+			Nav(m_itemPos);
 			// 走るアニメーションを再生
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
 
@@ -414,7 +404,7 @@ void Enemy::Act_Tracking()
 	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
 	// ナビメッシュを作成
-	Nav(m_playerPos,true);
+	Nav(m_playerPos);
 
 	// 走るアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
@@ -452,15 +442,17 @@ void Enemy::Pass(int PassState)
 	case ANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
 		break;
 		// (左に)直角
 	case ANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
 		break;
 		// 右回り(長方形)
 	case RECTANGLE_RIGHT:
@@ -631,7 +623,7 @@ void Enemy::Act_Called()
 	// 呼ばれた時の処理
 
 	// 目標地点へ向かうナビメッシュを作成
-	Nav(m_setPos,true);
+	Nav(m_setPos);
 
 	// 走るアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
@@ -697,7 +689,7 @@ void Enemy::Act_Loss()
 	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	Nav(m_point->s_position,false);
+	Nav(m_point->s_position);
 
 	//// エネミーからプレイヤーへ向かうベクトル
 	//Vector3 moveSpeed = m_point->s_position - m_position;

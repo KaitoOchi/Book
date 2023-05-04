@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Enemy_Normal.h"
 
-#include "GameManager.h"
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
@@ -44,9 +43,9 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	Enemy::SearchPass(CRAW);
+	//Enemy::SearchPass(CRAW);
 
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
+		// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (Enemy::GetHitFlushBullet() == true) {
 		m_ActState = CONFUSION;
 	}
@@ -54,6 +53,7 @@ void Enemy_Normal::Update()
 	if (Enemy::GetHitSoundBullet() == true) {
 		m_ActState = LISTEN;
 	}
+
 
 	switch (m_ActState) {
 		// „‰ñ
@@ -72,13 +72,10 @@ void Enemy_Normal::Update()
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
-		// ‘MŒõ’e‚É“–‚½‚Á‚½
+		// ö—
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
-		// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
-	case LISTEN:
-		UpDate_OnListen();
 		// •ßŠl
 	case CATCH:
 		Update_OnCatch();
@@ -107,6 +104,11 @@ void Enemy_Normal::Update_OnCraw()
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = TRACKING;
 	}
+
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
 }
 
 void Enemy_Normal::Update_OnTracking()
@@ -120,7 +122,7 @@ void Enemy_Normal::Update_OnTracking()
 	}
 
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
-	if (Enemy::Act_CatchPlayer() == true) {
+	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
 }
@@ -143,15 +145,14 @@ void Enemy_Normal::Update_OnBackBasedOn()
 
 void Enemy_Normal::Update_OnConfusion()
 {
-	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
-
-	Enemy::Act_HitFlashBullet();
+	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
-	if (Enemy::GetHitFlushBullet() == false) {
+	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }
+
 
 void Enemy_Normal::UpDate_OnListen()
 {

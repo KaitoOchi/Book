@@ -47,7 +47,7 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
-	Enemy::SearchPass(CRAW);
+	//Enemy::SearchPass(CRAW);
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (Enemy::GetHitFlushBullet() == true) {
