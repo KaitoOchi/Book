@@ -1,8 +1,16 @@
 #include "stdafx.h"
 #include "Player2D.h"
-#include"Player3D.h"
+
+#include "Player3D.h"
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
+
+namespace
+{
+	const float CHANGE_TIME = 5.0f;
+}
+
+
 PlayerManagement::PlayerManagement()
 {
 
@@ -24,47 +32,43 @@ void PlayerManagement::Update()
 		return;
 	}
 
-	if (m_player3D->m_Player_Act)
-	{
-		PlayerChange();
+	if (m_enMananagementState == m_enPlayer_Changing) {
+		IsChanging();
+		return;
 	}
+
+	Input();
+	
 	
 }
-void PlayerManagement::PlayerChange()
+void PlayerManagement::Input()
 {
-	if (g_pad[0]->IsTrigger(enButtonLB1))
-	{
+	if (g_pad[0]->IsTrigger(enButtonLB1)) {
+
 		switch (m_enMananagementState)
 		{
 			//2Dの場合3Dを呼び出す
 		case PlayerManagement::m_enPlayer_2DChanging:
-			PlayerChange3D();
+			m_manageStateTmp = m_enPlayer_3DChanging;
+			m_player2D->m_Player_Act = false;
+			m_player2D->SetMoveSpeed(Vector3::Zero);
 			break;
 			//3Dの場合2Dを呼び出す
 		case PlayerManagement::m_enPlayer_3DChanging:
-			PlayerChange2D();
-			break;
-		default:
+			m_manageStateTmp = m_enPlayer_2DChanging;
+			m_player3D->m_Player_Act = false;
+			m_player3D->SetMoveSpeed(Vector3::Zero);
 			break;
 		}
+
+		m_enMananagementState = m_enPlayer_Changing;
 	}
 }
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
-	switch (manaState)
-	{
-		//2Dの場合3Dを呼び出す
-	case PlayerManagement::m_enPlayer_3DChanging:
-		PlayerChange3D();
-		break;
-		//3Dの場合2Dを呼び出す
-	case PlayerManagement::m_enPlayer_2DChanging:
-		PlayerChange2D();
-		break;
-	default:
-		break;
-	}
+	m_manageStateTmp = manaState;
+	m_enMananagementState = m_enPlayer_Changing;
 }
 
 void PlayerManagement::PlayerChange2D()
@@ -97,4 +101,32 @@ void PlayerManagement::PlayerChange3D()
 		});
 	//プレイヤーを３Dにする
 	m_enMananagementState = m_enPlayer_3DChanging;
+}
+
+void PlayerManagement::IsChanging()
+{
+	if (m_changeTime > CHANGE_TIME) {
+
+		//ステートを変更する
+		switch (m_manageStateTmp)
+		{
+			//2Dの場合3Dを呼び出す
+		case PlayerManagement::m_enPlayer_3DChanging:
+			PlayerChange3D();
+			m_player3D->m_Player_Act = true;
+			break;
+			//3Dの場合2Dを呼び出す
+		case PlayerManagement::m_enPlayer_2DChanging:
+			PlayerChange2D();
+			m_player2D->m_Player_Act = true;
+			break;
+		default:
+			break;
+		}
+
+		m_changeTime = 0.0f;
+		return;
+	}
+
+	m_changeTime += g_gameTime->GetFrameDeltaTime();
 }

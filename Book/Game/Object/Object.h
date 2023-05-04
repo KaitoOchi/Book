@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerManagement.h"
 #include "Game.h";
+class Gage;
 class Player3D;
 class Object : public IGameObject
 {
@@ -110,6 +111,7 @@ protected:
 	CollisionObject*	m_collisionObject = nullptr;
 	PlayerManagement*	m_player = nullptr;
 	Game*				m_game = nullptr;
+	Gage*				m_gage = nullptr;
 	Player3D*			m_player3d = nullptr;
 	Vector3				m_position	= Vector3::Zero;
 	Quaternion			m_rotation	= Quaternion::Identity;

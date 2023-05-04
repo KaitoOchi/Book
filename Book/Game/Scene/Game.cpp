@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -67,7 +67,10 @@ Game::~Game()
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
-	DeleteGO(m_treaSure);
+	if (m_gameState != m_enGameState_GameFade)
+	{
+		DeleteGO(m_treaSure);
+	}
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
@@ -419,6 +422,12 @@ void Game::LevelDesign()
 			m_physicsGhost->SetScale(objData.scale);
 			m_physicsGhost->SetRotation(objData.rotation);
 			return true;
+		}
+		if (objData.EqualObjectName(L"physics") == true) {
+			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
+			m_ghostBox->SetPosition(objData.position);
+			m_ghostBox->SetScale(objData.scale);
+			m_ghostBox->SetRotation(objData.rotation);
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
 

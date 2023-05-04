@@ -112,7 +112,6 @@ namespace nsBookEngine {
 			GetLightCB().pointLig[ptNum].ptPosition = ptlig.ptPosition;
 			GetLightCB().pointLig[ptNum].ptColor = ptlig.ptColor;
 			GetLightCB().pointLig[ptNum].ptRange = ptlig.ptRange;
-			GetLightCB().ptNum = ptNum;
 		}
 
 		/// <summary>
@@ -126,7 +125,6 @@ namespace nsBookEngine {
 			GetLightCB().spotLig[spNum].spRange = spLig.spRange;
 			GetLightCB().spotLig[spNum].spDirection = spLig.spDirection;
 			GetLightCB().spotLig[spNum].spAngle = spLig.spAngle;
-			//GetLightCB().spNum = spNum;
 		}
 
 		/// <summary>

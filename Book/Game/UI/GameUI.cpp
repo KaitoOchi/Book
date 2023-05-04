@@ -123,7 +123,7 @@ void GameUI::ChangeGage()
 	}
 	else if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
-		m_playerManagement->PlayerChange3D();
+		m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
 	}
 	if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
 		//‘‚â‚·

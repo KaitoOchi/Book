@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "Gage.h"
+
 #include "Game.h"
 #include "Enemy.h"
+#include "GameManager.h"
+
 namespace
 {
 	const float		VIGILANCE_TIME_MAX = 2.0f;							//警戒値の最大時間
@@ -29,8 +32,6 @@ bool Gage::Start()
 	//ゲームの情報を持ってくる
 	m_game = FindGO<Game>("game");
 
-
-
 	//基盤の更新
 	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
 	m_baseRender.SetPosition(BASE_POSITION);
@@ -56,10 +57,9 @@ bool Gage::Start()
 		m_LeverUPRender[i].SetPosition(LEVERUPPOSITION);
 		m_LeverUPRender[i].Update();
 	}
-	
 
-	
-
+	//発見時の音
+	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/game/find.wav");
 
 	return true;
 }
@@ -84,7 +84,12 @@ void Gage::Update()
 }
 void Gage::GageUp(int GageUp)
 {
-	
+	//発見音を出す
+	SoundSource* se = NewGO<SoundSource>(0);
+	se->Init(0);
+	se->Play(false);
+	se->SetVolume(GameManager::GetInstance()->GetSFX());
+
 	//クールダウンがまだなら
 	if (m_vigilanceTime > 0.0f)
 	{
