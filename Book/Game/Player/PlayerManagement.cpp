@@ -39,11 +39,11 @@ void PlayerManagement::Update()
 
 	if (m_player3D->m_Player_Act)
 	{
-		PlayerChange();
+		Input();
 	}
 	
 }
-void PlayerManagement::PlayerChange()
+void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 

@@ -4,18 +4,51 @@
 class Player2D;
 class Player3D;
 class PhysicsGhost;
+
 class PlayerManagement:public IGameObject
 {
+public:
+	/// <summary>
+	/// プレイヤー状態の列挙型
+	/// </summary>
+	enum EnManagementState
+	{
+		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
+		m_enPlayer_Changing,  //切替中
+		m_enPlayer_2DChanging,//2Dプレイヤー
+		m_enPlayer_3DChanging,//3Dプレイヤー
+	};
+	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
+
 public:
 	PlayerManagement();
 	~PlayerManagement();
 	bool Start();
-	void Update()override;
-	void PlayerChange();
-	void PlayerChange2D();
-	void PlayerChange3D();
+	void Update();
+
+public:
 	/// <summary>
-	/// ポジションの取得
+	/// プレイヤーのポインタを設定。
+	/// </summary>
+	/// <param name="player3d"></param>
+	/// <param name="player2d"></param>
+	void SetPlayer2DAND3D(Player3D* player3d, Player2D* player2d)
+	{
+		m_player2D = player2d;
+		m_player3D = player3d;
+	}
+
+	/// <summary>
+	/// 座標の設定。
+	/// </summary>
+	/// <param name="m_pos"></param>
+	void  SetPosition(const Vector3& m_pos)
+	{
+		m_position = m_pos;
+	}
+
+	/// <summary>
+	/// 座標の取得。
 	/// </summary>
 	const Vector3& GetPosition()const
 	{
@@ -27,24 +60,41 @@ public:
 			return m_player2D->GetPosition();
 		}
 	}
-	void  SetPosition(const Vector3& m_pos)
-	{
-		m_position = m_pos;
-	}
-	void SetPlayer2DAND3D(Player3D* player3d,Player2D* player2d)
-	{
-		m_player2D = player2d;
-		m_player3D = player3d;
-	}
 
-	//キャラコンの取得
+	/// <summary>
+	/// キャラコンの設定
+	/// </summary>
+	/// <param name="m_chara"></param>
 	void SetCharacon(CharacterController* m_chara)
 	{
 		m_characon = m_chara;
 	}
+
+	/// <summary>
+	/// キャラコンの取得。
+	/// </summary>
+	/// <returns></returns>
 	CharacterController* GetCharacon()
 	{
 		return m_characon;
+	}
+
+	/// <summary>
+	/// 3Dプレイヤーの取得。
+	/// </summary>
+	/// <returns></returns>
+	Player3D* GetPlayer3D()
+	{
+		return m_player3D;
+	}
+
+	/// <summary>
+	/// 2Dプレイヤーの取得。
+	/// </summary>
+	/// <returns></returns>
+	Player2D* GetPlayer2D()
+	{
+		return m_player2D;
 	}
 
 	/// <summary>
@@ -62,54 +112,42 @@ public:
 	{
 		return m_GameStartState;
 	}
-	
-	
-	enum EnManagementState
-	{
-		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
-		m_enPlayer_Changing,  //切替中
-		m_enPlayer_2DChanging,//2Dプレイヤー
-		m_enPlayer_3DChanging,//3Dプレイヤー
-	};
-	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
-
-public:
-	Player3D* GetPlayer3D()
-	{
-		return m_player3D;
-	}
-
-	Player2D* GetPlayer2D()
-	{
-		return m_player2D;
-	}
 
 	/// <summary>
 	/// 外部から切替を行う
 	/// </summary>
 	void SetChange(EnManagementState manaState);
+
 private:
+	/// <summary>
+	/// 入力処理。
+	/// </summary>
+	void Input();
+
+	/// <summary>
+	/// プレイヤーを2Dに変更する。
+	/// </summary>
+	void PlayerChange2D();
+
+	/// <summary>
+	/// プレイヤーを3Dに変更する。
+	/// </summary>
+	void PlayerChange3D();
+
 	/// <summary>
 	/// 切り替え中かどうか。
 	/// </summary>
 	void IsChanging();
 
 private:
-
-	Vector3 m_ghostPosition=Vector3::Zero;
-	
-	Vector3 m_position = Vector3::Zero;
-	CharacterController* m_characon = nullptr;
-	Player2D* m_player2D = nullptr;
-	Player3D* m_player3D = nullptr;
-	PhysicsGhost* m_physicsghost = nullptr;
-	float YLstickamount = 0;
-	EnManagementState m_manageStateTmp = m_enPlayer_3DChanging;
-
-	float m_changeTime = 0.0f;									//プレイヤーを切り替える時間
-
-	bool m_GameStartState = false;								//ゲームが始まっているかどうか
-private:
-	
+	CharacterController*	m_characon = nullptr;
+	Player2D*				m_player2D = nullptr;
+	Player3D*				m_player3D = nullptr;
+	PhysicsGhost*			m_physicsghost = nullptr;
+	Vector3					m_ghostPosition = Vector3::Zero;
+	Vector3					m_position = Vector3::Zero;
+	EnManagementState		m_manageStateTmp = m_enPlayer_3DChanging;		//遷移するステートの一時変数
+	bool					m_GameStartState = false;						//ゲームが始まっているかどうか
+	float					m_changeTime = 0.0f;							//プレイヤーを切り替える時間
 };
 
