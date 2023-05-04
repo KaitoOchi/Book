@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -395,7 +395,7 @@ void Game::LevelDesign()
 			m_treaSure->SetRotation(objData.rotation);
 			return true;
 		}
-		if (objData.EqualObjectName(L"gost") == true) {
+		if (objData.EqualObjectName(L"ghost") == true) {
 
 			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
 			m_physicsGhost->SetPosition(objData.position);
