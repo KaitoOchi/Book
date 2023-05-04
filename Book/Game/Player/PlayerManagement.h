@@ -89,6 +89,13 @@ public:
 	/// </summary>
 	void SetChange(EnManagementState manaState);
 private:
+	/// <summary>
+	/// 切り替え中かどうか。
+	/// </summary>
+	void IsChanging();
+
+private:
+
 	Vector3 m_ghostPosition=Vector3::Zero;
 	
 	Vector3 m_position = Vector3::Zero;
@@ -97,10 +104,9 @@ private:
 	Player3D* m_player3D = nullptr;
 	PhysicsGhost* m_physicsghost = nullptr;
 	float YLstickamount = 0;
+	EnManagementState m_manageStateTmp = m_enPlayer_3DChanging;
 
-	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
-
-	float m_changeTime = 5.0f;									//プレイヤーを切り替える時間
+	float m_changeTime = 0.0f;									//プレイヤーを切り替える時間
 
 	bool m_GameStartState = false;								//ゲームが始まっているかどうか
 private:
