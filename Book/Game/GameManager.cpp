@@ -7,7 +7,18 @@ GameManager* GameManager::m_instance = nullptr;
 
 GameManager::GameManager()
 {
-	g_soundEngine->ResistWaveFileBank(10, "Assets/sound/sound_test.wav");
+	//キャンセル時の音
+	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/title/cancel.wav");
+	//決定時の音
+	g_soundEngine->ResistWaveFileBank(1, "Assets/sound/title/enter.wav");
+	//選択時の音
+	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/title/select.wav");
+
+	//タイトルBGMの設定
+	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/sound_test.wav");
+
+	//データのロード
+	DataLoad();
 }
 
 GameManager::~GameManager()

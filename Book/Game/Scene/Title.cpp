@@ -41,15 +41,8 @@ bool Title::Start()
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 
-	//ƒLƒƒƒ“ƒZƒ‹Žž‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/title/cancel.wav");
-	//Œˆ’èŽž‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(1, "Assets/sound/title/enter.wav");
-	//‘I‘ðŽž‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/title/select.wav");
-
 	//BGM‚ð–Â‚ç‚·
-	GameManager::GetInstance()->SetBGM(10);
+	GameManager::GetInstance()->SetBGM(20);
 
 	return true;
 }

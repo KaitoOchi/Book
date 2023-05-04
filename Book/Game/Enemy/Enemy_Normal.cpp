@@ -37,14 +37,23 @@ bool Enemy_Normal::Start()
 	Enemy::Start();
 
 	m_point = &m_pointList[0];
-	//Enemy::SpotLight_New(m_position, 3);
 
 	return true;
 }
 
 void Enemy_Normal::Update()
 {
-	Enemy::SearchPass(CRAW);
+	//Enemy::SearchPass(CRAW);
+
+		// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ğg—p‚µ‚½
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
+
 
 	switch (m_ActState) {
 		// „‰ñ
@@ -108,6 +117,7 @@ void Enemy_Normal::Update_OnTracking()
 
 	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚È‚¢‚Æ‚«
 	if (Enemy::Act_SeachPlayer() == false) {
+		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 
@@ -139,6 +149,19 @@ void Enemy_Normal::Update_OnConfusion()
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
 	if (m_HitFlashBulletFlag == false) {
+		m_ActState = BACKBASEDON;
+	}
+}
+
+
+void Enemy_Normal::UpDate_OnListen()
+{
+	// ‰¹”š’e‚ğg‚Á‚½‚Æ‚«
+
+	Enemy::Act_HitSoundBullet();
+
+	// Œø‰Ê‚ªI—¹‚µ‚½‚Æ‚«
+	if (Enemy::GetHitSoundBullet() == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "GameManager.h"
 class Game;
 
 class Pause : public IGameObject
@@ -45,11 +45,22 @@ private:
 	/// </summary>
 	void SetSprite();
 
+	/// <summary>
+	/// SEを出す。
+	/// </summary>
+	void PlaySE(const int num)
+	{
+		SoundSource* se = NewGO<SoundSource>(0, "sound");
+		se->Init(num);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+	}
+
 private:
 	SpriteRender	m_backGroundSpriteRender;		//背景画像
 	SpriteRender	m_pauseSpriteRender;			//ポーズメニュー画像
 	SpriteRender	m_cursorSpriteRender;			//カーソル画像
-	PauseState		m_pauseState = enState_FadeOut;	//ポーズステート
+	PauseState		m_pauseState = enState_Game;	//ポーズステート
 	Game*			m_game = nullptr;				//ゲームクラス
 	bool			m_isPause = false;				//ポーズしたかどうか
 	int				m_cursor = 0;					//カーソル
