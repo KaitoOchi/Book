@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Enemy_Clear.h"
+
+#include "GameManager.h"
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”

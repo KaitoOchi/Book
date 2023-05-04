@@ -59,7 +59,7 @@ bool Enemy::Start()
 	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
-	//m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
+	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 	//m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
 
 	// インスタンスを探す
@@ -226,7 +226,6 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 	// 壁と衝突していない
 	// プレイヤーを見つけた
-	GameManager::GetInstance()->AddSearchNum();
 	return true;
 }
 
@@ -678,6 +677,18 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
 		VigilanceCount();
+
+		// カウントするフラグがfalseのとき
+		if (m_CountFlag == false) {
+			// 発見回数に1を加算
+			GameManager::GetInstance()->AddSearchNum();
+			// フラグをtrueにして再度行わないようにする
+			m_CountFlag = true;
+		}
+	}
+	else {
+		// 存在しないときはフラグを戻す
+		m_CountFlag = false;
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Enemy_Search.h"
+
+#include "GameManager.h"
 namespace
 {
 	const float KEEPTIME = 2.0f;
