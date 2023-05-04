@@ -270,6 +270,7 @@ protected:
 	float m_Vicount;						//警戒度を一定回数増やす
 
 	bool m_CountFlag = false;				// カウントするフラグ
+	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 
 	int m_spotNum = 0;						// スポットライトの個数
 };

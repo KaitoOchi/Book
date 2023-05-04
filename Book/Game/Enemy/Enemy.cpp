@@ -245,6 +245,11 @@ bool Enemy::Act_CatchPlayer()
 		m_fontRender.SetText(L"catch");
 		m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
+		for (int i = 0; i < enemyList.size(); i++) {
+			// 捕まえたのでフラグをtrueにする
+			enemyList[i]->m_ChachPlayerFlag = true;
+		}
+
 		return true;
 	}
 
@@ -687,8 +692,11 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 		}
 	}
 	else {
-		// 存在しないときはフラグを戻す
-		m_CountFlag = false;
+		// プレイヤーを確保していないとき
+		if (m_ChachPlayerFlag == false) {
+			// プレイヤーが存在しないときはフラグを戻す
+			m_CountFlag = false;
+		}
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
