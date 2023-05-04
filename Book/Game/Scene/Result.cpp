@@ -17,7 +17,11 @@ namespace
 
 Result::Result()
 {
+	//ƒhƒ‰ƒ€ƒ[ƒ‹‚Ì‰¹
+	g_soundEngine->ResistWaveFileBank(4, "Assets/sound/result/dramroll.wav");
 
+	//‘¾ŒÛ‚Ì‰¹
+	g_soundEngine->ResistWaveFileBank(5, "Assets/sound/result/ddn.wav");
 }
 
 Result::~Result()
@@ -206,6 +210,15 @@ void Result::Update()
 	}
 	else {
 		Input();
+	}
+
+	//‘¾ŒÛ‰¹‚ğo‚·
+	if (m_timer >= ENABLE_TIME[4] && !m_isDram) {
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(5);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		m_isDram = true;
 	}
 
 	//ŠÔ‚Ìˆ—

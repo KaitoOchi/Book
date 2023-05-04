@@ -60,7 +60,7 @@ private:
 	SpriteRender	m_backGroundSpriteRender;		//背景画像
 	SpriteRender	m_pauseSpriteRender;			//ポーズメニュー画像
 	SpriteRender	m_cursorSpriteRender;			//カーソル画像
-	PauseState		m_pauseState = enState_FadeOut;	//ポーズステート
+	PauseState		m_pauseState = enState_Game;	//ポーズステート
 	Game*			m_game = nullptr;				//ゲームクラス
 	bool			m_isPause = false;				//ポーズしたかどうか
 	int				m_cursor = 0;					//カーソル
