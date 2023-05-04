@@ -66,6 +66,7 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
+
 	// gameで設定したエネミーのリストを取得する
 	enemyList = m_game->GetEnemyList();
 
@@ -100,7 +101,7 @@ void Enemy::Rotation(Vector3 rot)
 
 }
 
-void Enemy::Nav(Vector3 pos)
+void Enemy::Nav(Vector3 pos, bool flag)
 {
 	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
@@ -124,12 +125,22 @@ void Enemy::Nav(Vector3 pos)
 		AI_HIGH							// AIエージェントの高さ
 	);
 
-	// パス上を移動する
-	m_position = m_path.Move(
-		m_position,						// 座標
-		MOVE_SPEED* ADD_SPEED,			// 移動速度
-		isEnd							// 移動したときtrue
-	);
+	if (flag == true) {
+		// パス上を走って移動する
+		m_position = m_path.Move(
+			m_position,						// 座標
+			MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
+			isEnd							// 移動したときtrue
+		);
+	}
+	else {
+		// パス上を歩いて移動する
+		m_position = m_path.Move(
+			m_position,						// 座標
+			MOVE_SPEED,						// 移動速度（パス移動よりも速め）
+			isEnd							// 移動したときtrue
+		);
+	}
 
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 moveSpeed = m_playerPos - m_position;
@@ -261,14 +272,19 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
+	// 当たったとき
 	if (m_HitFlashBulletFlag == true) {
+
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
+
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
 			m_HitFlashBulletFlag = false;		// フラグを降ろす
 			m_addTimer[0] = 0.0f;				// タイマーをリセット
 
+			// 見渡すアニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 		// そうでないとき
 		else {
@@ -276,6 +292,37 @@ void Enemy::Act_HitFlashBullet()
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
+}
+
+bool Enemy::Act_HitSoundBullet()
+{
+	// 音爆弾の処理
+	// trueのとき当たった
+
+	// 当たった(プレイヤーが使用した)とき
+	if (m_HitSoundBulletFlag == true) {
+
+		// エネミーからアイテムへ向かうベクトルを作成
+		Vector3 diff = m_itemPos - m_position;
+		float length = diff.Length();
+
+		// 一定範囲内より小さいとき
+		if (length < CALL_DISTANCE_MAX) {
+			// アイテムの座標を基にしてナビメッシュを作成
+			Nav(m_itemPos,true);
+			// 走るアニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+
+			// アイテムを使用した位置についたとき
+			if (length > 20.0f && length < 500.0f) {
+				// 見渡すアニメーションを再生
+				m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 void Enemy::Act_Craw()
@@ -328,7 +375,7 @@ void Enemy::Act_Tracking()
 	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
 	// ナビメッシュを作成
-	Nav(m_playerPos);
+	Nav(m_playerPos,true);
 
 	// 走るアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
@@ -545,7 +592,7 @@ void Enemy::Act_Called()
 	// 呼ばれた時の処理
 
 	// 目標地点へ向かうナビメッシュを作成
-	Nav(m_setPos);
+	Nav(m_setPos,true);
 
 	// 走るアニメーションを再生
 	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
@@ -611,14 +658,19 @@ void Enemy::Act_Loss()
 	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = m_point->s_position - m_position;
-	// 正規化
-	moveSpeed.Normalize();
-	// 移動速度に乗算
-	moveSpeed *= MOVE_SPEED;
-	// 回転
-	Rotation(moveSpeed);
+	Nav(m_point->s_position,false);
+
+	//// エネミーからプレイヤーへ向かうベクトル
+	//Vector3 moveSpeed = m_point->s_position - m_position;
+	//// 正規化
+	//moveSpeed.Normalize();
+	//// 移動速度に乗算
+	//moveSpeed *= MOVE_SPEED;
+	//// 回転
+	//Rotation(moveSpeed);
+
+	// 歩くアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
 	return;
 }

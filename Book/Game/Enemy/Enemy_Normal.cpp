@@ -44,6 +44,17 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
+	Enemy::SearchPass(CRAW);
+
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ğg—p‚µ‚½
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
+
 	switch (m_ActState) {
 		// „‰ñ
 	case CRAW:
@@ -61,10 +72,13 @@ void Enemy_Normal::Update()
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
-		// ö—
+		// ‘MŒõ’e‚É“–‚½‚Á‚½
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
+		// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
+	case LISTEN:
+		UpDate_OnListen();
 		// •ßŠl
 	case CATCH:
 		Update_OnCatch();
@@ -95,7 +109,7 @@ void Enemy_Normal::Update_OnCraw()
 	}
 
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
-	if (Act_CatchPlayer() == true) {
+	if (Enemy::Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
 }
@@ -110,7 +124,7 @@ void Enemy_Normal::Update_OnTracking()
 	}
 
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
-	if (Act_CatchPlayer() == true) {
+	if (Enemy::Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
 }
@@ -133,10 +147,24 @@ void Enemy_Normal::Update_OnBackBasedOn()
 
 void Enemy_Normal::Update_OnConfusion()
 {
-	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
+	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
+
+	Enemy::Act_HitFlashBullet();
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
-	if (m_HitFlashBulletFlag == false) {
+	if (Enemy::GetHitFlushBullet() == false) {
+		m_ActState = BACKBASEDON;
+	}
+}
+
+void Enemy_Normal::UpDate_OnListen()
+{
+	// ‰¹”š’e‚ğg‚Á‚½‚Æ‚«
+
+	Enemy::Act_HitSoundBullet();
+
+	// Œø‰Ê‚ªI—¹‚µ‚½‚Æ‚«
+	if (Enemy::GetHitSoundBullet() == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

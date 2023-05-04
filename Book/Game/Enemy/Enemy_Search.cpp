@@ -33,6 +33,15 @@ void Enemy_Search::Update()
 {
 	Enemy::SearchPass(SEARCH);
 
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ğg—p‚µ‚½
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
+
 	switch (m_ActState) {
 	case SEARCH:
 		Update_OnSearch();
@@ -59,11 +68,6 @@ void Enemy_Search::Update_OnSearch()
 	// õ“G
 	Rotaition();
 
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-
 	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚·‚é‚Æ‚«
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = CALL;
@@ -74,11 +78,6 @@ void Enemy_Search::Update_OnCall()
 {
 	// ü‚è‚Ì“G‚ğŒÄ‚Ô
 	Enemy::Act_Call();
-
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
 
 	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚µ‚È‚¢‚Æ‚«
 	if (Enemy::Act_SeachPlayer() == false) {
@@ -103,7 +102,7 @@ void Enemy_Search::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
-	if (m_HitFlashBulletFlag == false) {
+	if (Enemy::GetHitFlushBullet() == false) {
 		m_ActState = SEARCH;
 	}
 }
@@ -143,5 +142,4 @@ void Enemy_Search::Rotaition()
 void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
-	//m_fontRender.Draw(rc);
 }
