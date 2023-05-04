@@ -121,6 +121,11 @@ void Enemy_Charge::Update_OnCharge()
 	// 突進
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
 										// 関数内で巡回状態に戻る処理を記述
+
+	// プレイヤーを捕まえたとき
+	if (Enemy::Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
 }
 
 void Enemy_Charge::Update_OnBackBasedOn()
@@ -164,6 +169,14 @@ void Enemy_Charge::UpDate_OnListen()
 	else {
 		m_ActState = CRAW;
 	}
+}
+
+void Enemy_Charge::Update_OnCatch()
+{
+
+	Enemy::Act_CatchPlayer();
+
+	m_ActState = CRAW;
 }
 
 void Enemy_Charge::Animation()

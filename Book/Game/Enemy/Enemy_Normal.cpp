@@ -107,11 +107,6 @@ void Enemy_Normal::Update_OnCraw()
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = TRACKING;
 	}
-
-	// プレイヤーを捕まえたとき
-	if (Enemy::Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
-	}
 }
 
 void Enemy_Normal::Update_OnTracking()
@@ -120,6 +115,7 @@ void Enemy_Normal::Update_OnTracking()
 
 	// 視野角にプレイヤーがいないとき
 	if (Enemy::Act_SeachPlayer() == false) {
+		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 

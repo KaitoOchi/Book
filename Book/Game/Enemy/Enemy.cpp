@@ -71,8 +71,7 @@ bool Enemy::Start()
 	enemyList = m_game->GetEnemyList();
 
 	// 各タイマーのリセット
-	for (int i = 0; i < 3; i++) {
-		// 0が閃光弾。1が巡回。2を突進用として用意
+	for (int i = 0; i < TIMER_NUM; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
@@ -265,6 +264,46 @@ bool Enemy::Act_CatchPlayer()
 	}
 
 	return false;
+}
+
+void Enemy::Act_MissingPlayer()
+{
+	// プレイヤーを見失った時の処理
+
+	if (m_FindPlayerFlag == false) {
+		// 座標を参照
+		m_playerPos3 = m_playerManagement->GetPosition();
+		// 何度も参照しないようにする
+		m_FindPlayerFlag = true;
+	}
+
+	// ベクトルを作成
+	Vector3 moveSpeed = m_playerPos3 - m_position;
+
+	// 長さを計算
+	float length = moveSpeed.Length();
+
+	// 移動する
+	moveSpeed.Normalize();
+	//移動速度に加算
+	moveSpeed *= MOVE_SPEED;
+
+	// 座標が一定範囲内になるまで
+	if (length < 50.0f) {
+		m_position += moveSpeed;
+	}
+
+	// 回転を教える
+	Rotation(moveSpeed);
+
+	// 歩きモーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+	// モーションを再生
+	if (Act_Stop(3.0f, 4) == false) {
+		// きょろきょろするモーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	}
 }
 
 void Enemy::Act_HitFlashBullet()

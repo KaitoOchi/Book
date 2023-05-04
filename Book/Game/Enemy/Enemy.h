@@ -4,6 +4,11 @@
 #include "AI/PathFinding/Path.h"
 #include "AI/PathFinding/PathFinding.h"
 
+namespace
+{
+	const int TIMER_NUM = 4;
+}
+
 class PlayerManagement;
 class Gage;
 class Game;
@@ -98,7 +103,7 @@ public:
 	/// <summary>
 	/// プレイヤーを見失った時の処理
 	/// </summary>
-	void Act_MissingPlayer():
+	void Act_MissingPlayer();
 
 	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
@@ -317,6 +322,7 @@ protected:
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 	Vector3 m_playerPos2 = Vector3::Zero;	// 突進用。プレイヤーの座標
+	Vector3 m_playerPos3 = Vector3::Zero;	// 見失った時用。プレイヤーの座標
 	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
@@ -334,7 +340,11 @@ protected:
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 
-	float m_addTimer[3];					// 加算するタイマー。処理ごとに配列を作成
+	/// <summary>
+	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
+	/// </summary>
+	float m_addTimer[TIMER_NUM];
+
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;
 	float m_Vicount;						//警戒度を一定回数増やす

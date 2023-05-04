@@ -40,9 +40,6 @@ bool Enemy_Clear::Start()
 	// パス移動
 	m_point = &m_pointList[0];
 
-	//// 視野を作成
-	//Enemy::SpotLight_New(m_position, 2);
-
 	return true;
 }
 void Enemy_Clear::Update()
@@ -109,11 +106,6 @@ void Enemy_Clear::Update_OnCraw()
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = TRACKING;
 	}
-
-	// プレイヤーを捕まえたとき
-	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
-	}
 }
 
 void Enemy_Clear::Update_OnTracking()
@@ -122,6 +114,7 @@ void Enemy_Clear::Update_OnTracking()
 
 	// 視野角にプレイヤーがいないとき
 	if (Enemy::Act_SeachPlayer() == false) {
+		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 
