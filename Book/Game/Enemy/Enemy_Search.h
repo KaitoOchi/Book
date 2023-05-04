@@ -14,7 +14,7 @@ public:
 	void Update_OnSearch();				// 索敵
 	void Update_OnCall();				// 周りの敵を呼ぶ
 	void Update_OnCallEnd();			// 呼ぶ行動の終了時
-	void Update_OnConfusion();			// 錯乱
+	void Update_OnConfusion();			// 閃光弾に当たったとき
 		
 private:
 	//SpotLight m_spotLight;				//スポットライト

@@ -4,10 +4,14 @@
 #include "AI/PathFinding/Path.h"
 #include "AI/PathFinding/PathFinding.h"
 
+namespace
+{
+	const int TIMER_NUM = 4;
+}
+
 class PlayerManagement;
 class Gage;
 class Game;
-class Gage;
 class Enemy :public IGameObject
 {
 public:
@@ -16,25 +20,92 @@ public:
 
 	bool Start();
 
-	bool WallAndHit(Vector3 pos);		// 壁と衝突したかどうかの処理
-	void Rotation(Vector3 rot);			// 回転処理
-	void Nav(Vector3 pos);				// ナビメッシュを行う処理
-	void Act_Craw();					// 巡回行動
-	void Act_Tracking();				// 追跡行動
-	void Act_Access();					// 接近行動
-	void Act_Charge(float time);		// 突進行動
-	void Act_Call();					// 敵を呼ぶ行動
-	void Act_Called();					// 呼ばれた時の行動
-	bool Act_CallEnd();					// 視野角内にプレイヤーが存在しないときの行動
-	void Act_Loss();					// 見失ったときの処理
-	void Act_Limit();					// 一定以内には近づかないための処理
-	void Act_HitFlashBullet();			// 閃光弾が当たったときの処理
-	void Act_HitSoundBullet();			// 音爆弾が当たったときの処理
-	bool Act_Stop(float time,int i);	// 行動停止
-	bool Act_SeachPlayer();				// プレイヤーを発見する処理
-	bool Act_CatchPlayer();				// プレイヤーを確保する処理
+	/// <summary>
+	/// 壁と衝突したかどうかの処理
+	/// </summary>
+	/// <param name="pos">座標</param>
+	/// <returns></returns>
+	bool WallAndHit(Vector3 pos);
+	/// <summary>
+	/// 回転処理
+	/// </summary>
+	/// <param name="rot">自身が向かうベクトル</param>
+	void Rotation(Vector3 rot);
+	/// <summary>
+	/// ナビメッシュを作成する
+	/// </summary>
+	void Nav(Vector3 pos);
+	/// <summary>
+	/// 巡回行動
+	/// </summary>
+	void Act_Craw();
+	/// <summary>
+	/// 追跡行動
+	/// </summary>
+	void Act_Tracking();
+	/// <summary>
+	/// 接近行動
+	/// </summary>
+	void Act_Access();
+	/// <summary>
+	/// 突進行動
+	/// </summary>
+	/// <param name="time">突進するまでのチャージ時間</param>
+	void Act_Charge(float time);
+	/// <summary>
+	/// 敵を呼ぶ行動
+	/// </summary>
+	void Act_Call();
+	/// <summary>
+	/// 呼ばれた時の行動
+	/// </summary>
+	void Act_Called();
+	/// <summary>
+	/// 視野角内にプレイヤーが存在しないときの行動
+	/// </summary>
+	/// <returns></returns>
+	bool Act_CallEnd();
+	/// <summary>
+	/// 見失ったときの処理
+	/// </summary>
+	void Act_Loss();
+	/// <summary>
+	/// 一定以内には近づかないための処理
+	/// </summary>
+	void Act_Limit();
+	/// <summary>
+	/// 閃光弾が当たったときの処理
+	/// </summary>
+	void Act_HitFlashBullet();
+	/// <summary>
+	/// 音爆弾が当たったときの処理
+	/// </summary>
+	bool Act_HitSoundBullet();
+	/// <summary>
+	/// 行動停止
+	/// </summary>
+	/// <param name="time">停止する時間</param>
+	/// <param name="i">使用するタイマーを指定</param>
+	/// <returns></returns>
+	bool Act_Stop(float time,int i);
+	/// <summary>
+	/// プレイヤーを発見する処理
+	/// </summary>
+	/// <returns></returns>
+	bool Act_SeachPlayer();
+	/// <summary>
+	/// プレイヤーを確保する処理
+	/// </summary>
+	/// <returns></returns>
+	bool Act_CatchPlayer();
+	/// <summary>
+	/// プレイヤーを見失った時の処理
+	/// </summary>
+	void Act_MissingPlayer();
+
 	void SpotLight_New(Vector3 position,int num);
-	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);			
+	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
+	void VigilanceCount();				//
 
 	enum EnemyType
 	{
@@ -69,7 +140,8 @@ public:
 		CALLEND,		// 視野角内にプレイヤーが存在しないとき実行
 		CHARGE,			// 突進
 		BACKBASEDON,	// 巡回状態に戻る
-		CONFUSION,		// 錯乱
+		CONFUSION,		// 閃光弾にあたったとき
+		LISTEN,			// 音爆弾を使用したとき
 		CATCH,			// 捕獲
 		NOOP			// 何もしない
 	};
@@ -84,7 +156,8 @@ public:
 	/// <param name="CALLEND">視野角内にプレイヤーが存在しないとき実行</param>
 	/// <param name="CHARGE">突進</param>
 	/// <param name="BACKBASEDON">巡回状態に戻る</param>
-	/// <param name="CONFUSION">錯乱</param>
+	/// <param name="CONFUSION">閃光弾にあたったとき</param>
+	/// <param name="LISTEN">音爆弾を使用したとき</param>
 	/// <param name="CATCH">捕獲</param>
 	/// <param name="NOOP">何もしない</param>
 	EnEnemyActState m_ActState = CRAW;
@@ -140,7 +213,7 @@ public:
 	}
 
 	/// <summary>
-	/// 被弾フラグ設定用。必要なければ消去
+	/// 閃光弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHitFlashBullet(bool b) {
@@ -150,13 +223,13 @@ public:
 	/// <summary>
 	/// 閃光弾に当たったかどうか返す
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>被弾したかどうかどうか判定する。trueなら被弾したと判定</returns>
 	bool GetHitFlushBullet() {
 		return m_HitFlashBulletFlag;
 	}
 
 	/// <summary>
-	/// 被弾フラグ設定用。必要なければ消去
+	/// 音爆弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHitSoundBullet(bool b) {
@@ -164,9 +237,9 @@ public:
 	};
 
 	/// <summary>
-	/// アイテムの座標を設定する
+	/// 音爆弾に当たったかどうか返す
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>被弾したかどうかどうか判定する。trueなら被弾したと判定</returns>
 	bool GetHitSoundBullet() {
 		return m_HitSoundBulletFlag;
 	}
@@ -201,8 +274,8 @@ public:
 	}
 
 	// スポットライトの番号を教える
-	void AddSpotLightNum() {
-		m_spotNum++;
+	void SetSpotLigNum(int num) {
+		m_spotNum = num;
 	}
 	//------------------------------------------
 	//エネミーの前方向を求める
@@ -234,8 +307,8 @@ protected:
 	std::vector<Enemy*> enemyList;			// エネミーのリスト
 
 	PlayerManagement* m_playerManagement = nullptr;
-	Game* m_game = nullptr;
 	Gage* m_gage = nullptr;
+	Game* m_game = nullptr;
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー
@@ -245,29 +318,34 @@ protected:
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
-	Quaternion m_rotation=Quaternion::Identity;	// 回転
-
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
-
-	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool m_HitSoundBulletFlag = false;		// 音爆弾
-	bool m_FindPlayerFlag = false;			
-	bool m_CalculatedFlag = false;			// 突進用フラグ
-
-	float m_addTimer[3];					// 加算するタイマー。処理ごとに配列を作成
-	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
-	float m_move = 1.0f;
-
 	Vector3 m_playerPos2 = Vector3::Zero;	// 突進用。プレイヤーの座標
+	Vector3 m_playerPos3 = Vector3::Zero;	// 見失った時用。プレイヤーの座標
 	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 
+	Quaternion m_rotation = Quaternion::Identity;	// 回転
+
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
 
+	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool m_HitSoundBulletFlag = false;		// 音爆弾
+	bool m_FindPlayerFlag = false;			// プレイヤーの座標を参照するフラグ
+	bool m_CalculatedFlag = false;			// 突進用フラグ
+	bool m_CountFlag = false;				// カウントするフラグ
+	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 
+	/// <summary>
+	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
+	/// </summary>
+	float m_addTimer[TIMER_NUM];
 
-	int m_spotNum = 1;						// スポットライトの個数
+	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
+	float m_move = 1.0f;
+	float m_Vicount;						//警戒度を一定回数増やす
+
+	int m_spotNum = 0;						// スポットライトの個数
 };

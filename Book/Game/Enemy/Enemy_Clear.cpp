@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Enemy_Clear.h"
+
+#include "GameManager.h"
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
@@ -38,14 +40,20 @@ bool Enemy_Clear::Start()
 	// パス移動
 	m_point = &m_pointList[0];
 
-	//// 視野を作成
-	//Enemy::SpotLight_New(m_position, 2);
-
 	return true;
 }
 void Enemy_Clear::Update()
 {
-	Enemy::SearchPass(CRAW);
+	//Enemy::SearchPass(CRAW);
+
+	// 閃光弾に当たった
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// 音爆弾を使用した
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
 
 	switch (m_ActState) {
 		// 巡回
@@ -64,10 +72,13 @@ void Enemy_Clear::Update()
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
-		// 錯乱
+		// 閃光弾に当たった
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
+		// 音爆弾を使用したとき
+	case LISTEN:
+		UpDate_OnListen();
 		// 捕獲
 	case CATCH:
 		Update_OnCatch();
@@ -95,11 +106,6 @@ void Enemy_Clear::Update_OnCraw()
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = TRACKING;
 	}
-
-	// プレイヤーを捕まえたとき
-	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
-	}
 }
 
 void Enemy_Clear::Update_OnTracking()
@@ -108,6 +114,7 @@ void Enemy_Clear::Update_OnTracking()
 
 	// 視野角にプレイヤーがいないとき
 	if (Enemy::Act_SeachPlayer() == false) {
+		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 
@@ -135,10 +142,24 @@ void Enemy_Clear::Update_OnBackBasedOn()
 
 void Enemy_Clear::Update_OnConfusion()
 {
+	// 閃光弾に当たったとき
 
-	Enemy::Act_HitFlashBullet();		// 閃光弾に当たったときの処理
+	Enemy::Act_HitFlashBullet();
+
 	// 硬直が解けているとき
 	if (m_HitFlashBulletFlag == false) {
+		m_ActState = BACKBASEDON;
+	}
+}
+
+void Enemy_Clear::UpDate_OnListen()
+{
+	// 音爆弾を使ったとき
+
+	Enemy::Act_HitSoundBullet();
+
+	// 効果が終了したとき
+	if (Enemy::GetHitSoundBullet() == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

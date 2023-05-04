@@ -74,6 +74,10 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
+
+	// ライトの数を0に
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
+	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
 }
 
 void Game::GameDelete(const int nextScene)
@@ -114,6 +118,8 @@ bool Game::Start()
 
 	NewGO<Pause>(0, "pause");
 
+	//NewGO<SecurityCamera>(0, "securityCamera");
+
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	//m_stageModelRender.SetRotation(Quaternion::Identity);
@@ -123,7 +129,6 @@ bool Game::Start()
 
 	//m_modelRender.Init("Assets/modelData/wall1.tkm");
 
-	
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 	m_pointLight[0].SetPointLight(
@@ -154,16 +159,7 @@ bool Game::Start()
 		m_pointLight[i].Update();
 	}
 
-	m_spotLight.SetSpotLight(
-		0,
-		{ 0.0f, 40.0f, 0.0f },
-		{ 0.0f, 10.0f, 0.0f },
-		400.0f,
-		Vector3::AxisZ,
-		45.0f
-	);
-
-	//m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
@@ -190,7 +186,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test3.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -225,7 +221,7 @@ void Game::LevelDesign()
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
-			// エネミーを生成
+			 //エネミーを生成
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
 			m_enemyNormal->m_enemyType = Enemy::Normal;
@@ -233,10 +229,11 @@ void Game::LevelDesign()
 			m_enemyNormal->SetPosition(objData.position);
 			m_enemyNormal->SetRotation(objData.rotation);
 			m_enemyNormal->SetScale(objData.scale);
+
+			m_enemyNormal->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// パス移動の順路を指定
 			m_enemyNormal->Pass(0);
-			// スポットライトの数を加算
-			m_enemyNormal->AddSpotLightNum();
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyNormal);
 			return true;
@@ -252,10 +249,11 @@ void Game::LevelDesign()
 			m_enemyCharge->SetPosition(objData.position);
 			m_enemyCharge->SetRotation(objData.rotation);
 			m_enemyCharge->SetScale(objData.scale);
+
+			m_enemyCharge->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyCharge->Pass(0);
-			// スポットライトの数を加算
-			m_enemyCharge->AddSpotLightNum();
+			m_enemyCharge->Pass(1);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyCharge);
 			return true;
@@ -271,10 +269,31 @@ void Game::LevelDesign()
 			m_enemySearch->SetPosition(objData.position);
 			m_enemySearch->SetRotation(objData.rotation);
 			m_enemySearch->SetScale(objData.scale);
-			// スポットライトの数を加算
-			m_enemySearch->AddSpotLightNum();
+
+			m_enemySearch->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemySearch);
+			return true;
+		}
+
+		// 名前が Clear のとき
+		if (objData.EqualObjectName(L"Clear") == true) {
+			// エネミーを生成
+			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			// 自身の属性を教える
+			m_enemyClear->m_enemyType = Enemy::Clear;
+			// 座標・回転・スケールを教える
+			m_enemyClear->SetPosition(objData.position);
+			m_enemyClear->SetRotation(objData.rotation);
+			m_enemyClear->SetScale(objData.scale);
+
+			m_enemyClear->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			// パス移動の順路を指定
+			m_enemyClear->Pass(6);
+			// エネミーのリストに追加する
+			m_enemyList.push_back(m_enemyClear);
 			return true;
 		}
 
@@ -292,15 +311,16 @@ void Game::LevelDesign()
 				return true;
 			}
 
-			// 名前がwallなら
-			if (objData.EqualObjectName(L"wall") == true) {
-				// 壁を生成
-				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
-				m_normal->SetPosition(objData.position);
-				m_normal->SetRotation(objData.rotation);
-				m_normal->SetScale(objData.scale);
-				m_wallList.emplace_back(m_normal);
-			}
+			//// 名前がwallなら
+			//if (objData.EqualObjectName(L"wall") == true) {
+			//	// 壁を生成
+			//	m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+			//	m_normal->SetPosition(objData.position);
+			//	m_normal->SetRotation(objData.rotation);
+			//	m_normal->SetScale(objData.scale);
+			//	m_wallList.emplace_back(m_normal);
+			//	return true;
+			//}
 
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
@@ -419,6 +439,8 @@ void Game::LevelDesign()
 		return true;
 		}
 	);
+
+	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
 }
 
 void Game::Update()
