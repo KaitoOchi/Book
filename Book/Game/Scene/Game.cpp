@@ -67,7 +67,10 @@ Game::~Game()
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
-	DeleteGO(m_treaSure);
+	if (m_gameState != m_enGameState_GameFade)
+	{
+		DeleteGO(m_treaSure);
+	}
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
