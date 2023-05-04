@@ -118,6 +118,16 @@ public:
 	/// </summary>
 	void SetChange(EnManagementState manaState);
 
+
+	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
+
+
+	Quaternion m_Changerot;										//切替中に回転させる											
+private:
+	void PlayerStop();
+	bool RestartState = true;									//プレイヤーを再開させるかどうか
+	bool ChangeStart = true;
+
 private:
 	/// <summary>
 	/// 入力処理。

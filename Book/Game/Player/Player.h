@@ -36,6 +36,7 @@ public:
 	Player();
 	virtual ~Player();
 	virtual bool Start();
+public:
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -89,6 +90,11 @@ public:
 
 	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
 	
+	void SetMoveSpeed(const Vector3 speed)
+	{
+		m_moveSpeed = speed;
+	}
+
 protected:
 	virtual void Update();
 	void Move();

@@ -1,7 +1,6 @@
 #pragma once
 #include "Object.h"
 class Gage;
-
 class LightSensor : public Object
 {
 public:
@@ -83,7 +82,6 @@ private:
 
 private:
 	SpotLight			m_spotLight;			//スポットライト
-	Gage*				m_gage = nullptr;		//ゲームUI
 	LightSensorState	m_lightSensorState = enState_Move;
 	Vector3				m_direction;			//方向
 	Vector3				m_moveSpeed;			//移動速度
@@ -91,5 +89,6 @@ private:
 	float				m_angle = 25.0f;		//放射角度
 	float				m_timer = 0.0f;			//時間
 	float				m_maxTime = 5.0f;		//最大時間
+	Gage*				m_gage = nullptr;		//ゲージ
 };
 
