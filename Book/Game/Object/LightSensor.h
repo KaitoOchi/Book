@@ -1,6 +1,6 @@
 #pragma once
 #include "Object.h"
-
+class Gage;
 class LightSensor : public Object
 {
 public:
@@ -89,5 +89,6 @@ private:
 	float				m_angle = 25.0f;		//•úËŠp“x
 	float				m_timer = 0.0f;			//ŠÔ
 	float				m_maxTime = 5.0f;		//Å‘åŠÔ
+	Gage*				m_gage = nullptr;		//ƒQ[ƒW
 };
 

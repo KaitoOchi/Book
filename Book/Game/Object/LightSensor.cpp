@@ -2,6 +2,7 @@
 #include "LightSensor.h"
 
 #include "PlayerManagement.h"
+#include "Gage.h"
 
 
 LightSensor::LightSensor()
@@ -17,6 +18,7 @@ LightSensor::~LightSensor()
 bool LightSensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
+	m_gage = FindGO<Gage>("gage");
 	m_isActive = false;
 
 	//スポットライトを設定
@@ -48,22 +50,9 @@ void LightSensor::Update()
 	}
 
 	//当たり判定
-	switch (m_player->m_enMananagementState)
-	{
-	case PlayerManagement::m_enPlayer_3DChanging:
-		if (m_spotLight.IsHit(m_player->GetPlayer3D()->GetPosition())) {
-
-			int i = 0;
-		}
-		break;
-	case PlayerManagement::m_enPlayer_2DChanging:
-		if (m_spotLight.IsHit(m_player->GetPlayer2D()->GetPosition())) {
-
-			int i = 0;
-		}
-		break;
-	default:
-		break;
+	if (m_spotLight.IsHit(m_player->GetPosition())) {
+		m_gage->GageUp(2);
+		
 	}
 }
 

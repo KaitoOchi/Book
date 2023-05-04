@@ -5,7 +5,7 @@
 #include "GameUI.h"
 #include "Game.h"
 #include "GameManager.h"
-
+#include "Gage.h"
 #define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
 #define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
 
@@ -49,8 +49,6 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	//警戒度時間を代入
-	m_Vicount = VIGILANCETIME;
 
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
@@ -66,6 +64,7 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gameUI = FindGO<GameUI>("gameUI");
 	m_game = FindGO<Game>("game");
+	m_gage = FindGO<Gage>("gage");
 	// gameで設定したエネミーのリストを取得する
 	enemyList = m_game->GetEnemyList();
 
@@ -677,18 +676,9 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_spotLight.SetDirection(m_front);
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
-		VigilanceCount();
+		//ステートの遷移
+		m_gage->GageUp(1);
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
-}
-void Enemy::VigilanceCount()
-{
-	m_Vicount -= g_gameTime->GetFrameDeltaTime();
-	if (m_Vicount <= 0.0f)
-	{
-		//ステートの遷移
-		m_gameUI->Vigilance(1);
-		m_Vicount = VIGILANCETIME;
-	}
 }

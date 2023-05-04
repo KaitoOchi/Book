@@ -35,20 +35,27 @@ void PlayerManagement::PlayerChange()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1))
 	{
+		ChangeStart = false;
+	}
+	if (ChangeStart == false)
+	{
 		switch (m_enMananagementState)
 		{
 			//2Dの場合3Dを呼び出す
 		case PlayerManagement::m_enPlayer_2DChanging:
 			PlayerChange3D();
+			
 			break;
 			//3Dの場合2Dを呼び出す
 		case PlayerManagement::m_enPlayer_3DChanging:
 			PlayerChange2D();
+			
 			break;
 		default:
 			break;
 		}
 	}
+	
 }
 
 void PlayerManagement::SetChange(EnManagementState manaState)
@@ -98,4 +105,14 @@ void PlayerManagement::PlayerChange3D()
 		});
 	//プレイヤーを３Dにする
 	m_enMananagementState = m_enPlayer_3DChanging;
+}
+
+void PlayerManagement::PlayerStop()
+{
+	if (RestartState)
+	{
+
+	}
+
+		
 }

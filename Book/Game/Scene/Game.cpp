@@ -37,7 +37,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -402,6 +402,12 @@ void Game::LevelDesign()
 			m_physicsGhost->SetScale(objData.scale);
 			m_physicsGhost->SetRotation(objData.rotation);
 			return true;
+		}
+		if (objData.EqualObjectName(L"physics") == true) {
+			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
+			m_ghostBox->SetPosition(objData.position);
+			m_ghostBox->SetScale(objData.scale);
+			m_ghostBox->SetRotation(objData.rotation);
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
 

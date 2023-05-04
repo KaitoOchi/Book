@@ -7,6 +7,7 @@
 class PlayerManagement;
 class GameUI;
 class Game;
+class Gage;
 class Enemy :public IGameObject
 {
 public:
@@ -33,8 +34,7 @@ public:
 	bool Act_SeachPlayer();				// プレイヤーを発見する処理
 	bool Act_CatchPlayer();				// プレイヤーを確保する処理
 	void SpotLight_New(Vector3 position,int num);
-	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
-	void VigilanceCount();				//
+	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);			
 
 	enum EnemyType
 	{
@@ -236,6 +236,7 @@ protected:
 	PlayerManagement* m_playerManagement = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Game* m_game = nullptr;
+	Gage* m_gage = nullptr;
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー
@@ -267,9 +268,7 @@ protected:
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
 
-	float m_Vicount;						//警戒度を一定回数増やす
 
-	bool m_CountFlag = false;				// カウントするフラグ
 
 	int m_spotNum = 1;						// スポットライトの個数
 };

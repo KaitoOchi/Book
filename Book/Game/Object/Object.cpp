@@ -3,6 +3,7 @@
 #include "PlayerManagement.h"
 #include "Player3D.h"
 #include "Game.h"
+#include "Gage.h"
 Object::Object()
 {
 }
@@ -17,6 +18,7 @@ bool Object::Start()
 	m_player3d = FindGO<Player3D>("player3d");
 	m_player = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
+	m_gage = FindGO<Gage>("gage");
 	return true;
 }
 
@@ -33,22 +35,8 @@ void Object::Collision()
 	}
 
 	//“–‚½‚è”»’è
-	switch (m_player->m_enMananagementState)
-	{
-	case PlayerManagement::m_enPlayer_3DChanging:
-		if (m_collisionObject->IsHit(*m_player->GetPlayer3D()->GetCharacon())) {
+	if (m_collisionObject->IsHit(*m_player->GetCharacon())) {
 
-			Hit();
-		}
-		break;
-	case PlayerManagement::m_enPlayer_2DChanging:
-		if (m_collisionObject->IsHit(*m_player->GetPlayer2D()->GetCharacon())) {
-
-			Hit();
-		}
-		break;
-	default:
-		break;
+		Hit();
 	}
-	
 }
