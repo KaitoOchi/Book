@@ -59,7 +59,7 @@ bool Gage::Start()
 	}
 
 	//”­Œ©‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(0, "Assets/sound/game/find.wav");
+	g_soundEngine->ResistWaveFileBank(3, "Assets/sound/game/find.wav");
 
 	return true;
 }
@@ -86,7 +86,7 @@ void Gage::GageUp(int GageUp)
 {
 	//”­Œ©‰¹‚ğo‚·
 	SoundSource* se = NewGO<SoundSource>(0);
-	se->Init(0);
+	se->Init(3);
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 

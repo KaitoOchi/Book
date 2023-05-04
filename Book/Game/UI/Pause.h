@@ -1,5 +1,5 @@
 #pragma once
-
+#include "GameManager.h"
 class Game;
 
 class Pause : public IGameObject
@@ -44,6 +44,17 @@ private:
 	/// スプライトの変更処理。
 	/// </summary>
 	void SetSprite();
+
+	/// <summary>
+	/// SEを出す。
+	/// </summary>
+	void PlaySE(const int num)
+	{
+		SoundSource* se = NewGO<SoundSource>(0, "sound");
+		se->Init(num);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+	}
 
 private:
 	SpriteRender	m_backGroundSpriteRender;		//背景画像

@@ -13,6 +13,7 @@ Pause::Pause()
 
 Pause::~Pause()
 {
+
 }
 
 bool Pause::Start()
@@ -69,6 +70,9 @@ void Pause::PauseScreen()
 	if (g_pad[0]->IsTrigger(enButtonStart)) {
 		GameObjectManager::GetInstance()->SetStop(false);
 		m_pauseState = enState_FadeIn;
+
+		//キャンセル音を出す
+		PlaySE(0);
 	}
 
 	//Aボタンを押したら
@@ -88,18 +92,36 @@ void Pause::PauseScreen()
 			m_game->GameDelete(2);
 			break;
 		}
+
+		//決定音を出す
+		PlaySE(1);
 	}
 
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
 		m_cursor--;
+
+		int cursor = m_cursor;
+		m_cursor = min(max(m_cursor, 0), 2);
+
+		if (m_cursor == cursor) {
+			//選択音を出す
+			PlaySE(2);
+		}
 	}
 	//下ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonDown)) {
 		m_cursor++;
+
+		int cursor = m_cursor;
+		m_cursor = min(max(m_cursor, 0), 2);
+
+		if (m_cursor == cursor) {
+			//選択音を出す
+			PlaySE(2);
+		}
 	}
 
-	m_cursor = min(max(m_cursor, 0), 2);
 	m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * -235.0f), 0.0f));
 	m_cursorSpriteRender.Update();
 }

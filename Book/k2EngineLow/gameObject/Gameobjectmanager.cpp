@@ -47,6 +47,15 @@ namespace nsK2EngineLow {
 				}
 			}
 		}
+		else {
+			for (auto& goList : m_gameObjectListArray) {
+				for (auto& go : goList) {
+					if (go->IsMatchName("sound") == true) {
+						go->UpdateWrapper();
+					}
+				}
+			}
+		}
 
 		//物理エンジンのアップデートを呼び出す。
 		PhysicsWorld::GetInstance()->Update(1.0f / 60.0f);

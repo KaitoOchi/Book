@@ -71,6 +71,8 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
+
+	DeleteGO(FindGO<CountDown>("countDown"));
 }
 
 void Game::GameDelete(const int nextScene)
