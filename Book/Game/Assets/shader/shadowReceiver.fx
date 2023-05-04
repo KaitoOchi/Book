@@ -265,10 +265,10 @@ float4 PSMain(SPSIn In) : SV_Target0
 				+ limColor																							
 				+ hemiLight;
 	
-	if(lig.r > 50.0f && lig.g > 50.0f && lig.b > 50.0f){
-		lig.r = 50.0f;
-		lig.g = 50.0f;
-		lig.b = 50.0f;
+	if(lig.r > 30.0f && lig.g > 30.0f && lig.b > 30.0f){
+		lig.r = 30.0f;
+		lig.g = 30.0f;
+		lig.b = 30.0f;
 	}
 
 	//シャドウマップを求める

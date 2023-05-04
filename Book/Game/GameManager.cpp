@@ -15,7 +15,13 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(2, "Assets/sound/title/select.wav");
 
 	//タイトルBGMの設定
-	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/sound_test.wav");
+	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/bgm/bgm_title.wav");
+
+	//ゲームメインBGMの設定
+	g_soundEngine->ResistWaveFileBank(21, "Assets/sound/bgm/bgm_game_main.wav");
+
+	//リザルトBGMの設定
+	g_soundEngine->ResistWaveFileBank(23, "Assets/sound/bgm/bgm_result.wav");
 
 	//データのロード
 	DataLoad();
@@ -42,8 +48,9 @@ void GameManager::DeletingBGM()
 	if (m_timer < 0.0f) {
 		m_isDeleteBGM = false;
 		m_bgm->Stop();
+		m_timer = 0.0f;
 	}
 
-	m_timer -= g_gameTime->GetFrameDeltaTime();
+	m_timer -= g_gameTime->GetFrameDeltaTime() * 10.0f;
 	m_bgm->SetVolume(m_timer);
 }

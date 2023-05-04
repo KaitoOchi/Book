@@ -441,9 +441,6 @@ void Title::StartScreen()
 	else {
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
-
-		//BGM‚ðŽ~‚ß‚é
-		GameManager::GetInstance()->DeleteBGM();
 	}
 }
 
