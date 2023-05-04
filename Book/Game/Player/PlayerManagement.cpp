@@ -52,10 +52,14 @@ void PlayerManagement::Input()
 			//2D‚Ìê‡3D‚ðŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_2DChanging:
 			m_manageStateTmp = m_enPlayer_3DChanging;
+			m_player2D->m_Player_Act = false;
+			m_player3D->SetMoveSpeed(Vector3::Zero);
 			break;
 			//3D‚Ìê‡2D‚ðŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_3DChanging:
 			m_manageStateTmp = m_enPlayer_2DChanging;
+			m_player3D->m_Player_Act = false;
+			m_player3D->SetMoveSpeed(Vector3::Zero);
 			break;
 		}
 
