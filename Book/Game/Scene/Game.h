@@ -80,7 +80,6 @@ public:
 
 	//ライトの生成
 	PointLight m_pointLight[4];
-	SpotLight m_spotLight;
 	int lights = 0;
 	int m_lightNumber = 0;
 public:
@@ -158,5 +157,7 @@ private:
 
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
 	int						m_nextScene = 0;				//次に移行するシーン
+
+	int						m_spotLigNum = 0;				// エネミー用スポットライトの数
 };	
 

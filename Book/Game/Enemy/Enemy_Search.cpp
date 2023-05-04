@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Enemy_Search.h"
+
+#include "GameManager.h"
 namespace
 {
 	const float KEEPTIME = 2.0f;
@@ -22,7 +24,6 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
-	//Enemy::SpotLight_New(m_position, 4);
 
 	m_ActState = SEARCH;	// 行動パターンを設定。基本がCRAWのため。
 
@@ -31,6 +32,15 @@ bool Enemy_Search::Start()
 void Enemy_Search::Update()
 {
 	Enemy::SearchPass(SEARCH);
+
+	// 閃光弾に当たった
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// 音爆弾を使用した
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
 
 	switch (m_ActState) {
 	case SEARCH:
@@ -47,11 +57,9 @@ void Enemy_Search::Update()
 		break;
 	}
 
-	m_enemyRender.SetRotation(m_rot);
-
 	Enemy::SpotLight_Serch(m_rot, m_position);
-
 	// 更新
+	m_enemyRender.SetRotation(m_rot);
 	m_enemyRender.Update();
 }
 
@@ -59,11 +67,6 @@ void Enemy_Search::Update_OnSearch()
 {
 	// 索敵
 	Rotaition();
-
-	// 閃光弾が当たったとき
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
 
 	// 視野角内にプレイヤーが存在するとき
 	if (Enemy::Act_SeachPlayer() == true) {
@@ -75,11 +78,6 @@ void Enemy_Search::Update_OnCall()
 {
 	// 周りの敵を呼ぶ
 	Enemy::Act_Call();
-
-	// 閃光弾が当たったとき
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
 
 	// 視野角内にプレイヤーが存在しないとき
 	if (Enemy::Act_SeachPlayer() == false) {
@@ -104,7 +102,7 @@ void Enemy_Search::Update_OnConfusion()
 	Enemy::Act_HitFlashBullet();
 
 	// 硬直が解けているとき
-	if (m_HitFlashBulletFlag == false) {
+	if (Enemy::GetHitFlushBullet() == false) {
 		m_ActState = SEARCH;
 	}
 }
@@ -144,5 +142,4 @@ void Enemy_Search::Rotaition()
 void Enemy_Search::Render(RenderContext& rc)
 {
 	m_enemyRender.Draw(rc);
-	//m_fontRender.Draw(rc);
 }

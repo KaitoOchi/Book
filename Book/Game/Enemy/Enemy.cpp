@@ -2,10 +2,10 @@
 #include "Enemy.h"
 
 #include "PlayerManagement.h"
-#include "GameUI.h"
+#include "Gage.h"
 #include "Game.h"
 #include "GameManager.h"
-#include "Gage.h"
+
 #define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
 #define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
 
@@ -49,6 +49,8 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
+	//警戒度時間を代入
+	m_Vicount = VIGILANCETIME;
 
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
@@ -62,19 +64,19 @@ bool Enemy::Start()
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_game = FindGO<Game>("game");
 	m_gage = FindGO<Gage>("gage");
+	m_game = FindGO<Game>("game");
+
 	// gameで設定したエネミーのリストを取得する
 	enemyList = m_game->GetEnemyList();
 
 	// 各タイマーのリセット
-	for (int i = 0; i < 3; i++) {
-		// 0が閃光弾。1が巡回。2を突進用として用意
+	for (int i = 0; i < TIMER_NUM; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
 	// 視野を作成
-	Enemy::SpotLight_New(m_position, m_spotNum);
+	SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
 	m_foward = Vector3::AxisZ;
@@ -122,10 +124,10 @@ void Enemy::Nav(Vector3 pos)
 		AI_HIGH							// AIエージェントの高さ
 	);
 
-	// パス上を移動する
+	// パス上を走って移動する
 	m_position = m_path.Move(
 		m_position,						// 座標
-		MOVE_SPEED* ADD_SPEED,			// 移動速度
+		MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
 		isEnd							// 移動したときtrue
 	);
 
@@ -224,7 +226,6 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 	// 壁と衝突していない
 	// プレイヤーを見つけた
-	GameManager::GetInstance()->AddSearchNum();
 	return true;
 }
 
@@ -244,10 +245,55 @@ bool Enemy::Act_CatchPlayer()
 		m_fontRender.SetText(L"catch");
 		m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
 
+		for (int i = 0; i < enemyList.size(); i++) {
+			// 捕まえたのでフラグをtrueにする
+			enemyList[i]->m_ChachPlayerFlag = true;
+		}
+
 		return true;
 	}
 
 	return false;
+}
+
+void Enemy::Act_MissingPlayer()
+{
+	// プレイヤーを見失った時の処理
+
+	if (m_FindPlayerFlag == false) {
+		// 座標を参照
+		m_playerPos3 = m_playerManagement->GetPosition();
+		// 何度も参照しないようにする
+		m_FindPlayerFlag = true;
+	}
+
+	// ベクトルを作成
+	Vector3 moveSpeed = m_playerPos3 - m_position;
+
+	// 長さを計算
+	float length = moveSpeed.Length();
+
+	// 移動する
+	moveSpeed.Normalize();
+	//移動速度に加算
+	moveSpeed *= MOVE_SPEED;
+
+	// 座標が一定範囲内になるまで
+	if (length < 50.0f) {
+		m_position += moveSpeed;
+	}
+
+	// 回転を教える
+	Rotation(moveSpeed);
+
+	// 歩きモーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+
+	// モーションを再生
+	if (Act_Stop(3.0f, 4) == false) {
+		// きょろきょろするモーションを再生
+		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	}
 }
 
 void Enemy::Act_HitFlashBullet()
@@ -255,14 +301,19 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
+	// 当たったとき
 	if (m_HitFlashBulletFlag == true) {
+
 		// 被弾アニメーションを再生
 		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
+
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
 			m_HitFlashBulletFlag = false;		// フラグを降ろす
 			m_addTimer[0] = 0.0f;				// タイマーをリセット
 
+			// 見渡すアニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 		// そうでないとき
 		else {
@@ -270,6 +321,37 @@ void Enemy::Act_HitFlashBullet()
 			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
 		}
 	}
+}
+
+bool Enemy::Act_HitSoundBullet()
+{
+	// 音爆弾の処理
+	// trueのとき当たった
+
+	// 当たった(プレイヤーが使用した)とき
+	if (m_HitSoundBulletFlag == true) {
+
+		// エネミーからアイテムへ向かうベクトルを作成
+		Vector3 diff = m_itemPos - m_position;
+		float length = diff.Length();
+
+		// 一定範囲内より小さいとき
+		if (length < CALL_DISTANCE_MAX) {
+			// アイテムの座標を基にしてナビメッシュを作成
+			Nav(m_itemPos);
+			// 走るアニメーションを再生
+			m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+
+			// アイテムを使用した位置についたとき
+			if (length > 20.0f && length < 500.0f) {
+				// 見渡すアニメーションを再生
+				m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 void Enemy::Act_Craw()
@@ -360,15 +442,17 @@ void Enemy::Pass(int PassState)
 	case ANGLE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
 		break;
 		// (左に)直角
 	case ANGLE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
 		break;
 		// 右回り(長方形)
 	case RECTANGLE_RIGHT:
@@ -605,14 +689,19 @@ void Enemy::Act_Loss()
 	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = m_point->s_position - m_position;
-	// 正規化
-	moveSpeed.Normalize();
-	// 移動速度に乗算
-	moveSpeed *= MOVE_SPEED;
-	// 回転
-	Rotation(moveSpeed);
+	Nav(m_point->s_position);
+
+	//// エネミーからプレイヤーへ向かうベクトル
+	//Vector3 moveSpeed = m_point->s_position - m_position;
+	//// 正規化
+	//moveSpeed.Normalize();
+	//// 移動速度に乗算
+	//moveSpeed *= MOVE_SPEED;
+	//// 回転
+	//Rotation(moveSpeed);
+
+	// 歩くアニメーションを再生
+	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 
 	return;
 }
@@ -675,9 +764,33 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_spotLight.SetDirection(m_front);
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
-		//ステートの遷移
-		m_gage->GageUp(1);
+		VigilanceCount();
+
+		// カウントするフラグがfalseのとき
+		if (m_CountFlag == false) {
+			// 発見回数に1を加算
+			GameManager::GetInstance()->AddSearchNum();
+			// フラグをtrueにして再度行わないようにする
+			m_CountFlag = true;
+		}
+	}
+	else {
+		// プレイヤーを確保していないとき
+		if (m_ChachPlayerFlag == false) {
+			// プレイヤーが存在しないときはフラグを戻す
+			m_CountFlag = false;
+		}
 	}
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
+}
+void Enemy::VigilanceCount()
+{
+	m_Vicount -= g_gameTime->GetFrameDeltaTime();
+	if (m_Vicount <= 0.0f)
+	{
+		//ステートの遷移
+		m_gage->GageUp(1);
+		m_Vicount = VIGILANCETIME;
+	}
 }

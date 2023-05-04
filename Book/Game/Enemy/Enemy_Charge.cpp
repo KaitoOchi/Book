@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Enemy_Charge.h"
 
+#include "GameManager.h"
+
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
@@ -40,15 +42,21 @@ bool Enemy_Charge::Start()
 	// ƒpƒXˆÚ“®
 	m_point = &m_pointList[0];
 
-	//// ‹–ì‚ğì¬
-	//Enemy::SpotLight_New(m_position, 1);
-
 	return true;
 }
 
 void Enemy_Charge::Update()
 {
-	Enemy::SearchPass(CRAW);
+	//Enemy::SearchPass(CRAW);
+
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (Enemy::GetHitFlushBullet() == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ğg—p‚µ‚½
+	if (Enemy::GetHitSoundBullet() == true) {
+		m_ActState = LISTEN;
+	}
 
 	switch (m_ActState) {
 		// „‰ñ
@@ -67,9 +75,16 @@ void Enemy_Charge::Update()
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
 		break;
-		// ö—
+		// ‘MŒõ’e‚É“–‚½‚Á‚½
 	case CONFUSION:
 		Update_OnConfusion();
+		break;
+		// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
+	case LISTEN:
+		UpDate_OnListen();
+		// •ßŠl
+	case CATCH:
+		Update_OnCatch();
 		break;
 	}
 
@@ -99,23 +114,17 @@ void Enemy_Charge::Update_OnCraw()
 	if (Enemy::Act_SeachPlayer() == true) {
 		m_ActState = CHARGE;
 	}
-
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
 	// “Ëi
-
 	Enemy::Act_Charge(STOP_TIMER);		// “ËiUŒ‚
 										// ŠÖ”“à‚Å„‰ñó‘Ô‚É–ß‚éˆ—‚ğ‹Lq
 
-	// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
+	if (Enemy::Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
 	}
 }
 
@@ -138,14 +147,36 @@ void Enemy_Charge::Update_OnCalled()
 
 void Enemy_Charge::Update_OnConfusion()
 {
-	// ö—
+	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 
-	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
+	Enemy::Act_HitFlashBullet();
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-	if (m_HitFlashBulletFlag == false) {
+	if (Enemy::GetHitFlushBullet() == false) {
 		m_ActState = BACKBASEDON;
 	}
+}
+
+void Enemy_Charge::UpDate_OnListen()
+{
+	// ‰¹”š’e‚ğg‚Á‚½‚Æ‚«
+
+	// Œø‰Ê‚ªI—¹‚µ‚½‚Æ‚«
+	if (Enemy::Act_HitSoundBullet() == true) {
+		m_ActState = BACKBASEDON;
+	}
+	// Œø‰Ê‚ª–³Œø‚¾‚Á‚½‚Æ‚«
+	else {
+		m_ActState = CRAW;
+	}
+}
+
+void Enemy_Charge::Update_OnCatch()
+{
+
+	Enemy::Act_CatchPlayer();
+
+	m_ActState = CRAW;
 }
 
 void Enemy_Charge::Animation()
