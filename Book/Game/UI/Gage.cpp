@@ -8,7 +8,7 @@
 namespace
 {
 	const float		VIGILANCE_TIME_MAX = 2.0f;							//Œx‰ú’l‚ÌÅ‘åŽžŠÔ
-	const float		VIGILANCE_DOWN_TIME = 10.0f;						//Œx‰ú“x‚ªŽ©‘RŒ¸­‚·‚éŽžŠÔ
+	const float		VIGILANCE_DOWN_TIME = 5.0f;						//Œx‰ú“x‚ªŽ©‘RŒ¸­‚·‚éŽžŠÔ
 	const float		BASEYSIZE = 154.0f;									//basec‚Ì‘å‚«‚³
 	const float     BASEXSIZE = 553.0f;									//base‰¡‚Ì‘å‚«‚³
 	const float		VIGIRANCE_XSIZE = 66.0f;							//Œx‰ú“x‚Ìc‚Ì‘å‚«‚³
@@ -94,8 +94,11 @@ void Gage::GageUp(int GageUp)
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 
-	//BGM‚ð•ÏX
-	GameManager::GetInstance()->SetBGM(22);
+	if (!m_isFind) {
+		//BGM‚ð•ÏX
+		GameManager::GetInstance()->SetBGM(22);
+		m_isFind = true;
+	}
 
 	if (m_vigilanceGage < 11 && m_leverState != m_enLever_MAX) {
 		m_vigilanceGage += GageUp;
@@ -131,6 +134,12 @@ void Gage::GageDown()
 			if (m_vigilanceGage < 11)
 			{
 				m_vigilanceGage -= 1;
+
+				if (m_isFind) {
+					//BGM‚ð•ÏX
+					GameManager::GetInstance()->SetBGM(21);
+					m_isFind = false;
+				}
 			}
 			m_vigilaceDownTime = 2.0f;
 		}
