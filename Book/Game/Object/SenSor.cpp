@@ -9,23 +9,20 @@ namespace
 }
 
 
-Sensor::Sensor()
+SenSor::SenSor()
 {
 
 }
 
-Sensor::~Sensor()
+SenSor::~SenSor()
 {
 	DeleteGO(m_collisionObject);
 }
 
-bool Sensor::Start()
+bool SenSor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
-
-	m_position = Vector3(200.0f, 10.0f, 0.0f);
-	m_scale = Vector3(1.0f, 1.0f, 50.0f);
 
 	m_modelRender.Init("Assets/modelData/object/sensor/sensor.tkm");
 	m_modelRender.SetPosition(m_position);
@@ -41,18 +38,18 @@ bool Sensor::Start()
 	return true;
 }
 
-void Sensor::Update()
+void SenSor::Update()
 {
 	Collision();
 }
 
-void Sensor::Hit()
+void SenSor::Hit()
 {
 	//ƒvƒŒƒCƒ„[‚ÆÚG
 	m_gage->GageUp(GAGE);
 }
 
-void Sensor::Render(RenderContext& rc)
+void SenSor::Render(RenderContext& rc)
 {
 	if (m_isActive)
 		m_modelRender.Draw(rc);

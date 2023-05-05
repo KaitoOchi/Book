@@ -18,7 +18,6 @@ public:
 	void Update() override;
 
 public:
-	
 	/// <summary>
 	/// ステートを設定。
 	/// </summary>
@@ -59,6 +58,14 @@ public:
 		m_maxTime = time;
 	}
 
+	/// <summary>
+	/// スポットライトの番号を設定。
+	/// </summary>
+	void SetLightNumber(const int num)
+	{
+		m_number = num;
+	}
+
 private:
 	/// <summary>
 	/// タイムの計測処理。
@@ -86,6 +93,7 @@ private:
 	Vector3				m_direction;			//方向
 	Vector3				m_moveSpeed;			//移動速度
 	bool				m_isTimeOver = false;	//タイムを超えたか
+	int					m_number = 0;			//番号
 	float				m_angle = 25.0f;		//放射角度
 	float				m_timer = 0.0f;			//時間
 	float				m_maxTime = 5.0f;		//最大時間

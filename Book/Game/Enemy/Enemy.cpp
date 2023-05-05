@@ -11,8 +11,8 @@
 
 namespace
 {
-	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 1.3f;						// 乗算速度
+	const float		MOVE_SPEED = 5.0f;						// 移動速度
+	const float		ADD_SPEED = 2.0f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
@@ -27,10 +27,10 @@ namespace
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
 
-	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
+	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(50.0f, 0.0f, 0.0f);		//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);		//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
@@ -132,7 +132,7 @@ void Enemy::Nav(Vector3 pos)
 	);
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = m_playerPos - m_position;
+	Vector3 moveSpeed = pos - m_position;
 
 	// 回転を教える
 	float angle = atan2(-moveSpeed.x, moveSpeed.z);
@@ -158,8 +158,8 @@ bool Enemy::Act_SeachPlayer()
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 
-	// ベクトルが一定の長さ以下のとき
-	if (diff.LengthSq() <= SEACH_DECISION) {
+	// スポットライトの中にプレイヤーがいるとき
+	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		// 正規化
 		diff.Normalize();
 		// 内積を計算
