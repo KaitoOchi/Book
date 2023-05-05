@@ -8,9 +8,6 @@
 #include "graphics/light/HemiSphereLight.h"
 #include "graphics/postEffect/Bloom.h"
 
-#define MAX_POINT_LIGHT 4;
-#define MAX_SPOT_LIGHT 4;
-
 namespace nsBookEngine {
 
 	class RenderingEngine
@@ -29,7 +26,7 @@ namespace nsBookEngine {
 		{
 			DirectionLight::directionLight directionLig;
 			PointLight::pointLight pointLig[4];
-			SpotLight::spotLight spotLig[20];
+			SpotLight::spotLight spotLig[24];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;
 			int ptNum;											//ポイントライトの数

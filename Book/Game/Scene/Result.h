@@ -67,10 +67,10 @@ private:
 		}
 		else if (m_canInputTime < 0.5f && m_canInputTime > 0.4f) {
 			//ドラムロール音を出す
-			SoundSource* se = NewGO<SoundSource>(0);
-			se->Init(4);
-			se->Play(false);
-			se->SetVolume(GameManager::GetInstance()->GetSFX());
+			m_sound = NewGO<SoundSource>(0);
+			m_sound->Init(4);
+			m_sound->Play(false);
+			m_sound->SetVolume(GameManager::GetInstance()->GetSFX());
 			m_canInputTime = 0.3f;
 			return false;
 		}
@@ -103,6 +103,7 @@ private:
 	ResultState		m_resultState = enState_GameOver;		//リザルトステート
 
 	Fade*			m_fade = nullptr;						//フェードクラス
+	SoundSource*	m_sound = nullptr;						//サウンドクラス
 
 	Vector3			m_fontPosition[4];						//文字を出す座標
 

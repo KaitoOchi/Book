@@ -94,7 +94,12 @@ public:
 	/// <param name="num">–Â‚ç‚µ‚½‚¢‰¹‚Ì”Ô†</param>
 	void SetBGM(const int num)
 	{
-		m_bgm = NewGO<SoundSource>(0);
+		if (m_bgm != nullptr) {
+			m_bgm->Stop();
+		}
+		else {
+			m_bgm = NewGO<SoundSource>(0);
+		}
 		m_bgm->Init(num);
 		m_bgm->SetVolume(m_saveData.bgm);
 		m_bgm->Play(true);

@@ -71,16 +71,16 @@ float4 PSBloomFinal(PSInput In) : SV_Target0
 	combineColor0 += combineColor2;
 	combineColor0 += combineColor3;
 
-	combineColor0 /= 10.0f;
-	combineColor0.a = 1.0f;
+	combineColor0 /= 50.0f;
+	//combineColor0.a = 1.0f;
 	return combineColor0;
 }
 
 float4 SetColor(float4 color)
 {
-	color /= 10.0f;
+	color /= 50.0f;
 
-	if(color.r >= 1.0f && color.g >= 1.0f && color.b >= 1.0f){
+	if(color.r > 1.0f && color.g > 1.0f && color.b > 1.0f){
 	color.r = 1.0f;
 	color.g = 1.0f;
 	color.b = 1.0f;

@@ -22,7 +22,7 @@ Sensor::~Sensor()
 bool Sensor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
-	m_gage= FindGO<Gage>("gage");
+	m_gage = FindGO<Gage>("gage");
 
 	m_position = Vector3(200.0f, 10.0f, 0.0f);
 	m_scale = Vector3(1.0f, 1.0f, 50.0f);
@@ -49,7 +49,7 @@ void Sensor::Update()
 void Sensor::Hit()
 {
 	//ƒvƒŒƒCƒ„[‚ÆÚG
-	//m_gage->GageUp(GAGE);
+	m_gage->GageUp(GAGE);
 }
 
 void Sensor::Render(RenderContext& rc)
