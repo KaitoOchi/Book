@@ -23,7 +23,7 @@ bool LightSensor::Start()
 
 	//スポットライトを設定
 	m_spotLight.SetSpotLight(
-		m_number,
+		0,
 		m_position,
 		Vector3(10.0f, 0.0f, 0.0f),
 		500.0f,
@@ -89,15 +89,14 @@ void LightSensor::Rotate()
 {
 	//Y軸周りの回転
 	Quaternion qRotY;
-	qRotY.SetRotationY(m_timer * 0.001f);
+	qRotY.SetRotationY(m_timer * 0.005f);
 	qRotY.Apply(m_spotLight.GetDirection());
 
 	//外積を求める
 	Vector3 rotAxis;
 	rotAxis.Cross(g_vec3AxisY, m_spotLight.GetDirection());
 
-	Quaternion qRot;
-	qRot.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
+	m_rotation.SetRotation({ 0.0f, 0.0f, -1.0f }, m_spotLight.GetDirection());
 
 	m_spotLight.Update();
 }
