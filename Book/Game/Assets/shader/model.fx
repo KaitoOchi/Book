@@ -57,7 +57,7 @@ cbuffer LightCb : register(b1) {
 	PointLig ptLig[4];
 
 	//スポットライト用の定数バッファ
-	SpotLig spLig[20];
+	SpotLig spLig[24];
 		
 	//半球ライト用の定数バッファ
 	HemiLig hemiLig;
