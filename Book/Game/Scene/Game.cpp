@@ -117,7 +117,7 @@ bool Game::Start()
 	NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
 
-	NewGO<SecurityCamera>(0, "securityCamera");
+	//NewGO<SecurityCamera>(0, "securityCamera");
 
 	NewGO<Pause>(0, "pause");
 

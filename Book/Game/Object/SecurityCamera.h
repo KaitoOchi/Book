@@ -48,7 +48,7 @@ public:
 	/// </summary>
 	void SetNumber(const int num)
 	{
-		m_lightSensor->SetLightNumber(num);
+		//m_lightSensor->SetLightNumber(num);
 	}
 
 private:
