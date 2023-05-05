@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -53,7 +53,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<Sensor>("sensor"));
+	DeleteGO(FindGO<SenSor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -72,6 +72,7 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
+	DeleteGO(m_treaSure);
 
 	DeleteGO(FindGO<CountDown>("countDown"));
 
@@ -109,7 +110,6 @@ bool Game::Start()
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
-	NewGO<Sensor>(0, "sensor");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
@@ -193,38 +193,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
-	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
-		// �E��E��E�O�E��E�unityChan�E�Ȃ�
-
-		//if (objData.ForwardMatchName(L"FootmanHP") == true) {
-		//	//m_mirror = NewGO<Mirror>(0, "mirror");
-
-		//	// エネミーを生成
-		//	m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
-		//	// 自身の属性を教える
-		//	m_enemyNormal->m_enemyType = Enemy::Normal;
-		//	// 座標・回転・スケールを教える
-		//	m_enemyNormal->SetPosition(objData.position);
-		//	m_enemyNormal->SetRotation(objData.rotation);
-		//	m_enemyNormal->SetScale(objData.scale);
-		//	// パス移動の順路を指定
-		//	m_enemyNormal->Pass(0);
-		//	// エネミーのリストに追加する
-		//	m_enemyList.push_back(m_enemyNormal);
-
-		//	m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
-		//	m_enemyClear->SetPosition(objData.position);
-		//	m_enemyClear->SetRotation(objData.rotation);
-		//	m_enemyClear->SetScale(objData.scale);
-		//	// Enemy�̃��X�g�ɒǉ�
-		//	m_enemyList.push_back(m_enemyClear);
-
-		//	// �p�X�ړ��̎w��
-		//	m_enemyClear->Pass(7);
-
-		//	return true;
-		//}
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level.tkl", [&](LevelObjectData& objData){
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
@@ -298,7 +267,7 @@ void Game::LevelDesign()
 			m_enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyClear->Pass(6);
+			m_enemyClear->Pass(3);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyClear);
 			return true;
@@ -318,17 +287,6 @@ void Game::LevelDesign()
 				return true;
 			}
 
-			//// 名前がwallなら
-			//if (objData.EqualObjectName(L"wall") == true) {
-			//	// 壁を生成
-			//	m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
-			//	m_normal->SetPosition(objData.position);
-			//	m_normal->SetRotation(objData.rotation);
-			//	m_normal->SetScale(objData.scale);
-			//	m_wallList.emplace_back(m_normal);
-			//	return true;
-			//}
-
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
 				// 壁を生成
@@ -344,6 +302,31 @@ void Game::LevelDesign()
 			if (objData.EqualObjectName(L"gap_1") == true) {
 				// 隙間を生成する
 				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->ModelLoad(1);
+				m_gap->SetPosition(objData.position);
+				m_gap->SetRotation(objData.rotation);
+				m_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(m_gap);
+				return true;
+			}
+
+			// 名前がgapのとき
+			if (objData.EqualObjectName(L"gap_2") == true) {
+				// 隙間を生成する
+				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->ModelLoad(2);
+				m_gap->SetPosition(objData.position);
+				m_gap->SetRotation(objData.rotation);
+				m_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(m_gap);
+				return true;
+			}
+
+			// 名前がgapのとき
+			if (objData.EqualObjectName(L"gap_3") == true) {
+				// 隙間を生成する
+				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->ModelLoad(3);
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
@@ -409,8 +392,25 @@ void Game::LevelDesign()
 		//	return true;
 		//}
 
-		if (objData.EqualObjectName(L"push") == true) {
+		if (objData.EqualObjectName(L"sensor")==true) {
+			m_senSor = NewGO<SenSor>(0, "sensor");
+			m_senSor->SetPosition(objData.position);
+			m_senSor->SetScale(objData.scale);
+			m_senSor->SetRotation(objData.rotation);
 
+			return true;
+		}
+
+		if (objData.EqualObjectName(L"camera") == true) {
+			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
+			m_securityCamera->SetPosition(objData.position);
+			m_securityCamera->SetType(0);
+
+			return true;
+		}
+
+		//if (objData.EqualObjectName(L"debugtoumei") == true) {
+		if (objData.EqualObjectName(L"push") == true) {
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
