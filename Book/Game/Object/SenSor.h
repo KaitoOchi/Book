@@ -3,11 +3,11 @@
 
 class Gage;
 
-class SenSor : public Object
+class Sensor : public Object
 {
 public:
-	SenSor();
-	~SenSor()override;
+	Sensor();
+	~Sensor()override;
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& rc);
