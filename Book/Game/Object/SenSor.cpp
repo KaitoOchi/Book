@@ -24,9 +24,6 @@ bool Sensor::Start()
 	m_player = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 
-	m_position = Vector3(200.0f, 10.0f, 0.0f);
-	m_scale = Vector3(1.0f, 1.0f, 50.0f);
-
 	m_modelRender.Init("Assets/modelData/object/sensor/sensor.tkm");
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.SetRotation(m_rotation);
