@@ -16,18 +16,14 @@ SecurityCamera::~SecurityCamera()
 
 bool SecurityCamera::Start()
 {
-	m_position = { 100.0f, 100.0f, 0.0f };
-	SetType(0);
-
-
-	//�Ď��J�����̐ݒ�
+	//モデルの設定
 	m_modelRender.Init("Assets/modelData/object/SecurityCamera/camera_arm.tkm");
 	m_modelRender.SetPosition(m_position);
 	m_cameraModelRender.Init("Assets/modelData/object/SecurityCamera/camera_body.tkm");
 	m_cameraModelRender.SetPosition(m_position);
 	m_cameraModelRender.Update();
 
-	//���C�g�Z���T�[�̐ݒ�
+	//ライトセンサーの設定
 	m_lightSensor = NewGO<LightSensor>(0, "lightSensor");
 	m_lightSensor->SetState(LightSensor::enState_Rotate);
 	m_lightSensor->SetLightNumber(m_lightNumber);
@@ -49,7 +45,7 @@ bool SecurityCamera::Start()
 
 void SecurityCamera::Update()
 {
-	//�J�������]������
+	//カメラを回転させる
 	Quaternion rot;
 	rot = m_lightSensor->GetRotation();
 
