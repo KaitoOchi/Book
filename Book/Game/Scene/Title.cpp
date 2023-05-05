@@ -149,7 +149,7 @@ void Title::InitSprite()
 	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
 
 	for (int i = 0; i < 2; i++) {
-		m_buttonSpriteRender[i].SetPosition(Vector3(-725.0f, -425.0f, 0.0f));
+		m_buttonSpriteRender[i].SetPosition(Vector3(-725.0f, -375.0f - (i * 50.0f), 0.0f));
 		m_buttonSpriteRender[i].SetScale(Vector3(0.75f, 0.75f, 0.0f));
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
@@ -166,7 +166,7 @@ void Title::Update()
 		//ステートの遷移中の処理。
 		StateChange();
 
-		m_playerModelRender.SetAnimationSpeed(0.7);
+		m_playerModelRender.SetAnimationSpeed(0.9);
 		m_playerModelRender.PlayAnimation(animationClip_Put, 0.5f);
 		m_playerModelRender.Update();
 		return;
@@ -234,6 +234,7 @@ void Title::Input()
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
+		//タイトルとメニュー画面なら
 		if (m_titleState_tmp <= 1) {
 
 			m_titleState_tmp = m_cursor_vertical + 1;
@@ -245,6 +246,19 @@ void Title::Input()
 
 			IsCanPlaySound(true);
 		}
+		//説明画面なら
+		else if (m_titleState_tmp == 3) {
+
+			if (m_cursor_horizontal != 0) {
+				m_titleState_tmp = 1;
+				m_cursor_vertical = 1;
+				m_isWaitState = true;
+			}
+			else {
+				m_cursor_horizontal++;
+			}
+			IsCanPlaySound(true);
+		}
 	}
 	//Bボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonB))
@@ -253,8 +267,20 @@ void Title::Input()
 			return;
 		}
 
+		//説明画面なら
+		if (m_titleState_tmp == 3) {
+
+			if (m_cursor_horizontal == 1) {
+				m_cursor_horizontal = 0;
+			}
+			else {
+				m_titleState_tmp = 1;
+				m_cursor_vertical = 1;
+				m_isWaitState = true;
+			}
+		}
 		//メニュー画面以降なら
-		if (m_titleState_tmp >= 2) {
+		else if (m_titleState_tmp >= 2) {
 			m_titleState_tmp = 1;
 			m_cursor_vertical = 1;
 			m_isWaitState = true;
@@ -441,9 +467,6 @@ void Title::StartScreen()
 	else {
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
-
-		//BGMを止める
-		GameManager::GetInstance()->DeleteBGM();
 	}
 }
 
@@ -503,7 +526,8 @@ void Title::Render(RenderContext &rc)
 	//操作方法画面なら
 	case 3:
 		m_guideBackSpriteRender.Draw(rc);
-		m_guideSpriteRender[1].Draw(rc);
+		m_guideSpriteRender[m_cursor_horizontal].Draw(rc);
+		m_buttonSpriteRender[0].Draw(rc);
 		m_buttonSpriteRender[1].Draw(rc);
 		break;
 

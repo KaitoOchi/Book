@@ -75,6 +75,8 @@ Game::~Game()
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
 
+	DeleteGO(FindGO<CountDown>("countDown"));
+
 	// ライトの数を0に
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
 	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
@@ -85,6 +87,7 @@ void Game::GameDelete(const int nextScene)
 	m_nextScene = nextScene;
 	m_isWaitFadeOut = true;	
 	m_fade->StartFadeOut();
+	GameManager::GetInstance()->DeleteBGM();
 }
 	
 void Game::GamePos()
@@ -180,13 +183,15 @@ bool Game::Start()
 
 
 	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
+
+	GameManager::GetInstance()->SetBGM(21);
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test01.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -221,7 +226,7 @@ void Game::LevelDesign()
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
-			// エネミーを生成
+			 //エネミーを生成
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
 			m_enemyNormal->m_enemyType = Enemy::Normal;
@@ -291,7 +296,7 @@ void Game::LevelDesign()
 			m_enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyClear->Pass(4);
+			m_enemyClear->Pass(6);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyClear);
 			return true;
@@ -310,6 +315,17 @@ void Game::LevelDesign()
 
 				return true;
 			}
+
+			//// 名前がwallなら
+			//if (objData.EqualObjectName(L"wall") == true) {
+			//	// 壁を生成
+			//	m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+			//	m_normal->SetPosition(objData.position);
+			//	m_normal->SetRotation(objData.rotation);
+			//	m_normal->SetScale(objData.scale);
+			//	m_wallList.emplace_back(m_normal);
+			//	return true;
+			//}
 
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
@@ -456,6 +472,7 @@ void Game::Update()
 			}
 			DeleteGO(FindGO<Pause>("pause"));
 			DeleteGO(this);
+			GameManager::GetInstance()->DeleteBGM();
 		}
 	}
 	
