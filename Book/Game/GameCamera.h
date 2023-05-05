@@ -12,13 +12,20 @@ public:
 	{
 		m_target = m_pos;
 	}
+
+public:
+	void SetCameraPositio(const Vector3& camerapos)
+	{
+		m_cameraposition = camerapos;
+	}
+
 private:
 	Vector3 m_toCameraPos = Vector3::Zero;//注視点から視点に向かうベクトル
 	Vector3 m_toCameraPosOld = Vector3::Zero;//注視点から視点に向かうベクトル変更前座標
 	Vector3 m_target=Vector3::Zero;//注視点
 	Quaternion qRot;//Y軸周りの回転
 	Vector3 axisX;//X軸周りの回転
-
+	Vector3 m_cameraposition;
 	PlayerManagement* m_playerManagement = nullptr;
 };
 

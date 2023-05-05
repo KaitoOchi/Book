@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
+#include "Player2D.h"
 #include "Game.h"
 namespace
 {
@@ -123,6 +124,7 @@ void GameUI::ChangeGage()
 	}
 	else if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
+		
 		m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
 	}
 	if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {

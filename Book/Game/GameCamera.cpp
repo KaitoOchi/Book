@@ -44,8 +44,9 @@ void GameCamera::Update()
 }
 void GameCamera::UpdatePositionAndTarget()
 {
-	if (m_playerManagement->IsDead())
+	if (m_playerManagement->IsDead()||m_playerManagement->m_enMananagementState==PlayerManagement::m_enPlayer_Changing)
 	{
+		SetPosition({m_cameraposition.x,m_cameraposition.y + 100.0f,m_cameraposition.z });
 		return;
 	}
 	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});

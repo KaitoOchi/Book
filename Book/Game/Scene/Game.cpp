@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -67,10 +67,8 @@ Game::~Game()
 	//�E�A�E�C�E�e�E��E�
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
-	if (m_gameState != m_enGameState_GameFade)
-	{
-		DeleteGO(m_treaSure);
-	}
+	DeleteGO(m_treaSure);
+	
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
@@ -154,6 +152,8 @@ bool Game::Start()
 
 
 	LevelDesign();
+	//お宝を作成する
+	m_treaSure = NewGO<Treasure>(0, "treaSure");
 
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
@@ -334,7 +334,7 @@ void Game::LevelDesign()
 			}
 
 			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap") == true) {
+			if (objData.EqualObjectName(L"gap_1") == true) {
 				// 隙間を生成する
 				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
 				m_gap->SetPosition(objData.position);
@@ -402,20 +402,18 @@ void Game::LevelDesign()
 		//	return true;
 		//}
 
-		if (objData.EqualObjectName(L"debugtoumei") == true) {
+		if (objData.EqualObjectName(L"push") == true) {
 
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"otakara") == true) {
 
-			m_treaSure = NewGO<Treasure>(0, "treaSure");
-			m_treaSure->SetPosition(objData.position);
-			m_treaSure->SetScale(objData.scale);
-			m_treaSure->SetRotation(objData.rotation);
+			m_treasurePositions.push_back(objData.position);
+			
 			return true;
 		}
-		if (objData.EqualObjectName(L"gost") == true) {
+		if (objData.EqualObjectName(L"ghost") == true) {
 
 			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
 			m_physicsGhost->SetPosition(objData.position);
@@ -459,6 +457,7 @@ void Game::Update()
 			if (m_gameState != m_enGameState_GameFade)
 			{
 				GamePos();
+				
 			}
 			else
 			{
