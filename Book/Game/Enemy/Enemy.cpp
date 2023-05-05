@@ -158,8 +158,8 @@ bool Enemy::Act_SeachPlayer()
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
 
-	// ベクトルが一定の長さ以下のとき
-	if (diff.LengthSq() <= SEACH_DECISION) {
+	// スポットライトの中にプレイヤーがいるとき
+	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		// 正規化
 		diff.Normalize();
 		// 内積を計算
