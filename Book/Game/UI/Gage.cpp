@@ -59,9 +59,6 @@ bool Gage::Start()
 		m_LeverUPRender[i].Update();
 	}
 
-	//”­Œ©Žž‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(3, "Assets/sound/game/find.wav");
-
 	return true;
 }
 

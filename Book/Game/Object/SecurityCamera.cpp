@@ -17,7 +17,7 @@ SecurityCamera::~SecurityCamera()
 bool SecurityCamera::Start()
 {
 	m_position = { -145.0f, 100.0f, 45.0f };
-	SetType(0);
+	SetType(2);
 
 	//ŠÄ‹ƒJƒƒ‰‚Ìİ’è
 	m_modelRender.Init("Assets/modelData/object/SecurityCamera/camera_arm.tkm");

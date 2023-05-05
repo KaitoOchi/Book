@@ -76,10 +76,6 @@ bool Player3D::Start()
 
 	m_playerManagement->SetCharacon(m_characon);
 
-
-	//‘«‰¹
-	g_soundEngine->ResistWaveFileBank(4, "Assets/sound/game/step.wav");
-
 	return true;
 }
 
@@ -220,12 +216,24 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 		default:
 			break;
 		}
+
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(8);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		se->Play(false);
 		
 	}
 	else if (wcscmp(eventName, L"Step") == 0)
 	{
 		SoundSource* se = NewGO<SoundSource>(0);
-		se->Init(4);
+		se->Init(6);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		se->Play(false);
+	}
+	else if (wcscmp(eventName, L"Jump_end") == 0)
+	{
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(7);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 		se->Play(false);
 	}
