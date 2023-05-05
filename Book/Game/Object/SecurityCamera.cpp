@@ -45,6 +45,11 @@ bool SecurityCamera::Start()
 	return true;
 }
 
+void SecurityCamera::SetNumber(const int num)
+{
+	m_lightSensor->SetLightNumber(num);
+}
+
 void SecurityCamera::Update()
 {
 	//ƒJƒƒ‰‚ğ‰ñ“]‚³‚¹‚é
