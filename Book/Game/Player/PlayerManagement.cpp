@@ -4,7 +4,7 @@
 #include "Player3D.h"
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
-
+#include"GameCamera.h"
 namespace
 {
 	const float CHANGE_TIME = 2.0f;
@@ -24,6 +24,7 @@ bool PlayerManagement::Start()
 	m_physicsghost = FindGO<PhysicsGhost>("physicsGhost");
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
+	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	return true;
 }
 void PlayerManagement::Update()
@@ -52,12 +53,15 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
+			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
+			
 			break;
 			//3D‚Ìê‡2D‚ðŒÄ‚Ño‚·
 		case PlayerManagement::m_enPlayer_3DChanging:
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
+			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
 			break;
 		}
 
@@ -67,6 +71,10 @@ void PlayerManagement::Input()
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
+	m_player3D->m_Player_Act = false;
+	m_player3D->SetMoveSpeed(Vector3::Zero);
+	m_player2D->m_Player_Act = false;
+	m_player2D->SetMoveSpeed(Vector3::Zero);
 	m_manageStateTmp = manaState;
 	m_enMananagementState = m_enPlayer_Changing;
 }
