@@ -43,6 +43,14 @@ public:
 		m_type = type;
 	}
 
+	/// <summary>
+	/// ”Ô†‚ğİ’èB
+	/// </summary>
+	void SetNumber(const int num)
+	{
+		m_lightSensor->SetLightNumber(num);
+	}
+
 private:
 	void Hit() override
 	{
