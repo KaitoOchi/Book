@@ -78,6 +78,13 @@ public:
 	//クリア座標の取得
 	std::vector<Vector3>m_clearList;
 
+
+	std::vector<Vector3> GetTreasurePositionList()
+	{
+		return m_treasurePositions;
+	}
+
+
 	//ライトの生成
 	PointLight m_pointLight[4];
 	int lights = 0;
@@ -135,6 +142,8 @@ private:
 	std::vector<Star*>m_starList;
 
 	std::vector<Wall*>m_wallList;
+
+	std::vector<Vector3>m_treasurePositions;
 
 	PlayerManagement* m_playerManagement = nullptr;
 
