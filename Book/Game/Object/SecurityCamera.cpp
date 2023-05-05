@@ -20,14 +20,14 @@ bool SecurityCamera::Start()
 	SetType(0);
 
 
-	//ŠÄ‹ƒJƒƒ‰‚Ìİ’è
+	//ï¿½Äï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
 	m_modelRender.Init("Assets/modelData/object/SecurityCamera/camera_arm.tkm");
 	m_modelRender.SetPosition(m_position);
 	m_cameraModelRender.Init("Assets/modelData/object/SecurityCamera/camera_body.tkm");
 	m_cameraModelRender.SetPosition(m_position);
 	m_cameraModelRender.Update();
 
-	//ƒ‰ƒCƒgƒZƒ“ƒT[‚Ìİ’è
+	//ï¿½ï¿½ï¿½Cï¿½gï¿½Zï¿½ï¿½ï¿½Tï¿½[ï¿½Ìİ’ï¿½
 	m_lightSensor = NewGO<LightSensor>(0, "lightSensor");
 	m_lightSensor->SetState(LightSensor::enState_Rotate);
 	m_lightSensor->SetLightNumber(m_lightNumber);
@@ -49,7 +49,7 @@ bool SecurityCamera::Start()
 
 void SecurityCamera::Update()
 {
-	//ƒJƒƒ‰‚ğ‰ñ“]‚³‚¹‚é
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	Quaternion rot;
 	rot = m_lightSensor->GetRotation();
 

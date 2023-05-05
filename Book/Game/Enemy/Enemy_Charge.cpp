@@ -6,7 +6,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
-	const float		STOP_TIMER = 3.0f;				// 溜め時間
+	const float		STOP_TIMER = 1.5f;				// 溜め時間
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -47,8 +47,6 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
-	//Enemy::SearchPass(CRAW);
-
 	// 閃光弾に当たった
 	if (Enemy::GetHitFlushBullet() == true) {
 		m_ActState = CONFUSION;
@@ -82,6 +80,7 @@ void Enemy_Charge::Update()
 		// 音爆弾を使用したとき
 	case LISTEN:
 		UpDate_OnListen();
+		break;
 		// 捕獲
 	case CATCH:
 		Update_OnCatch();
