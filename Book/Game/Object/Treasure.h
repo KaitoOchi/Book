@@ -10,6 +10,12 @@ public:
 	void Render(RenderContext& rc);
 	void Hit()override;
 	float m_gagecount=0;
-private:
 
+	
+
+private:
+	
+	int m_treasures = 0;
+	int m_randTreasure = 0;
+	
 };

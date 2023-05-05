@@ -11,7 +11,7 @@ Ghost::~Ghost()
 bool Ghost::Start()
 {
 	//ƒ‚ƒfƒ‹‚ğ“Ç‚İ‚İƒ‚ƒfƒ‹‚Ì‘å‚«‚³‚ğ‹‚ß‚é
-	m_modelRender.Init("Assets/modelData/level/box.tkm");
+	m_modelRender.Init("Assets/modelData/level_test/tkm/box.tkm");
 	m_modelRender.Update();
 	CreateGhostBox();
 	return true;

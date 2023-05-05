@@ -2,6 +2,7 @@
 
 class PlayerManagement;
 class Game;
+class Player2D;
 class GameUI : public IGameObject	
 {
 public:
@@ -40,6 +41,7 @@ private:
 	FontRender			m_timeFontRender;				//タイム文字
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
+	Player2D*			m_player2D;						
 	int					m_vigilanceGage = 1;			//警戒度
 	int					m_Gitgage = 0;
 	float				m_timer = 0.0f;					//タイマー
