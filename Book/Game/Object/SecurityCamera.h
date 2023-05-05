@@ -48,7 +48,7 @@ public:
 	/// </summary>
 	void SetNumber(const int num)
 	{
-		m_lightSensor->SetLightNumber(num);
+		m_lightNumber = num;
 	}
 
 private:
@@ -60,5 +60,6 @@ private:
 private:
 	ModelRender		m_cameraModelRender;
 	LightSensor*	m_lightSensor = nullptr;
+	int				m_lightNumber = 0;
 	int				m_type = 0;
 };

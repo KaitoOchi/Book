@@ -28,7 +28,7 @@ class GameUI;
 class Pause;
 class GhostBox;
 class PhysicsGhost;
-class SenSor;
+class Sensor;
 class SecurityCamera;
 class Game : public IGameObject
 {
@@ -160,7 +160,7 @@ private:
 	Ghost* m_ghost = nullptr;
 	PhysicsGhost* m_physicsGhost = nullptr;
 	GhostBox* m_ghostBox = nullptr;
-	SenSor* m_senSor = nullptr;
+	Sensor* m_sensor = nullptr;
 	SecurityCamera* m_securityCamera = nullptr;
 
 

@@ -6,7 +6,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Title.h"
-#include "SenSor.h"
+#include "Sensor.h"
 #include "MiniMap.h"
 #include "Enemy.h"
 #include "Enemy_Normal.h"
@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -53,7 +53,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<SenSor>("sensor"));
+	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -393,10 +393,10 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_senSor = NewGO<SenSor>(0, "sensor");
-			m_senSor->SetPosition(objData.position);
-			m_senSor->SetScale(objData.scale);
-			m_senSor->SetRotation(objData.rotation);
+			m_sensor = NewGO<Sensor>(0, "sensor");
+			m_sensor->SetPosition(objData.position);
+			m_sensor->SetScale(objData.scale);
+			m_sensor->SetRotation(objData.rotation);
 
 			return true;
 		}
