@@ -375,6 +375,8 @@ void Title::ValueUpdate(bool vertical)
 			//•Û‘¶‚·‚é
 			SetSaveData();
 			GameManager::GetInstance()->SetVolume();
+
+			Sound(2);
 		}
 	}
 }
@@ -467,6 +469,9 @@ void Title::StartScreen()
 	else {
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
+
+		//BGM‚ðíœ‚·‚é
+		GameManager::GetInstance()->DeleteBGM();
 	}
 }
 

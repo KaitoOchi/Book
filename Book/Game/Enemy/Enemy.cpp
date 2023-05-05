@@ -27,7 +27,7 @@ namespace
 	const float		SCALESIZE = 1.3f;						// SetScaleのサイズ
 	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
 
-	const float     VIGILANCETIME = 1.0f;					//警戒度UP時間
+	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);		//���C�g�̃J���[

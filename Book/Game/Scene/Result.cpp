@@ -18,11 +18,6 @@ namespace
 
 Result::Result()
 {
-	//ƒhƒ‰ƒ€ƒ[ƒ‹‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(4, "Assets/sound/result/dramroll.wav");
-
-	//‘¾ŒÛ‚Ì‰¹
-	g_soundEngine->ResistWaveFileBank(5, "Assets/sound/result/cymbal.wav");
 }
 
 Result::~Result()
@@ -222,7 +217,7 @@ void Result::Update()
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 		m_isDram = true;
 
-		GameManager::GetInstance()->SetBGM(23);
+		GameManager::GetInstance()->SetBGM(24);
 	}
 
 	//ŽžŠÔ‚Ìˆ—
