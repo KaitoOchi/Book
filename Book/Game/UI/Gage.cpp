@@ -83,16 +83,19 @@ void Gage::Update()
 
 void Gage::GageUp(int GageUp)
 {
+	//クールダウンがまだなら
+	if (m_vigilanceTime > 0.0f) {
+		return;
+	}
+
 	//発見音を出す
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(3);
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 
-	//クールダウンがまだなら
-	if (m_vigilanceTime > 0.0f) {
-		return;
-	}
+	//BGMを変更
+	GameManager::GetInstance()->SetBGM(22);
 
 	if (m_vigilanceGage < 11 && m_leverState != m_enLever_MAX) {
 		m_vigilanceGage += GageUp;

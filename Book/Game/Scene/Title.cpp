@@ -166,7 +166,7 @@ void Title::Update()
 		//ステートの遷移中の処理。
 		StateChange();
 
-		m_playerModelRender.SetAnimationSpeed(0.7);
+		m_playerModelRender.SetAnimationSpeed(0.9);
 		m_playerModelRender.PlayAnimation(animationClip_Put, 0.5f);
 		m_playerModelRender.Update();
 		return;

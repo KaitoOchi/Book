@@ -19,6 +19,6 @@ private:
 	void Hit() override;
 
 private:
-	Gage* m_gage = nullptr;;
+	Gage* m_gage = nullptr;
 };
 

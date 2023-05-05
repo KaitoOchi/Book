@@ -20,6 +20,9 @@ GameManager::GameManager()
 	//ゲームメインBGMの設定
 	g_soundEngine->ResistWaveFileBank(21, "Assets/sound/bgm/bgm_game_main.wav");
 
+	//ゲーム発見BGMの設定
+	g_soundEngine->ResistWaveFileBank(22, "Assets/sound/bgm/bgm_find.wav");
+
 	//リザルトBGMの設定
 	g_soundEngine->ResistWaveFileBank(23, "Assets/sound/bgm/bgm_result.wav");
 

@@ -7,7 +7,7 @@
 
 namespace
 {
-	const float CHANGE_TIME = 5.0f;
+	const float CHANGE_TIME = 2.0f;
 }
 
 

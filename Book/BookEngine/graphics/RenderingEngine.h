@@ -8,9 +8,6 @@
 #include "graphics/light/HemiSphereLight.h"
 #include "graphics/postEffect/Bloom.h"
 
-#define MAX_POINT_LIGHT 4;
-#define MAX_SPOT_LIGHT 4;
-
 namespace nsBookEngine {
 
 	class RenderingEngine

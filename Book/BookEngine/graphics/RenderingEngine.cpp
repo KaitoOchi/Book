@@ -8,6 +8,7 @@ namespace nsBookEngine {
 
 	RenderingEngine::RenderingEngine()
 	{
+
 	}
 
 	RenderingEngine::~RenderingEngine()
@@ -25,8 +26,8 @@ namespace nsBookEngine {
 
 		//半球光の設定
 		SetHemiSphereLight(
-			Vector3(0.2f, 0.2f, 0.2f),
-			Vector3(0.9f, 0.9f, 0.9f),
+			Vector3(0.6f, 0.5f, 0.5f),
+			Vector3(0.5f, 0.5f, 0.5f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
