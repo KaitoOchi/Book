@@ -46,10 +46,7 @@ public:
 	/// <summary>
 	/// ”Ô†‚ğİ’èB
 	/// </summary>
-	void SetNumber(const int num)
-	{
-		m_lightSensor->SetLightNumber(num);
-	}
+	void SetNumber(const int num);
 
 private:
 	void Hit() override

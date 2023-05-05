@@ -6,7 +6,7 @@
 
 SecurityCamera::SecurityCamera()
 {
-
+	m_lightSensor = NewGO<LightSensor>(0, "lightSensor");
 }
 
 SecurityCamera::~SecurityCamera()
@@ -24,7 +24,6 @@ bool SecurityCamera::Start()
 	m_cameraModelRender.Update();
 
 	//ライトセンサーの設定
-	m_lightSensor = NewGO<LightSensor>(0, "lightSensor");
 	m_lightSensor->SetState(LightSensor::enState_Rotate);
 	m_lightSensor->SetPosition(m_position);
 	m_lightSensor->SetRotation(m_rotation);
@@ -40,6 +39,11 @@ bool SecurityCamera::Start()
 	m_modelRender.Update();
 
 	return true;
+}
+
+void SecurityCamera::SetNumber(const int num)
+{
+	m_lightSensor->SetLightNumber(num);
 }
 
 void SecurityCamera::Update()

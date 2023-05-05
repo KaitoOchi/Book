@@ -405,6 +405,9 @@ void Game::LevelDesign()
 			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
 			m_securityCamera->SetPosition(objData.position);
 			m_securityCamera->SetType(0);
+			// 番号を教える
+			m_securityCamera->SetNumber(m_spotLigNum);
+			m_spotLigNum++;
 
 			return true;
 		}
