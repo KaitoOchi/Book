@@ -186,7 +186,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test3.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test01.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -221,7 +221,7 @@ void Game::LevelDesign()
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
-			 //エネミーを生成
+			// エネミーを生成
 			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
 			m_enemyNormal->m_enemyType = Enemy::Normal;
@@ -310,17 +310,6 @@ void Game::LevelDesign()
 
 				return true;
 			}
-
-			//// 名前がwallなら
-			//if (objData.EqualObjectName(L"wall") == true) {
-			//	// 壁を生成
-			//	m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
-			//	m_normal->SetPosition(objData.position);
-			//	m_normal->SetRotation(objData.rotation);
-			//	m_normal->SetScale(objData.scale);
-			//	m_wallList.emplace_back(m_normal);
-			//	return true;
-			//}
 
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {

@@ -6,7 +6,7 @@
 namespace 
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
-	const float		STOP_TIMER = 3.0f;				// —­‚ßŠÔ
+	const float		STOP_TIMER = 1.5f;				// —­‚ßŠÔ
 }
 
 Enemy_Charge::Enemy_Charge()

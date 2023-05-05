@@ -25,8 +25,8 @@ namespace nsBookEngine {
 
 		//半球光の設定
 		SetHemiSphereLight(
-			Vector3(0.4f, 0.2f, 0.2f),
-			Vector3(0.1f, 0.3f, 0.2f),
+			Vector3(0.0f, 0.0f, 0.0f),
+			Vector3(0.0f, 0.0f, 0.0f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
