@@ -28,6 +28,8 @@ class GameUI;
 class Pause;
 class GhostBox;
 class PhysicsGhost;
+class SenSor;
+class SecurityCamera;
 class Game : public IGameObject
 {
 public:
@@ -149,6 +151,8 @@ private:
 	Ghost* m_ghost = nullptr;
 	PhysicsGhost* m_physicsGhost = nullptr;
 	GhostBox* m_ghostBox = nullptr;
+	SenSor* m_senSor = nullptr;
+	SecurityCamera* m_securityCamera = nullptr;
 
 
 	Fade* m_fade = nullptr;

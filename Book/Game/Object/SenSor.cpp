@@ -9,17 +9,17 @@ namespace
 }
 
 
-Sensor::Sensor()
+SenSor::SenSor()
 {
 
 }
 
-Sensor::~Sensor()
+SenSor::~SenSor()
 {
 	DeleteGO(m_collisionObject);
 }
 
-bool Sensor::Start()
+bool SenSor::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
@@ -38,18 +38,18 @@ bool Sensor::Start()
 	return true;
 }
 
-void Sensor::Update()
+void SenSor::Update()
 {
 	Collision();
 }
 
-void Sensor::Hit()
+void SenSor::Hit()
 {
 	//ƒvƒŒƒCƒ„[‚ÆÚG
 	m_gage->GageUp(GAGE);
 }
 
-void Sensor::Render(RenderContext& rc)
+void SenSor::Render(RenderContext& rc)
 {
 	if (m_isActive)
 		m_modelRender.Draw(rc);
