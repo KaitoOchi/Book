@@ -46,7 +46,10 @@ public:
 	/// <summary>
 	/// ”Ô†‚ğİ’èB
 	/// </summary>
-	void SetNumber(const int num);
+	void SetNumber(const int num)
+	{
+		m_lightNumber = num;
+	}
 
 private:
 	void Hit() override
@@ -57,5 +60,6 @@ private:
 private:
 	ModelRender		m_cameraModelRender;
 	LightSensor*	m_lightSensor = nullptr;
+	int				m_lightNumber = 0;
 	int				m_type = 0;
 };
