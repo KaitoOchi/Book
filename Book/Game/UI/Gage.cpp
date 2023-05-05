@@ -8,6 +8,7 @@
 namespace
 {
 	const float		VIGILANCE_TIME_MAX = 2.0f;							//警戒値の最大時間
+	const float		VIGILANCE_DOWN_TIME = 5.0f;						//警戒度が自然減少する時間
 	const float		BASEYSIZE = 154.0f;									//base縦の大きさ
 	const float     BASEXSIZE = 553.0f;									//base横の大きさ
 	const float		VIGIRANCE_XSIZE = 66.0f;							//警戒度の縦の大きさ
@@ -51,7 +52,7 @@ bool Gage::Start()
 	m_LeverUPRender[0].Init("Assets/sprite/UI/Gauge/1.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[1].Init("Assets/sprite/UI/Gauge/2.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[2].Init("Assets/sprite/UI/Gauge/3.DDS", BASEXSIZE, BASEYSIZE);
-	m_LeverUPRender[3].Init("Assets/sprite/UI/Gauge/MAX.DDS", BASEXSIZE, BASEYSIZE);
+	m_LeverUPRender[3].Init("Assets/sprite/UI/Gauge/max.DDS", BASEXSIZE, BASEYSIZE);
 	for (int i = 0; i < MAXLEVERCOUNT ; i++)
 	{
 		m_LeverUPRender[i].SetPosition(LEVERUPPOSITION);
@@ -66,49 +67,55 @@ bool Gage::Start()
 
 void Gage::Update()
 {
-
 	//警戒度のクールタイムを計算
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
-	if (m_vigilanceGage != -1)
-	{
+	if (m_vigilanceGage != 0) {
 		GageDown();
 	}
-	VigilaceLeverChange();
+
 	if (m_GetState != m_leverState)
 	{
 		m_Color = 0.7f;
 		Gage_ColorChange();
 		m_GetState = m_leverState;
 	}
-	
 }
+
 void Gage::GageUp(int GageUp)
 {
+	//クールダウンがまだなら
+	if (m_vigilanceTime > 0.0f) {
+		return;
+	}
+
 	//発見音を出す
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(3);
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 
-	//クールダウンがまだなら
-	if (m_vigilanceTime > 0.0f)
-	{
-		return;
+	if (!m_isFind) {
+		//BGMを変更
+		GameManager::GetInstance()->SetBGM(22);
+		m_isFind = true;
 	}
 
-	if (m_vigilanceGage >= 11 && m_leverState == m_enLever_MAX)
-	{
+	if (m_vigilanceGage < 11 && m_leverState != m_enLever_MAX) {
 		m_vigilanceGage += GageUp;
 	}
 	
 	m_vigilanceTime = VIGILANCE_TIME_MAX;
 
-
-
+	VigilaceLeverChange();
 }
+
 void Gage::GageDown()
 {
-	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
+	if (m_vigilanceTime > -VIGILANCE_DOWN_TIME) {
+		return;
+	}
+
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
 		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->TRACKING||
 			m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CHARGE)
@@ -127,6 +134,12 @@ void Gage::GageDown()
 			if (m_vigilanceGage < 11)
 			{
 				m_vigilanceGage -= 1;
+
+				if (m_isFind) {
+					//BGMを変更
+					GameManager::GetInstance()->SetBGM(21);
+					m_isFind = false;
+				}
 			}
 			m_vigilaceDownTime = 2.0f;
 		}
@@ -190,18 +203,16 @@ void Gage::Gage_ColorChange()
 	default:
 		break;
 	}
-	
-	
-
 }
 
 void Gage::Render(RenderContext& rc)
 {
 	m_baseRender.Draw(rc);
-	for (int i = -1; i < m_vigilanceGage; i++)
-	{
+
+	for (int i = 0; i < m_vigilanceGage; i++) {
 		m_vigilanceRender[i].Draw(rc);
 	}
+
 	switch (m_leverState)
 	{
 	case Gage::m_enLever_1:

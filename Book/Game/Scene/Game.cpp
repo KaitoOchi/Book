@@ -73,6 +73,8 @@ Game::~Game()
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
 
+	DeleteGO(FindGO<CountDown>("countDown"));
+
 	// ライトの数を0に
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
 	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
@@ -83,6 +85,7 @@ void Game::GameDelete(const int nextScene)
 	m_nextScene = nextScene;
 	m_isWaitFadeOut = true;	
 	m_fade->StartFadeOut();
+	GameManager::GetInstance()->DeleteBGM();
 }
 	
 void Game::GamePos()
@@ -180,13 +183,15 @@ bool Game::Start()
 
 
 	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
+
+	GameManager::GetInstance()->SetBGM(21);
 	return true;
 }
 
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test3.tkl", [&](LevelObjectData& objData)
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test.tkl", [&](LevelObjectData& objData)
 	/*m_levelRender.Init("Assets/modelData/level/debug.tkl", [&](LevelObjectData& objData)*/ {
 		// �E��E��E�O�E��E�unityChan�E�Ȃ�
 
@@ -466,6 +471,7 @@ void Game::Update()
 			}
 			DeleteGO(FindGO<Pause>("pause"));
 			DeleteGO(this);
+			GameManager::GetInstance()->DeleteBGM();
 		}
 	}
 	

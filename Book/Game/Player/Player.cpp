@@ -42,9 +42,9 @@ void Player::Animation3D()
 	//アニメーションを読み込む
 	m_animationClips[m_enAnimationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[m_enAnimationClip_Idle].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_Walk].Load("Assets/animData/player/walk.tka");
+	m_animationClips[m_enAnimationClip_Walk].Load("Assets/animData/player/walk_key.tka");
 	m_animationClips[m_enAnimationClip_Walk].SetLoopFlag(true);
-	m_animationClips[m_enAnimationClip_Run].Load("Assets/animData/player/run.tka");
+	m_animationClips[m_enAnimationClip_Run].Load("Assets/animData/player/run_key.tka");
 	m_animationClips[m_enAnimationClip_Run].SetLoopFlag(true);
 	m_animationClips[m_enAnimationClip_Jump].Load("Assets/animData/player/jump_start.tka");
 	m_animationClips[m_enAnimationClip_Jump].SetLoopFlag(false);

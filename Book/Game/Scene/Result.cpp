@@ -4,6 +4,7 @@
 #include "Fade.h"
 #include "Title.h"
 #include "Game.h"
+#include "GameManager.h"
 
 namespace
 {
@@ -212,13 +213,16 @@ void Result::Update()
 		Input();
 	}
 
-	//太鼓音を出す
+	//太鼓音とBGMを鳴らす
 	if (m_timer >= ENABLE_TIME[4] && !m_isDram) {
+
 		SoundSource* se = NewGO<SoundSource>(0);
 		se->Init(5);
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 		m_isDram = true;
+
+		GameManager::GetInstance()->SetBGM(23);
 	}
 
 	//時間の処理
@@ -236,11 +240,15 @@ void Result::Input()
 		if (m_timer < ENABLE_TIME[4]) {
 			//表示をスキップする
 			m_timer = ENABLE_TIME[4];
+
+			m_sound->Stop();
 		}
 		else {
 			//フェードを始める
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
+
+			GameManager::GetInstance()->DeleteBGM();
 		}
 	}
 }

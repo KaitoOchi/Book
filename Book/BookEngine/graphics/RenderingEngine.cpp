@@ -8,6 +8,7 @@ namespace nsBookEngine {
 
 	RenderingEngine::RenderingEngine()
 	{
+
 	}
 
 	RenderingEngine::~RenderingEngine()
@@ -18,15 +19,15 @@ namespace nsBookEngine {
 	void RenderingEngine::Init()
 	{
 		//ディレクショナルライトの設定
-		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.5f, 0.5f, 0.5f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
 		//環境光の設定
-		SetAmbient(0.7f);
+		SetAmbient(0.3f);
 
 		//半球光の設定
 		SetHemiSphereLight(
-			Vector3(0.4f, 0.2f, 0.2f),
-			Vector3(0.1f, 0.3f, 0.2f),
+			Vector3(0.6f, 0.5f, 0.5f),
+			Vector3(0.5f, 0.6f, 0.5f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
@@ -48,7 +49,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(10.0f);
+		SetBloomThreshold(20.0f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();

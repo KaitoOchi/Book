@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player3D.h"
-#include"Player2D.h"
+
+#include "Player2D.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
 #include "FlashBom.h"
@@ -8,11 +9,14 @@
 #include "Star.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "GameManager.h"
+
 namespace
 {
 	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
 	const float SPEEDDOWN = 0.8;//速度減速率
 }
+
 Player3D::Player3D()
 {
 
@@ -71,6 +75,11 @@ bool Player3D::Start()
 
 
 	m_playerManagement->SetCharacon(m_characon);
+
+
+	//足音
+	g_soundEngine->ResistWaveFileBank(4, "Assets/sound/game/step.wav");
+
 	return true;
 }
 
@@ -212,6 +221,13 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 			break;
 		}
 		
+	}
+	else if (wcscmp(eventName, L"Step") == 0)
+	{
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(4);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		se->Play(false);
 	}
 
 }
