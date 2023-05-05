@@ -390,7 +390,6 @@ void Game::LevelDesign()
 		//	return true;
 		//}
 
-<<<<<<< HEAD
 		if (objData.EqualObjectName(L"sensor")==true) {
 			m_senSor = NewGO<SenSor>(0, "sensor");
 			m_senSor->SetPosition(objData.position);
@@ -408,11 +407,8 @@ void Game::LevelDesign()
 			return true;
 		}
 
-		if (objData.EqualObjectName(L"debugtoumei") == true) {
-=======
+		//if (objData.EqualObjectName(L"debugtoumei") == true) {
 		if (objData.EqualObjectName(L"push") == true) {
->>>>>>> 5c340d7ec7554131cd74eac7e6988262cb49df52
-
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
