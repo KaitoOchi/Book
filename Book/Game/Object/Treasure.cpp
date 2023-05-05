@@ -20,7 +20,7 @@ bool Treasure::Start()
 {
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int>dist(0, 3);
+	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
 	Object::Start();
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
