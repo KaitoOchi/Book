@@ -28,6 +28,8 @@ class GameUI;
 class Pause;
 class GhostBox;
 class PhysicsGhost;
+class SenSor;
+class SecurityCamera;
 class Game : public IGameObject
 {
 public:
@@ -158,15 +160,17 @@ private:
 	Ghost* m_ghost = nullptr;
 	PhysicsGhost* m_physicsGhost = nullptr;
 	GhostBox* m_ghostBox = nullptr;
+	SenSor* m_senSor = nullptr;
+	SecurityCamera* m_securityCamera = nullptr;
 
 
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Star* m_star = nullptr;
 
-	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
-	int						m_nextScene = 0;				//次に移行するシーン
+	bool m_isWaitFadeOut = false;		//フェード状態かどうか
+	int	m_nextScene = 0;				//次に移行するシーン
 
-	int						m_spotLigNum = 0;				// エネミー用スポットライトの数
+	int m_spotLigNum = 0;				// エネミー用スポットライトの数
 };	
 

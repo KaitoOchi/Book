@@ -6,10 +6,11 @@ class Enemy_Search;
 class Enemy_Charge;
 class Game;
 class Enemy;
+class Treasure;
 
 namespace
 {
-	const int ENEMY_NUM = 50;							// 表示するかどうかのフラグ用。多めに用意する。
+	const int ENEMY_NUM = 50;							// 表示するかどうかのフラグ用。多めに用意してます
 }
 
 class MiniMap:public IGameObject
@@ -28,6 +29,10 @@ public:
 	/// <param name="pos">変換するエネミーの座標</param>
 	/// <param name="num">配列番号</param>
 	void DrawMap(Vector3 enemyPos,int num);		
+	/// <summary>
+	/// お宝を描画する
+	/// </summary>
+	void DrawMap_Treasure(Vector3 TreasurePos);
 
 private:
 	/// <summary>
@@ -47,15 +52,20 @@ private:
 	SpriteRender m_OutLineSpriteRender;				// スプライトレンダー。ミニマップの装飾部分
 	SpriteRender m_PlayerSpriteRender;				// スプライトレンダー。プレイヤー
 	SpriteRender m_EnemySpriteRender[ENEMY_NUM];	// スプライトレンダー。エネミー
+	SpriteRender m_TreasureSpriteRender;			// スプライトレンダー。お宝
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
 	Enemy_Search* m_enemySearch = nullptr;
 	Enemy_Charge* m_enemyCharge = nullptr;
 	Game* m_game = nullptr;
+	Treasure* m_treasure = nullptr;
 
 	std::vector<Enemy*> m_enemyList;				// エネミーのリスト
 
+	Vector3 m_treasurePos = Vector3::Zero;			// お宝の位置
+
 	bool m_isImage[ENEMY_NUM];						// 表示するかどうかのフラグ。エネミーの数分用意する
+	bool m_isImage2 = false;						// 表示するかどうかのフラグ。お宝用
 };
 

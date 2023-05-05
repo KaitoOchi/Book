@@ -277,6 +277,7 @@ public:
 	void SetSpotLigNum(int num) {
 		m_spotNum = num;
 	}
+
 	//------------------------------------------
 	//エネミーの前方向を求める
 	const Vector3 GetFoward()const

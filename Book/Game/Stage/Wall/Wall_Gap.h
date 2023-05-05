@@ -7,6 +7,7 @@ public:
 	~Wall_Gap();
 
 	bool Start();
+	void ModelLoad(int i);
 	void Render(RenderContext& rc);
 };
 

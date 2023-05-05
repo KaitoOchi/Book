@@ -44,16 +44,14 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
-	//Enemy::SearchPass(CRAW);
-
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
-	if (Enemy::GetHitFlushBullet() == true) {
-		m_ActState = CONFUSION;
-	}
-	// ‰¹”š’e‚ğg—p‚µ‚½
-	if (Enemy::GetHitSoundBullet() == true) {
-		m_ActState = LISTEN;
-	}
+	//// ‘MŒõ’e‚É“–‚½‚Á‚½
+	//if (Enemy::GetHitFlushBullet() == true) {
+	//	m_ActState = CONFUSION;
+	//}
+	//// ‰¹”š’e‚ğg—p‚µ‚½
+	//if (Enemy::GetHitSoundBullet() == true) {
+	//	m_ActState = LISTEN;
+	//}
 
 	switch (m_ActState) {
 		// „‰ñ
@@ -79,6 +77,7 @@ void Enemy_Clear::Update()
 		// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
 	case LISTEN:
 		UpDate_OnListen();
+		break;
 		// •ßŠl
 	case CATCH:
 		Update_OnCatch();
