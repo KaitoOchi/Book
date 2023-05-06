@@ -6,7 +6,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Title.h"
-#include "Sensor.h"
+#include "SenSor.h"
 #include "MiniMap.h"
 #include "Enemy.h"
 #include "Enemy_Normal.h"
@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -53,7 +53,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<Sensor>("sensor"));
+	DeleteGO(FindGO<SenSor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -116,8 +116,6 @@ bool Game::Start()
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
-
-	NewGO<SecurityCamera>(0, "securityCamera");
 
 	NewGO<Pause>(0, "pause");
 
@@ -193,7 +191,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level.tkl", [&](LevelObjectData& objData){
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test1.tkl", [&](LevelObjectData& objData){
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
@@ -393,7 +391,7 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_sensor = NewGO<Sensor>(0, "sensor");
+			m_sensor = NewGO<SenSor>(0, "sensor");
 			m_sensor->SetPosition(objData.position);
 			m_sensor->SetScale(objData.scale);
 			m_sensor->SetRotation(objData.rotation);
@@ -405,15 +403,13 @@ void Game::LevelDesign()
 			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
 			m_securityCamera->SetPosition(objData.position);
 			m_securityCamera->SetType(0);
-			// 番号を教える
-			m_securityCamera->SetNumber(m_spotLigNum);
-			m_spotLigNum++;
 
 			return true;
 		}
 
-		//if (objData.EqualObjectName(L"debugtoumei") == true) {
+		if (objData.EqualObjectName(L"debugtoumei") == true) {
 		if (objData.EqualObjectName(L"push") == true) {
+
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
@@ -432,10 +428,11 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
-			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
+			m_ghostBox = NewGO<GhostBox>(0, "ghostBox");
 			m_ghostBox->SetPosition(objData.position);
 			m_ghostBox->SetScale(objData.scale);
 			m_ghostBox->SetRotation(objData.rotation);
+		}
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
 
