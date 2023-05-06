@@ -147,7 +147,7 @@ private:
 
 	std::vector<Vector3>m_treasurePositions;
 
-	std::vector<Sensor*>m_sensorList;
+	std::vector<SenSor*>m_sensorList;
 
 	std::vector<SecurityCamera*>m_SecurityCameraList;
 
