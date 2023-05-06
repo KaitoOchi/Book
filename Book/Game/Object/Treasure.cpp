@@ -20,13 +20,13 @@ bool Treasure::Start()
 {
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int>dist(0, 3);
+	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
 	Object::Start();
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelRender.Init("Assets/modelData/object/takara/item.tkm");
 	m_modelRender.SetPosition(m_game->GetTreasurePositionList()[m_randTreasure]);
-	m_modelRender.SetScale(m_scale);
+	m_modelRender.SetScale(m_scale*3.0f);
 	m_modelRender.SetRotation(m_rotation);
 	//ƒRƒŠƒWƒ‡ƒ“‚Ìì¬
 	m_collisionObject = NewGO<CollisionObject>(0);

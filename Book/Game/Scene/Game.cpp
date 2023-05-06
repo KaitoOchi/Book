@@ -6,7 +6,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Title.h"
-#include "SenSor.h"
+#include "Sensor.h"
 #include "MiniMap.h"
 #include "Enemy.h"
 #include "Enemy_Normal.h"
@@ -40,7 +40,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -53,7 +53,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<SenSor>("sensor"));
+	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -68,11 +68,19 @@ Game::~Game()
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
-	
+	for (int i = 0; i < m_sensorList.size(); i++)
+	{
+		DeleteGO(m_sensorList[i]);
+	}
+
+	for (int i = 0; i < m_SecurityCameraList.size(); i++)
+	{
+		DeleteGO(m_SecurityCameraList[i]);
+	}
+
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-	DeleteGO(m_treaSure);
 
 	DeleteGO(FindGO<CountDown>("countDown"));
 
@@ -117,9 +125,10 @@ bool Game::Start()
 	NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
 
+	//NewGO<SecurityCamera>(0, "securityCamera");
+
 	NewGO<Pause>(0, "pause");
 
-	//NewGO<SecurityCamera>(0, "securityCamera");
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
 	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -191,7 +200,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level_test1.tkl", [&](LevelObjectData& objData){
+	m_levelRender.Init("Assets/modelData/level_test/tkl/level.tkl", [&](LevelObjectData& objData){
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
@@ -391,10 +400,11 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_sensor = NewGO<SenSor>(0, "sensor");
+			m_sensor = NewGO<Sensor>(0, "sensor");
 			m_sensor->SetPosition(objData.position);
 			m_sensor->SetScale(objData.scale);
 			m_sensor->SetRotation(objData.rotation);
+			m_sensorList.emplace_back(m_sensor);
 
 			return true;
 		}
@@ -403,13 +413,12 @@ void Game::LevelDesign()
 			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
 			m_securityCamera->SetPosition(objData.position);
 			m_securityCamera->SetType(0);
-
+			m_SecurityCameraList.emplace_back(m_securityCamera);
 			return true;
 		}
 
-		if (objData.EqualObjectName(L"debugtoumei") == true) {
+		//if (objData.EqualObjectName(L"debugtoumei") == true) {
 		if (objData.EqualObjectName(L"push") == true) {
-
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
@@ -428,11 +437,10 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
-			m_ghostBox = NewGO<GhostBox>(0, "ghostBox");
+			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
 			m_ghostBox->SetPosition(objData.position);
 			m_ghostBox->SetScale(objData.scale);
 			m_ghostBox->SetRotation(objData.rotation);
-		}
 		}
 		if (objData.EqualObjectName(L"clear") == true) {
 
