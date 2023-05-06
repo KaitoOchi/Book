@@ -28,7 +28,7 @@ class GameUI;
 class Pause;
 class GhostBox;
 class PhysicsGhost;
-class Sensor;
+class SenSor;
 class SecurityCamera;
 class Game : public IGameObject
 {
@@ -147,7 +147,7 @@ private:
 
 	std::vector<Vector3>m_treasurePositions;
 
-	std::vector<Sensor*>m_sensorList;
+	std::vector<SenSor*>m_sensorList;
 
 	std::vector<SecurityCamera*>m_SecurityCameraList;
 
@@ -165,7 +165,7 @@ private:
 	Ghost* m_ghost = nullptr;
 	PhysicsGhost* m_physicsGhost = nullptr;
 	GhostBox* m_ghostBox = nullptr;
-	Sensor* m_sensor = nullptr;
+	SenSor* m_sensor = nullptr;
 	SecurityCamera* m_securityCamera = nullptr;
 
 
