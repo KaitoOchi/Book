@@ -26,7 +26,7 @@ bool Treasure::Start()
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelRender.Init("Assets/modelData/object/takara/item.tkm");
 	m_modelRender.SetPosition(m_game->GetTreasurePositionList()[m_randTreasure]);
-	m_modelRender.SetScale(m_scale);
+	m_modelRender.SetScale(m_scale*3.0f);
 	m_modelRender.SetRotation(m_rotation);
 	//ƒRƒŠƒWƒ‡ƒ“‚Ìì¬
 	m_collisionObject = NewGO<CollisionObject>(0);
