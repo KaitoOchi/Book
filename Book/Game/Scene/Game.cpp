@@ -53,7 +53,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<SenSor>("sensor"));
+	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -400,7 +400,7 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_sensor = NewGO<SenSor>(0, "sensor");
+			m_sensor = NewGO<Sensor>(0, "sensor");
 			m_sensor->SetPosition(objData.position);
 			m_sensor->SetScale(objData.scale);
 			m_sensor->SetRotation(objData.rotation);
