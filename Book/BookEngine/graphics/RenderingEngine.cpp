@@ -22,7 +22,7 @@ namespace nsBookEngine {
 		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
 		//環境光の設定
-		SetAmbient(0.3f);
+		SetAmbient(0.0f);
 
 		//半球光の設定
 		SetHemiSphereLight(

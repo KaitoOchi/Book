@@ -25,6 +25,10 @@ public:
 			m_resultState = enState_GameOver;
 	}
 
+	/// <summary>
+	/// I—¹ŠÔ‚ğİ’èB
+	/// </summary>
+	/// <param name="time"></param>
 	void SetTime(const float time)
 	{
 		m_score[0] = time;
