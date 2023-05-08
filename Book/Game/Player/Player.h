@@ -5,6 +5,7 @@ class Ghost;
 class Star;
 class Game;
 class Treasure;  
+class GameCamera;
 class Player : public IGameObject
 {
 public:
@@ -200,6 +201,7 @@ protected:
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
+protected:
 	//アニメーション
 	enum EnAnimationClip {
 		m_enAnimationClip_Idle,				//待機アニメーション
@@ -239,24 +241,25 @@ protected:
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
 	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
+	
 	Quaternion m_rotation;										//回転
+	
 	CharacterController *m_characon;							//キャラコン
-	
-	
-	Ghost* m_ghost = nullptr;
-	Game* m_game = nullptr;
-	
-	
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
-	GameCamera* gamecamera=nullptr;								//ゲームカメラ
+	GameCamera* m_gamecamera=nullptr;								//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 	Star* m_star = nullptr;										//星
 	Treasure* m_treasure = nullptr;
+	Ghost* m_ghost = nullptr;
+	Game* m_game = nullptr;
+
 
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;
 
 	float m_downTime = 3.0f;									//気絶時間
+
+	bool m_playerCaught = true;
 
 };
