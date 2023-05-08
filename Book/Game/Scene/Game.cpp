@@ -82,6 +82,11 @@ Game::~Game()
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
 
+	// エネミーの削除
+	for (int i = 0; i < m_enemyList.size(); i++) {
+		DeleteGO(m_enemyList[i]);
+	}
+
 	DeleteGO(FindGO<CountDown>("countDown"));
 
 	// ライトの数を0に
@@ -274,7 +279,7 @@ void Game::LevelDesign()
 			m_enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyClear->Pass(3);
+			m_enemyClear->Pass(2);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(m_enemyClear);
 			return true;
@@ -374,16 +379,16 @@ void Game::LevelDesign()
 				return true;
 			}
 
-			//// 名前がgoalのとき
-			//if (objData.EqualObjectName(L"goal") == true) {
-			//	// ゴールを生成
-			//	m_wall = NewGO<Wall>(0, "wall");
-			//	m_wall->SetPosition(objData.position);
-			//	m_wall->SetRotation(objData.rotation);
-			//	m_wall->SetScale(objData.scale);
-
-			//	return true;
-			//}
+			// 名前がgoalのとき
+			if (objData.EqualObjectName(L"clear") == true) {
+				// ゴールを生成
+				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				m_normal->SetPosition(objData.position);
+				m_normal->SetRotation(objData.rotation);
+				m_normal->SetScale(objData.scale);
+				m_wallList.emplace_back(m_normal);
+				return true;
+			}
 		}
 
 
@@ -412,7 +417,9 @@ void Game::LevelDesign()
 		if (objData.EqualObjectName(L"camera") == true) {
 			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
 			m_securityCamera->SetPosition(objData.position);
-			m_securityCamera->SetType(0);
+			m_securityCamera->SetType(1);
+			//m_securityCamera->SetNumber(m_spotLigNum);
+			//m_spotLigNum++;
 			m_SecurityCameraList.emplace_back(m_securityCamera);
 			return true;
 		}
