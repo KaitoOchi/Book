@@ -7,7 +7,7 @@
 #include "Game.h"
 #include "Enemy.h"
 #include "Treasure.h"
-
+#include "GameCamera.h"
 namespace
 {
 	const float WALK = 40.0f;//•à‚«‚ÌæZ—Ê
@@ -28,6 +28,7 @@ Player::~Player()
 
 bool Player::Start()
 {
+	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_ghost = FindGO<Ghost>("ghost");
@@ -238,9 +239,11 @@ void Player::PlayerCatch()
 {
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH)
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH&&m_playerCaught)
 		{
 			m_playerState = m_enPlayer_Caught;
+			m_playerCaught = false;
+			m_gamecamera->SetCameraPositio(m_position);
 		}
 	}
 }

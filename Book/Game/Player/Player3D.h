@@ -48,7 +48,12 @@ private:
 
 	float m_catchTime = 2.0f;
 
+	
 private:
+	/// <summary>
+	/// プレイヤーの押し出し
+	/// </summary>
+	void PlayerPush();
 	/// <summary>
 	/// 待機ステートの遷移処理
 	/// </summary>
