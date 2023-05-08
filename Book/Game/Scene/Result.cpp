@@ -44,10 +44,17 @@ bool Result::Start()
 void Result::InitScore()
 {
 	//リザルトを保存
+	int time = m_score[0];
+	if (m_resultState == enState_GameOver) {
+		m_score[0] = (600 - m_score[0]) * 100;
+	}
+	else {
+		m_score[0] *= 100;
+	}
+
 	m_score[1] = m_resultState;
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
-	//m_score[2] = 5;
-	m_score[3] = (m_score[0] * 100) +
+	m_score[3] = m_score[0] +
 		(m_score[1] * 50000) +
 		(m_score[2] * -500);
 
@@ -75,8 +82,8 @@ void Result::InitScore()
 	m_rankSpriteRender.SetPosition(Vector3(250.0f, -150.0f, 0.0f));
 	m_rankSpriteRender.Update();
 
-	int m = m_score[0] / 60;
-	int s = m_score[0] % 60;
+	int m = time / 60;
+	int s = time % 60;
 
 	//スコア文字の設定
 	for (int i = 0; i < 4; i++) {
