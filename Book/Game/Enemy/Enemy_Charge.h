@@ -10,7 +10,6 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void Animation();					// アニメーション
 	void Update_OnCraw();				// 巡回
 	void Update_OnCharge();				// 突進
 	void Update_OnCalled();				// CALL時に実行
@@ -21,17 +20,4 @@ public:
 private:
 
 	Enemy* enemy;
-
-	// アニメーションクリップ
-	enum EnEnemyAnimationClip
-	{
-		m_enAnimationClip_Idle,			// 待機
-		m_enAnimationClip_Walk,			// 歩く
-		m_enAnimationClip_Run,			// 走る
-		m_enAnimationClip_Attack,		// 攻撃
-		m_enAnimationClip_Damege,		// 被弾
-		m_enAnimationClip_Num
-	};
-	// アニメーションクリップ
-	AnimationClip m_animationClips[m_enAnimationClip_Num];
 };
