@@ -62,8 +62,8 @@ namespace nsBookEngine {
 		ModelRender m_modelRender;
 
 		Vector3 m_position;
-		Vector3 m_scale = Vector3::One  * 2000.0f;
+		Vector3 m_scale = Vector3::One  * 1000.0f;
 
-		float m_luminance;
+		float m_luminance = 1.0f;
 	};
 }

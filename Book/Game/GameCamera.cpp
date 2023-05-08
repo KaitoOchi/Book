@@ -32,6 +32,7 @@ bool GameCamera::Start()
 
 	g_camera3D->SetNear(150.0f);
 	//g_camera3D->SetFar(3000.0f);
+	g_camera3D->SetFar(12000.0f);
 
 	return true;
 }
