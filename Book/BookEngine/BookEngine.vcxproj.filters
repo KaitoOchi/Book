@@ -45,6 +45,9 @@
     <ClInclude Include="level2DRender\Level2DRender.h">
       <Filter>level2DRender</Filter>
     </ClInclude>
+    <ClInclude Include="nature\SkyCube.h">
+      <Filter>nature</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BookEngine.cpp" />
@@ -88,6 +91,9 @@
     <ClCompile Include="level2DRender\Level2DRender.cpp">
       <Filter>level2DRender</Filter>
     </ClCompile>
+    <ClCompile Include="SkyCube.cpp">
+      <Filter>nature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
@@ -110,6 +116,9 @@
     </Filter>
     <Filter Include="level2DRender">
       <UniqueIdentifier>{b8bf0235-ce9a-42ad-92ae-a37ba578dd04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="nature">
+      <UniqueIdentifier>{932604e3-c8f2-4f81-b704-afb938b634a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -47,14 +47,9 @@ private:
 	void Input();
 
 	/// <summary>
-	/// ゲームクリア処理。
+	/// アニメーション処理。
 	/// </summary>
-	void GameClear();
-
-	/// <summary>
-	/// ゲームオーバー処理。
-	/// </summary>
-	void GameOver();
+	void Animation();
 
 	/// <summary>
 	/// 待機時間が終了したかどうか
@@ -96,16 +91,11 @@ private:
 	SpriteRender	m_failedSpriteRender;					//failed文字
 	FontRender		m_messageFontRender[4];					//スコアメッセージ
 	FontRender		m_scoreFontRender;						//スコアフォント
-
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
-
 	ResultState		m_resultState = enState_GameOver;		//リザルトステート
-
 	Fade*			m_fade = nullptr;						//フェードクラス
 	SoundSource*	m_sound = nullptr;						//サウンドクラス
-
 	Vector3			m_fontPosition[4];						//文字を出す座標
-
 	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
 	bool			m_isDram = false;						//ドラム音を出したかどうか
 	int				m_cursor = 0;							//カーソル

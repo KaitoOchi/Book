@@ -35,6 +35,7 @@
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
+#include "nature/SkyCube.h"
 
 
 Game::Game()
@@ -128,6 +129,7 @@ bool Game::Start()
 	//NewGO<SecurityCamera>(0, "securityCamera");
 
 	NewGO<Pause>(0, "pause");
+	NewGO<SkyCube>(0, "skyCube");
 
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");

@@ -9,7 +9,7 @@
 namespace
 {
 	const char		RANK[4] = { 'A', 'B', 'C', 'D' };						//ランク一覧
-	const wchar_t* GET_TREASURE_TEXT[2] = {L"    FAILED", L" SUCCUESS!" };	//宝を取得したかどうかのテキスト
+	const wchar_t*	GET_TREASURE_TEXT[2] = {L"    FAILED", L" SUCCUESS!" };	//宝を取得したかどうかのテキスト
 	const int		SCORE_RANK[4] = { 100000, 80000, 60000, 50000 };		//ランクの条件
 	const float		CAN_INPUT = 6.0f;										//入力可能時間
 	const float		ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };		//表示可能になる時間
@@ -208,22 +208,7 @@ void Result::Update()
 		Input();
 	}
 
-	//太鼓音とBGMを鳴らす
-	if (m_timer >= ENABLE_TIME[4] && !m_isDram) {
-
-		SoundSource* se = NewGO<SoundSource>(0);
-		se->Init(5);
-		se->Play(false);
-		se->SetVolume(GameManager::GetInstance()->GetSFX());
-		m_isDram = true;
-
-		GameManager::GetInstance()->SetBGM(24);
-	}
-
-	//時間の処理
-	m_timer += g_gameTime->GetFrameDeltaTime();
-
-	GameClear();
+	Animation();
 }
 
 void Result::Input()
@@ -246,12 +231,26 @@ void Result::Input()
 			GameManager::GetInstance()->DeleteBGM();
 		}
 	}
+
+	//太鼓音とBGMを鳴らす
+	if (m_timer >= ENABLE_TIME[4] && !m_isDram) {
+
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(5);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		m_isDram = true;
+
+		GameManager::GetInstance()->SetBGM(24);
+	}
 }
 
-void Result::GameClear()
+void Result::Animation()
 {
-	float time = m_timer - ENABLE_TIME[4];
+	//時間の処理
+	m_timer += g_gameTime->GetFrameDeltaTime();
 
+	float time = m_timer - ENABLE_TIME[4];
 	if (time > 2.0f) {
 		m_timer = ENABLE_TIME[4];
 	}
@@ -274,23 +273,6 @@ void Result::GameClear()
 	}
 }
 
-void Result::GameOver()
-{
-	if (m_timer > 1.0f)
-		m_timer = -0.5f;
-
-	// -t^2 + 2t
-	m_alpha = fabsf(-pow(m_timer, 2.0f) + (2 * m_timer));
-	m_alpha = min(m_alpha, 1.0f);
-	m_alpha *= 3.0f;
-	m_alpha = max(m_alpha, 1.0f);
-
-	//カーソルを点滅させる
-	m_cursorSpriteRender.SetPosition(Vector3(-650.0f, 90.0f + (m_cursor * -240.0f), 0.0f));
-	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
-	m_cursorSpriteRender.Update();
-}
-
 void Result::Render(RenderContext& rc)
 {
 	m_backGroundSpriteRender.Draw(rc);
@@ -300,11 +282,13 @@ void Result::Render(RenderContext& rc)
 		return;
 	}
 
+	//リザルト文字の描画
 	for (int i = 0; i < 4; i++) {
 		if (m_timer > ENABLE_TIME[i])
 			m_messageFontRender[i].Draw(rc);
 	}
 
+	//リザルト後の描画
 	if (m_timer >= ENABLE_TIME[4]) {
 		m_explainSpriteRender[0].Draw(rc);
 		m_scoreFontRender.Draw(rc);
