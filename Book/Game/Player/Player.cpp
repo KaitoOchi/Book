@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "Treasure.h"
 #include "GameCamera.h"
+#include "Stage/Wall/Wall.h"
 namespace
 {
 	const float WALK = 40.0f;//歩き時の乗算量
@@ -97,21 +98,11 @@ void Player::Update()
 		{
 			//お宝のコリジョンがない時は普通にジャンプさせる
 			if (m_treasure->GetCollision() == nullptr ||
-				m_collisionObject->IsHit(m_treasure->GetCollision())==false)
+				m_collisionObject->IsHit(m_treasure->GetCollision()) == false)
 			{
 				Jump();
 			}
-			//お宝のコリジョンに当たった時に重力も消えてしまうため
-			if (m_collisionObject->IsHit(m_treasure->GetCollision()) == true &&
-				m_characon->IsOnGround() == false)
-			{
-				//重力を発生させる
-				m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
-			}
-
 		}
-
-
 		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
 			m_Player_Act&&
 			m_playerState!=m_enPlayer_Jump)
@@ -120,9 +111,21 @@ void Player::Update()
 		}
 		m_Player_Act = true;
 	}
+
+	//空中にいる場合
+	if(m_characon->IsOnGround() == false)
+	{
+		//重力を発生させる
+		m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
+	}
+
 	PlayerCatch();
 	Animation();
 	ManageState();
+	for (int i=0; i < m_game->GetWallList().size(); i++)
+	{
+		m_game->GetWallList()[i]->SetWallRenderPosition(m_position);
+	}
 
 }
 
@@ -180,12 +183,7 @@ void Player::Jump()
 
 		}
 	}
-	//空中にいる場合
-	else
-	{
-		//重力を発生させる
-		m_moveSpeed.y -= GRAVITY * g_gameTime->GetFrameDeltaTime();
-	}
+	
 }
 void Player::Rotation()
 {
@@ -250,6 +248,17 @@ void Player::PlayerCatch()
 
 void Player::ProcessCommonStateTransition()
 {
+
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	{
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH && m_playerCaught)
+		{
+			m_playerState = m_enPlayer_Caught;
+			m_playerCaught = false;
+			m_gamecamera->SetCameraPositio(m_position);
+			return;
+		}
+	}
 	if (GetCharacon() == nullptr)
 	{
 		return;

@@ -55,6 +55,7 @@ public:
 	{
 		m_enGameState_DuringGamePlay,//�Q�[���v���C��
 		m_enGameState_GameClearable,//クリア可能
+		m_enGameState_GameClear,//クリア
 		m_enGameState_GameFade,//�Q�[���N���A
 		m_enGameState_GameOver,//�Q�[���I�[�o�[
 		m_enGameState_GameBuck//�^�C�g���ɖ߂�
@@ -101,6 +102,17 @@ public:
 	/// ポーズ画面の切替
 	/// </summary>
 	void GamePos();
+
+	std::vector<Wall*>GetWallList()
+	{
+		return m_wallList;
+	}
+
+	std::vector<PhysicsGhost*>GetPhysicsGhostList()
+	{
+		return m_physicsGhostList;
+	}
+
 private:
 	/// <summary>
 	/// �N���A�X�e�[�g�ɑJ��
@@ -151,6 +163,7 @@ private:
 
 	std::vector<SecurityCamera*>m_SecurityCameraList;
 
+	std::vector<PhysicsGhost*>m_physicsGhostList;
 
 	PlayerManagement* m_playerManagement = nullptr;
 

@@ -339,8 +339,8 @@ void Player3D::ProcessFoundStateTransition()
 void Player3D::ProcessCaughtStateTransition()
 {
 	//‘¬“x‚ð‰Šú‰»
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
+	m_moveSpeed.x *= 0.0f;
+	m_moveSpeed.z *= 0.0f;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{

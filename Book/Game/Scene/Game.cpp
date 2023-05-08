@@ -177,7 +177,7 @@ bool Game::Start()
 		200.0f
 	);
 
-
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
@@ -451,6 +451,7 @@ void Game::LevelDesign()
 			m_physicsGhost->SetPosition(objData.position);
 			m_physicsGhost->SetScale(objData.scale);
 			m_physicsGhost->SetRotation(objData.rotation);
+			m_physicsGhostList.emplace_back(m_physicsGhost);
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
@@ -486,7 +487,7 @@ void Game::Update()
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
 
-			if (m_gameState != m_enGameState_GameFade)
+			if (m_gameState != m_enGameState_GameFade&& m_gameState != m_enGameState_GameClear)
 			{
 				GamePos();
 				
@@ -494,9 +495,14 @@ void Game::Update()
 			else
 			{
 				Result* result = NewGO<Result>(0, "result");
+				if (m_gameState == m_enGameState_GameClear)
+				{
+					result->SetResult(true);
+				}
 				result->SetTime(m_gameUI->GetTime());
 			}
 			DeleteGO(FindGO<Pause>("pause"));
+			
 			DeleteGO(this);
 			GameManager::GetInstance()->DeleteBGM();
 		}
@@ -511,7 +517,7 @@ void Game::Clearable()
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
 		GameDelete(0);
-		m_gameState = m_enGameState_GameFade;
+		m_gameState = m_enGameState_GameClear;
 	
 	}
 	if (m_gameUI->GetTime() <= 0.0f)

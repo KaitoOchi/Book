@@ -60,6 +60,17 @@ public:
 		ModelState = num;
 	}
 
+	/// <summary>
+	/// 壁との距離
+	/// </summary>
+	/// <param name="pos">プレイヤーの座標</param>
+	void SetWallRenderPosition(const Vector3 pos)
+	{
+		m_RenderPosition = pos;
+	}
+
+
+
 protected:
 	PhysicsBoxObject m_physicsBoxObj;
 	PhysicsGhostObject m_physicsGhostObj;
@@ -81,6 +92,8 @@ protected:
 
 	Vector3 m_boxSize = Vector3::Zero;					//ボックスコライダーの作成
 
+	Vector3 m_RenderPosition = Vector3::Zero;
+	
 	int ModelState = 0;									// モデルを指定する
 };
 

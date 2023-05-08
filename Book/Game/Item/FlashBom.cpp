@@ -144,7 +144,7 @@ void FlashBom::SetFlashEffect()
 	m_alpha = MAXALPHA;
 	m_range = MAXRANGE;
 	m_ambient = MAXAMBIENT;
-	
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 4;
 }
 
 void FlashBom::ProcessStartState()
@@ -186,7 +186,6 @@ void FlashBom::ProcessEndState()
 		m_alpha = 0.0f;
 		RenderingEngine::GetInstance()->SetAmbient(0.7f);
 		m_FlashState = m_enFlash_No;
-
 	}
 }
 
