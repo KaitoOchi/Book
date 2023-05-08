@@ -19,8 +19,13 @@ Enemy_Search::~Enemy_Search()
 }
 bool Enemy_Search::Start()
 {
+	// アニメーションの読み込み
+	Animation();
+
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+
 	Enemy::Start();
-	m_enemyRender.Init("Assets/modelData/unityChan.tkm", 0, 0, enModelUpAxisZ, true, true, 2);
+
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
@@ -58,6 +63,9 @@ void Enemy_Search::Update()
 	}
 
 	Enemy::SpotLight_Serch(m_rot, m_position);
+
+	m_enAnimationState = IDLE;
+
 	// 更新
 	m_enemyRender.SetRotation(m_rot);
 	m_enemyRender.Update();

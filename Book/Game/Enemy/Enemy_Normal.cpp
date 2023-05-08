@@ -16,13 +16,17 @@ Enemy_Normal::~Enemy_Normal()
 
 bool Enemy_Normal::Start()
 {
+	// アニメーションの読み込み
+	Animation();
+
 	// モデルの読み込み
-	m_enemyRender.Init("Assets/modelData/enemy/enemy.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+
+	Enemy::Start();
+
 	m_enemyRender.SetScale(m_scale);
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
-
-	Enemy::Start();
 
 	m_point = &m_pointList[0];
 

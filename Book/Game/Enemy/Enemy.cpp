@@ -11,6 +11,8 @@
 
 namespace
 {
+	const Vector3	MODEL_SCALE = { 2.0f,2.0f,2.0f };		// モデルのスケール
+
 	const float		MOVE_SPEED = 5.0f;						// 移動速度
 	const float		ADD_SPEED = 2.0f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
@@ -51,8 +53,7 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	// アニメーションの読み込み
-	Animation();
+	SetScale(MODEL_SCALE);
 
 	//警戒度時間を代入
 	m_Vicount = VIGILANCETIME;
@@ -97,22 +98,22 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Idle].Load("Assets/animData/enemy/idle.tka");
 	m_enAnimationClips[m_enAnimation_Idle].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Walk].Load("Assets/animData/enemy/walk.tka");
+	m_enAnimationClips[m_enAnimation_Walk].Load("Assets/animData/enemy/walk_battle.tka");
 	m_enAnimationClips[m_enAnimation_Walk].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Run].Load("Assets/animData/enemy/run.tka");
+	m_enAnimationClips[m_enAnimation_Run].Load("Assets/animData/enemy/run_battle.tka");
 	m_enAnimationClips[m_enAnimation_Run].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Attack].Load("Assets/animData/enemy/attack1.tka");
+	m_enAnimationClips[m_enAnimation_Attack].Load("Assets/animData/enemy/attack.tka");
 	m_enAnimationClips[m_enAnimation_Attack].SetLoopFlag(false);
 
 	m_enAnimationClips[m_enAnimation_Damege].Load("Assets/animData/enemy/damege.tka");
 	m_enAnimationClips[m_enAnimation_Damege].SetLoopFlag(false);
 
-	m_enAnimationClips[m_enAnimation_Flash].Load("Assets/animData/enemy/damege.tka");
+	m_enAnimationClips[m_enAnimation_Flash].Load("Assets/animData/enemy/dizzy.tka");
 	m_enAnimationClips[m_enAnimation_Flash].SetLoopFlag(false);
 
-	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/damege.tka");
+	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
 	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(false);
 }
 
@@ -200,9 +201,6 @@ void Enemy::Nav(Vector3 pos)
 
 	// 回転を教える
 	m_enemyRender.SetRotation(rot);
-
-	// 歩きアニメーションを再生
-	m_enAnimationState = RUN;
 }
 
 bool Enemy::Act_SeachPlayer()
@@ -445,6 +443,10 @@ void Enemy::Act_Craw()
 		m_enAnimationState = WALK;
 		// 座標に加算
 		m_position += moveSpeed;
+	}
+	else {
+		// 歩きアニメーションを再生
+		m_enAnimationState = IDLE;
 	}
 }
 
