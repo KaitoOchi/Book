@@ -168,9 +168,9 @@ void MiniMap::Render(RenderContext& rc)
 	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
-	if (m_isImage2 == true) {
-		m_TreasureSpriteRender.Draw(rc);
-	}
+	//if (m_isImage2 == true) {
+	//	m_TreasureSpriteRender.Draw(rc);
+	//}
 
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		// ”ÍˆÍ“à‚Ì‚Æ‚«
