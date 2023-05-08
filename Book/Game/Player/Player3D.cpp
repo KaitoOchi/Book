@@ -108,26 +108,32 @@ void Player3D::Update()
 	//壁に埋まっているなら
 	else
 	{
-		senkeiPos += g_gameTime->GetFrameDeltaTime()*1.5f;
-		m_position.Lerp(senkeiPos,GetPushPosition(), GetGhostPosition());
-		m_modelRender->SetPosition(m_position);
-		m_modelRender->Update();
-		m_characon->SetPosition(m_position);
-		m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
-		//プレイヤーを押し出す方向に回転させる
-		m_pushRotPos = GetPushPosition() - GetGhostPosition();
-		m_pushRot=atan2(-m_pushRotPos.x, m_pushRotPos.z);
-		m_rotation.SetRotationY(m_pushRot);
-		m_modelRender->SetRotation(m_rotation);
-		if (senkeiPos >= 1.0f)
-		{
-			senkeiPos = 0.0f;
-			m_ghostHit = true;
-			m_playerState = m_enPlayer_Down;
-		}
+		PlayerPush();
 	}
 
 }
+
+void Player3D::PlayerPush()
+{
+	senkeiPos += g_gameTime->GetFrameDeltaTime() * 1.5f;
+	m_position.Lerp(senkeiPos, GetPushPosition(), GetGhostPosition());
+	m_modelRender->SetPosition(m_position);
+	m_modelRender->Update();
+	m_characon->SetPosition(m_position);
+	m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
+	//プレイヤーを押し出す方向に回転させる
+	m_pushRotPos = GetPushPosition() - GetGhostPosition();
+	m_pushRot = atan2(-m_pushRotPos.x, m_pushRotPos.z);
+	m_rotation.SetRotationY(m_pushRot);
+	m_modelRender->SetRotation(m_rotation);
+	if (senkeiPos >= 1.0f)
+	{
+		senkeiPos = 0.0f;
+		m_ghostHit = true;
+		m_playerState = m_enPlayer_Down;
+	}
+}
+
 void Player3D::Throw()
 {
 	m_playerState = m_enPlayer3D_Throw;
@@ -344,6 +350,7 @@ void Player3D::ProcessCaughtStateTransition()
 
 void Player3D::ProcessCatchingStateTransition()
 {
+	
 	m_catchTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_catchTime < 0.0f)
 	{

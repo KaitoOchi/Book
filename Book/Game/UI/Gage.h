@@ -46,7 +46,7 @@ private:
 	SpriteRender m_baseRender;						//下に置く画像
 	SpriteRender m_vigilanceRender[10];				//警戒度画像
 	bool m_isFind = false;					//発見されたかどうか
-	int m_vigilanceGage = 8;						//警戒度ゲージ量
+	int m_vigilanceGage = 0;						//警戒度ゲージ量
 	float m_vigilanceTime = 2.0f;					//警戒度に入るクールタイム
 
 	float m_Color=0.7f;								//警戒度カラー						

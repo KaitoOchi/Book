@@ -50,6 +50,7 @@ Game::~Game()
 	//�E�G�E�l�E�~�E�[
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
+		
 		DeleteGO(m_enemyList[i]);
 	}
 	//�I�u�W�F�N�g
@@ -116,6 +117,13 @@ void Game::GamePos()
 
 bool Game::Start()
 {
+	//リストの初期化
+	m_enemyList.clear();
+	m_wallList.clear();
+	m_sensorList.clear();
+	m_SecurityCameraList.clear();
+
+
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
