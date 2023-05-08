@@ -8,7 +8,6 @@ namespace nsBookEngine {
 		SkyCube();
 		~SkyCube();
 		bool Start();
-		void Update();
 		void Render(RenderContext& rc);
 
 	public:
@@ -58,12 +57,10 @@ namespace nsBookEngine {
 		}
 
 	private:
-		Texture m_texture;
-		ModelRender m_modelRender;
-
-		Vector3 m_position;
-		Vector3 m_scale = Vector3::One  * 1000.0f;
-
-		float m_luminance = 1.0f;
+		Texture			m_texture;
+		ModelRender		m_modelRender;
+		Vector3			m_position;
+		Vector3			m_scale = Vector3::One  * 1000.0f;
+		float			m_luminance = 0.75f;
 	};
 }
