@@ -66,6 +66,6 @@ void GameManager::DeletingBGM()
 		m_timer = 0.0f;
 	}
 
-	m_timer -= (g_gameTime->GetFrameDeltaTime() * 4.0f);
+	m_timer -= (g_gameTime->GetFrameDeltaTime() * 5.0f);
 	m_bgm->SetVolume(m_timer);
 }

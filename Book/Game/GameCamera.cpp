@@ -29,16 +29,29 @@ bool GameCamera::Start()
 	m_toCameraPos.Set(BEKUTORU);
 	//�v���C���[�Ǘ��̃C���X�^���X
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-
+	m_player3D = FindGO<Player3D>("player3d");
 	g_camera3D->SetNear(150.0f);
-	g_camera3D->SetFar(3000.0f);
+	//g_camera3D->SetFar(3000.0f);
+	g_camera3D->SetFar(12000.0f);
 
 	return true;
 }
 void GameCamera::Update()
 {
-	//���_�ƒ����_�̍X�V
-	UpdatePositionAndTarget();
+	if (m_player3D->m_playerState != m_player3D->m_enPlayer_Catching)
+	{
+		//���_�ƒ����_�̍X�V
+		UpdatePositionAndTarget();
+		//視点を元に戻す
+		if (g_pad[0]->IsTrigger(enButtonLB2))
+		{
+			m_toCameraPos.Set(BEKUTORU);
+		}
+	}
+	else
+	{
+		CatchMove();
+	}
 	//�J�����̍X�V
 	g_camera3D->Update();
 }
@@ -46,6 +59,8 @@ void GameCamera::UpdatePositionAndTarget()
 {
 	if (m_playerManagement->IsDead()||m_playerManagement->m_enMananagementState==PlayerManagement::m_enPlayer_Changing)
 	{
+		m_getPosition = m_cameraposition;
+
 		SetPosition({m_cameraposition.x,m_cameraposition.y + 100.0f,m_cameraposition.z });
 		return;
 	}
@@ -89,14 +104,24 @@ void GameCamera::UpdatePositionAndTarget()
 	//	//���������
 	//	m_toCameraPos = m_toCameraPosOld;
 	//}
-	if (g_pad[0]->IsTrigger(enButtonLB2))
-	{
-		m_toCameraPos.Set(BEKUTORU);
-	}
+
 	//���_�̌v�Z
 	Vector3 pos = m_target + m_toCameraPos;
 	//�J�����ɒ����_�Ǝ��_��ݒ肷��
 	g_camera3D->SetPosition(pos);
 	g_camera3D->SetTarget(m_target);
 
+}
+
+void GameCamera::CatchMove()
+{
+	m_cameraMove += g_gameTime->GetFrameDeltaTime() * 0.5f;
+	Vector3 m_playerPosition = m_player3D->GetPosition();
+	m_playerPosition.y += 100.0f;
+	m_cameraPosition.Lerp(m_cameraMove, m_target+m_toCameraPos, m_playerPosition);
+	if (m_cameraMove > 0.6f)
+	{
+		return;
+	}
+	g_camera3D->SetPosition(m_cameraPosition);
 }

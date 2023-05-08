@@ -38,6 +38,11 @@ namespace nsBookEngine {
 			int maxInstance = 1);
 
 		/// <summary>
+		/// ModelInitDataを使用した初期化処理。
+		/// </summary>
+		void InitModelData(ModelInitData& initData);
+
+		/// <summary>
 		/// 更新処理。
 		/// </summary>
 		void Update();
