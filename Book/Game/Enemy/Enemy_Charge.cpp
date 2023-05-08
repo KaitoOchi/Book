@@ -99,6 +99,11 @@ void Enemy_Charge::Update_OnCraw()
 {
 	// 巡回
 
+	if (m_ChachPlayerFlag == true) {
+		m_enAnimationState = IDLE;
+		return;
+	}
+
 	Enemy::Act_Craw();					// 巡回行動
 
 	// 視野角にプレイヤーがいるとき

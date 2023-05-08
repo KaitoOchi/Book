@@ -16,7 +16,7 @@ namespace
 	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 3.0f;						// 乗算速度
+	const float		ADD_SPEED = 2.0f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
@@ -142,7 +142,7 @@ void Enemy::PlayAnimation()
 	case LOSS:
 		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
 		// 再生速度を速くする
-		m_enemyRender.SetAnimationSpeed(20.0f);
+		//m_enemyRender.SetAnimationSpeed(4.0f);
 		break;
 	}
 }
@@ -343,9 +343,6 @@ void Enemy::Act_MissingPlayer()
 
 	// 回転を教える
 	Rotation(moveSpeed);
-
-	// 歩きモーションを再生
-	m_enAnimationState = WALK;
 
 	// モーションを再生
 	if (Act_Stop(3.0f, 4) == false) {

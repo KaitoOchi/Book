@@ -239,10 +239,9 @@ void Player::PlayerCatch()
 {
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH&&m_playerCaught)
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH)
 		{
 			m_playerState = m_enPlayer_Caught;
-			m_playerCaught = false;
 			m_gamecamera->SetCameraPositio(m_position);
 		}
 	}

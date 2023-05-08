@@ -92,6 +92,11 @@ void Enemy_Clear::Update()
 }
 void Enemy_Clear::Update_OnCraw()
 {
+	if (m_ChachPlayerFlag == true) {
+		m_enAnimationState = IDLE;
+		return;
+	}
+
 	Enemy::Act_Craw();				// 巡回行動
 
 	// 視野角にプレイヤーがいるとき
