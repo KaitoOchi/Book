@@ -8,7 +8,7 @@ namespace
 	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
 	const Vector3	TIME_FONT_POSITION = { -100.0f, 500.0f, 0.0f };		//タイムの位置
 	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
-	const float		TIME_MAX = 300.0f;									//最大残り時間
+	const float		TIME_MAX = 600.0f;									//最大残り時間
 	const float		MAXTIMEYPOSITION = 800.0f;							//タイムの一番大きい座標
 	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
 	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
@@ -57,11 +57,9 @@ bool GameUI::Start()
 
 void GameUI::Update()
 {
-	if (m_game->m_gameState == m_game->m_enGameState_GameClearable)
-	{
-		Time();
-		TimeMove();
-	}
+	Time();
+	TimeMove();
+
 	ChangeGage();
 }
 
@@ -140,9 +138,5 @@ void GameUI::Render(RenderContext& rc)
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
 
-	if (m_game->m_gameState == m_game->m_enGameState_GameClearable)
-	{
-		m_timeFontRender.Draw(rc);
-
-	}
+	m_timeFontRender.Draw(rc);
 }

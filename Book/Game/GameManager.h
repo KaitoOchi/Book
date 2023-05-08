@@ -152,6 +152,14 @@ public:
 	}
 
 	/// <summary>
+	/// 発見された数を削除。
+	/// </summary>
+	void ResetSearchNum()
+	{
+		m_searchNum = 0;
+	}
+
+	/// <summary>
 	/// ステートの切替
 	/// </summary>
 	/// <param name="gamestate"></param>
