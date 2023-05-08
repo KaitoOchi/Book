@@ -23,7 +23,7 @@ bool LightSensor::Start()
 
 	//スポットライトを設定
 	m_spotLight.SetSpotLight(
-		0,
+		m_number,
 		m_position,
 		Vector3(10.0f, 0.0f, 0.0f),
 		500.0f,
