@@ -16,7 +16,7 @@ namespace nsBookEngine {
 	bool SkyCube::Start()
 	{
 		//テクスチャの初期化
-		m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMapNight.dds");
+		m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMapWild.dds");
 
 		//モデルの初期化
 		ModelInitData initData;
