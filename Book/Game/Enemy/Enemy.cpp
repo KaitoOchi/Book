@@ -11,8 +11,12 @@
 
 namespace
 {
-	const float		MOVE_SPEED = 5.0f;						// 移動速度
-	const float		ADD_SPEED = 2.0f;						// 乗算速度
+	const Vector3	MODEL_SCALE = { 2.0f,2.0f,2.0f };		// モデルのスケール
+
+	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完
+
+	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		ADD_SPEED = 3.0f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
@@ -34,7 +38,7 @@ namespace
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
-	const float		ADD_MOVE_MIN = 100.0f;
+	const float		ADD_MOVE_MIN = 250.0f;
 	const float		ADD_MOVE_LONG = 400.0f;
 }
 
@@ -49,6 +53,8 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
+	SetScale(MODEL_SCALE);
+
 	//警戒度時間を代入
 	m_Vicount = VIGILANCETIME;
 
@@ -59,8 +65,7 @@ bool Enemy::Start()
 	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
-	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
-	//m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
+	m_nvmMesh.Init("Assets/modelData/level_test/nav_test.tkn");
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -84,6 +89,62 @@ bool Enemy::Start()
 	//----------------------------------------------
 
 	return true;
+}
+
+void Enemy::Animation()
+{
+	// アニメーションの読み込み
+	m_enAnimationClips[m_enAnimation_Idle].Load("Assets/animData/enemy/idle.tka");
+	m_enAnimationClips[m_enAnimation_Idle].SetLoopFlag(true);
+
+	m_enAnimationClips[m_enAnimation_Walk].Load("Assets/animData/enemy/walk_battle.tka");
+	m_enAnimationClips[m_enAnimation_Walk].SetLoopFlag(true);
+
+	m_enAnimationClips[m_enAnimation_Run].Load("Assets/animData/enemy/run_battle.tka");
+	m_enAnimationClips[m_enAnimation_Run].SetLoopFlag(true);
+
+	m_enAnimationClips[m_enAnimation_Attack].Load("Assets/animData/enemy/attack.tka");
+	m_enAnimationClips[m_enAnimation_Attack].SetLoopFlag(false);
+
+	m_enAnimationClips[m_enAnimation_Damege].Load("Assets/animData/enemy/damege.tka");
+	m_enAnimationClips[m_enAnimation_Damege].SetLoopFlag(false);
+
+	m_enAnimationClips[m_enAnimation_Flash].Load("Assets/animData/enemy/dizzy.tka");
+	m_enAnimationClips[m_enAnimation_Flash].SetLoopFlag(true);
+
+	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
+	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
+}
+
+void Enemy::PlayAnimation()
+{
+	// 行動パターンで再生アニメーションを変動
+	switch (m_enAnimationState)
+	{
+	case IDLE:
+		m_enemyRender.PlayAnimation(m_enAnimation_Idle, LINEAR_COMPLETION);
+		break;
+	case WALK:
+		m_enemyRender.PlayAnimation(m_enAnimation_Walk, LINEAR_COMPLETION);
+		break;
+	case RUN:
+		m_enemyRender.PlayAnimation(m_enAnimation_Run, LINEAR_COMPLETION);
+		break;
+	case ATTACK:
+		m_enemyRender.PlayAnimation(m_enAnimation_Attack, LINEAR_COMPLETION);
+		break;
+	case DAMEGE:
+		m_enemyRender.PlayAnimation(m_enAnimation_Damege, LINEAR_COMPLETION);
+		break;
+	case FLASH:
+		m_enemyRender.PlayAnimation(m_enAnimation_Flash, LINEAR_COMPLETION);
+		break;
+	case LOSS:
+		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
+		// 再生速度を速くする
+		m_enemyRender.SetAnimationSpeed(20.0f);
+		break;
+	}
 }
 
 void Enemy::Rotation(Vector3 rot)
@@ -141,9 +202,6 @@ void Enemy::Nav(Vector3 pos)
 
 	// 回転を教える
 	m_enemyRender.SetRotation(rot);
-
-	// 歩きアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
 }
 
 bool Enemy::Act_SeachPlayer()
@@ -287,12 +345,12 @@ void Enemy::Act_MissingPlayer()
 	Rotation(moveSpeed);
 
 	// 歩きモーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	m_enAnimationState = WALK;
 
 	// モーションを再生
 	if (Act_Stop(3.0f, 4) == false) {
-		// きょろきょろするモーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+		// 見渡すモーションを再生
+		m_enAnimationState = LOSS;
 	}
 }
 
@@ -305,7 +363,7 @@ void Enemy::Act_HitFlashBullet()
 	if (m_HitFlashBulletFlag == true) {
 
 		// 被弾アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Damege;
+		m_enAnimationState = DAMEGE;
 
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
@@ -313,12 +371,7 @@ void Enemy::Act_HitFlashBullet()
 			m_addTimer[0] = 0.0f;				// タイマーをリセット
 
 			// 見渡すアニメーションを再生
-			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
-		}
-		// そうでないとき
-		else {
-			// 待機アニメーションを再生
-			m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+			m_enAnimationState = LOSS;
 		}
 	}
 }
@@ -340,12 +393,12 @@ bool Enemy::Act_HitSoundBullet()
 			// アイテムの座標を基にしてナビメッシュを作成
 			Nav(m_itemPos);
 			// 走るアニメーションを再生
-			m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+			m_enAnimationState = RUN;
 
 			// アイテムを使用した位置についたとき
 			if (length > 20.0f && length < 500.0f) {
 				// 見渡すアニメーションを再生
-				m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+				m_enAnimationState = LOSS;
 				return true;
 			}
 		}
@@ -388,14 +441,13 @@ void Enemy::Act_Craw()
 	// タイマーがtrueのとき
 	if (Act_Stop(WAITING_TIMER,1) == true) {
 		// 歩きアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		m_enAnimationState = WALK;
 		// 座標に加算
 		m_position += moveSpeed;
 	}
-	// そうでないとき
 	else {
-		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+		// 歩きアニメーションを再生
+		m_enAnimationState = IDLE;
 	}
 }
 
@@ -407,7 +459,7 @@ void Enemy::Act_Tracking()
 	Nav(m_playerPos);
 
 	// 走るアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+	m_enAnimationState = RUN;
 }
 
 void Enemy::Pass(int PassState)
@@ -427,16 +479,16 @@ void Enemy::Pass(int PassState)
 		// 右回り(正方形)
 	case SQUARE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_MIN),4 });
 		break;
 		// 左回り(正方形)
 	case SQUARE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z+ ADD_MOVE_MIN),4 });
 		break;
 		// (右に)直角
 	case ANGLE_RIGHT:
@@ -490,7 +542,7 @@ void Enemy::Act_Access()
 		m_position += moveSpeed;
 
 		// 歩きアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+		m_enAnimationState = WALK;
 	}
 
 }
@@ -522,7 +574,7 @@ void Enemy::Act_Charge(float time)
 	Rotation(rot);
 
 	// 待機アニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	m_enAnimationState = IDLE;
 
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
@@ -551,7 +603,7 @@ void Enemy::Act_Charge(float time)
 		m_sumPos += moveSpeed;
 
 		// 走るアニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+		m_enAnimationState = RUN;
 
 		// 長さが一定以上のとき
 		if (m_sumPos.Length() > MOVING_DISTANCE) {
@@ -626,7 +678,7 @@ void Enemy::Act_Called()
 	Nav(m_setPos);
 
 	// 走るアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Run;
+	m_enAnimationState = RUN;
 
 	// 自身から目標へ向かうベクトル
 	Vector3 diff = m_setPos - m_position;
@@ -636,7 +688,7 @@ void Enemy::Act_Called()
 		// 移動を停止する
 		m_position = m_position;
 		// 待機アニメーションを再生
-		m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+		m_enAnimationState = IDLE;
 	}
 }
 
@@ -701,7 +753,7 @@ void Enemy::Act_Loss()
 	//Rotation(moveSpeed);
 
 	// 歩くアニメーションを再生
-	m_enEnemyAnimationState = m_enEnemyAnimationState_Walk;
+	m_enAnimationState = RUN;
 
 	return;
 }
