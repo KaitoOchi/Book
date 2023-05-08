@@ -229,6 +229,7 @@ void Result::Input()
 			m_fade->StartFadeOut();
 
 			GameManager::GetInstance()->DeleteBGM();
+			GameManager::GetInstance()->ResetSearchNum();
 		}
 	}
 
