@@ -21,6 +21,14 @@ public:
 	bool Start();
 
 	/// <summary>
+	/// アニメーション
+	/// </summary>
+	void Animation();
+	/// <summary>
+	/// アニメーションの再生
+	/// </summary>
+	void PlayAnimation();
+	/// <summary>
 	/// 壁と衝突したかどうかの処理
 	/// </summary>
 	/// <param name="pos">座標</param>
@@ -118,16 +126,32 @@ public:
 
 	// エネミーのアニメーションステート
 	// 継承した派生クラスでアニメーションを読み込み、関数を呼ぶと再生されます。
-	enum EnEnemyAnimationState
+	enum EnAnimationClip
 	{
-		m_enEnemyAnimationState_Idle,	// 待機
-		m_enEnemyAnimationState_Walk,	// 歩く
-		m_enEnemyAnimationState_Run,	// 走る
-		m_enEnemyAnimationState_Attack,	// 攻撃
-		m_enEnemyAnimationState_Damege,	// 被弾
+		m_enAnimation_Idle,		// 待機
+		m_enAnimation_Walk,		// 歩く
+		m_enAnimation_Run,		// 走る
+		m_enAnimation_Attack,	// 攻撃
+		m_enAnimation_Damege,	// 被弾
+		m_enAnimation_Flash,	// 閃光弾を受けたとき
+		m_enAnimation_Loss,		// プレイヤーを見失った時
+		m_enAnimation_Num
 	};
 	// アニメーションステート
-	EnEnemyAnimationState m_enEnemyAnimationState = m_enEnemyAnimationState_Idle;
+	AnimationClip m_enAnimationClips[m_enAnimation_Num];
+	
+	// アニメーション再生用ステート
+	enum EnAnimationState
+	{
+		IDLE,
+		WALK,
+		RUN,
+		ATTACK,
+		DAMEGE,
+		FLASH,
+		LOSS
+	};
+	EnAnimationState m_enAnimationState = IDLE;
 
 	// エネミーの行動パターン
 	enum EnEnemyActState
@@ -338,6 +362,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
+	bool m_TrakkingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
