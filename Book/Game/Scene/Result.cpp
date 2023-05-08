@@ -10,7 +10,7 @@ namespace
 {
 	const char		RANK[4] = { 'A', 'B', 'C', 'D' };						//ランク一覧
 	const wchar_t* GET_TREASURE_TEXT[2] = {L"    FAILED", L" SUCCUESS!" };	//宝を取得したかどうかのテキスト
-	const int		SCORE_RANK[4] = { 100000, 80000, 60000, 50000 };				//ランクの条件
+	const int		SCORE_RANK[4] = { 100000, 80000, 60000, 50000 };		//ランクの条件
 	const float		CAN_INPUT = 6.0f;										//入力可能時間
 	const float		ENABLE_TIME[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };		//表示可能になる時間
 	const Vector3	GAMEOVER_SPRITE_POS = { -150.0f, 0.0f, 0.0f };			//ゲームオーバー画像の座標
@@ -191,7 +191,7 @@ void Result::InitSprite()
 
 void Result::Update()
 {
-	if (!IsEndAnimation()) {
+	if (IsEndAnimation()) {
 		return;
 	}
 
@@ -296,7 +296,7 @@ void Result::Render(RenderContext& rc)
 	m_backGroundSpriteRender.Draw(rc);
 	m_stateSpriteRender.Draw(rc);
 
-	if (!IsEndAnimation()) {
+	if (IsEndAnimation()) {
 		return;
 	}
 

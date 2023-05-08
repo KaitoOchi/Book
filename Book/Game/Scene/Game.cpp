@@ -6,7 +6,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Title.h"
-#include "SenSor.h"
+#include "Sensor.h"
 #include "MiniMap.h"
 #include "Enemy.h"
 #include "Enemy_Normal.h"
