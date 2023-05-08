@@ -60,10 +60,10 @@ private:
 	/// 待機時間が終了したかどうか
 	/// </summary>
 	/// <returns></returns>
-	const bool& IsEndAnimation()
+	const bool IsEndAnimation()
 	{
 		if (m_canInputTime < 0.0f) {
-			return true;
+			return false;
 		}
 		else if (m_canInputTime < 0.5f && m_canInputTime > 0.4f) {
 			//ドラムロール音を出す
@@ -72,12 +72,11 @@ private:
 			m_sound->Play(false);
 			m_sound->SetVolume(GameManager::GetInstance()->GetSFX());
 			m_canInputTime = 0.3f;
-			return false;
+			return true;
 		}
-		else {
-			m_canInputTime -= g_gameTime->GetFrameDeltaTime();
-			return false;
-		}
+
+		m_canInputTime -= g_gameTime->GetFrameDeltaTime();
+		return true;
 	}
 
 private:

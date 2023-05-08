@@ -89,7 +89,7 @@ void LightSensor::Rotate()
 {
 	//Y²ü‚è‚Ì‰ñ“]
 	Quaternion qRotY;
-	qRotY.SetRotationY(m_timer * 0.005f);
+	qRotY.SetRotationY(m_timer * 0.0025f);
 	qRotY.Apply(m_spotLight.GetDirection());
 
 	//ŠOÏ‚ğ‹‚ß‚é
