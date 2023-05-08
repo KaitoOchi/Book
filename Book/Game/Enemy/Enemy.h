@@ -362,6 +362,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
+	bool m_TrakkingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理

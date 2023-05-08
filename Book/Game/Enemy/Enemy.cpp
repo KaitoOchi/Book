@@ -13,8 +13,10 @@ namespace
 {
 	const Vector3	MODEL_SCALE = { 2.0f,2.0f,2.0f };		// モデルのスケール
 
-	const float		MOVE_SPEED = 5.0f;						// 移動速度
-	const float		ADD_SPEED = 2.0f;						// 乗算速度
+	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完
+
+	const float		MOVE_SPEED = 3.0f;						// 移動速度
+	const float		ADD_SPEED = 3.0f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
 	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
@@ -36,10 +38,8 @@ namespace
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
-	const float		ADD_MOVE_MIN = 100.0f;
+	const float		ADD_MOVE_MIN = 250.0f;
 	const float		ADD_MOVE_LONG = 400.0f;
-
-	const float		ANIM_SPEED = 0.5f;
 }
 
 Enemy::Enemy()
@@ -65,8 +65,7 @@ bool Enemy::Start()
 	m_sphereCollider.Create(18.0f);
 
 	// ナビメッシュを構築
-	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
-	//m_nvmMesh.Init("Assets/modelData/level_test/nvm_test.tkn");
+	m_nvmMesh.Init("Assets/modelData/level_test/nav_test.tkn");
 
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -111,10 +110,10 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Damege].SetLoopFlag(false);
 
 	m_enAnimationClips[m_enAnimation_Flash].Load("Assets/animData/enemy/dizzy.tka");
-	m_enAnimationClips[m_enAnimation_Flash].SetLoopFlag(false);
+	m_enAnimationClips[m_enAnimation_Flash].SetLoopFlag(true);
 
 	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
-	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(false);
+	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
 }
 
 void Enemy::PlayAnimation()
@@ -123,25 +122,27 @@ void Enemy::PlayAnimation()
 	switch (m_enAnimationState)
 	{
 	case IDLE:
-		m_enemyRender.PlayAnimation(m_enAnimation_Idle, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Idle, LINEAR_COMPLETION);
 		break;
 	case WALK:
-		m_enemyRender.PlayAnimation(m_enAnimation_Walk, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Walk, LINEAR_COMPLETION);
 		break;
 	case RUN:
-		m_enemyRender.PlayAnimation(m_enAnimation_Run, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Run, LINEAR_COMPLETION);
 		break;
 	case ATTACK:
-		m_enemyRender.PlayAnimation(m_enAnimation_Attack, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Attack, LINEAR_COMPLETION);
 		break;
 	case DAMEGE:
-		m_enemyRender.PlayAnimation(m_enAnimation_Damege, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Damege, LINEAR_COMPLETION);
 		break;
 	case FLASH:
-		m_enemyRender.PlayAnimation(m_enAnimation_Flash, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Flash, LINEAR_COMPLETION);
 		break;
 	case LOSS:
-		m_enemyRender.PlayAnimation(m_enAnimation_Loss, ANIM_SPEED);
+		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
+		// 再生速度を速くする
+		m_enemyRender.SetAnimationSpeed(20.0f);
 		break;
 	}
 }
@@ -478,16 +479,16 @@ void Enemy::Pass(int PassState)
 		// 右回り(正方形)
 	case SQUARE_RIGHT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_MIN),4 });
 		break;
 		// 左回り(正方形)
 	case SQUARE_LEFT:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_LONG),3 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z+ ADD_MOVE_MIN),4 });
 		break;
 		// (右に)直角
 	case ANGLE_RIGHT:
