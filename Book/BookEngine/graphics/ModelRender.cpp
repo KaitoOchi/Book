@@ -143,6 +143,15 @@ namespace nsBookEngine {
 		}
 	}
 
+	void ModelRender::InitModelData(ModelInitData& initData)
+	{
+		InitSkeleton(initData.m_tkmFilePath);
+
+		m_model.Init(initData);
+
+		UpdateWorldMatrixInModes();
+	}
+
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{

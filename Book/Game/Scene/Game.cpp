@@ -6,7 +6,7 @@
 #include "PlayerManagement.h"
 #include "GameUI.h"
 #include "Title.h"
-#include "SenSor.h"
+#include "Sensor.h"
 #include "MiniMap.h"
 #include "Enemy.h"
 #include "Enemy_Normal.h"
@@ -35,6 +35,7 @@
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
+#include "nature/SkyCube.h"
 
 
 Game::Game()
@@ -53,7 +54,7 @@ Game::~Game()
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<SenSor>("sensor"));
+	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -128,6 +129,7 @@ bool Game::Start()
 	//NewGO<SecurityCamera>(0, "securityCamera");
 
 	NewGO<Pause>(0, "pause");
+	NewGO<SkyCube>(0, "skyCube");
 
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -400,7 +402,7 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_sensor = NewGO<SenSor>(0, "sensor");
+			m_sensor = NewGO<Sensor>(0, "sensor");
 			m_sensor->SetPosition(objData.position);
 			m_sensor->SetScale(objData.scale);
 			m_sensor->SetRotation(objData.rotation);

@@ -47,23 +47,18 @@ private:
 	void Input();
 
 	/// <summary>
-	/// ゲームクリア処理。
+	/// アニメーション処理。
 	/// </summary>
-	void GameClear();
-
-	/// <summary>
-	/// ゲームオーバー処理。
-	/// </summary>
-	void GameOver();
+	void Animation();
 
 	/// <summary>
 	/// 待機時間が終了したかどうか
 	/// </summary>
 	/// <returns></returns>
-	const bool& IsEndAnimation()
+	const bool IsEndAnimation()
 	{
 		if (m_canInputTime < 0.0f) {
-			return true;
+			return false;
 		}
 		else if (m_canInputTime < 0.5f && m_canInputTime > 0.4f) {
 			//ドラムロール音を出す
@@ -72,12 +67,11 @@ private:
 			m_sound->Play(false);
 			m_sound->SetVolume(GameManager::GetInstance()->GetSFX());
 			m_canInputTime = 0.3f;
-			return false;
+			return true;
 		}
-		else {
-			m_canInputTime -= g_gameTime->GetFrameDeltaTime();
-			return false;
-		}
+
+		m_canInputTime -= g_gameTime->GetFrameDeltaTime();
+		return true;
 	}
 
 private:
@@ -97,16 +91,11 @@ private:
 	SpriteRender	m_failedSpriteRender;					//failed文字
 	FontRender		m_messageFontRender[4];					//スコアメッセージ
 	FontRender		m_scoreFontRender;						//スコアフォント
-
 	Level2DRender	m_level2DRender;						//レベル2Dレンダー
-
 	ResultState		m_resultState = enState_GameOver;		//リザルトステート
-
 	Fade*			m_fade = nullptr;						//フェードクラス
 	SoundSource*	m_sound = nullptr;						//サウンドクラス
-
 	Vector3			m_fontPosition[4];						//文字を出す座標
-
 	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
 	bool			m_isDram = false;						//ドラム音を出したかどうか
 	int				m_cursor = 0;							//カーソル
