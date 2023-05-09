@@ -46,6 +46,16 @@ namespace nsBookEngine {
 		~RenderingEngine();
 
 	public:
+
+		const void Setm_directionLig(Vector3 light,float ambi,Vector3 color)
+		{
+			m_directionLig.SetDirection(light);
+			m_directionLig.SetAmbientLight(ambi);
+			m_directionLig.SetColor(color);
+		}
+
+
+
 		/// <summary>
 		/// インスタンスの生成。
 		/// </summary>
@@ -86,8 +96,12 @@ namespace nsBookEngine {
 		/// <param name="color">ライトのカラー。[</param>
 		void SetDirectionLight(const Vector3& dir, const Vector3 color)
 		{
-			m_directionLig.SetDirection(dir);
-			m_directionLig.SetColor(color);
+			//m_directionLig.SetDirection(dir);
+			//m_directionLig.SetColor(color);
+			Vector3 dir_ = dir;
+			dir_.Normalize();
+			GetLightCB().directionLig.ligDirection = dir_;
+			GetLightCB().directionLig.ligColor = color;
 		}
 
 		/// <summary>
@@ -97,6 +111,7 @@ namespace nsBookEngine {
 		void SetAmbient(const float amb)
 		{
 			m_directionLig.SetAmbientLight(amb);
+			//GetLightCB().directionLig.ambient = { amb,amb,amb };
 		}
 
 		/// <summary>

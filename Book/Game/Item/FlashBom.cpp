@@ -9,7 +9,7 @@ namespace
 	const float FLASHRANGE = 300.0f;			//フラッシュの効果範囲
 	const float MAXRANGE = 2000.0f;				//ポイントライトの範囲
 	const float MAXALPHA = 0.9;					//α値の範囲
-	const float MAXAMBIENT = 10.0f;				//環境の強さ
+	const float MAXAMBIENT = 1.0f;				//環境の強さ
 	const float MAXCOLOR = 10.0f;
 	
 }
