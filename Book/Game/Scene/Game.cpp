@@ -480,10 +480,17 @@ void Game::LevelDesign()
 
 void Game::Update()
 {		
+	if (m_gameState == m_enGameState_GameClearable || m_gameState == m_enGameState_DuringGamePlay)
+	{
+		DuringGamePlayState();
+	}
 	if (m_gameState == m_enGameState_GameClearable)
 	{
 		ClearableState();
 	}
+
+	
+
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
@@ -530,12 +537,15 @@ void Game::ClearableState()
 		NotifyGameClear();
 	
 	}
-	else if (m_gameUI->GetTime() <= 0.0f)
+}
+
+void Game::DuringGamePlayState()
+{
+	if (m_gameUI->GetTime() <= 0.0f)
 	{
 		GameDelete(0);
 		NotifyGameOver();
 	}
-	
 }
 
 void Game::NotifyGameStart()
