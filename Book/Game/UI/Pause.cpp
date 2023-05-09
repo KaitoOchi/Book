@@ -87,9 +87,11 @@ void Pause::PauseScreen()
 			break;
 		case 1:
 			m_game->GameDelete(1);
+			m_game->NotifyGameBack();
 			break;
 		case 2:
 			m_game->GameDelete(2);
+			m_game->NotifyGameBack();
 			break;
 		}
 

@@ -33,6 +33,7 @@ void PlayerManagement::Update()
 	if (!m_GameStartState) {
 		return;
 	}
+	
 
 	if (m_enMananagementState == m_enPlayer_Changing) {
 		IsChanging();

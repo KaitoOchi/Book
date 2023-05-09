@@ -122,9 +122,13 @@ void Game::GamePos()
 
 bool Game::Start()
 {
+
+	NotifyGameStart();
+
 	//リストの初期化
 	m_enemyList.clear();
 	m_wallList.clear();
+	m_starList.clear();
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
@@ -476,8 +480,10 @@ void Game::LevelDesign()
 
 void Game::Update()
 {		
-	MnageState();
-
+	if (m_gameState == m_enGameState_GameClearable)
+	{
+		ClearableState();
+	}
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
@@ -487,22 +493,26 @@ void Game::Update()
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
 
-			if (m_gameState != m_enGameState_GameFade&& m_gameState != m_enGameState_GameClear)
+			if (m_gameState ==m_enGameState_GameBuck)
 			{
 				GamePos();
 				
 			}
-			else
+			else if(m_gameState==m_enGameState_GameClear)
 			{
+				//ゲームクリアにする
 				Result* result = NewGO<Result>(0, "result");
-				if (m_gameState == m_enGameState_GameClear)
-				{
-					result->SetResult(true);
-				}
+				result->SetResult(true);
+				result->SetTime(m_gameUI->GetTime());
+			}
+			else if (m_gameState == m_enGameState_GameOver)
+			{
+				//ゲームオーバーにする
+				Result* result = NewGO<Result>(0, "result");
+				result->SetResult(false);
 				result->SetTime(m_gameUI->GetTime());
 			}
 			DeleteGO(FindGO<Pause>("pause"));
-			
 			DeleteGO(this);
 			GameManager::GetInstance()->DeleteBGM();
 		}
@@ -510,46 +520,52 @@ void Game::Update()
 	
 
 }
-void Game::Clearable()
+void Game::ClearableState()
 {
 	
 	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
 		GameDelete(0);
-		m_gameState = m_enGameState_GameClear;
+		NotifyGameClear();
 	
 	}
-	if (m_gameUI->GetTime() <= 0.0f)
+	else if (m_gameUI->GetTime() <= 0.0f)
 	{
-		m_gameState = m_enGameState_GameFade;
+		GameDelete(0);
+		NotifyGameOver();
 	}
 	
 }
 
-void Game::ClearState()
+void Game::NotifyGameStart()
 {
-	
+	m_gameState = m_enGameState_GameStart;
 }
 
-void Game::MnageState()
+void Game::NotifyDuringGamePlay()
 {
-	switch (m_gameState)
-	{
-	case Game::m_enGameState_GameClearable:
-		Clearable();
-		break;
-	case Game::m_enGameState_DuringGamePlay:
-		break;
-	case Game::m_enGameState_GameFade:
-		break;
-	case Game::m_enGameState_GameOver:
-		break;
-	case Game::m_enGameState_GameBuck:
-		break;
-	default:
-		break;
-	}
+	m_gameState = m_enGameState_DuringGamePlay;
+}
+
+void Game::NotifyGameClear()
+{
+	m_gameState = m_enGameState_GameClear;
+}
+
+void Game::NotifyGameOver()
+{
+	m_gameState = m_enGameState_GameOver;
+}
+
+void Game::NotifyGameClearable()
+{
+	m_gameState = m_enGameState_GameClearable;
+}
+
+void Game::NotifyGameBack()
+{
+	m_gameState = m_enGameState_GameBuck;
 }
 
 void Game::Render(RenderContext& rc)
