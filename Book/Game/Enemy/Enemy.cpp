@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "GameManager.h"
 
-#define FIELDOF_VIEW Math::PI / 180.0f) * 75.0f				// エネミーの視野角(初期:120)
+#define FIELDOF_VIEW (Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
 #define SEACH_DECISION 200.0f * 200.0f						// ベクトルを作成する範囲
 
 namespace
@@ -16,13 +16,13 @@ namespace
 	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 3.0f;						// 乗算速度
+	const float		ADD_SPEED = 1.8f;						// 乗算速度
 	const float		MOVING_DISTANCE = 400.0f;				// 移動距離
-	const float		CALL_DISTANCE_MAX = 350.0f;				// 呼ぶことができる最大値
+	const float		CALL_DISTANCE_MAX = 200.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
-	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
+	const float		CANMOVE_TIMER = 5.0f;					// 再度行動できるまでのタイマー
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
@@ -109,10 +109,10 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Damege].Load("Assets/animData/enemy/damege.tka");
 	m_enAnimationClips[m_enAnimation_Damege].SetLoopFlag(false);
 
-	m_enAnimationClips[m_enAnimation_Flash].Load("Assets/animData/enemy/dizzy.tka");
-	m_enAnimationClips[m_enAnimation_Flash].SetLoopFlag(true);
+	m_enAnimationClips[m_enAnimation_Dizzy].Load("Assets/animData/enemy/dizzy.tka");
+	m_enAnimationClips[m_enAnimation_Dizzy].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
+	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/attack.tka");
 	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
 }
 
@@ -136,13 +136,13 @@ void Enemy::PlayAnimation()
 	case DAMEGE:
 		m_enemyRender.PlayAnimation(m_enAnimation_Damege, LINEAR_COMPLETION);
 		break;
-	case FLASH:
-		m_enemyRender.PlayAnimation(m_enAnimation_Flash, LINEAR_COMPLETION);
+	case DIZZY:
+		m_enemyRender.PlayAnimation(m_enAnimation_Dizzy, LINEAR_COMPLETION);
 		break;
 	case LOSS:
 		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
 		// 再生速度を速くする
-		m_enemyRender.SetAnimationSpeed(20.0f);
+		//m_enemyRender.SetAnimationSpeed(4.0f);
 		break;
 	}
 }
@@ -204,7 +204,7 @@ void Enemy::Nav(Vector3 pos)
 	m_enemyRender.SetRotation(rot);
 }
 
-bool Enemy::Act_SeachPlayer()
+void Enemy::Act_SeachPlayer()
 {
 	// 索敵
 	// trueのときプレイヤーを発見している
@@ -218,6 +218,9 @@ bool Enemy::Act_SeachPlayer()
 
 	// スポットライトの中にプレイヤーがいるとき
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
+
+		m_TrakingPlayerFlag = true;
+
 		// 正規化
 		diff.Normalize();
 		// 内積を計算
@@ -225,13 +228,13 @@ bool Enemy::Act_SeachPlayer()
 		// 角度を計算
 		float angle = acosf(cos);
 		// 角度が視野角内のとき
-		if (angle <= (FIELDOF_VIEW) {
+		if (angle <= FIELDOF_VIEW) {
 			// 衝突判定を行う
-			return WallAndHit(m_playerPos);
+			if (WallAndHit(m_playerPos) == false) {
+				m_TrakingPlayerFlag = false;
+			}
 		}
 	}
-
-	return false;
 }
 
 // 衝突したときに呼ばれる関数オブジェクト(壁用)
@@ -344,9 +347,6 @@ void Enemy::Act_MissingPlayer()
 	// 回転を教える
 	Rotation(moveSpeed);
 
-	// 歩きモーションを再生
-	m_enAnimationState = WALK;
-
 	// モーションを再生
 	if (Act_Stop(3.0f, 4) == false) {
 		// 見渡すモーションを再生
@@ -364,11 +364,19 @@ void Enemy::Act_HitFlashBullet()
 
 		// 被弾アニメーションを再生
 		m_enAnimationState = DAMEGE;
+		// 被弾アニメーションが終了したとき
+		if (m_enemyRender.IsPlayingAniamtion() == false) {
+			// めまいのアニメーションを再生
+			m_enAnimationState = DIZZY;
+		}
 
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
-			m_HitFlashBulletFlag = false;		// フラグを降ろす
-			m_addTimer[0] = 0.0f;				// タイマーをリセット
+			// フラグを降ろす
+			m_TrakingPlayerFlag = false;
+			m_HitFlashBulletFlag = false;
+			// タイマーをリセット
+			m_addTimer[0] = 0.0f;
 
 			// 見渡すアニメーションを再生
 			m_enAnimationState = LOSS;
@@ -615,7 +623,7 @@ void Enemy::Act_Charge(float time)
 			m_CalculatedFlag = false;		// フラグを降ろす
 
 			// プレイヤーが視野角内にいるとき
-			if (Act_SeachPlayer() == true) {
+			if (m_TrakingPlayerFlag == true) {
 				return;
 			}
 			// いないときは巡回状態に戻る
