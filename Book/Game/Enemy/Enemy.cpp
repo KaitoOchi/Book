@@ -303,8 +303,7 @@ bool Enemy::Act_CatchPlayer()
 	// 一定の長さのとき
 	if (length <= CATCH_DECISION) {
 		// 捕まえる
-		m_fontRender.SetText(L"catch");
-		m_fontRender.SetPosition(Vector3(-500.0f, 0.0f, 0.0f));
+		m_enAnimationState = ATTACK;
 
 		for (int i = 0; i < enemyList.size(); i++) {
 			// 捕まえたのでフラグをtrueにする
@@ -673,7 +672,7 @@ void Enemy::Act_Call()
 			// 移動速度を加算
 			enemyList[i]->m_position += diff * MOVE_SPEED;
 
-			m_fontRender.SetText(L"call");
+			//m_fontRender.SetText(L"call");
 		}
 	}
 }
@@ -709,7 +708,7 @@ bool Enemy::Act_CallEnd()
 		//Vector3 diff = m_position - enemyList[i]->m_position;
 		//float length = diff.Length();
 
-		m_fontRender.SetText(L"callend");
+		//m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
 		if (enemyList[i]->m_ActState == CALLED) {
