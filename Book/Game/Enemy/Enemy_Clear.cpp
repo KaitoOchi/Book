@@ -36,15 +36,6 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
-	// 閃光弾に当たった
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-	// 音爆弾を使用した
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
-	}
-
 	switch (m_ActState) {
 		// 巡回
 	case CRAW:
@@ -73,8 +64,23 @@ void Enemy_Clear::Update()
 		// 捕獲
 	case CATCH:
 		Update_OnCatch();
-
 		break;
+		// デフォルトに戻す
+	case DEFAULT:
+		m_ActState = CRAW;
+		break;
+	case NOOP:
+		return;
+		break;
+	}
+
+	// 閃光弾に当たった
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+	// 音爆弾を使用した
+	if (m_HitSoundBulletFlag == true) {
+		m_ActState = LISTEN;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
@@ -114,7 +120,6 @@ void Enemy_Clear::Update_OnTracking()
 	// 視野角にプレイヤーがいないとき
 	if (m_TrakingPlayerFlag == false) {
 		Enemy::Act_MissingPlayer();
-		m_ActState = BACKBASEDON;
 	}
 
 	// プレイヤーを捕まえたとき
@@ -200,7 +205,9 @@ void Enemy_Clear::Render(RenderContext& rc)
 	//透明化解除
 	if (m_clearFlag == false)
 	{
-		m_enemyRender.Draw(rc);
+		if (m_ActState != NOOP) {
+			m_enemyRender.Draw(rc);
+		}
 	}
 	
 }

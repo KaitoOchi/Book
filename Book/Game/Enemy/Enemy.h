@@ -167,7 +167,8 @@ public:
 		CONFUSION,		// 閃光弾にあたったとき
 		LISTEN,			// 音爆弾を使用したとき
 		CATCH,			// 捕獲
-		NOOP			// 何もしない
+		NOOP,			// 何もしない
+		DEFAULT			// デフォルトに戻す
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -185,6 +186,11 @@ public:
 	/// <param name="CATCH">捕獲</param>
 	/// <param name="NOOP">何もしない</param>
 	EnEnemyActState m_ActState = CRAW;
+
+	// ステートを設定する
+	void SetActState(EnEnemyActState state) {
+		m_ActState = state;
+	}
 
 	void SearchPass(EnEnemyActState state);
 

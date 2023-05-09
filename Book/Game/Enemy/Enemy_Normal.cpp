@@ -35,16 +35,6 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	// 閃光弾に当たった
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-	// 音爆弾を使用した
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
-	}
-
-
 	switch (m_ActState) {
 		// 巡回
 	case CRAW:
@@ -74,6 +64,22 @@ void Enemy_Normal::Update()
 	case CATCH:
 		Update_OnCatch();
 		break;
+		// デフォルトに戻す
+	case DEFAULT:
+		m_ActState = CRAW;
+		break;
+	case NOOP:
+		return;
+		break;
+	}
+
+	// 閃光弾に当たった
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+	// 音爆弾を使用した
+	if (m_HitSoundBulletFlag == true) {
+		m_ActState = LISTEN;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
@@ -86,6 +92,7 @@ void Enemy_Normal::Update()
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);
+
 	// 視野角
 	Enemy::Act_SeachPlayer();
 
@@ -118,7 +125,6 @@ void Enemy_Normal::Update_OnTracking()
 
 	// 視野角にプレイヤーがいないとき
 	if (m_TrakingPlayerFlag == false) {
-		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 
@@ -140,7 +146,7 @@ void Enemy_Normal::Update_OnCalled()
 
 void Enemy_Normal::Update_OnBackBasedOn()
 {
-	Enemy::Act_Loss();					// 追跡行動からの切り替え
+	Enemy::Act_MissingPlayer();
 	m_ActState = CRAW;
 }
 
@@ -178,7 +184,9 @@ void Enemy_Normal::Update_OnCatch()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// 描画
-	m_enemyRender.Draw(rc);
+	if (m_ActState != NOOP) {
+		m_enemyRender.Draw(rc);
+	}
 
 	if (Enemy::Act_CatchPlayer() == true) {
 		m_fontRender.Draw(rc);

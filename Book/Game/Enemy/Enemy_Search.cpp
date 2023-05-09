@@ -37,17 +37,6 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
-	Enemy::SearchPass(SEARCH);
-
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-	// ‰¹”š’e‚ðŽg—p‚µ‚½
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
-	}
-
 	switch (m_ActState) {
 	case SEARCH:
 		Update_OnSearch();
@@ -61,6 +50,22 @@ void Enemy_Search::Update()
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
+		// ƒfƒtƒHƒ‹ƒg‚É–ß‚·
+	case DEFAULT:
+		m_ActState = CRAW;
+		break;
+	case NOOP:
+		return;
+		break;
+	}
+
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ðŽg—p‚µ‚½
+	if (m_HitSoundBulletFlag == true) {
+		m_ActState = LISTEN;
 	}
 
 	Enemy::SpotLight_Serch(m_rot, m_position);
@@ -150,5 +155,7 @@ void Enemy_Search::Rotaition()
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	m_enemyRender.Draw(rc);
+	if (m_ActState != NOOP) {
+		m_enemyRender.Draw(rc);
+	}
 }
