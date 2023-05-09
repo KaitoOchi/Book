@@ -97,6 +97,8 @@ public:
 	}
 
 protected:
+	
+
 	virtual void Update();
 	void Move();
 	void Jump();
@@ -247,7 +249,7 @@ protected:
 	CharacterController *m_characon;							//キャラコン
 	CollisionObject* m_collisionObject = nullptr;				//コリジョン
 
-	GameCamera* m_gamecamera=nullptr;								//ゲームカメラ
+	GameCamera* m_gamecamera=nullptr;							//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 	Star* m_star = nullptr;										//星
 	Treasure* m_treasure = nullptr;
@@ -261,5 +263,7 @@ protected:
 	float m_downTime = 3.0f;									//気絶時間
 
 	bool m_playerCaught = true;
+
+	
 
 };

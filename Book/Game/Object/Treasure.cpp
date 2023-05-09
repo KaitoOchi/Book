@@ -64,7 +64,7 @@ void Treasure::Hit()
 	if (m_gagecount >= 1.0f)
 	{
 		m_player3d->m_enPlayer3D_Steal;
-		m_game->m_gameState = m_game->m_enGameState_GameClearable;
+		m_game->NotifyGameClearable();
 		m_game->m_pointLight[m_game->m_lightNumber].SetColor(Vector3(50.0f, 0.0f, 0.0f));
 		m_game->m_pointLight[m_game->m_lightNumber].Update();
 

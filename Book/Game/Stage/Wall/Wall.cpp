@@ -42,7 +42,7 @@ void Wall::Update()
 }
 void Wall::Render(RenderContext& rc)
 {
-	Vector3 diff = m_player->GetPosition() - m_position;
+	Vector3 diff = m_RenderPosition - m_position;
 	if (diff.Length() < 1500.0f) {
 		m_wallRender.Draw(rc);
 	}
