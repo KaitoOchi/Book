@@ -24,7 +24,7 @@ bool Treasure::Start()
 	m_randTreasure = dist(mt);
 	Object::Start();
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	m_modelRender.Init("Assets/modelData/object/takara/item.tkm");
+	m_modelRender.Init("Assets/modelData/object/takara/treasure.tkm");
 	m_modelRender.SetPosition(m_game->GetTreasurePositionList()[m_randTreasure]);
 	m_modelRender.SetScale(m_scale*3.0f);
 	m_modelRender.SetRotation(m_rotation);

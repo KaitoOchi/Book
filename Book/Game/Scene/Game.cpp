@@ -125,7 +125,7 @@ bool Game::Start()
 	//環境光を初期化する
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, -1), Vector3(0.01f, 0.01f, 0.01f));
 	RenderingEngine::GetInstance()->SetAmbient(0.0f);
-	RenderingEngine::GetInstance()->Setm_directionLig(Vector3(1, -1, 1),0.0f, Vector3(0.2f, 0.2f, 0.2f));
+	//RenderingEngine::GetInstance()->Setm_directionLig(Vector3(1, -1, 1),0.0f, Vector3(0.2f, 0.2f, 0.2f));
 
 	//スタート時を知らせる
 	NotifyGameStart();
@@ -547,6 +547,14 @@ void Game::ClearableState()
 		GameDelete(0);
 		NotifyGameClear();
 	
+	}
+}
+
+void Game::NotDraw_Enemy(bool flag)
+{
+	// 描画するかどうか決定する
+	for (int i = 0; i < m_enemyList.size(); i++) {
+		m_enemyList[i]->SetNotDrawFlag(flag);
 	}
 }
 
