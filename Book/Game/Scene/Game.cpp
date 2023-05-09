@@ -486,6 +486,11 @@ void Game::Update()
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
 
+			//BGMが削除されるまで待つ
+			if (!GameManager::GetInstance()->IsDeleteBGM()) {
+				return;
+			}
+
 			if (m_gameState != m_enGameState_GameFade)
 			{
 				GamePos();
