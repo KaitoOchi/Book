@@ -38,6 +38,12 @@ GameManager::GameManager()
 	//リザルトBGMの設定
 	g_soundEngine->ResistWaveFileBank(24, "Assets/sound/bgm/bgm_result.wav");
 
+
+	//エフェクトの設定
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/kemuri/TowerDown.efk");
+	//EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/a.efk");
+
+
 	//データのロード
 	DataLoad();
 }

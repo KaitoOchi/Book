@@ -35,6 +35,7 @@ private:
 	/// 時間の移動処理。
 	/// </summary>
 	void TimeMove(const int& m, const int& s);
+
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
 	SpriteRender		m_gageSpriteRender;				//ゲージ画像
