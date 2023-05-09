@@ -61,7 +61,7 @@ void Ghost::CreateGhostBox()
 	posZ = posZmax - posZmin;
 	//ÉTÉCÉYÇä|ÇØÇÈ
 	m_boxSize.x = posX * m_scale.x;
-	m_boxSize.y = posY * m_scale.y;
+	m_boxSize.y = posY * m_scale.y*2.0f;
 	m_boxSize.z = posZ * m_scale.z;
 	
 }
