@@ -26,6 +26,8 @@ Title::~Title()
 
 bool Title::Start()
 {
+	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(-1.5f, -1, 1), Vector3(3.0f,3.0f,0.8f));
+	RenderingEngine::GetInstance()->SetAmbient(1.0f);
 	InitSprite();
 
 	//ÉJÉÅÉâÇÃê›íË
@@ -64,7 +66,7 @@ void Title::InitSprite()
 	rot.AddRotationY(Math::DegToRad(-120.0f));
 
 	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ);
-	m_playerModelRender.SetPosition(Vector3(100.0f, -100.0f, -400.0f));
+	m_playerModelRender.SetPosition(Vector3(100.0f, -100.0f, -380.0f));
 	m_playerModelRender.SetRotation(rot);
 	m_playerModelRender.Update();
 

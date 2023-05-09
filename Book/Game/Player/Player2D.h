@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 class PlayerManagement;
+class Player3D;
 class Player2D:public Player
 {
 public:
@@ -23,7 +24,7 @@ private:
 	Vector3 m_InputRot=Vector3::Zero;
 	Quaternion m_rot;
 	PlayerManagement* m_playerManagement = nullptr;
-
+	Player3D* m_player3D = nullptr;
 private:
 	/// <summary>
 	/// 待機ステートの遷移処理

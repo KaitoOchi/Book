@@ -1,17 +1,14 @@
 #include "stdafx.h"
 #include "Player2D.h"
-
 #include "Game.h"
 #include "Player3D.h"
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
 #include"GameCamera.h"
-
-//#include "graphics/effect/EffectEmitter.h"
-
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
+	const float EFFECTSIZE = 1.5f;
 }
 
 
@@ -30,6 +27,10 @@ bool PlayerManagement::Start()
 	m_player3D = FindGO<Player3D>("player3d");
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_game = FindGO<Game>("game");
+
+	
+
+
 	return true;
 }
 void PlayerManagement::Update()
@@ -43,8 +44,10 @@ void PlayerManagement::Update()
 		IsChanging();
 		return;
 	}
-
-	Input();
+	if (m_player3D->m_Player_Act == true || m_player2D->m_Player_Act == true)
+	{
+		Input();
+	}
 	
 	
 }
@@ -52,12 +55,14 @@ void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 
-		//煙エフェクトを再生
-		EffectEmitter* changeEffect = NewGO<EffectEmitter>(0);
-		changeEffect->Init(1);
-		changeEffect->SetPosition(GetPosition());
-		changeEffect->SetScale(Vector3(10.0f, 10.0f, 10.0f));
-		changeEffect->Play();
+		EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+		m_soundEffect = NewGO<EffectEmitter>(0);
+		m_soundEffect->Init(0);
+		//エフェクトの大きさを指定する
+		m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
+		//エフェクトの座標の設定
+		
+		m_soundEffect->Play();
 
 		switch (m_enMananagementState)
 		{
@@ -67,6 +72,7 @@ void PlayerManagement::Input()
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
+			m_soundEffect->SetPosition(m_player2D->GetPosition());
 			
 			break;
 			//3Dの場合2Dを呼び出す
@@ -75,6 +81,7 @@ void PlayerManagement::Input()
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
+			m_soundEffect->SetPosition(m_player3D->GetPosition());
 			break;
 		}
 
@@ -84,6 +91,14 @@ void PlayerManagement::Input()
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+	m_soundEffect = NewGO<EffectEmitter>(0);
+	m_soundEffect->Init(0);
+	//エフェクトの大きさを指定する
+	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
+	//エフェクトの座標の設定
+	m_soundEffect->SetPosition(m_player2D->GetPosition());
+	m_soundEffect->Play();
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);
 	m_player2D->m_Player_Act = false;
@@ -105,6 +120,7 @@ void PlayerManagement::PlayerChange2D()
 }
 void PlayerManagement::PlayerChange3D()
 {
+	
 	m_player3D->Activate();//プレイヤー3Dをアクティブにする
 	m_player3D->SetPosition(m_player2D->GetPosition());//3Dに2Dのポジションを与える
 	m_player3D->ModelRenderUpdate();//モデルを更新する
