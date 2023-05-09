@@ -83,9 +83,9 @@ void FlashBom::ItemHit()
 			end.setIdentity();
 			Vector3 enemyPosition = m_game->GetEnemyList()[i]->GetPosition();
 			//始点はアイテムの座標
-			start.setOrigin(btVector3(m_position.x, m_position.y + 10.0f, m_position.z));
+			start.setOrigin(btVector3(m_position.x,10.0f, m_position.z));
 			//終点はエネミーの座標
-			end.setOrigin(btVector3(enemyPosition.x, m_position.y + 10.0f, enemyPosition.z));
+			end.setOrigin(btVector3(enemyPosition.x, 10.0f, enemyPosition.z));
 			SweepResyltWall callback;
 			//コライダーを始点から終点までを動かして。
 			//衝突するかどうか調べる
@@ -133,7 +133,7 @@ void FlashBom::FlashEffect()
 
 void FlashBom::SetFlashEffect()
 {
-	RenderingEngine::GetInstance()->SetAmbient(10.0f);
+	//RenderingEngine::GetInstance()->SetAmbient(10.0f);
 	//ポイントライトの初期化
 	m_color = MAXCOLOR;
 
@@ -175,7 +175,7 @@ void FlashBom::ProcessFlashingState()
 		m_alpha = 0.0f;
 		RenderingEngine::GetInstance()->SetAmbient(0.7f);
 		m_FlashState = m_enFlash_No;
-		RenderingEngine::GetInstance()->GetLightCB().ptNum = 35;
+		RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	}
 }
 
