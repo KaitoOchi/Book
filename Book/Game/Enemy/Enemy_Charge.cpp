@@ -39,6 +39,13 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	if (m_NotDrawFlag == true) {
+		return;
+	}
+	else {
+		m_ActState = CRAW;
+	}
+
 	switch (m_ActState) {
 		// 巡回
 	case CRAW:
@@ -68,22 +75,6 @@ void Enemy_Charge::Update()
 	case CATCH:
 		Update_OnCatch();
 		break;
-		// デフォルトに戻す
-	case DEFAULT:
-		m_ActState = CRAW;
-		break;
-	case NOOP:
-		return;
-		break;
-	}
-
-	// 閃光弾に当たった
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-	// 音爆弾を使用した
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
