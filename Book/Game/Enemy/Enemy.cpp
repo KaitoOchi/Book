@@ -377,8 +377,6 @@ void Enemy::Act_MissingPlayer()
 
 	// 回転を教える
 	Rotation(moveSpeed);
-
-	
 }
 
 void Enemy::Act_HitFlashBullet()
