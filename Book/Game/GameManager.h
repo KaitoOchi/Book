@@ -126,6 +126,18 @@ public:
 	}
 
 	/// <summary>
+	/// BGM‚ªíœ‚³‚ê‚½‚©‚Ç‚¤‚©
+	/// </summary>
+	/// <returns></returns>
+	const bool IsDeleteBGM()
+	{
+		if (m_timer <= 0.0f) {
+			return true;
+		}
+		return false;
+	}
+
+	/// <summary>
 	/// SFX‚Ì‰¹—Ê‚ğæ“¾B
 	/// </summary>
 	/// <returns></returns>
