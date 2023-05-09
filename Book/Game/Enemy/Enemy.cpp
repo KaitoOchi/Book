@@ -655,9 +655,6 @@ void Enemy::SearchPass(EnEnemyActState state)
 	if (diff.Length() < 1500.0f) {
 		m_ActState = state;
 	}
-	else {
-		m_ActState = NOOP;
-	}
 }
 
 void Enemy::Act_Call()

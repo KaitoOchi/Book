@@ -177,7 +177,7 @@ void Enemy_Charge::Update_OnCatch()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	if (m_ActState != NOOP) {
+	if (m_NotDrawFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

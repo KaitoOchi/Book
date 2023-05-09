@@ -304,8 +304,8 @@ public:
 	/// 描画するかどうか決定する。trueのとき描画しない
 	/// </summary>
 	/// <param name="flag"></param>
-	void SetDrawFlag(bool flag) {
-		m_DrawFlag = flag;
+	void SetNotDrawFlag(bool flag) {
+		m_NotDrawFlag = flag;
 	}
 
 	//------------------------------------------
@@ -370,7 +370,7 @@ protected:
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_TrakingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 
-	bool m_DrawFlag = false;				// 描画するかどうか
+	bool m_NotDrawFlag = false;				// 描画するかどうか
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理

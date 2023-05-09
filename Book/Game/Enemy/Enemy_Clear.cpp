@@ -196,7 +196,7 @@ void Enemy_Clear::Render(RenderContext& rc)
 	//“§–¾‰»‰ğœ
 	if (m_clearFlag == false)
 	{
-		if (m_ActState != NOOP) {
+		if (m_NotDrawFlag == false) {
 			m_enemyRender.Draw(rc);
 		}
 	}

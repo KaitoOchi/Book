@@ -168,7 +168,7 @@ void Enemy_Normal::Update_OnCatch()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// •`‰æ
-	if (m_ActState != NOOP) {
+	if (m_NotDrawFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 

@@ -155,7 +155,7 @@ void Enemy_Search::Rotaition()
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	if (m_ActState != NOOP) {
+	if (m_NotDrawFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 }
