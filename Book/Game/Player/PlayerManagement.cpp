@@ -44,8 +44,10 @@ void PlayerManagement::Update()
 		IsChanging();
 		return;
 	}
-
-	Input();
+	if (m_player3D->m_Player_Act == true || m_player2D->m_Player_Act == true)
+	{
+		Input();
+	}
 	
 	
 }
@@ -95,7 +97,7 @@ void PlayerManagement::SetChange(EnManagementState manaState)
 	//エフェクトの大きさを指定する
 	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
 	//エフェクトの座標の設定
-	m_soundEffect->SetPosition(m_position);
+	m_soundEffect->SetPosition(m_player2D->GetPosition());
 	m_soundEffect->Play();
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);

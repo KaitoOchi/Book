@@ -20,14 +20,12 @@ public:
 		m_enPlayer_3DChanging,//3Dプレイヤー
 	};
 	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
-
+	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
 public:
 	PlayerManagement();
 	~PlayerManagement();
 	bool Start();
 	void Update();
-
-public:
 	/// <summary>
 	/// プレイヤーのポインタを設定。
 	/// </summary>
@@ -119,11 +117,16 @@ public:
 	/// </summary>
 	void SetChange(EnManagementState manaState);
 
-
-	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
-
-
-	Quaternion m_Changerot;										//切替中に回転させる											
+	const Player::EnPlayerState& GetEnPlayerState()
+	{
+		// 今アクティブなプレイヤーの座標を返す
+		if (m_enMananagementState == m_enPlayer_3DChanging) {
+			return m_player3D->GetPlayerState();
+		}
+		else {
+			return m_player2D->GetPlayerState();
+		}
+	}
 private:
 	void PlayerStop();
 	bool RestartState = true;									//プレイヤーを再開させるかどうか
