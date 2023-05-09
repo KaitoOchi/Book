@@ -53,6 +53,12 @@ namespace nsK2EngineLow {
 					if (go->IsMatchName("sound") == true) {
 						go->UpdateWrapper();
 					}
+					if (go->IsMatchName("event") == true) {
+						go->UpdateWrapper();
+					}
+					if (go->IsMatchName("fade") == true) {
+						go->UpdateWrapper();
+					}
 				}
 			}
 		}

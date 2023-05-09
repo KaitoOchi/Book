@@ -46,7 +46,7 @@ void Result::InitScore()
 	//ƒŠƒUƒ‹ƒg‚ð•Û‘¶
 	int time = m_score[0];
 	if (m_resultState == enState_GameOver) {
-		m_score[0] = (600 - m_score[0]) * 100;
+		m_score[0] = (600 - m_score[0]) * 10;
 	}
 	else {
 		m_score[0] *= 100;
