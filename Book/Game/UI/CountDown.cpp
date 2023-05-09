@@ -37,6 +37,9 @@ void CountDown::Update()
 		if (m_count < 0) {
 			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
 			player->SetGameState(true);
+
+			Game* game = FindGO<Game>("game");
+			game->NotifyDuringGamePlay();
 			DeleteGO(this);
 			return;
 		}
