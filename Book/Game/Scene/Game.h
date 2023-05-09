@@ -40,6 +40,12 @@ public:
 	void Render(RenderContext& rc);
 	void LevelDesign();			// �X�e�[�W�̃��x���f�U�C���̏���
 
+	/// <summary>
+	/// 描画するかどうか決定する。trueのとき描画しない
+	/// </summary>
+	/// <param name="flag"></param>
+	void NotDraw_Enemy(bool flag);
+
 	//�N���A���W��Ԃ�
 	Vector3 GetClearPosition()
 	{

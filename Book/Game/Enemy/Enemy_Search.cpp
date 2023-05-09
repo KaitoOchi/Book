@@ -37,7 +37,12 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
-	Enemy::SearchPass(SEARCH);
+	if (m_NotDrawFlag == true) {
+		return;
+	}
+	else {
+		m_ActState = SEARCH;
+	}
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (m_HitFlashBulletFlag == true) {
@@ -150,5 +155,7 @@ void Enemy_Search::Rotaition()
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	m_enemyRender.Draw(rc);
+	if (m_NotDrawFlag == false) {
+		m_enemyRender.Draw(rc);
+	}
 }

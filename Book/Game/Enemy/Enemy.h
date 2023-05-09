@@ -167,7 +167,6 @@ public:
 		CONFUSION,		// 閃光弾にあたったとき
 		LISTEN,			// 音爆弾を使用したとき
 		CATCH,			// 捕獲
-		NOOP			// 何もしない
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -183,7 +182,6 @@ public:
 	/// <param name="CONFUSION">閃光弾にあたったとき</param>
 	/// <param name="LISTEN">音爆弾を使用したとき</param>
 	/// <param name="CATCH">捕獲</param>
-	/// <param name="NOOP">何もしない</param>
 	EnEnemyActState m_ActState = CRAW;
 
 	void SearchPass(EnEnemyActState state);
@@ -302,6 +300,14 @@ public:
 		m_spotNum = num;
 	}
 
+	/// <summary>
+	/// 描画するかどうか決定する。trueのとき描画しない
+	/// </summary>
+	/// <param name="flag"></param>
+	void SetNotDrawFlag(bool flag) {
+		m_NotDrawFlag = flag;
+	}
+
 	//------------------------------------------
 	//エネミーの前方向を求める
 	const Vector3 GetFoward()const
@@ -363,6 +369,8 @@ protected:
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_TrakingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
+
+	bool m_NotDrawFlag = false;				// 描画するかどうか
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理

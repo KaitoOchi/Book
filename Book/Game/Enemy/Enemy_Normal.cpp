@@ -35,16 +35,6 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
-	}
-	// ‰¹”š’e‚ğg—p‚µ‚½
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
-	}
-
-
 	switch (m_ActState) {
 		// „‰ñ
 	case CRAW:
@@ -86,6 +76,7 @@ void Enemy_Normal::Update()
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);
+
 	// ‹–ìŠp
 	Enemy::Act_SeachPlayer();
 
@@ -118,7 +109,6 @@ void Enemy_Normal::Update_OnTracking()
 
 	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚È‚¢‚Æ‚«
 	if (m_TrakingPlayerFlag == false) {
-		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
 
@@ -140,7 +130,7 @@ void Enemy_Normal::Update_OnCalled()
 
 void Enemy_Normal::Update_OnBackBasedOn()
 {
-	Enemy::Act_Loss();					// ’ÇÕs“®‚©‚ç‚ÌØ‚è‘Ö‚¦
+	Enemy::Act_MissingPlayer();
 	m_ActState = CRAW;
 }
 
@@ -178,7 +168,9 @@ void Enemy_Normal::Update_OnCatch()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// •`‰æ
-	m_enemyRender.Draw(rc);
+	if (m_NotDrawFlag == false) {
+		m_enemyRender.Draw(rc);
+	}
 
 	if (Enemy::Act_CatchPlayer() == true) {
 		m_fontRender.Draw(rc);
