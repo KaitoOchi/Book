@@ -377,6 +377,7 @@ void Player::ManageState()
 		ProcessDownStateTransition();
 		break;
 	case m_enPlayer_Caught:
+		m_game->NotifyGameOver();
 		ProcessCaughtStateTransition();
 	case m_enPlayer_Catching:
 		ProcessCatchingStateTransition();

@@ -53,7 +53,7 @@ public:
 	Vector3 m_position = Vector3::Zero;
 	enum EnGameSceneState
 	{
-		m_enGameState_GameStart,//ゲームスタート
+		m_enGameState_GameStart,//ゲームスタート時
 		m_enGameState_DuringGamePlay,//ゲーム中
 		m_enGameState_GameClearable,//クリア可能
 		m_enGameState_GameClear,//クリア
@@ -144,6 +144,10 @@ private:
 	/// クリア可能
 	/// </summary>
 	void ClearableState();
+	/// <summary>
+	/// ゲーム中
+	/// </summary>
+	void DuringGamePlayState();
 	
 
 	ModelRender m_stageModelRender;
