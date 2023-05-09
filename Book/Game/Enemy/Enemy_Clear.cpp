@@ -36,14 +36,14 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
-	//// 閃光弾に当たった
-	//if (Enemy::GetHitFlushBullet() == true) {
-	//	m_ActState = CONFUSION;
-	//}
-	//// 音爆弾を使用した
-	//if (Enemy::GetHitSoundBullet() == true) {
-	//	m_ActState = LISTEN;
-	//}
+	// 閃光弾に当たった
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+	// 音爆弾を使用した
+	if (m_HitSoundBulletFlag == true) {
+		m_ActState = LISTEN;
+	}
 
 	switch (m_ActState) {
 		// 巡回
@@ -87,15 +87,22 @@ void Enemy_Clear::Update()
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);
+	// 視野角
+	Enemy::Act_SeachPlayer();
 
 	m_enemyRender.Update();	// 更新
 }
 void Enemy_Clear::Update_OnCraw()
 {
+	if (m_ChachPlayerFlag == true) {
+		m_enAnimationState = IDLE;
+		return;
+	}
+
 	Enemy::Act_Craw();				// 巡回行動
 
 	// 視野角にプレイヤーがいるとき
-	if (Enemy::Act_SeachPlayer() == true) {
+	if (m_TrakingPlayerFlag == true) {
 		m_ActState = TRACKING;
 	}
 }
@@ -105,7 +112,7 @@ void Enemy_Clear::Update_OnTracking()
 	Enemy::Act_Tracking();			// 追跡行動
 
 	// 視野角にプレイヤーがいないとき
-	if (Enemy::Act_SeachPlayer() == false) {
+	if (m_TrakingPlayerFlag == false) {
 		Enemy::Act_MissingPlayer();
 		m_ActState = BACKBASEDON;
 	}
@@ -121,7 +128,7 @@ void Enemy_Clear::Update_OnCalled()
 	Enemy::Act_Called();
 
 	// 視野角にプレイヤーがいるとき
-	if (Enemy::Act_SeachPlayer() == true) {
+	if (m_TrakingPlayerFlag == true) {
 		m_ActState = TRACKING;
 	}
 }
