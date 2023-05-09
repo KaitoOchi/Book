@@ -41,7 +41,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
@@ -536,6 +536,14 @@ void Game::ClearableState()
 		GameDelete(0);
 		NotifyGameClear();
 	
+	}
+}
+
+void Game::NotDraw_Enemy(bool flag)
+{
+	// 描画するかどうか決定する
+	for (int i = 0; i < m_enemyList.size(); i++) {
+		m_enemyList[i]->SetNotDrawFlag(flag);
 	}
 }
 
