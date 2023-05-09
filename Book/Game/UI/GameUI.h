@@ -34,7 +34,8 @@ private:
 	/// <summary>
 	/// 時間の移動処理。
 	/// </summary>
-	void TimeMove();
+	void TimeMove(const int& m, const int& s);
+
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
 	SpriteRender		m_gageSpriteRender;				//ゲージ画像
@@ -42,7 +43,7 @@ private:
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
 	Player2D*			m_player2D;
-	bool				m_isTimerEnable = false;		//タイマーの表示状態
+	bool				m_isTimerEnable = true;			//タイマーの表示状態
 	int					m_vigilanceGage = 1;			//警戒度
 	float				m_timer = 0.0f;					//タイマー
 	float				m_vigilanceTime = 0.0f;			//警戒度用のタイマー

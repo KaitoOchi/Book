@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "Player2D.h"
+
 #include "Game.h"
 #include "Player3D.h"
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
 #include"GameCamera.h"
+
+//#include "graphics/effect/EffectEmitter.h"
+
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
@@ -47,6 +51,13 @@ void PlayerManagement::Update()
 void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
+
+		//煙エフェクトを再生
+		EffectEmitter* changeEffect = NewGO<EffectEmitter>(0);
+		changeEffect->Init(1);
+		changeEffect->SetPosition(GetPosition());
+		changeEffect->SetScale(Vector3(10.0f, 10.0f, 10.0f));
+		changeEffect->Play();
 
 		switch (m_enMananagementState)
 		{
