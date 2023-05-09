@@ -21,9 +21,9 @@ SoundBom::~SoundBom()
 bool SoundBom::Start()
 {
 	Item::Start();
-	EffectEngine::GetInstance()->ResistEffect(0,u"Assets/effect/soundeffect/soundeffect.efk");
-	m_soundEffect = NewGO<EffectEmitter>(0);
-	m_soundEffect->Init(0);
+	EffectEngine::GetInstance()->ResistEffect(1,u"Assets/effect/soundeffect/soundeffect.efk");
+	m_soundEffect = NewGO<EffectEmitter>(1);
+	m_soundEffect->Init(1);
 	//エフェクトの大きさを指定する
 	m_soundEffect->SetScale(Vector3::One*EFFECTSIZE);
 	//エフェクトの座標の設定

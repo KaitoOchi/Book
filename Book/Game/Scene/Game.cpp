@@ -122,7 +122,10 @@ void Game::GamePos()
 
 bool Game::Start()
 {
+	//環境光を初期化する
+	RenderingEngine::GetInstance()->SetAmbient(0.0f);
 
+	//スタート時を知らせる
 	NotifyGameStart();
 
 	//リストの初期化
