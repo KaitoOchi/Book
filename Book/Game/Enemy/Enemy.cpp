@@ -34,7 +34,7 @@ namespace
 	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);		//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
@@ -209,18 +209,23 @@ void Enemy::Act_SeachPlayer()
 	// 索敵
 	// trueのときプレイヤーを発見している
 
+	// スポットライトの中にプレイヤーがいるとき
+	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
+
+		m_TrakingPlayerFlag = true;
+		return;
+	}
+
 	m_forward = Vector3::AxisZ;
 	m_rotation.Apply(m_forward);
 
 	m_playerPos = m_playerManagement->GetPosition();
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerPos - m_position;
+	float length = diff.Length();
 
-	// スポットライトの中にプレイヤーがいるとき
-	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
-
-		m_TrakingPlayerFlag = true;
-
+	// ベクトルの長さが一定範囲内のとき
+	if(length < SEACH_DECISION){
 		// 正規化
 		diff.Normalize();
 		// 内積を計算
@@ -231,6 +236,7 @@ void Enemy::Act_SeachPlayer()
 		if (angle <= FIELDOF_VIEW) {
 			// 衝突判定を行う
 			if (WallAndHit(m_playerPos) == false) {
+				// 壁に衝突したとき
 				m_TrakingPlayerFlag = false;
 			}
 		}
@@ -328,29 +334,51 @@ void Enemy::Act_MissingPlayer()
 	}
 
 	// ベクトルを作成
-	Vector3 moveSpeed = m_playerPos3 - m_position;
+	Vector3 diff = m_playerPos3 - m_position;
 
 	// 長さを計算
-	float length = moveSpeed.Length();
+	float length = diff.Length();
 
 	// 移動する
-	moveSpeed.Normalize();
-	//移動速度に加算
-	moveSpeed *= MOVE_SPEED;
+	diff.Normalize();
 
-	// 座標が一定範囲内になるまで
-	if (length < 50.0f) {
-		m_position += moveSpeed;
+	// 移動速度に加算
+	Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
+	m_position += moveSpeed * m_move;
+	// 総移動距離を計算
+	m_sumPos += moveSpeed;
+
+	// 走るアニメーションを再生
+	m_enAnimationState = RUN;
+
+	// 長さが一定以上のとき
+	if (m_sumPos.Length() > 100.0f) {
+
+		// モーションを再生
+		if (Act_Stop(5.0f, 4) == false) {
+			// 見渡すモーションを再生
+			m_enAnimationState = LOSS;
+		}
+
+		m_addTimer[4] = 0.0f;			// タイマーをリセット
+		m_sumPos = Vector3::Zero;		// 移動距離をリセット
+		m_FindPlayerFlag = false;		// フラグを降ろす
+
+		// プレイヤーを発見したとき
+		if (m_TrakingPlayerFlag == true) {
+			// 再度追跡する
+			m_ActState = TRACKING;
+			return;
+		}
+
+		// 発見していなかったら元のパスに戻る
+		Act_Loss();
 	}
 
 	// 回転を教える
 	Rotation(moveSpeed);
 
-	// モーションを再生
-	if (Act_Stop(3.0f, 4) == false) {
-		// 見渡すモーションを再生
-		m_enAnimationState = LOSS;
-	}
+	
 }
 
 void Enemy::Act_HitFlashBullet()
@@ -361,13 +389,8 @@ void Enemy::Act_HitFlashBullet()
 	// 当たったとき
 	if (m_HitFlashBulletFlag == true) {
 
-		// 被弾アニメーションを再生
-		m_enAnimationState = DAMEGE;
-		// 被弾アニメーションが終了したとき
-		if (m_enemyRender.IsPlayingAniamtion() == false) {
-			// めまいのアニメーションを再生
-			m_enAnimationState = DIZZY;
-		}
+		// めまいのアニメーションを再生
+		m_enAnimationState = DIZZY;
 
 		// タイマーがtrueのとき
 		if (Act_Stop(CANMOVE_TIMER,0) == true) {
@@ -376,9 +399,6 @@ void Enemy::Act_HitFlashBullet()
 			m_HitFlashBulletFlag = false;
 			// タイマーをリセット
 			m_addTimer[0] = 0.0f;
-
-			// 見渡すアニメーションを再生
-			m_enAnimationState = LOSS;
 		}
 	}
 }
@@ -395,19 +415,16 @@ bool Enemy::Act_HitSoundBullet()
 		Vector3 diff = m_itemPos - m_position;
 		float length = diff.Length();
 
-		// 一定範囲内より小さいとき
-		if (length < CALL_DISTANCE_MAX) {
-			// アイテムの座標を基にしてナビメッシュを作成
-			Nav(m_itemPos);
-			// 走るアニメーションを再生
-			m_enAnimationState = RUN;
+		// アイテムの座標を基にしてナビメッシュを作成
+		Nav(m_itemPos);
+		// 走るアニメーションを再生
+		m_enAnimationState = RUN;
 
-			// アイテムを使用した位置についたとき
-			if (length > 20.0f && length < 500.0f) {
-				// 見渡すアニメーションを再生
-				m_enAnimationState = LOSS;
-				return true;
-			}
+		// アイテムを使用した位置についたとき
+		if (length > 20.0f && length < 500.0f) {
+			// 見渡すアニメーションを再生
+			m_enAnimationState = LOSS;
+			return true;
 		}
 	}
 
@@ -637,9 +654,6 @@ void Enemy::SearchPass(EnEnemyActState state)
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 	if (diff.Length() < 1500.0f) {
 		m_ActState = state;
-	}
-	else {
-		m_ActState = NOOP;
 	}
 }
 

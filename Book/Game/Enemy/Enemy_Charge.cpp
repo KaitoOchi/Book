@@ -39,13 +39,11 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
-	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+	if (m_NotDrawFlag == true) {
+		return;
 	}
-	// ‰¹”š’e‚ðŽg—p‚µ‚½
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
+	else {
+		m_ActState = CRAW;
 	}
 
 	switch (m_ActState) {
@@ -179,5 +177,7 @@ void Enemy_Charge::Update_OnCatch()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	m_enemyRender.Draw(rc);
+	if (m_NotDrawFlag == false) {
+		m_enemyRender.Draw(rc);
+	}
 }
