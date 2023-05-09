@@ -58,6 +58,7 @@ bool GameUI::Start()
 void GameUI::Update()
 {
 	Time();
+
 	TimeMove();
 
 	ChangeGage();
@@ -65,6 +66,10 @@ void GameUI::Update()
 
 void GameUI::Time()
 {
+	if (m_game->m_gameState == Game::m_enGameState_DuringGamePlay) {
+		return;
+	}
+
 	//時間を計測する
 	m_timer -= g_gameTime->GetFrameDeltaTime();
 
@@ -91,9 +96,28 @@ void GameUI::Time()
 
 void GameUI::TimeMove()
 {
-	m_timePosition -= 100 * g_gameTime->GetFrameDeltaTime();
-	m_timePosition=max(m_timePosition, SETTIMEYPOSITION);
-	m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION,m_timePosition,0.0f });
+	if (m_isTimerEnable) {
+		//タイマーを非表示
+		if (((int)m_timer / 60) % 60 == 5) {
+			m_isTimerEnable = false;
+		}
+
+		//タイマーの表示
+		m_timePosition -= 100 * g_gameTime->GetFrameDeltaTime();
+		m_timePosition = max(m_timePosition, SETTIMEYPOSITION);
+		m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION,m_timePosition,0.0f });
+	}
+	else {
+		//一分ごとにタイマーを表示
+		if (((int)m_timer / 60) % 60 == 0) {
+			m_isTimerEnable = true;
+		}
+
+		//タイマーの表示
+		//m_timePosition += 100 * g_gameTime->GetFrameDeltaTime();
+		//m_timePosition = max(m_timePosition, SETTIMEYPOSITION);
+		//m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION,m_timePosition,0.0f });
+	}
 }
 void GameUI::ChangeGage()
 {

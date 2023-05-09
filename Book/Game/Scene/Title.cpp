@@ -147,14 +147,16 @@ void Title::InitSprite()
 	//ボタン画像の設定
 	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Abutton.DDS", 287.0f, 152.0f);
 	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
+	m_buttonSpriteRender[2].Init("Assets/sprite/UI/button/text_crosskey.DDS", 198.0f, 133.0f);
 
-	for (int i = 0; i < 2; i++) {
-		m_buttonSpriteRender[i].SetPosition(Vector3(-725.0f, -375.0f - (i * 50.0f), 0.0f));
+	for (int i = 0; i < 3; i++) {
+		m_buttonSpritePos[i] = { -825.0f, -375.0f - (i * 50.0f), 0.0f };
+		m_buttonSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_buttonSpriteRender[i].SetScale(Vector3(0.75f, 0.75f, 0.0f));
+		m_buttonSpriteRender[2].SetScale(Vector3(1.0f, 1.0f, 0.0f));
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
 	}
-
 }
 
 void Title::Update()
@@ -200,6 +202,7 @@ void Title::StateChange()
 					m_isWaitFadeOut = false;
 					m_titleState = m_titleState_tmp;
 					m_animTime = -0.11f;
+					EnableButtonSprite();
 				}
 			}
 			else {
@@ -210,6 +213,7 @@ void Title::StateChange()
 		}
 		else {
 			m_titleState = m_titleState_tmp;
+			EnableButtonSprite();
 		}
 	}
 	//ステート遷移を終了する
@@ -461,9 +465,13 @@ void Title::StartScreen()
 	if (m_isWaitFadeOut) {
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
-			//ゲーム画面へ遷移
-			NewGO<Game>(0, "game");
-			DeleteGO(this);
+
+			//BGMが削除されたら
+			if (GameManager::GetInstance()->IsDeleteBGM()) {
+				//ゲーム画面へ遷移
+				NewGO<Game>(0, "game");
+				DeleteGO(this);
+			}
 		}
 	}
 	else {
@@ -502,6 +510,51 @@ void Title::SettingScreen()
 	}
 }
 
+void Title::EnableButtonSprite()
+{
+	//ボタンの表示状態を設定
+	switch (m_titleState)
+	{
+	case 0:
+		for (int i = 0; i < 3; i++) {
+			m_enableButtonSprite[i] = false;
+		}
+		break;
+
+	case 1:
+		m_enableButtonSprite[0] = true;
+		m_enableButtonSprite[1] = false;
+		m_enableButtonSprite[2] = true;
+		break;
+
+	case 2:
+		break;
+
+	case 3:
+		m_enableButtonSprite[0] = true;
+		m_enableButtonSprite[1] = true;
+		m_enableButtonSprite[2] = false;
+		break;
+
+	case 4:
+		m_enableButtonSprite[0] = false;
+		m_enableButtonSprite[1] = true;
+		m_enableButtonSprite[2] = true;
+		break;
+	}
+
+	int num = 0;
+
+	//ボタンの座標を設定
+	for (int i = 0; i < 3; i++) {
+
+		if (m_enableButtonSprite[i] == true) {
+			m_buttonSpriteRender[i].SetPosition(m_buttonSpritePos[num]);
+			num++;
+		}
+	}
+}
+
 void Title::Render(RenderContext &rc)
 {
 	m_backGroundModelRender.Draw(rc);
@@ -520,7 +573,6 @@ void Title::Render(RenderContext &rc)
 		m_menuSpriteRender.Draw(rc);
 		m_titleSpriteRender.Draw(rc);
 		m_playerModelRender.Draw(rc);
-		m_buttonSpriteRender[0].Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
 		break;
 
@@ -532,8 +584,6 @@ void Title::Render(RenderContext &rc)
 	case 3:
 		m_guideBackSpriteRender.Draw(rc);
 		m_guideSpriteRender[m_cursor_horizontal].Draw(rc);
-		m_buttonSpriteRender[0].Draw(rc);
-		m_buttonSpriteRender[1].Draw(rc);
 		break;
 
 	//設定画面なら
@@ -544,8 +594,14 @@ void Title::Render(RenderContext &rc)
 
 		m_settingSpriteRender.Draw(rc);
 		m_settingTextSpriteRender[m_cursor_vertical -1].Draw(rc);
-		m_buttonSpriteRender[1].Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
 		break;
+	}
+
+	//ボタン画像の描画
+	for (int i = 0; i < 3; i++) {
+		if (m_enableButtonSprite[i] == true) {
+			m_buttonSpriteRender[i].Draw(rc);
+		}
 	}
 }

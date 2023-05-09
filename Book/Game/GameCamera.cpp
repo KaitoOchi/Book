@@ -31,7 +31,6 @@ bool GameCamera::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
 	g_camera3D->SetNear(150.0f);
-	//g_camera3D->SetFar(3000.0f);
 	g_camera3D->SetFar(12000.0f);
 
 	return true;

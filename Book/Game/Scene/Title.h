@@ -71,6 +71,11 @@ private:
 	void SettingScreen();
 
 	/// <summary>
+	/// ボタン画像の処理。
+	/// </summary>
+	void EnableButtonSprite();
+
+	/// <summary>
 	/// データ配列にセーブデータを入れて保存する処理。
 	/// </summary>
 	void SetDataArray()
@@ -147,14 +152,16 @@ private:
 	SpriteRender			m_gaugeSpriteRender[2];			//BGMのメーター
 	SpriteRender			m_settingTextSpriteRender[3];	//設定の説明画像
 	SpriteRender			m_cursorSpriteRender;			//カーソル画像
-	SpriteRender			m_buttonSpriteRender[2];		//ボタン画像
+	SpriteRender			m_buttonSpriteRender[3];		//ボタン画像
 	std::vector<SpriteRender*> m_sprites;					//SpriteRenderのベクター型
 
 	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
 	Fade*					m_fade = nullptr;				//フェードクラス
 	GameManager::SaveData	m_saveData;						//セーブデータの構造体
+	Vector3					m_buttonSpritePos[3];			//ボタン画像の座標
 	bool					m_isWaitState = false;			//ステートの遷移中かどうか
 	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
+	bool					m_enableButtonSprite[3];		//ボタン画像を表示するかどうか
 	int						m_titleState = 0;				//タイトルステート
 	int						m_titleState_tmp = 0;			//タイトルステートの一時的変数
 	int						m_cursor_vertical = 0;			//縦カーソル

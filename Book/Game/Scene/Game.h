@@ -53,13 +53,15 @@ public:
 	Vector3 m_position = Vector3::Zero;
 	enum EnGameSceneState
 	{
-		m_enGameState_DuringGamePlay,//�Q�[���v���C��
+		m_enGameState_GameStart,//ゲームスタート
+		m_enGameState_DuringGamePlay,//ゲーム中
 		m_enGameState_GameClearable,//クリア可能
-		m_enGameState_GameFade,//�Q�[���N���A
-		m_enGameState_GameOver,//�Q�[���I�[�o�[
-		m_enGameState_GameBuck//�^�C�g���ɖ߂�
+		m_enGameState_GameClear,//クリア
+		m_enGameState_GameFade,//ゲームフェード
+		m_enGameState_GameOver,//ゲームオーバー
+		m_enGameState_GameBuck//他のメニューに戻る
 	};
-	EnGameSceneState m_gameState = m_enGameState_DuringGamePlay;//���݂̃X�e�[�g�̊Ǘ�
+	EnGameSceneState m_gameState = m_enGameState_DuringGamePlay;//ゲーム中
 
 	// �G�l�~�[�̃��X�g��Ԃ�
 	std::vector<Enemy*> GetEnemyList()
@@ -94,31 +96,56 @@ public:
 public:
 
 	/// <summary>
-	/// 別のところで消去する
+	/// フェードアウト
 	/// </summary>
 	void GameDelete(const int nextScene);
 	/// <summary>
 	/// ポーズ画面の切替
 	/// </summary>
 	void GamePos();
+
+	std::vector<Wall*>GetWallList()
+	{
+		return m_wallList;
+	}
+
+	std::vector<PhysicsGhost*>GetPhysicsGhostList()
+	{
+		return m_physicsGhostList;
+	}
+
+	/// <summary>
+	/// ゲームスタート
+	/// </summary>
+	void NotifyGameStart();
+	/// <summary>
+	/// ゲーム中
+	/// </summary>
+	void NotifyDuringGamePlay();
+	/// <summary>
+	/// ゲームオーバーを通知
+	/// </summary>
+	void NotifyGameOver();
+	/// <summary>
+	/// ゲームクリアを通知
+	/// </summary>
+	void NotifyGameClear();
+	/// <summary>
+	/// ゲームバックを通知
+	/// </summary>
+	void NotifyGameBack();
+	/// <summary>
+	/// クリア可能を通知
+	/// </summary>
+	void NotifyGameClearable();
+
 private:
 	/// <summary>
-	/// �N���A�X�e�[�g�ɑJ��
+	/// クリア可能
 	/// </summary>
-	void ClearState();
-	/// <summary>
-	/// �N���A�\�X�e�[�g�ɑJ��
-	/// </summary>
-	void Clearable();
-
-	/// <summary>
-	/// �X�e�[�g�̐ؑ�
-	/// </summary>
-	void MnageState();
-
+	void ClearableState();
 	
 
-	
 	ModelRender m_stageModelRender;
 	PhysicsStaticObject m_demobg;
 	Player3D* m_player3D = nullptr;//3D�v���C���[
@@ -151,6 +178,7 @@ private:
 
 	std::vector<SecurityCamera*>m_SecurityCameraList;
 
+	std::vector<PhysicsGhost*>m_physicsGhostList;
 
 	PlayerManagement* m_playerManagement = nullptr;
 

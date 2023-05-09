@@ -45,10 +45,7 @@ private:
 	/// </summary>
 	void ProcessFlashingState();
 
-	/// <summary>
-	/// I‚í‚è‚Ì‘JˆÚ
-	/// </summary>
-	void ProcessEndState();
+	
 
 
 	SpriteRender m_flashRender;
