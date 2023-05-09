@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "Player2D.h"
-
+#include "Game.h"
 #include "Player3D.h"
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
 #include"GameCamera.h"
 namespace
 {
-	const float CHANGE_TIME = 2.0f;
+	const float CHANGE_TIME = 1.0f;
 }
 
 
@@ -25,6 +25,7 @@ bool PlayerManagement::Start()
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
+	m_game = FindGO<Game>("game");
 	return true;
 }
 void PlayerManagement::Update()
@@ -32,6 +33,7 @@ void PlayerManagement::Update()
 	if (!m_GameStartState) {
 		return;
 	}
+	
 
 	if (m_enMananagementState == m_enPlayer_Changing) {
 		IsChanging();
@@ -100,12 +102,16 @@ void PlayerManagement::PlayerChange3D()
 	SetCharacon(m_player3D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーが埋まっているなら
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
-			if (m_physicsghost->m_physicsGhostObj.IsSelf(contactObject) == true)
+		for (int i = 0; i < m_game->GetPhysicsGhostList().size(); i++)
+		{
+			if (m_game->GetPhysicsGhostList()[i]->m_physicsGhostObj.IsSelf(contactObject) == true)
 			{
 				m_player3D->GhostHit();
 				m_player3D->SetPushPosition(m_player3D->GetPosition());
 				m_player3D->m_ghostHit = false;
 			}
+		}
+			
 		});
 	//プレイヤーを３Dにする
 	m_enMananagementState = m_enPlayer_3DChanging;

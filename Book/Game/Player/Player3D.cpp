@@ -295,7 +295,6 @@ void Player3D::ProcessDownStartStateTransition()
 }
 void Player3D::ProcessDownStateTransition()
 {
-
 	//速度を初期化
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;
@@ -305,7 +304,6 @@ void Player3D::ProcessDownStateTransition()
 	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-
 		//ステートの遷移
 		m_game->GetStarList()[laststar]->Deactivate();
 		//ステートの遷移
@@ -339,8 +337,8 @@ void Player3D::ProcessFoundStateTransition()
 void Player3D::ProcessCaughtStateTransition()
 {
 	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
+	m_moveSpeed.x *= 0.0f;
+	m_moveSpeed.z *= 0.0f;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
@@ -354,11 +352,9 @@ void Player3D::ProcessCatchingStateTransition()
 	m_catchTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_catchTime < 0.0f)
 	{
-		m_game->m_gameState = m_game->m_enGameState_GameFade;
 		m_game->GameDelete(0);
 		m_catchTime = 2.0f;
 	}
-
 }
 
 void Player3D::ProcessClearStateTransition()

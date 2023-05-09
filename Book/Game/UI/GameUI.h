@@ -41,14 +41,13 @@ private:
 	FontRender			m_timeFontRender;				//タイム文字
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
-	Player2D*			m_player2D;						
+	Player2D*			m_player2D;
+	bool				m_isTimerEnable = false;		//タイマーの表示状態
 	int					m_vigilanceGage = 1;			//警戒度
-	int					m_Gitgage = 0;
 	float				m_timer = 0.0f;					//タイマー
 	float				m_vigilanceTime = 0.0f;			//警戒度用のタイマー
 	float				m_gage = 0.0f;					//MPゲージ
 	float				m_gaugeTimer = 0.0f;			//ゲージ用のタイマー
-
 	float				m_timePosition = 0.0f;			//タイムの座標
 
 };
