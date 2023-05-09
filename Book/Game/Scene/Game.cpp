@@ -505,6 +505,13 @@ void Game::Update()
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
 
+			//BGMが削除されるまで待つ
+			if (!GameManager::GetInstance()->IsDeleteBGM()) {
+				return;
+			}
+
+			if (m_gameState != m_enGameState_GameFade)
+
 			if (m_gameState ==m_enGameState_GameBuck)
 			{
 				GamePos();
@@ -526,7 +533,6 @@ void Game::Update()
 			}
 			DeleteGO(FindGO<Pause>("pause"));
 			DeleteGO(this);
-			GameManager::GetInstance()->DeleteBGM();
 		}
 	}
 	

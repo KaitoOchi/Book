@@ -161,8 +161,6 @@ private:
 	GameCamera*				m_gamecamera = nullptr;
 	PhysicsGhost*			m_physicsghost = nullptr;
 	Game*					m_game = nullptr;
-	
-	
 	Vector3					m_ghostPosition = Vector3::Zero;
 	Vector3					m_position = Vector3::Zero;
 	EnManagementState		m_manageStateTmp = m_enPlayer_3DChanging;		//遷移するステートの一時変数

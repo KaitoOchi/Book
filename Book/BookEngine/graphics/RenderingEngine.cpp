@@ -37,7 +37,7 @@ namespace nsBookEngine {
 
 
 		//メインレンダーターゲットを設定
-		float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 		m_mainRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
