@@ -41,7 +41,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 }
 
 Game::~Game()
