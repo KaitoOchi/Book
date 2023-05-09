@@ -30,7 +30,8 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
 
-	m_ActState = SEARCH;	// 行動パターンを設定。基本がCRAWのため。
+	m_ActState = SEARCH;		// 行動パターンを設定
+	m_enAnimationState = IDLE;	// アニメーションステートを設定
 
 	return true;
 }
@@ -39,11 +40,11 @@ void Enemy_Search::Update()
 	Enemy::SearchPass(SEARCH);
 
 	// 閃光弾に当たった
-	if (Enemy::GetHitFlushBullet() == true) {
+	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
 	// 音爆弾を使用した
-	if (Enemy::GetHitSoundBullet() == true) {
+	if (m_HitSoundBulletFlag == true) {
 		m_ActState = LISTEN;
 	}
 
@@ -63,8 +64,8 @@ void Enemy_Search::Update()
 	}
 
 	Enemy::SpotLight_Serch(m_rot, m_position);
-
-	m_enAnimationState = IDLE;
+	// 視野角
+	Enemy::Act_SeachPlayer();
 
 	// 更新
 	m_enemyRender.SetRotation(m_rot);
@@ -77,7 +78,7 @@ void Enemy_Search::Update_OnSearch()
 	Rotaition();
 
 	// 視野角内にプレイヤーが存在するとき
-	if (Enemy::Act_SeachPlayer() == true) {
+	if (m_TrakingPlayerFlag == true) {
 		m_ActState = CALL;
 	}
 }
@@ -88,7 +89,7 @@ void Enemy_Search::Update_OnCall()
 	Enemy::Act_Call();
 
 	// 視野角内にプレイヤーが存在しないとき
-	if (Enemy::Act_SeachPlayer() == false) {
+	if (m_TrakingPlayerFlag == false) {
 		m_ActState = CALLEND;
 	}
 }
