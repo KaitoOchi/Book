@@ -86,15 +86,34 @@ public:
 	/// 透明ブロックの当たり判定
 	/// </summary>
 	void GhostHit();
-	std::vector<Vector3> m_ghostpositions;
-	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
-
-	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
+	
 	
 	void SetMoveSpeed(const Vector3 speed)
 	{
 		m_moveSpeed = speed;
 	}
+	/// <summary>
+	/// プレイヤーステートの変更
+	/// </summary>
+	/// <param name="state">プレイヤーステート</param>
+	/// <returns></returns>
+	const void SetPlayerState(EnPlayerState state)
+	{
+		m_playerState = state;
+	}
+	/// <summary>
+	/// プレイヤーステートの状態
+	/// </summary>
+	/// <returns></returns>
+	const EnPlayerState GetPlayerState()
+	{
+		return m_playerState;
+	}
+
+	std::vector<Vector3> m_ghostpositions;
+	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
+
+	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
 
 protected:
 	
@@ -232,11 +251,12 @@ protected:
 	};
 	EnItemState m_enItemState = m_enItem_Flash;
 	
+protected:
 	bool m_characonState = true;								//キャラコンを作るかどうか
 
 	Vector3 m_moveSpeed=Vector3::Zero;							//移動速度
 	Vector3 m_Lstic = Vector3::Zero;							//左ステック
-	Vector3 m_position = Vector3(0.0f, 0.0f, 0.0f);				//初期座標
+	Vector3 m_position = Vector3::Zero;				//初期座標
 	Vector3 m_forward = Vector3::AxisZ;							//プレイヤーの正面ベクトル
 	
 	float angle=0;												//回転角度
@@ -264,6 +284,5 @@ protected:
 
 	bool m_playerCaught = true;
 
-	
 
 };
