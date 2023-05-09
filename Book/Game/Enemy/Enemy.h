@@ -100,7 +100,7 @@ public:
 	/// プレイヤーを発見する処理
 	/// </summary>
 	/// <returns></returns>
-	bool Act_SeachPlayer();
+	void Act_SeachPlayer();
 	/// <summary>
 	/// プレイヤーを確保する処理
 	/// </summary>
@@ -133,7 +133,7 @@ public:
 		m_enAnimation_Run,		// 走る
 		m_enAnimation_Attack,	// 攻撃
 		m_enAnimation_Damege,	// 被弾
-		m_enAnimation_Flash,	// 閃光弾を受けたとき
+		m_enAnimation_Dizzy,	// 閃光弾を受けたとき
 		m_enAnimation_Loss,		// プレイヤーを見失った時
 		m_enAnimation_Num
 	};
@@ -148,7 +148,7 @@ public:
 		RUN,
 		ATTACK,
 		DAMEGE,
-		FLASH,
+		DIZZY,
 		LOSS
 	};
 	EnAnimationState m_enAnimationState = IDLE;
@@ -362,7 +362,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
-	bool m_TrakkingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
+	bool m_TrakingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
