@@ -207,14 +207,16 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 	{
 		switch (m_enItemState)
 		{
+		//‘MŒõ’e‚ð“Š‚°‚é
 		case Player::m_enItem_Flash:
-			if (m_flashBom->m_flashCount > 0)
+			if (m_flashBom->m_flashCount > 0&&
+				m_flashBom->m_FlashState==m_flashBom->m_enFlash_No)
 			{
 				m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
 				m_flashBom->SetItemPosition(m_position);
 			}
-			
 			break;
+		//‰¹”š’e‚ð“Š‚°‚é
 		case Player::m_enItem_SoundBom:
 			m_soundBom->Activate();
 			m_soundBom->SetItemPosition(m_position);
