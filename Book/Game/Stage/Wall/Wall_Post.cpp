@@ -18,6 +18,7 @@ bool Wall_Post::Start()
 	// “–‚½‚è”»’è‚ðì¬
 	m_physicsBoxObj.Create(Vector3{ 60.0f,150.0f,50.0f }, m_position, m_rotation);
 	Wall::Start();
+	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
 
 	return true;
 }
