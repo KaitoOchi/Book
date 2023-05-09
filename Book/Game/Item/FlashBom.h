@@ -58,5 +58,6 @@ private:
 	float m_alpha=0;
 	float m_ambient=0;
 	float m_color = 0;
+
 };
 
