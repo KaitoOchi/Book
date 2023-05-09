@@ -377,8 +377,6 @@ void Enemy::Act_MissingPlayer()
 
 	// 回転を教える
 	Rotation(moveSpeed);
-
-	
 }
 
 void Enemy::Act_HitFlashBullet()
@@ -568,7 +566,6 @@ void Enemy::Act_Access()
 		// 歩きアニメーションを再生
 		m_enAnimationState = WALK;
 	}
-
 }
 
 void Enemy::Act_Charge(float time)
@@ -686,7 +683,7 @@ void Enemy::Act_Call()
 			// 移動速度を加算
 			enemyList[i]->m_position += diff * MOVE_SPEED;
 
-			m_fontRender.SetText(L"call");
+			//m_fontRender.SetText(L"call");
 		}
 	}
 }
@@ -722,7 +719,7 @@ bool Enemy::Act_CallEnd()
 		//Vector3 diff = m_position - enemyList[i]->m_position;
 		//float length = diff.Length();
 
-		m_fontRender.SetText(L"callend");
+		//m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
 		if (enemyList[i]->m_ActState == CALLED) {
