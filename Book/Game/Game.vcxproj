@@ -237,6 +237,7 @@
     <ClCompile Include="Enemy\Enemy_Search.cpp" />
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
     <ClCompile Include="Object\SecurityCamera.cpp" />
+    <ClCompile Include="Scene\Event.cpp" />
     <ClCompile Include="Stage\GhostBox.cpp" />
     <ClCompile Include="Stage\PhysicsGhost.cpp" />
     <ClCompile Include="Stage\Wall\Wall.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="Enemy\Enemy_Search.h" />
     <ClInclude Include="Enemy\Enemy_Clear.h" />
     <ClInclude Include="Object\SecurityCamera.h" />
+    <ClInclude Include="Scene\Event.h" />
     <ClInclude Include="Stage\GhostBox.h" />
     <ClInclude Include="Stage\PhysicsGhost.h" />
     <ClInclude Include="Stage\Wall\Wall.h" />
