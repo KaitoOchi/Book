@@ -566,7 +566,6 @@ void Enemy::Act_Access()
 		// 歩きアニメーションを再生
 		m_enAnimationState = WALK;
 	}
-
 }
 
 void Enemy::Act_Charge(float time)
