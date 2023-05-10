@@ -22,5 +22,5 @@ bool Item::Start()
 }
 void Item::Update()
 {
-	ItemHit();
+	ManageState();
 }

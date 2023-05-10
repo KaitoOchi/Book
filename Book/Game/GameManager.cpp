@@ -25,6 +25,8 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(7, "Assets/sound/game/jump_end.wav");
 	//“Š±‰¹
 	g_soundEngine->ResistWaveFileBank(8, "Assets/sound/game/throw.wav");
+	//‘MŒõ‚Ì‰¹
+	g_soundEngine->ResistWaveFileBank(9, "Assets/sound/game/flashbom.wav");
 
 
 	//ƒ^ƒCƒgƒ‹BGM‚Ìİ’è
