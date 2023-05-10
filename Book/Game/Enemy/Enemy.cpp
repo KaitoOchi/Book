@@ -419,7 +419,7 @@ bool Enemy::Act_HitSoundBullet()
 		m_enAnimationState = RUN;
 
 		// アイテムを使用した位置についたとき
-		if (length > 20.0f && length < 500.0f) {
+		if (length > 50.0f && length < 200.0f) {
 			// 見渡すアニメーションを再生
 			m_enAnimationState = LOSS;
 			return true;
