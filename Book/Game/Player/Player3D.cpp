@@ -214,12 +214,22 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 			{
 				m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
 				m_flashBom->SetItemPosition(m_position);
+				//SE‚ð–Â‚ç‚·
+				SoundSource* se = NewGO<SoundSource>(0);
+				se->Init(9);
+				se->SetVolume(GameManager::GetInstance()->GetSFX());
+				se->Play(false);
 			}
 			break;
 		//‰¹”š’e‚ð“Š‚°‚é
 		case Player::m_enItem_SoundBom:
-			m_soundBom->Activate();
-			m_soundBom->SetItemPosition(m_position);
+			if (m_soundBom->m_soundState == m_soundBom->m_enSoundState_End&&
+				m_soundBom->GetSoundBomNumber()>0)
+			{
+				m_soundBom->Activate();
+				m_soundBom->NotifySoundStart();
+				m_soundBom->SetItemPosition(m_position);
+			}
 			break;
 		default:
 			break;

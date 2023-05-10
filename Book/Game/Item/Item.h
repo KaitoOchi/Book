@@ -26,7 +26,6 @@ public:
 
 
 protected:
-
 	Vector3 m_position = Vector3::Zero;					//アイテムを使った座標
 	
 	Game* m_game=nullptr;
@@ -42,6 +41,10 @@ protected:
 	}
 
 	std::vector<Enemy*> m_HitEnemyList;
-
+protected:
+	/// <summary>
+	/// ステートの遷移
+	/// </summary>
+	virtual void ManageState() = 0;
 };
 

@@ -34,7 +34,7 @@ private:
 	/// <summary>
 	/// ステートの管理
 	/// </summary>
-	void ManageState();
+	void ManageState()override;
 	/// <summary>
 	/// 開始時の遷移
 	/// </summary>
