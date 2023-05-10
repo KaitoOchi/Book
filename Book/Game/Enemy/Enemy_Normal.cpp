@@ -35,6 +35,22 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
+	if (m_NotDrawFlag == true) {
+		return;
+	}
+	else {
+		m_ActState = CRAW;
+	}
+
+	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	if (m_HitFlashBulletFlag == true) {
+		m_ActState = CONFUSION;
+	}
+	// ‰¹”š’e‚ğg—p‚µ‚½
+	if (m_HitSoundBulletFlag == true) {
+		m_ActState = LISTEN;
+	}
+
 	switch (m_ActState) {
 		// „‰ñ
 	case CRAW:
