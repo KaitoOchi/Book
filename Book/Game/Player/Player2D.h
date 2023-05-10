@@ -66,10 +66,6 @@ private:
 	/// <summary>
 	/// 気絶ステートの遷移処理
 	/// </summary>
-	void ProcessDownStartStateTransition()override;
-	/// <summary>
-	/// 気絶ステートの遷移処理
-	/// </summary>
 	void ProcessDownStateTransition()override;
 	/// <summary>
 	/// 捕まるステートの遷移処理

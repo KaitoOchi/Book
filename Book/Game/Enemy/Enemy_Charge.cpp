@@ -42,9 +42,7 @@ void Enemy_Charge::Update()
 	if (m_NotDrawFlag == true) {
 		return;
 	}
-	else {
-		m_ActState = CRAW;
-	}
+
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (m_HitFlashBulletFlag == true) {

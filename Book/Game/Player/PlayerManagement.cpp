@@ -39,6 +39,8 @@ void PlayerManagement::Update()
 		return;
 	}
 	
+	
+
 
 	if (m_enMananagementState == m_enPlayer_Changing) {
 		IsChanging();
@@ -47,8 +49,7 @@ void PlayerManagement::Update()
 	if (m_player3D->m_Player_Act == true || 
 		m_player2D->m_Player_Act == true)
 	{
-		if (m_player3D->GetPlayerState() != Player::m_enPlayer_DownStart &&
-			m_player3D->GetPlayerState() != Player::m_enPlayer_Down)
+		if (m_player3D->GetPlayerState() != Player::m_enPlayer_Down)
 		{
 			Input();
 		}
@@ -77,6 +78,7 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
+			SetPosition(m_player2D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
 			//エフェクトの座標の設定
@@ -88,6 +90,7 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
+			SetPosition(m_player3D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
 			//エフェクトの座標の設定

@@ -55,8 +55,16 @@ public:
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPosition();
 		}
-		else {
+		else if (m_enMananagementState == m_enPlayer_2DChanging) {
 			return m_player2D->GetPosition();
+		}
+		else if (m_manageStateTmp == m_enPlayer_3DChanging)
+		{
+			return m_player2D->GetPosition();
+		}
+		else if (m_manageStateTmp == m_enPlayer_2DChanging)
+		{
+			return m_player3D->GetPosition();
 		}
 	}
 

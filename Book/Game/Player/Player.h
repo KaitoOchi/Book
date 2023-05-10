@@ -21,7 +21,6 @@ public:
 		m_enPlayer_Found,		//見つかる
 		m_enPlayer_Caught,		//捕まった
 		m_enPlayer_Catching,	//捕まっている
-		m_enPlayer_DownStart,	//気絶スタート
 		m_enPlayer_Down,		//気絶中
 		m_enPlayer_DownEnd,		//気絶解除
 		m_enPlayer_Clear,		//ゲームクリア
@@ -191,10 +190,6 @@ protected:
 	/// </summary>
 	virtual void ProcessFoundStateTransition()=0;
 
-	/// <summary>
-	/// 気絶ステートの遷移処理
-	/// </summary>
-	virtual void ProcessDownStartStateTransition()=0;
 
 	/// <summary>
 	/// 気絶ステートの遷移処理
