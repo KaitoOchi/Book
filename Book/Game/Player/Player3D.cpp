@@ -299,7 +299,7 @@ void Player3D::ProcessChangeStateTransition()
 }
 void Player3D::ProcessDownStartStateTransition()
 {
-
+	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
 		m_playerState = m_enPlayer_Down;

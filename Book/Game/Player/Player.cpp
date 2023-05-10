@@ -371,10 +371,14 @@ void Player::ManageState()
 	case m_enPlayer3D_Throw:
 		ProcessThrowStateTransition();
 		break;
+	case m_enPlayer_DownStart:
+		ProcessDownStartStateTransition();
+		break;
 		//‹Câ‚µ‚Ä‚¢‚é‚Æ‚«
 	case m_enPlayer_Down:
 		ProcessDownStateTransition();
 		break;
+	
 	case m_enPlayer_Caught:
 		m_game->NotifyGameOver();
 		ProcessCaughtStateTransition();

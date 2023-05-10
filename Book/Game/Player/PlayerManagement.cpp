@@ -44,9 +44,15 @@ void PlayerManagement::Update()
 		IsChanging();
 		return;
 	}
-	if (m_player3D->m_Player_Act == true || m_player2D->m_Player_Act == true)
+	if (m_player3D->m_Player_Act == true || 
+		m_player2D->m_Player_Act == true)
 	{
-		Input();
+		if (m_player3D->GetPlayerState() != Player::m_enPlayer_DownStart &&
+			m_player3D->GetPlayerState() != Player::m_enPlayer_Down)
+		{
+			Input();
+		}
+		
 	}
 	
 	
