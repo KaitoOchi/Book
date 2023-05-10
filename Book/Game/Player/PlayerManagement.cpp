@@ -56,13 +56,13 @@ void PlayerManagement::Input()
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 
 		EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
-		m_soundEffect = NewGO<EffectEmitter>(0);
-		m_soundEffect->Init(0);
+		m_smokeEffect = NewGO<EffectEmitter>(0);
+		m_smokeEffect->Init(0);
 		//エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
-		//エフェクトの座標の設定
+		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
 		
-		m_soundEffect->Play();
+		
+		m_smokeEffect->Play();
 
 		switch (m_enMananagementState)
 		{
@@ -71,8 +71,10 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
+			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
-			m_soundEffect->SetPosition(m_player2D->GetPosition());
+			//エフェクトの座標の設定
+			m_smokeEffect->SetPosition(m_player2D->GetPosition());
 			
 			break;
 			//3Dの場合2Dを呼び出す
@@ -80,8 +82,10 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
+			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
-			m_soundEffect->SetPosition(m_player3D->GetPosition());
+			//エフェクトの座標の設定
+			m_smokeEffect->SetPosition(m_player3D->GetPosition());
 			break;
 		}
 
@@ -92,13 +96,14 @@ void PlayerManagement::Input()
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
-	m_soundEffect = NewGO<EffectEmitter>(0);
-	m_soundEffect->Init(0);
+	m_smokeEffect = NewGO<EffectEmitter>(0);
+	m_smokeEffect->Init(0);
 	//エフェクトの大きさを指定する
-	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
+	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
 	//エフェクトの座標の設定
-	m_soundEffect->SetPosition(m_player2D->GetPosition());
-	m_soundEffect->Play();
+	m_smokeEffect->SetPosition(m_player2D->GetPosition());
+	m_smokeEffect->Play();
+
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);
 	m_player2D->m_Player_Act = false;

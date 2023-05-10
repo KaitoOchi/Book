@@ -165,26 +165,6 @@ bool Game::Start()
 
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-	m_pointLight[0].SetPointLight(
-		0,
-		Vector3::Zero,
-		{ 0.0f, 0.0f, 0.0f },
-		200.0f
-	);
-
-	m_pointLight[1].SetPointLight(
-		1,
-		Vector3::Zero,
-		{ 0.0f, 0.0f, 0.0f },
-		200.0f
-	);
-
-	m_pointLight[2].SetPointLight(
-		2,
-		Vector3::Zero,
-		{ 0.0f, 0.0f, 0.0f },
-		200.0f
-	);
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
@@ -406,6 +386,14 @@ void Game::LevelDesign()
 				m_normal->SetRotation(objData.rotation);
 				m_normal->SetScale(objData.scale);
 				m_wallList.emplace_back(m_normal);
+				SetClearPosition(objData.position);
+				m_pointLight[lights].SetPointLight(
+					lights,
+					Vector3(m_position.x, m_position.y + 10.0f, m_position.z),
+					Vector3::Zero,
+					400.0f
+				);
+				lights++;
 				return true;
 			}
 		}
@@ -468,13 +456,6 @@ void Game::LevelDesign()
 			m_ghostBox->SetPosition(objData.position);
 			m_ghostBox->SetScale(objData.scale);
 			m_ghostBox->SetRotation(objData.rotation);
-		}
-		if (objData.EqualObjectName(L"clear") == true) {
-
-			SetClearPosition(objData.position);
-			m_pointLight[lights].SetPosition(Vector3(m_position.x , m_position.y + 10.0f, m_position.z));
-			lights++;
-			return true;
 		}
 		return true;
 		}
