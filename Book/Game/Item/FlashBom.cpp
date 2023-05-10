@@ -3,6 +3,8 @@
 #include "Enemy.h"
 #include "Game.h"
 #include "PlayerManagement.h"
+#include "GameManager.h"
+
 namespace
 {
 	const Vector3 LIGHTNO = Vector3::Zero;
@@ -56,7 +58,7 @@ struct SweepResyltWall :public btCollisionWorld::ConvexResultCallback
 
 void FlashBom::Update()
 {
-	ManageState();
+	Item::Update();
 	if (m_FlashState == m_enFlash_Flashing)
 	{
 		FlashEffect();
@@ -145,6 +147,9 @@ void FlashBom::SetFlashEffect()
 	m_range = MAXRANGE;
 	m_ambient = MAXAMBIENT;
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 4;
+
+	
+
 }
 
 void FlashBom::ProcessStartState()
