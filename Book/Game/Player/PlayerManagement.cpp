@@ -5,6 +5,7 @@
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
 #include"GameCamera.h"
+#include "Enemy.h"
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
@@ -39,7 +40,23 @@ void PlayerManagement::Update()
 		return;
 	}
 	
-	
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	{
+		if (m_game->GetEnemyList()[i]->GetChachPlayerFlag() == true) 
+		{
+			if (m_player3D->IsActive() == false)
+			{
+				PlayerChange3D();
+				m_player3D->SetPosition(m_player2D->GetPosition());
+			}
+			else
+			{
+				return;
+			}
+			
+		}
+		
+	}
 
 
 	if (m_enMananagementState == m_enPlayer_Changing) {

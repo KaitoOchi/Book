@@ -69,7 +69,7 @@ void Enemy_Search::Update()
 		break;
 	}
 
-	Enemy::Animation();
+	Enemy::PlayAnimation();
 
 	Enemy::SpotLight_Serch(m_rot, m_position);
 	// Ž‹–ìŠp

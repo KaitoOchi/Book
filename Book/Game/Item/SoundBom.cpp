@@ -39,7 +39,7 @@ void SoundBom::ItemHit()
 	//エフェクトの大きさを指定する
 	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
 	//エフェクトの座標の設定
-	m_soundEffect->SetPosition(m_position);
+	m_soundEffect->SetPosition(Vector3(m_position.x,10.0f,m_position.z));
 	m_soundEffect->Play();
 	
 	//近くにいるエネミーたちを探す
