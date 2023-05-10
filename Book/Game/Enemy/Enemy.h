@@ -235,6 +235,14 @@ public:
 	}
 
 	/// <summary>
+	/// プレイヤーを確保したかどうか返す
+	/// </summary>
+	/// <returns></returns>
+	bool GetChachPlayerFlag() {
+		return m_ChachPlayerFlag;
+	}
+
+	/// <summary>
 	/// 閃光弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
