@@ -39,10 +39,12 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
 		return;
 	}
-	else {
+	// デフォルトに戻すフラグがtrueのとき
+	if(m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
 	}
 
