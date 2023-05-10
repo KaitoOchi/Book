@@ -39,10 +39,14 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
 		return;
 	}
-
+	// デフォルトに戻すフラグがtrueのとき
+	if(m_ChangeDefaultFlag == true) {
+		m_ActState = CRAW;
+	}
 
 	// 閃光弾に当たった
 	if (m_HitFlashBulletFlag == true) {
