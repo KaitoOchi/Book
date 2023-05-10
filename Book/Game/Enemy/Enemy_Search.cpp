@@ -31,17 +31,18 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetScale(m_scale);
 
 	m_ActState = SEARCH;		// 行動パターンを設定
-	m_enAnimationState = IDLE;	// アニメーションステートを設定
 
 	return true;
 }
 void Enemy_Search::Update()
 {
+	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
 		return;
 	}
-	else {
-		m_ActState = SEARCH;
+	// デフォルトに戻すフラグがtrueのとき
+	if (m_ChangeDefaultFlag == true) {
+		m_ActState = CRAW;
 	}
 
 	// 閃光弾に当たった
@@ -68,6 +69,8 @@ void Enemy_Search::Update()
 		break;
 	}
 
+	Enemy::PlayAnimation();
+
 	Enemy::SpotLight_Serch(m_rot, m_position);
 	// 視野角
 	Enemy::Act_SeachPlayer();
@@ -81,6 +84,7 @@ void Enemy_Search::Update_OnSearch()
 {
 	// 索敵
 	Rotaition();
+	m_enAnimationState = IDLE;	// アニメーションステートを設定
 
 	// 視野角内にプレイヤーが存在するとき
 	if (m_TrakingPlayerFlag == true) {
@@ -92,6 +96,7 @@ void Enemy_Search::Update_OnCall()
 {
 	// 周りの敵を呼ぶ
 	Enemy::Act_Call();
+	m_enAnimationState = IDLE;	// アニメーションステートを設定
 
 	// 視野角内にプレイヤーが存在しないとき
 	if (m_TrakingPlayerFlag == false) {
@@ -103,6 +108,7 @@ void Enemy_Search::Update_OnCallEnd()
 {
 	Rotaition();
 	Enemy::Act_CallEnd();
+	m_enAnimationState = IDLE;	// アニメーションステートを設定
 
 	// エネミーを元に戻す
 	if (Enemy::Act_CallEnd() == true) {
