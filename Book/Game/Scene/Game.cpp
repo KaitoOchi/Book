@@ -536,6 +536,7 @@ void Game::NotDraw_Enemy(bool flag)
 	// 描画するかどうか決定する
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_enemyList[i]->SetNotDrawFlag(flag);
+		m_enemyList[i]->SetTrueChangeDefaultFlag();
 	}
 }
 
