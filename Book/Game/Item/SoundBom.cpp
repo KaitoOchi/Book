@@ -6,12 +6,12 @@
 
 namespace
 {
-	const float SOUNDRANGE = 120.0f;
-	const float EFFECTSIZE = 100.0f;
+	const float SOUNDRANGE = 30.0f;
+	const float EFFECTSIZE = 2.0f;
 }
 SoundBom::SoundBom()
 {
-
+	
 }
 SoundBom::~SoundBom()
 {
@@ -33,7 +33,6 @@ void SoundBom::ItemHit()
 {
 	m_soundCount -= 1;
 	
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
 	m_soundEffect = NewGO<EffectEmitter>(1);
 	m_soundEffect->Init(1);
 	//エフェクトの大きさを指定する

@@ -16,6 +16,10 @@ namespace
 	const float JUMPVOLUM = 200.0f;//ジャンプ量
 	const float GRAVITY = 400.0f;//重力
 	const float SPEEDDOWN = 0.8;//速度減速率
+	const float PLAYERSTAMINA = 10.0f;//プレイヤーのスタミナ
+	const float STAMINAHEAL = 1.0f;//スタミナの回復
+	const float STAMINASYOPHEAL = 1.5f;
+	const float STAMINADOWN = 1.0f;//スタミナの減少
 }
 
 Player::Player()
@@ -29,6 +33,7 @@ Player::~Player()
 
 bool Player::Start()
 {
+	m_stamina = PLAYERSTAMINA;
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
@@ -131,6 +136,8 @@ void Player::Update()
 
 void Player::Move()
 {
+
+
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//速度を初期化
@@ -148,20 +155,61 @@ void Player::Move()
 	cameraRight.y = 0.0f;
 	cameraRight.Normalize();
 	//もしAボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonA)&& m_characon->IsOnGround() == true)
+	if (g_pad[0]->IsPress(enButtonA)&& 
+		m_characon->IsOnGround() == true&&
+		m_runState==true)
 	{
-		//ダッシュをさせる
-		//左ステックと走る速度を乗算する
-		m_moveSpeed+= cameraFoward*m_Lstic.y * RUN;
-		m_moveSpeed+= cameraRight*m_Lstic.x * RUN;
+		PlayerRun();
 	}
 	else
 	{
+		//プレイヤーが動いていないなら
+		if (m_moveSpeed.x >= 0.0f &&
+			m_moveSpeed.y >= 0.0f &&
+			m_moveSpeed.z >= 0.0f)
+		{
+			//スタミナの回復量を1.5にする
+			m_stamina += 1.5f * g_gameTime->GetFrameDeltaTime();
+			m_stamina = min(m_stamina, PLAYERSTAMINA);
+		}
+		else
+		{
+			//スタミナの回復量を1にする
+			m_stamina += 1.0f * g_gameTime->GetFrameDeltaTime();
+			m_stamina = min(m_stamina, PLAYERSTAMINA);
+		}
+		
 		//左ステックと歩く速度を乗算させる
 		m_moveSpeed += cameraFoward* m_Lstic.y * WALK;
 		m_moveSpeed += cameraRight*m_Lstic.x * WALK;
+		if (m_stamina == PLAYERSTAMINA)
+		{
+			m_runState = true;
+		}
 	}
 
+}
+
+void Player::PlayerRun()
+{
+	m_stamina -= 1.0f * g_gameTime->GetFrameDeltaTime();
+	m_stamina = max(m_stamina, 0.0f);
+	if (m_stamina <= 0.0f)
+	{
+		m_runState = false;
+	}
+	//カメラの前方向と、右方向の取得
+	Vector3 cameraFoward = g_camera3D->GetForward();
+	Vector3 cameraRight = g_camera3D->GetRight();
+	//XZ平面での前方方向と右方向を取得
+	cameraFoward.y = 0.0f;
+	cameraFoward.Normalize();
+	cameraRight.y = 0.0f;
+	cameraRight.Normalize();
+	//ダッシュをさせる
+	//左ステックと走る速度を乗算する
+	m_moveSpeed += cameraFoward * m_Lstic.y * RUN;
+	m_moveSpeed += cameraRight * m_Lstic.x * RUN;
 }
 void Player::Jump()
 {
@@ -269,7 +317,8 @@ void Player::ProcessCommonStateTransition()
 	}
 	else if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
 	{
-		if (g_pad[0]->IsPress(enButtonA))
+		if (g_pad[0]->IsPress(enButtonA)&&
+			m_runState == true)
 		{
 			//ダッシュ中にする
 			m_playerState = m_enPlayer_Run;

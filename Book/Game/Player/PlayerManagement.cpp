@@ -15,7 +15,7 @@ namespace
 
 PlayerManagement::PlayerManagement()
 {
-
+	
 }
 PlayerManagement::~PlayerManagement()
 {
@@ -79,7 +79,6 @@ void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 
-		EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 		m_smokeEffect = NewGO<EffectEmitter>(0);
 		m_smokeEffect->Init(0);
 		//エフェクトの大きさを指定する
@@ -121,7 +120,6 @@ void PlayerManagement::Input()
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
-	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 	m_smokeEffect = NewGO<EffectEmitter>(0);
 	m_smokeEffect->Init(0);
 	//エフェクトの大きさを指定する
@@ -142,6 +140,7 @@ void PlayerManagement::PlayerChange2D()
 {
 	m_player2D->Activate();//プレイヤー2Dをアクティブにする
 	m_player2D->SetPosition(m_player3D->GetPosition());//2Dに3Dのポジションを与える
+	m_player2D->SetStamina(m_player3D->GetStamina());
 	m_player2D->ModelRenderUpdate();//モデルを更新する
 	m_player3D->PlayerChang();//プレイヤー3Dをディアクティブにする
 	m_player2D->CreatCharcon();//キャラコンを生成する
@@ -154,6 +153,7 @@ void PlayerManagement::PlayerChange3D()
 	
 	m_player3D->Activate();//プレイヤー3Dをアクティブにする
 	m_player3D->SetPosition(m_player2D->GetPosition());//3Dに2Dのポジションを与える
+	m_player3D->SetStamina(m_player2D->GetStamina());
 	m_player3D->ModelRenderUpdate();//モデルを更新する
 	m_player2D->PlayerChang();//プレイヤー2Dをディアクティブにする
 	m_player3D->CreatCharcon();//キャラコンを生成する

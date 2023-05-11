@@ -33,10 +33,17 @@ public:
 
 	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
 
+	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
+
+	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
+
+	std::vector<Vector3> m_ghostpositions;
+	
+public:
+
 	Player();
 	virtual ~Player();
 	virtual bool Start();
-public:
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -108,17 +115,27 @@ public:
 	{
 		return m_playerState;
 	}
+	/// <summary>
+	/// スタミナの取得
+	/// </summary>
+	/// <returns></returns>
+	const float GetStamina()
+	{
+		return m_stamina;
+	}
 
-	std::vector<Vector3> m_ghostpositions;
-	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
+	const void SetStamina(const float stamina)
+	{
+		m_stamina = stamina;
+	}
 
-	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
 
 protected:
 	
 
 	virtual void Update();
 	void Move();
+	void PlayerRun();
 	void Jump();
 	void Rotation();
 	/// <summary>
@@ -279,5 +296,7 @@ protected:
 
 	bool m_playerCaught = true;
 
+	bool m_runState = true;
 
+	float m_stamina = 0.0f;
 };
