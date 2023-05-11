@@ -1,0 +1,11 @@
+System.DivideByZeroException: 0 で除算しようとしました。
+   場所 Effekseer.Data.Value.FCurve`1.GetValue(Int32 frame)
+   場所 Effekseer.GUI.Dock.FCurves.FCurve.UpdateTree(String nodeName)
+   場所 Effekseer.GUI.Dock.FCurves.UpdateTreeNode(TreeNode treeNode)
+   場所 Effekseer.GUI.Dock.FCurves.UpdateTreeNode(TreeNode treeNode)
+   場所 Effekseer.GUI.Dock.FCurves.UpdateInternal()
+   場所 Effekseer.GUI.Dock.DockPanel.Update()
+   場所 Effekseer.GUI.Dock.DockManager.Update()
+   場所 Effekseer.GUI.Manager.Update()
+   場所 Effekseer.Program.Exec(Boolean gui, String input, String output, String export, String format, Single magnification, Boolean materialCache)
+   場所 Effekseer.Program.Main(String[] args)

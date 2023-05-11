@@ -115,6 +115,8 @@ void Player3D::Update()
 
 void Player3D::PlayerPush()
 {
+	m_Player_Act = false;
+
 	senkeiPos += g_gameTime->GetFrameDeltaTime() * 1.5f;
 	m_position.Lerp(senkeiPos, GetPushPosition(), GetGhostPosition());
 	m_modelRender->SetPosition(m_position);
@@ -297,14 +299,7 @@ void Player3D::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
-void Player3D::ProcessDownStartStateTransition()
-{
 
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		m_playerState = m_enPlayer_Down;
-	}
-}
 void Player3D::ProcessDownStateTransition()
 {
 	//速度を初期化

@@ -91,10 +91,7 @@ private:
 	/// 見つかるステートの遷移処理
 	/// </summary>
 	void ProcessFoundStateTransition()override;
-	/// <summary>
-	/// 気絶ステートの遷移処理
-	/// </summary>
-	void ProcessDownStartStateTransition()override;
+
 	/// <summary>
 	/// 気絶ステートの遷移処理
 	/// </summary>
