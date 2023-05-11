@@ -89,7 +89,7 @@ namespace nsBookEngine {
 			modelInitData.m_psEntryPointFunc = "PSMain";
 		}
 
-		if (m_skeleton.IsInited()) {
+		if (m_skeleton.IsInited()) { 
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
