@@ -79,10 +79,6 @@ void Enemy_Clear::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		break;
-		// 捕獲
-	case CATCH:
-		Update_OnCatch();
-		break;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
@@ -117,16 +113,18 @@ void Enemy_Clear::Update_OnCraw()
 
 void Enemy_Clear::Update_OnTracking()
 {
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+		return;
+	}
+
+
 	Enemy::Act_Tracking();			// 追跡行動
 
 	// 視野角にプレイヤーがいないとき
 	if (m_TrakingPlayerFlag == false) {
 		Enemy::Act_MissingPlayer();
-	}
-
-	// プレイヤーを捕まえたとき
-	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
 	}
 }
 
@@ -168,13 +166,6 @@ void Enemy_Clear::UpDate_OnListen()
 	if (Enemy::GetHitSoundBullet() == false) {
 		m_ActState = BACKBASEDON;
 	}
-}
-
-void Enemy_Clear::Update_OnCatch()
-{
-
-	Enemy::Act_CatchPlayer();
-	m_ActState = CRAW;
 }
 
 void Enemy_Clear::ClearChange()
