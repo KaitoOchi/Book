@@ -72,9 +72,6 @@ bool Enemy::Start()
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
 
-	// gameで設定したエネミーのリストを取得する
-	enemyList = m_game->GetEnemyList();
-
 	// 各タイマーのリセット
 	for (int i = 0; i < TIMER_NUM; i++) {
 		m_addTimer[i] = 0.0f;
@@ -311,9 +308,9 @@ bool Enemy::Act_CatchPlayer()
 		// 捕まえる
 		m_enAnimationState = ATTACK;
 
-		for (int i = 0; i < enemyList.size(); i++) {
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 			// 捕まえたのでフラグをtrueにする
-			enemyList[i]->m_ChachPlayerFlag = true;
+			m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
 		}
 
 		return true;
@@ -659,17 +656,17 @@ void Enemy::Act_Call()
 	// 周りの敵を呼ぶ処理
 
 	// エネミーのリストを検索
-	for (int i = 0; i < enemyList.size(); i++) {
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
 		// 各エネミーから該当エネミーへ向かうベクトル
-		Vector3 diff = m_position - enemyList[i]->m_position;
+		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		float length = diff.Length();
 
 		// 長さが一定以内のとき
 		if (length > CALL_DISTANCE_MIN && length < CALL_DISTANCE_MAX) {
 
-			enemyList[i]->m_ActState = CALLED;				// 行動パターンを変更する
-			enemyList[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
+			m_game->GetEnemyList()[i]->m_ActState = CALLED;				// 行動パターンを変更する
+			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
 
 			// 長さが一定上のとき
 			if (length <= CALL_DISTANCE_MIN) {
@@ -681,7 +678,7 @@ void Enemy::Act_Call()
 			// 正規化
 			diff.Normalize();
 			// 移動速度を加算
-			enemyList[i]->m_position += diff * MOVE_SPEED;
+			m_game->GetEnemyList()[i]->m_position += diff * MOVE_SPEED;
 
 			//m_fontRender.SetText(L"call");
 		}
@@ -713,18 +710,18 @@ void Enemy::Act_Called()
 bool Enemy::Act_CallEnd()
 {
 	// エネミーのリストを検索
-	for (int i = 0; i < enemyList.size(); i++) {
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
 		//// 各エネミーから該当エネミーへ向かうベクトル
-		//Vector3 diff = m_position - enemyList[i]->m_position;
+		//Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		//float length = diff.Length();
 
 		//m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
-		if (enemyList[i]->m_ActState == CALLED) {
+		if (m_game->GetEnemyList()[i]->m_ActState == CALLED) {
 
-			enemyList[i]->m_ActState = BACKBASEDON;		// 行動パターンを変更する
+			m_game->GetEnemyList()[i]->m_ActState = BACKBASEDON;		// 行動パターンを変更する
 		}
 	}
 

@@ -350,8 +350,6 @@ protected:
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
 
-	std::vector<Enemy*> enemyList;			// エネミーのリスト
-
 	PlayerManagement* m_playerManagement = nullptr;
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
