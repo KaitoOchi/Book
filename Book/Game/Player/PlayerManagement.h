@@ -56,8 +56,16 @@ public:
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPosition();
 		}
-		else {
+		else if (m_enMananagementState == m_enPlayer_2DChanging) {
 			return m_player2D->GetPosition();
+		}
+		else if (m_manageStateTmp == m_enPlayer_3DChanging)
+		{
+			return m_player2D->GetPosition();
+		}
+		else if (m_manageStateTmp == m_enPlayer_2DChanging)
+		{
+			return m_player3D->GetPosition();
 		}
 	}
 
@@ -128,6 +136,18 @@ public:
 			return m_player2D->GetPlayerState();
 		}
 	}
+
+	const float GetStamina()const
+	{
+		// 今アクティブなプレイヤーの座標を返す
+		if (m_enMananagementState == m_enPlayer_3DChanging) {
+			return m_player3D->GetStamina();
+		}
+		else {
+			return m_player2D->GetStamina();
+		}
+	}
+
 private:
 	void PlayerStop();
 	bool RestartState = true;									//プレイヤーを再開させるかどうか
