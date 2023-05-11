@@ -42,8 +42,8 @@ GameManager::GameManager()
 
 
 	//エフェクトの設定
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/kemuri/TowerDown.efk");
-	//EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/a.efk");
+	
+	
 
 
 	//データのロード

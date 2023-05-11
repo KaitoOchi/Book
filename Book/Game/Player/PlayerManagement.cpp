@@ -5,6 +5,7 @@
 #include "PlayerManagement.h"
 #include "PhysicsGhost.h"
 #include"GameCamera.h"
+#include "Enemy.h"
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
@@ -14,7 +15,7 @@ namespace
 
 PlayerManagement::PlayerManagement()
 {
-
+	
 }
 PlayerManagement::~PlayerManagement()
 {
@@ -39,14 +40,37 @@ void PlayerManagement::Update()
 		return;
 	}
 	
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	{
+		if (m_game->GetEnemyList()[i]->GetChachPlayerFlag() == true) 
+		{
+			if (m_player3D->IsActive() == false)
+			{
+				PlayerChange3D();
+				m_player3D->SetPosition(m_player2D->GetPosition());
+			}
+			else
+			{
+				return;
+			}
+			
+		}
+		
+	}
+
 
 	if (m_enMananagementState == m_enPlayer_Changing) {
 		IsChanging();
 		return;
 	}
-	if (m_player3D->m_Player_Act == true || m_player2D->m_Player_Act == true)
+	if (m_player3D->m_Player_Act == true || 
+		m_player2D->m_Player_Act == true)
 	{
-		Input();
+		if (m_player3D->GetPlayerState() != Player::m_enPlayer_Down)
+		{
+			Input();
+		}
+		
 	}
 	
 	
@@ -55,7 +79,6 @@ void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 
-		EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 		m_smokeEffect = NewGO<EffectEmitter>(0);
 		m_smokeEffect->Init(0);
 		//エフェクトの大きさを指定する
@@ -71,6 +94,7 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
+			SetPosition(m_player2D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
 			//エフェクトの座標の設定
@@ -82,6 +106,7 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
+			SetPosition(m_player3D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
 			//エフェクトの座標の設定
@@ -95,7 +120,6 @@ void PlayerManagement::Input()
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
-	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 	m_smokeEffect = NewGO<EffectEmitter>(0);
 	m_smokeEffect->Init(0);
 	//エフェクトの大きさを指定する
@@ -116,6 +140,7 @@ void PlayerManagement::PlayerChange2D()
 {
 	m_player2D->Activate();//プレイヤー2Dをアクティブにする
 	m_player2D->SetPosition(m_player3D->GetPosition());//2Dに3Dのポジションを与える
+	m_player2D->SetStamina(m_player3D->GetStamina());
 	m_player2D->ModelRenderUpdate();//モデルを更新する
 	m_player3D->PlayerChang();//プレイヤー3Dをディアクティブにする
 	m_player2D->CreatCharcon();//キャラコンを生成する
@@ -128,6 +153,7 @@ void PlayerManagement::PlayerChange3D()
 	
 	m_player3D->Activate();//プレイヤー3Dをアクティブにする
 	m_player3D->SetPosition(m_player2D->GetPosition());//3Dに2Dのポジションを与える
+	m_player3D->SetStamina(m_player2D->GetStamina());
 	m_player3D->ModelRenderUpdate();//モデルを更新する
 	m_player2D->PlayerChang();//プレイヤー2Dをディアクティブにする
 	m_player3D->CreatCharcon();//キャラコンを生成する
