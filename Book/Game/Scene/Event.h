@@ -34,7 +34,11 @@ private:
 private:
 	enum EnAnimationClip {
 		animationClip_Idle,
-		animationClip_Put,
+		animationClip_Walk,
+		animationClip_HeadUp,
+		animationClip_HeadStop,
+		animationClip_HeadDown,
+		animationClip_RunAway,
 		animationClip_Num,
 	};
 	AnimationClip m_animationClips[animationClip_Num];

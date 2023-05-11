@@ -12,7 +12,7 @@ namespace
 	const bool ENEMY_ENABLE[SCENE_MAX] = { false, false, false, true, false };	//エネミーの表示状態
 	const bool LIGHT_ENABLE[SCENE_MAX] = { false, false, true, false, true };	//ライトの表示状態
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
-	const float SCENE_TIME[SCENE_MAX] = { 3.0f, 3.0f, 1.5f, 2.7f, 5.0f };		//シーン遷移するための時間
+	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
 									{ 100.0f, 50.0f, 50.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
@@ -48,6 +48,16 @@ bool Event::Start()
 	//プレイヤーモデルを設定
 	m_animationClips[animationClip_Idle].Load("Assets/animData/player/idle.tka");
 	m_animationClips[animationClip_Idle].SetLoopFlag(true);
+	m_animationClips[animationClip_Walk].Load("Assets/animData/player/event/walk_start.tka");
+	m_animationClips[animationClip_Walk].SetLoopFlag(false);
+	m_animationClips[animationClip_HeadUp].Load("Assets/animData/player/event/head_up.tka");
+	m_animationClips[animationClip_HeadUp].SetLoopFlag(false);
+	m_animationClips[animationClip_HeadStop].Load("Assets/animData/player/event/head_stop.tka");
+	m_animationClips[animationClip_HeadStop].SetLoopFlag(false);
+	m_animationClips[animationClip_HeadDown].Load("Assets/animData/player/event/head_down.tka");
+	m_animationClips[animationClip_HeadDown].SetLoopFlag(false);
+	m_animationClips[animationClip_RunAway].Load("Assets/animData/player/event/run_away.tka");
+	m_animationClips[animationClip_RunAway].SetLoopFlag(false);
 	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, 0, 0, 0, D3D12_CULL_MODE_BACK);
 	m_playerModelRender.SetPosition(m_tresurePos);
 	m_playerModelRender.Update();
@@ -103,7 +113,7 @@ void Event::Update()
 	else {
 		//フェードアウトを始める
 		if (m_cameraScene == SCENE_MAX - 1 &&
-			m_timer > 3.0f) {
+			m_timer > 1.0f) {
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
 		}
@@ -117,8 +127,35 @@ void Event::Update()
 }
 
 void Event::Animation()
-{
-	m_playerModelRender.PlayAnimation(animationClip_Idle, 0.5f);
+{	
+	switch (m_cameraScene)
+	{
+	case 0:
+		if (m_timer < 1.0f) {
+			m_playerModelRender.PlayAnimation(animationClip_Walk, 0.0f);
+		}
+		else {
+			m_playerModelRender.PlayAnimation(animationClip_Idle, 0.0f);
+		}
+		break;
+	case 2:
+		m_playerModelRender.PlayAnimation(animationClip_HeadUp, 0.0f);
+		break;
+	case 3:
+		m_playerModelRender.PlayAnimation(animationClip_HeadStop, 0.0f);
+		break;
+	case 4:
+		if (m_timer < 1.0f) {
+			m_playerModelRender.PlayAnimation(animationClip_HeadDown, 0.0f);
+		}
+		else {
+			m_playerModelRender.PlayAnimation(animationClip_RunAway, 0.3f);
+		}
+		break;
+	default:
+		m_playerModelRender.PlayAnimation(animationClip_Idle, 0.5f);
+		break;
+	}
 	m_playerModelRender.Update();
 
 	for (int i = 0; i < 3; i++) {
