@@ -38,6 +38,10 @@ void PlayerManagement::Update()
 	if (!m_GameStartState) {
 		return;
 	}
+
+	if (m_enMananagementState == m_enPlayer_Stop) {
+		return;
+	}
 	
 
 	if (m_enMananagementState == m_enPlayer_Changing) {
@@ -60,7 +64,6 @@ void PlayerManagement::Input()
 		m_smokeEffect->Init(0);
 		//エフェクトの大きさを指定する
 		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-		
 		
 		m_smokeEffect->Play();
 

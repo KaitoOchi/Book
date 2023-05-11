@@ -21,7 +21,7 @@ bool Enemy_Clear::Start()
 	Animation();
 
 	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 3);
 
 	Enemy::Start();
 

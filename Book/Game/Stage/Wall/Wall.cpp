@@ -2,6 +2,7 @@
 #include "Wall.h"
 
 #include "PlayerManagement.h"
+#include "GameManager.h"
 
 namespace
 {
@@ -37,11 +38,13 @@ void Wall::CreateBoxObj()
 	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// �R���W����������ݒ�	
 }
 
-void Wall::Update()
-{
-}
 void Wall::Render(RenderContext& rc)
 {
+	if (GameManager::GetInstance()->GetGameState() == GameManager::enState_Result) {
+		m_wallRender.Draw(rc);
+		return;
+	}
+
 	Vector3 diff = m_RenderPosition - m_position;
 	if (diff.Length() < 1500.0f) {
 		m_wallRender.Draw(rc);

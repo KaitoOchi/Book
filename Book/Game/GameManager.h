@@ -180,6 +180,14 @@ public:
 		m_gameState = gamestate;
 	}
 
+	/// <summary>
+	/// ステートの取得。
+	/// </summary>
+	EnGameState GetGameState()
+	{
+		return m_gameState;
+	}
+
 
 	/// <summary>
 	/// 更新処理。
