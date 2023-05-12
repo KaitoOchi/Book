@@ -15,21 +15,31 @@ namespace nsBookEngine {
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alpha;
 
+		//2Dゲージのクリップ
 		if (clipMode == 1) {
 			initData.m_vsEntryPointFunc = "VSMain1";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
+		//BGMのクリップ
 		else if (clipMode == 2) {
 			initData.m_vsEntryPointFunc = "VSMain2";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
+		//SFXのクリップ
 		else if (clipMode == 3) {
 			initData.m_vsEntryPointFunc = "VSMain3";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
+
+		//UVスクロール
+		if (clipMode == 4) {
+			initData.m_psEntryPoinFunc = "PSMainUVScroll";
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}

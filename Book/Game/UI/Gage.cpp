@@ -78,7 +78,7 @@ void Gage::Update()
 	}
 }
 
-void Gage::GageUp(int GageUp)
+void Gage::GageUp(const int GageUp, const bool isEnemy)
 {
 	//クールダウンがまだなら
 	if (m_vigilanceTime > 0.0f) {
@@ -87,7 +87,13 @@ void Gage::GageUp(int GageUp)
 
 	//発見音を出す
 	SoundSource* se = NewGO<SoundSource>(0);
-	se->Init(3);
+
+	if (isEnemy) {
+		se->Init(10);
+	}
+	else {
+		se->Init(3);
+	}
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 

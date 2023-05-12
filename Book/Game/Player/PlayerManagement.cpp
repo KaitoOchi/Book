@@ -1,11 +1,14 @@
 #include "stdafx.h"
-#include "Player2D.h"
-#include "Game.h"
-#include "Player3D.h"
 #include "PlayerManagement.h"
-#include "PhysicsGhost.h"
-#include"GameCamera.h"
+
+#include "Player2D.h"
+#include "Player3D.h"
 #include "Enemy.h"
+#include "Game.h"
+#include "PhysicsGhost.h"
+#include "GameCamera.h"
+#include "GameManager.h"
+
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
@@ -37,6 +40,10 @@ bool PlayerManagement::Start()
 void PlayerManagement::Update()
 {
 	if (!m_GameStartState) {
+		return;
+	}
+
+	if (m_enMananagementState == m_enPlayer_Stop) {
 		return;
 	}
 	
@@ -82,26 +89,32 @@ void PlayerManagement::Input()
 
 		switch (m_enMananagementState)
 		{
-			//2D‚Ìê‡3D‚ğŒÄ‚Ño‚·
+			//2Dï¿½Ìê‡3Dï¿½ï¿½Ä‚Ñoï¿½ï¿½
 		case PlayerManagement::m_enPlayer_2DChanging:
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
 			SetPosition(m_player2D->GetPosition());
-			//ƒJƒƒ‰‚ÌˆÊ’u‚Ìİ’è
+			//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÊ’uï¿½Ìİ’ï¿½
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
 			
 			break;
-			//3D‚Ìê‡2D‚ğŒÄ‚Ño‚·
+			//3Dï¿½Ìê‡2Dï¿½ï¿½Ä‚Ñoï¿½ï¿½
 		case PlayerManagement::m_enPlayer_3DChanging:
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
 			SetPosition(m_player3D->GetPosition());
-			//ƒJƒƒ‰‚ÌˆÊ’u‚Ìİ’è
+			//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÊ’uï¿½Ìİ’ï¿½
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
 			break;
 		}
+
+		//ï¿½Ïgï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(13);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
 		m_enMananagementState = m_enPlayer_Changing;
 	}
@@ -121,27 +134,27 @@ void PlayerManagement::SetChange(EnManagementState manaState)
 
 void PlayerManagement::PlayerChange2D()
 {
-	m_player2D->Activate();//ƒvƒŒƒCƒ„[2D‚ğƒAƒNƒeƒBƒu‚É‚·‚é
-	m_player2D->SetPosition(m_player3D->GetPosition());//2D‚É3D‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğ—^‚¦‚é
+	m_player2D->Activate();//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[2Dï¿½ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½ï¿½
+	m_player2D->SetPosition(m_player3D->GetPosition());//2Dï¿½ï¿½3Dï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½
 	m_player2D->SetStamina(m_player3D->GetStamina());
-	m_player2D->ModelRenderUpdate();//ƒ‚ƒfƒ‹‚ğXV‚·‚é
-	m_player3D->PlayerChang();//ƒvƒŒƒCƒ„[3D‚ğƒfƒBƒAƒNƒeƒBƒu‚É‚·‚é
-	m_player2D->CreatCharcon();//ƒLƒƒƒ‰ƒRƒ“‚ğ¶¬‚·‚é
-	SetCharacon(m_player2D->GetCharacon());//ƒLƒƒƒ‰ƒRƒ“‚Ìî•ñ‚ğ“¾‚é
-	//ƒvƒŒƒCƒ„[‚ğ2D‚É‚·‚é
+	m_player2D->ModelRenderUpdate();//ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
+	m_player3D->PlayerChang();//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[3Dï¿½ï¿½fï¿½Bï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½ï¿½
+	m_player2D->CreatCharcon();//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	SetCharacon(m_player2D->GetCharacon());//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìï¿½ï¿½ğ“¾‚ï¿½
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½2Dï¿½É‚ï¿½ï¿½ï¿½
 	m_enMananagementState = m_enPlayer_2DChanging;
 	
 }
 void PlayerManagement::PlayerChange3D()
 {
-	m_player3D->Activate();//ƒvƒŒƒCƒ„[3D‚ğƒAƒNƒeƒBƒu‚É‚·‚é
-	m_player3D->SetPosition(m_player2D->GetPosition());//3D‚É2D‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğ—^‚¦‚é
+	m_player3D->Activate();//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[3Dï¿½ï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½ï¿½
+	m_player3D->SetPosition(m_player2D->GetPosition());//3Dï¿½ï¿½2Dï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½
 	m_player3D->SetStamina(m_player2D->GetStamina());
-	m_player3D->ModelRenderUpdate();//ƒ‚ƒfƒ‹‚ğXV‚·‚é
-	m_player2D->PlayerChang();//ƒvƒŒƒCƒ„[2D‚ğƒfƒBƒAƒNƒeƒBƒu‚É‚·‚é
-	m_player3D->CreatCharcon();//ƒLƒƒƒ‰ƒRƒ“‚ğ¶¬‚·‚é
-	SetCharacon(m_player3D->GetCharacon());//ƒLƒƒƒ‰ƒRƒ“‚Ìî•ñ‚ğ“¾‚é
-	//ƒvƒŒƒCƒ„[‚ª–„‚Ü‚Á‚Ä‚¢‚é‚È‚ç
+	m_player3D->ModelRenderUpdate();//ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½
+	m_player2D->PlayerChang();//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[2Dï¿½ï¿½fï¿½Bï¿½Aï¿½Nï¿½eï¿½Bï¿½uï¿½É‚ï¿½ï¿½ï¿½
+	m_player3D->CreatCharcon();//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	SetCharacon(m_player3D->GetCharacon());//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìï¿½ï¿½ğ“¾‚ï¿½
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½È‚ï¿½
 	PhysicsWorld::GetInstance()->ContactTest(*m_player3D->GetCharacon(), [&](const btCollisionObject& contactObject) {
 		for (int i = 0; i < m_game->GetPhysicsGhostList().size(); i++)
 		{
@@ -154,7 +167,7 @@ void PlayerManagement::PlayerChange3D()
 		}
 
 		});
-	//ƒvƒŒƒCƒ„[‚ğ‚RD‚É‚·‚é
+	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½RDï¿½É‚ï¿½ï¿½ï¿½
 	m_enMananagementState = m_enPlayer_3DChanging;
 }
 
@@ -162,16 +175,16 @@ void PlayerManagement::IsChanging()
 {
 	if (m_changeTime > CHANGE_TIME) {
 
-		//ƒXƒe[ƒg‚ğ•ÏX‚·‚é
+		//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½ÏXï¿½ï¿½ï¿½ï¿½
 		switch (m_manageStateTmp)
 		{
-			//2D‚Ìê‡3D‚ğŒÄ‚Ño‚·
+			//2Dï¿½Ìê‡3Dï¿½ï¿½Ä‚Ñoï¿½ï¿½
 		case PlayerManagement::m_enPlayer_3DChanging:
 			PlayerChange3D();
 			m_player3D->m_Player_Act = true;
 			
 			break;
-			//3D‚Ìê‡2D‚ğŒÄ‚Ño‚·
+			//3Dï¿½Ìê‡2Dï¿½ï¿½Ä‚Ñoï¿½ï¿½
 		case PlayerManagement::m_enPlayer_2DChanging:
 			PlayerChange2D();
 			m_player2D->m_Player_Act = true;

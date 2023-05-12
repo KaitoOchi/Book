@@ -14,7 +14,6 @@ public:
 	
 
 private:
-	
 	int m_treasures = 0;
 	int m_randTreasure = 0;
 	

@@ -28,12 +28,12 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
-
 #include <random>
 #include"Gage.h"
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
+#include "Event.h"
 #include "nature/SkyCube.h"
 namespace
 {
@@ -157,13 +157,14 @@ bool Game::Start()
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
-	NewGO<Gage>(0,"gage");
+	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
 
 	//NewGO<SecurityCamera>(0, "securityCamera");
 
 	NewGO<Pause>(0, "pause");
 	NewGO<SkyCube>(0, "skyCube");
+	//NewGO<Wipe>(0, "wipe");
 
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -202,7 +203,7 @@ bool Game::Start()
 	m_position = m_pointLight[m_lightNumber].GetPosition();
 
 
-	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
+	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 
 	GameManager::GetInstance()->SetBGM(21);
 	return true;
@@ -211,7 +212,7 @@ bool Game::Start()
 void Game::LevelDesign()
 {
 	// レベルデザイン処理
-	m_levelRender.Init("Assets/modelData/level_test/tkl/level.tkl", [&](LevelObjectData& objData){
+	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
@@ -498,6 +499,25 @@ void Game::Update()
 				return;
 			}
 
+			if (m_gameState == m_enGameState_EventStart) {
+				//イベントシーンを呼ぶ
+				Event* event = NewGO<Event>(0, "event");
+				event->SetTresurePosition(m_tresurePos);
+
+				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
+				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+				NotDraw_Enemy(true);
+
+				m_gameUI->Deactivate();
+				m_gage->Deactivate();
+				m_gamecamera->Deactivate();
+				m_miniMap->Deactivate();
+				m_playerManagement->Deactivate();
+				m_player3D->Deactivate();
+
+				m_isWaitFadeOut = false;
+				return;
+			}
 
 			if (m_gameState ==m_enGameState_GameBuck)
 			{
@@ -564,6 +584,31 @@ void Game::NotifyDuringGamePlay()
 {
 	m_gameState = m_enGameState_DuringGamePlay;
 }
+
+void Game::NotifyEventStart()
+{
+	m_gameState = m_enGameState_EventStart;
+	m_fade->StartFadeOut();
+	GameManager::GetInstance()->DeleteBGM();
+	m_isWaitFadeOut = true;
+}
+
+void Game::NotifyEventEnd()
+{
+	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
+	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
+	NotDraw_Enemy(false);
+
+	m_gamecamera->Activate();
+	m_gameUI->Activate();
+	m_gage->Activate();
+	m_miniMap->Activate();
+	m_playerManagement->Activate();
+	m_player3D->Activate();
+
+	m_fade->StartFadeIn();
+}
+
 
 void Game::NotifyGameClear()
 {

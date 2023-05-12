@@ -73,31 +73,37 @@ namespace nsBookEngine {
 		ModelInitData modelInitData;
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_modelUpAxis = modelUpAxis;
+		modelInitData.m_fxFilePath = "Assets/shader/model.fx";
 		modelInitData.m_cullMode = cullMode;
 		modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
 		modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 		modelInitData.m_alphaBlendMode = AlphaBlendMode_Trans;
+		modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowBlur().GetBokeTexture();
 		modelInitData.m_expandShaderResoruceView[1] = &RenderingEngine::GetInstance()->GetZPrepassDepthTexture();
 
+		//影を設定
 		if (isShadowReceiver) {
-			modelInitData.m_fxFilePath = "Assets/shader/shadowReceiver.fx";
-			modelInitData.m_expandShaderResoruceView[0] = &RenderingEngine::GetInstance()->GetShadowBlur().GetBokeTexture();
+			modelInitData.m_psEntryPointFunc = "PSMainShadow";
 		}
 		else {
-			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
+			modelInitData.m_psEntryPointFunc = "PSMain";
 		}
 
-		if (m_skeleton.IsInited()) {
+		if (m_skeleton.IsInited()) { 
 			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 		
+		//輪郭線を設定
 		if (outlineMode == 1) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinPlayer";
 		}
 		else if (outlineMode == 2) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemy";
+		}
+		else if (outlineMode == 3) {
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemyClear";
 		}
 
 		m_model.Init(modelInitData);

@@ -48,6 +48,7 @@ void SoundBom::ItemHit()
 		if (diff.Length() < pow(SOUNDRANGE, 2.0f))
 		{
 			m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
+			m_game->GetEnemyList()[i]->SetItemPos(m_position);
 		}
 		
 	}
