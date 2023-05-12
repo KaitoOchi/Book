@@ -88,7 +88,7 @@ public:
 	/// <summary>
 	/// ‰¹”š’e‚ª“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 	/// </summary>
-	bool Act_HitSoundBullet();
+	void Act_HitSoundBullet();
 	/// <summary>
 	/// s“®’â~
 	/// </summary>

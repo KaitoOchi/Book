@@ -116,7 +116,7 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Dizzy].Load("Assets/animData/enemy/dizzy.tka");
 	m_enAnimationClips[m_enAnimation_Dizzy].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/attack.tka");
+	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
 	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
 }
 
@@ -355,15 +355,16 @@ void Enemy::Act_MissingPlayer()
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 
-	// 長さが一定以上のとき
-	if (m_sumPos.Length() > 100.0f) {
+	// 長さが一定以下のとき
+	if (m_sumPos.Length() < 100.0f) {
+		return;
+	}
 
-		// モーションを再生
-		if (Act_Stop(5.0f, 4) == false) {
-			// 見渡すモーションを再生
-			m_enAnimationState = LOSS;
-		}
+	// 見渡すモーションを再生
+	m_enAnimationState = LOSS;
 
+	// モーションを再生
+	if (Act_Stop(5.0f, 4) == true) {
 		m_addTimer[4] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 		m_FindPlayerFlag = false;		// フラグを降ろす
@@ -388,8 +389,10 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
+	// プレイヤーを確保したフラグがtrueになったら
 	if (m_ChachPlayerFlag == true) {
-		m_CalculatedFlag = false;
+		// バグらないように補正する
+		m_ChachPlayerFlag = false;
 	}
 
 	// めまいのアニメーションを再生
@@ -424,32 +427,29 @@ void Enemy::Act_HitFlashBullet()
 	}
 }
 
-bool Enemy::Act_HitSoundBullet()
+void Enemy::Act_HitSoundBullet()
 {
 	// 音爆弾の処理
 	// trueのとき当たった
 
-	// 当たった(プレイヤーが使用した)とき
-	if (m_HitSoundBulletFlag == true) {
+	// エネミーからアイテムへ向かうベクトルを作成
+	Vector3 diff = m_itemPos - m_position;
+	float length = diff.Length();
 
-		// エネミーからアイテムへ向かうベクトルを作成
-		Vector3 diff = m_itemPos - m_position;
-		float length = diff.Length();
+	// アイテムの座標を基にしてナビメッシュを作成
+	Nav(m_itemPos);
+	// 走るアニメーションを再生
+	m_enAnimationState = RUN;
 
-		// アイテムの座標を基にしてナビメッシュを作成
-		Nav(m_itemPos);
-		// 走るアニメーションを再生
-		m_enAnimationState = RUN;
+	if (length <= 50.0f) {
 
-		// アイテムを使用した位置についたとき
-		if (length > 30.0f && length < 100.0f) {
-			// 見渡すアニメーションを再生
-			m_enAnimationState = LOSS;
-			return true;
-		}
+		m_enAnimationState = LOSS;
+
+		if (Act_Stop(5.0f, 4) == true) {
+			m_addTimer[4] = 0.0f;
+			m_HitSoundBulletFlag = false;
+		};
 	}
-
-	return false;
 }
 
 void Enemy::Act_Craw()
