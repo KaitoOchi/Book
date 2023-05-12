@@ -55,7 +55,7 @@ Event::~Event()
 
 bool Event::Start()
 {
-	//お宝モデルの設定
+	////お宝モデルの設定
 	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
 	m_tresureModelRender.Update();
@@ -146,7 +146,9 @@ void Event::Update()
 	if (m_isWaitFadeOut) {
 		//フェードが終了したら
 		if (!m_fade->IsFade()) {
+			
 			DeleteGO(this);
+			
 		}
 	}
 	else {
