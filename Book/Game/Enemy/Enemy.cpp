@@ -13,7 +13,7 @@ namespace
 {
 	const Vector3	MODEL_SCALE = { 2.0f,2.0f,2.0f };		// モデルのスケール
 
-	const float		LINEAR_COMPLETION = 0.5f;				// 線形補完
+	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		ADD_SPEED = 1.8f;						// 乗算速度
@@ -22,7 +22,7 @@ namespace
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
-	const float		CANMOVE_TIMER = 5.0f;					// 再度行動できるまでのタイマー
+	const float		CANMOVE_TIMER = 10.0f;					// 再度行動できるまでのタイマー
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
@@ -38,8 +38,10 @@ namespace
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 
-	const float		ADD_MOVE_MIN = 250.0f;
-	const float		ADD_MOVE_LONG = 400.0f;
+	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
+	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
+
+	const float		EFFECT_SIZE = 0.7f;						// エフェクトのサイズ
 }
 
 Enemy::Enemy()
@@ -72,12 +74,14 @@ bool Enemy::Start()
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
 
-	// gameで設定したエネミーのリストを取得する
-	enemyList = m_game->GetEnemyList();
-
 	// 各タイマーのリセット
 	for (int i = 0; i < TIMER_NUM; i++) {
 		m_addTimer[i] = 0.0f;
+	}
+
+	// フラグのリセット
+	for (int i = 0; i < 3; i++) {
+		m_efectDrawFlag[i] = false;
 	}
 
 	// 視野を作成
@@ -311,9 +315,9 @@ bool Enemy::Act_CatchPlayer()
 		// 捕まえる
 		m_enAnimationState = ATTACK;
 
-		for (int i = 0; i < enemyList.size(); i++) {
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 			// 捕まえたのでフラグをtrueにする
-			enemyList[i]->m_ChachPlayerFlag = true;
+			m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
 		}
 
 		return true;
@@ -384,20 +388,39 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
-	// 当たったとき
-	if (m_HitFlashBulletFlag == true) {
+	if (m_ChachPlayerFlag == true) {
+		m_CalculatedFlag = false;
+	}
 
-		// めまいのアニメーションを再生
-		m_enAnimationState = DIZZY;
+	// めまいのアニメーションを再生
+	m_enAnimationState = DIZZY;
 
-		// タイマーがtrueのとき
-		if (Act_Stop(CANMOVE_TIMER,0) == true) {
-			// フラグを降ろす
-			m_TrakingPlayerFlag = false;
-			m_HitFlashBulletFlag = false;
-			// タイマーをリセット
-			m_addTimer[0] = 0.0f;
-		}
+	// エフェクトを一度しか生成しないようにする
+	if (m_efectDrawFlag[1] == false) {
+
+		// めまいのエフェクトを生成
+		m_soundEffect = NewGO<EffectEmitter>(2);
+		m_soundEffect->Init(2);
+		//エフェクトの大きさを指定する
+		m_soundEffect->SetScale(Vector3::One * EFFECT_SIZE);
+		//エフェクトの座標の設定
+		m_soundEffect->SetPosition(Vector3(m_position.x+5.0f, 100.0f, m_position.z+10.0f));
+		m_soundEffect->Play();
+
+		m_efectDrawFlag[1] = true;
+	}
+
+	// タイマーがtrueのとき
+	if (Act_Stop(CANMOVE_TIMER,0) == true) {
+		// 生成フラグをリセット
+		m_efectDrawFlag[1] = false;
+
+		// フラグを降ろす
+		m_TrakingPlayerFlag = false;
+		m_HitFlashBulletFlag = false;
+
+		// タイマーをリセット
+		m_addTimer[0] = 0.0f;
 	}
 }
 
@@ -419,7 +442,7 @@ bool Enemy::Act_HitSoundBullet()
 		m_enAnimationState = RUN;
 
 		// アイテムを使用した位置についたとき
-		if (length > 20.0f && length < 500.0f) {
+		if (length > 30.0f && length < 100.0f) {
 			// 見渡すアニメーションを再生
 			m_enAnimationState = LOSS;
 			return true;
@@ -659,17 +682,17 @@ void Enemy::Act_Call()
 	// 周りの敵を呼ぶ処理
 
 	// エネミーのリストを検索
-	for (int i = 0; i < enemyList.size(); i++) {
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
 		// 各エネミーから該当エネミーへ向かうベクトル
-		Vector3 diff = m_position - enemyList[i]->m_position;
+		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		float length = diff.Length();
 
 		// 長さが一定以内のとき
 		if (length > CALL_DISTANCE_MIN && length < CALL_DISTANCE_MAX) {
 
-			enemyList[i]->m_ActState = CALLED;				// 行動パターンを変更する
-			enemyList[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
+			m_game->GetEnemyList()[i]->m_ActState = CALLED;				// 行動パターンを変更する
+			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
 
 			// 長さが一定上のとき
 			if (length <= CALL_DISTANCE_MIN) {
@@ -681,7 +704,7 @@ void Enemy::Act_Call()
 			// 正規化
 			diff.Normalize();
 			// 移動速度を加算
-			enemyList[i]->m_position += diff * MOVE_SPEED;
+			m_game->GetEnemyList()[i]->m_position += diff * MOVE_SPEED;
 
 			//m_fontRender.SetText(L"call");
 		}
@@ -713,18 +736,18 @@ void Enemy::Act_Called()
 bool Enemy::Act_CallEnd()
 {
 	// エネミーのリストを検索
-	for (int i = 0; i < enemyList.size(); i++) {
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
 		//// 各エネミーから該当エネミーへ向かうベクトル
-		//Vector3 diff = m_position - enemyList[i]->m_position;
+		//Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		//float length = diff.Length();
 
 		//m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
-		if (enemyList[i]->m_ActState == CALLED) {
+		if (m_game->GetEnemyList()[i]->m_ActState == CALLED) {
 
-			enemyList[i]->m_ActState = BACKBASEDON;		// 行動パターンを変更する
+			m_game->GetEnemyList()[i]->m_ActState = BACKBASEDON;		// 行動パターンを変更する
 		}
 	}
 

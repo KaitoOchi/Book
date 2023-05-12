@@ -13,8 +13,9 @@
 
 namespace
 {
-	const Vector3 BOXSIZE{ 50.0f,120.0f,50.0f };//ボックスコライダーの大きさ
-	const float SPEEDDOWN = 0.8;//速度減速率
+	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//ボックスコライダーの大きさ
+	const float		SPEEDDOWN = 0.8;									//速度減速率
+	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
 }
 
 Player3D::Player3D()
@@ -306,13 +307,8 @@ void Player3D::ProcessDownStateTransition()
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;
 	auto laststar = m_game->GetEnemyList().size();
-	//☆をアクティブにする
-	m_game->GetStarList()[laststar]->Activate();
-	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//ステートの遷移
-		m_game->GetStarList()[laststar]->Deactivate();
 		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
@@ -377,5 +373,10 @@ void Player3D::ProcessGameOverStateTransition()
 }
 void Player3D::Render(RenderContext& rc)
 {
+	if (m_stamina!=PLAYERSTAMINA)
+	{
+		m_staminaBaseRender.Draw(rc);
+		m_staminaGageRender.Draw(rc);
+	}
 	m_modelRender->Draw(rc);
 }

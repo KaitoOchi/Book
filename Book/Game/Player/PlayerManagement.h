@@ -188,6 +188,6 @@ private:
 	bool					m_GameStartState = false;						//ゲームが始まっているかどうか
 	float					m_changeTime = 0.0f;							//プレイヤーを切り替える時間
 
-	EffectEmitter*			m_smokeEffect = nullptr;
+	
 };
 

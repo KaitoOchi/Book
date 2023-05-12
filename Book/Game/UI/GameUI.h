@@ -36,17 +36,13 @@ private:
 	/// </summary>
 	void TimeMove(const int& m, const int& s);
 
-	/// <summary>
-	/// スタミナゲージの変更
-	/// </summary>
-	void StaminaGage(const float& stamina);
+
 
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
 	SpriteRender		m_gageSpriteRender;				//ゲージ画像
 	FontRender			m_timeFontRender;				//タイム文字
-	SpriteRender		m_staminaBaseRender;			//スタミナゲージベース画像
-	SpriteRender		m_staminaGageRender;			//スタミナゲージ画像
+	
 
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
@@ -59,5 +55,6 @@ private:
 	float				m_gaugeTimer = 0.0f;			//ゲージ用のタイマー
 	float				m_timePosition = 0.0f;			//タイムの座標
 
+	
 };
 

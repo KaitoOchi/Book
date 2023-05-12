@@ -139,9 +139,6 @@
     <ClCompile Include="Item\SoundBom.cpp">
       <Filter>Item</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Star.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Gage.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -265,9 +262,6 @@
     </ClInclude>
     <ClInclude Include="Item\SoundBom.h">
       <Filter>Item</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Star.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI\Gage.h">
       <Filter>UI</Filter>

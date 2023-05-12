@@ -12,6 +12,7 @@ namespace
 	const float		MAXTIMEYPOSITION = 600.0f;							//タイムの一番大きい座標
 	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
 	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
+	
 
 }
 
@@ -48,9 +49,6 @@ bool GameUI::Start()
 	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	//スタミナゲージのベース画像の設定
-	m_staminaBaseRender.Init("Assets/sprite/stamina/base.png", 256.0f, 256.0f);
-	m_staminaBaseRender.SetPivot(Vector2(0.5, 0.0));
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -67,7 +65,6 @@ void GameUI::Update()
 	}
 
 	Time();
-
 	ChangeGage();
 }
 
@@ -166,10 +163,6 @@ void GameUI::ChangeGage()
 	}
 }
 
-void GameUI::StaminaGage(const float& stamina)
-{
-
-}
 
 void GameUI::Render(RenderContext& rc)
 {
@@ -177,4 +170,6 @@ void GameUI::Render(RenderContext& rc)
 	m_gageSpriteRender.Draw(rc);
 
 	m_timeFontRender.Draw(rc);
+	
+	
 }

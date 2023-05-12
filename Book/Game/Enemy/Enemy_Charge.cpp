@@ -82,10 +82,6 @@ void Enemy_Charge::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		break;
-		// 捕獲
-	case CATCH:
-		Update_OnCatch();
-		break;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
@@ -110,10 +106,12 @@ void Enemy_Charge::Update_OnCraw()
 {
 	// 巡回
 
-	if (m_ChachPlayerFlag == true) {
-		m_enAnimationState = IDLE;
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
 		return;
 	}
+
 
 	Enemy::Act_Craw();					// 巡回行動
 
