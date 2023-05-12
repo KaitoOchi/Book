@@ -311,10 +311,10 @@ void Game::LevelDesign()
 			}
 
 			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_1") == true) {
+			if (objData.ForwardMatchName(L"gap") == true) {
 				// 隙間を生成する
 				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(1);
+				//m_gap->ModelLoad(1);
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
@@ -322,29 +322,29 @@ void Game::LevelDesign()
 				return true;
 			}
 
-			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_2") == true) {
-				// 隙間を生成する
-				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(2);
-				m_gap->SetPosition(objData.position);
-				m_gap->SetRotation(objData.rotation);
-				m_gap->SetScale(objData.scale);
-				m_wallList.emplace_back(m_gap);
-				return true;
-			}
+			//// 名前がgapのとき
+			//if (objData.EqualObjectName(L"gap_2") == true) {
+			//	// 隙間を生成する
+			//	m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+			//	m_gap->ModelLoad(2);
+			//	m_gap->SetPosition(objData.position);
+			//	m_gap->SetRotation(objData.rotation);
+			//	m_gap->SetScale(objData.scale);
+			//	m_wallList.emplace_back(m_gap);
+			//	return true;
+			//}
 
-			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_3") == true) {
-				// 隙間を生成する
-				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(3);
-				m_gap->SetPosition(objData.position);
-				m_gap->SetRotation(objData.rotation);
-				m_gap->SetScale(objData.scale);
-				m_wallList.emplace_back(m_gap);
-				return true;
-			}
+			//// 名前がgapのとき
+			//if (objData.EqualObjectName(L"gap_3") == true) {
+			//	// 隙間を生成する
+			//	m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+			//	m_gap->ModelLoad(3);
+			//	m_gap->SetPosition(objData.position);
+			//	m_gap->SetRotation(objData.rotation);
+			//	m_gap->SetScale(objData.scale);
+			//	m_wallList.emplace_back(m_gap);
+			//	return true;
+			//}
 
 			// 名前がpostのとき
 			if (objData.EqualObjectName(L"post") == true) {
