@@ -163,7 +163,7 @@ void Enemy_Clear::UpDate_OnListen()
 	Enemy::Act_HitSoundBullet();
 
 	// Œø‰Ê‚ªI—¹‚µ‚½‚Æ‚«
-	if (Enemy::GetHitSoundBullet() == false) {
+	if (m_HitSoundBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }

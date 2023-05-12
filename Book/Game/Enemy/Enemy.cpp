@@ -116,7 +116,7 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Dizzy].Load("Assets/animData/enemy/dizzy.tka");
 	m_enAnimationClips[m_enAnimation_Dizzy].SetLoopFlag(true);
 
-	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/attack.tka");
+	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
 	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
 }
 
@@ -424,32 +424,29 @@ void Enemy::Act_HitFlashBullet()
 	}
 }
 
-bool Enemy::Act_HitSoundBullet()
+void Enemy::Act_HitSoundBullet()
 {
 	// 音爆弾の処理
 	// trueのとき当たった
 
-	// 当たった(プレイヤーが使用した)とき
-	if (m_HitSoundBulletFlag == true) {
+	// エネミーからアイテムへ向かうベクトルを作成
+	Vector3 diff = m_itemPos - m_position;
+	float length = diff.Length();
 
-		// エネミーからアイテムへ向かうベクトルを作成
-		Vector3 diff = m_itemPos - m_position;
-		float length = diff.Length();
+	// アイテムの座標を基にしてナビメッシュを作成
+	Nav(m_itemPos);
+	// 走るアニメーションを再生
+	m_enAnimationState = RUN;
 
-		// アイテムの座標を基にしてナビメッシュを作成
-		Nav(m_itemPos);
-		// 走るアニメーションを再生
-		m_enAnimationState = RUN;
+	if (length <= 200) {
 
-		// アイテムを使用した位置についたとき
-		if (length > 30.0f && length < 100.0f) {
-			// 見渡すアニメーションを再生
-			m_enAnimationState = LOSS;
-			return true;
-		}
+		m_enAnimationState = LOSS;
+
+		if (Act_Stop(5.0f, 4) == true) {
+			m_addTimer[4] = 0.0f;
+			m_HitSoundBulletFlag = false;
+		};
 	}
-
-	return false;
 }
 
 void Enemy::Act_Craw()
