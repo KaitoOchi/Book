@@ -42,7 +42,7 @@ void Enemy_Search::Update()
 	}
 	// デフォルトに戻すフラグがtrueのとき
 	if (m_ChangeDefaultFlag == true) {
-		m_ActState = CRAW;
+		m_ActState = SEARCH;
 	}
 
 	// 閃光弾に当たった
