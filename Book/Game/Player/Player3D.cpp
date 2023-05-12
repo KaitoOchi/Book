@@ -6,7 +6,6 @@
 #include "PlayerManagement.h"
 #include "FlashBom.h"
 #include "SoundBom.h"
-#include "Star.h"
 #include "Enemy.h"
 #include "Game.h"
 #include "GameManager.h"
