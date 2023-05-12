@@ -75,19 +75,6 @@ public:
 		return m_enemyList;
 	}
 
-	/// <summary>
-	/// 星の情報を取得
-	/// </summary>
-	/// <returns></returns>
-	std::vector<Star*> GetStarList()
-	{
-		return m_starList;
-	}
-
-
-	//クリア座標の取得
-	std::vector<Vector3>m_clearList;
-
 
 	std::vector<Vector3> GetTreasurePositionList()
 	{
@@ -178,7 +165,6 @@ private:
 	
 	std::vector<Enemy*> m_enemyList;
 	
-	std::vector<Star*>m_starList;
 
 	std::vector<Wall*>m_wallList;
 

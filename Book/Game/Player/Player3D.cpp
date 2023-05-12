@@ -306,13 +306,8 @@ void Player3D::ProcessDownStateTransition()
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;
 	auto laststar = m_game->GetEnemyList().size();
-	//☆をアクティブにする
-	m_game->GetStarList()[laststar]->Activate();
-	m_game->GetStarList()[laststar]->SetPosition(m_playerManagement->GetPosition());
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//ステートの遷移
-		m_game->GetStarList()[laststar]->Deactivate();
 		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
