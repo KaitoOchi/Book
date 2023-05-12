@@ -31,7 +31,6 @@
 #include "Star.h"
 #include <random>
 #include"Gage.h"
-#include "Star.h"
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
@@ -42,7 +41,15 @@ Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	// はてなマークのエフェクト
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
+	//ビックリマーク
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/e/exclamation/exmark.efk");
+	//星エフェクト
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/e/star/star.efk");
+	//音と煙のエフェクト
 	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
+	//煙のエフェクト
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 }
 
@@ -135,7 +142,7 @@ bool Game::Start()
 	//リストの初期化
 	m_enemyList.clear();
 	m_wallList.clear();
-	m_starList.clear();
+	
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
@@ -182,12 +189,7 @@ bool Game::Start()
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 	
-	
-	for (int i = 0; i <= m_enemyList.size(); i++)
-	{
-		m_star = NewGO<Star>(0, "star");
-		m_starList.push_back(m_star);
-	}
+
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
