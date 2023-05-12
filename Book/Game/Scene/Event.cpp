@@ -55,7 +55,7 @@ Event::~Event()
 
 bool Event::Start()
 {
-	//‚¨•óƒ‚ƒfƒ‹‚Ìİ’è
+	////‚¨•óƒ‚ƒfƒ‹‚Ìİ’è
 	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
 	m_tresureModelRender.Update();
