@@ -24,6 +24,7 @@ public:
 		m_position = pos;
 	}
 
+	
 
 protected:
 	Vector3 m_position = Vector3::Zero;					//アイテムを使った座標

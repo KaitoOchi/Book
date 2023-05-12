@@ -278,7 +278,7 @@ public:
 	/// アイテムの座標を渡す
 	/// </summary>
 	/// <returns></returns>
-	bool SetItemPos(Vector3 pos) {
+	void SetItemPos(Vector3 pos) {
 		m_itemPos = pos;
 	}
 
