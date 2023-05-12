@@ -3,7 +3,6 @@
 
 #include "Game.h"
 #include "Title.h"
-#include "Debug.h"
 #include "Fade.h"
 
 #include "Event.h"
@@ -19,7 +18,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//NewGO<Title>(0, "title");
 	NewGO<Game>(0, "game");
-	//NewGO<Debug>(0, "debug");
+
+	//NewGO<Event>(0, "event");
 
 	NewGO<Fade>(9, "fade");
 

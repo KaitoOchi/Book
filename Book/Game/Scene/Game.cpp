@@ -37,6 +37,7 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
+#include "Wipe.h"
 
 
 Game::Game()
@@ -155,6 +156,7 @@ bool Game::Start()
 
 	NewGO<Pause>(0, "pause");
 	NewGO<SkyCube>(0, "skyCube");
+	//NewGO<Wipe>(0, "wipe");
 
 
 	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
@@ -198,7 +200,7 @@ bool Game::Start()
 	m_position = m_pointLight[m_lightNumber].GetPosition();
 
 
-	GameManager::GetInstance()->SetGameState(GameManager::GetInstance()->enState_Game);
+	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 
 	GameManager::GetInstance()->SetBGM(21);
 	return true;
@@ -584,6 +586,7 @@ void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
 	m_fade->StartFadeOut();
+	GameManager::GetInstance()->DeleteBGM();
 	m_isWaitFadeOut = true;
 }
 

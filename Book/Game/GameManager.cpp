@@ -27,24 +27,27 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(8, "Assets/sound/game/throw.wav");
 	//閃光時の音
 	g_soundEngine->ResistWaveFileBank(9, "Assets/sound/game/flashbom.wav");
-
+	//敵が発見したときの音
+	g_soundEngine->ResistWaveFileBank(10, "Assets/sound/game/findPlayer.wav");
+	//ライトが照らされた音
+	g_soundEngine->ResistWaveFileBank(11, "Assets/sound/event/light.wav");
+	//敵の足音
+	g_soundEngine->ResistWaveFileBank(12, "Assets/sound/event/foot.wav");
+	//変身時の音
+	g_soundEngine->ResistWaveFileBank(13, "Assets/sound/game/change.wav");
 
 	//タイトルBGMの設定
 	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/bgm/bgm_title.wav");
 	//ゲームメインBGMの設定
 	g_soundEngine->ResistWaveFileBank(21, "Assets/sound/bgm/bgm_game_main.wav");
-	//ゲーム発見BGMの設定
+	//発見BGMの設定
 	g_soundEngine->ResistWaveFileBank(22, "Assets/sound/bgm/bgm_find.wav");
 	//お宝入手後のBGMを設定
-	g_soundEngine->ResistWaveFileBank(23, "Assets/sound/bgm/bgm_find.wav");
-	//リザルトBGMの設定
+	g_soundEngine->ResistWaveFileBank(23, "Assets/sound/bgm/bgm_game_main2.wav");
+	//ゲームオーバーリザルトBGMの設定
 	g_soundEngine->ResistWaveFileBank(24, "Assets/sound/bgm/bgm_result.wav");
-
-
-	//エフェクトの設定
-	
-	
-
+	//ゲームオーバーリザルトBGMの設定
+	g_soundEngine->ResistWaveFileBank(25, "Assets/sound/bgm/bgm_result_clear.wav");
 
 	//データのロード
 	DataLoad();
@@ -74,6 +77,6 @@ void GameManager::DeletingBGM()
 		m_timer = 0.0f;
 	}
 
-	m_timer -= (g_gameTime->GetFrameDeltaTime() * 2.0f);
+	m_timer -= (g_gameTime->GetFrameDeltaTime() * 0.5f);
 	m_bgm->SetVolume(m_timer);
 }

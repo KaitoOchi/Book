@@ -46,7 +46,7 @@ void Sensor::Update()
 void Sensor::Hit()
 {
 	//ƒvƒŒƒCƒ„[‚ÆÚG
-	m_gage->GageUp(GAGE);
+	m_gage->GageUp(GAGE, false);
 }
 
 void Sensor::Render(RenderContext& rc)

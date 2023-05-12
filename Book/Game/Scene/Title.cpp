@@ -9,6 +9,10 @@ namespace
 {
 	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 3 };		//各ステートの縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[4] = { 0, 100, 100, 2};		//各設定の横カーソル最大値
+
+	const Vector3 CURSOR_POS_MENU[3] = { { -725.0f,  260.0f, 0.0f},
+										{ -725.0f,  -15.0f, 0.0f},
+										{ -725.0f,  -230.0f, 0.0f} };	//メニュー画面のカーソル座標
 }
 
 Title::Title()
@@ -121,9 +125,9 @@ void Title::InitSprite()
 	m_sprites.push_back(&m_settingSpriteRender);
 
 	//設定テキストの設定
-	m_settingTextSpriteRender[0].Init("Assets/sprite/UI/setting/BGM_text.DDS", 380.0f, 28.0f);
-	m_settingTextSpriteRender[1].Init("Assets/sprite/UI/setting/SE_text.DDS", 227.0f, 28.0f);
-	m_settingTextSpriteRender[2].Init("Assets/sprite/UI/setting/FPS_text.DDS", 457.0f, 27.0f);
+	m_settingTextSpriteRender[0].Init("Assets/sprite/UI/setting/BGM_text.DDS", 443.0f, 31.0f);
+	m_settingTextSpriteRender[1].Init("Assets/sprite/UI/setting/SE_text.DDS", 443.0f, 31.0f);
+	m_settingTextSpriteRender[2].Init("Assets/sprite/UI/setting/FPS_text.DDS", 443.0f, 31.0f);
 
 	for (int i = 0; i < 3; i++) {
 		m_settingTextSpriteRender[i].SetPosition(Vector3(0.0f, -400.0f, 0.0f));
@@ -132,7 +136,7 @@ void Title::InitSprite()
 	}
 
 	m_gaugeSpriteRender[0].SetPosition(Vector3(-210.2, 166.4f, 0.0f));
-	m_gaugeSpriteRender[1].SetPosition(Vector3(-211.3, -36.6f, 0.0f));
+	m_gaugeSpriteRender[1].SetPosition(Vector3(-211.3, -33.0f, 0.0f));
 
 	//BGMとSFX音量の画像を設定
 	for (int i = 0; i < 2; i++) {
@@ -456,7 +460,7 @@ void Title::MenuScreen()
 	m_titleSpriteRender.Update();
 
 	if (!m_isWaitState || m_animTime < 0.0f) {
-		m_cursorSpriteRender.SetPosition(Vector3(-725.0f,  475.0f + (m_cursor_vertical * -235.0f), 0.0f));
+		m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[m_cursor_vertical - 1]);
 		m_cursorSpriteRender.Update();
 	}
 }

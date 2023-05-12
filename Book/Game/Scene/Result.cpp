@@ -249,7 +249,12 @@ void Result::Input()
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 		m_isDram = true;
 
-		GameManager::GetInstance()->SetBGM(24);
+		if (m_resultState == enState_GameOver) {
+			GameManager::GetInstance()->SetBGM(24);
+		}
+		else {
+			GameManager::GetInstance()->SetBGM(25);
+		}
 	}
 }
 

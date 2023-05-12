@@ -680,6 +680,7 @@ float4 Outline(SPSIn psIn, float4 albedo)
 	//半透明の敵は透過させる
 	if(psIn.outlineColor.w == 0.9f) {
 		//albedo.w = 0.5f;
+		//clip(-1);
 	}
 
     // 普通のテクスチャ

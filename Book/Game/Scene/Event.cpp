@@ -3,10 +3,11 @@
 
 #include "Game.h"
 #include "Fade.h"
+#include "GameManager.h"
 
 namespace
 {
-	const int SCENE_MAX = 5;
+	const int SCENE_MAX = 5;													//シーンの最大数
 
 	const bool PLAYER_ENABLE[SCENE_MAX] = { true, true, true, false, true };	//プレイヤーの表示状態
 	const bool ENEMY_ENABLE[SCENE_MAX] = { false, false, false, true, false };	//エネミーの表示状態
@@ -28,6 +29,11 @@ namespace
 									{ 0.0f, 0.0f, 0.0f },
 									{ 0.0f, 0.0f, -150.0f },
 									{ 0.0f, 3.0f, 0.0f } };			//カメラ速度
+
+	const Vector3 FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
+								{ 750.0f, 0.0f, 0.0f },
+								{ 0.0f, 420.0f, 0.0f },
+								{ 0.0f, -420.0f, 0.0f } };			//フィルムの座標
 }
 
 Event::Event()
@@ -36,8 +42,14 @@ Event::Event()
 
 Event::~Event()
 {
+	//警告音を削除
+	m_alert->Stop();
+
+	//ゲームクラスにイベント終了を通知
 	Game* game = FindGO<Game>("game");
 	game->NotifyEventEnd();
+
+	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
 }
 
 bool Event::Start()
@@ -61,6 +73,13 @@ bool Event::Start()
 	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, 0, 0, 0, D3D12_CULL_MODE_BACK);
 	m_playerModelRender.SetPosition(m_tresurePos);
 	m_playerModelRender.Update();
+
+	//アニメーションイベントを設定
+	m_playerModelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName)
+		{
+			OnAnimationEvent(clipName, eventName);
+		});
+
 
 	//エネミーモデルを設定
 	m_enemyAnimClips[enemyAnimClip_Run].Load("Assets/animData/enemy/run_battle.tka");
@@ -87,6 +106,17 @@ bool Event::Start()
 	m_volumeLightModelRender.SetPosition(m_tresurePos);
 	m_volumeLightModelRender.Update();
 
+	//フィルム画像の設定
+	m_filmSpriteRender[0].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
+	m_filmSpriteRender[1].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
+	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
+	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
+
+	for (int i = 0; i < 4; i++) {
+		m_filmSpriteRender[i].SetPosition(FILM_POS[i]);
+		m_filmSpriteRender[i].Update();
+	}
+
 	//カメラの設定
 	m_cameraPos = CAMERA_POS[0];
 	m_cameraTarget = CAMERA_TARGET[0];
@@ -94,6 +124,9 @@ bool Event::Start()
 	g_camera3D->SetPosition(m_cameraPos);
 	g_camera3D->SetTarget(m_cameraTarget);
 	g_camera3D->Update();
+
+	//BGMの設定
+	GameManager::GetInstance()->SetBGM(23);
 
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
@@ -119,11 +152,21 @@ void Event::Update()
 		}
 	}
 
-	m_timer += g_gameTime->GetFrameDeltaTime();
-
 	Animation();
 
+	Time();
+
 	Camera();
+}
+
+void Event::Time()
+{
+	//時間を計測
+	m_timer += g_gameTime->GetFrameDeltaTime();
+
+	//フィルム用の時間を計測
+	m_filmTimer += 0.001f;
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.z = m_filmTimer;
 }
 
 void Event::Animation()
@@ -140,9 +183,31 @@ void Event::Animation()
 		break;
 	case 2:
 		m_playerModelRender.PlayAnimation(animationClip_HeadUp, 0.0f);
+
+		if (m_timer == 0.0f) {
+			//ライトの音を出す
+			SoundSource* se = NewGO<SoundSource>(0);
+			se->Init(11);
+			se->Play(false);
+			se->SetVolume(GameManager::GetInstance()->GetSFX());
+		}
 		break;
 	case 3:
 		m_playerModelRender.PlayAnimation(animationClip_HeadStop, 0.0f);
+
+		if (m_timer == 0.0f) {
+			//足音を出す
+			SoundSource* se = NewGO<SoundSource>(0);
+			se->Init(12);
+			se->Play(false);
+			se->SetVolume(GameManager::GetInstance()->GetSFX());
+
+			//警告音を出す
+			m_alert = NewGO<SoundSource>(0);
+			m_alert->Init(3);
+			m_alert->Play(true);
+			m_alert->SetVolume(GameManager::GetInstance()->GetSFX());
+		}
 		break;
 	case 4:
 		if (m_timer < 1.0f) {
@@ -199,8 +264,26 @@ void Event::Camera()
 	}
 }
 
+void Event::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	(void)clipName;
+	//キーの名前がAttack_Startの時
+	if (wcscmp(eventName, L"Step") == 0) {
+		//足音を再生
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(6);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		se->Play(false);
+
+	}
+}
+
 void Event::Render(RenderContext& rc)
 {
+	for (int i = 0; i < 4; i++) {
+		m_filmSpriteRender[i].Draw(rc);
+	}
+
 	if (LIGHT_ENABLE[m_cameraScene] == true) {
 		//ライトモデルの描画
 		m_volumeLightModelRender.Draw(rc);

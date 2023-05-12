@@ -860,7 +860,7 @@ void Enemy::VigilanceCount()
 	if (m_Vicount <= 0.0f)
 	{
 		//ステートの遷移
-		m_gage->GageUp(1);
+		m_gage->GageUp(1, true);
 		m_Vicount = VIGILANCETIME;
 	}
 }

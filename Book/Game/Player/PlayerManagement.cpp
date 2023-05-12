@@ -1,11 +1,14 @@
 #include "stdafx.h"
-#include "Player2D.h"
-#include "Game.h"
-#include "Player3D.h"
 #include "PlayerManagement.h"
-#include "PhysicsGhost.h"
-#include"GameCamera.h"
+
+#include "Player2D.h"
+#include "Player3D.h"
 #include "Enemy.h"
+#include "Game.h"
+#include "PhysicsGhost.h"
+#include "GameCamera.h"
+#include "GameManager.h"
+
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
@@ -116,6 +119,12 @@ void PlayerManagement::Input()
 			m_smokeEffect->SetPosition(m_player3D->GetPosition());
 			break;
 		}
+
+		//•Ïg‰¹‚ğo‚·
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(13);
+		se->Play(false);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
 		m_enMananagementState = m_enPlayer_Changing;
 	}
