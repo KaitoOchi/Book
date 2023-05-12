@@ -39,7 +39,7 @@ private:
 	/// <summary>
 	/// スタミナゲージの変更
 	/// </summary>
-	void StaminaGage(const float& stamina);
+	void StaminaGage();
 
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
@@ -59,5 +59,6 @@ private:
 	float				m_gaugeTimer = 0.0f;			//ゲージ用のタイマー
 	float				m_timePosition = 0.0f;			//タイムの座標
 
+	Vector2				m_spritePosition = Vector2::Zero;
 };
 
