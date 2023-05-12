@@ -20,6 +20,7 @@ public:
 	{
 		enState_Title,
 		enState_Game,
+		enState_GetTresure,
 		enState_Result
 	};
 
@@ -101,7 +102,7 @@ public:
 			m_bgm = NewGO<SoundSource>(0);
 		}
 		m_bgm->Init(num);
-		m_bgm->SetVolume(m_saveData.bgm);
+		m_bgm->SetVolume(m_saveData.bgm * 0.5f);
 		m_bgm->Play(true);
 	}
 
@@ -110,7 +111,7 @@ public:
 	/// </summary>
 	void SetVolume()
 	{
-		m_bgm->SetVolume(m_saveData.bgm);
+		m_bgm->SetVolume(m_saveData.bgm * 0.5f);
 	}
 
 	/// <summary>
@@ -178,6 +179,14 @@ public:
 	void SetGameState(const EnGameState	gamestate)
 	{
 		m_gameState = gamestate;
+	}
+
+	/// <summary>
+	/// ステートの取得。
+	/// </summary>
+	EnGameState GetGameState()
+	{
+		return m_gameState;
 	}
 
 

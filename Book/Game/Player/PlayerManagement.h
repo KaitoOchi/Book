@@ -16,6 +16,7 @@ public:
 	{
 		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
 		m_enPlayer_Changing,  //切替中
+		m_enPlayer_Stop,  //停止中
 		m_enPlayer_2DChanging,//2Dプレイヤー
 		m_enPlayer_3DChanging,//3Dプレイヤー
 	};

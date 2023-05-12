@@ -51,9 +51,23 @@ PSInput VSMain3(VSInput vsIn)
 	return VSMain(vsIn, 3.0f);
 }
 
-float4 PSMain(PSInput In) : SV_Target0
+float4 PSMainCore(PSInput In, uniform int mode)
 {
-    float4 albedo = albedoTexture.Sample(Sampler, In.uv) * mulColor;
+    float4 albedo;
+
+    //UVスクロールモードなら
+    if(mode == 1){
+        float2 offset = float2(clipSize.z, 0);
+
+        if(In.uv.x > 1.0f - offset.x){
+            offset.x -= 1.0f;
+        }
+
+        albedo = albedoTexture.Sample(Sampler, In.uv + offset) * mulColor;
+    }
+    else{
+        albedo = albedoTexture.Sample(Sampler, In.uv) * mulColor;
+    }
 
     //ゲームシーンなら
     if(In.clipmode == 1.0f){
@@ -66,5 +80,18 @@ float4 PSMain(PSInput In) : SV_Target0
     else if(In.clipmode == 3.0f){
         clip(clipSize.y - In.pos.x);
     }
+
     return albedo;
 }
+
+float4 PSMain(PSInput In) : SV_Target0
+{
+    return PSMainCore(In, 0);
+}
+
+float4 PSMainUVScroll(PSInput In) : SV_Target0
+{
+    return PSMainCore(In, 1);
+}
+
+

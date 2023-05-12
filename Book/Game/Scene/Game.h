@@ -25,6 +25,7 @@ class SoundBom;
 class Fade;
 class Star;
 class GameUI;
+class Gage;
 class Pause;
 class GhostBox;
 class PhysicsGhost;
@@ -61,6 +62,8 @@ public:
 	{
 		m_enGameState_GameStart,//ゲームスタート時
 		m_enGameState_DuringGamePlay,//ゲーム中
+		m_enGameState_EventStart,	//イベント開始
+		m_enGameState_EventEnd,		//イベント終了
 		m_enGameState_GameClearable,//クリア可能
 		m_enGameState_GameClear,//クリア
 		m_enGameState_GameFade,//ゲームフェード
@@ -108,6 +111,14 @@ public:
 	}
 
 	/// <summary>
+	/// 宝の座標を設定。
+	/// </summary>
+	void SetTresurePosition(const Vector3& pos)
+	{
+		m_tresurePos = pos;
+	}
+
+	/// <summary>
 	/// ゲームスタート
 	/// </summary>
 	void NotifyGameStart();
@@ -115,6 +126,14 @@ public:
 	/// ゲーム中
 	/// </summary>
 	void NotifyDuringGamePlay();
+	/// <summary>
+	/// イベントの開始を通知。
+	/// </summary>
+	void NotifyEventStart();
+	/// <summary>
+	/// イベントの終了を通知。
+	/// </summary>
+	void NotifyEventEnd();
 	/// <summary>
 	/// ゲームオーバーを通知
 	/// </summary>
@@ -198,7 +217,10 @@ private:
 
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
+	Gage* m_gage = nullptr;
 	Star* m_star = nullptr;
+
+	Vector3 m_tresurePos;
 
 	bool m_isWaitFadeOut = false;		//フェード状態かどうか
 	int	m_nextScene = 0;				//次に移行するシーン

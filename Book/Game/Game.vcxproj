@@ -279,6 +279,7 @@
     <ClCompile Include="UI\Fade.cpp" />
     <ClCompile Include="UI\GameUI.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
+    <ClCompile Include="UI\Wipe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h" />
@@ -324,6 +325,7 @@
     <ClInclude Include="UI\Fade.h" />
     <ClInclude Include="UI\GameUI.h" />
     <ClInclude Include="UI\MiniMap.h" />
+    <ClInclude Include="UI\Wipe.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
