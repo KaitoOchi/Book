@@ -78,7 +78,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.pos = mul(mProj, psIn.pos); // カメラ座標系からスクリーン座標系に変換
     psIn.depth.x = psIn.pos.z / psIn.pos.w;
     psIn.depth.y = saturate( psIn.pos.w / 1000.0f );
-    
+
     return psIn;
 }
 

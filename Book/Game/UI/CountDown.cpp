@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "CountDown.h"
+
 #include "Game.h"
 #include "PlayerManagement.h"
+#include "GameManager.h"
 
 
 CountDown::CountDown()
@@ -22,6 +24,7 @@ bool CountDown::Start()
 	m_countDownSpriteRender[2].Init("Assets/sprite/UI/countDown/2.dds", 161.0f, 234.0f);
 	m_countDownSpriteRender[3].Init("Assets/sprite/UI/countDown/3.dds", 166.0f, 255.0f);
 
+
 	return true;
 }
 
@@ -34,6 +37,8 @@ void CountDown::Update()
 		m_count--;
 		m_timer = 1.0f;
 
+		SoundSource* se = NewGO<SoundSource>(0);
+
 		if (m_count < 0) {
 			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
 			player->SetGameState(true);
@@ -42,6 +47,18 @@ void CountDown::Update()
 			game->NotifyDuringGamePlay();
 			DeleteGO(this);
 			return;
+		}
+		else if (m_count == 0) {
+			//カウント終了の音を出す
+			se->Init(16);
+			se->Play(false);
+			se->SetVolume(GameManager::GetInstance()->GetSFX());
+		}
+		else {
+			//カウントの音を出す
+			se->Init(15);
+			se->Play(false);
+			se->SetVolume(GameManager::GetInstance()->GetSFX());
 		}
 	}
 
@@ -55,5 +72,8 @@ void CountDown::Update()
 
 void CountDown::Render(RenderContext& rc)
 {
+	if (m_count == 4) {
+		return;
+	}
 	m_countDownSpriteRender[m_count].Draw(rc);
 }

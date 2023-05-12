@@ -153,6 +153,9 @@
     <ClCompile Include="Scene\Event.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Wipe.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="Scene\Event.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Wipe.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

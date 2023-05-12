@@ -14,7 +14,7 @@ public:
 	/// Œx‰ú“x‚ğã‚°‚é
 	/// </summary>
 	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
-	void GageUp(const int GageUp);
+	void GageUp(const int GageUp, const bool isEnemy);
 
 private:
 	

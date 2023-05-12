@@ -108,6 +108,9 @@ SPSIn VSSkinMain(SVSIn vsIn)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
+    float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+
+
     //ライトから見た深度値と、ライトから見た深度値の2乗を出力する
     return float4(psIn.depth.x, psIn.depth.y, 0.0f, 1.0f);
 }

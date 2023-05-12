@@ -3,7 +3,6 @@
 
 #include "Game.h"
 #include "Title.h"
-#include "Debug.h"
 #include "Fade.h"
 
 #include "Event.h"
@@ -15,11 +14,10 @@
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	// �Q�[���̏������B
-	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Book"));
+	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Carta Gatto"));
 
 	NewGO<Title>(0, "title");
 	//NewGO<Game>(0, "game");
-	//NewGO<Debug>(0, "debug");
 
 	//NewGO<Event>(0, "event");
 

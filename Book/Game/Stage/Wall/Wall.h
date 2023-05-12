@@ -8,10 +8,8 @@ public:
 	Wall();
 	~Wall();
 	bool Start();
-	void Update();
 	void Render(RenderContext& rc);
 
-	void SetModel(int num);
 	void CreateBoxObj();		// 当たり判定を作成
 
 	//座標の取得
@@ -79,16 +77,6 @@ protected:
 
 	PlayerManagement* m_player = nullptr;
 	LevelRender m_levelRender;
-
-	float posXmax = 0;
-	float posXmin = 1000000.0;
-	float posYmax = 0;
-	float posYmin = 1000000.0;
-	float posZmax = 0;
-	float posZmin = 1000000.0;
-	float posX;
-	float posY;
-	float posZ;
 
 	Vector3 m_boxSize = Vector3::Zero;					//ボックスコライダーの作成
 

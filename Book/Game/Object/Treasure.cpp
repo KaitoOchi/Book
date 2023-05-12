@@ -68,6 +68,8 @@ void Treasure::Hit()
 		m_game->m_pointLight[m_game->m_lightNumber].SetColor(Vector3(50.0f, 0.0f, 0.0f));
 		m_game->m_pointLight[m_game->m_lightNumber].Update();
 
+		m_game->NotifyEventStart();
+		m_game->SetTresurePosition(m_game->GetTreasurePositionList()[m_randTreasure]);
 
 		Deactivate();
 	}
