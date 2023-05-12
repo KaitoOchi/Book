@@ -28,21 +28,32 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
+#include "Star.h"
 #include <random>
 #include"Gage.h"
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
 #include "nature/SkyCube.h"
-
+namespace
+{
+	const float EFFECTSIZE = 1.5f;
+}
 
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
+	// はてなマークのエフェクト
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
+	//ビックリマーク
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/e/exclamation/exmark.efk");
+	//星エフェクト
 	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/e/star/star.efk");
+	//音と煙のエフェクト
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
+	//煙のエフェクト
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 }
 
 Game::~Game()
@@ -134,7 +145,7 @@ bool Game::Start()
 	//リストの初期化
 	m_enemyList.clear();
 	m_wallList.clear();
-	m_starList.clear();
+	
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
@@ -181,12 +192,7 @@ bool Game::Start()
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 	
-	
-	//for (int i = 0; i <= m_enemyList.size(); i++)
-	//{
-	//	m_star = NewGO<Star>(0, "star");
-	//	m_starList.push_back(m_star);
-	//}
+
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
@@ -311,10 +317,10 @@ void Game::LevelDesign()
 			}
 
 			// 名前がgapのとき
-			if (objData.ForwardMatchName(L"gap") == true) {
+			if (objData.EqualObjectName(L"gap_1") == true) {
 				// 隙間を生成する
 				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				//m_gap->ModelLoad(1);
+				m_gap->ModelLoad(1);
 				m_gap->SetPosition(objData.position);
 				m_gap->SetRotation(objData.rotation);
 				m_gap->SetScale(objData.scale);
@@ -322,29 +328,29 @@ void Game::LevelDesign()
 				return true;
 			}
 
-			//// 名前がgapのとき
-			//if (objData.EqualObjectName(L"gap_2") == true) {
-			//	// 隙間を生成する
-			//	m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-			//	m_gap->ModelLoad(2);
-			//	m_gap->SetPosition(objData.position);
-			//	m_gap->SetRotation(objData.rotation);
-			//	m_gap->SetScale(objData.scale);
-			//	m_wallList.emplace_back(m_gap);
-			//	return true;
-			//}
+			// 名前がgapのとき
+			if (objData.EqualObjectName(L"gap_2") == true) {
+				// 隙間を生成する
+				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->ModelLoad(2);
+				m_gap->SetPosition(objData.position);
+				m_gap->SetRotation(objData.rotation);
+				m_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(m_gap);
+				return true;
+			}
 
-			//// 名前がgapのとき
-			//if (objData.EqualObjectName(L"gap_3") == true) {
-			//	// 隙間を生成する
-			//	m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-			//	m_gap->ModelLoad(3);
-			//	m_gap->SetPosition(objData.position);
-			//	m_gap->SetRotation(objData.rotation);
-			//	m_gap->SetScale(objData.scale);
-			//	m_wallList.emplace_back(m_gap);
-			//	return true;
-			//}
+			// 名前がgapのとき
+			if (objData.EqualObjectName(L"gap_3") == true) {
+				// 隙間を生成する
+				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				m_gap->ModelLoad(3);
+				m_gap->SetPosition(objData.position);
+				m_gap->SetRotation(objData.rotation);
+				m_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(m_gap);
+				return true;
+			}
 
 			// 名前がpostのとき
 			if (objData.EqualObjectName(L"post") == true) {
@@ -583,4 +589,16 @@ void Game::NotifyGameBack()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
+}
+
+void Game::NewPlayerSmoke()
+{
+	m_smokeEffect = NewGO<EffectEmitter>(0);
+	m_smokeEffect->Init(0);
+	//エフェクトの大きさを指定する
+	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+	//エフェクトの座標の設定
+	m_smokeEffect->SetPosition(m_playerManagement->GetPosition());
+	m_smokeEffect->Play();
+	m_smokeEffect->Update();
 }

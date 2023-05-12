@@ -10,15 +10,18 @@
 #include "Stage/Wall/Wall.h"
 namespace
 {
-	const float WALK = 40.0f;//歩き時の乗算量
-	const float RUN = 80.0f;//走り時の乗算量
-	const float JUMPVOLUM = 200.0f;//ジャンプ量
-	const float GRAVITY = 400.0f;//重力
-	const float SPEEDDOWN = 0.8;//速度減速率
-	const float PLAYERSTAMINA = 10.0f;//プレイヤーのスタミナ
-	const float STAMINAHEAL = 1.0f;//スタミナの回復
-	const float STAMINASYOPHEAL = 1.5f;
-	const float STAMINADOWN = 1.0f;//スタミナの減少
+	const float		WALK = 40.0f;										//歩き時の乗算量
+	const float		RUN = 80.0f;										//走り時の乗算量
+	const float		JUMPVOLUM = 200.0f;									//ジャンプ量
+	const float		GRAVITY = 400.0f;									//重力
+	const float		SPEEDDOWN = 0.8;									//速度減速率
+	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
+	const float		STAMINAHEAL = 2.0f;									//スタミナの回復
+	const float		STAMINASTOPHEAL = 3.0f;
+	const float		STAMINADOWN = 2.0f;									//スタミナの減少
+	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
+	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
+	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
 }
 
 Player::Player()
@@ -40,6 +43,19 @@ bool Player::Start()
 	m_game = FindGO<Game>("game");
 	//お宝の呼び出し
 	m_treasure = FindGO<Treasure>("treaSure");
+
+	//スタミナゲージのベース画像の設定
+	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/base.DDS", 18.0f, 166.0f);
+	m_staminaBaseRender.Update();
+
+	//スタミナゲージ画像の設定
+	m_staminaGageRender.Init("Assets/sprite/UI/stamina/staminagage.DDS", 10.0f, 118.0f);
+	m_staminaGageRender.SetPivot(Vector2(0.5, 0.0));
+	m_staminaGageRender.SetScale(m_stamianGageScale);
+	m_staminaGageRender.Update();
+	//クールタイムを初期化
+	m_staminaCoolTime = STAMINA_COOL_TIME;
+
 	return true;
 }
 void Player::Animation3D()
@@ -125,6 +141,7 @@ void Player::Update()
 	PlayerCatch();
 	Animation();
 	ManageState();
+	StaminaGage(m_stamina);
 	for (int i=0; i < m_game->GetWallList().size(); i++)
 	{
 		m_game->GetWallList()[i]->SetWallRenderPosition(m_position);
@@ -157,26 +174,32 @@ void Player::Move()
 		m_characon->IsOnGround() == true&&
 		m_runState==true)
 	{
+		if(m_Lstic.x != 0 || m_Lstic.y != 0)
 		PlayerRun();
 	}
 	else
 	{
-		//プレイヤーが動いていないなら
-		if (m_moveSpeed.x >= 0.0f &&
-			m_moveSpeed.y >= 0.0f &&
-			m_moveSpeed.z >= 0.0f)
+		//クールタイムがなくなるまで回復しない
+		m_staminaCoolTime -= g_gameTime->GetFrameDeltaTime();
+		if (m_staminaCoolTime < 0.0f)
 		{
-			//スタミナの回復量を1.5にする
-			m_stamina += 1.5f * g_gameTime->GetFrameDeltaTime();
-			m_stamina = min(m_stamina, PLAYERSTAMINA);
+			//プレイヤーが動いていないなら
+			if (m_moveSpeed.x >= 0.0f &&
+				m_moveSpeed.y >= 0.0f &&
+				m_moveSpeed.z >= 0.0f)
+			{
+				//スタミナの回復量を1.5にする
+				m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
+				m_stamina = min(m_stamina, PLAYERSTAMINA);
+			}
+			else
+			{
+				//スタミナの回復量を1にする
+				m_stamina += STAMINAHEAL * g_gameTime->GetFrameDeltaTime();
+				m_stamina = min(m_stamina, PLAYERSTAMINA);
+			}
+
 		}
-		else
-		{
-			//スタミナの回復量を1にする
-			m_stamina += 1.0f * g_gameTime->GetFrameDeltaTime();
-			m_stamina = min(m_stamina, PLAYERSTAMINA);
-		}
-		
 		//左ステックと歩く速度を乗算させる
 		m_moveSpeed += cameraFoward* m_Lstic.y * WALK;
 		m_moveSpeed += cameraRight*m_Lstic.x * WALK;
@@ -208,6 +231,7 @@ void Player::PlayerRun()
 	//左ステックと走る速度を乗算する
 	m_moveSpeed += cameraFoward * m_Lstic.y * RUN;
 	m_moveSpeed += cameraRight * m_Lstic.x * RUN;
+	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
 void Player::Jump()
 {
@@ -430,7 +454,26 @@ void Player::ManageState()
 	}
 }
 
-
 void Player::Animation()
 {
 }
+
+void Player::StaminaGage(float stamina)
+{
+	m_stamianGageScale.y *=  stamina/10;
+
+	Vector3 position = m_position;
+	//ワールド座標からスクリーン座標を計算
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
+	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_BASE_POSITION, 0.0f));
+	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f));
+	m_staminaGageRender.SetScale(Vector3(1.0f , stamina / 10, 1.0f));
+	m_staminaBaseRender.Update();
+	m_staminaGageRender.Update();
+}
+
+void Player::Render(RenderContext& rc)
+{
+	
+}
+

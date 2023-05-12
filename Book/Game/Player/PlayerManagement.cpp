@@ -9,7 +9,7 @@
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
-	const float EFFECTSIZE = 1.5f;
+	
 }
 
 
@@ -78,14 +78,7 @@ void PlayerManagement::Update()
 void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
-
-		m_smokeEffect = NewGO<EffectEmitter>(0);
-		m_smokeEffect->Init(0);
-		//エフェクトの大きさを指定する
-		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-		
-		
-		m_smokeEffect->Play();
+		m_game->NewPlayerSmoke();
 
 		switch (m_enMananagementState)
 		{
@@ -97,8 +90,6 @@ void PlayerManagement::Input()
 			SetPosition(m_player2D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
-			//エフェクトの座標の設定
-			m_smokeEffect->SetPosition(m_player2D->GetPosition());
 			
 			break;
 			//3Dの場合2Dを呼び出す
@@ -109,8 +100,6 @@ void PlayerManagement::Input()
 			SetPosition(m_player3D->GetPosition());
 			//カメラの位置の設定
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
-			//エフェクトの座標の設定
-			m_smokeEffect->SetPosition(m_player3D->GetPosition());
 			break;
 		}
 
@@ -120,14 +109,8 @@ void PlayerManagement::Input()
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
-	m_smokeEffect = NewGO<EffectEmitter>(0);
-	m_smokeEffect->Init(0);
-	//エフェクトの大きさを指定する
-	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-	//エフェクトの座標の設定
-	m_smokeEffect->SetPosition(m_player2D->GetPosition());
-	m_smokeEffect->Play();
-
+	
+	m_game->NewPlayerSmoke();
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);
 	m_player2D->m_Player_Act = false;
@@ -147,10 +130,10 @@ void PlayerManagement::PlayerChange2D()
 	SetCharacon(m_player2D->GetCharacon());//キャラコンの情報を得る
 	//プレイヤーを2Dにする
 	m_enMananagementState = m_enPlayer_2DChanging;
+	
 }
 void PlayerManagement::PlayerChange3D()
 {
-	
 	m_player3D->Activate();//プレイヤー3Dをアクティブにする
 	m_player3D->SetPosition(m_player2D->GetPosition());//3Dに2Dのポジションを与える
 	m_player3D->SetStamina(m_player2D->GetStamina());
@@ -169,7 +152,7 @@ void PlayerManagement::PlayerChange3D()
 				m_player3D->m_ghostHit = false;
 			}
 		}
-			
+
 		});
 	//プレイヤーを３Dにする
 	m_enMananagementState = m_enPlayer_3DChanging;
@@ -186,11 +169,13 @@ void PlayerManagement::IsChanging()
 		case PlayerManagement::m_enPlayer_3DChanging:
 			PlayerChange3D();
 			m_player3D->m_Player_Act = true;
+			
 			break;
 			//3Dの場合2Dを呼び出す
 		case PlayerManagement::m_enPlayer_2DChanging:
 			PlayerChange2D();
 			m_player2D->m_Player_Act = true;
+		
 			break;
 		default:
 			break;

@@ -13,7 +13,7 @@ public:
 	void Animation()override;
 	void Throw()override;
 	void PlayerChang();
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 	/// <summary>
 	/// ƒLƒƒƒ‰ƒRƒ“‚Ìì¬‚ÌŠÖ”
 	/// </summary>

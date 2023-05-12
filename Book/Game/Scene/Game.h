@@ -75,19 +75,6 @@ public:
 		return m_enemyList;
 	}
 
-	/// <summary>
-	/// 星の情報を取得
-	/// </summary>
-	/// <returns></returns>
-	std::vector<Star*> GetStarList()
-	{
-		return m_starList;
-	}
-
-
-	//クリア座標の取得
-	std::vector<Vector3>m_clearList;
-
 
 	std::vector<Vector3> GetTreasurePositionList()
 	{
@@ -144,7 +131,10 @@ public:
 	/// クリア可能を通知
 	/// </summary>
 	void NotifyGameClearable();
-
+	/// <summary>
+	/// プレイヤーのエフェクトを呼び出す関数
+	/// </summary>
+	void NewPlayerSmoke();
 private:
 	/// <summary>
 	/// クリア可能
@@ -178,7 +168,6 @@ private:
 	
 	std::vector<Enemy*> m_enemyList;
 	
-	std::vector<Star*>m_starList;
 
 	std::vector<Wall*>m_wallList;
 
@@ -205,7 +194,7 @@ private:
 	GhostBox* m_ghostBox = nullptr;
 	Sensor* m_sensor = nullptr;
 	SecurityCamera* m_securityCamera = nullptr;
-
+	EffectEmitter* m_smokeEffect = nullptr;
 
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
