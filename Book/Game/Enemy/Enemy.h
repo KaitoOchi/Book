@@ -88,7 +88,7 @@ public:
 	/// <summary>
 	/// 音爆弾が当たったときの処理
 	/// </summary>
-	bool Act_HitSoundBullet();
+	void Act_HitSoundBullet();
 	/// <summary>
 	/// 行動停止
 	/// </summary>
@@ -278,7 +278,7 @@ public:
 	/// アイテムの座標を渡す
 	/// </summary>
 	/// <returns></returns>
-	bool SetItemPos(Vector3 pos) {
+	void SetItemPos(Vector3 pos) {
 		m_itemPos = pos;
 	}
 
