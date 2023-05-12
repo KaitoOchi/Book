@@ -355,15 +355,16 @@ void Enemy::Act_MissingPlayer()
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 
-	// 長さが一定以上のとき
-	if (m_sumPos.Length() > 100.0f) {
+	// 長さが一定以下のとき
+	if (m_sumPos.Length() < 100.0f) {
+		return;
+	}
 
-		// モーションを再生
-		if (Act_Stop(5.0f, 4) == false) {
-			// 見渡すモーションを再生
-			m_enAnimationState = LOSS;
-		}
+	// 見渡すモーションを再生
+	m_enAnimationState = LOSS;
 
+	// モーションを再生
+	if (Act_Stop(5.0f, 4) == true) {
 		m_addTimer[4] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 		m_FindPlayerFlag = false;		// フラグを降ろす
@@ -388,8 +389,10 @@ void Enemy::Act_HitFlashBullet()
 	// 閃光弾が当たったとき
 	// trueのとき当たった
 
+	// プレイヤーを確保したフラグがtrueになったら
 	if (m_ChachPlayerFlag == true) {
-		m_CalculatedFlag = false;
+		// バグらないように補正する
+		m_ChachPlayerFlag = false;
 	}
 
 	// めまいのアニメーションを再生
@@ -438,7 +441,7 @@ void Enemy::Act_HitSoundBullet()
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 
-	if (length <= 200) {
+	if (length <= 50.0f) {
 
 		m_enAnimationState = LOSS;
 

@@ -160,6 +160,12 @@ void Enemy_Clear::UpDate_OnListen()
 {
 	// 音爆弾を使ったとき
 
+	// 閃光弾を食らっているときは実行しない
+	if (m_HitFlashBulletFlag == true) {
+		m_HitFlashBulletFlag = false;
+		return;
+	}
+
 	Enemy::Act_HitSoundBullet();
 
 	// 効果が終了したとき

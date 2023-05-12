@@ -166,6 +166,13 @@ void Enemy_Charge::UpDate_OnListen()
 {
 	// 音爆弾を使ったとき
 
+	// 閃光弾を食らっているときは実行しない
+	if (m_HitFlashBulletFlag == true) {
+		m_HitFlashBulletFlag = false;
+		return;
+	}
+
+
 	// 効果が終了したとき
 	if (m_HitSoundBulletFlag == true) {
 		m_ActState = BACKBASEDON;
