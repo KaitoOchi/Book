@@ -12,8 +12,7 @@ namespace
 	const float		MAXTIMEYPOSITION = 600.0f;							//タイムの一番大きい座標
 	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
 	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
-	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
-	const float		STAMINA_GAGE_POSITION = -22.5f;						//スタミナゲージ画像の座標
+	
 
 }
 
@@ -50,14 +49,6 @@ bool GameUI::Start()
 	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	//スタミナゲージのベース画像の設定
-	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/base.DDS", 18.0f, 166.0f);
-	m_staminaBaseRender.Update();
-
-	//スタミナゲージ画像の設定
-	m_staminaGageRender.Init("Assets/sprite/UI/stamina/staminagage.DDS", 18.0f, 166.0f);
-	m_staminaGageRender.SetPivot(Vector2(0.5, 0.0));
-	m_staminaGageRender.Update();
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -74,7 +65,6 @@ void GameUI::Update()
 	}
 
 	Time();
-	StaminaGage();
 	ChangeGage();
 }
 
@@ -173,16 +163,6 @@ void GameUI::ChangeGage()
 	}
 }
 
-void GameUI::StaminaGage()
-{
-	Vector3 position = m_playerManagement->GetPosition();
-	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
-	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 50.0f, m_spritePosition.y+ STAMINA_BASE_POSITION, 0.0f));
-	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 50.0f, m_spritePosition.y+ STAMINA_GAGE_POSITION, 0.0f));
-	m_staminaBaseRender.Update();
-	m_staminaGageRender.Update();
-}
 
 void GameUI::Render(RenderContext& rc)
 {
@@ -190,11 +170,6 @@ void GameUI::Render(RenderContext& rc)
 	m_gageSpriteRender.Draw(rc);
 
 	m_timeFontRender.Draw(rc);
-	if (m_game->m_gameState == Game::m_enGameState_DuringGamePlay &&
-		m_game->m_gameState == Game::m_enGameState_DuringGamePlay)
-	{
-		m_staminaBaseRender.Draw(rc);
-		m_staminaGageRender.Draw(rc);
-	}
+	
 	
 }

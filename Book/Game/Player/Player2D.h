@@ -17,7 +17,7 @@ public:
 	/// </summary>
 	void CreatCharcon();
 	void Animation()override;
-	void Render(RenderContext& rc);
+	void Render(RenderContext& rc)override;
 private:
 	int i = 0;
 	int j = 0;
