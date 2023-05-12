@@ -42,7 +42,9 @@ private:
 	SpriteRender		m_gageFrameSpriteRender;		//ƒQ[ƒW‚Ì˜g‰æ‘œ
 	SpriteRender		m_gageSpriteRender;				//ƒQ[ƒW‰æ‘œ
 	FontRender			m_timeFontRender;				//ƒ^ƒCƒ€•¶š
-	
+	SpriteRender		m_itemBaseRender;
+	SpriteRender		m_itemFlashRender;				//‘MŒõ
+	SpriteRender		m_itemSoundRender;
 
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;

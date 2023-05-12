@@ -498,7 +498,6 @@ void Game::Update()
 				return;
 			}
 
-			if (m_gameState != m_enGameState_GameFade)
 
 			if (m_gameState ==m_enGameState_GameBuck)
 			{
