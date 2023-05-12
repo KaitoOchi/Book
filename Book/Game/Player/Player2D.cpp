@@ -3,7 +3,6 @@
 #include "Player3D.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
-#include "Star.h"
 #include "Enemy.h"
 #include "Game.h"
 namespace

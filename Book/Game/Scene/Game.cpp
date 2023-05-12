@@ -28,10 +28,8 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
-#include "Star.h"
 #include <random>
 #include"Gage.h"
-#include "Star.h"
 #include "Pause.h"
 #include "CountDown.h"
 #include "SecurityCamera.h"
@@ -42,8 +40,9 @@ Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/e/star/star.efk");
 }
 
 Game::~Game()
@@ -183,11 +182,11 @@ bool Game::Start()
 	m_fade->StartFadeIn();
 	
 	
-	for (int i = 0; i <= m_enemyList.size(); i++)
-	{
-		m_star = NewGO<Star>(0, "star");
-		m_starList.push_back(m_star);
-	}
+	//for (int i = 0; i <= m_enemyList.size(); i++)
+	//{
+	//	m_star = NewGO<Star>(0, "star");
+	//	m_starList.push_back(m_star);
+	//}
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
