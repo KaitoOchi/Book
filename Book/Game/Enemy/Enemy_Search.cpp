@@ -49,10 +49,6 @@ void Enemy_Search::Update()
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
-	// ‰¹”š’e‚ðŽg—p‚µ‚½
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
-	}
 
 	switch (m_ActState) {
 	case SEARCH:

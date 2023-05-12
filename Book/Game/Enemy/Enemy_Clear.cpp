@@ -45,6 +45,11 @@ void Enemy_Clear::Update()
 		m_ActState = CRAW;
 	}
 
+
+	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		m_HitSoundBulletFlag = false;
+	}
+
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
