@@ -28,7 +28,6 @@
 #include "SoundBom.h"
 #include "Fade.h"
 #include "Result.h"
-#include "Star.h"
 #include <random>
 #include"Gage.h"
 #include "Pause.h"
