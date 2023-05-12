@@ -146,7 +146,9 @@ void Event::Update()
 	if (m_isWaitFadeOut) {
 		//フェードが終了したら
 		if (!m_fade->IsFade()) {
+			
 			DeleteGO(this);
+			
 		}
 	}
 	else {
