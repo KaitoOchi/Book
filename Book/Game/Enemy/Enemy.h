@@ -350,11 +350,11 @@ protected:
 	nsAI::Path m_path;						// パス
 	nsAI::PathFinding m_pathFiding;			// パスを探す
 
-	std::vector<Enemy*> enemyList;			// エネミーのリスト
-
 	PlayerManagement* m_playerManagement = nullptr;
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
+
+	EffectEmitter* m_soundEffect = nullptr;		// エフェクト
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー
@@ -387,6 +387,8 @@ protected:
 
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
+
+	bool m_efectDrawFlag[3];				// エフェクト描画フラグ
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
