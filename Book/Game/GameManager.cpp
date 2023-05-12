@@ -35,6 +35,12 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(12, "Assets/sound/event/foot.wav");
 	//変身時の音
 	g_soundEngine->ResistWaveFileBank(13, "Assets/sound/game/change.wav");
+	//お宝の音
+	g_soundEngine->ResistWaveFileBank(14, "Assets/sound/event/tresure.wav");
+	//カウントダウン中の音
+	g_soundEngine->ResistWaveFileBank(15, "Assets/sound/countDown/count.wav");
+	//カウントダウン終了の音
+	g_soundEngine->ResistWaveFileBank(16, "Assets/sound/countDown/count_end.wav");
 
 	//タイトルBGMの設定
 	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/bgm/bgm_title.wav");

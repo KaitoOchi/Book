@@ -10,6 +10,7 @@ namespace
 	const int SCENE_MAX = 5;													//シーンの最大数
 
 	const bool PLAYER_ENABLE[SCENE_MAX] = { true, true, true, false, true };	//プレイヤーの表示状態
+	const bool TRESURE_ENABLE[SCENE_MAX] = { true, true, true, false, false };	//お宝の表示状態
 	const bool ENEMY_ENABLE[SCENE_MAX] = { false, false, false, true, false };	//エネミーの表示状態
 	const bool LIGHT_ENABLE[SCENE_MAX] = { false, false, true, false, true };	//ライトの表示状態
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
@@ -54,6 +55,12 @@ Event::~Event()
 
 bool Event::Start()
 {
+	//お宝モデルの設定
+	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
+	m_tresureModelRender.Update();
+
+	//座標を設定
 	m_tresurePos.y -= 50.0f;
 	m_tresurePos.z -= 10.0f;
 
@@ -70,7 +77,7 @@ bool Event::Start()
 	m_animationClips[animationClip_HeadDown].SetLoopFlag(false);
 	m_animationClips[animationClip_RunAway].Load("Assets/animData/player/event/run_away.tka");
 	m_animationClips[animationClip_RunAway].SetLoopFlag(false);
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, 0, 0, 0, D3D12_CULL_MODE_BACK);
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 	m_playerModelRender.SetPosition(m_tresurePos);
 	m_playerModelRender.Update();
 
@@ -80,12 +87,11 @@ bool Event::Start()
 			OnAnimationEvent(clipName, eventName);
 		});
 
-
 	//エネミーモデルを設定
 	m_enemyAnimClips[enemyAnimClip_Run].Load("Assets/animData/enemy/run_battle.tka");
 	m_enemyAnimClips[enemyAnimClip_Run].SetLoopFlag(true);
 	for (int i = 0; i < 3; i++) {
-		m_enemyModelRender[i].Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnimClips, enemyAnimClip_Num, enModelUpAxisZ);
+		m_enemyModelRender[i].Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnimClips, enemyAnimClip_Num, enModelUpAxisZ, true, true);
 		m_enemyModelRender[i].SetPosition(Vector3(260.0f, 0.0f, (-300.0f + (100 * i))));
 		m_enemyModelRender[i].Update();
 	}
@@ -179,6 +185,15 @@ void Event::Animation()
 		}
 		else {
 			m_playerModelRender.PlayAnimation(animationClip_Idle, 0.0f);
+		}
+		break;
+	case 1:
+		if (m_timer == 0.0f) {
+			//ライトの音を出す
+			SoundSource* se = NewGO<SoundSource>(0);
+			se->Init(14);
+			se->Play(false);
+			se->SetVolume(GameManager::GetInstance()->GetSFX());
 		}
 		break;
 	case 2:
@@ -287,6 +302,11 @@ void Event::Render(RenderContext& rc)
 	if (LIGHT_ENABLE[m_cameraScene] == true) {
 		//ライトモデルの描画
 		m_volumeLightModelRender.Draw(rc);
+	}
+
+	if (TRESURE_ENABLE[m_cameraScene] == true) {
+		//お宝モデルの描画
+		m_tresureModelRender.Draw(rc);
 	}
 
 	if (PLAYER_ENABLE[m_cameraScene] == true) {

@@ -10,9 +10,9 @@ namespace
 	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 3 };		//各ステートの縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[4] = { 0, 100, 100, 2};		//各設定の横カーソル最大値
 
-	const Vector3 CURSOR_POS_MENU[3] = { { -725.0f,  260.0f, 0.0f},
-										{ -725.0f,  -15.0f, 0.0f},
-										{ -725.0f,  -230.0f, 0.0f} };	//メニュー画面のカーソル座標
+	const Vector3 CURSOR_POS_MENU[3] = { { -725.0f,  80.0f, 0.0f},
+										{ -725.0f,  -120.0f, 0.0f},
+										{ -725.0f,  -270.0f, 0.0f} };	//メニュー画面のカーソル座標
 }
 
 Title::Title()

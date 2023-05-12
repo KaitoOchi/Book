@@ -111,7 +111,7 @@ public:
 	/// </summary>
 	void SetVolume()
 	{
-		m_bgm->SetVolume(m_saveData.bgm);
+		m_bgm->SetVolume(m_saveData.bgm * 0.5f);
 	}
 
 	/// <summary>

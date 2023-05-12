@@ -61,6 +61,7 @@ private:
 
 private:
 	ModelRender		m_playerModelRender;		//プレイヤーモデル
+	ModelRender		m_tresureModelRender;		//お宝モデル
 	ModelRender		m_enemyModelRender[3];		//エネミーモデル
 	ModelRender		m_volumeLightModelRender;	//ボリュームライトモデル
 	SpriteRender	m_filmSpriteRender[4];		//フィルム画像
