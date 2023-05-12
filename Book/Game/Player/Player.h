@@ -44,6 +44,7 @@ public:
 	Player();
 	virtual ~Player();
 	virtual bool Start();
+	virtual void Render(RenderContext& rc);
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -234,7 +235,16 @@ protected:
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
+	/// <summary>
+	/// スタミナゲージの変更
+	/// </summary>
+	void StaminaGage(float stamina);
+
 protected:
+
+
+
+
 	//アニメーション
 	enum EnAnimationClip {
 		m_enAnimationClip_Idle,				//待機アニメーション
@@ -299,4 +309,11 @@ protected:
 	bool m_runState = true;
 
 	float m_stamina = 0.0f;
-};
+
+	SpriteRender		m_staminaBaseRender;					//スタミナゲージベース画像
+	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像
+	Vector2				m_spritePosition = Vector2::Zero;
+	Vector3				m_stamianGageScale = Vector3::One;
+
+	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム
+};	

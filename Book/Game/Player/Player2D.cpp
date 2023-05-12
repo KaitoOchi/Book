@@ -8,12 +8,13 @@
 #include "Game.h"
 namespace
 {
-	const Vector3 BOXSIZE{ 20.0f,120.0f,2.0f };//ボックスコライダーの大きさ
-	const Vector3 MODELSIZE{ 1.0f,1.0f,1.0f };
-	int WALKVALUE = 30;
-	int JUMPVALUE = 90;
-	float RUBVALUM = 3.0f;
-	const float SPEEDDOWN = 0.8;//速度減速率
+	const Vector3	BOXSIZE{ 20.0f,120.0f,2.0f };						//ボックスコライダーの大きさ
+	const Vector3	MODELSIZE{ 1.0f,1.0f,1.0f };
+	int				WALKVALUE = 30;
+	int				JUMPVALUE = 90;
+	float			RUBVALUM = 3.0f;
+	const float		SPEEDDOWN = 0.8;									//速度減速率
+	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
 }
 Player2D::Player2D()
 {
@@ -205,13 +206,6 @@ void Player2D::ProcessChangeStateTransition()
 	//ステートを遷移する。
 	ProcessCommonStateTransition();
 }
-void Player2D::ProcessDownStateTransition()
-{
-}
-void Player2D::ProcessThrowStateTransition()
-{
-}
-
 void Player2D::ProcessFoundStateTransition()
 {
 	//ステートを遷移する。
@@ -232,10 +226,7 @@ void Player2D::ProcessCaughtStateTransition()
 	
 }
 
-void Player2D::ProcessCatchingStateTransition()
-{
 
-}
 
 void Player2D::ProcessClearStateTransition()
 {
@@ -251,9 +242,24 @@ void Player2D::ProcessGameOverStateTransition()
 
 void Player2D::Render(RenderContext& rc)
 {
+	if (m_stamina != PLAYERSTAMINA)
+	{
+		m_staminaBaseRender.Draw(rc);
+		m_staminaGageRender.Draw(rc);
+	}
 	m_modelRender->Draw(rc);
 }
 
 void Player2D::Throw()
 {
+}
+void Player2D::ProcessDownStateTransition()
+{
+}
+void Player2D::ProcessThrowStateTransition()
+{
+}
+void Player2D::ProcessCatchingStateTransition()
+{
+
 }

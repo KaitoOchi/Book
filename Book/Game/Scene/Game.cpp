@@ -35,7 +35,10 @@
 #include "CountDown.h"
 #include "SecurityCamera.h"
 #include "nature/SkyCube.h"
-
+namespace
+{
+	const float EFFECTSIZE = 1.5f;
+}
 
 Game::Game()
 {
@@ -586,4 +589,16 @@ void Game::NotifyGameBack()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
+}
+
+void Game::NewPlayerSmoke()
+{
+	m_smokeEffect = NewGO<EffectEmitter>(0);
+	m_smokeEffect->Init(0);
+	//エフェクトの大きさを指定する
+	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+	//エフェクトの座標の設定
+	m_smokeEffect->SetPosition(m_playerManagement->GetPosition());
+	m_smokeEffect->Play();
+	m_smokeEffect->Update();
 }
