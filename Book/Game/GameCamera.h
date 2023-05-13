@@ -1,6 +1,7 @@
 #pragma once
 class PlayerManagement;
 class Player3D;
+class Game;
 class GameCamera:public IGameObject
 {
 public:
@@ -40,6 +41,7 @@ private:
 	
 	PlayerManagement* m_playerManagement = nullptr;
 	Player3D* m_player3D = nullptr;
+	Game* m_game = nullptr;
 
 	float m_cameraMove = 0.0f;
 	Vector3 m_cameraPosition = Vector3::Zero;

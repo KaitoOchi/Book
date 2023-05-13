@@ -215,7 +215,7 @@ void Player::Move()
 
 void Player::PlayerRun()
 {
-	m_stamina -= 1.0f * g_gameTime->GetFrameDeltaTime();
+	m_stamina -= STAMINADOWN * g_gameTime->GetFrameDeltaTime();
 	m_stamina = max(m_stamina, 0.0f);
 	if (m_stamina <= 0.0f)
 	{
@@ -447,7 +447,6 @@ void Player::ManageState()
 		ProcessDownStateTransition();
 		break;
 	case m_enPlayer_Caught:
-		m_game->NotifyGameOver();
 		ProcessCaughtStateTransition();
 	case m_enPlayer_Catching:
 		ProcessCatchingStateTransition();
