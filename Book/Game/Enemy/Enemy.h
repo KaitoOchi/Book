@@ -61,6 +61,10 @@ public:
 	/// <param name="time">突進するまでのチャージ時間</param>
 	void Act_Charge(float time);
 	/// <summary>
+	/// 壁との衝突判定
+	/// </summary>
+	void Act_Charge_HitWall();
+	/// <summary>
 	/// 敵を呼ぶ行動
 	/// </summary>
 	void Act_Call();
@@ -77,10 +81,6 @@ public:
 	/// 見失ったときの処理
 	/// </summary>
 	void Act_Loss();
-	/// <summary>
-	/// 一定以内には近づかないための処理
-	/// </summary>
-	void Act_Limit();
 	/// <summary>
 	/// 閃光弾が当たったときの処理
 	/// </summary>
@@ -108,8 +108,14 @@ public:
 	bool Act_CatchPlayer();
 	/// <summary>
 	/// プレイヤーを見失った時の処理
+	/// 見失った位置まで位置を移動する
 	/// </summary>
-	void Act_MissingPlayer();
+	void Act_MoveMissingPosition();
+	/// <summary>
+	/// プレイヤーを見失った時の処理
+	/// プレイヤーを探す
+	/// </summary>
+	void Act_SearchMissingPlayer();
 
 	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
@@ -156,17 +162,19 @@ public:
 	// エネミーの行動パターン
 	enum EnEnemyActState
 	{
-		CRAW,			// 巡回
-		TRACKING,		// 追跡
-		SEARCH,			// 索敵
-		CALL,			// 周りの敵を呼ぶ
-		CALLED,			// CALL時にSearch以外が実行
-		CALLEND,		// 視野角内にプレイヤーが存在しないとき実行
-		CHARGE,			// 突進
-		BACKBASEDON,	// 巡回状態に戻る
-		CONFUSION,		// 閃光弾にあたったとき
-		LISTEN,			// 音爆弾を使用したとき
-		CATCH			// 捕獲
+		CRAW,					// 巡回
+		TRACKING,				// 追跡
+		SEARCH,					// 索敵
+		MISSING_MOVEPOSITON,	// 見失った座標まで移動した
+		MISSING_SEARCHPLAYER,	// 見失ったプレイヤーを探す
+		CALL,					// 周りの敵を呼ぶ
+		CALLED,					// CALL時にSearch以外が実行
+		CALLEND,				// 視野角内にプレイヤーがいないとき周りの敵を元の位置に戻す
+		CHARGE,					// 突進
+		BACKBASEDON,			// 巡回状態に戻る
+		CONFUSION,				// 閃光弾にあたったとき
+		LISTEN,					// 音爆弾を使用したとき
+		CATCH					// 捕獲した
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -174,6 +182,7 @@ public:
 	/// <param name="CRAW">巡回</param>
 	/// <param name="TRACKING">追跡</param>
 	/// <param name="SEARCH">待機</param>
+	/// <param name="MISSING_MOVEPOSITON">見失った座標まで移動した</param>
 	/// <param name="CALL">周りの敵を呼ぶ</param>
 	/// <param name="CALLED">CALL時にSearch以外が実行</param>
 	/// <param name="CALLEND">視野角内にプレイヤーが存在しないとき実行</param>
@@ -365,9 +374,8 @@ protected:
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
-	Vector3 m_playerPos2 = Vector3::Zero;	// 突進用。プレイヤーの座標
-	Vector3 m_playerPos3 = Vector3::Zero;	// 見失った時用。プレイヤーの座標
-	Vector3 m_enemyPos = Vector3::Zero;		// 突進用。自身の座標
+	Vector3 m_playerChargePosition = Vector3::Zero;			// 突進用。プレイヤーの座標
+	Vector3 m_playerMissionPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
@@ -379,12 +387,10 @@ protected:
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
 	bool m_HitSoundBulletFlag = false;		// 音爆弾
-	bool m_FindPlayerFlag = false;			// プレイヤーの座標を参照するフラグ
-	bool m_CalculatedFlag = false;			// 突進用フラグ
 	bool m_CountFlag = false;				// カウントするフラグ
-	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_TrakingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
-
+	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
+	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
 

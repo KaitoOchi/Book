@@ -2,6 +2,7 @@
 #include "Enemy_Clear.h"
 
 #include "GameManager.h"
+#include "PlayerManagement.h"
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
@@ -46,9 +47,9 @@ void Enemy_Clear::Update()
 		m_ChangeDefaultFlag = false;
 	}
 
-	// ï¿½Mï¿½ï¿½ï¿½eï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ğ•·‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	// ‘MŒõ’e‚É“–‚½‚Á‚½@Š@‰¹”š’e‚ğ•·‚¢‚½‚Æ‚«
 	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
-		// ï¿½Mï¿½ï¿½ï¿½eï¿½ï¿½Dï¿½æ‚·ï¿½ï¿½
+		// ‘MŒõ’e‚ğ—Dæ‚·‚é
 		m_HitSoundBulletFlag = false;
 	}
 
@@ -69,6 +70,12 @@ void Enemy_Clear::Update()
 		// ’ÇÕ
 	case TRACKING:
 		Update_OnTracking();
+		break;
+	case MISSING_MOVEPOSITON:
+		Update_OnMoveMissingPosition();
+		break;
+	case MISSING_SEARCHPLAYER:
+		Update_OnSearchMissingPlayer();
 		break;
 		// ŒÄ‚Î‚ê‚½‚Æ‚«
 	case CALLED:
@@ -98,14 +105,16 @@ void Enemy_Clear::Update()
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);
+
 	// ‹–ìŠp
 	Enemy::Act_SeachPlayer();
 
 	m_enemyRender.Update();	// XV
 }
+
 void Enemy_Clear::Update_OnCraw()
 {
-	if (m_ChachPlayerFlag == true) {
+	if (m_ActState == CATCH) {
 		m_enAnimationState = IDLE;
 		return;
 	}
@@ -116,6 +125,11 @@ void Enemy_Clear::Update_OnCraw()
 	if (m_TrakingPlayerFlag == true) {
 		m_ActState = TRACKING;
 	}
+
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
 }
 
 void Enemy_Clear::Update_OnTracking()
@@ -123,15 +137,15 @@ void Enemy_Clear::Update_OnTracking()
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
-		return;
 	}
-
-
+	// 
 	Enemy::Act_Tracking();			// ’ÇÕs“®
 
 	// ‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚È‚¢‚Æ‚«
 	if (m_TrakingPlayerFlag == false) {
-		Enemy::Act_MissingPlayer();
+		// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½‚Ì‚Ì‚ÅAŒ©¸‚Á‚½‚ÌÀ•W‚ğ‹L‰¯‚·‚éB
+		m_playerMissionPosition = m_playerManagement->GetPosition();
+		m_ActState = MISSING_MOVEPOSITON;
 	}
 }
 
@@ -145,23 +159,34 @@ void Enemy_Clear::Update_OnCalled()
 	}
 }
 
+void Enemy_Clear::Update_OnMoveMissingPosition()
+{
+	// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
+	Enemy::Act_MoveMissingPosition();
+}
+
+void Enemy_Clear::Update_OnSearchMissingPlayer()
+{
+	// ƒvƒŒƒCƒ„[‚ğ’T‚·
+	Enemy::Act_SearchMissingPlayer();
+}
+
 void Enemy_Clear::Update_OnBackBasedOn()
 {
-	Enemy::Act_Loss();					// ’ÇÕs“®‚©‚ç‚ÌØ‚è‘Ö‚¦
+	Enemy::Act_Loss();
 	m_ActState = CRAW;
 }
 
 void Enemy_Clear::Update_OnConfusion()
 {
-	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
-
-	Enemy::Act_HitFlashBullet();
+	Enemy::Act_HitFlashBullet();		// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
 
 	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
 	if (m_HitFlashBulletFlag == false) {
 		m_ActState = BACKBASEDON;
 	}
 }
+
 
 void Enemy_Clear::UpDate_OnListen()
 {
