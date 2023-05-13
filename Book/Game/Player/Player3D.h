@@ -28,6 +28,11 @@ public:
 		return m_pushPosition;
 	}
 
+	const EnItemState GetItemState()
+	{
+		return m_enItemState;
+	}
+
 private:
 	PlayerManagement* m_playerManagement = nullptr;
 	FlashBom* m_flashBom = nullptr;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
-#include "Player2D.h"
+#include "Player3D.h"
 #include "Game.h"
 namespace
 {
@@ -12,6 +12,11 @@ namespace
 	const float		MAXTIMEYPOSITION = 600.0f;							//タイムの一番大きい座標
 	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
 	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
+	const Vector3	ITEM_BASE_POSITION = { 580.0f,250.0f,0.0f };		//アイテムの背景画像の座標
+	const Vector3	ITEM_FLASH_POSITION = { 550.0f,250.0f,0.0f };		//閃光弾の画像の座標
+	const Vector3	FLASH_FONT_POSITION = { 670.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
+	const Vector3	ITEM_SOUND_POSITION = { 615.0f,250.0f,0.0f };		//音爆弾の処理
+	const Vector3	SOUND_FONT_POSITION = { 745.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
 	
 
 }
@@ -30,6 +35,7 @@ bool GameUI::Start()
 {
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
+	m_player3D = FindGO<Player3D>("player3d");
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 
@@ -49,9 +55,20 @@ bool GameUI::Start()
 	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	//アイテムの背景の画像
+	//アイテムの背景の設定
+	m_itemBaseRender.Init("Assets/sprite/UI/ItemSlot/base2.DDS",136,79);
+	m_itemBaseRender.SetPosition(ITEM_BASE_POSITION);
+	m_itemBaseRender.Update();
 
+	//閃光弾画像の設定
+	m_itemFlashRender.Init("Assets/sprite/UI/ItemSlot/flashbom.DDS", 39, 39);
+	m_itemFlashRender.SetPosition(ITEM_FLASH_POSITION);
+	m_itemFlashRender.Update();
 
+	//音爆弾画像の設定
+	m_itemSoundRender.Init("Assets/sprite/UI/ItemSlot/soundbom.DDS", 39, 39);
+	m_itemSoundRender.SetPosition(ITEM_SOUND_POSITION);
+	m_itemSoundRender.Update();
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -62,12 +79,15 @@ bool GameUI::Start()
 
 void GameUI::Update()
 {
+	ItemSlot();
+	ItemScaleUp();
 	if (m_game->m_gameState == Game::m_enGameState_GameStart ||
 		m_game->m_gameState == Game::m_enGameState_GameOver) {
 		return;
 	}
 
 	Time();
+	
 	ChangeGage();
 }
 
@@ -166,6 +186,51 @@ void GameUI::ChangeGage()
 	}
 }
 
+void GameUI::ItemSlot()
+{
+	wchar_t flashText[255];
+	swprintf_s(flashText,L"x%d", m_flashNumber);
+	m_itemFlashNumber.SetText(flashText);
+	m_itemFlashNumber.SetScale(0.5f);
+	m_itemFlashNumber.SetPosition(FLASH_FONT_POSITION);
+
+	wchar_t soundText[255];
+	swprintf_s(soundText, L"x%d", m_soundNumber);
+	m_itemSoundNumber.SetText(soundText);
+	m_itemSoundNumber.SetPosition(SOUND_FONT_POSITION);
+	m_itemSoundNumber.SetScale(0.5f);
+}
+
+void GameUI::ItemScaleUp()
+{
+	
+	switch (m_player3D->GetItemState())
+	{
+	case Player::m_enItem_Flash:
+		m_flashScale += 0.1f;
+		m_flashScale = min(m_flashScale, 2.0f);
+		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.Update();
+
+		m_soundScale = 1.0f;
+		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.Update();
+		break;
+	case Player::m_enItem_SoundBom:
+		m_soundScale += 0.1f;
+		m_soundScale = min(m_soundScale, 2.0f);
+		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.Update();
+
+		m_flashScale = 1.0f;
+		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.Update();
+		break;
+	default:
+		break;
+	}
+}
+
 
 void GameUI::Render(RenderContext& rc)
 {
@@ -174,5 +239,9 @@ void GameUI::Render(RenderContext& rc)
 
 	m_timeFontRender.Draw(rc);
 	
-	
+	m_itemBaseRender.Draw(rc);
+	m_itemFlashRender.Draw(rc);
+	m_itemSoundRender.Draw(rc);
+	m_itemFlashNumber.Draw(rc);
+	m_itemSoundNumber.Draw(rc);
 }
