@@ -150,7 +150,7 @@ bool Game::Start()
 	m_SecurityCameraList.clear();
 
 
-	m_player2D=NewGO<Player2D>(0,"player2d");
+	m_player2D =NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
@@ -165,7 +165,7 @@ bool Game::Start()
 		
 	NewGO<CountDown>(0, "countDown");
 	NewGO<SkyCube>(0, "skyCube");
-	//NewGO<Wipe>(0, "wipe");
+	NewGO<Wipe>(0, "wipe");
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
@@ -198,7 +198,7 @@ void Game::LevelDesign()
 {
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
-
+		/*
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
 			 //エネミーを生成
@@ -276,6 +276,7 @@ void Game::LevelDesign()
 			m_enemyList.push_back(enemyClear);
 			return true;
 		}
+		*/
 
 		// ステージのレベル
 		{

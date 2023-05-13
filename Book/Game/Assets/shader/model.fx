@@ -197,7 +197,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 
 	//輪郭線の色を設定
 	psIn.outlineColor = olColor;
-
+	psIn.outlineColor.w = 0.8;
+	if(psIn.outlineColor.w == 0.9){
+		
+	}
 	psIn.uv = vsIn.uv;
 
 	return psIn;
@@ -678,7 +681,8 @@ float4 Outline(SPSIn psIn, float4 albedo)
     }
 
 	//半透明の敵は透過させる
-	if(psIn.outlineColor.w >= 0.001f && psIn.outlineColor.w <= 0.999f) {
+	// if(psIn.outlineColor.w >= 0.001f && psIn.outlineColor.w <= 0.999f) {
+	if(psIn.outlineColor.w == 0.9f /*&& psIn.outlineColor.w <= 0.999f*/) {
 
 		Dithering(psIn);
 	}

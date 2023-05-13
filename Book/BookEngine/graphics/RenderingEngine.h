@@ -293,6 +293,7 @@ namespace nsBookEngine {
 		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 		Camera					m_lightCamera;						//ライトカメラ
+		Camera					m_wipeCamera;						//ワイプカメラ。
 
 		D3D12_VIEWPORT			m_viewPorts[2];						//ビューポート
 	};

@@ -209,10 +209,14 @@ namespace nsBookEngine {
 		}
 	}
 
-	void ModelRender::OnWipeForwardRender(RenderContext& rc)
+	void ModelRender::OnWipeForwardRender(RenderContext& rc, Camera& camera)
 	{
+		if (!m_isUseWipeCamera) {
+			return;
+		}
+
 		if (m_model.IsInited()) {
-			m_model.Draw(rc, 1);
+			m_model.Draw(rc, camera, 1);
 		}
 	}
 }

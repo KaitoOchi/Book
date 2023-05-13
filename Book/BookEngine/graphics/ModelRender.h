@@ -80,7 +80,10 @@ namespace nsBookEngine {
 		{
 			return m_model;
 		}
-
+		Model& GetShadowModel()
+		{
+			return m_shadowModel;
+		}
 		/// <summary>
 		/// 座標の設定。
 		/// </summary>
@@ -126,15 +129,6 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="flag"></param>
-		void SetShadowCasterFlag(bool flag)
-		{
-			m_isShadowCaster = flag;
-		}
-
-		/// <summary>
 		/// アニメーションの速度を設定。
 		/// </summary>
 		/// <param name="animationSpeed"></param>
@@ -164,12 +158,11 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// 
+		/// ワイプカメラを使用するかどうか
 		/// </summary>
-		/// <returns></returns>
-		bool IsShadowCaster()
+		void SetUseWipeCamera(const bool is)
 		{
-			return m_isShadowCaster;
+			m_isUseWipeCamera = is;
 		}
 
 	private:
@@ -226,7 +219,7 @@ namespace nsBookEngine {
 		/// <summary>
 		/// ワイプ越しのフォワードレンダリングの描画処理。
 		/// </summary>
-		void OnWipeForwardRender(RenderContext& rc) override;
+		void OnWipeForwardRender(RenderContext& rc, Camera& camera) override;
 
 	private:
 		AnimationClip*	m_animationClips = nullptr;
@@ -242,10 +235,8 @@ namespace nsBookEngine {
 		Model			m_zprepassModel;
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
+		bool			m_isUseWipeCamera = false;
 		bool			m_isShadowCaster = true;
 		float			m_animationSpeed = 1.0f;
-
-
 	};
-
 }

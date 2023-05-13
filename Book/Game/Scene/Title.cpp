@@ -26,6 +26,7 @@ Title::~Title()
 	{
 		m_sprites.pop_back();
 	}
+	m_sprites.shrink_to_fit();
 }
 
 bool Title::Start()

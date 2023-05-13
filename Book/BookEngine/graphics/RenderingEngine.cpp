@@ -162,6 +162,12 @@ namespace nsBookEngine {
 		m_viewPorts[1].TopLeftY = 0;   //画面左上のy座標
 		m_viewPorts[1].MinDepth = 0.0f;   //深度値の最小値
 		m_viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
+
+		//ワイプカメラを初期化。
+		m_wipeCamera.SetPosition({ 0.0f, 100.0f, -300.0f });
+		m_wipeCamera.SetTarget({ 0.0f, 50.0f, 0.0f });
+		m_wipeCamera.SetViewAngle(5.0f);
+		m_wipeCamera.Update();
 	}
 
 	void RenderingEngine::Execute(RenderContext& rc)
@@ -237,7 +243,6 @@ namespace nsBookEngine {
 		//メインレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
-		//rc.SetRenderTarget(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 
 		//ビューポートの数だけ回す
@@ -246,15 +251,23 @@ namespace nsBookEngine {
 			//ビューポートを設定
 			rc.SetViewportAndScissor(m_viewPorts[i]);
 
-			//描画処理
-			for (auto& renderObj : m_renderObjects) {
-				renderObj->OnForwardRender(rc);
+			if (i == 0) {
+				//描画処理
+				m_wipeCamera.SetPosition({ 0.0f, 100.0f, -300.0f });
+				m_wipeCamera.SetTarget({ 0.0f, 50.0f, 0.0f });
+				m_wipeCamera.SetViewAngle(5.0f);
+				m_wipeCamera.Update();
+				for (auto& renderObj : m_renderObjects) {
+					renderObj->OnWipeForwardRender(rc, m_wipeCamera);
+				}
 			}
-		}
+			else {
+				//描画処理
+				for (auto& renderObj : m_renderObjects) {
+					renderObj->OnForwardRender(rc);
+				}
+			}
 
-		//描画処理
-		for (auto& renderObj : m_renderObjects) {
-			renderObj->OnForwardRender(rc);
 		}
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);

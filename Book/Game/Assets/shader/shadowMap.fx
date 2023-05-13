@@ -110,10 +110,9 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 {
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
 
-    if(albedo.w <= 0.9f && albedo.w >= 0.1f){
-        //clip(-1);
+    if(albedo.w < 0.5f ){
+        clip(-1);
     }
-
 
     //ライトから見た深度値と、ライトから見た深度値の2乗を出力する
     return float4(psIn.depth.x, psIn.depth.y, 0.0f, 1.0f);

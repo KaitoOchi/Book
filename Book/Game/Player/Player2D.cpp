@@ -164,6 +164,7 @@ void Player2D::Animation()
 		break;
 	}
 	m_modelRender->GetModel().ChangeAlbedoMap("", m_player2D[j]);
+	m_modelRender->GetShadowModel().ChangeAlbedoMap("", m_player2D[j]);
 }
 
 void Player2D::ProcessIdleStateTransition()
