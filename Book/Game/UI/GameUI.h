@@ -2,7 +2,7 @@
 
 class PlayerManagement;
 class Game;
-class Player2D;
+class Player3D;
 class GameUI : public IGameObject	
 {
 public:
@@ -20,6 +20,29 @@ public:
 		return m_timer;
 	}
 
+	/// <summary>
+	/// ‘MŒõ’e‚Ì”
+	/// </summary>
+	/// <param name="flash">Œ»İ‚Ì‘MŒõ’e‚Ì”</param>
+	/// <returns></returns>
+	const void SetFlashSlot(const int flash)
+	{
+		m_flashNumber = flash;
+	}
+
+	/// <summary>
+	/// ‰¹”š’e‚Ì”
+	/// </summary>
+	/// <param name="flash">Œ»İ‚Ì‰¹”š’e‚Ì”</param>
+	/// <returns></returns>
+	const void SetSoundSlot(const int sound)
+	{
+		m_soundNumber = sound;
+	}
+
+	
+
+
 private:
 	/// <summary>
 	/// ŠÔŒv‘ªˆ—B
@@ -36,19 +59,29 @@ private:
 	/// </summary>
 	void TimeMove(const int& m, const int& s);
 
+	/// <summary>
+	/// ƒAƒCƒeƒ€‚ÌŠ”‚Ìˆ—
+	/// </summary>
+	void ItemSlot();
 
+	void ItemScaleUp();
 
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ƒQ[ƒW‚Ì˜g‰æ‘œ
 	SpriteRender		m_gageSpriteRender;				//ƒQ[ƒW‰æ‘œ
 	FontRender			m_timeFontRender;				//ƒ^ƒCƒ€•¶š
+	
 	SpriteRender		m_itemBaseRender;				//ƒAƒCƒeƒ€‚Ì”wŒi‰æ‘œ
 	SpriteRender		m_itemFlashRender;				//‘MŒõ’e‚Ì‰æ‘œ
 	SpriteRender		m_itemSoundRender;				//‰¹”š’e‚Ì‰æ‘œ
+	FontRender			m_itemFlashNumber;				//‘MŒõ’e‚Ì”
+	FontRender			m_itemSoundNumber;				//‰¹”š’e‚Ì”
+
 
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
-	Player2D*			m_player2D;
+	Player3D*			m_player3D;
+
 	bool				m_isTimerEnable = true;			//ƒ^ƒCƒ}[‚Ì•\¦ó‘Ô
 	int					m_vigilanceGage = 1;			//Œx‰ú“x
 	float				m_timer = 0.0f;					//ƒ^ƒCƒ}[
@@ -57,6 +90,11 @@ private:
 	float				m_gaugeTimer = 0.0f;			//ƒQ[ƒW—p‚Ìƒ^ƒCƒ}[
 	float				m_timePosition = 0.0f;			//ƒ^ƒCƒ€‚ÌÀ•W
 
+	int					m_flashNumber = 0;				//‘MŒõ’e‚Ì”
+	int					m_soundNumber = 0;				//‰¹”š’e‚Ì”
+
+	float				m_flashScale = 1.0f;			//‘MŒõ’e‚Ì‰æ‘œ‚Ì‘å‚«‚³
+	float				m_soundScale = 1.0f;			//‘MŒõ’e‚Ì‰æ‘œ‚Ì‘å‚«‚³
 	
 };
 
