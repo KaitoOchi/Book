@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
+#include "Player3D.h"
 #include "Game.h"
 namespace
 {
@@ -34,6 +35,7 @@ bool GameUI::Start()
 {
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
+	m_player3D = FindGO<Player3D>("player3d");
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 
@@ -77,13 +79,15 @@ bool GameUI::Start()
 
 void GameUI::Update()
 {
+	ItemSlot();
+	ItemScaleUp();
 	if (m_game->m_gameState == Game::m_enGameState_GameStart ||
 		m_game->m_gameState == Game::m_enGameState_GameOver) {
 		return;
 	}
 
 	Time();
-	ItemSlot();
+	
 	ChangeGage();
 }
 
@@ -186,15 +190,45 @@ void GameUI::ItemSlot()
 {
 	wchar_t flashText[255];
 	swprintf_s(flashText,L"%d", m_flashNumber);
-	m_itemFalshNumber.SetText(flashText);
-	m_itemFalshNumber.SetScale(0.5f);
-	m_itemFalshNumber.SetPosition(FLASH_FONT_POSITION);
+	m_itemFlashNumber.SetText(flashText);
+	m_itemFlashNumber.SetScale(0.5f);
+	m_itemFlashNumber.SetPosition(FLASH_FONT_POSITION);
 
 	wchar_t soundText[255];
 	swprintf_s(soundText, L"%d", m_soundNumber);
 	m_itemSoundNumber.SetText(soundText);
 	m_itemSoundNumber.SetPosition(SOUND_FONT_POSITION);
 	m_itemSoundNumber.SetScale(0.5f);
+}
+
+void GameUI::ItemScaleUp()
+{
+	
+	switch (m_player3D->GetItemState())
+	{
+	case Player::m_enItem_Flash:
+		m_flashScale += 0.1f;
+		m_flashScale = min(m_flashScale, 2.0f);
+		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.Update();
+
+		m_soundScale = 1.0f;
+		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.Update();
+		break;
+	case Player::m_enItem_SoundBom:
+		m_soundScale += 0.1f;
+		m_soundScale = min(m_soundScale, 2.0f);
+		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.Update();
+
+		m_flashScale = 1.0f;
+		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.Update();
+		break;
+	default:
+		break;
+	}
 }
 
 
@@ -208,6 +242,6 @@ void GameUI::Render(RenderContext& rc)
 	m_itemBaseRender.Draw(rc);
 	m_itemFlashRender.Draw(rc);
 	m_itemSoundRender.Draw(rc);
-	m_itemFalshNumber.Draw(rc);
+	m_itemFlashNumber.Draw(rc);
 	m_itemSoundNumber.Draw(rc);
 }

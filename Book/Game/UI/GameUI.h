@@ -2,6 +2,7 @@
 
 class PlayerManagement;
 class Game;
+class Player3D;
 class GameUI : public IGameObject	
 {
 public:
@@ -39,6 +40,8 @@ public:
 		m_soundNumber = sound;
 	}
 
+	
+
 
 private:
 	/// <summary>
@@ -61,6 +64,8 @@ private:
 	/// </summary>
 	void ItemSlot();
 
+	void ItemScaleUp();
+
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ƒQ[ƒW‚Ì˜g‰æ‘œ
 	SpriteRender		m_gageSpriteRender;				//ƒQ[ƒW‰æ‘œ
@@ -69,12 +74,14 @@ private:
 	SpriteRender		m_itemBaseRender;				//ƒAƒCƒeƒ€‚Ì”wŒi‰æ‘œ
 	SpriteRender		m_itemFlashRender;				//‘MŒõ’e‚Ì‰æ‘œ
 	SpriteRender		m_itemSoundRender;				//‰¹”š’e‚Ì‰æ‘œ
-	FontRender			m_itemFalshNumber;				//‘MŒõ’e‚Ì”
+	FontRender			m_itemFlashNumber;				//‘MŒõ’e‚Ì”
 	FontRender			m_itemSoundNumber;				//‰¹”š’e‚Ì”
 
 
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
+	Player3D*			m_player3D;
+
 	bool				m_isTimerEnable = true;			//ƒ^ƒCƒ}[‚Ì•\¦ó‘Ô
 	int					m_vigilanceGage = 1;			//Œx‰ú“x
 	float				m_timer = 0.0f;					//ƒ^ƒCƒ}[
@@ -86,6 +93,8 @@ private:
 	int					m_flashNumber = 0;				//‘MŒõ’e‚Ì”
 	int					m_soundNumber = 0;				//‰¹”š’e‚Ì”
 
-
+	float				m_flashScale = 1.0f;			//‘MŒõ’e‚Ì‰æ‘œ‚Ì‘å‚«‚³
+	float				m_soundScale = 1.0f;			//‘MŒõ’e‚Ì‰æ‘œ‚Ì‘å‚«‚³
+	
 };
 
