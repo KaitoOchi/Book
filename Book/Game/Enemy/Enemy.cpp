@@ -654,8 +654,23 @@ void Enemy::Act_Charge(float time)
 			if (m_TrakingPlayerFlag == true) {
 				return;
 			}
+
+			if (m_efectDrawFlag[3] == false) {
+				// !のエフェクトを生成
+				m_soundEffect = NewGO<EffectEmitter>(4);
+				m_soundEffect->Init(4);
+				//エフェクトの大きさを指定する
+				m_soundEffect->SetScale(Vector3::One * 1.5f);
+				//エフェクトの座標の設定
+				m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+				m_soundEffect->Play();
+
+				m_efectDrawFlag[3] = true;
+			}
+
 			// いないときは巡回状態に戻る
 			m_ActState = BACKBASEDON;
+			m_efectDrawFlag[3] = false;
 		}
 	}
 }
