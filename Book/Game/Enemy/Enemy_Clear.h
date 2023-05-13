@@ -11,6 +11,8 @@ public:
 
 	void Update_OnCraw();				// „‰ñ
 	void Update_OnTracking();			// ’ÇÕ
+	void Update_OnMoveMissingPosition();// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
+	void Update_OnSearchMissingPlayer();// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
 	void Update_OnCalled();				// CALL‚ÉÀs
 	void Update_OnBackBasedOn();		// „‰ñó‘Ô‚É–ß‚é
 	void Update_OnConfusion();			// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
