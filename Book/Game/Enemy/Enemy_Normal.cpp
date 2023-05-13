@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Enemy_Normal.h"
+#include "PlayerManagement.h"
 
 namespace
 {
@@ -69,6 +70,12 @@ void Enemy_Normal::Update()
 	case TRACKING:
 		Update_OnTracking();
 		break;
+	case MISSING_MOVEPOSITON:
+		Update_OnMoveMissingPosition();
+		break;
+	case MISSING_SEARCHPLAYER:
+		Update_OnSearchMissingPlayer();
+		break;
 		// 呼ばれたとき
 	case CALLED:
 		Update_OnCalled();
@@ -106,7 +113,7 @@ void Enemy_Normal::Update()
 
 void Enemy_Normal::Update_OnCraw()
 {
-	if (m_ChachPlayerFlag == true) {
+	if (m_ActState == CATCH) {
 		m_enAnimationState = IDLE;
 		return;
 	}
@@ -130,12 +137,14 @@ void Enemy_Normal::Update_OnTracking()
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
-
+	// 
 	Enemy::Act_Tracking();			// 追跡行動
 
 	// 視野角にプレイヤーがいないとき
 	if (m_TrakingPlayerFlag == false) {
-		m_ActState = BACKBASEDON;
+		// プレイヤーを見失ったのので、見失った時の座標を記憶する。
+		m_playerMissionPosition = m_playerManagement->GetPosition();
+		m_ActState = MISSING_MOVEPOSITON;
 	}
 }
 
@@ -149,9 +158,21 @@ void Enemy_Normal::Update_OnCalled()
 	}
 }
 
+void Enemy_Normal::Update_OnMoveMissingPosition()
+{
+	// プレイヤーを見失った位置まで移動する
+	Enemy::Act_MoveMissingPosition();
+}
+
+void Enemy_Normal::Update_OnSearchMissingPlayer()
+{
+	// プレイヤーを探す
+	Enemy::Act_SearchMissingPlayer();
+}
+
 void Enemy_Normal::Update_OnBackBasedOn()
 {
-	Enemy::Act_MissingPlayer();
+	Enemy::Act_Loss();
 	m_ActState = CRAW;
 }
 
