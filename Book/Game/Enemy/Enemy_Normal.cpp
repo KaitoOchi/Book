@@ -42,6 +42,7 @@ void Enemy_Normal::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+		m_ChangeDefaultFlag = false;
 	}
 
 	// 閃光弾に当たった　且　音爆弾を聞いたとき

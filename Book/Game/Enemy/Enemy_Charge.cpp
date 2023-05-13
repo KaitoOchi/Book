@@ -46,6 +46,7 @@ void Enemy_Charge::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if(m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+		m_ChangeDefaultFlag = false;
 	}
 
 
