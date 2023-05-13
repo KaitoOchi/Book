@@ -228,7 +228,6 @@ void Enemy::Act_SeachPlayer()
 
 			m_efectDrawFlag[2] = true;
 		}
-	
 		return;
 	}
 
@@ -321,6 +320,10 @@ bool Enemy::Act_CatchPlayer()
 
 	// 一定の長さのとき
 	if (length <= CATCH_DECISION) {
+
+		// プレイヤーの方向を向く
+		diff.Normalize();
+		Rotation(diff);
 		// 捕まえる
 		m_enAnimationState = ATTACK;
 
@@ -630,6 +633,7 @@ void Enemy::Act_Charge(float time)
 
 		// 移動速度に加算
 		Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
+
 		m_position += moveSpeed * m_move;
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
