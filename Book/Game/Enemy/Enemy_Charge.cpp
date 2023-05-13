@@ -2,6 +2,7 @@
 #include "Enemy_Charge.h"
 
 #include "GameManager.h"
+#include "PlayerManagement.h"
 
 namespace 
 {
@@ -113,23 +114,23 @@ void Enemy_Charge::Update_OnCraw()
 	// 巡回
 
 	// プレイヤーを捕まえたとき
-	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+	if (m_ActState == CATCH) {
+		m_enAnimationState = IDLE;
 		return;
 	}
-
 
 	Enemy::Act_Craw();					// 巡回行動
 
 	// 視野角にプレイヤーがいるとき
 	if (m_TrakingPlayerFlag == true) {
+		m_playerChargePosition = m_playerManagement->GetPosition();
 		m_ActState = CHARGE;
 	}
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
-	// 突進
+	Enemy::Act_Charge_HitWall();		// 壁との衝突判定
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
 										// 関数内で巡回状態に戻る処理を記述
 
