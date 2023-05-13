@@ -33,6 +33,15 @@ public:
 
 	EnPlayerState m_playerState = m_enPlayer_Idle;				//待機状態
 
+	//アイテムの切替
+	enum EnItemState
+	{
+		m_enItem_No,			//何も持っていない
+		m_enItem_Flash,			//閃光弾			
+		m_enItem_SoundBom		//音爆弾
+	};
+	EnItemState m_enItemState = m_enItem_Flash;
+
 	bool m_ghostHit = true;										//壁に埋まったかを感知するブロックに当たったかどうか
 
 	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
@@ -264,14 +273,7 @@ protected:
 	
 
 	
-	//アイテムの切替
-	enum EnItemState
-	{
-		m_enItem_No,			//何も持っていない
-		m_enItem_Flash,			//閃光弾			
-		m_enItem_SoundBom		//音爆弾
-	};
-	EnItemState m_enItemState = m_enItem_Flash;
+	
 	
 protected:
 	bool m_characonState = true;								//キャラコンを作るかどうか
@@ -307,7 +309,7 @@ protected:
 
 	bool m_runState = true;
 
-	float m_stamina = 0.0f;
+	float m_stamina = 0.0f;										//プレイヤーのスタミナ
 
 	SpriteRender		m_staminaBaseRender;					//スタミナゲージベース画像
 	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像

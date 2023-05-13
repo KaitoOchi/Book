@@ -538,7 +538,6 @@ void Game::ClearableState()
 	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
-		GameDelete(0);
 		NotifyGameClear();
 	
 	}
@@ -557,7 +556,6 @@ void Game::DuringGamePlayState()
 {
 	if (m_gameUI->GetTime() <= 0.0f)
 	{
-		GameDelete(0);
 		NotifyGameOver();
 	}
 }
@@ -603,11 +601,15 @@ void Game::NotifyEventEnd()
 
 void Game::NotifyGameClear()
 {
+	m_isWaitFadeOut = true;
+	m_fade->StartFadeOut();
 	m_gameState = m_enGameState_GameClear;
 }
 
 void Game::NotifyGameOver()
 {
+	m_isWaitFadeOut = true;
+	m_fade->StartFadeOut();
 	m_gameState = m_enGameState_GameOver;
 }
 

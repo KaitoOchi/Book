@@ -47,7 +47,7 @@ private:
 
 	
 
-
+private:
 	SpriteRender m_flashRender;
 
 	SphereCollider m_sphereCollider;					//スフィアコライダー

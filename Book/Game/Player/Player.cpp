@@ -274,12 +274,13 @@ void Player::ItemChange()
 	if (g_pad[0]->IsTrigger(enButtonRight))
 	{
 		//‘MŒõ’e‚ğ‚Á‚Ä‚¢‚é
-		m_enItemState = m_enItem_Flash;
+		m_enItemState = m_enItem_SoundBom;
 	}
 	if (g_pad[0]->IsTrigger(enButtonLeft))
 	{
 		//‰¹”š’e‚ğ‚Á‚Ä‚¢‚é
-		m_enItemState = m_enItem_SoundBom;
+		
+		m_enItemState = m_enItem_Flash;
 	}
 }
 
