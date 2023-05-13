@@ -44,8 +44,9 @@ void Enemy_Normal::Update()
 		m_ActState = CRAW;
 	}
 
-
+	// ‘MŒõ’e‚É“–‚½‚Á‚½@Š@‰¹”š’e‚ğ•·‚¢‚½‚Æ‚«
 	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		// ‘MŒõ’e‚ğ—Dæ‚·‚é
 		m_HitSoundBulletFlag = false;
 	}
 
@@ -127,7 +128,6 @@ void Enemy_Normal::Update_OnTracking()
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
-		return;
 	}
 
 	Enemy::Act_Tracking();			// ’ÇÕs“®
