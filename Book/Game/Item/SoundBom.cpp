@@ -3,7 +3,7 @@
 #include "PlayerManagement.h"
 #include "Game.h"
 #include "Enemy.h"
-
+#include "GameUI.h"
 namespace
 {
 	const float SOUNDRANGE = 30.0f;
@@ -20,6 +20,7 @@ SoundBom::~SoundBom()
 bool SoundBom::Start()
 {
 	Item::Start();
+	m_gameUI->SetSoundSlot(m_soundCount);
 	//ディアクティブ
 	Deactivate();
 	return true;
@@ -52,6 +53,8 @@ void SoundBom::ItemHit()
 		}
 		
 	}
+
+	m_gameUI->SetSoundSlot(m_soundCount);
 	NotifySounding();
 }
 
