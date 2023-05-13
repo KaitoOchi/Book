@@ -35,6 +35,8 @@ Player::~Player()
 
 bool Player::Start()
 {
+
+	
 	m_stamina = PLAYERSTAMINA;
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");

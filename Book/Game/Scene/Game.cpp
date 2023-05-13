@@ -516,6 +516,7 @@ void Game::Update()
 				m_player3D->Deactivate();
 
 				m_isWaitFadeOut = false;
+				
 				return;
 			}
 
@@ -597,6 +598,7 @@ void Game::NotifyEventEnd()
 {
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	NotDraw_Enemy(false);
 
 	m_gamecamera->Activate();
@@ -607,6 +609,8 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	m_fade->StartFadeIn();
+
+	NotifyGameClearable();
 }
 
 

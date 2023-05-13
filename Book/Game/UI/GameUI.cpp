@@ -49,6 +49,9 @@ bool GameUI::Start()
 	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
+	//ƒAƒCƒeƒ€‚Ì”wŒi‚Ì‰æ‘œ
+
+
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 

@@ -145,8 +145,6 @@ void Enemy::PlayAnimation()
 		break;
 	case LOSS:
 		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
-		// 再生速度を速くする
-		//m_enemyRender.SetAnimationSpeed(4.0f);
 		break;
 	}
 }
@@ -242,6 +240,7 @@ void Enemy::Act_SeachPlayer()
 			if (WallAndHit(m_playerPos) == false) {
 				// 壁に衝突したとき
 				m_TrakingPlayerFlag = false;
+				return;
 			}
 		}
 	}
@@ -288,10 +287,6 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 	// 壁と衝突した
 	if (callback.isHit == true) {
-		// プレイヤーは見つかっていない
-		//if (m_ActState == EnEnemyActState::CHARGE) {
-		//	int hoge = 0;
-		//}
 		return false;
 	}
 
@@ -316,8 +311,12 @@ bool Enemy::Act_CatchPlayer()
 		m_enAnimationState = ATTACK;
 
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-			// 捕まえたのでフラグをtrueにする
-			m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
+
+			// 閃光弾に当たっていない(CONFUSIONでない)とき
+			if (m_game->GetEnemyList()[i]->m_ActState != CONFUSION) {
+				// 捕まえたのでフラグをtrueにする
+				m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
+			}
 		}
 
 		return true;
@@ -705,8 +704,6 @@ void Enemy::Act_Call()
 			diff.Normalize();
 			// 移動速度を加算
 			m_game->GetEnemyList()[i]->m_position += diff * MOVE_SPEED;
-
-			//m_fontRender.SetText(L"call");
 		}
 	}
 }
@@ -737,12 +734,6 @@ bool Enemy::Act_CallEnd()
 {
 	// エネミーのリストを検索
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-
-		//// 各エネミーから該当エネミーへ向かうベクトル
-		//Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
-		//float length = diff.Length();
-
-		//m_fontRender.SetText(L"callend");
 
 		// 行動パターンがCALLのとき
 		if (m_game->GetEnemyList()[i]->m_ActState == CALLED) {
