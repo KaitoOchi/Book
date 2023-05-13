@@ -44,8 +44,6 @@ namespace
 	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
-
-	const float		EFFECT_SIZE = 0.7f;						// エフェクトのサイズ
 }
 
 Enemy::Enemy()
@@ -217,6 +215,20 @@ void Enemy::Act_SeachPlayer()
 	// スポットライトの中にプレイヤーがいるとき
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		m_TrakingPlayerFlag = true;
+
+		if (m_efectDrawFlag[2] == false) {
+			// !のエフェクトを生成
+			m_soundEffect = NewGO<EffectEmitter>(3);
+			m_soundEffect->Init(3);
+			//エフェクトの大きさを指定する
+			m_soundEffect->SetScale(Vector3::One * 1.2f);
+			//エフェクトの座標の設定
+			m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+			m_soundEffect->Play();
+
+			m_efectDrawFlag[2] = true;
+		}
+	
 		return;
 	}
 
@@ -242,6 +254,7 @@ void Enemy::Act_SeachPlayer()
 			if (WallAndHit(m_playerPos) == false) {
 				// 壁に衝突したとき
 				m_TrakingPlayerFlag = false;
+				m_efectDrawFlag[2] == false;
 			}
 		}
 	}
@@ -351,11 +364,26 @@ void Enemy::Act_MoveMissingPosition()
 
 void Enemy::Act_SearchMissingPlayer()
 {
+	if (m_efectDrawFlag[3] == false) {
+		// !のエフェクトを生成
+		m_soundEffect = NewGO<EffectEmitter>(4);
+		m_soundEffect->Init(4);
+		//エフェクトの大きさを指定する
+		m_soundEffect->SetScale(Vector3::One * 1.5f);
+		//エフェクトの座標の設定
+		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_soundEffect->Play();
+
+		m_efectDrawFlag[3] = true;
+	}
+
+
 	// 見渡すモーションを再生
 	m_enAnimationState = LOSS;
 
 	// モーションを再生
-	if (Act_Stop(10.0f, 4) == true) {
+	if (Act_Stop(7.0f, 4) == true) {
+		m_efectDrawFlag[3] = false;
 		m_addTimer[4] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
@@ -390,7 +418,7 @@ void Enemy::Act_HitFlashBullet()
 		m_soundEffect = NewGO<EffectEmitter>(2);
 		m_soundEffect->Init(2);
 		//エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * EFFECT_SIZE);
+		m_soundEffect->SetScale(Vector3::One * 1.5f);
 		//エフェクトの座標の設定
 		m_soundEffect->SetPosition(Vector3(m_position.x+5.0f, 100.0f, m_position.z+10.0f));
 		m_soundEffect->Play();
