@@ -36,10 +36,7 @@
 #include "Event.h"
 #include "nature/SkyCube.h"
 #include "Wipe.h"
-namespace
-{
-	const float EFFECTSIZE = 1.5f;
-}
+
 
 Game::Game()
 {
@@ -57,18 +54,19 @@ Game::Game()
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
 
 	//フレームレートを固定
-	g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, GameManager::GetInstance()->GetFrameRate());
+	//g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, GameManager::GetInstance()->GetFrameRate());
 }
 
 Game::~Game()
 {
 
-	//�E�G�E�l�E�~�E�[
+	//エネミーリストの解放
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
-		
 		DeleteGO(m_enemyList[i]);
 	}
+	m_enemyList.shrink_to_fit();
+
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
@@ -77,15 +75,13 @@ Game::~Game()
 	DeleteGO(m_miniMap);
 	DeleteGO(m_pause);
 	DeleteGO(m_gamecamera);
+
 	//壁や床の削除
-	DeleteGO(m_backGround);
+	DeleteGO(FindGO<BackGround>("backGround"));
 	for (int i = 0; i < m_wallList.size(); i++)
 	{
 		DeleteGO(m_wallList[i]);
 	}
-	//�E�A�E�C�E�e�E��E�
-	DeleteGO(m_soundBom);
-	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
 	for (int i = 0; i < m_sensorList.size(); i++)
 	{
@@ -158,8 +154,6 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
-	m_flahBom = NewGO<FlashBom>(0, "flashBom");
-	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 	m_gamecamera = NewGO<GameCamera>(0, "gameCamera");
 
@@ -172,14 +166,6 @@ bool Game::Start()
 	NewGO<CountDown>(0, "countDown");
 	NewGO<SkyCube>(0, "skyCube");
 	//NewGO<Wipe>(0, "wipe");
-
-
-	//m_stageModelRender.Init("Assets/modelData/stage1.tkm");
-	//m_stageModelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-	//m_stageModelRender.SetRotation(Quaternion::Identity);
-	//m_stageModelRender.SetScale(Vector3::One);
-	//m_stageModelRender.Update();
-	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
@@ -216,78 +202,78 @@ void Game::LevelDesign()
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {
 			 //エネミーを生成
-			m_enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
-			m_enemyNormal->m_enemyType = Enemy::Normal;
+			enemyNormal->m_enemyType = Enemy::Normal;
 			// 座標・回転・スケールを教える
-			m_enemyNormal->SetPosition(objData.position);
-			m_enemyNormal->SetRotation(objData.rotation);
-			m_enemyNormal->SetScale(objData.scale);
+			enemyNormal->SetPosition(objData.position);
+			enemyNormal->SetRotation(objData.rotation);
+			enemyNormal->SetScale(objData.scale);
 
-			m_enemyNormal->SetSpotLigNum(m_spotLigNum);
+			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyNormal->Pass(0);
+			enemyNormal->Pass(0);
 			// エネミーのリストに追加する
-			m_enemyList.push_back(m_enemyNormal);
+			m_enemyList.push_back(enemyNormal);
 			return true;
 		}
 
 		// 名前が Charge のとき
 		if (objData.EqualObjectName(L"Charge") == true) {
 			// エネミーを生成
-			m_enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			// 自身の属性を教える
-			m_enemyCharge->m_enemyType = Enemy::Charge;
+			enemyCharge->m_enemyType = Enemy::Charge;
 			// 座標・回転・スケールを教える
-			m_enemyCharge->SetPosition(objData.position);
-			m_enemyCharge->SetRotation(objData.rotation);
-			m_enemyCharge->SetScale(objData.scale);
+			enemyCharge->SetPosition(objData.position);
+			enemyCharge->SetRotation(objData.rotation);
+			enemyCharge->SetScale(objData.scale);
 
-			m_enemyCharge->SetSpotLigNum(m_spotLigNum);
+			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyCharge->Pass(1);
+			enemyCharge->Pass(1);
 			// エネミーのリストに追加する
-			m_enemyList.push_back(m_enemyCharge);
+			m_enemyList.push_back(enemyCharge);
 			return true;
 		}
 
 		// 名前が Search のとき
 		if (objData.EqualObjectName(L"Search") == true) {
 			// エネミーを生成
-			m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			Enemy_Search* enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
 			// 自身の属性を教える
-			m_enemySearch->m_enemyType = Enemy::Search;
+			enemySearch->m_enemyType = Enemy::Search;
 			// 座標・回転・スケールを教える
-			m_enemySearch->SetPosition(objData.position);
-			m_enemySearch->SetRotation(objData.rotation);
-			m_enemySearch->SetScale(objData.scale);
+			enemySearch->SetPosition(objData.position);
+			enemySearch->SetRotation(objData.rotation);
+			enemySearch->SetScale(objData.scale);
 
-			m_enemySearch->SetSpotLigNum(m_spotLigNum);
+			enemySearch->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// エネミーのリストに追加する
-			m_enemyList.push_back(m_enemySearch);
+			m_enemyList.push_back(enemySearch);
 			return true;
 		}
 
 		// 名前が Clear のとき
 		if (objData.EqualObjectName(L"Clear") == true) {
 			// エネミーを生成
-			m_enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			// 自身の属性を教える
-			m_enemyClear->m_enemyType = Enemy::Clear;
+			enemyClear->m_enemyType = Enemy::Clear;
 			// 座標・回転・スケールを教える
-			m_enemyClear->SetPosition(objData.position);
-			m_enemyClear->SetRotation(objData.rotation);
-			m_enemyClear->SetScale(objData.scale);
+			enemyClear->SetPosition(objData.position);
+			enemyClear->SetRotation(objData.rotation);
+			enemyClear->SetScale(objData.scale);
 
-			m_enemyClear->SetSpotLigNum(m_spotLigNum);
+			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			m_enemyClear->Pass(2);
+			enemyClear->Pass(2);
 			// エネミーのリストに追加する
-			m_enemyList.push_back(m_enemyClear);
+			m_enemyList.push_back(enemyClear);
 			return true;
 		}
 
@@ -297,10 +283,10 @@ void Game::LevelDesign()
 			if (objData.EqualObjectName(L"base") == true)
 			/*if (objData.EqualObjectName(L"debug") == true)*/ {
 				// 背景を生成
-				m_backGround = NewGO<BackGround>(0, "backGround");
-				m_backGround->SetPosition(objData.position);
-				m_backGround->SetRotation(objData.rotation);
-				m_backGround->SetScale(objData.scale);
+				BackGround* backGround = NewGO<BackGround>(0, "backGround");
+				backGround->SetPosition(objData.position);
+				backGround->SetRotation(objData.rotation);
+				backGround->SetScale(objData.scale);
 
 				return true;
 			}
@@ -308,92 +294,92 @@ void Game::LevelDesign()
 			// 名前がboxなら
 			if (objData.EqualObjectName(L"box") == true) {
 				// 壁を生成
-				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
-				m_normal->SetPosition(objData.position);
-				m_normal->SetRotation(objData.rotation);
-				m_normal->SetScale(objData.scale);
-				m_wallList.emplace_back(m_normal);
+				Wall_Normal* wall_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				wall_normal->SetPosition(objData.position);
+				wall_normal->SetRotation(objData.rotation);
+				wall_normal->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_normal);
 				return true;
 			}
 
 			// 名前がgapのとき
 			if (objData.EqualObjectName(L"gap_1") == true) {
 				// 隙間を生成する
-				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(1);
-				m_gap->SetPosition(objData.position);
-				m_gap->SetRotation(objData.rotation);
-				m_gap->SetScale(objData.scale);
-				m_wallList.emplace_back(m_gap);
+				Wall_Gap* wall_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				wall_gap->ModelLoad(1);
+				wall_gap->SetPosition(objData.position);
+				wall_gap->SetRotation(objData.rotation);
+				wall_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_gap);
 				return true;
 			}
 
 			// 名前がgapのとき
 			if (objData.EqualObjectName(L"gap_2") == true) {
 				// 隙間を生成する
-				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(2);
-				m_gap->SetPosition(objData.position);
-				m_gap->SetRotation(objData.rotation);
-				m_gap->SetScale(objData.scale);
-				m_wallList.emplace_back(m_gap);
+				Wall_Gap* wall_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				wall_gap->ModelLoad(2);
+				wall_gap->SetPosition(objData.position);
+				wall_gap->SetRotation(objData.rotation);
+				wall_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_gap);
 				return true;
 			}
 
 			// 名前がgapのとき
 			if (objData.EqualObjectName(L"gap_3") == true) {
 				// 隙間を生成する
-				m_gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				m_gap->ModelLoad(3);
-				m_gap->SetPosition(objData.position);
-				m_gap->SetRotation(objData.rotation);
-				m_gap->SetScale(objData.scale);
-				m_wallList.emplace_back(m_gap);
+				Wall_Gap* wall_gap = NewGO<Wall_Gap>(0, "wall_Gap");
+				wall_gap->ModelLoad(3);
+				wall_gap->SetPosition(objData.position);
+				wall_gap->SetRotation(objData.rotation);
+				wall_gap->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_gap);
 				return true;
 			}
 
 			// 名前がpostのとき
 			if (objData.EqualObjectName(L"post") == true) {
 				// 隙間を生成する
-				m_post = NewGO<Wall_Post>(0, "wall_Post");
-				m_post->SetPosition(objData.position);
-				m_post->SetRotation(objData.rotation);
-				m_post->SetScale(objData.scale);
-				m_wallList.emplace_back(m_post);
+				Wall_Post* post = NewGO<Wall_Post>(0, "wall_Post");
+				post->SetPosition(objData.position);
+				post->SetRotation(objData.rotation);
+				post->SetScale(objData.scale);
+				m_wallList.emplace_back(post);
 				return true;
 			}
 
 			// 名前がdecorationのとき
 			if (objData.EqualObjectName(L"decoration") == true) {
 				// 障害物を生成
-				m_decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
-				m_decoration->SetPosition(objData.position);
-				m_decoration->SetRotation(objData.rotation);
-				m_decoration->SetScale(objData.scale);
-				m_wallList.emplace_back(m_decoration);
+				Wall_Decoration* wall_Decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
+				wall_Decoration->SetPosition(objData.position);
+				wall_Decoration->SetRotation(objData.rotation);
+				wall_Decoration->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_Decoration);
 				return true;
 			}
 
 			// 名前がstartのとき
 			if (objData.EqualObjectName(L"start") == true) {
 				// スタートを生成
-				m_door = NewGO<Wall_Door>(0, "wall_Door");
-				m_door->SetPosition(objData.position);
-				m_door->SetRotation(objData.rotation);
-				m_door->SetScale(objData.scale);
-				m_wallList.emplace_back(m_door);
+				Wall_Door* door = NewGO<Wall_Door>(0, "wall_Door");
+				door->SetPosition(objData.position);
+				door->SetRotation(objData.rotation);
+				door->SetScale(objData.scale);
+				m_wallList.emplace_back(door);
 				return true;
 			}
 
 			// 名前がgoalのとき
 			if (objData.EqualObjectName(L"clear") == true) {
 				// ゴールを生成
-				m_normal = NewGO<Wall_Normal>(0, "wall_Normal");
-				m_normal->SetPosition(objData.position);
-				m_normal->SetRotation(objData.rotation);
-				m_normal->SetScale(objData.scale);
-				m_wallList.emplace_back(m_normal);
-				SetClearPosition(objData.position);
+				Wall_Normal* wall_normal = NewGO<Wall_Normal>(0, "wall_Normal");
+				wall_normal->SetPosition(objData.position);
+				wall_normal->SetRotation(objData.rotation);
+				wall_normal->SetScale(objData.scale);
+				m_wallList.emplace_back(wall_normal);
+				m_position = objData.position;
 				m_pointLight[lights].SetPointLight(
 					lights,
 					Vector3(m_position.x, m_position.y + 10.0f, m_position.z),
@@ -419,22 +405,22 @@ void Game::LevelDesign()
 		//}
 
 		if (objData.EqualObjectName(L"sensor")==true) {
-			m_sensor = NewGO<Sensor>(0, "sensor");
-			m_sensor->SetPosition(objData.position);
-			m_sensor->SetScale(objData.scale);
-			m_sensor->SetRotation(objData.rotation);
-			m_sensorList.emplace_back(m_sensor);
+			Sensor* sensor = NewGO<Sensor>(0, "sensor");
+			sensor->SetPosition(objData.position);
+			sensor->SetScale(objData.scale);
+			sensor->SetRotation(objData.rotation);
+			m_sensorList.emplace_back(sensor);
 
 			return true;
 		}
 
 		if (objData.EqualObjectName(L"camera") == true) {
-			m_securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
-			m_securityCamera->SetPosition(objData.position);
-			m_securityCamera->SetType(1);
-			m_securityCamera->SetNumber(m_spotLigNum);
+			SecurityCamera* securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
+			securityCamera->SetPosition(objData.position);
+			securityCamera->SetType(1);
+			securityCamera->SetNumber(m_spotLigNum);
 			m_spotLigNum++;
-			m_SecurityCameraList.emplace_back(m_securityCamera);
+			m_SecurityCameraList.emplace_back(securityCamera);
 			return true;
 		}
 
@@ -451,18 +437,18 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"ghost") == true) {
 
-			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
-			m_physicsGhost->SetPosition(objData.position);
-			m_physicsGhost->SetScale(objData.scale);
-			m_physicsGhost->SetRotation(objData.rotation);
-			m_physicsGhostList.emplace_back(m_physicsGhost);
+			PhysicsGhost* physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
+			physicsGhost->SetPosition(objData.position);
+			physicsGhost->SetScale(objData.scale);
+			physicsGhost->SetRotation(objData.rotation);
+			m_physicsGhostList.emplace_back(physicsGhost);
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
-			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
-			m_ghostBox->SetPosition(objData.position);
-			m_ghostBox->SetScale(objData.scale);
-			m_ghostBox->SetRotation(objData.rotation);
+			GhostBox* ghostBox = NewGO<GhostBox>(0,"ghostBox");
+			ghostBox->SetPosition(objData.position);
+			ghostBox->SetScale(objData.scale);
+			ghostBox->SetRotation(objData.rotation);
 		}
 		return true;
 		}
@@ -633,21 +619,4 @@ void Game::NotifyGameClearable()
 void Game::NotifyGameBack()
 {
 	m_gameState = m_enGameState_GameBuck;
-}
-
-void Game::Render(RenderContext& rc)
-{
-	m_stageModelRender.Draw(rc);
-}
-
-void Game::NewPlayerSmoke()
-{
-	m_smokeEffect = NewGO<EffectEmitter>(0);
-	m_smokeEffect->Init(0);
-	//エフェクトの大きさを指定する
-	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-	//エフェクトの座標の設定
-	m_smokeEffect->SetPosition(m_playerManagement->GetPosition());
-	m_smokeEffect->Play();
-	m_smokeEffect->Update();
 }

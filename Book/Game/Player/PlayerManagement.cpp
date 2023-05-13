@@ -11,8 +11,8 @@
 
 namespace
 {
-	const float CHANGE_TIME = 1.0f;
-	
+	const float CHANGE_TIME = 1.0f;		//変身時間
+	const float EFFECTSIZE = 1.5f;		//エフェクトサイズ
 }
 
 
@@ -85,8 +85,7 @@ void PlayerManagement::Update()
 void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
-		m_game->NewPlayerSmoke();
-
+		
 		switch (m_enMananagementState)
 		{
 			//2D�̏ꍇ3D��Ăяo��
@@ -116,14 +115,20 @@ void PlayerManagement::Input()
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
+		//煙エフェクトの再生
+		EffectEmitter* smokeEffect = NewGO<EffectEmitter>(0);
+		smokeEffect->Init(0);
+		smokeEffect->SetPosition(m_position);
+		smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+		smokeEffect->Play();
+		smokeEffect->Update();
+
 		m_enMananagementState = m_enPlayer_Changing;
 	}
 }
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
-	
-	m_game->NewPlayerSmoke();
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);
 	m_player2D->m_Player_Act = false;

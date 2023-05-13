@@ -111,7 +111,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
 
     if(albedo.w <= 0.9f && albedo.w >= 0.1f){
-        clip(-1);
+        //clip(-1);
     }
 
 

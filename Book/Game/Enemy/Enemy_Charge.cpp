@@ -15,6 +15,7 @@ Enemy_Charge::Enemy_Charge()
 
 Enemy_Charge::~Enemy_Charge()
 {
+
 }
 
 bool Enemy_Charge::Start()

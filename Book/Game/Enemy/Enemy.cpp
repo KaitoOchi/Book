@@ -46,11 +46,13 @@ namespace
 
 Enemy::Enemy()
 {
+	//m_point = new Point;
 }
 
 Enemy::~Enemy()
 {
-
+	m_pointList.clear();
+	m_pointList.shrink_to_fit();
 }
 
 bool Enemy::Start()

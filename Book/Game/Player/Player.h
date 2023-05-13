@@ -295,7 +295,6 @@ protected:
 	PlayerManagement* m_playerManagement=nullptr;				//ƒvƒŒƒCƒ„[ŠÇ—
 	Star* m_star = nullptr;										//¯
 	Treasure* m_treasure = nullptr;
-	Ghost* m_ghost = nullptr;
 	Game* m_game = nullptr;
 
 

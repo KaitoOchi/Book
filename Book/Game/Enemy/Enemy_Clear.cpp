@@ -46,9 +46,9 @@ void Enemy_Clear::Update()
 		m_ChangeDefaultFlag = false;
 	}
 
-	// ï¿½Mï¿½ï¿½ï¿½eï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ğ•·‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	// E½ME½E½E½eE½É“ï¿½E½E½E½E½E½E½E½@E½E½E½@E½E½E½E½E½eE½ğ•·‚ï¿½E½E½E½Æ‚ï¿½
 	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
-		// ï¿½Mï¿½ï¿½ï¿½eï¿½ï¿½Dï¿½æ‚·ï¿½ï¿½
+		// E½ME½E½E½eE½E½DE½æ‚·E½E½
 		m_HitSoundBulletFlag = false;
 	}
 
@@ -216,6 +216,8 @@ void Enemy_Clear::Render(RenderContext& rc)
 	//	}
 	//}
 
-	m_enemyRender.Draw(rc);
+	if (m_NotDrawFlag == false) {
+		m_enemyRender.Draw(rc);
+	}
 	
 }

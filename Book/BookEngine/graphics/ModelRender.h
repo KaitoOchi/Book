@@ -223,6 +223,10 @@ namespace nsBookEngine {
 		/// フォワードレンダリングの描画処理。
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
+		/// <summary>
+		/// ワイプ越しのフォワードレンダリングの描画処理。
+		/// </summary>
+		void OnWipeForwardRender(RenderContext& rc) override;
 
 	private:
 		AnimationClip*	m_animationClips = nullptr;

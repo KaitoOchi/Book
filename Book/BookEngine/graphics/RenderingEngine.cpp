@@ -57,6 +57,8 @@ namespace nsBookEngine {
 		InitShadowMapRenderTarget();
 
 		InitZPrepassRenderTarget();
+
+		InitViewPort();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -143,6 +145,25 @@ namespace nsBookEngine {
 		);
 	}
 
+	void RenderingEngine::InitViewPort()
+	{
+		//ワイプ画面の描画
+		m_viewPorts[0].Width = FRAME_BUFFER_W / 8;   //画面の横サイズ
+		m_viewPorts[0].Height = FRAME_BUFFER_H / 8;   //画面の縦サイズ
+		m_viewPorts[0].TopLeftX = 0;   //画面左上のx座標
+		m_viewPorts[0].TopLeftY = 0;   //画面左上のy座標
+		m_viewPorts[0].MinDepth = 0.0f;   //深度値の最小値
+		m_viewPorts[0].MaxDepth = 1.0f;   //深度値の最大値
+
+		//通常画面の描画
+		m_viewPorts[1].Width = FRAME_BUFFER_W;   //画面の横サイズ
+		m_viewPorts[1].Height = FRAME_BUFFER_H;   //画面の縦サイズ
+		m_viewPorts[1].TopLeftX = 0;   //画面左上のx座標
+		m_viewPorts[1].TopLeftY = 0;   //画面左上のy座標
+		m_viewPorts[1].MinDepth = 0.0f;   //深度値の最小値
+		m_viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
+	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		//視点の位置を設定する
@@ -152,24 +173,14 @@ namespace nsBookEngine {
 
 		RenderShadowMap(rc);
 
-		if (m_isLate) {
+		ForwardRendering(rc);
 
-			Render2D(rc);
-			
-			m_bloom.Render(rc, m_mainRenderTarget);
+		m_bloom.Render(rc, m_mainRenderTarget);
 
-			ForwardRendering(rc);
-		}
-		else {
-			ForwardRendering(rc);
+		//ここでエフェクトドロー。
+		EffectEngine::GetInstance()->Draw();
 
-			m_bloom.Render(rc, m_mainRenderTarget);
-
-			//ここでエフェクトドロー。
-			EffectEngine::GetInstance()->Draw();
-
-			Render2D(rc);
-		}
+		Render2D(rc);
 
 		m_renderObjects.clear();
 	}
@@ -226,7 +237,20 @@ namespace nsBookEngine {
 		//メインレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+		//rc.SetRenderTarget(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
+
+		//ビューポートの数だけ回す
+		for (int i = 0; i < 2; i++) {
+
+			//ビューポートを設定
+			rc.SetViewportAndScissor(m_viewPorts[i]);
+
+			//描画処理
+			for (auto& renderObj : m_renderObjects) {
+				renderObj->OnForwardRender(rc);
+			}
+		}
 
 		//描画処理
 		for (auto& renderObj : m_renderObjects) {

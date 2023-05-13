@@ -41,7 +41,6 @@ bool Player::Start()
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
-	m_ghost = FindGO<Ghost>("ghost");
 	m_game = FindGO<Game>("game");
 	//‚¨•ó‚ÌŒÄ‚Ño‚µ
 	m_treasure = FindGO<Treasure>("treaSure");

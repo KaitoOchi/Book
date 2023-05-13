@@ -208,4 +208,11 @@ namespace nsBookEngine {
 			m_model.Draw(rc, 1);
 		}
 	}
+
+	void ModelRender::OnWipeForwardRender(RenderContext& rc)
+	{
+		if (m_model.IsInited()) {
+			m_model.Draw(rc, 1);
+		}
+	}
 }
