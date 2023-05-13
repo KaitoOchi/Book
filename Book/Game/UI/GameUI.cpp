@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "GameUI.h"
 #include "PlayerManagement.h"
-#include "Player2D.h"
 #include "Game.h"
 namespace
 {
@@ -12,6 +11,11 @@ namespace
 	const float		MAXTIMEYPOSITION = 600.0f;							//ƒ^ƒCƒ€‚Ìˆê”Ô‘å‚«‚¢À•W
 	const float		SETTIMEYPOSITION = 500.0f;							//ƒ^ƒCƒ€‚ÌˆÚ“®æYÀ•W
 	const float		SETTIMEXPOSITION = -100.0f;							//ƒ^ƒCƒ€‚ÌˆÚ“®æXÀ•W
+	const Vector3	ITEM_BASE_POSITION = { 580.0f,250.0f,0.0f };		//ƒAƒCƒeƒ€‚Ì”wŒi‰æ‘œ‚ÌÀ•W
+	const Vector3	ITEM_FLASH_POSITION = { 550.0f,250.0f,0.0f };		//‘MŒõ’e‚Ì‰æ‘œ‚ÌÀ•W
+	const Vector3	FLASH_FONT_POSITION = { 680.0f,280.0f,0.0f };		//‘MŒõ’e‚Ì”‚ÌƒtƒHƒ“ƒg‚ÌÀ•W
+	const Vector3	ITEM_SOUND_POSITION = { 615.0f,250.0f,0.0f };		//‰¹”š’e‚Ìˆ—
+	const Vector3	SOUND_FONT_POSITION = { 755.0f,280.0f,0.0f };		//‘MŒõ’e‚Ì”‚ÌƒtƒHƒ“ƒg‚ÌÀ•W
 	
 
 }
@@ -49,9 +53,20 @@ bool GameUI::Start()
 	m_timeFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 	m_timeFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	//ƒAƒCƒeƒ€‚Ì”wŒi‚Ì‰æ‘œ
+	//ƒAƒCƒeƒ€‚Ì”wŒi‚ÌÝ’è
+	m_itemBaseRender.Init("Assets/sprite/UI/ItemSlot/base2.DDS",136,79);
+	m_itemBaseRender.SetPosition(ITEM_BASE_POSITION);
+	m_itemBaseRender.Update();
 
+	//‘MŒõ’e‰æ‘œ‚ÌÝ’è
+	m_itemFlashRender.Init("Assets/sprite/UI/ItemSlot/flashbom.DDS", 39, 39);
+	m_itemFlashRender.SetPosition(ITEM_FLASH_POSITION);
+	m_itemFlashRender.Update();
 
+	//‰¹”š’e‰æ‘œ‚ÌÝ’è
+	m_itemSoundRender.Init("Assets/sprite/UI/ItemSlot/soundbom.DDS", 39, 39);
+	m_itemSoundRender.SetPosition(ITEM_SOUND_POSITION);
+	m_itemSoundRender.Update();
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -68,6 +83,7 @@ void GameUI::Update()
 	}
 
 	Time();
+	ItemSlot();
 	ChangeGage();
 }
 
@@ -166,6 +182,21 @@ void GameUI::ChangeGage()
 	}
 }
 
+void GameUI::ItemSlot()
+{
+	wchar_t flashText[255];
+	swprintf_s(flashText,L"%d", m_flashNumber);
+	m_itemFalshNumber.SetText(flashText);
+	m_itemFalshNumber.SetScale(0.5f);
+	m_itemFalshNumber.SetPosition(FLASH_FONT_POSITION);
+
+	wchar_t soundText[255];
+	swprintf_s(soundText, L"%d", m_soundNumber);
+	m_itemSoundNumber.SetText(soundText);
+	m_itemSoundNumber.SetPosition(SOUND_FONT_POSITION);
+	m_itemSoundNumber.SetScale(0.5f);
+}
+
 
 void GameUI::Render(RenderContext& rc)
 {
@@ -174,5 +205,9 @@ void GameUI::Render(RenderContext& rc)
 
 	m_timeFontRender.Draw(rc);
 	
-	
+	m_itemBaseRender.Draw(rc);
+	m_itemFlashRender.Draw(rc);
+	m_itemSoundRender.Draw(rc);
+	m_itemFalshNumber.Draw(rc);
+	m_itemSoundNumber.Draw(rc);
 }

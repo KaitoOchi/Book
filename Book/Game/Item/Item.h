@@ -3,6 +3,7 @@ class Game;
 class Player3D;
 class PlayerManagement;
 class Enemy;
+class GameUI;
 class Item :public IGameObject
 {
 public:
@@ -27,12 +28,14 @@ public:
 	
 
 protected:
-	Vector3 m_position = Vector3::Zero;					//アイテムを使った座標
+	Vector3					m_position = Vector3::Zero;				//アイテムを使った座標
 	
-	Game* m_game=nullptr;
-	PlayerManagement* m_playerManagement=nullptr;
-	Player3D* m_player3D = nullptr;
-	Vector3 EffecrRange = Vector3::Zero;
+	Game*					m_game=nullptr;
+	PlayerManagement*		m_playerManagement=nullptr;
+	Player3D*				m_player3D = nullptr;
+	GameUI*					m_gameUI = nullptr;
+
+	Vector3					EffecrRange = Vector3::Zero;
 	
 	
 
@@ -41,7 +44,7 @@ protected:
 		return m_HitEnemyList;
 	}
 
-	std::vector<Enemy*> m_HitEnemyList;
+	std::vector<Enemy*>		m_HitEnemyList;
 protected:
 	/// <summary>
 	/// ステートの遷移

@@ -308,7 +308,7 @@ protected:
 
 	bool m_runState = true;
 
-	float m_stamina = 0.0f;
+	float m_stamina = 0.0f;										//プレイヤーのスタミナ
 
 	SpriteRender		m_staminaBaseRender;					//スタミナゲージベース画像
 	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像

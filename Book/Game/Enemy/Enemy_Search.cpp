@@ -15,7 +15,6 @@ Enemy_Search::Enemy_Search()
 }
 Enemy_Search::~Enemy_Search()
 {
-
 }
 bool Enemy_Search::Start()
 {

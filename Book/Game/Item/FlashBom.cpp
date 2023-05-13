@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "PlayerManagement.h"
 #include "GameManager.h"
-
+#include "GameUI.h"
 namespace
 {
 	const Vector3 LIGHTNO = Vector3::Zero;
@@ -33,6 +33,7 @@ bool FlashBom::Start()
 	
 	//フラッシュ
 	m_flashRender.Init("Assets/sprite/Flash/flash.DDS", 1920.0f, 1080.0f);
+	m_gameUI->SetFlashSlot(m_flashCount);
 	return true;
 }
 
@@ -155,12 +156,13 @@ void FlashBom::SetFlashEffect()
 void FlashBom::ProcessStartState()
 {
 	m_flashCount -= 1;
-	if (m_flashCount > 0)
+	if (m_flashCount >= 0)
 	{
 		//開始時に必要な物を呼ぶ
 
 		SetFlashEffect();
 		ItemHit();
+		m_gameUI->SetFlashSlot(m_flashCount);
 		m_FlashState = m_enFlash_Flashing;
 	}
 	else
