@@ -35,6 +35,7 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
+#include "Wipe.h"
 namespace
 {
 	const float EFFECTSIZE = 1.5f;
@@ -54,6 +55,9 @@ Game::Game()
 	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
 	//煙のエフェクト
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+
+	//フレームレートを固定
+	g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, GameManager::GetInstance()->GetFrameRate());
 }
 
 Game::~Game()
@@ -69,8 +73,9 @@ Game::~Game()
 	//�E�I�E�u�E�W�E�F�E�N�E�g
 	DeleteGO(FindGO<Sensor>("sensor"));
 	DeleteGO(m_gameUI);
-	DeleteGO(FindGO<Gage>("gage"));
+	DeleteGO(m_gage);
 	DeleteGO(m_miniMap);
+	DeleteGO(m_pause);
 	DeleteGO(m_gamecamera);
 	//壁や床の削除
 	DeleteGO(m_backGround);
@@ -145,24 +150,26 @@ bool Game::Start()
 	//リストの初期化
 	m_enemyList.clear();
 	m_wallList.clear();
-	
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
 
 	m_player2D=NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
-	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_flahBom = NewGO<FlashBom>(0, "flashBom");
+	m_soundBom = NewGO<SoundBom>(0, "soundBom");
+
+	m_gamecamera = NewGO<GameCamera>(0, "gameCamera");
+
+	//UIの初期化
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
+	m_miniMap = NewGO<MiniMap>(0, "miniMap");
+	m_pause = NewGO<Pause>(0, "pause");
+		
 	NewGO<CountDown>(0, "countDown");
-
-	//NewGO<SecurityCamera>(0, "securityCamera");
-
-	NewGO<Pause>(0, "pause");
 	NewGO<SkyCube>(0, "skyCube");
 	//NewGO<Wipe>(0, "wipe");
 
@@ -174,11 +181,6 @@ bool Game::Start()
 	//m_stageModelRender.Update();
 	/*m_demobg.CreateFromModel(m_stageModelRender.GetModel(), m_stageModelRender.GetModel().GetWorldMatrix());*/
 
-	//m_modelRender.Init("Assets/modelData/wall1.tkm");
-
-	m_soundBom = NewGO<SoundBom>(0, "soundBom");
-
-
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
 	//お宝を作成する
@@ -187,13 +189,6 @@ bool Game::Start()
 	for (int i = 0; i < 3; i++) {
 		m_pointLight[i].Update();
 	}
-
-	m_miniMap = NewGO<MiniMap>(0, "miniMap");
-	//�E�t�E�F�E�[�E�h�E�̏��E��E�
-	m_fade = FindGO<Fade>("fade");
-	m_fade->StartFadeIn();
-	
-
 
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
@@ -204,8 +199,12 @@ bool Game::Start()
 
 
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
-
 	GameManager::GetInstance()->SetBGM(21);
+
+	//フェードの処理
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
+
 	return true;
 }
 
@@ -510,8 +509,9 @@ void Game::Update()
 
 				m_gameUI->Deactivate();
 				m_gage->Deactivate();
-				m_gamecamera->Deactivate();
 				m_miniMap->Deactivate();
+				m_pause->Deactivate();
+				m_gamecamera->Deactivate();
 				m_playerManagement->Deactivate();
 				m_player3D->Deactivate();
 
@@ -601,10 +601,11 @@ void Game::NotifyEventEnd()
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	NotDraw_Enemy(false);
 
-	m_gamecamera->Activate();
 	m_gameUI->Activate();
 	m_gage->Activate();
 	m_miniMap->Activate();
+	m_pause->Activate();
+	m_gamecamera->Activate();
 	m_playerManagement->Activate();
 	m_player3D->Activate();
 

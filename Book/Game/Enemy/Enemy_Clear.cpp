@@ -202,11 +202,13 @@ void Enemy_Clear::ClearChange()
 void Enemy_Clear::Render(RenderContext& rc)
 {
 	//ìßñæâªâèú
-	if (m_clearFlag == false)
-	{
-		if (m_NotDrawFlag == false) {
-			m_enemyRender.Draw(rc);
-		}
-	}
+	//if (m_clearFlag == false)
+	//{
+	//	if (m_NotDrawFlag == false) {
+	//		m_enemyRender.Draw(rc);
+	//	}
+	//}
+
+	m_enemyRender.Draw(rc);
 	
 }

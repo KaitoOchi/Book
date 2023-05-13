@@ -678,13 +678,13 @@ float4 Outline(SPSIn psIn, float4 albedo)
     }
 
 	//半透明の敵は透過させる
-	if(psIn.outlineColor.w == 0.9f) {
-		//albedo.w = 0.5f;
-		//clip(-1);
+	if(psIn.outlineColor.w >= 0.001f && psIn.outlineColor.w <= 0.999f) {
+
+		Dithering(psIn);
 	}
 
     // 普通のテクスチャ
-    return albedo;
+    return albedo ;
 }
 
 /// <summary>
@@ -700,5 +700,5 @@ void Dithering(SPSIn psIn)
 	int dither = pattern[y][x];
 
 	//50以下ならピクセルキル
-	clip(dither - 50);
+	clip(dither - 40);
 }

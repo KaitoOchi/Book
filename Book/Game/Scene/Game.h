@@ -23,7 +23,6 @@ class GameUI;
 class FlashBom;
 class SoundBom;
 class Fade;
-class Star;
 class GameUI;
 class Gage;
 class Pause;
@@ -218,7 +217,7 @@ private:
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Gage* m_gage = nullptr;
-	Star* m_star = nullptr;
+	Pause* m_pause = nullptr;
 
 	Vector3 m_tresurePos;
 

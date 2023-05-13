@@ -11,8 +11,7 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	D3D11_VIEWPORT viewPorts[2];
-	ID3D11DeviceContext* d3dDeviceContext;
+	D3D12_VIEWPORT m_viewPorts[2];
 
 	ModelRender m_modelRender;
 };
