@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "GameCamera.h"
 #include "PlayerManagement.h"
-#include "Ghost.h"
 #include "Game.h"
 #include "Enemy.h"
 #include "Treasure.h"
@@ -41,7 +40,6 @@ bool Player::Start()
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
-	m_ghost = FindGO<Ghost>("ghost");
 	m_game = FindGO<Game>("game");
 	//‚¨•ó‚ÌŒÄ‚Ño‚µ
 	m_treasure = FindGO<Treasure>("treaSure");
