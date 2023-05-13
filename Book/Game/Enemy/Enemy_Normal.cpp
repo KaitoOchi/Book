@@ -42,6 +42,13 @@ void Enemy_Normal::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+		m_ChangeDefaultFlag = false;
+	}
+
+	// 閃光弾に当たった　且　音爆弾を聞いたとき
+	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		// 閃光弾を優先する
+		m_HitSoundBulletFlag = false;
 	}
 
 	// 閃光弾に当たった
@@ -122,7 +129,6 @@ void Enemy_Normal::Update_OnTracking()
 	// プレイヤーを捕まえたとき
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
-		return;
 	}
 
 	Enemy::Act_Tracking();			// 追跡行動

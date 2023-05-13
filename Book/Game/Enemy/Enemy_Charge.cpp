@@ -46,6 +46,12 @@ void Enemy_Charge::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if(m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+		m_ChangeDefaultFlag = false;
+	}
+
+
+	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		m_HitSoundBulletFlag = false;
 	}
 
 	// 閃光弾に当たった
