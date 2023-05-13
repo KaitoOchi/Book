@@ -2,7 +2,6 @@
 #include "Enemy_Charge.h"
 
 #include "GameManager.h"
-#include "PlayerManagement.h"
 
 namespace 
 {
@@ -123,7 +122,6 @@ void Enemy_Charge::Update_OnCraw()
 
 	// Ž‹–ìŠp‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚Æ‚«
 	if (m_TrakingPlayerFlag == true) {
-		m_playerChargePosition = m_playerManagement->GetPosition();
 		m_ActState = CHARGE;
 	}
 }
