@@ -43,6 +43,13 @@ void Enemy_Clear::Update()
 	// ƒfƒtƒHƒ‹ƒg‚É–ß‚·ƒtƒ‰ƒO‚ªtrue‚Ì‚Æ‚«
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+		m_ChangeDefaultFlag = false;
+	}
+
+	// ï¿½Mï¿½ï¿½ï¿½eï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ð•·‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
+	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		// ï¿½Mï¿½ï¿½ï¿½eï¿½ï¿½Dï¿½æ‚·ï¿½ï¿½
+		m_HitSoundBulletFlag = false;
 	}
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½

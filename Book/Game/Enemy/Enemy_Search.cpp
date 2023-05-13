@@ -43,15 +43,12 @@ void Enemy_Search::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = SEARCH;
+		m_ChangeDefaultFlag = false;
 	}
 
 	// 閃光弾に当たった
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
-	}
-	// 音爆弾を使用した
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = LISTEN;
 	}
 
 	switch (m_ActState) {
