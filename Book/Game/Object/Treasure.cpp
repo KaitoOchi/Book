@@ -65,8 +65,8 @@ void Treasure::Hit()
 	{
 		m_player3d->m_enPlayer3D_Steal;
 		m_game->NotifyGameClearable();
-		m_game->GetPointLight().SetColor(Vector3(50.0f, 0.0f, 0.0f));
-		m_game->GetPointLight().Update();
+		m_game->m_pointLight[m_game->m_lightNumber].SetColor(Vector3(50.0f, 0.0f, 0.0f));
+		m_game->m_pointLight[m_game->m_lightNumber].Update();
 
 		m_game->NotifyEventStart();
 		m_game->SetTresurePosition(m_game->GetTreasurePositionList()[m_randTreasure]);

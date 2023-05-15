@@ -8,41 +8,41 @@ class Player : public IGameObject
 {
 public:
 	enum EnPlayerState {
-		m_enPlayer_Idle,		//ï¿½Ò‹@ï¿½ï¿½
-		m_enPlayer_walk,		//ï¿½ï¿½ï¿½
-		m_enPlayer_Run,			//ï¿½ï¿½ï¿½ï¿½
-		m_enPlayer_Jump,		//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
-		m_enPlayer_Jumpend,		//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Iï¿½ï¿½ï¿½
-		m_enPlayer_Change,		//ï¿½Ø‘ï¿½
-		m_enPlayer_2DChanging,	//2Dï¿½ÉØ‘Ö’ï¿½
-		m_enPlayer_3DChanging,	//3Dï¿½ÉØ‘Ö’ï¿½
-		m_enPlayer_Found,		//ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½
-		m_enPlayer_Caught,		//ï¿½ß‚Ü‚ï¿½ï¿½ï¿½
-		m_enPlayer_Catching,	//ï¿½ß‚Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
-		m_enPlayer_Down,		//ï¿½Cï¿½â’†
-		m_enPlayer_DownEnd,		//ï¿½Cï¿½ï¿½ï¿½ï¿½
-		m_enPlayer_Clear,		//ï¿½Qï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½A
-		m_enPlayer_GameOver,	//ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[
-		m_enPlayer3D_Throw,		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		m_enPlayer3D_Steal,		//ï¿½ï¿½ï¿½ï¿½
-		m_enPlayer3D_Push,		//ï¿½ï¿½ï¿½ï¿½
+		m_enPlayer_Idle,		//‘Ò‹@’†
+		m_enPlayer_walk,		//•à‚­
+		m_enPlayer_Run,			//‘–‚é
+		m_enPlayer_Jump,		//ƒWƒƒƒ“ƒv
+		m_enPlayer_Jumpend,		//ƒWƒƒƒ“ƒvI‚í‚è
+		m_enPlayer_Change,		//Ø‘Ö
+		m_enPlayer_2DChanging,	//2D‚ÉØ‘Ö’†
+		m_enPlayer_3DChanging,	//3D‚ÉØ‘Ö’†
+		m_enPlayer_Found,		//Œ©‚Â‚©‚é
+		m_enPlayer_Caught,		//•ß‚Ü‚Á‚½
+		m_enPlayer_Catching,	//•ß‚Ü‚Á‚Ä‚¢‚é
+		m_enPlayer_Down,		//‹Câ’†
+		m_enPlayer_DownEnd,		//‹Câ‰ğœ
+		m_enPlayer_Clear,		//ƒQ[ƒ€ƒNƒŠƒA
+		m_enPlayer_GameOver,	//ƒQ[ƒ€ƒI[ƒo[
+		m_enPlayer3D_Throw,		//“Š‚°‚é
+		m_enPlayer3D_Steal,		//“‚Ş
+		m_enPlayer3D_Push,		//‰Ÿ‚·
 
 	};
 
-	EnPlayerState m_playerState = m_enPlayer_Idle;				//ï¿½Ò‹@ï¿½ï¿½ï¿½
+	EnPlayerState m_playerState = m_enPlayer_Idle;				//‘Ò‹@ó‘Ô
 
-	//ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½ÌØ‘ï¿½
+	//ƒAƒCƒeƒ€‚ÌØ‘Ö
 	enum EnItemState
 	{
-		m_enItem_No,			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½
-		m_enItem_Flash,			//ï¿½Mï¿½ï¿½ï¿½e			
-		m_enItem_SoundBom		//ï¿½ï¿½ï¿½ï¿½ï¿½e
+		m_enItem_No,			//‰½‚à‚Á‚Ä‚¢‚È‚¢
+		m_enItem_Flash,			//‘MŒõ’e			
+		m_enItem_SoundBom		//‰¹”š’e
 	};
 	EnItemState m_enItemState = m_enItem_Flash;
 
-	bool m_ghostHit = true;										//ï¿½Ç‚É–ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
+	bool m_ghostHit = true;										//•Ç‚É–„‚Ü‚Á‚½‚©‚ğŠ´’m‚·‚éƒuƒƒbƒN‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©
 
-	bool m_Player_Act = true;									//trueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Â”\falseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Å‚ï¿½ï¿½È‚ï¿½
+	bool m_Player_Act = true;									//true‚¾‚Á‚½‚çs“®‰Â”\false‚¾‚Á‚½‚çs“®‚Å‚«‚È‚¢
 
 	std::vector<Vector3> m_ghostpositions;
 	
@@ -52,29 +52,29 @@ public:
 	virtual ~Player();
 	virtual bool Start();
 	virtual void Render(RenderContext& rc)=0;
-	//ï¿½ï¿½ï¿½Wï¿½Ìæ“¾
+	//À•W‚Ìæ“¾
 	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
-	//ï¿½ï¿½ï¿½Wï¿½Ìæ“¾
+	//À•W‚Ìæ“¾
 	void SetPosition(const Vector3& m_pos)
 	{
 		m_position = m_pos;
 	}
-	// ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½
+	// ŠO•”‚©‚çXV‚ğ‚·‚é
 	void ModelRenderUpdate() {
 		m_modelRender->SetPosition(m_position);
 		m_modelRender->Update();
 	}
 
-	//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìæ“¾
+	//ƒLƒƒƒ‰ƒRƒ“‚Ìæ“¾
 	CharacterController* GetCharacon()
 	{
 		return m_characon;
 	}
 
-	//ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ìæ“¾
+	//ƒRƒŠƒWƒ‡ƒ“‚Ìæ“¾
 	CollisionObject* GetCollision()
 	{
 		return m_collisionObject;
@@ -83,7 +83,7 @@ public:
 
 
 	/// <summary>
-	///ï¿½ï¿½ï¿½ï¿½ï¿½|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìİ’ï¿½
+	///“§–¾ƒ|ƒWƒVƒ‡ƒ“‚Ìİ’è
 	/// </summary>
 	/// <returns></returns>
 	void SetGhostPosition(const Vector3 ghostpos)
@@ -97,7 +97,7 @@ public:
 	}
 
 	/// <summary>
-	/// ï¿½ï¿½ï¿½ï¿½ï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ì“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½
+	/// “§–¾ƒuƒƒbƒN‚Ì“–‚½‚è”»’è
 	/// </summary>
 	void GhostHit();
 	
@@ -107,16 +107,16 @@ public:
 		m_moveSpeed = speed;
 	}
 	/// <summary>
-	/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì•ÏX
+	/// ƒvƒŒƒCƒ„[ƒXƒe[ƒg‚Ì•ÏX
 	/// </summary>
-	/// <param name="state">ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½g</param>
+	/// <param name="state">ƒvƒŒƒCƒ„[ƒXƒe[ƒg</param>
 	/// <returns></returns>
 	const void SetPlayerState(EnPlayerState state)
 	{
 		m_playerState = state;
 	}
 	/// <summary>
-	/// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½gï¿½Ìï¿½ï¿½
+	/// ƒvƒŒƒCƒ„[ƒXƒe[ƒg‚Ìó‘Ô
 	/// </summary>
 	/// <returns></returns>
 	const EnPlayerState GetPlayerState()
@@ -124,7 +124,7 @@ public:
 		return m_playerState;
 	}
 	/// <summary>
-	/// ï¿½Xï¿½^ï¿½~ï¿½iï¿½Ìæ“¾
+	/// ƒXƒ^ƒ~ƒi‚Ìæ“¾
 	/// </summary>
 	/// <returns></returns>
 	const float GetStamina()
@@ -147,102 +147,103 @@ protected:
 	void Jump();
 	void Rotation();
 	/// <summary>
-	/// ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	/// •ß‚Ü‚Á‚½”»’è
 	/// </summary>
 	void PlayerCatch();
 
 	virtual void Throw()=0;
 	virtual void Animation()=0;
 	void Animation3D();
+	void Animation2D();
 	/// <summary>
-	/// ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½ÌØ‘ï¿½
+	/// ƒAƒCƒeƒ€‚ÌØ‘Ö
 	/// </summary>
 	void ItemChange();
 
 	/// <summary>
-	/// ï¿½eï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ŠeƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	void ManageState();
 	
 	/// <summary>
-	/// ï¿½ï¿½ï¿½Ê‚ÌƒXï¿½eï¿½[ï¿½gï¿½Jï¿½Úï¿½ï¿½ï¿½
+	/// ‹¤’Ê‚ÌƒXƒe[ƒg‘JˆÚˆ—
 	/// </summary>
 	void ProcessCommonStateTransition();
 	
 	/// <summary>
-	/// ï¿½Ò‹@ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ‘Ò‹@ƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessIdleStateTransition()=0;
 	
 	/// <summary>
-	/// ï¿½Ú“ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ˆÚ“®ƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessWalkStateTransition()=0;
 	
 	/// <summary>
-	/// ï¿½_ï¿½bï¿½Vï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ƒ_ƒbƒVƒ…ƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessRunStateTransition()=0;
 	
 	/// <summary>
-	/// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ƒWƒƒƒ“ƒvƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessJumpStateTransition()=0;
 	
 	/// <summary>
-	/// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Iï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ƒWƒƒƒ“ƒvI‚í‚èƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessJumpendStateTransition()=0;
 	
 	/// <summary>
-	/// ï¿½ÏXï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// •ÏXƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessChangeStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// “Š‚°‚éƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessThrowStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½ï¿½ï¿½ŞƒXï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// “‚ŞƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessStealStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// Œ©‚Â‚©‚éƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessFoundStateTransition()=0;
 
 
 	/// <summary>
-	/// ï¿½Cï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ‹CâƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessDownStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½ß‚Ü‚ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// •ß‚Ü‚éƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessCaughtStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+	/// •ß‚Ü‚Á‚½Œã‚Ìˆ—
 	/// </summary>
 	virtual void ProcessCatchingStateTransition() = 0;
 
 
 	/// <summary>
-	/// ï¿½Qï¿½[ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ƒQ[ƒ€ƒNƒŠƒAƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessClearStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Úï¿½ï¿½ï¿½
+	/// ƒQ[ƒ€ƒI[ƒo[ƒXƒe[ƒg‚Ì‘JˆÚˆ—
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
 	/// <summary>
-	/// ï¿½Xï¿½^ï¿½~ï¿½iï¿½Qï¿½[ï¿½Wï¿½Ì•ÏX
+	/// ƒXƒ^ƒ~ƒiƒQ[ƒW‚Ì•ÏX
 	/// </summary>
 	void StaminaGage(float stamina);
 
@@ -251,19 +252,19 @@ protected:
 
 
 
-	//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
+	//ƒAƒjƒ[ƒVƒ‡ƒ“
 	enum EnAnimationClip {
-		m_enAnimationClip_Idle,				//ï¿½Ò‹@ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Walk,				//ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Run,				//ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Jump,				//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Jumpend,			//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Iï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Down,				//ï¿½_ï¿½Eï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_DownEnd,			//ï¿½_ï¿½Eï¿½ï¿½ï¿½Iï¿½ï¿½
-		m_enAnimationClip_Throw,			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_CaughtStart,		//ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒXï¿½^ï¿½[ï¿½gï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Caught,			//ï¿½ß‚Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒAï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
-		m_enAnimationClip_Num,				//ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½
+		m_enAnimationClip_Idle,				//‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Walk,				//•à‚«ƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Run,				//‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Jump,				//ƒWƒƒƒ“ƒvƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Jumpend,			//ƒWƒƒƒ“ƒvI‚í‚èƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Down,				//ƒ_ƒEƒ“ƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_DownEnd,			//ƒ_ƒEƒ“I—¹
+		m_enAnimationClip_Throw,			//“Š‚°‚éƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_CaughtStart,		//•ß‚Ü‚Á‚½‚ÌƒXƒ^[ƒgƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Caught,			//•ß‚Ü‚Á‚½‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
+		m_enAnimationClip_Num,				//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”
 	};
 	AnimationClip m_animationClips[m_enAnimationClip_Num];
 
@@ -273,24 +274,25 @@ protected:
 	
 	
 protected:
-	bool m_characonState = true;								//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
+	bool m_characonState = true;								//ƒLƒƒƒ‰ƒRƒ“‚ğì‚é‚©‚Ç‚¤‚©
 
-	Vector3 m_moveSpeed=Vector3::Zero;							//ï¿½Ú“ï¿½ï¿½ï¿½ï¿½x
-	Vector3 m_Lstic = Vector3::Zero;							//ï¿½ï¿½ï¿½Xï¿½eï¿½bï¿½N
-	Vector3 m_position = Vector3::Zero;				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½W
-	Vector3 m_forward = Vector3::AxisZ;							//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½
+	Vector3 m_moveSpeed=Vector3::Zero;							//ˆÚ“®‘¬“x
+	Vector3 m_Lstic = Vector3::Zero;							//¶ƒXƒeƒbƒN
+	Vector3 m_position = Vector3::Zero;				//‰ŠúÀ•W
+	Vector3 m_forward = Vector3::AxisZ;							//ƒvƒŒƒCƒ„[‚Ì³–ÊƒxƒNƒgƒ‹
 	
-	float angle=0;												//ï¿½ï¿½]ï¿½pï¿½x
+	float angle=0;												//‰ñ“]Šp“x
 	
-	ModelRender *m_modelRender=nullptr;							//3Dï¿½ï¿½ï¿½fï¿½ï¿½
+	ModelRender *m_modelRender=nullptr;							//3Dƒ‚ƒfƒ‹
+	std::array<nsK2EngineLow::Texture,14> m_player2D;						//ƒeƒNƒXƒ`ƒƒ
 	
-	Quaternion m_rotation;										//ï¿½ï¿½]
+	Quaternion m_rotation;										//‰ñ“]
 	
-	CharacterController *m_characon;							//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½
-	CollisionObject* m_collisionObject = nullptr;				//ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½
+	CharacterController *m_characon;							//ƒLƒƒƒ‰ƒRƒ“
+	CollisionObject* m_collisionObject = nullptr;				//ƒRƒŠƒWƒ‡ƒ“
 
-	GameCamera* m_gamecamera=nullptr;							//ï¿½Qï¿½[ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
-	PlayerManagement* m_playerManagement=nullptr;				//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ç—ï¿½
+	GameCamera* m_gamecamera=nullptr;							//ƒQ[ƒ€ƒJƒƒ‰
+	PlayerManagement* m_playerManagement=nullptr;				//ƒvƒŒƒCƒ„[ŠÇ—
 	Treasure* m_treasure = nullptr;
 	Game* m_game = nullptr;
 
@@ -298,18 +300,18 @@ protected:
 	Vector3 m_ghostPosition = Vector3::Zero;
 	Vector3 m_setGhostpos=Vector3::Zero;
 
-	float m_downTime = 3.0f;									//ï¿½Cï¿½âï¿½ï¿½
+	float m_downTime = 3.0f;									//‹CâŠÔ
 
 	bool m_playerCaught = true;
 
 	bool m_runState = true;
 
-	float m_stamina = 0.0f;										//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒXï¿½^ï¿½~ï¿½i
+	float m_stamina = 0.0f;										//ƒvƒŒƒCƒ„[‚ÌƒXƒ^ƒ~ƒi
 
-	SpriteRender		m_staminaBaseRender;					//ï¿½Xï¿½^ï¿½~ï¿½iï¿½Qï¿½[ï¿½Wï¿½xï¿½[ï¿½Xï¿½æ‘œ
-	SpriteRender		m_staminaGageRender;					//ï¿½Xï¿½^ï¿½~ï¿½iï¿½Qï¿½[ï¿½Wï¿½æ‘œ
+	SpriteRender		m_staminaBaseRender;					//ƒXƒ^ƒ~ƒiƒQ[ƒWƒx[ƒX‰æ‘œ
+	SpriteRender		m_staminaGageRender;					//ƒXƒ^ƒ~ƒiƒQ[ƒW‰æ‘œ
 	Vector2				m_spritePosition = Vector2::Zero;
 	Vector3				m_stamianGageScale = Vector3::One;
 
-	float				m_staminaCoolTime = 0.0f;				//ï¿½Xï¿½^ï¿½~ï¿½iï¿½ï¿½ï¿½ñ•œ‚ï¿½ï¿½ï¿½Ü‚Å‚ÌƒNï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½
+	float				m_staminaCoolTime = 0.0f;				//ƒXƒ^ƒ~ƒi‚ª‰ñ•œ‚·‚é‚Ü‚Å‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 };	
