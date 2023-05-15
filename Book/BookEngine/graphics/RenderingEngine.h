@@ -19,6 +19,7 @@ namespace nsBookEngine {
 			Vector3 lightPos = Vector3::Zero;
 			float pad0;
 			Matrix mLVP = g_matIdentity;
+			int playerAnim2D;									//2Dアニメーションの番号
 		};
 
 		//ライト用の構造体
@@ -28,7 +29,7 @@ namespace nsBookEngine {
 			PointLight::pointLight pointLig[4];
 			SpotLight::spotLight spotLig[32];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
-			ShadowParamCB shadowCB;
+			ShadowParamCB shadowCB;	
 			int ptNum;											//ポイントライトの数
 			int spNum;											//スポットライトの数
 		};
@@ -211,12 +212,13 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// スプライトとモデルの描画順を変更
+		/// ワイプ用のビューポートを取得。
 		/// </summary>
-		void SetIsLate(const bool isLate)
+		D3D12_VIEWPORT& GetWipeViewPort()
 		{
-			m_isLate = isLate;
+			return m_viewPorts[1];
 		}
+		
 
 		/// <summary>
 		/// 初期化処理。
@@ -246,6 +248,11 @@ namespace nsBookEngine {
 		void InitZPrepassRenderTarget();
 
 		/// <summary>
+		/// ビューポートの初期化。
+		/// </summary>
+		void InitViewPort();
+
+		/// <summary>
 		/// シャドウマップの描画処理。
 		/// </summary>
 		/// <param name="rc"></param>
@@ -273,25 +280,22 @@ namespace nsBookEngine {
 
 		LightCB					m_lightCB;							//ライト用の構造体
 		SpriteCB				m_spriteCB;							//スプライト用の構造体
-
 		DirectionLight			m_directionLig;						//ディレクショナルライトの構造体
 		HemiSphereLight			m_hemiSphereLig;					//半球ライトの構造体
-
 		Bloom					m_bloom;							//ブルーム
 
 		RenderTarget			m_mainRenderTarget;					//メインレンダーターゲット
-
 		RenderTarget			m_2DRenderTarget;					//2Dレンダーターゲット
 		Sprite					m_2DSprite;                         //2Dスプライト
 		Sprite					m_mainSprite;
 		Sprite					m_copyMainRtToFrameBufferSprite;    //メインレンダーターゲットのスプライト
-		
 		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
 		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 		Camera					m_lightCamera;						//ライトカメラ
+		Camera					m_wipeCamera;						//ワイプカメラ。
 
-		bool					m_isLate = false;					//描画順の変更
+		D3D12_VIEWPORT			m_viewPorts[2];						//ビューポート
 	};
 }

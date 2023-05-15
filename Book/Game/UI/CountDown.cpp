@@ -37,8 +37,6 @@ void CountDown::Update()
 		m_count--;
 		m_timer = 1.0f;
 
-		SoundSource* se = NewGO<SoundSource>(0);
-
 		if (m_count < 0) {
 			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
 			player->SetGameState(true);
@@ -50,15 +48,17 @@ void CountDown::Update()
 		}
 		else if (m_count == 0) {
 			//カウント終了の音を出す
+			SoundSource* se = NewGO<SoundSource>(0);
 			se->Init(16);
 			se->Play(false);
 			se->SetVolume(GameManager::GetInstance()->GetSFX());
 		}
 		else {
 			//カウントの音を出す
-			se->Init(15);
-			se->Play(false);
-			se->SetVolume(GameManager::GetInstance()->GetSFX());
+			SoundSource* se2 = NewGO<SoundSource>(0);
+			se2->Init(15);
+			se2->Play(false);
+			se2->SetVolume(GameManager::GetInstance()->GetSFX());
 		}
 	}
 
@@ -73,7 +73,7 @@ void CountDown::Update()
 
 void CountDown::Render(RenderContext& rc)
 {
-	if (m_count == 4) {
+	if (m_count >= 4) {
 		return;
 	}
 	m_countDownSpriteRender[m_count].Draw(rc);

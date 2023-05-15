@@ -1,5 +1,4 @@
 #pragma once
-#include "d3d11.h"
 
 class Wipe : public IGameObject
 {
@@ -11,8 +10,7 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	D3D11_VIEWPORT viewPorts[2];
-	ID3D11DeviceContext* d3dDeviceContext;
-
 	ModelRender m_modelRender;
+	ModelRender a;
+	int num = 0;
 };

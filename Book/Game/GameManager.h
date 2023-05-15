@@ -148,6 +148,15 @@ public:
 	}
 
 	/// <summary>
+	/// フレームレートを取得。
+	/// </summary>
+	/// <returns></returns>
+	const int GetFrameRate()
+	{
+		return m_saveData.frameRate;
+	}
+
+	/// <summary>
 	/// 発見された数を加算。
 	/// </summary>
 	void AddSearchNum()

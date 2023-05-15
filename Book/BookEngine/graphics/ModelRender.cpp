@@ -24,7 +24,7 @@ namespace nsBookEngine {
 		const bool isShadowReceiver,
 		const int outlineMode,
 		D3D12_CULL_MODE cullMode,
-		int maxInstance)
+		const bool useWipe)
 	{
 		//スケルトンを初期化。
 		InitSkeleton(filePath);
@@ -33,7 +33,7 @@ namespace nsBookEngine {
 		InitAnimation(animationClips, numAnimationClips, enModelUpAxis);
 
 		// モデルを初期化。
-		InitModel(filePath, enModelUpAxis, isShadow, isShadowReceiver, outlineMode, cullMode);
+		InitModel(filePath, enModelUpAxis, isShadow, isShadowReceiver, outlineMode, cullMode, useWipe);
 
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
@@ -66,7 +66,8 @@ namespace nsBookEngine {
 		const bool isShadow,
 		const bool isShadowReceiver,
 		const int outlineMode,
-		D3D12_CULL_MODE cullMode
+		D3D12_CULL_MODE cullMode,
+		const bool useWipe
 	)
 	{
 		//通常モデルを初期化
@@ -105,8 +106,16 @@ namespace nsBookEngine {
 		else if (outlineMode == 3) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemyClear";
 		}
+		//2Dプレイヤーなら
+		else if (outlineMode == 4) {
+			modelInitData.m_psEntryPointFunc = "PSPlayer2D";
+		}
 
 		m_model.Init(modelInitData);
+
+		if (useWipe) {
+			m_wipeModel.Init(modelInitData);
+		}
 
 
 		if (isShadow) {
@@ -170,6 +179,9 @@ namespace nsBookEngine {
 		if (m_zprepassModel.IsInited()) {
 			m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}
+		if (m_wipeModel.IsInited()) {
+			m_wipeModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		}
 	}
 
 	void ModelRender::Update()
@@ -206,6 +218,13 @@ namespace nsBookEngine {
 	{
 		if (m_model.IsInited()) {
 			m_model.Draw(rc, 1);
+		}
+	}
+
+	void ModelRender::OnWipeForwardRender(RenderContext& rc, Camera& camera)
+	{
+		if (m_wipeModel.IsInited()) {
+			m_wipeModel.Draw(rc, camera, 1);
 		}
 	}
 }

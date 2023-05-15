@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Wipe.h"
 
-#include "d3d11.h"
-
 
 Wipe::Wipe()
 {
@@ -16,40 +14,35 @@ Wipe::~Wipe()
 
 bool Wipe::Start()
 {
-    //通常画面の描画
-    viewPorts[0].Width = FRAME_BUFFER_W;   //画面の横サイズ
-    viewPorts[0].Height = FRAME_BUFFER_H;   //画面の縦サイズ
-    viewPorts[0].TopLeftX = 0;   //画面左上のx座標
-    viewPorts[0].TopLeftY = 0;   //画面左上のy座標
-    viewPorts[0].MinDepth = 0.0f;   //深度値の最小値
-    viewPorts[0].MaxDepth = 1.0f;   //深度値の最大値
+    m_modelRender.Init("Assets/modelData/player/player.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
+    m_modelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+    m_modelRender.SetScale(Vector3(1.0f, 1.0f, 1.0f));
+    m_modelRender.Update();
 
-    //ワイプ画面の描画
-    viewPorts[1].Width = FRAME_BUFFER_W / 4;   //画面の横サイズ
-    viewPorts[1].Height = FRAME_BUFFER_H / 4;   //画面の縦サイズ
-    viewPorts[1].TopLeftX = 0;   //画面左上のx座標
-    viewPorts[1].TopLeftY = FRAME_BUFFER_H / 2;   //画面左上のy座標
-    viewPorts[1].MinDepth = 0.0f;   //深度値の最小値
-    viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
-
-
-    m_modelRender.Init("Assets/modelData/enemy/enemy_charge.tkm");
+    a.Init("Assets/modelData/player/test.tkm", 0, 0, enModelUpAxisZ, false, false, 4, D3D12_CULL_MODE_BACK, false);
+    a.SetPosition(Vector3(0.0f, 200.0f, 0.0f));
+    a.Update();
 
 	return true;
 }
 
 void Wipe::Update()
 {
+    if (g_pad[0]->IsTrigger(enButtonA)) {
+        num += 100;
 
+        RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY += 10;
+        RenderingEngine::GetInstance()->GetWipeViewPort().Height += 10;
+    }
+    if (g_pad[0]->IsTrigger(enButtonB)) {
+        RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX += 10;
+        RenderingEngine::GetInstance()->GetWipeViewPort().Width += 10;
+    }
 }
 
 void Wipe::Render(RenderContext& rc)
 {
-    //ビューポートの数だけfor文を回す
-    for (int i = 0; i < sizeof(viewPorts) / sizeof(viewPorts[0]); i++) {
-        //ビューポートを設定
-        d3dDeviceContext->RSSetViewports(1, (viewPorts + i));
-        //モデルを描画
-        m_modelRender.Draw(rc);
-    }
+    m_modelRender.Draw(rc);
+
+    a.Draw(rc);
 }

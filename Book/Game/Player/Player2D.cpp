@@ -32,14 +32,12 @@ bool Player2D::Start()
 {
 
 	Player::Start();
-	//2Dアニメーションのロード
-	Player::Animation2D();
 	m_characon = new CharacterController;
 	m_modelRender = new ModelRender;
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
 	//モデルの読み込み
-	m_modelRender->Init("Assets/modelData/player/player2D.tkm",0,0,enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_NONE);
+	m_modelRender->Init("Assets/modelData/player/test.tkm",0,0,enModelUpAxisZ, true, true, 4, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetScale(MODELSIZE);
 
 	
@@ -47,6 +45,7 @@ bool Player2D::Start()
 	delete(m_characon);
 	m_characon = nullptr;
 	Deactivate();
+
 	return true;
 }
 void Player2D::Update()
@@ -106,8 +105,8 @@ void Player2D::Animation()
 	{
 	case Player::m_enPlayer_Idle:
 		JUMPVALUE = 90;
-		j = i / 10;
 		i++;
+		j = i / 10;
 		if (i >= 29)
 		{
 			i = 0;
@@ -116,8 +115,8 @@ void Player2D::Animation()
 		break;
 	case Player::m_enPlayer_walk:
 		JUMPVALUE = 90;
-		j = WALKVALUE / 10;
 		WALKVALUE++;
+		j = WALKVALUE / 10;
 		if (WALKVALUE >= 89)
 		{
 			WALKVALUE = 30;
@@ -163,7 +162,8 @@ void Player2D::Animation()
 	default:
 		break;
 	}
-	m_modelRender->GetModel().ChangeAlbedoMap("", m_player2D[j]);
+
+	RenderingEngine::GetInstance()->GetLightCB().shadowCB.playerAnim2D = j;
 }
 
 void Player2D::ProcessIdleStateTransition()

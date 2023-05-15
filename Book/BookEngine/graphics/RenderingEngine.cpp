@@ -57,6 +57,8 @@ namespace nsBookEngine {
 		InitShadowMapRenderTarget();
 
 		InitZPrepassRenderTarget();
+
+		InitViewPort();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
@@ -143,6 +145,32 @@ namespace nsBookEngine {
 		);
 	}
 
+	void RenderingEngine::InitViewPort()
+	{
+		//通常画面の描画
+		m_viewPorts[0].Width = FRAME_BUFFER_W;   //画面の横サイズ
+		m_viewPorts[0].Height = FRAME_BUFFER_H;   //画面の縦サイズ
+		m_viewPorts[0].TopLeftX = 0;   //画面左上のx座標
+		m_viewPorts[0].TopLeftY = 0;   //画面左上のy座標
+		m_viewPorts[0].MinDepth = 0.0f;   //深度値の最小値
+		m_viewPorts[0].MaxDepth = 1.0f;   //深度値の最大値
+		
+		//ワイプ画面の描画
+		m_viewPorts[1].Width = 960 / 4;   //画面の横サイズ
+		m_viewPorts[1].Height = 540 / 4;   //画面の縦サイズ
+		m_viewPorts[1].TopLeftX = 0;   //画面左上のx座標
+		m_viewPorts[1].TopLeftY = 0;   //画面左上のy座標
+		m_viewPorts[1].MinDepth = 0.0f;   //深度値の最小値
+		m_viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
+
+		//ワイプカメラを初期化。
+		m_wipeCamera.SetPosition({ 100.0f, 300.0f, -100.0f });
+		m_wipeCamera.SetTarget({ 0.0f, 0.0f, 0.0f });
+		m_wipeCamera.SetNear(150.0f);
+		m_wipeCamera.SetFar(5000.0f);
+		m_wipeCamera.Update();
+	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		//視点の位置を設定する
@@ -152,24 +180,14 @@ namespace nsBookEngine {
 
 		RenderShadowMap(rc);
 
-		if (m_isLate) {
+		ForwardRendering(rc);
 
-			Render2D(rc);
-			
-			m_bloom.Render(rc, m_mainRenderTarget);
+		m_bloom.Render(rc, m_mainRenderTarget);
 
-			ForwardRendering(rc);
-		}
-		else {
-			ForwardRendering(rc);
+		//ここでエフェクトドロー。
+		EffectEngine::GetInstance()->Draw();
 
-			m_bloom.Render(rc, m_mainRenderTarget);
-
-			//ここでエフェクトドロー。
-			EffectEngine::GetInstance()->Draw();
-
-			Render2D(rc);
-		}
+		Render2D(rc);
 
 		m_renderObjects.clear();
 	}
@@ -225,12 +243,22 @@ namespace nsBookEngine {
 
 		//メインレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
-		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+		//rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+		rc.SetRenderTarget(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 
-		//描画処理
+		//ビューポートを設定
+		rc.SetViewportAndScissor(m_viewPorts[0]);
+		//通常描画処理
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnForwardRender(rc);
+		}
+
+		//ビューポートを設定
+		rc.SetViewportAndScissor(m_viewPorts[1]);
+		//ワイプ描画処理。
+		for (auto& renderObj : m_renderObjects) {
+			renderObj->OnWipeForwardRender(rc, m_wipeCamera);
 		}
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);

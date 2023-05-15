@@ -46,6 +46,15 @@ namespace nsBookEngine {
 		{
 
 		}
+
+		/// <summary>
+		/// ワイプ越しのフォワードレンダーパスから呼ばれる処理。
+		/// </summary>
+		virtual void OnWipeForwardRender(RenderContext& rc, Camera& camera)
+		{
+
+		}
+
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。
 		/// </summary>

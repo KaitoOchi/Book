@@ -30,6 +30,9 @@ Player3D::~Player3D()
 	}
 	DeleteGO(m_collisionObject);
 
+	DeleteGO(m_soundBom);
+	DeleteGO(m_flashBom);
+
 }
 bool Player3D::Start()
 {
@@ -37,9 +40,9 @@ bool Player3D::Start()
 	Player::Start();
 	
 	//‘MŒõ’e‚ÌŒÄ‚Ño‚µ
-	m_flashBom = FindGO<FlashBom>("flashBom");
+	m_flashBom = NewGO<FlashBom>(0, "flashBom");
 	//‰¹”š’e‚ÌŒÄ‚Ño‚µ
-	m_soundBom = FindGO<SoundBom>("soundBom");
+	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 
 
