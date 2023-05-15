@@ -114,11 +114,10 @@ void Enemy_Charge::Update_OnCraw()
 	// 巡回
 
 	// プレイヤーを捕まえたとき
-	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+	if (m_ActState == CATCH) {
+		m_enAnimationState = IDLE;
 		return;
 	}
-
 
 	Enemy::Act_Craw();					// 巡回行動
 
@@ -130,7 +129,7 @@ void Enemy_Charge::Update_OnCraw()
 
 void Enemy_Charge::Update_OnCharge()
 {
-	// 突進
+	Enemy::Act_Charge_HitWall();		// 壁との衝突判定
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
 										// 関数内で巡回状態に戻る処理を記述
 

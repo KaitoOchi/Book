@@ -14,9 +14,9 @@ namespace
 	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
 	const Vector3	ITEM_BASE_POSITION = { 580.0f,250.0f,0.0f };		//アイテムの背景画像の座標
 	const Vector3	ITEM_FLASH_POSITION = { 550.0f,250.0f,0.0f };		//閃光弾の画像の座標
-	const Vector3	FLASH_FONT_POSITION = { 680.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
+	const Vector3	FLASH_FONT_POSITION = { 670.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
 	const Vector3	ITEM_SOUND_POSITION = { 615.0f,250.0f,0.0f };		//音爆弾の処理
-	const Vector3	SOUND_FONT_POSITION = { 755.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
+	const Vector3	SOUND_FONT_POSITION = { 745.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
 	
 
 }
@@ -189,13 +189,13 @@ void GameUI::ChangeGage()
 void GameUI::ItemSlot()
 {
 	wchar_t flashText[255];
-	swprintf_s(flashText,L"%d", m_flashNumber);
+	swprintf_s(flashText,L"x%d", m_flashNumber);
 	m_itemFlashNumber.SetText(flashText);
 	m_itemFlashNumber.SetScale(0.5f);
 	m_itemFlashNumber.SetPosition(FLASH_FONT_POSITION);
 
 	wchar_t soundText[255];
-	swprintf_s(soundText, L"%d", m_soundNumber);
+	swprintf_s(soundText, L"x%d", m_soundNumber);
 	m_itemSoundNumber.SetText(soundText);
 	m_itemSoundNumber.SetPosition(SOUND_FONT_POSITION);
 	m_itemSoundNumber.SetScale(0.5f);

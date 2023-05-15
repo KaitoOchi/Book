@@ -354,7 +354,6 @@ void Player3D::ProcessCatchingStateTransition()
 	m_catchTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_catchTime < 0.0f)
 	{
-		m_game->GameDelete(0);
 		m_catchTime = 2.0f;
 	}
 }

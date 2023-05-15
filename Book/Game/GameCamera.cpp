@@ -3,6 +3,7 @@
 #include "Player3D.h"
 #include "Player2D.h"
 #include"PlayerManagement.h"
+#include "Game.h"
 namespace
 {
 	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//�����_���王�_�܂ł̃x�N�g����ݒ�B
@@ -30,6 +31,7 @@ bool GameCamera::Start()
 	//�v���C���[�Ǘ��̃C���X�^���X
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
+	m_game = FindGO<Game>("game");
 	g_camera3D->SetNear(150.0f);
 	g_camera3D->SetFar(12000.0f);
 
@@ -120,6 +122,7 @@ void GameCamera::CatchMove()
 	m_cameraPosition.Lerp(m_cameraMove, m_target+m_toCameraPos, m_playerPosition);
 	if (m_cameraMove > 0.6f)
 	{
+		m_game->NotifyGameOver();
 		return;
 	}
 	g_camera3D->SetPosition(m_cameraPosition);

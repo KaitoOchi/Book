@@ -35,8 +35,10 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
-#include "Wipe.h"
-
+namespace
+{
+	
+}
 
 Game::Game()
 {
@@ -69,7 +71,11 @@ Game::~Game()
 
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<Sensor>("sensor"));
+	for (int i = 0; i < m_sensorList.size(); i++)
+	{
+		DeleteGO(m_sensorList[i]);
+	}
+	
 	DeleteGO(m_gameUI);
 	DeleteGO(m_gage);
 	DeleteGO(m_miniMap);
@@ -83,10 +89,7 @@ Game::~Game()
 		DeleteGO(m_wallList[i]);
 	}
 	DeleteGO(m_treaSure);
-	for (int i = 0; i < m_sensorList.size(); i++)
-	{
-		DeleteGO(m_sensorList[i]);
-	}
+	
 
 	for (int i = 0; i < m_SecurityCameraList.size(); i++)
 	{
@@ -96,11 +99,6 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-
-	// エネミーの削除
-	for (int i = 0; i < m_enemyList.size(); i++) {
-		DeleteGO(m_enemyList[i]);
-	}
 
 	DeleteGO(FindGO<CountDown>("countDown"));
 
@@ -179,7 +177,7 @@ bool Game::Start()
 	//�����_���Ȓl�𐶐�����
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int>dist(0, 3);
+	std::uniform_int_distribution<int>dist(0, 2);
 	m_lightNumber = dist(mt);
 	m_position = m_pointLight[m_lightNumber].GetPosition();
 
@@ -391,20 +389,6 @@ void Game::LevelDesign()
 				return true;
 			}
 		}
-
-
-		//if (objData.EqualObjectName(L"unityChan") == true) {
-
-		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-		//	m_enemySearch->SetPosition(objData.position);
-		//	m_enemySearch->SetRotation(objData.rotation);
-		//	m_enemySearch->SetScale(objData.scale);
-		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
-		//	m_enemyList.push_back(m_enemySearch);
-
-		//	return true;
-		//}
-
 		if (objData.EqualObjectName(L"sensor")==true) {
 			Sensor* sensor = NewGO<Sensor>(0, "sensor");
 			sensor->SetPosition(objData.position);
@@ -622,4 +606,9 @@ void Game::NotifyGameClearable()
 void Game::NotifyGameBack()
 {
 	m_gameState = m_enGameState_GameBuck;
+}
+
+void Game::Render(RenderContext& rc)
+{
+	m_stageModelRender.Draw(rc);
 }
