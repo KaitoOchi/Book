@@ -11,7 +11,7 @@ public:
 	void Render(RenderContext& rc);
 
 private:
-	SpriteRender	m_countDownSpriteRender[4];		//カウントダウン画像
+	std::array<SpriteRender,4> m_countDownSpriteRender;		//カウントダウン画像
 	float			m_timer = 1.0f;					//タイマー
 	int				m_count = 4;					//カウント
 };

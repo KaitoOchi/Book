@@ -4,7 +4,7 @@ class Enemy_Charge : public Enemy
 {
 public:
 	Enemy_Charge();
-	~Enemy_Charge();
+	~Enemy_Charge()override;
 
 	bool Start();
 	void Update();

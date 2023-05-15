@@ -85,7 +85,7 @@ public:
 
 
 	//ライトの生成
-	PointLight m_pointLight[4];
+	std::array<PointLight,4> m_pointLight;
 	int lights = 0;
 	int m_lightNumber = 0;
 public:

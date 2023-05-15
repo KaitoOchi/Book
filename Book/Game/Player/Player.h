@@ -284,7 +284,7 @@ protected:
 	float angle=0;												//回転角度
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
-	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
+	std::array<nsK2EngineLow::Texture,14> m_player2D;						//テクスチャ
 	
 	Quaternion m_rotation;										//回転
 	

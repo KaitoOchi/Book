@@ -48,11 +48,11 @@ private:
 		Vector3& mapPosirion
 	);
 
-	SpriteRender m_SpriteRender;					// スプライトレンダー。ミニマップのベース
-	SpriteRender m_OutLineSpriteRender;				// スプライトレンダー。ミニマップの装飾部分
-	SpriteRender m_PlayerSpriteRender;				// スプライトレンダー。プレイヤー
-	SpriteRender m_EnemySpriteRender[ENEMY_NUM];	// スプライトレンダー。エネミー
-	SpriteRender m_TreasureSpriteRender;			// スプライトレンダー。お宝
+	SpriteRender m_SpriteRender;							// スプライトレンダー。ミニマップのベース
+	SpriteRender m_OutLineSpriteRender;						// スプライトレンダー。ミニマップの装飾部分
+	SpriteRender m_PlayerSpriteRender;						// スプライトレンダー。プレイヤー
+	std::array<SpriteRender,ENEMY_NUM>m_EnemySpriteRender;	// スプライトレンダー。エネミー
+	SpriteRender m_TreasureSpriteRender;					// スプライトレンダー。お宝
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Enemy_Normal* m_enemyNormal = nullptr;
@@ -65,7 +65,7 @@ private:
 
 	Vector3 m_treasurePos = Vector3::Zero;			// お宝の位置
 
-	bool m_isImage[ENEMY_NUM];						// 表示するかどうかのフラグ。エネミーの数分用意する
+	std::array<bool,ENEMY_NUM>m_isImage;						// 表示するかどうかのフラグ。エネミーの数分用意する
 	bool m_isImage2 = false;						// 表示するかどうかのフラグ。お宝用
 };
 
