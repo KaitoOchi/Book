@@ -4,11 +4,6 @@
 #include "AI/PathFinding/Path.h"
 #include "AI/PathFinding/PathFinding.h"
 
-namespace
-{
-	const int TIMER_NUM = 4;
-}
-
 class PlayerManagement;
 class Gage;
 class Game;
@@ -399,7 +394,7 @@ protected:
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
 	/// </summary>
-	std::array<float,TIMER_NUM>m_addTimer;
+	std::array<float, 4>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;

@@ -149,10 +149,6 @@ public:
 	/// クリア可能を通知
 	/// </summary>
 	void NotifyGameClearable();
-	/// <summary>
-	/// プレイヤーのエフェクトを呼び出す関数
-	/// </summary>
-	void NewPlayerSmoke();
 private:
 	/// <summary>
 	/// クリア可能
@@ -212,8 +208,7 @@ private:
 	GhostBox* m_ghostBox = nullptr;
 	Sensor* m_sensor = nullptr;
 	SecurityCamera* m_securityCamera = nullptr;
-	EffectEmitter* m_smokeEffect = nullptr;
-
+	
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Gage* m_gage = nullptr;

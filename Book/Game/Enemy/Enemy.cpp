@@ -77,7 +77,7 @@ bool Enemy::Start()
 	m_game = FindGO<Game>("game");
 
 	// 各タイマーのリセット
-	for (int i = 0; i < TIMER_NUM; i++) {
+	for (int i = 0; i < 4; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
@@ -216,7 +216,7 @@ void Enemy::Act_SeachPlayer()
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		m_TrakingPlayerFlag = true;
 
-		if (m_efectDrawFlag[1] == false) {
+		if (m_efectDrawFlag[2] == false) {
 			// !のエフェクトを生成
 			m_soundEffect = NewGO<EffectEmitter>(3);
 			m_soundEffect->Init(3);
@@ -226,7 +226,7 @@ void Enemy::Act_SeachPlayer()
 			m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 			m_soundEffect->Play();
 
-			m_efectDrawFlag[1] = true;
+			m_efectDrawFlag[2] = true;
 		}
 		return;
 	}
@@ -253,7 +253,7 @@ void Enemy::Act_SeachPlayer()
 			if (WallAndHit(m_playerPos) == false) {
 				// 壁に衝突したとき
 				m_TrakingPlayerFlag = false;
-				m_efectDrawFlag[1] == false;
+				m_efectDrawFlag[2] == false;
 			}
 		}
 	}
@@ -324,7 +324,6 @@ bool Enemy::Act_CatchPlayer()
 		// プレイヤーの方向を向く
 		diff.Normalize();
 		Rotation(diff);
-
 		// 捕まえる
 		m_enAnimationState = ATTACK;
 
@@ -368,7 +367,7 @@ void Enemy::Act_MoveMissingPosition()
 
 void Enemy::Act_SearchMissingPlayer()
 {
-	if (m_efectDrawFlag[3] == false) {
+	if (m_efectDrawFlag[2] == false) {
 		// !のエフェクトを生成
 		m_soundEffect = NewGO<EffectEmitter>(4);
 		m_soundEffect->Init(4);
@@ -378,28 +377,25 @@ void Enemy::Act_SearchMissingPlayer()
 		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_soundEffect->Play();
 
-		m_efectDrawFlag[3] = true;
+		m_efectDrawFlag[2] = true;
 	}
 
 
 	// 見渡すモーションを再生
 	m_enAnimationState = LOSS;
 
-	// プレイヤーを発見したとき
-	if (m_TrakingPlayerFlag == true) {
-		// エフェクトを再生するためにリセットする
-		m_efectDrawFlag[1] = false;
-		// 再度追跡する
-		m_ActState = TRACKING;
-		return;
-	}
-
 	// モーションを再生
-	if (Act_Stop(7.0f, 4) == true) {
-		m_efectDrawFlag[3] = false;
-		m_addTimer[4] = 0.0f;			// タイマーをリセット
+	if (Act_Stop(7.0f, 3) == true) {
+		m_efectDrawFlag[2] = false;
+		m_addTimer[3] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
+		// プレイヤーを発見したとき
+		if (m_TrakingPlayerFlag == true) {
+			// 再度追跡する
+			m_ActState = TRACKING;
+			return;
+		}
 		m_ActState = BACKBASEDON;
 	}
 }
@@ -419,7 +415,7 @@ void Enemy::Act_HitFlashBullet()
 	m_enAnimationState = DIZZY;
 
 	// エフェクトを一度しか生成しないようにする
-	if (m_efectDrawFlag[0] == false) {
+	if (m_efectDrawFlag[1] == false) {
 
 		// めまいのエフェクトを生成
 		m_soundEffect = NewGO<EffectEmitter>(2);
@@ -430,13 +426,13 @@ void Enemy::Act_HitFlashBullet()
 		m_soundEffect->SetPosition(Vector3(m_position.x+5.0f, 100.0f, m_position.z+10.0f));
 		m_soundEffect->Play();
 
-		m_efectDrawFlag[0] = true;
+		m_efectDrawFlag[1] = true;
 	}
 
 	// タイマーがtrueのとき
 	if (Act_Stop(CANMOVE_TIMER,0) == true) {
 		// 生成フラグをリセット
-		m_efectDrawFlag[0] = false;
+		m_efectDrawFlag[1] = false;
 
 		// フラグを降ろす
 		m_TrakingPlayerFlag = false;
@@ -465,8 +461,8 @@ void Enemy::Act_HitSoundBullet()
 
 		m_enAnimationState = LOSS;
 
-		if (Act_Stop(5.0f, 4) == true) {
-			m_addTimer[4] = 0.0f;
+		if (Act_Stop(5.0f, 3) == true) {
+			m_addTimer[3] = 0.0f;
 			m_HitSoundBulletFlag = false;
 		};
 	}
@@ -523,11 +519,8 @@ void Enemy::Act_Tracking()
 	// ナビメッシュを作成
 	Nav(m_playerPos);
 
-	// まだ確保していないとき
-	if (m_ChachPlayerFlag == false) {
-		// 走るアニメーションを再生
-		m_enAnimationState = RUN;
-	}
+	// 走るアニメーションを再生
+	m_enAnimationState = RUN;
 }
 
 void Enemy::Pass(int PassState)
@@ -663,7 +656,7 @@ void Enemy::Act_Charge(float time)
 			}
 
 			if (m_efectDrawFlag[2] == false) {
-				// ?のエフェクトを生成
+				// !のエフェクトを生成
 				m_soundEffect = NewGO<EffectEmitter>(4);
 				m_soundEffect->Init(4);
 				//エフェクトの大きさを指定する
@@ -677,7 +670,7 @@ void Enemy::Act_Charge(float time)
 
 			// いないときは巡回状態に戻る
 			m_ActState = BACKBASEDON;
-			m_efectDrawFlag[3] = false;
+			m_efectDrawFlag[2] = false;
 		}
 	}
 }

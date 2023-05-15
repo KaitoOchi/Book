@@ -37,7 +37,7 @@
 #include "nature/SkyCube.h"
 namespace
 {
-	const float EFFECTSIZE = 1.5f;
+	
 }
 
 Game::Game()
@@ -85,6 +85,8 @@ Game::~Game()
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
+	
+
 	for (int i = 0; i < m_SecurityCameraList.size(); i++)
 	{
 		DeleteGO(m_SecurityCameraList[i]);
@@ -398,20 +400,6 @@ void Game::LevelDesign()
 				return true;
 			}
 		}
-
-
-		//if (objData.EqualObjectName(L"unityChan") == true) {
-
-		//	m_enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
-		//	m_enemySearch->SetPosition(objData.position);
-		//	m_enemySearch->SetRotation(objData.rotation);
-		//	m_enemySearch->SetScale(objData.scale);
-		//	// Enemy・ｽﾌ・ｿｽ・ｽX・ｽg・ｽﾉ追会ｿｽ
-		//	m_enemyList.push_back(m_enemySearch);
-
-		//	return true;
-		//}
-
 		if (objData.EqualObjectName(L"sensor")==true) {
 			m_sensor = NewGO<Sensor>(0, "sensor");
 			m_sensor->SetPosition(objData.position);
@@ -632,16 +620,4 @@ void Game::NotifyGameBack()
 void Game::Render(RenderContext& rc)
 {
 	m_stageModelRender.Draw(rc);
-}
-
-void Game::NewPlayerSmoke()
-{
-	m_smokeEffect = NewGO<EffectEmitter>(0);
-	m_smokeEffect->Init(0);
-	//エフェクトの大きさを指定する
-	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-	//エフェクトの座標の設定
-	m_smokeEffect->SetPosition(m_playerManagement->GetPosition());
-	m_smokeEffect->Play();
-	m_smokeEffect->Update();
 }
