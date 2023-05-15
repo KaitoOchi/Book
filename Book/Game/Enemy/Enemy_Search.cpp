@@ -37,6 +37,7 @@ void Enemy_Search::Update()
 {
 	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
+		m_soundEffect->Stop();
 		return;
 	}
 	// デフォルトに戻すフラグがtrueのとき
