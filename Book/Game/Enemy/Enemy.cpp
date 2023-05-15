@@ -324,6 +324,7 @@ bool Enemy::Act_CatchPlayer()
 		// プレイヤーの方向を向く
 		diff.Normalize();
 		Rotation(diff);
+
 		// 捕まえる
 		m_enAnimationState = ATTACK;
 
@@ -384,18 +385,21 @@ void Enemy::Act_SearchMissingPlayer()
 	// 見渡すモーションを再生
 	m_enAnimationState = LOSS;
 
+	// プレイヤーを発見したとき
+	if (m_TrakingPlayerFlag == true) {
+		// エフェクトを再生するためにリセットする
+		m_efectDrawFlag[1] = false;
+		// 再度追跡する
+		m_ActState = TRACKING;
+		return;
+	}
+
 	// モーションを再生
 	if (Act_Stop(7.0f, 4) == true) {
 		m_efectDrawFlag[3] = false;
 		m_addTimer[4] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
-		// プレイヤーを発見したとき
-		if (m_TrakingPlayerFlag == true) {
-			// 再度追跡する
-			m_ActState = TRACKING;
-			return;
-		}
 		m_ActState = BACKBASEDON;
 	}
 }
