@@ -138,7 +138,7 @@ void Enemy_Clear::Update_OnTracking()
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
-	// 
+
 	Enemy::Act_Tracking();			// 追跡行動
 
 	// 視野角にプレイヤーがいないとき
