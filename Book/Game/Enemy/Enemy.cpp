@@ -216,7 +216,7 @@ void Enemy::Act_SeachPlayer()
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		m_TrakingPlayerFlag = true;
 
-		if (m_efectDrawFlag[2] == false) {
+		if (m_efectDrawFlag[1] == false) {
 			// !のエフェクトを生成
 			m_soundEffect = NewGO<EffectEmitter>(3);
 			m_soundEffect->Init(3);
@@ -226,7 +226,7 @@ void Enemy::Act_SeachPlayer()
 			m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 			m_soundEffect->Play();
 
-			m_efectDrawFlag[2] = true;
+			m_efectDrawFlag[1] = true;
 		}
 		return;
 	}
@@ -253,7 +253,7 @@ void Enemy::Act_SeachPlayer()
 			if (WallAndHit(m_playerPos) == false) {
 				// 壁に衝突したとき
 				m_TrakingPlayerFlag = false;
-				m_efectDrawFlag[2] == false;
+				m_efectDrawFlag[1] == false;
 			}
 		}
 	}
@@ -415,7 +415,7 @@ void Enemy::Act_HitFlashBullet()
 	m_enAnimationState = DIZZY;
 
 	// エフェクトを一度しか生成しないようにする
-	if (m_efectDrawFlag[1] == false) {
+	if (m_efectDrawFlag[0] == false) {
 
 		// めまいのエフェクトを生成
 		m_soundEffect = NewGO<EffectEmitter>(2);
@@ -426,13 +426,13 @@ void Enemy::Act_HitFlashBullet()
 		m_soundEffect->SetPosition(Vector3(m_position.x+5.0f, 100.0f, m_position.z+10.0f));
 		m_soundEffect->Play();
 
-		m_efectDrawFlag[1] = true;
+		m_efectDrawFlag[0] = true;
 	}
 
 	// タイマーがtrueのとき
 	if (Act_Stop(CANMOVE_TIMER,0) == true) {
 		// 生成フラグをリセット
-		m_efectDrawFlag[1] = false;
+		m_efectDrawFlag[0] = false;
 
 		// フラグを降ろす
 		m_TrakingPlayerFlag = false;
@@ -655,8 +655,8 @@ void Enemy::Act_Charge(float time)
 				return;
 			}
 
-			if (m_efectDrawFlag[3] == false) {
-				// !のエフェクトを生成
+			if (m_efectDrawFlag[2] == false) {
+				// ?のエフェクトを生成
 				m_soundEffect = NewGO<EffectEmitter>(4);
 				m_soundEffect->Init(4);
 				//エフェクトの大きさを指定する
@@ -665,7 +665,7 @@ void Enemy::Act_Charge(float time)
 				m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 				m_soundEffect->Play();
 
-				m_efectDrawFlag[3] = true;
+				m_efectDrawFlag[2] = true;
 			}
 
 			// いないときは巡回状態に戻る
