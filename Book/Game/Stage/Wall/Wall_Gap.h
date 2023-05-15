@@ -4,7 +4,7 @@ class Wall_Gap:public Wall
 {
 public:
 	Wall_Gap();
-	~Wall_Gap();
+	~Wall_Gap()override;
 
 	bool Start();
 	void ModelLoad(int i);

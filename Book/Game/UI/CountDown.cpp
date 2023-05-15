@@ -65,9 +65,10 @@ void CountDown::Update()
 	if (m_timer > 0.5f) {
 		//ƒJƒEƒ“ƒg‰æ‘œ‚Ìİ’è
 		m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
+		m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f - m_timer));
+		m_countDownSpriteRender[m_count].Update();
 	}
-	m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f - m_timer));
-	m_countDownSpriteRender[m_count].Update();
+	
 }
 
 void CountDown::Render(RenderContext& rc)
