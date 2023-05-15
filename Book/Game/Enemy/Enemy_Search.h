@@ -4,7 +4,7 @@ class Enemy_Search:public Enemy
 {
 public:
 	Enemy_Search();
-	~Enemy_Search();
+	~Enemy_Search()override;
 	bool Start();
 	void Update();
 	void Rotaition();

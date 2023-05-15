@@ -4,7 +4,7 @@ class Enemy_Normal:public Enemy
 {
 public:
 	Enemy_Normal();
-	~Enemy_Normal();
+	~Enemy_Normal()override;
 
 	bool Start();
 	void Update();

@@ -42,17 +42,17 @@ private:
 
 	EnLeverState m_GetState = m_leverState;
 
-	SpriteRender m_LeverUPRender[4];				//警戒度レベル画像
-	SpriteRender m_baseRender;						//下に置く画像
-	SpriteRender m_vigilanceRender[10];				//警戒度画像
-	bool m_isFind = false;					//発見されたかどうか
-	int m_vigilanceGage = 0;						//警戒度ゲージ量
-	float m_vigilanceTime = 2.0f;					//警戒度に入るクールタイム
+	std::array<SpriteRender,4>m_LeverUPRender;					//警戒度レベル画像
+	SpriteRender m_baseRender;									//下に置く画像
+	std::array<SpriteRender,10>m_vigilanceRender;				//警戒度画像
+	bool m_isFind = false;										//発見されたかどうか
+	int m_vigilanceGage = 0;									//警戒度ゲージ量
+	float m_vigilanceTime = 2.0f;								//警戒度に入るクールタイム
 
-	float m_Color=0.7f;								//警戒度カラー						
+	float m_Color=0.7f;											//警戒度カラー						
 
 	float m_HitTime = 5.0f;
-	float m_vigilaceDownTime = 2.0f;				//警戒度を下げるクールタイム
+	float m_vigilaceDownTime = 2.0f;							//警戒度を下げるクールタイム
 
 	Game* m_game = nullptr;
 };
