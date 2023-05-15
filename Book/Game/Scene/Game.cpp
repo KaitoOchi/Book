@@ -35,10 +35,7 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
-namespace
-{
-	
-}
+#include "Wipe.h"
 
 Game::Game()
 {
