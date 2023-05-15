@@ -23,7 +23,6 @@ class GameUI;
 class FlashBom;
 class SoundBom;
 class Fade;
-class Star;
 class GameUI;
 class Gage;
 class Pause;
@@ -86,7 +85,7 @@ public:
 
 
 	//ライトの生成
-	PointLight m_pointLight[4];
+	std::array<PointLight,4> m_pointLight;
 	int lights = 0;
 	int m_lightNumber = 0;
 public:
@@ -218,7 +217,6 @@ private:
 	Fade* m_fade = nullptr;
 	GameUI* m_gameUI = nullptr;
 	Gage* m_gage = nullptr;
-	Star* m_star = nullptr;
 
 	Vector3 m_tresurePos;
 

@@ -16,7 +16,7 @@ class Enemy :public IGameObject
 {
 public:
 	Enemy();
-	virtual ~Enemy();
+	virtual ~Enemy()=0;
 
 	bool Start();
 
@@ -394,12 +394,12 @@ protected:
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
 
-	bool m_efectDrawFlag[3];				// エフェクト描画フラグ
+	std::array<bool,3>m_efectDrawFlag;				// エフェクト描画フラグ
 
 	/// <summary>
 	/// 0が閃光弾。1が巡回。2が突進用。3がプレイヤーを見失った時の処理
 	/// </summary>
-	float m_addTimer[TIMER_NUM];
+	std::array<float,TIMER_NUM>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;

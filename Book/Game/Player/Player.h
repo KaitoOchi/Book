@@ -1,8 +1,6 @@
 #pragma once
 class PlayerManagement;
 class GameCamera;
-class Ghost;
-class Star;
 class Game;
 class Treasure;  
 class GameCamera;
@@ -53,7 +51,7 @@ public:
 	Player();
 	virtual ~Player();
 	virtual bool Start();
-	virtual void Render(RenderContext& rc);
+	virtual void Render(RenderContext& rc)=0;
 	//座標の取得
 	const Vector3& GetPosition()const
 	{
@@ -286,7 +284,7 @@ protected:
 	float angle=0;												//回転角度
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
-	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
+	std::array<nsK2EngineLow::Texture,14> m_player2D;						//テクスチャ
 	
 	Quaternion m_rotation;										//回転
 	
@@ -295,9 +293,7 @@ protected:
 
 	GameCamera* m_gamecamera=nullptr;							//ゲームカメラ
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
-	Star* m_star = nullptr;										//星
 	Treasure* m_treasure = nullptr;
-	Ghost* m_ghost = nullptr;
 	Game* m_game = nullptr;
 
 
