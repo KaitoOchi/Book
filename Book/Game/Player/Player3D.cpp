@@ -30,6 +30,9 @@ Player3D::~Player3D()
 	}
 	DeleteGO(m_collisionObject);
 
+	DeleteGO(m_soundBom);
+	DeleteGO(m_flashBom);
+
 }
 bool Player3D::Start()
 {
