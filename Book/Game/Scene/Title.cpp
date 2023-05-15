@@ -104,8 +104,8 @@ void Title::InitSprite()
 	m_sprites.push_back(&m_menuSpriteRender);
 
 	//ÉKÉCÉhîwåiâÊñ ÇÃê›íË
-	m_guideBackSpriteRender.Init("Assets/sprite/UI/guide/guide_all2.DDS", 1536.0f, 891.0f);
-	m_guideBackSpriteRender.SetPosition(Vector3(-50.0f, 35.0f, 0.0f));
+	m_guideBackSpriteRender.Init("Assets/sprite/UI/guide/guide_all2.DDS", 1920.0f, 1080.0f);
+	//m_guideBackSpriteRender.SetPosition(Vector3(-50.0f, 35.0f, 0.0f));
 	m_guideBackSpriteRender.Update();
 	m_sprites.push_back(&m_guideBackSpriteRender);
 

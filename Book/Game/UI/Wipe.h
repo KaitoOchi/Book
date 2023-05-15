@@ -11,4 +11,6 @@ public:
 
 private:
 	ModelRender m_modelRender;
+	ModelRender a;
+	int num = 0;
 };

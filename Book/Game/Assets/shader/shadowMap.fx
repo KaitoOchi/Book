@@ -11,6 +11,7 @@ cbuffer ShadowCB : register(b1)
 {
 	float3 lightPos;
     float4x4 mLVP;
+    int playerAnim2D;
 }
 
 struct SSkinVSIn{
@@ -108,9 +109,15 @@ SPSIn VSSkinMain(SVSIn vsIn)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
-    float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	float2 uv;
+	int x, y;
+	x = playerAnim2D % 4;
+	y = playerAnim2D / 4;
+	uv.x = (psIn.uv.x / 4) + (x * 0.25);
+	uv.y = (psIn.uv.y / 4) + (y * 0.25);
+	float4 albedo = g_albedo.Sample(g_sampler, uv);
 
-    if(albedo.w < 0.5f ){
+    if(albedo.w < 0.1f){
         clip(-1);
     }
 

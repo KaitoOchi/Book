@@ -156,7 +156,6 @@ protected:
 	virtual void Throw()=0;
 	virtual void Animation()=0;
 	void Animation3D();
-	void Animation2D();
 	/// <summary>
 	/// アイテムの切替
 	/// </summary>
@@ -286,7 +285,6 @@ protected:
 	float angle=0;												//回転角度
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
-	nsK2EngineLow::Texture m_player2D[14];						//テクスチャ
 	
 	Quaternion m_rotation;										//回転
 	

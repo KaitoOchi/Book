@@ -19,6 +19,7 @@ namespace nsBookEngine {
 			Vector3 lightPos = Vector3::Zero;
 			float pad0;
 			Matrix mLVP = g_matIdentity;
+			int playerAnim2D;									//2Dアニメーションの番号
 		};
 
 		//ライト用の構造体
@@ -28,7 +29,7 @@ namespace nsBookEngine {
 			PointLight::pointLight pointLig[4];
 			SpotLight::spotLight spotLig[32];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
-			ShadowParamCB shadowCB;
+			ShadowParamCB shadowCB;	
 			int ptNum;											//ポイントライトの数
 			int spNum;											//スポットライトの数
 		};
@@ -215,7 +216,7 @@ namespace nsBookEngine {
 		/// </summary>
 		D3D12_VIEWPORT& GetWipeViewPort()
 		{
-			return m_viewPorts[0];
+			return m_viewPorts[1];
 		}
 		
 

@@ -25,7 +25,7 @@ namespace nsBookEngine {
 		/// <param name="isShadowReceiver">trueなら影を落とす。</param>
 		/// <param name="outlineMode">1でプレイヤー、2で敵の輪郭線</param>
 		/// <param name="isFrontCullingOnDrawShadowMap">カリングモード。</param>
-		/// <param name="maxInstance">インスタンスの数。</param>
+		/// <param name="useWipe">ワイプモデルを使用する。</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationClip = nullptr,
@@ -35,7 +35,7 @@ namespace nsBookEngine {
 			const bool isShadowReceiver = false,
 			const int outlineMode = 0,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
-			int maxInstance = 1);
+			const bool useWipe = false);
 
 		/// <summary>
 		/// ModelInitDataを使用した初期化処理。
@@ -157,14 +157,6 @@ namespace nsBookEngine {
 			return m_skeleton.GetBone(boneNo);
 		}
 
-		/// <summary>
-		/// ワイプカメラを使用するかどうか
-		/// </summary>
-		void SetUseWipeCamera(const bool is)
-		{
-			m_isUseWipeCamera = is;
-		}
-
 	private:
 		/// <summary>
 		/// スケルトンの初期化。
@@ -199,7 +191,8 @@ namespace nsBookEngine {
 			const bool isShadow,
 			const bool isShadowReceiver,
 			const int outlineMode,
-			D3D12_CULL_MODE cullMode
+			D3D12_CULL_MODE cullMode,
+			const bool useWipe
 		);
 
 	private:
@@ -233,6 +226,7 @@ namespace nsBookEngine {
 		Model			m_model;
 		Model			m_shadowModel;
 		Model			m_zprepassModel;
+		Model			m_wipeModel;
 		bool			m_isUpdateAnimation = true;
 		Skeleton		m_skeleton;
 		bool			m_isUseWipeCamera = false;
