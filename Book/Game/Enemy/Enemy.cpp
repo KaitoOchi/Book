@@ -519,8 +519,11 @@ void Enemy::Act_Tracking()
 	// ナビメッシュを作成
 	Nav(m_playerPos);
 
-	// 走るアニメーションを再生
-	m_enAnimationState = RUN;
+	// まだ確保していないとき
+	if (m_ChachPlayerFlag == false) {
+		// 走るアニメーションを再生
+		m_enAnimationState = RUN;
+	}
 }
 
 void Enemy::Pass(int PassState)
