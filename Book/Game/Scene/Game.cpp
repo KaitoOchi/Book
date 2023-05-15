@@ -62,12 +62,15 @@ Game::~Game()
 	//�E�G�E�l�E�~�E�[
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
-		
 		DeleteGO(m_enemyList[i]);
 	}
 	//�I�u�W�F�N�g
 	//�E�I�E�u�E�W�E�F�E�N�E�g
-	DeleteGO(FindGO<Sensor>("sensor"));
+	for (int i = 0; i < m_sensorList.size(); i++)
+	{
+		DeleteGO(m_sensorList[i]);
+	}
+	
 	DeleteGO(m_gameUI);
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
@@ -82,11 +85,6 @@ Game::~Game()
 	DeleteGO(m_soundBom);
 	DeleteGO(m_flahBom);
 	DeleteGO(m_treaSure);
-	for (int i = 0; i < m_sensorList.size(); i++)
-	{
-		DeleteGO(m_sensorList[i]);
-	}
-
 	for (int i = 0; i < m_SecurityCameraList.size(); i++)
 	{
 		DeleteGO(m_SecurityCameraList[i]);
@@ -95,11 +93,6 @@ Game::~Game()
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-
-	// エネミーの削除
-	for (int i = 0; i < m_enemyList.size(); i++) {
-		DeleteGO(m_enemyList[i]);
-	}
 
 	DeleteGO(FindGO<CountDown>("countDown"));
 

@@ -87,25 +87,25 @@ private:
 	};
 
 private:
-	SpriteRender	m_backGroundSpriteRender;				//背景画像
-	SpriteRender	m_stateSpriteRender;					//ステート文字画像
-	SpriteRender	m_explainSpriteRender[2];				//詳細画像
-	SpriteRender	m_cursorSpriteRender;					//カーソル
-	SpriteRender	m_rankSpriteRender;						//ランク画像
-	SpriteRender	m_failedSpriteRender;					//failed文字
-	FontRender		m_messageFontRender[4];					//スコアメッセージ
-	FontRender		m_scoreFontRender;						//スコアフォント
-	Level2DRender	m_level2DRender;						//レベル2Dレンダー
-	ResultState		m_resultState = enState_GameOver;		//リザルトステート
-	Fade*			m_fade = nullptr;						//フェードクラス
-	SoundSource*	m_sound = nullptr;						//サウンドクラス
-	Vector3			m_fontPosition[4];						//文字を出す座標
-	bool			m_isWaitFadeOut = false;				//フェードしているかどうか
-	bool			m_isDram = false;						//ドラム音を出したかどうか
-	int				m_cursor = 0;							//カーソル
-	int				m_score[4];								//クリア時のスコア
-	float			m_timer = 0.0f;							//タイマー
-	float			m_alpha = 0.0f;							//透明度
-	float			m_canInputTime = 0.0f;					//入力可能時間
+	SpriteRender	m_backGroundSpriteRender;						//背景画像
+	SpriteRender	m_stateSpriteRender;							//ステート文字画像
+	std::array<SpriteRender,2>m_explainSpriteRender;				//詳細画像
+	SpriteRender	m_cursorSpriteRender;							//カーソル
+	SpriteRender	m_rankSpriteRender;								//ランク画像
+	SpriteRender	m_failedSpriteRender;							//failed文字
+	std::array<FontRender,4>m_messageFontRender;					//スコアメッセージ
+	FontRender		m_scoreFontRender;								//スコアフォント
+	Level2DRender	m_level2DRender;								//レベル2Dレンダー
+	ResultState		m_resultState = enState_GameOver;				//リザルトステート
+	Fade*			m_fade = nullptr;								//フェードクラス
+	SoundSource*	m_sound = nullptr;								//サウンドクラス
+	std::array<Vector3,4>m_fontPosition;							//文字を出す座標
+	bool			m_isWaitFadeOut = false;						//フェードしているかどうか
+	bool			m_isDram = false;								//ドラム音を出したかどうか
+	int				m_cursor = 0;									//カーソル
+	int				m_score[4];										//クリア時のスコア
+	float			m_timer = 0.0f;									//タイマー
+	float			m_alpha = 0.0f;									//透明度
+	float			m_canInputTime = 0.0f;							//入力可能時間
 };
 

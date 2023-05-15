@@ -60,19 +60,19 @@ private:
 	AnimationClip m_enemyAnimClips[enemyAnimClip_Num];
 
 private:
-	ModelRender		m_playerModelRender;		//プレイヤーモデル
-	ModelRender		m_tresureModelRender;		//お宝モデル
-	ModelRender		m_enemyModelRender[3];		//エネミーモデル
-	ModelRender		m_volumeLightModelRender;	//ボリュームライトモデル
-	SpriteRender	m_filmSpriteRender[4];		//フィルム画像
+	ModelRender		m_playerModelRender;				//プレイヤーモデル
+	ModelRender		m_tresureModelRender;				//お宝モデル
+	std::array<ModelRender,3>m_enemyModelRender;		//エネミーモデル
+	ModelRender		m_volumeLightModelRender;			//ボリュームライトモデル
+	std::array<SpriteRender,4>m_filmSpriteRender;		//フィルム画像
 	SoundSource*	m_alert = nullptr;
 	Fade*			m_fade = nullptr;
-	Vector3			m_tresurePos;				//宝の座標
-	Vector3			m_cameraPos;				//カメラ座標
-	Vector3			m_cameraTarget;				//カメラ注視点
-	bool			m_isWaitFadeOut;			//フェードアウト中
-	int				m_cameraScene = 0;			//カメラシーン
-	float			m_timer = 0.0f;				//タイマー
-	float			m_filmTimer = 0.0f;			//フィルム用タイマー
+	Vector3			m_tresurePos;						//宝の座標
+	Vector3			m_cameraPos;						//カメラ座標
+	Vector3			m_cameraTarget;						//カメラ注視点
+	bool			m_isWaitFadeOut;					//フェードアウト中
+	int				m_cameraScene = 0;					//カメラシーン
+	float			m_timer = 0.0f;						//タイマー
+	float			m_filmTimer = 0.0f;					//フィルム用タイマー
 };
 
