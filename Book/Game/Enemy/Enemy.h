@@ -121,7 +121,7 @@ public:
 	void VigilanceCount();				//
 
 	void Efect_Dizzy();
-	void Efect_FIndPlayer();
+	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
 
 	enum EnemyType

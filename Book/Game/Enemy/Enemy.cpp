@@ -169,7 +169,7 @@ void Enemy::Efect_Dizzy()
 	}
 }
 
-void Enemy::Efect_FIndPlayer()
+void Enemy::Efect_FindPlayer()
 {
 	if (m_efectDrawFlag[1] == false) {
 		// !のエフェクトを生成
@@ -271,7 +271,7 @@ void Enemy::Act_SeachPlayer()
 		// 追跡フラグをtrueにする
 		m_TrakingPlayerFlag = true;
 		// エフェクトを生成
-		Efect_FIndPlayer();
+		Efect_FindPlayer();
 		return;
 	}
 
@@ -432,7 +432,7 @@ void Enemy::Act_SearchMissingPlayer()
 		// プレイヤーを発見したとき
 		if (m_TrakingPlayerFlag == true) {
 			// 再度追跡する
-			Efect_MissingPlayer();
+			Efect_FindPlayer();
 			m_ActState = TRACKING;
 			return;
 		}
@@ -690,6 +690,7 @@ void Enemy::Act_Charge(float time)
 		m_sumPos += moveSpeed;
 
 		m_enAnimationState = RUN;
+		return;
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
