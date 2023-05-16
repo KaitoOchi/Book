@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Wall_Gap.h"
-
 Wall_Gap::Wall_Gap()
 {
 
@@ -39,6 +38,7 @@ void Wall_Gap::ModelLoad(int i)
 	//	break;
 	//}
 }
+
 
 void Wall_Gap::Render(RenderContext& rc)
 {
