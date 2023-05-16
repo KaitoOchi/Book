@@ -17,6 +17,7 @@
 #include "Stage/Wall/Wall.h"
 #include "Stage/Wall/Wall_Decoration.h"
 #include "Stage/Wall/Wall_Door.h"
+#include "Stage/Wall/Wall_Duct.h"
 #include "Stage/Wall/Wall_Gap.h"
 #include "Stage/Wall/Wall_Normal.h"
 #include "Stage/Wall/Wall_Post.h"
@@ -209,7 +210,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(0);
+			enemyNormal->Pass(1);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
@@ -229,7 +230,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(1);
+			enemyCharge->Pass(0);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -267,7 +268,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(2);
+			enemyClear->Pass(3);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
@@ -299,34 +300,9 @@ void Game::LevelDesign()
 			}
 
 			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_1") == true) {
+			if (objData.EqualObjectName(L"gap") == true) {
 				// 隙間を生成する
 				Wall_Gap* gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				gap->ModelLoad(1);
-				gap->SetPosition(objData.position);
-				gap->SetRotation(objData.rotation);
-				gap->SetScale(objData.scale);
-				m_wallList.emplace_back(gap);
-				return true;
-			}
-
-			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_2") == true) {
-				// 隙間を生成する
-				Wall_Gap* gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				gap->ModelLoad(2);
-				gap->SetPosition(objData.position);
-				gap->SetRotation(objData.rotation);
-				gap->SetScale(objData.scale);
-				m_wallList.emplace_back(gap);
-				return true;
-			}
-
-			// 名前がgapのとき
-			if (objData.EqualObjectName(L"gap_3") == true) {
-				// 隙間を生成する
-				Wall_Gap* gap = NewGO<Wall_Gap>(0, "wall_Gap");
-				gap->ModelLoad(3);
 				gap->SetPosition(objData.position);
 				gap->SetRotation(objData.rotation);
 				gap->SetScale(objData.scale);
@@ -346,9 +322,11 @@ void Game::LevelDesign()
 			}
 
 			// 名前がdecorationのとき
-			if (objData.EqualObjectName(L"decoration") == true) {
+			if (objData.ForwardMatchName(L"decoration") == true) {
 				// 障害物を生成
 				Wall_Decoration* decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
+				// モデルの番号を渡す
+				//decoration->Load_Model(objData.number);
 				decoration->SetPosition(objData.position);
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
@@ -370,11 +348,12 @@ void Game::LevelDesign()
 			// 名前がgoalのとき
 			if (objData.EqualObjectName(L"clear") == true) {
 				// ゴールを生成
-				Wall_Normal* normal = NewGO<Wall_Normal>(0, "wall_Normal");
-				normal->SetPosition(objData.position);
-				normal->SetRotation(objData.rotation);
-				normal->SetScale(objData.scale);
-				m_wallList.emplace_back(normal);
+				Wall_Duct* duct = NewGO<Wall_Duct>(0, "wall_Duct");
+				duct->SetPosition(objData.position);
+				duct->SetRotation(objData.rotation);
+				duct->SetScale(objData.scale);
+				m_wallList.emplace_back(duct);
+
 				SetClearPosition(objData.position);
 				m_pointLight[lights].SetPointLight(
 					lights,

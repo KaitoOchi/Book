@@ -37,6 +37,7 @@ void Enemy_Search::Update()
 {
 	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
+		m_soundEffect->Stop();
 		return;
 	}
 	// デフォルトに戻すフラグがtrueのとき
@@ -67,12 +68,12 @@ void Enemy_Search::Update()
 
 	Enemy::PlayAnimation();
 
-	Enemy::SpotLight_Serch(m_rot, m_position);
+	Enemy::SpotLight_Serch(m_rotation, m_position);
 	// 視野角
 	Enemy::Act_SeachPlayer();
 
 	// 更新
-	m_enemyRender.SetRotation(m_rot);
+	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.Update();
 }
 
@@ -144,10 +145,10 @@ void Enemy_Search::Rotaition()
 	switch (m_rotState)
 	{
 	case true:
-		m_rot.AddRotationY(RODADD);
+		m_rotation.AddRotationY(RODADD);
 		break;
 	case false:
-		m_rot.AddRotationY(-RODADD);
+		m_rotation.AddRotationY(-RODADD);
 		break;
 	default:
 		break;

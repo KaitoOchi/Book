@@ -56,6 +56,10 @@ public:
 	/// <param name="time">突進するまでのチャージ時間</param>
 	void Act_Charge(float time);
 	/// <summary>
+	/// 突進した後の行動処理
+	/// </summary>
+	void Act_ChargeEnd();
+	/// <summary>
 	/// 壁との衝突判定
 	/// </summary>
 	void Act_Charge_HitWall();
@@ -116,6 +120,10 @@ public:
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
 
+	void Efect_Dizzy();
+	void Efect_FindPlayer();
+	void Efect_MissingPlayer();
+
 	enum EnemyType
 	{
 		Normal,
@@ -166,6 +174,7 @@ public:
 		CALLED,					// CALL時にSearch以外が実行
 		CALLEND,				// 視野角内にプレイヤーがいないとき周りの敵を元の位置に戻す
 		CHARGE,					// 突進
+		CHARGEEND,				// 突進終了
 		BACKBASEDON,			// 巡回状態に戻る
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき

@@ -246,6 +246,7 @@
     <ClCompile Include="Stage\Wall\Wall.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Decoration.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Door.cpp" />
+    <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Gap.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Normal.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Post.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Stage\Wall\Wall.h" />
     <ClInclude Include="Stage\Wall\Wall_Decoration.h" />
     <ClInclude Include="Stage\Wall\Wall_Door.h" />
+    <ClInclude Include="Stage\Wall\Wall_Duct.h" />
     <ClInclude Include="Stage\Wall\Wall_Gap.h" />
     <ClInclude Include="Stage\Wall\Wall_Normal.h" />
     <ClInclude Include="Stage\Wall\Wall_Post.h" />
