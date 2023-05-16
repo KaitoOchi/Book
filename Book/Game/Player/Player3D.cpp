@@ -44,7 +44,7 @@ bool Player3D::Start()
 	//音爆弾の呼び出し
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-	m_position = { 11200.0f, 300.0f, 1300.0f };
+	//m_position = { 11200.0f, 300.0f, 1300.0f };
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -131,8 +131,8 @@ void Player3D::PlayerPush()
 	m_characon->SetPosition(m_position);
 	m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
 	//プレイヤーを押し出す方向に回転させる
-	m_pushRotPos = GetPushPosition() - GetGhostPosition();
-	m_pushRot = atan2(-m_pushRotPos.x, m_pushRotPos.z);
+	m_pushRotPos = GetPushPosition()-GetGhostPosition();
+	m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 	m_rotation.SetRotationY(m_pushRot);
 	m_modelRender->SetRotation(m_rotation);
 	if (senkeiPos >= 1.0f)
@@ -191,7 +191,7 @@ void Player3D::Animation()
 	case Player::m_enPlayer_Down:
 		//プレイヤーを押し出す方向に回転させる
 		m_pushRotPos = GetPushPosition() - GetGhostPosition();
-		m_pushRot = atan2(-m_pushRotPos.x, m_pushRotPos.z);
+		m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 		m_rotation.SetRotationY(m_pushRot);
 		m_modelRender->SetRotation(m_rotation);
 		m_modelRender->SetAnimationSpeed(0.6f);

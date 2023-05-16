@@ -7,7 +7,11 @@ public:
 	~Wall_Gap()override;
 
 	bool Start();
-	void ModelLoad(int i);
 	void Render(RenderContext& rc);
+
+
+public:
+private:
+	
 };
 
