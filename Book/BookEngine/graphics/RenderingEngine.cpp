@@ -164,8 +164,8 @@ namespace nsBookEngine {
 		m_viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
 
 		//ワイプカメラを初期化。
-		m_wipeCamera.SetPosition({ 100.0f, 300.0f, -100.0f });
-		m_wipeCamera.SetTarget({ 0.0f, 0.0f, 0.0f });
+		m_wipeCamera.SetPosition({ 11200.0f, 400.0f, 1300.0f });
+		m_wipeCamera.SetTarget({ 11200.0f, 50.0f, 1200.0f });
 		m_wipeCamera.SetNear(150.0f);
 		m_wipeCamera.SetFar(5000.0f);
 		m_wipeCamera.Update();

@@ -135,6 +135,11 @@ namespace nsBookEngine {
 				shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 			}
 
+			//2DÉvÉåÉCÉÑÅ[Ç»ÇÁ
+			if (outlineMode == 4) {
+				shadowModelInitData.m_psEntryPointFunc = "PSPlayer2D";
+			}
+
 			m_shadowModel.Init(shadowModelInitData);
 		}
 

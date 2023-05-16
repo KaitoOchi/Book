@@ -8,6 +8,7 @@ public:
 	Wall();
 	virtual ~Wall()=0;
 	bool Start();
+	void WipeRender(RenderContext& rc);
 	void Render(RenderContext& rc);
 
 	void CreateBoxObj();		// “–‚½‚è”»’è‚ğì¬

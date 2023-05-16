@@ -44,7 +44,7 @@ bool Player3D::Start()
 	//音爆弾の呼び出し
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-
+	m_position = { 11200.0f, 300.0f, 1300.0f };
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -84,6 +84,10 @@ bool Player3D::Start()
 
 void Player3D::Update()
 {
+
+	if (g_pad[0]->IsTrigger(enButtonB)) {
+		m_position = m_position;
+	}
 
 	if (GetCharacon() == nullptr)
 	{

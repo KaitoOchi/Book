@@ -38,6 +38,11 @@ void Wall::CreateBoxObj()
 	m_physicsBoxObj.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);	// �R���W����������ݒ�	
 }
 
+void Wall::WipeRender(RenderContext& rc)
+{
+	m_wallRender.Draw(rc);
+}
+
 void Wall::Render(RenderContext& rc)
 {
 	if (GameManager::GetInstance()->GetGameState() == GameManager::enState_Result) {
