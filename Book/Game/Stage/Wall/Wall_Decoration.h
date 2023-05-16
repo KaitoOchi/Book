@@ -8,5 +8,6 @@ public:
 	~Wall_Decoration()override;
 
 	bool Start();
+	void Load_Model(int num);
 	void Render(RenderContext& rc);
 };

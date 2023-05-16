@@ -156,6 +156,7 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -280,5 +281,6 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Duct.h" />
   </ItemGroup>
 </Project>

@@ -46,19 +46,6 @@ public:
 	Vector3 m_scale = Vector3::Zero;
 	Quaternion m_rotation;
 
-
-	/// <summary>
-	/// 壁のモデルを設定する
-	/// </summary>
-	/// <param name="0">基本</param>
-	/// <param name="1">絵画あり</param>
-	/// <param name = "2">隙間あり</param>
-	/// <param name = "3">スタート</param>
-	/// <param name="4">ゴール</param>
-	void SetWallModel(int num) {
-		ModelState = num;
-	}
-
 	/// <summary>
 	/// 壁との距離
 	/// </summary>
@@ -82,7 +69,5 @@ protected:
 	Vector3 m_boxSize = Vector3::Zero;					//ボックスコライダーの作成
 
 	Vector3 m_RenderPosition = Vector3::Zero;
-	
-	int ModelState = 0;									// モデルを指定する
 };
 

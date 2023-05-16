@@ -18,7 +18,6 @@ public:
 		
 private:
 	//SpotLight m_spotLight;				//スポットライト
-	Quaternion m_rot;					//回転
 	bool m_rotState=true;				//回転の向きの切替
 	float m_rotTime = 2.0f;
 };
