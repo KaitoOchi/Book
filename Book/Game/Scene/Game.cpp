@@ -49,10 +49,17 @@ Game::Game()
 	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
 	//煙のエフェクト
 	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+	//隙間のキラキラエフェクト
+	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/e/sukima/sukima.efk");
 }
 
 Game::~Game()
 {
+
+	for (int i = 0; i < m_physicsGhostList.size(); i++)
+	{
+		DeleteGO(m_physicsGhostList[i]);
+	}
 
 	//�E�G�E�l�E�~�E�[
 	for (int i = 0; i < m_enemyList.size(); i++)
@@ -133,7 +140,7 @@ bool Game::Start()
 	//リストの初期化
 	m_enemyList.clear();
 	m_wallList.clear();
-	
+	m_physicsGhostList.clear();
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
@@ -417,6 +424,7 @@ void Game::LevelDesign()
 			m_physicsGhost->SetScale(objData.scale);
 			m_physicsGhost->SetRotation(objData.rotation);
 			m_physicsGhostList.emplace_back(m_physicsGhost);
+			
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
