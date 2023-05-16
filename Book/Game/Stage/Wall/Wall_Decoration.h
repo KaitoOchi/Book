@@ -5,7 +5,7 @@ class Wall_Decoration :public Wall
 {
 public:
 	Wall_Decoration();
-	~Wall_Decoration();
+	~Wall_Decoration()override;
 
 	bool Start();
 	void Render(RenderContext& rc);

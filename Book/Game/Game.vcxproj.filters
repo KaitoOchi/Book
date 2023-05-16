@@ -52,9 +52,6 @@
     <ClCompile Include="Enemy\Enemy_Search.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Player\Player.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
     <ClCompile Include="Player\Player2D.cpp">
       <Filter>Player</Filter>
     </ClCompile>
@@ -91,9 +88,6 @@
     <ClCompile Include="UI\MiniMap.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Game.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Title.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -102,9 +96,6 @@
     </ClCompile>
     <ClCompile Include="Stage\Ghost.cpp">
       <Filter>Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Treasure.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="UI\Fade.cpp">
       <Filter>UI</Filter>
@@ -156,6 +147,15 @@
     <ClCompile Include="UI\Wipe.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Game.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Treasure.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -175,9 +175,6 @@
     </ClInclude>
     <ClInclude Include="Enemy\Enemy_Search.h">
       <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\Player.h">
-      <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="Player\Player2D.h">
       <Filter>Player</Filter>
@@ -209,9 +206,6 @@
     <ClInclude Include="UI\MiniMap.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Game.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Title.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -226,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="Stage\Ghost.h">
       <Filter>Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Treasure.h">
-      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="UI\Fade.h">
       <Filter>UI</Filter>
@@ -279,6 +270,15 @@
     </ClInclude>
     <ClInclude Include="UI\Wipe.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Game.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Treasure.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@ Enemy_Normal::Enemy_Normal()
 
 Enemy_Normal::~Enemy_Normal()
 {
+
 }
 
 bool Enemy_Normal::Start()

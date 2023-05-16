@@ -50,20 +50,17 @@ struct HemiLig
 //ライト用の定数バッファ
 cbuffer LightCb : register(b1) {
 
-	//ディレクションライト用の定数バッファ
-	DirectionLig dirLig;
+	DirectionLig dirLig;	//ディレクションライト用の定数バッファ
 
-	//ポイントライト用の定数バッファ
-	PointLig ptLig[4];
+	PointLig ptLig[4];		//ポイントライト用の定数バッファ
 
-	//スポットライト用の定数バッファ
-	SpotLig spLig[32];
+	SpotLig spLig[32];		//スポットライト用の定数バッファ
 		
-	//半球ライト用の定数バッファ
-	HemiLig hemiLig;
+	HemiLig hemiLig;		//半球ライト用の定数バッファ
 
 	float3 lightPos;		//ライトの座標
 	float4x4 mLVP;			//ライトビュープロジェクション行列
+	int playerAnim2D;		//2Dプレイヤーアニメーションの番号
 
 	int ptNum;				//ポイントライトの数
 	int spNum;				//スポットライトの数
@@ -121,6 +118,7 @@ static const int pattern[4][4] = {
     { 12, 44,  4, 36},
     { 60, 28, 52, 20},
 };
+static const int anim_array_max = 4;		//アニメーション正方形の配列の数
 
 ///////////////////////////////////////////
 // 関数宣言
@@ -243,15 +241,8 @@ SPSIn VSSkinEnemyClear( SVSIn vsIn )
 	return VSMainCore(vsIn, true, float4(1.0f, 0.0f, 0.0f, 0.9f));
 }
 
-float4 PSMainCore(SPSIn In, uniform bool hasShadow)
+float4 PSMainCore(SPSIn In, uniform bool hasShadow, float4 albedo)
 {
-	// G-Bufferの内容を使ってライティング
-    float4 albedo = g_albedo.Sample(g_sampler, In.uv);
-
-	if(albedo.a == 0.0f){
-		clip(-1);
-	}
-
 	//ノーマルマップを求める
     float3 normal = CalcNormal(In);
 
@@ -304,7 +295,10 @@ float4 PSMainCore(SPSIn In, uniform bool hasShadow)
 /// </summary>
 float4 PSMain( SPSIn psIn ) : SV_Target0
 {
-	return PSMainCore(psIn, false);
+	//アルベドマップを読み込む
+    float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+
+	return PSMainCore(psIn, false, albedo);
 }
 
 /// <summary>
@@ -312,7 +306,30 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 /// </summary>
 float4 PSMainShadow( SPSIn psIn ) : SV_Target0
 {
-	return PSMainCore(psIn, true);
+	//アルベドマップを読み込む
+    float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+
+	return PSMainCore(psIn, true, albedo);
+}
+
+/// <summary>
+/// 2Dプレイヤー用のエントリー関数。
+/// </summary>
+float4 PSPlayer2D( SPSIn psIn ) : SV_Target0
+{
+	float2 uv;
+	int x, y;
+	x = playerAnim2D % anim_array_max;
+	y = playerAnim2D / anim_array_max;
+	uv.x = (psIn.uv.x / 4) + (x * 0.25);
+	uv.y = (psIn.uv.y / 4) + (y * 0.25);
+	float4 albedo = g_albedo.Sample(g_sampler, uv);
+
+	if(albedo.a <= 0.001f){
+		clip(-1);
+	}
+
+	return PSMainCore(psIn, true, albedo);
 }
 
 /// <summary>
@@ -678,13 +695,13 @@ float4 Outline(SPSIn psIn, float4 albedo)
     }
 
 	//半透明の敵は透過させる
-	if(psIn.outlineColor.w == 0.9f) {
-		//albedo.w = 0.5f;
-		//clip(-1);
+	if(abs(psIn.outlineColor.w - 0.9f) < 0.001f ) {
+		//ディザリングを行う
+		Dithering(psIn);
 	}
 
     // 普通のテクスチャ
-    return albedo;
+    return albedo ;
 }
 
 /// <summary>
@@ -699,6 +716,6 @@ void Dithering(SPSIn psIn)
 	//上で求めたxyを利用して、このピクセルのディザリング閾値を取得する
 	int dither = pattern[y][x];
 
-	//50以下ならピクセルキル
-	clip(dither - 50);
+	//40以下ならピクセルキル
+	clip(dither - 40);
 }

@@ -12,7 +12,7 @@
 namespace
 {
 	const float CHANGE_TIME = 1.0f;
-	
+	const float EFFECTSIZE = 1.5f;
 }
 
 
@@ -85,7 +85,12 @@ void PlayerManagement::Update()
 void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
-		m_game->NewPlayerSmoke();
+		m_smokeEffect = NewGO<EffectEmitter>(0);
+		m_smokeEffect->Init(0);
+		//エフェクトの大きさを指定する
+		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+		//エフェクトの座標の設定
+		m_smokeEffect->Play();
 
 		switch (m_enMananagementState)
 		{
@@ -97,6 +102,7 @@ void PlayerManagement::Input()
 			SetPosition(m_player2D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
+			m_smokeEffect->SetPosition(m_player2D->GetPosition());
 			
 			break;
 			//3D�̏ꍇ2D��Ăяo��
@@ -107,6 +113,7 @@ void PlayerManagement::Input()
 			SetPosition(m_player3D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
+			m_smokeEffect->SetPosition(m_player3D->GetPosition());
 			break;
 		}
 
@@ -116,21 +123,44 @@ void PlayerManagement::Input()
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
+		//煙エフェクトの再生
+		EffectEmitter* smokeEffect = NewGO<EffectEmitter>(0);
+		smokeEffect->Init(0);
+		smokeEffect->SetPosition(m_position);
+		smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+		smokeEffect->Play();
+		smokeEffect->Update();
+
 		m_enMananagementState = m_enPlayer_Changing;
+		m_smokeEffect->Update();
 	}
 }
 
 void PlayerManagement::SetChange(EnManagementState manaState)
 {
 	
-	m_game->NewPlayerSmoke();
+	m_smokeEffect = NewGO<EffectEmitter>(0);
+	m_smokeEffect->Init(0);
+	//エフェクトの大きさを指定する
+	m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+	//エフェクトの座標の設定
+	m_smokeEffect->Play();
+	m_smokeEffect->SetPosition(m_player2D->GetPosition());
+	m_smokeEffect->Update();
+
+
 	m_player3D->m_Player_Act = false;
 	m_player3D->SetMoveSpeed(Vector3::Zero);
 	m_player2D->m_Player_Act = false;
 	m_player2D->SetMoveSpeed(Vector3::Zero);
 	m_manageStateTmp = manaState;
 	m_enMananagementState = m_enPlayer_Changing;
+	SoundSource* se = NewGO<SoundSource>(0);
+	se->Init(13);
+	se->Play(false);
+	se->SetVolume(GameManager::GetInstance()->GetSFX());
 }
+
 
 void PlayerManagement::PlayerChange2D()
 {

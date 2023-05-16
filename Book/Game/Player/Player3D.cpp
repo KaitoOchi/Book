@@ -30,6 +30,9 @@ Player3D::~Player3D()
 	}
 	DeleteGO(m_collisionObject);
 
+	DeleteGO(m_soundBom);
+	DeleteGO(m_flashBom);
+
 }
 bool Player3D::Start()
 {
@@ -37,11 +40,11 @@ bool Player3D::Start()
 	Player::Start();
 	
 	//閃光弾の呼び出し
-	m_flashBom = FindGO<FlashBom>("flashBom");
+	m_flashBom = NewGO<FlashBom>(0, "flashBom");
 	//音爆弾の呼び出し
-	m_soundBom = FindGO<SoundBom>("soundBom");
+	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-
+	m_position = { 11200.0f, 300.0f, 1300.0f };
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -81,6 +84,10 @@ bool Player3D::Start()
 
 void Player3D::Update()
 {
+
+	if (g_pad[0]->IsTrigger(enButtonB)) {
+		m_position = m_position;
+	}
 
 	if (GetCharacon() == nullptr)
 	{

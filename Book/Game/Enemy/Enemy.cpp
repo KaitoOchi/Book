@@ -48,11 +48,13 @@ namespace
 
 Enemy::Enemy()
 {
+	//m_point = new Point;
 }
 
 Enemy::~Enemy()
 {
-
+	m_pointList.clear();
+	m_pointList.shrink_to_fit();
 }
 
 bool Enemy::Start()
@@ -77,7 +79,7 @@ bool Enemy::Start()
 	m_game = FindGO<Game>("game");
 
 	// 各タイマーのリセット
-	for (int i = 0; i < TIMER_NUM; i++) {
+	for (int i = 0; i < 4; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
@@ -367,7 +369,7 @@ void Enemy::Act_MoveMissingPosition()
 
 void Enemy::Act_SearchMissingPlayer()
 {
-	if (m_efectDrawFlag[3] == false) {
+	if (m_efectDrawFlag[2] == false) {
 		// !のエフェクトを生成
 		m_soundEffect = NewGO<EffectEmitter>(4);
 		m_soundEffect->Init(4);
@@ -377,7 +379,7 @@ void Enemy::Act_SearchMissingPlayer()
 		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_soundEffect->Play();
 
-		m_efectDrawFlag[3] = true;
+		m_efectDrawFlag[2] = true;
 	}
 
 
@@ -385,9 +387,9 @@ void Enemy::Act_SearchMissingPlayer()
 	m_enAnimationState = LOSS;
 
 	// モーションを再生
-	if (Act_Stop(7.0f, 4) == true) {
-		m_efectDrawFlag[3] = false;
-		m_addTimer[4] = 0.0f;			// タイマーをリセット
+	if (Act_Stop(7.0f, 3) == true) {
+		m_efectDrawFlag[2] = false;
+		m_addTimer[3] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
 		// プレイヤーを発見したとき
@@ -461,8 +463,8 @@ void Enemy::Act_HitSoundBullet()
 
 		m_enAnimationState = LOSS;
 
-		if (Act_Stop(5.0f, 4) == true) {
-			m_addTimer[4] = 0.0f;
+		if (Act_Stop(5.0f, 3) == true) {
+			m_addTimer[3] = 0.0f;
 			m_HitSoundBulletFlag = false;
 		};
 	}
@@ -655,7 +657,7 @@ void Enemy::Act_Charge(float time)
 				return;
 			}
 
-			if (m_efectDrawFlag[3] == false) {
+			if (m_efectDrawFlag[2] == false) {
 				// !のエフェクトを生成
 				m_soundEffect = NewGO<EffectEmitter>(4);
 				m_soundEffect->Init(4);
@@ -665,12 +667,12 @@ void Enemy::Act_Charge(float time)
 				m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 				m_soundEffect->Play();
 
-				m_efectDrawFlag[3] = true;
+				m_efectDrawFlag[2] = true;
 			}
 
 			// いないときは巡回状態に戻る
 			m_ActState = BACKBASEDON;
-			m_efectDrawFlag[3] = false;
+			m_efectDrawFlag[2] = false;
 		}
 	}
 }
