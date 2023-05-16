@@ -150,7 +150,6 @@ bool Game::Start()
 
 	NewGO<Pause>(0, "pause");
 	NewGO<SkyCube>(0, "skyCube");
-	NewGO<Wipe>(0, "wipe");
 
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;

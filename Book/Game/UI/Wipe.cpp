@@ -9,9 +9,9 @@
 
 namespace
 {
-	const float	MOVE_TIME = 1.2f;			//ˆÚ“®ŠÔ
-	const float MOVE_SPEED = 0.3f;			//ˆÚ“®‘¬“x
-	const float ENEMY_DURATION = 0.1f;		//“G‚ÌŠÔŠu
+	const float	MOVE_TIME = 1.3f;				//ˆÚ“®ŠÔ
+	const float MOVE_SPEED = 0.3f;				//ˆÚ“®‘¬“x
+	const float ENEMY_DURATION = 0.1f;			//“G‚ÌŠÔŠu
 }
 
 Wipe::Wipe()
@@ -33,15 +33,23 @@ Wipe::~Wipe()
 
 bool Wipe::Start()
 {
+	m_wipePos = WIPE_POS_MIN;
+	m_outlinePos = OUTLINE_POS_MIN;
+
 	//ƒAƒjƒ[ƒVƒ‡ƒ“İ’è
 	m_enemyAnim = new AnimationClip;
 	m_enemyAnim->Load("Assets/animData/enemy/run_battle.tka");
 	m_enemyAnim->SetLoopFlag(true);
 
+	//—ÖŠsü‚Ìİ’è
+	m_outlineSpriteRender.Init("Assets/sprite/UI/Gauge/wipe_outline.DDS", 262.0f, 205.0f);
+	m_outlineSpriteRender.SetPosition(m_outlinePos);
+	m_outlineSpriteRender.Update();
+
 	//“G‚Ì‰Šú‰»
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
 		m_enemy[i].modelRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnim, 1, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
-		m_enemy[i].modelRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+		m_enemy[i].modelRender.SetPosition(Vector3(10000.0f, 0.0f, 0.0f));
 		m_enemy[i].modelRender.SetScale(Vector3(2.0f, 2.0f, 2.0f));
 		m_enemy[i].modelRender.Update();
 		m_enemy[i].moveSpeed[0] = m_bezierPos[0];
@@ -112,26 +120,24 @@ void Wipe::LevelDesign()
 
 void Wipe::Update()
 {
-    if (g_pad[0]->IsTrigger(enButtonA)) {
-
-        RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY += 10;
-        RenderingEngine::GetInstance()->GetWipeViewPort().Height += 10;
-    }
-    if (g_pad[0]->IsTrigger(enButtonB)) {
-        RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX += 10;
-        RenderingEngine::GetInstance()->GetWipeViewPort().Width += 10;
-    }
-
-	if (g_pad[0]->IsTrigger(enButtonX)) {
+ 	if (g_pad[0]->IsTrigger(enButtonX)) {
 		Reset();
 	}
 
 	EnemyMove();
+
+	WipeOutline();
 }
 
 void Wipe::EnemyMove()
 {
+	if (!m_isWipe) {
+		return;
+	}
+
+	//ŠÔ‚ªŒo‰ß‚µ‚½‚çAˆÚ“®‚ğ~‚ß‚é
 	if (m_timer > MOVE_TIME) {
+		m_isWipe = false;
 		return;
 	}
 
@@ -140,8 +146,10 @@ void Wipe::EnemyMove()
 
 	float timer = m_timer;
 
+	//“G‚Ì”‚¾‚¯for•¶‚Å‰ñ‚·
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
 
+		//“G‚ÌŠÔŠu‚ğİ’è
 		timer = m_timer - (i * ENEMY_DURATION);
 
 		Vector3 moveSpeed = m_enemy[i].moveSpeed[2];
@@ -165,6 +173,38 @@ void Wipe::EnemyMove()
 	}
 }
 
+void Wipe::WipeOutline()
+{
+	if (!m_isWipe) {
+		//ŠÔ‚ªŒo‰ß‚µ‚½‚çAƒƒCƒv‚ÌˆÚ“®‚ğ~‚ß‚é
+		if (m_outlineTimer <= 0.0f) {
+			return;
+		}
+
+		//ŠÔ‚ğŒv‘ª
+		m_outlineTimer -= g_gameTime->GetFrameDeltaTime();
+		m_outlineTimer = max(m_outlineTimer, 0.0f);
+	}
+	else {
+		//ŠÔ‚ªŒo‰ß‚µ‚½‚çAƒƒCƒv‚ÌˆÚ“®‚ğ~‚ß‚é
+		if (m_outlineTimer > 1.0f) {
+			return;
+		}
+
+		//ŠÔ‚ğŒv‘ª
+		m_outlineTimer += g_gameTime->GetFrameDeltaTime();
+		m_outlineTimer = min(m_outlineTimer, 1.0f);
+	}
+
+	m_outlinePos.Lerp(m_outlineTimer, OUTLINE_POS_MIN, OUTLINE_POS_MAX);
+	m_wipePos.Lerp(m_outlineTimer, WIPE_POS_MIN, WIPE_POS_MAX);
+
+	//ƒƒCƒv‚Ìİ’è
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = m_wipePos.x;
+	m_outlineSpriteRender.SetPosition(m_outlinePos);
+	m_outlineSpriteRender.Update();
+}
+
 void Wipe::Render(RenderContext& rc)
 {
 	for (auto& wall : m_stage)
@@ -175,4 +215,6 @@ void Wipe::Render(RenderContext& rc)
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
 		m_enemy[i].modelRender.Draw(rc);
 	}
+
+	m_outlineSpriteRender.Draw(rc);
 }
