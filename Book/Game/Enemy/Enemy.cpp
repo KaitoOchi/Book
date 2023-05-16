@@ -432,7 +432,7 @@ void Enemy::Act_SearchMissingPlayer()
 		// プレイヤーを発見したとき
 		if (m_TrakingPlayerFlag == true) {
 			// 再度追跡する
-			Efect_FIndPlayer();
+			Efect_MissingPlayer();
 			m_ActState = TRACKING;
 			return;
 		}
@@ -461,10 +461,6 @@ void Enemy::Act_HitFlashBullet()
 
 	// タイマーがtrueのとき
 	if (Act_Stop(CANMOVE_TIMER,0) == true) {
-		// エフェクトを生成
-		Efect_MissingPlayer();
-		m_enAnimationState = LOSS;
-
 		// 生成フラグをリセット
 		m_efectDrawFlag[0] = false;
 
@@ -474,6 +470,13 @@ void Enemy::Act_HitFlashBullet()
 
 		// タイマーをリセット
 		m_addTimer[0] = 0.0f;
+
+		// エフェクトを生成
+		Efect_MissingPlayer();
+
+		// プレイヤーを探す
+		m_ActState = MISSING_SEARCHPLAYER;
+
 	}
 	else {
 		// エフェクトの生成フラグをfalseにしておく
@@ -658,6 +661,8 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
+	Vector3 diff;
+
 	// 壁との衝突判定
 	Act_Charge_HitWall();
 
@@ -674,11 +679,8 @@ void Enemy::Act_Charge(float time)
 		}
 
 		// エネミーからプレイヤーへ向かうベクトル
-		Vector3 diff = m_playerChargePosition - m_position;
+		diff = m_playerChargePosition - m_position;
 		diff.Normalize();
-
-		// 回転を教える
-		Rotation(diff);
 
 		// 移動速度に加算
 		Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
@@ -687,9 +689,19 @@ void Enemy::Act_Charge(float time)
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
 
-		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
 	}
+	else {
+		// 回転のみプレイヤーを追尾させる
+		diff = m_playerManagement->GetPosition() - m_position;
+		diff.Normalize();
+
+		// 待機アニメーションを再生
+		m_enAnimationState = IDLE;
+	}
+
+	// 回転を教える
+	Rotation(diff);
 }
 
 void Enemy::Act_ChargeEnd()

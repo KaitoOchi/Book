@@ -7,6 +7,7 @@ namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
 	const float		STOP_TIMER = 1.5f;				// 溜め時間
+	const float		MOVING_DISTANCE = 400.0f;		// 移動距離
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -74,6 +75,14 @@ void Enemy_Charge::Update()
 	case CHARGE:
 		Update_OnCharge();
 		break;
+		// 突進終了
+	case CHARGEEND:
+		Update_OnChargeEnd();
+		break;
+		// プレイヤーを探す
+	case MISSING_SEARCHPLAYER:
+		Update_OnSearchMissingPlayer();
+		break;
 		// 呼ばれたとき
 	case CALLED:
 		Update_OnCalled();
@@ -130,14 +139,29 @@ void Enemy_Charge::Update_OnCraw()
 
 void Enemy_Charge::Update_OnCharge()
 {
-	Enemy::Act_Charge_HitWall();		// 壁との衝突判定
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
 										// 関数内で巡回状態に戻る処理を記述
+
+	// 移動距離の長さが一定以上のとき
+	if (m_sumPos.Length() >= MOVING_DISTANCE) {
+		m_ActState = CHARGEEND;
+	}
 
 	// プレイヤーを捕まえたとき
 	if (Enemy::Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
+}
+
+void Enemy_Charge::Update_OnChargeEnd()
+{
+	Enemy::Act_ChargeEnd();		// 突進をやめる
+}
+
+void Enemy_Charge::Update_OnSearchMissingPlayer()
+{
+	// プレイヤーを探す
+	Enemy::Act_SearchMissingPlayer();
 }
 
 void Enemy_Charge::Update_OnBackBasedOn()
@@ -159,40 +183,23 @@ void Enemy_Charge::Update_OnCalled()
 
 void Enemy_Charge::Update_OnConfusion()
 {
-	// 閃光弾に当たったとき
-
 	Enemy::Act_HitFlashBullet();
-
-	// 閃光弾に当たっていないとき
-	if (Enemy::GetHitFlushBullet() == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 void Enemy_Charge::UpDate_OnListen()
 {
 	// 音爆弾を使ったとき
+	Enemy::Act_HitSoundBullet();
 
 	// 閃光弾を食らっているときは実行しない
 	if (m_HitFlashBulletFlag == true) {
 		m_HitFlashBulletFlag = false;
 		return;
 	}
-
-
-	// 効果が終了したとき
-	if (m_HitSoundBulletFlag == true) {
-		m_ActState = BACKBASEDON;
-	}
-	// 効果が無効だったとき
-	else {
-		m_ActState = CRAW;
-	}
 }
 
 void Enemy_Charge::Update_OnCatch()
 {
-
 	Enemy::Act_CatchPlayer();
 
 	m_ActState = CRAW;
