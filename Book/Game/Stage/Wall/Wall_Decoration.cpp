@@ -14,10 +14,7 @@ Wall_Decoration::~Wall_Decoration()
 bool Wall_Decoration::Start()
 {
 	Wall::Start();
-
-
 	m_wallRender.Init("Assets/modelData/level_test/tkm/decoration.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
-
 	// ìñÇΩÇËîªíËÇçÏê¨
 	Wall::CreateBoxObj();
 
@@ -31,7 +28,7 @@ void Wall_Decoration::Load_Model(int num)
 		m_wallRender.Init("Assets/modelData/level_test/tkm/decoration.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
 		break;
 	case 2:
-		
+		m_wallRender.Init("Assets/modelData/level_test/tkm/decoration_2.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
 		break;
 	case 3:
 		m_wallRender.Init("Assets/modelData/level_test/tkm/decoration_3.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
