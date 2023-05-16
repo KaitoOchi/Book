@@ -95,6 +95,9 @@ private:
 
 	float				m_flashScale = 1.0f;			//閃光弾の画像の大きさ
 	float				m_soundScale = 1.0f;			//閃光弾の画像の大きさ
+
+	bool				m_falshState = true;			//閃光弾のステート
+	bool				m_soundState = false;			//音爆弾のステート
 	
 };
 

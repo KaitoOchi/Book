@@ -8,5 +8,10 @@ public:
 
 	bool Start();
 	void Render(RenderContext& rc);
+
+
+public:
+private:
+	
 };
 
