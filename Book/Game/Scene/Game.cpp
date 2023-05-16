@@ -210,7 +210,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(0);
+			enemyNormal->Pass(1);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
@@ -230,7 +230,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(1);
+			enemyCharge->Pass(0);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -268,7 +268,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(2);
+			enemyClear->Pass(3);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
