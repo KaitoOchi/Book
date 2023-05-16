@@ -193,6 +193,7 @@ private:
 
 	std::vector<PhysicsGhost*>m_physicsGhostList;
 
+
 	PlayerManagement* m_playerManagement = nullptr;
 
 	// ステージ

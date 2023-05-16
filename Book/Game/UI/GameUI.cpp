@@ -17,7 +17,9 @@ namespace
 	const Vector3	FLASH_FONT_POSITION = { 670.0f,280.0f,0.0f };		//‘MŒõ’e‚Ì”‚ÌƒtƒHƒ“ƒg‚ÌÀ•W
 	const Vector3	ITEM_SOUND_POSITION = { 615.0f,250.0f,0.0f };		//‰¹”š’e‚Ìˆ—
 	const Vector3	SOUND_FONT_POSITION = { 745.0f,280.0f,0.0f };		//‘MŒõ’e‚Ì”‚ÌƒtƒHƒ“ƒg‚ÌÀ•W
-	
+	const float		FLASH_SCALE_MAX = 1.3f;								//‘MŒõ’eUI‚ÌÅ‘å‚ÌƒXƒP[ƒ‹
+	const float		SOUND_SCALE_MAX = 1.3f;								//‰¹”š’eUI‚ÌÅ‘å‚ÌƒXƒP[ƒ‹
+
 
 }
 
@@ -61,12 +63,12 @@ bool GameUI::Start()
 	m_itemBaseRender.Update();
 
 	//‘MŒõ’e‰æ‘œ‚Ìİ’è
-	m_itemFlashRender.Init("Assets/sprite/UI/ItemSlot/flashbom.DDS", 39, 39);
+	m_itemFlashRender.Init("Assets/sprite/UI/ItemSlot/flashbom.DDS", 69, 69);
 	m_itemFlashRender.SetPosition(ITEM_FLASH_POSITION);
 	m_itemFlashRender.Update();
 
 	//‰¹”š’e‰æ‘œ‚Ìİ’è
-	m_itemSoundRender.Init("Assets/sprite/UI/ItemSlot/soundbom.DDS", 39, 39);
+	m_itemSoundRender.Init("Assets/sprite/UI/ItemSlot/soundbom.DDS", 69, 69);
 	m_itemSoundRender.SetPosition(ITEM_SOUND_POSITION);
 	m_itemSoundRender.Update();
 
@@ -207,23 +209,67 @@ void GameUI::ItemScaleUp()
 	switch (m_player3D->GetItemState())
 	{
 	case Player::m_enItem_Flash:
-		m_flashScale += 0.1f;
-		m_flashScale = min(m_flashScale, 2.0f);
+		if (m_falshState)
+		{
+			//Šg‘å‚·‚é
+			m_flashScale += 0.2f*g_gameTime->GetFrameDeltaTime();
+			m_flashScale = min(m_flashScale, FLASH_SCALE_MAX);
+			if (m_flashScale == FLASH_SCALE_MAX)
+			{
+				m_falshState = false;
+			}
+		}
+		else
+		{
+			//k¬‚·‚é
+			m_flashScale -= 0.2f * g_gameTime->GetFrameDeltaTime();
+			m_flashScale = max(m_flashScale, 1.0f);
+			if (m_flashScale == 1.0f)
+			{
+				m_falshState = true;
+			}
+		}
+		//‘MŒõ’eUI‚ğİ’è‚·‚é
 		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.SetMulColor(Vector4 {10.0f,10.0f,10.0f,1.0f });
 		m_itemFlashRender.Update();
 
+		//‰¹”š’eUI‚ğ‰Šú‰»‚·‚é
 		m_soundScale = 1.0f;
 		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.SetMulColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });
 		m_itemSoundRender.Update();
 		break;
 	case Player::m_enItem_SoundBom:
-		m_soundScale += 0.1f;
-		m_soundScale = min(m_soundScale, 2.0f);
+		if (m_soundState)
+		{
+			//Šg‘å‚·‚é
+			m_soundScale += 0.2f * g_gameTime->GetFrameDeltaTime();
+			m_soundScale = min(m_soundScale, SOUND_SCALE_MAX);
+			if (m_soundScale == SOUND_SCALE_MAX)
+			{
+				m_soundState = false;
+			}
+		}
+		else
+		{
+			//k¬‚·‚é
+			m_soundScale -= 0.2f * g_gameTime->GetFrameDeltaTime();
+			m_soundScale = max(m_soundScale, 1.0f);
+			if (m_soundScale == 1.0f)
+			{
+				m_soundState = true;
+			}
+		}
+		//‰¹”š’eUI‚ğİ’è‚·‚é
 		m_itemSoundRender.SetScale(Vector3(m_soundScale, m_soundScale, 0.0f));
+		m_itemSoundRender.SetMulColor(Vector4{ 10.0f,10.0f,10.0f,1.0f });
 		m_itemSoundRender.Update();
 
+		//‘MŒõ’eUI‚ğ‰Šú‰»‚·‚é
 		m_flashScale = 1.0f;
 		m_itemFlashRender.SetScale(Vector3(m_flashScale, m_flashScale, 0.0f));
+		m_itemFlashRender.SetMulColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });
 		m_itemFlashRender.Update();
 		break;
 	default:
