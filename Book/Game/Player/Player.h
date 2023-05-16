@@ -106,6 +106,12 @@ public:
 	{
 		m_moveSpeed = speed;
 	}
+
+	const Vector3 GetMoveSpeed()
+	{
+		return m_moveSpeed;
+	}
+
 	/// <summary>
 	/// プレイヤーステートの変更
 	/// </summary>
@@ -137,6 +143,15 @@ public:
 		m_stamina = stamina;
 	}
 
+	const void SetRotation(const Quaternion rot)
+	{
+		m_rotation = rot;
+	}
+
+	const Quaternion GetRotation()
+	{
+		return m_rotation;
+	}
 
 protected:
 	

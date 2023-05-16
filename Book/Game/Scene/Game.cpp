@@ -194,6 +194,12 @@ void Game::LevelDesign()
 {
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
+		if (objData.EqualObjectName(L"Player") == true)
+		{
+			m_player3D->SetPosition(objData.position);
+			m_player3D->SetRotation(objData.rotation);
+			return true;
+		}
 
 		// 名前が Normal のとき
 		if (objData.EqualObjectName(L"Normal") == true) {

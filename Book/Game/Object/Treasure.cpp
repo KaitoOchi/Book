@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Treasure.h"
 #include "Game.h"
+#include "Gage.h"
 #include <random>
 
 namespace
@@ -18,10 +19,14 @@ Treasure::~Treasure()
 }
 bool Treasure::Start()
 {
+	//‚¨•ó‚ÌÀ•W‚ğƒ‰ƒ“ƒ_ƒ€‚Å¶¬‚·‚é
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
+
+	m_gage = FindGO<Gage>("gage");
+
 	Object::Start();
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelRender.Init("Assets/modelData/object/takara/treasure.tkm");
@@ -70,7 +75,8 @@ void Treasure::Hit()
 
 		m_game->NotifyEventStart();
 		m_game->SetTresurePosition(m_game->GetTreasurePositionList()[m_randTreasure]);
-
+		
+		m_gage->m_leverState = m_gage->m_enLever_MAX;
 		Deactivate();
 	}
 }

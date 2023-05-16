@@ -69,6 +69,25 @@ public:
 		}
 	}
 
+	const Vector3 GetMoveSpeed()
+	{
+		// 今アクティブなプレイヤーの座標を返す
+		if (m_enMananagementState == m_enPlayer_3DChanging) {
+			return m_player3D->GetMoveSpeed();
+		}
+		else if (m_enMananagementState == m_enPlayer_2DChanging) {
+			return m_player2D->GetMoveSpeed();
+		}
+		else if (m_manageStateTmp == m_enPlayer_3DChanging)
+		{
+			return m_player2D->GetMoveSpeed();
+		}
+		else if (m_manageStateTmp == m_enPlayer_2DChanging)
+		{
+			return m_player3D->GetMoveSpeed();
+		}
+	}
+
 	/// <summary>
 	/// キャラコンの設定
 	/// </summary>
@@ -149,7 +168,7 @@ public:
 	}
 
 private:
-	void PlayerStop();
+	
 	bool RestartState = true;									//プレイヤーを再開させるかどうか
 	bool ChangeStart = true;
 

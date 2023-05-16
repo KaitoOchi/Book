@@ -44,7 +44,6 @@ bool Player3D::Start()
 	//音爆弾の呼び出し
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-	m_position = { 11200.0f, 300.0f, 1300.0f };
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
@@ -318,6 +317,7 @@ void Player3D::ProcessDownStateTransition()
 		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
+		m_modelRender->SetAnimationSpeed(1.0f);
 	}
 }
 void Player3D::ProcessThrowStateTransition()

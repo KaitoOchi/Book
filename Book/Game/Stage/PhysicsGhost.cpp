@@ -3,7 +3,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const float EFFECT_SIZE = 2.0f;						//エフェクトサイズ
+	const float EFFECT_SIZE = 1.50f;						//エフェクトサイズ
 }
 PhysicsGhost::PhysicsGhost()
 {
@@ -49,14 +49,11 @@ void PhysicsGhost::EffectDraw()
 	Vector3 diff = m_position-m_playerManagement->GetPosition() ;
 	if (diff.Length() < pow(30.0f,2))
 	{
-		if (m_kirakiraEffect->IsPlay()==false)
-		{
-			m_kirakiraEffect->Play();
-		}
+		m_kirakiraEffect->SetScale(Vector3::One * EFFECT_SIZE);
 	}
 	else
 	{
-		m_kirakiraEffect->Stop();
+		m_kirakiraEffect->SetScale(Vector3::Zero);
 	}
 	
 }
