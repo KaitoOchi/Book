@@ -107,7 +107,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
 /// <summary>
 /// シャドウマップ描画用のピクセルシェーダー
 /// </summary>
-float4 PSMain(SPSIn psIn) : SV_Target0
+float4 PSMainCore(SPSIn psIn)
 {
 	float2 uv;
 	int x, y;
@@ -123,4 +123,14 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
     //ライトから見た深度値と、ライトから見た深度値の2乗を出力する
     return float4(psIn.depth.x, psIn.depth.y, 0.0f, 1.0f);
+}
+
+float4 PSMain(SPSIn psIn) : SV_Target0
+{
+    return PSMainCore(psIn);
+}
+
+float4 PSPlayer2D(SPSIn psIn) : SV_Target0
+{
+        return PSMainCore(psIn);
 }
