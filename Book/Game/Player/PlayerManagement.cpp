@@ -84,11 +84,6 @@ void PlayerManagement::Update()
 }
 void PlayerManagement::Input()
 {
-
-	if (g_pad[0]->IsTrigger(enButtonA)) {
-		m_position = m_position;
-	}
-
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 		m_smokeEffect = NewGO<EffectEmitter>(0);
 		m_smokeEffect->Init(0);

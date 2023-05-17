@@ -18,12 +18,12 @@ namespace
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
 									{ 100.0f, 50.0f, 50.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
-									{ 285.0f, 10.0f, -50.0f },
+									{ 220.0f, 5.0f, -50.0f },
 									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
 	const Vector3 CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
 									{ 0.0f, 50.0f, 50.0f },
 									{ 0.0f, 50.0f, 0.0f },
-									{ 260.0f, 10.0f, -50.0f },
+									{ 200.0f, 5.0f, -50.0f },
 									{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
 	const Vector3 CAMERA_SPEED[5] = { {0.0f, -5.0f, 0.0f},
 									{ 0.0f, 0.0f, -3.0f },
@@ -60,7 +60,7 @@ bool Event::Start()
 	m_tresureModelRender.Update();
 
 	//座標を設定
-	m_tresurePos.y -= 50.0f;
+	m_tresurePos.y -= 98.0f;
 	m_tresurePos.z -= 10.0f;
 
 	//プレイヤーモデルを設定
@@ -91,7 +91,7 @@ bool Event::Start()
 	m_enemyAnimClips[enemyAnimClip_Run].SetLoopFlag(true);
 	for (int i = 0; i < 3; i++) {
 		m_enemyModelRender[i].Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnimClips, enemyAnimClip_Num, enModelUpAxisZ, true, true);
-		m_enemyModelRender[i].SetPosition(Vector3(260.0f, 0.0f, (-300.0f + (100 * i))));
+		m_enemyModelRender[i].SetPosition(Vector3(150.0f, 0.0f, (-300.0f + (100 * i))));
 		m_enemyModelRender[i].Update();
 	}
 
