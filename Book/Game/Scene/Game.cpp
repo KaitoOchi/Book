@@ -39,7 +39,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	// はてなマークのエフェクト
 	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
 	//ビックリマーク
@@ -322,7 +322,7 @@ void Game::LevelDesign()
 				// 障害物を生成
 				Wall_Decoration* decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
 				// モデルの番号を渡す
-				decoration->Load_Model(objData.number);
+				//decoration->Load_Model(objData.number);
 				decoration->SetPosition(objData.position);
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
