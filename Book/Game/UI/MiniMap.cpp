@@ -77,7 +77,6 @@ void MiniMap::Update()
 
 	// お宝を描画
 	DrawMap_Treasure(m_treasurePos);
-	m_TreasureSpriteRender.Update();
 
 	m_PlayerSpriteRender.Update();
 	m_SpriteRender.Update();
@@ -91,7 +90,7 @@ void MiniMap::DrawMap(Vector3 enemyPos, int num)
 	Vector3 mapPos;
 
 	// マップに表示する範囲に敵がいたら
-	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos)) {
+	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos, false)) {
 
 		// spriteRenderに座標を設定
 		m_EnemySpriteRender[num].SetPosition(mapPos);
@@ -108,21 +107,16 @@ void MiniMap::DrawMap_Treasure(Vector3 TreasurePos)
 {
 	// プレイヤーの座標
 	Vector3 playerPos = m_playerManagement->GetPosition();
-
 	Vector3 mapPos;
 
-	// 長さが範囲内だったら
-	if (WorldPositionConvertToMapPosition(playerPos, TreasurePos, mapPos)) {
-		// spriteRenderに座標を設定
-		m_TreasureSpriteRender.SetPosition(mapPos);
-		m_isImage2 = true;
-	}
-	else {
-		m_isImage2 = false;
-	}
+	//お宝座標をマップ上の座標に変換する
+	WorldPositionConvertToMapPosition(playerPos, TreasurePos, mapPos, true);
+
+	m_TreasureSpriteRender.SetPosition(mapPos);
+	m_TreasureSpriteRender.Update();
 }
 
-const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition, Vector3& mapPosition)
+const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition, Vector3& mapPosition, const bool isTresure)
 {
 	// Y座標はマップとは関係ないので0.0fを設定
 	worldCenterPosition.y = 0.0f;
@@ -130,11 +124,16 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 	// 中心の座標から表示したいオブジェクトの座標へ向かうベクトルを計算
 	Vector3 diff = worldPosition - worldCenterPosition;
+	Vector3 diff2 = diff;
 
-	// 	計算したベクトルが一定以上離れていたら
-	if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
-		// 範囲外に存在しているのでマップに表示しない
-		return false;
+	if (!isTresure) {
+
+		// 	計算したベクトルが一定以上離れていたら
+		if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
+
+			// 範囲外に存在しているのでマップに表示しない
+			return false;
+		}
 	}
 
 	// ベクトルの長さを取得する
@@ -158,6 +157,21 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 	// マップの中央座標と上記ベクトルを加算する
 	mapPosition = Vector3(CENTER_POSITION.x + diff.x, CENTER_POSITION.y + diff.z, 0.0f);
+
+	if (isTresure) {
+		// 	計算したベクトルが一定以上離れていたら
+		if (diff2.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
+			//お宝座標の方向を求める
+			diff2 =	Vector3(mapPosition.x - CENTER_POSITION.x, mapPosition.y - CENTER_POSITION.y, 0.0f);
+			length = diff2.Length();
+			//マップ上に写す座標を求める
+			mapPosition.x = CENTER_POSITION.x + (diff2.x / length) * MAP_RADIUS;
+			mapPosition.y = CENTER_POSITION.y + (diff2.y / length) * MAP_RADIUS;
+
+			// 範囲外に存在している
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -168,9 +182,7 @@ void MiniMap::Render(RenderContext& rc)
 	m_OutLineSpriteRender.Draw(rc);
 	m_PlayerSpriteRender.Draw(rc);
 
-	//if (m_isImage2 == true) {
-	//	m_TreasureSpriteRender.Draw(rc);
-	//}
+	m_TreasureSpriteRender.Draw(rc);
 
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		// 範囲内のとき

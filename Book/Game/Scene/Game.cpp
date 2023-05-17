@@ -154,11 +154,7 @@ bool Game::Start()
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
-
-
-	NewGO<Pause>(0, "pause");
 	NewGO<SkyCube>(0, "skyCube");
-	NewGO<Wipe>(0, "wipe");
 
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;

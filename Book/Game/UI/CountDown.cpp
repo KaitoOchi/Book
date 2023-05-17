@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "PlayerManagement.h"
 #include "GameManager.h"
+#include "Pause.h"
 
 
 CountDown::CountDown()
@@ -13,7 +14,7 @@ CountDown::CountDown()
 
 CountDown::~CountDown()
 {
-
+	NewGO<Pause>(2, "pause");
 }
 
 bool CountDown::Start()
@@ -65,7 +66,7 @@ void CountDown::Update()
 	if (m_timer > 0.5f) {
 		//ƒJƒEƒ“ƒg‰æ‘œ‚ÌÝ’è
 		m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
-		m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f - m_timer));
+		m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 2.0f - (m_timer * 2.0f)));
 		m_countDownSpriteRender[m_count].Update();
 	}
 	
@@ -73,8 +74,5 @@ void CountDown::Update()
 
 void CountDown::Render(RenderContext& rc)
 {
-	if (m_count >= 4) {
-		return;
-	}
 	m_countDownSpriteRender[m_count].Draw(rc);
 }

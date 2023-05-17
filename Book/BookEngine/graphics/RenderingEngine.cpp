@@ -156,12 +156,12 @@ namespace nsBookEngine {
 		m_viewPorts[0].MaxDepth = 1.0f;   //深度値の最大値
 		
 		//ワイプ画面の描画
-		m_viewPorts[1].Width = 960 / 4;   //画面の横サイズ
-		m_viewPorts[1].Height = 540 / 4;   //画面の縦サイズ
-		m_viewPorts[1].TopLeftX = 0;   //画面左上のx座標
-		m_viewPorts[1].TopLeftY = 0;   //画面左上のy座標
+		m_viewPorts[1].Width = 960 / 4 + 3;   //画面の横サイズ
+		m_viewPorts[1].Height = 540 / 4 + 3;   //画面の縦サイズ
+		m_viewPorts[1].TopLeftX = -290;   //画面左上のx座標
+		m_viewPorts[1].TopLeftY = 662;   //画面左上のy座標
 		m_viewPorts[1].MinDepth = 0.0f;   //深度値の最小値
-		m_viewPorts[1].MaxDepth = 1.0f;   //深度値の最大値
+		m_viewPorts[1].MaxDepth = 0.5f;   //深度値の最大値
 
 		//ワイプカメラを初期化。
 		m_wipeCamera.SetPosition({ 11200.0f, 400.0f, 1300.0f });
@@ -255,7 +255,7 @@ namespace nsBookEngine {
 		}
 
 		//ビューポートを設定
-		rc.SetViewportAndScissor(m_viewPorts[1]);
+		rc.SetViewPort(m_viewPorts[1]);
 		//ワイプ描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnWipeForwardRender(rc, m_wipeCamera);

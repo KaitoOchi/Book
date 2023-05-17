@@ -41,11 +41,13 @@ private:
 	/// <param name="worldcenterPosition">マップの中心とするオブジェクトのワールド座標</param>
 	/// <param name="worldPosition">マップに表示したいオブジェクトのワールド座標</param>
 	/// <param name="mapPosirion">変換した後のマップ座標</param>
+	/// <param name="isTresure">trueなら範囲外でも表示する</param>
 	/// <returns></returns>
 	const bool WorldPositionConvertToMapPosition(
 		Vector3 worldcenterPosition,
 		Vector3 worldPosition,
-		Vector3& mapPosirion
+		Vector3& mapPosirion,
+		const bool isTresure
 	);
 
 	SpriteRender m_SpriteRender;							// スプライトレンダー。ミニマップのベース
@@ -55,9 +57,6 @@ private:
 	SpriteRender m_TreasureSpriteRender;					// スプライトレンダー。お宝
 
 	PlayerManagement* m_playerManagement = nullptr;
-	Enemy_Normal* m_enemyNormal = nullptr;
-	Enemy_Search* m_enemySearch = nullptr;
-	Enemy_Charge* m_enemyCharge = nullptr;
 	Game* m_game = nullptr;
 	Treasure* m_treasure = nullptr;
 
@@ -66,6 +65,5 @@ private:
 	Vector3 m_treasurePos = Vector3::Zero;			// お宝の位置
 
 	std::array<bool,ENEMY_NUM>m_isImage;						// 表示するかどうかのフラグ。エネミーの数分用意する
-	bool m_isImage2 = false;						// 表示するかどうかのフラグ。お宝用
 };
 
