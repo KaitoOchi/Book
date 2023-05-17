@@ -155,10 +155,9 @@ void Wipe::EnemyMove()
 		m_enemy[i].moveSpeed[1].Lerp(timer, m_bezierPos[1], m_bezierPos[2]);
 		m_enemy[i].moveSpeed[2].Lerp(timer, m_enemy[i].moveSpeed[0], m_enemy[i].moveSpeed[1]);
 
+		//‰ñ“]‚³‚¹‚é
 		moveSpeed -= m_enemy[i].moveSpeed[2];
 		moveSpeed *= -1.0f;
-
-		//‰ñ“]‚³‚¹‚é
 		Quaternion rot;
 		rot.SetRotationYFromDirectionXZ(moveSpeed);
 
@@ -192,6 +191,7 @@ void Wipe::WipeOutline()
 		m_outlineTimer = min(m_outlineTimer, 1.0f);
 	}
 
+	//ƒƒCƒv‚ğˆÚ“®
 	m_outlinePos.Lerp(m_outlineTimer, OUTLINE_POS_MIN, OUTLINE_POS_MAX);
 	m_wipePos.Lerp(m_outlineTimer, WIPE_POS_MIN, WIPE_POS_MAX);
 
