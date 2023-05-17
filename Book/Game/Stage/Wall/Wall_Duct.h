@@ -1,17 +1,12 @@
 #pragma once
 #include "Wall.h"
-class Wall_Gap:public Wall
+class Wall_Duct :public Wall
 {
 public:
-	Wall_Gap();
-	~Wall_Gap()override;
+	Wall_Duct();
+	~Wall_Duct()override;
 
 	bool Start();
 	void Render(RenderContext& rc);
-
-
-public:
-private:
-	
 };
 
