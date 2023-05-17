@@ -30,7 +30,6 @@ namespace
 									{ 0.0f, 0.0f, 0.0f },
 									{ 0.0f, 0.0f, -150.0f },
 									{ 0.0f, 3.0f, 0.0f } };			//カメラ速度
-
 	const Vector3 FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
 								{ 750.0f, 0.0f, 0.0f },
 								{ 0.0f, 420.0f, 0.0f },
@@ -146,9 +145,7 @@ void Event::Update()
 	if (m_isWaitFadeOut) {
 		//フェードが終了したら
 		if (!m_fade->IsFade()) {
-			
 			DeleteGO(this);
-			
 		}
 	}
 	else {
@@ -173,7 +170,7 @@ void Event::Time()
 	m_timer += g_gameTime->GetFrameDeltaTime();
 
 	//フィルム用の時間を計測
-	m_filmTimer += 0.001f;
+	m_filmTimer += 0.0005f;
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.z = m_filmTimer;
 }
 

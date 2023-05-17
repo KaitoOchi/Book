@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include "Enemy.h"
+#include "Wipe.h"
 #include "GameManager.h"
 
 namespace
@@ -26,12 +27,14 @@ Gage::Gage()
 }
 Gage::~Gage()
 {
-
+	DeleteGO(m_wipe);
 }
 bool Gage::Start()
 {
 	//ƒQ[ƒ€‚Ìî•ñ‚ğ‚Á‚Ä‚­‚é
 	m_game = FindGO<Game>("game");
+
+	m_wipe = NewGO<Wipe>(0, "wipe");
 
 	//Šî”Õ‚ÌXV
 	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
@@ -158,10 +161,12 @@ void Gage::VigilaceLeverChange()
 		case Gage::m_enLever_1:
 			m_leverState = m_enLever_2;
 			m_vigilanceGage = 0;
+			m_wipe->Reset();
 			break;
 		case Gage::m_enLever_2:
 			m_leverState = m_enLever_3;
 			m_vigilanceGage = 0;
+			m_wipe->Reset();
 			break;
 		case Gage::m_enLever_3:
 			m_vigilanceGage = 10;
