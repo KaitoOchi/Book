@@ -41,6 +41,10 @@ bool PhysicsGhost::Start()
 void PhysicsGhost::Update()
 {
 	EffectDraw();
+	if (m_kirakiraEffect == nullptr)
+	{
+		return;
+	}
 	m_kirakiraEffect->Update();
 }
 
@@ -49,11 +53,14 @@ void PhysicsGhost::EffectDraw()
 	Vector3 diff = m_position-m_playerManagement->GetPosition() ;
 	if (diff.Length() < pow(30.0f,2))
 	{
-		m_kirakiraEffect->SetScale(Vector3::One * EFFECT_SIZE);
+		m_kirakiraEffect->Play();	
 	}
 	else
 	{
-		m_kirakiraEffect->SetScale(Vector3::Zero);
+		if (m_kirakiraEffect != nullptr)
+		{
+			m_kirakiraEffect->Stop();
+		}
 	}
 	
 }

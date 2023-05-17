@@ -16,7 +16,7 @@ bool Wall_Decoration::Start()
 	Wall::Start();
 	m_wallRender.Init("Assets/modelData/level_test/tkm/decoration.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
 	// “–‚½‚è”»’è‚ğì¬
-	Wall::CreateBoxObj();
+	//Wall::CreateBoxObj();
 
 	return true;
 }
