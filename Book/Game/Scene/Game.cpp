@@ -322,7 +322,7 @@ void Game::LevelDesign()
 				// 障害物を生成
 				Wall_Decoration* decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
 				// モデルの番号を渡す
-				//decoration->Load_Model(objData.number);
+				decoration->Load_Model(objData.number);
 				decoration->SetPosition(objData.position);
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
