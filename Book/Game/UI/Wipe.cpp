@@ -23,7 +23,7 @@ Wipe::~Wipe()
 {
 	delete m_enemyAnim;
 
-	for (auto stage : m_stage)
+	for (auto& stage : m_stage)
 	{
 		DeleteGO(stage);
 	}
@@ -120,10 +120,6 @@ void Wipe::LevelDesign()
 
 void Wipe::Update()
 {
- 	if (g_pad[0]->IsTrigger(enButtonX)) {
-		Reset();
-	}
-
 	EnemyMove();
 
 	WipeOutline();

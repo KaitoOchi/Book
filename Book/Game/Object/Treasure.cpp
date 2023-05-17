@@ -23,15 +23,16 @@ bool Treasure::Start()
 	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
 	Object::Start();
+	m_position = m_game->GetTreasurePositionList()[m_randTreasure];
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelRender.Init("Assets/modelData/object/takara/treasure.tkm");
-	m_modelRender.SetPosition(m_game->GetTreasurePositionList()[m_randTreasure]);
+	m_modelRender.SetPosition(m_position);
 	m_modelRender.SetScale(m_scale*3.0f);
 	m_modelRender.SetRotation(m_rotation);
 	//ƒRƒŠƒWƒ‡ƒ“‚Ìì¬
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_collisionObject->CreateBox(
-		m_game->GetTreasurePositionList()[m_randTreasure],
+		m_position,
 		m_rotation,
 		BOXSIZE
 	);
@@ -69,7 +70,7 @@ void Treasure::Hit()
 		m_game->GetPointLight().Update();
 
 		m_game->NotifyEventStart();
-		m_game->SetTresurePosition(m_game->GetTreasurePositionList()[m_randTreasure]);
+		m_game->SetTresurePosition(m_position);
 
 		Deactivate();
 	}

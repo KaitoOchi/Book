@@ -33,15 +33,15 @@ bool PhysicsGhost::Start()
 	m_kirakiraEffect->SetPosition(Vector3{ m_position.x,m_position.y + 50.0f,m_position.z });
 	m_kirakiraEffect->SetScale(Vector3::One * EFFECT_SIZE);
 	//エフェクトの座標の設定
-	m_kirakiraEffect->Play();
-	m_kirakiraEffect->Update();
+	//m_kirakiraEffect->Play();
+	//m_kirakiraEffect->Update();
 
 	return true;
 }
 void PhysicsGhost::Update()
 {
 	EffectDraw();
-	m_kirakiraEffect->Update();
+//	m_kirakiraEffect->Update();
 }
 
 void PhysicsGhost::EffectDraw()
@@ -51,12 +51,12 @@ void PhysicsGhost::EffectDraw()
 	{
 		if (m_kirakiraEffect->IsPlay()==false)
 		{
-			m_kirakiraEffect->Play();
+			//m_kirakiraEffect->Play();
 		}
 	}
 	else
 	{
-		m_kirakiraEffect->Stop();
+		//m_kirakiraEffect->Stop();
 	}
 	
 }

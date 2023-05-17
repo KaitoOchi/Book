@@ -51,6 +51,7 @@ void Pause::PauseUpdate()
 			m_isPause = true;
 			m_pauseState = enState_FadeOut;
 			GameObjectManager::GetInstance()->SetStop(true);
+			m_game->StopWallEffect();
 		}
 		break;
 	//フェードイン中なら
@@ -136,8 +137,16 @@ void Pause::FadeIn()
 	SetSprite();
 
 	if (m_timer < 0.0f) {
+		//カーソルの初期化
+		m_cursor = 0;
+		m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * -235.0f), 0.0f));
+		m_cursorSpriteRender.Update();
+
 		m_pauseState = enState_Game;
 		m_isPause = false;
+
+		//隙間エフェクトの再開
+		m_game->PlayWallEffect();
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "PlayerManagement.h"
 #include "GameManager.h"
+#include "Pause.h"
 
 
 CountDown::CountDown()
@@ -13,7 +14,7 @@ CountDown::CountDown()
 
 CountDown::~CountDown()
 {
-
+	NewGO<Pause>(2, "pause");
 }
 
 bool CountDown::Start()
