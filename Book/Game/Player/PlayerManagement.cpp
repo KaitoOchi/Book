@@ -84,6 +84,11 @@ void PlayerManagement::Update()
 }
 void PlayerManagement::Input()
 {
+
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		m_position = m_position;
+	}
+
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
 		m_smokeEffect = NewGO<EffectEmitter>(0);
 		m_smokeEffect->Init(0);
@@ -122,14 +127,6 @@ void PlayerManagement::Input()
 		se->Init(13);
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
-
-		//煙エフェクトの再生
-		EffectEmitter* smokeEffect = NewGO<EffectEmitter>(0);
-		smokeEffect->Init(0);
-		smokeEffect->SetPosition(m_position);
-		smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-		smokeEffect->Play();
-		smokeEffect->Update();
 
 		m_enMananagementState = m_enPlayer_Changing;
 		m_smokeEffect->Update();

@@ -170,7 +170,7 @@ void Event::Time()
 	m_timer += g_gameTime->GetFrameDeltaTime();
 
 	//フィルム用の時間を計測
-	m_filmTimer += 0.0005f;
+	m_filmTimer += 0.0005;
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.z = m_filmTimer;
 }
 

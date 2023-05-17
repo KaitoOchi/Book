@@ -549,6 +549,9 @@ void Game::NotifyEventEnd()
 	m_playerManagement->Activate();
 	m_player3D->Activate();
 
+	//ミニマップに脱出口を表示
+	m_miniMap->SetTreasurePos(m_position);
+
 	m_fade->StartFadeIn();
 
 	NotifyGameClearable();
