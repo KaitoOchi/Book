@@ -123,14 +123,6 @@ void PlayerManagement::Input()
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
-		//煙エフェクトの再生
-		EffectEmitter* smokeEffect = NewGO<EffectEmitter>(0);
-		smokeEffect->Init(0);
-		smokeEffect->SetPosition(m_position);
-		smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-		smokeEffect->Play();
-		smokeEffect->Update();
-
 		m_enMananagementState = m_enPlayer_Changing;
 		m_smokeEffect->Update();
 	}

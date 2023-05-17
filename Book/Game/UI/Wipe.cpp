@@ -173,6 +173,7 @@ void Wipe::WipeOutline()
 	if (!m_isWipe) {
 		//時間が経過したら、ワイプの移動を止める
 		if (m_outlineTimer <= 0.0f) {
+			m_timer = 0.0f;
 			return;
 		}
 
@@ -203,6 +204,10 @@ void Wipe::WipeOutline()
 
 void Wipe::Render(RenderContext& rc)
 {
+	if (m_timer <= 0.0f) {
+		return;
+	}
+
 	for (auto& wall : m_stage)
 	{
 		wall->WipeRender(rc);
