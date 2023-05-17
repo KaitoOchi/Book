@@ -1,6 +1,8 @@
 #pragma once
 class Game;
 class Enemy;
+class Wipe;
+
 class Gage:public IGameObject
 {
 public:
@@ -55,5 +57,6 @@ private:
 	float m_vigilaceDownTime = 2.0f;							//警戒度を下げるクールタイム
 
 	Game* m_game = nullptr;
+	Wipe* m_wipe = nullptr;
 };
 

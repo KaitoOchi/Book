@@ -5,7 +5,11 @@ class BackGround;
 
 namespace
 {
-	const int ENEMY_NUM_WIPE = 4;				//敵の数
+	const Vector3 WIPE_POS_MAX = { 8.0f, 662.0f, 0.0f };			//ワイプの最大座標
+	const Vector3 WIPE_POS_MIN = { -270.0f, 662.0f, 0.0f };			//ワイプの最小座標
+	const Vector3 OUTLINE_POS_MAX = { -671.5f, -280.0f, 0.0f };		//輪郭画像の最大座標
+	const Vector3 OUTLINE_POS_MIN = { -950.0f, -280.0f, 0.0f };		//輪郭画像の最小座標
+	const int ENEMY_NUM_WIPE = 4;									//敵の数
 }
 
 class Wipe : public IGameObject
@@ -16,6 +20,25 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+
+public:
+	/// <summary>
+	/// 敵の地点をリセット
+	/// </summary>
+	void Reset()
+	{
+		for (int i = 0; i < 3; i++) {
+			m_enemy[i].moveSpeed[0] = m_bezierPos[0];
+			m_enemy[i].moveSpeed[1] = m_bezierPos[0];
+			m_enemy[i].moveSpeed[2] = m_bezierPos[1];
+		}
+		m_wipePos = WIPE_POS_MIN;
+		RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = m_wipePos.x;
+		m_outlinePos = OUTLINE_POS_MIN;
+		m_isWipe = true;
+		m_timer = 0.0f;
+		m_outlineTimer = 0.0f;
+	}
 
 private:
 	/// <summary>
@@ -29,21 +52,12 @@ private:
 	void EnemyMove();
 
 	/// <summary>
-	/// 敵の地点をリセット
+	/// 輪郭線画像の処理。
 	/// </summary>
-	void Reset()
-	{
-		for (int i = 0; i < 3; i++) {
-			m_enemy[i].moveSpeed[0] = m_bezierPos[0];
-			m_enemy[i].moveSpeed[1] = m_bezierPos[0];
-			m_enemy[i].moveSpeed[2] = m_bezierPos[1];
-		}
-
-		m_timer = 0.0f;
-	}
-
+	void WipeOutline();
 
 private:
+	//敵の構造体
 	struct EnemyStruct
 	{
 		ModelRender modelRender;	//モデル
@@ -51,11 +65,16 @@ private:
 	};
 
 private:
-	LevelRender			m_levelRender;
-	AnimationClip*		m_enemyAnim = nullptr;
-	BackGround*			m_backGround = nullptr;
-	std::vector<Wall*>	m_stage;
-	EnemyStruct			m_enemy[ENEMY_NUM_WIPE];		//敵の構造体
-	Vector3				m_bezierPos[3];	//敵の移動座標
-	float				m_timer = 0.0f;
+	SpriteRender		m_outlineSpriteRender;		//ワイプの輪郭画像
+	LevelRender			m_levelRender;				//レベルレンダー
+	AnimationClip*		m_enemyAnim = nullptr;		//敵のアニメーション
+	BackGround*			m_backGround = nullptr;		//地面
+	std::vector<Wall*>	m_stage;					//ステージ
+	EnemyStruct			m_enemy[ENEMY_NUM_WIPE];	//敵の構造体
+	Vector3				m_bezierPos[3];				//敵の移動座標
+	Vector3				m_outlinePos;				//輪郭線の座標
+	Vector3				m_wipePos;					//ワイプの座標
+	bool				m_isWipe = false;			//ワイプを表示するかどうか
+	float				m_timer = 0.0f;				//タイマー
+	float				m_outlineTimer = 0.0f;		//ワイプ用タイマー
 };

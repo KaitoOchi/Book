@@ -10,7 +10,7 @@ public:
 	void Update();
 	void EffectDraw();
 	
-	const EffectEmitter* GetEffect()
+	EffectEmitter* GetEffect()
 	{
 		return m_kirakiraEffect;
 	}

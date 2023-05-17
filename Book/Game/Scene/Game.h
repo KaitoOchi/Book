@@ -19,6 +19,7 @@ class GhostBox;
 class PhysicsGhost;
 class Sensor;
 class SecurityCamera;
+#include "PhysicsGhost.h"
 
 class Game : public IGameObject
 {
@@ -115,6 +116,28 @@ public:
 	std::vector<PhysicsGhost*>GetPhysicsGhostList()
 	{
 		return m_physicsGhostList;
+	}
+
+	/// <summary>
+	/// 隙間エフェクトを再生。
+	/// </summary>
+	void PlayWallEffect()
+	{
+		for (auto& effect : m_physicsGhostList)
+		{
+			effect->GetEffect()->Play();
+		}
+	}
+
+	/// <summary>
+	/// 隙間エフェクトを停止。
+	/// </summary>
+	void StopWallEffect()
+	{
+		for (auto& effect : m_physicsGhostList)
+		{
+			effect->GetEffect()->Stop();
+		}
 	}
 
 public:

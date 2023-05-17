@@ -137,7 +137,6 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Stage\GhostBox.cpp" />
-    <ClCompile Include="Stage\PhysicsGhost.cpp" />
     <ClCompile Include="Object\SecurityCamera.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -156,7 +155,9 @@
     <ClCompile Include="Object\Treasure.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
+    <ClCompile Include="Stage\PhysicsGhost.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -262,7 +263,6 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Stage\GhostBox.h" />
-    <ClInclude Include="Stage\PhysicsGhost.h" />
     <ClInclude Include="Object\SecurityCamera.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -281,6 +281,8 @@
     <ClInclude Include="Object\Treasure.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\Wall\Wall_Duct.h" />
+    <ClInclude Include="Stage\PhysicsGhost.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
