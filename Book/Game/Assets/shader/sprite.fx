@@ -118,7 +118,7 @@ float4 PSMainUVScroll(PSInput In) : SV_Target0
 
     float4 albedo = albedoTexture.Sample(Sampler, In.uv + offset) * mulColor;
 
-    return PSMainCore(In);
+    return albedo;
 }
 
 

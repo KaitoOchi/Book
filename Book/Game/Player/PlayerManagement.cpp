@@ -32,9 +32,6 @@ bool PlayerManagement::Start()
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_game = FindGO<Game>("game");
 
-	
-
-
 	return true;
 }
 void PlayerManagement::Update()

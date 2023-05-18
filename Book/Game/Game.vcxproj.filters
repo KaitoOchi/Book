@@ -146,9 +146,6 @@
     <ClCompile Include="UI\Wipe.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Game.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Player\Player.cpp">
       <Filter>Player</Filter>
     </ClCompile>
@@ -159,7 +156,9 @@
       <Filter>Stage\Wall</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
-    <ClCompile Include="Enemy\Enemy_Increase.cpp" />
+    <ClCompile Include="Scene\Game.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -287,6 +286,5 @@
       <Filter>Stage\Wall</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Wall\Wall_Duct.h" />
-    <ClInclude Include="Enemy\Enemy_Increase.h" />
   </ItemGroup>
 </Project>

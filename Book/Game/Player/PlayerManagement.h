@@ -27,17 +27,8 @@ public:
 	~PlayerManagement();
 	bool Start();
 	void Update();
-	/// <summary>
-	/// プレイヤーのポインタを設定。
-	/// </summary>
-	/// <param name="player3d"></param>
-	/// <param name="player2d"></param>
-	void SetPlayer2DAND3D(Player3D* player3d, Player2D* player2d)
-	{
-		m_player2D = player2d;
-		m_player3D = player3d;
-	}
 
+public:
 	/// <summary>
 	/// 座標の設定。
 	/// </summary>
