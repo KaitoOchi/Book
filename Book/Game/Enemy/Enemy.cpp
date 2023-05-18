@@ -23,9 +23,11 @@ namespace
 	const float		CALL_DISTANCE_MIN = 70.0f;				// 呼ぶことができる最小値
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
-	const float		CANMOVE_TIMER = 9.5f;					// 再度行動できるまでのタイマー
 
+	const float		CANMOVE_TIMER = 9.5f;					// 再度行動できるまでの待機時間
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
+	const float		SEARCHPLAYER_TIMER = 7.0f;				// プレイヤーを見失った時の待機時間
+
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
 
@@ -41,7 +43,7 @@ namespace
 
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);			//���C�g�̃J���[
-	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
+	const float		LIGHTRANGE = 350.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 }
 
@@ -300,7 +302,7 @@ void Enemy::Act_SeachPlayer()
 				return;
 			}
 			//m_TrakingPlayerFlag = true;
-			//Efect_FIndPlayer();
+			//Efect_FindPlayer();
 		}
 	}
 }
@@ -419,8 +421,16 @@ void Enemy::Act_SearchMissingPlayer()
 	// 見渡すモーションを再生
 	m_enAnimationState = LOSS;
 
+	// プレイヤーを発見したとき
+	if (m_TrakingPlayerFlag == true) {
+		// 再度追跡する
+		Efect_FindPlayer();
+		m_ActState = TRACKING;
+		return;
+	}
+
 	// モーションを再生
-	if (Act_Stop(7.0f, 3) == true) {
+	if (Act_Stop(SEARCHPLAYER_TIMER, 3) == true) {
 
 		m_efectDrawFlag[1] = false;		// エフェクトの描画フラグ
 		m_efectDrawFlag[2] = false;
@@ -428,13 +438,6 @@ void Enemy::Act_SearchMissingPlayer()
 		m_addTimer[3] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
-		// プレイヤーを発見したとき
-		if (m_TrakingPlayerFlag == true) {
-			// 再度追跡する
-			Efect_FindPlayer();
-			m_ActState = TRACKING;
-			return;
-		}
 		m_ActState = BACKBASEDON;
 	}
 }
@@ -501,19 +504,8 @@ void Enemy::Act_HitSoundBullet()
 		m_efectDrawFlag[2] = false;
 	}
 	else {
-		// エフェクトを生成
-		Efect_MissingPlayer();
-
-		// 見失ったアニメーションを再生
-		m_enAnimationState = LOSS;
-
-		if (Act_Stop(5.0f, 3) == true) {
-
-			m_addTimer[3] = 0.0f;
-			m_HitSoundBulletFlag = false;
-
-			m_ActState = MISSING_SEARCHPLAYER;
-		};
+		// 見失ったプレイヤーを探す
+		m_ActState = MISSING_SEARCHPLAYER;
 	}
 }
 

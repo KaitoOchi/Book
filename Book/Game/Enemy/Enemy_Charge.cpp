@@ -137,6 +137,11 @@ void Enemy_Charge::Update_OnCraw()
 	if (m_TrakingPlayerFlag == true) {
 		m_ActState = CHARGE;
 	}
+
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
 }
 
 void Enemy_Charge::Update_OnCharge()
