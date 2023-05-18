@@ -250,16 +250,16 @@ float4 PSMainCore(SPSIn In, uniform bool hasShadow, float4 albedo)
 	float3 directionLight = CalcLigFromDirectionLight(In, normal);
 
 	//ポイントライトを求める
-	float3 pointLight = CalcLigFromPointLight(In, In.normal);
+	float3 pointLight = CalcLigFromPointLight(In, normal);
 
 	//スポットライトを求める
-	float3 spotLight = CalcLigFromSpotLight(In, In.normal);
+	float3 spotLight = CalcLigFromSpotLight(In, normal);
 
 	//半球ライトを求める
 	float3 hemiLight = CalcHemiSphereLight(normal, hemiLig.groundColor, hemiLig.skyColor, hemiLig.groundNormal);
 
 	//リムライトを求める
-	float limPower = CalcLim(dirLig.dirDirection, In.normal, In.normalInView);
+	float limPower = CalcLim(dirLig.dirDirection, normal, In.normalInView);
 
 
 	//最終的な反射光にリムライトの反射光を合算する
@@ -325,7 +325,7 @@ float4 PSPlayer2D( SPSIn psIn ) : SV_Target0
 	uv.y = (psIn.uv.y / 4) + (y * 0.25);
 	float4 albedo = g_albedo.Sample(g_sampler, uv);
 
-	if(albedo.a <= 0.001f){
+	if(albedo.a < 0.001f){
 		clip(-1);
 	}
 
@@ -343,9 +343,7 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 	//内積の結果に-1を乗算する
 	t *= -1.0f;
 
-	if (t < 0.0f) {
-		t = 0.0f;
-	}
+	t = max(t, 0.0f);
 
 	//拡散反射光を求める
 	return lightColor * t;
@@ -360,7 +358,6 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 	float3 refVec = reflect(lightDirection, normal);
 
 	//光があたったサーフェイスから視点に伸びるベクトルを求める
-	worldPos = float3(0.0f, 0.0f, 0.0f);
 	float3 toEye = dirLig.eyePos - worldPos;
 
 	//正規化する
@@ -369,12 +366,10 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 	//鏡面反射の強さを求める
 	float t = dot(refVec, toEye);
 
-	if (t < 0.0f) {
-		t = 0.0f;
-	}
+	t = max(t, 0.0f);
 
 	//鏡面反射の強さを求める
-	t = pow(t, 5.0f);
+	t = pow(t, 2.0f);
 
 	//鏡面反射光を求める
 	 return lightColor * t;
@@ -501,14 +496,8 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 		//入射光と射出方向の角度を求める
 		float angle = dot(ligDir, spLig[i].spDirection);
 
-		//acos関数は-1.0f～1.0fの範囲内に収めないといけない
-		if(angle < -1.0f){
-			angle = -1.0f;
-		}
-
-		if(angle > 1.0f){
-			angle = 1.0f;
-		}
+		//-1.0f～1.0fの範囲内に
+		angle = min(max(angle, -1.0f), 1.0f);
 
 		angle = abs(acos(angle));
 
@@ -516,9 +505,8 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 		affect = 1.0f - 1.0f / spLig[i].spAngle * angle;
 
 		//影響率がマイナスにならないように補正をかける
-		if (affect < 0.0f) {
-			affect = 0.0f;
-		}
+		affect = max(affect, 0.0f);
+
 		//影響の仕方を指数関数的にする
 		affect = pow(affect, 0.5f);
 
@@ -531,7 +519,6 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 
 	return finalspLig;
 }
-
 
 /// <summary>
 /// リムライトを計算する
@@ -574,20 +561,17 @@ float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, f
 float3 CalcNormal(SPSIn psIn)
 {
 	//法線マップからタンジェントスペースの法線をサンプリングする
-	float3 binSpcaeNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
-	binSpcaeNormal = (binSpcaeNormal - 0.5f) * 2.0f;
+	float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+
+	//タンジェントスペース法線を0~1の範囲から-1~1の範囲に復元する
+	localNormal = (localNormal - 0.5f) * 2.0f;
 
 	//タンジェントスペースの法線をワールドスペースに変換する
-	float3 newNormal = psIn.tangent * binSpcaeNormal.x + psIn.biNormal * binSpcaeNormal.y + psIn.normal * binSpcaeNormal.z;
+	float3 newNormal = psIn.tangent * localNormal.x
+					+ psIn.biNormal * localNormal.y
+					+ psIn.normal * localNormal.z;
 
-	newNormal = (newNormal / 2.0f) + 0.5f;
-
-	if(newNormal.x >= 0.0f && newNormal.x <= 0.0f){
-		
-	}
-	else{
-		newNormal = (0.0f, 0.0f, 0.0f);
-	}
+	newNormal = min(max(newNormal, -1.0f), 1.0f);
 
 	return newNormal;
 }
