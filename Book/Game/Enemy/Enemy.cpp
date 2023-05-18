@@ -35,7 +35,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 
@@ -662,8 +662,7 @@ void Enemy::Act_Charge(float time)
 {
 	Vector3 diff;
 
-	// 壁との衝突判定
-	Act_Charge_HitWall();
+	Enemy::Act_Charge_HitWall();		// 壁との衝突判定
 
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
@@ -689,7 +688,6 @@ void Enemy::Act_Charge(float time)
 		m_sumPos += moveSpeed;
 
 		m_enAnimationState = RUN;
-		return;
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
@@ -725,7 +723,7 @@ void Enemy::Act_ChargeEnd()
 	Efect_MissingPlayer();
 
 	// いないときは巡回状態に戻る
-	m_ActState = BACKBASEDON;
+	m_ActState = MISSING_SEARCHPLAYER;
 }
 
 void Enemy::Act_Charge_HitWall()

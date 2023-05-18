@@ -142,10 +142,10 @@ void Enemy_Charge::Update_OnCraw()
 void Enemy_Charge::Update_OnCharge()
 {
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
-										// 関数内で巡回状態に戻る処理を記述
 
 	// 移動距離の長さが一定以上のとき
-	if (m_sumPos.Length() >= MOVING_DISTANCE) {
+	if (m_sumPos.Length() > MOVING_DISTANCE) {
+		// 突進を終了する
 		m_ActState = CHARGEEND;
 	}
 
