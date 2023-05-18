@@ -66,7 +66,9 @@ private:
 
 private:
 	SpriteRender		m_outlineSpriteRender;		//ワイプの輪郭画像
+	SpriteRender		m_warningSpriteRender;		//警告画像
 	LevelRender			m_levelRender;				//レベルレンダー
+	PointLight			m_pointLight;				//ポイントライト
 	AnimationClip*		m_enemyAnim = nullptr;		//敵のアニメーション
 	BackGround*			m_backGround = nullptr;		//地面
 	std::vector<Wall*>	m_stage;					//ステージ

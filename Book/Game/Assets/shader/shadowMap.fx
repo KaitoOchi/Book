@@ -23,7 +23,6 @@ struct SSkinVSIn{
 struct SVSIn
 {
     float4 pos : POSITION;  // モデルの頂点座標
-    float3 normal : NORMAL; // 法線
     float2 uv : TEXCOORD0;  // UV座標
     SSkinVSIn skinVert;				//スキン用のデータ。
 };
@@ -32,7 +31,6 @@ struct SVSIn
 struct SPSIn
 {
     float4 pos : SV_POSITION;   // スクリーン空間でのピクセルの座標
-    float3 normal : NORMAL;     // 法線
     float2 uv : TEXCOORD0;      // uv座標
     float2 depth : TEXCOORD1;   // ライト空間での座標
 };
@@ -83,8 +81,6 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);
 
-    psIn.normal = mul(m, vsIn.normal);
-
     //頂点のライトから見た深度値と、ライトから見た深度値の2乗を計算する
     psIn.depth.x = length(worldPos - lightPos) / 1000.0f;
     psIn.depth.y = psIn.depth.x * psIn.depth.x;
@@ -120,15 +116,18 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 float4 PSPlayer2D(SPSIn psIn) : SV_Target0
 {
+    //アニメーションの番号からUV座標を求める
 	float2 uv;
 	int x, y;
 	x = playerAnim2D % 4;
 	y = playerAnim2D / 4;
 	uv.x = (psIn.uv.x / 4) + (x * 0.25);
 	uv.y = (psIn.uv.y / 4) + (y * 0.25);
+
 	float4 albedo = g_albedo.Sample(g_sampler, uv);
 
-    if(albedo.w < 0.1f){
+    //背景は透明にする
+    if(albedo.w < 0.001f){
         clip(-1);
     }
 

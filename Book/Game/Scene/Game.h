@@ -52,22 +52,6 @@ public:
 	void NotDraw_Enemy(bool flag);
 
 	/// <summary>
-	/// クリア座標の設定。
-	/// </summary>
-	void SetClearPosition(Vector3 m_pos)
-	{
-		m_position = m_pos;
-	}
-
-	/// <summary>
-	/// クリア座標の取得。
-	/// </summary>
-	const Vector3& GetClearPosition()
-	{
-		return m_position;
-	}
-
-	/// <summary>
 	/// 宝の座標を設定。
 	/// </summary>
 	void SetTresurePosition(const Vector3& pos)
@@ -81,7 +65,7 @@ public:
 	/// <returns></returns>
 	PointLight& GetPointLight()
 	{
-		return m_pointLight[m_lightNumber];
+		return m_pointLight;
 	}
 
 	/// <summary>
@@ -202,7 +186,7 @@ private:
 private:
 
 	LevelRender						m_levelRender;					//レベルレンダー
-	std::array<PointLight, 4>		m_pointLight;					//ポイントライト
+	PointLight						m_pointLight;					//ポイントライト
 
 	Player3D*						m_player3D = nullptr;
 	Player2D*						m_player2D = nullptr;
@@ -226,12 +210,10 @@ private:
 	std::vector<PhysicsGhost*>		m_physicsGhostList;
 
 	Vector3							m_tresurePos;					//宝座標
-	Vector3							m_position;						//クリア座標
+	Vector3							m_clearPos;						//クリア座標
 
 	bool							m_isWaitFadeOut = false;		//フェード状態かどうか
 	int								m_nextScene = 0;				//次に移行するシーン
 	int								m_spotLigNum = 0;				// エネミー用スポットライトの数
-	int								lights = 0;						//ポイントライトの数
-	int								m_lightNumber = 0;				//現在のポイントライトの数
 };	
 
