@@ -34,6 +34,14 @@ public:
 	/// </summary>
 	void DrawMap_Treasure(Vector3 TreasurePos);
 
+	/// <summary>
+	/// 永続表示する座標を設定。
+	/// </summary>
+	void SetTreasurePos(const Vector3& pos)
+	{
+		m_treasurePos = pos;
+	}
+
 private:
 	/// <summary>
 	/// ワールド座標系からマップ座標系に変換

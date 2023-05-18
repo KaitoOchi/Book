@@ -187,7 +187,6 @@ void Enemy::Efect_FindPlayer()
 
 void Enemy::Efect_MissingPlayer()
 {
-	// エフェクトを生成する
 	if (m_efectDrawFlag[2] == false) {
 		// ?のエフェクトを生成
 		m_soundEffect = NewGO<EffectEmitter>(4);

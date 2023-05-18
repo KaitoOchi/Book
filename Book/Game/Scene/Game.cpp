@@ -206,7 +206,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(1);
+			enemyNormal->Pass(0);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
@@ -226,7 +226,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(0);
+			enemyCharge->Pass(1);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -264,7 +264,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(3);
+			enemyClear->Pass(2);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
@@ -322,7 +322,7 @@ void Game::LevelDesign()
 				// 障害物を生成
 				Wall_Decoration* decoration = NewGO<Wall_Decoration>(0, "wall_Decoration");
 				// モデルの番号を渡す
-				//decoration->Load_Model(objData.number);
+				decoration->Load_Model(objData.number);
 				decoration->SetPosition(objData.position);
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
@@ -548,6 +548,9 @@ void Game::NotifyEventEnd()
 	m_miniMap->Activate();
 	m_playerManagement->Activate();
 	m_player3D->Activate();
+
+	//ミニマップに脱出口を表示
+	m_miniMap->SetTreasurePos(m_position);
 
 	m_fade->StartFadeIn();
 
