@@ -156,30 +156,14 @@ bool Game::Start()
 	NewGO<CountDown>(0, "countDown");
 	NewGO<SkyCube>(0, "skyCube");
 
-
-	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
-
-	for (int i = 0; i < 3; i++) {
-		m_pointLight[i].Update();
-	}
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
-	
-
-
-	//�����_���Ȓl�𐶐�����
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int>dist(0, 2);
-	m_lightNumber = dist(mt);
-	m_position = m_pointLight[m_lightNumber].GetPosition();
-
 
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 
@@ -189,6 +173,13 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
+	//クリア地点を0～2でランダムに生成
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int>dist(0, 2);
+	int clearNumber = dist(mt);
+	int clearNumTmp;
+
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
 		if (objData.EqualObjectName(L"Player") == true)
@@ -356,14 +347,19 @@ void Game::LevelDesign()
 				duct->SetScale(objData.scale);
 				m_wallList.emplace_back(duct);
 
-				SetClearPosition(objData.position);
-				m_pointLight[lights].SetPointLight(
-					lights,
-					Vector3(m_position.x, m_position.y + 10.0f, m_position.z),
-					Vector3::Zero,
-					400.0f
-				);
-				lights++;
+				if (clearNumber == clearNumTmp) {
+					m_clearPos = objData.position;
+
+					m_pointLight.SetPointLight(
+						0,
+						Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z),
+						Vector3::Zero,
+						400.0f
+					);
+					RenderingEngine::GetInstance()->GetLightCB().ptNum = 1;
+				}
+				clearNumTmp++;
+
 				return true;
 			}
 		}
@@ -432,12 +428,6 @@ void Game::Update()
 		ClearableState();
 	}
 
-	
-
-	for (int i = 0; i < 3; i++) {
-		m_pointLight[i].Update();
-	}
-
 	//フェードの待機時間
 	if (m_isWaitFadeOut) {
 		//フェードし終えたら
@@ -498,7 +488,7 @@ void Game::Update()
 void Game::ClearableState()
 {
 	
-	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
+	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight.GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
 		NotifyGameClear();
@@ -545,7 +535,7 @@ void Game::NotifyEventEnd()
 {
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
-	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;
 	NotDraw_Enemy(false);
 
 	m_gamecamera->Activate();
@@ -556,7 +546,7 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	//ミニマップに脱出口を表示
-	m_miniMap->SetTreasurePos(m_position);
+	m_miniMap->SetTreasurePos(m_clearPos);
 
 	m_fade->StartFadeIn();
 

@@ -16,14 +16,14 @@ namespace
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
 	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
-									{ 100.0f, 50.0f, 50.0f }, 
+									{ 200.0f, 50.0f, 50.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
-									{ 220.0f, 5.0f, -50.0f },
+									{ 220.0f, 5.0f, 0.0f },
 									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
 	const Vector3 CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
 									{ 0.0f, 50.0f, 50.0f },
 									{ 0.0f, 50.0f, 0.0f },
-									{ 200.0f, 5.0f, -50.0f },
+									{ 200.0f, 5.0f, 0.0f },
 									{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
 	const Vector3 CAMERA_SPEED[5] = { {0.0f, -5.0f, 0.0f},
 									{ 0.0f, 0.0f, -3.0f },
@@ -54,14 +54,17 @@ Event::~Event()
 
 bool Event::Start()
 {
-	////お宝モデルの設定
+	//お宝モデルの設定
 	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
 	m_tresureModelRender.Update();
 
-	//座標を設定
-	m_tresurePos.y -= 98.0f;
+	m_tresurePos.y -= 50.0f;
 	m_tresurePos.z -= 10.0f;
+
+	//プレイヤーとライトの座標を設定
+	Vector3 playerPos = m_tresurePos;
+	playerPos.z -= 50.0f;
 
 	//プレイヤーモデルを設定
 	m_animationClips[animationClip_Idle].Load("Assets/animData/player/idle.tka");
@@ -77,7 +80,7 @@ bool Event::Start()
 	m_animationClips[animationClip_RunAway].Load("Assets/animData/player/event/run_away.tka");
 	m_animationClips[animationClip_RunAway].SetLoopFlag(false);
 	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
-	m_playerModelRender.SetPosition(m_tresurePos);
+	m_playerModelRender.SetPosition(playerPos);
 	m_playerModelRender.Update();
 
 	//アニメーションイベントを設定
@@ -108,7 +111,7 @@ bool Event::Start()
 
 	//ボリュームライトモデルの設定
 	m_volumeLightModelRender.InitModelData(initData);
-	m_volumeLightModelRender.SetPosition(m_tresurePos);
+	m_volumeLightModelRender.SetPosition(playerPos);
 	m_volumeLightModelRender.Update();
 
 	//フィルム画像の設定
