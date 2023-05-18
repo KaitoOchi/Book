@@ -104,30 +104,6 @@ Game::~Game()
 	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
 }
 
-void Game::GameDelete(const int nextScene)
-{		
-	m_nextScene = nextScene;
-	m_isWaitFadeOut = true;	
-	m_fade->StartFadeOut();
-	GameManager::GetInstance()->DeleteBGM();
-}
-	
-void Game::GamePos()
-{
-	switch (m_nextScene) {
-	case 1:
-		//リトライ画面へ移行
-		NewGO<Game>(0, "game");
-		break;
-	case 2:
-		//タイトル画面へ移行
-		NewGO<Title>(0, "title");
-		break;
-	default:
-		break;
-	}
-}
-
 bool Game::Start()
 {
 	//環境光を初期化する
@@ -150,15 +126,17 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
-	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
 	NewGO<SkyCube>(0, "skyCube");
 
+
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	LevelDesign();
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
+
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
@@ -353,7 +331,6 @@ void Game::LevelDesign()
 					RenderingEngine::GetInstance()->GetLightCB().ptNum = 1;
 				}
 				clearNumTmp++;
-
 				return true;
 			}
 		}
@@ -529,7 +506,7 @@ void Game::NotifyEventEnd()
 {
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
-	RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	NotDraw_Enemy(false);
 
 	m_gamecamera->Activate();
