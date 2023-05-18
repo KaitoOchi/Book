@@ -33,6 +33,10 @@ Wipe::~Wipe()
 
 bool Wipe::Start()
 {
+	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 157.0f, AlphaBlendMode_Trans, 5);
+	m_circleBaseSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/base.DDS", 157.0f, 157.0f);
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+
 	m_wipePos = WIPE_POS_MIN;
 	m_outlinePos = OUTLINE_POS_MIN;
 
@@ -120,6 +124,15 @@ void Wipe::LevelDesign()
 
 void Wipe::Update()
 {
+	if (g_pad[0]->IsPress(enButtonA)) {
+		m_degree -= 1.0f;
+		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+	}
+	if (g_pad[0]->IsPress(enButtonB)) {
+		m_degree += 1.0f;
+		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+	}
+
 	EnemyMove();
 
 	WipeOutline();
@@ -204,6 +217,9 @@ void Wipe::WipeOutline()
 
 void Wipe::Render(RenderContext& rc)
 {
+	m_circleSpriteRender.Draw(rc);
+	m_circleBaseSpriteRender.Draw(rc);
+
 	if (m_timer <= 0.0f) {
 		return;
 	}

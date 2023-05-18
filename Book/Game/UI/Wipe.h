@@ -77,4 +77,9 @@ private:
 	bool				m_isWipe = false;			//ワイプを表示するかどうか
 	float				m_timer = 0.0f;				//タイマー
 	float				m_outlineTimer = 0.0f;		//ワイプ用タイマー
+
+	SpriteRender m_circleBaseSpriteRender;
+	SpriteRender m_circleSpriteRender;
+	float m_degree = 360.0f;
+	const float PI = 3.14159f;
 };

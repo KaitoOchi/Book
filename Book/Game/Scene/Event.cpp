@@ -59,7 +59,7 @@ bool Event::Start()
 	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
 	m_tresureModelRender.Update();
 
-	m_tresurePos.y -= 98.0f;
+	m_tresurePos.y -= 50.0f;
 	m_tresurePos.z -= 10.0f;
 
 	//プレイヤーとライトの座標を設定
