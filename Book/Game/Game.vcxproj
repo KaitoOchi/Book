@@ -236,6 +236,7 @@
     <ClCompile Include="Enemy\Enemy_Normal.cpp" />
     <ClCompile Include="Enemy\Enemy_Search.cpp" />
     <ClCompile Include="Enemy\Enemy_Clear.cpp" />
+    <ClCompile Include="Enemy\Enemy_Increase.cpp" />
     <ClCompile Include="Object\SecurityCamera.cpp" />
     <ClCompile Include="Object\Treasure.cpp" />
     <ClCompile Include="Player\Player.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Enemy\Enemy_Normal.h" />
     <ClInclude Include="Enemy\Enemy_Search.h" />
     <ClInclude Include="Enemy\Enemy_Clear.h" />
+    <ClInclude Include="Enemy\Enemy_Increase.h" />
     <ClInclude Include="Object\SecurityCamera.h" />
     <ClInclude Include="Object\Treasure.h" />
     <ClInclude Include="Player\Player.h" />

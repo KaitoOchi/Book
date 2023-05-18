@@ -158,6 +158,8 @@
     <ClCompile Include="Stage\PhysicsGhost.cpp">
       <Filter>Stage\Wall</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
+    <ClCompile Include="Enemy\Enemy_Increase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -284,5 +286,7 @@
     <ClInclude Include="Stage\PhysicsGhost.h">
       <Filter>Stage\Wall</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Duct.h" />
+    <ClInclude Include="Enemy\Enemy_Increase.h" />
   </ItemGroup>
 </Project>
