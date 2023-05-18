@@ -11,14 +11,14 @@ PhysicsGhost::PhysicsGhost()
 }
 PhysicsGhost::~PhysicsGhost()
 {
-	if (m_kirakiraEffect->IsPlay())
-	{
-		m_kirakiraEffect->Stop();
-	}
+	m_kirakiraEffect->SetDeleteState(false);
+	m_kirakiraEffect->Stop();
 }
 
 bool PhysicsGhost::Start()
 {
+	
+
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	Ghost::Start();
 	m_physicsGhostObj.CreateBox(
@@ -29,6 +29,7 @@ bool PhysicsGhost::Start()
 	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Ground);
 	//エフェクトの読み込み
 	m_kirakiraEffect = NewGO<EffectEmitter>(5);
+	m_kirakiraEffect->SetDeleteState(true);
 	m_kirakiraEffect->Init(5);
 	m_kirakiraEffect->SetPosition(Vector3{ m_position.x,m_position.y + 50.0f,m_position.z });
 	m_kirakiraEffect->SetScale(Vector3::One * EFFECT_SIZE);
@@ -45,7 +46,6 @@ void PhysicsGhost::Update()
 	{
 		return;
 	}
-	m_kirakiraEffect->Update();
 }
 
 void PhysicsGhost::EffectDraw()
@@ -53,12 +53,16 @@ void PhysicsGhost::EffectDraw()
 	Vector3 diff = m_position-m_playerManagement->GetPosition() ;
 	if (diff.Length() < pow(30.0f,2))
 	{
-		m_kirakiraEffect->Play();	
+		if (m_kirakiraEffect->IsPlay() == false)
+		{
+			m_kirakiraEffect->Play();
+		}
 	}
 	else
 	{
 		if (m_kirakiraEffect != nullptr)
 		{
+			
 			m_kirakiraEffect->Stop();
 		}
 	}
