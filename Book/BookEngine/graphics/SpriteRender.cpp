@@ -39,17 +39,16 @@ namespace nsBookEngine {
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
+		//UVスクロール
+		else if (clipMode == 4) {
+			initData.m_psEntryPoinFunc = "PSMainUVScroll";
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
 		//円形ゲージ
 		else if (clipMode == 5) {
 			initData.m_psEntryPoinFunc = "PSCircleGauge";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
-			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
-			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
-		}
-
-		//UVスクロール
-		if (clipMode == 4) {
-			initData.m_psEntryPoinFunc = "PSMainUVScroll";
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}

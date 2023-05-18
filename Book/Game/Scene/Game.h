@@ -11,8 +11,6 @@ class Wall;
 class Treasure;
 class Ghost;
 class GameUI;
-class Fade;
-class GameUI;
 class Gage;
 class Pause;
 class GhostBox;
@@ -20,6 +18,9 @@ class PhysicsGhost;
 class Sensor;
 class SecurityCamera;
 #include "PhysicsGhost.h"
+#include "GameManager.h"
+#include "Title.h"
+#include "Fade.h"
 
 class Game : public IGameObject
 {
@@ -126,14 +127,34 @@ public:
 
 public:
 	/// <summary>
-	/// フェードアウト
+	/// ゲームの終了処理。
 	/// </summary>
-	void GameDelete(const int nextScene);
+	void GameDelete(const int nextScene)
+	{
+		m_nextScene = nextScene;
+		m_isWaitFadeOut = true;
+		m_fade->StartFadeOut();
+		GameManager::GetInstance()->DeleteBGM();
+	}
 
 	/// <summary>
 	/// ポーズ画面の切替
 	/// </summary>
-	void GamePos();
+	void GamePos()
+	{
+		switch (m_nextScene) {
+		case 1:
+			//リトライ画面へ移行
+			NewGO<Game>(0, "game");
+			break;
+		case 2:
+			//タイトル画面へ移行
+			NewGO<Title>(0, "title");
+			break;
+		default:
+			break;
+		}
+	}
 
 
 public:
@@ -188,8 +209,8 @@ private:
 	LevelRender						m_levelRender;					//レベルレンダー
 	PointLight						m_pointLight;					//ポイントライト
 
-	Player3D*						m_player3D = nullptr;
 	Player2D*						m_player2D = nullptr;
+	Player3D*						m_player3D = nullptr;
 	PlayerManagement*				m_playerManagement = nullptr;
 	BackGround*						m_backGround = nullptr;
 	Treasure*						m_treaSure = nullptr;
