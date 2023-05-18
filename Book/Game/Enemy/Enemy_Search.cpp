@@ -18,7 +18,7 @@ Enemy_Search::~Enemy_Search()
 }
 bool Enemy_Search::Start()
 {
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
+	// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İï¿½ï¿½ï¿½
 	Animation();
 
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
@@ -29,26 +29,26 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
 
-	m_ActState = SEARCH;		// s“®ƒpƒ^[ƒ“‚ğİ’è
+	m_ActState = SEARCH;		// ï¿½sï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½ï¿½ï¿½İ’ï¿½
 
 	return true;
 }
 void Enemy_Search::Update()
 {
-	// •`‰æ‚µ‚È‚¢ƒtƒ‰ƒO‚ªtrue‚Ì‚Æ‚«
+	// ï¿½`ï¿½æ‚µï¿½È‚ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
 			m_soundEffect->Stop();
 		}
 		return;
 	}
-	// ƒfƒtƒHƒ‹ƒg‚É–ß‚·ƒtƒ‰ƒO‚ªtrue‚Ì‚Æ‚«
+	// ï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½É–ß‚ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½trueï¿½Ì‚Æ‚ï¿½
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = SEARCH;
 		m_ChangeDefaultFlag = false;
 	}
 
-	// ‘MŒõ’e‚É“–‚½‚Á‚½
+	// ï¿½Mï¿½ï¿½ï¿½eï¿½É“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
 	}
@@ -71,21 +71,21 @@ void Enemy_Search::Update()
 	Enemy::PlayAnimation();
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);
-	// ‹–ìŠp
+	// ï¿½ï¿½ï¿½ï¿½p
 	Enemy::Act_SeachPlayer();
 
-	// XV
+	// ï¿½Xï¿½V
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.Update();
 }
 
 void Enemy_Search::Update_OnSearch()
 {
-	// õ“G
+	// ï¿½ï¿½ï¿½G
 	Rotaition();
-	m_enAnimationState = IDLE;	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg‚ğİ’è
+	m_enAnimationState = IDLE;	// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½İ’ï¿½
 
-	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚·‚é‚Æ‚«
+	// ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½Éƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½Æ‚ï¿½
 	if (m_TrakingPlayerFlag == true) {
 		m_ActState = CALL;
 	}
@@ -93,11 +93,11 @@ void Enemy_Search::Update_OnSearch()
 
 void Enemy_Search::Update_OnCall()
 {
-	// ü‚è‚Ì“G‚ğŒÄ‚Ô
+	// ï¿½ï¿½ï¿½ï¿½Ì“Gï¿½ï¿½Ä‚ï¿½
 	Enemy::Act_Call();
-	m_enAnimationState = IDLE;	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg‚ğİ’è
+	m_enAnimationState = IDLE;	// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½İ’ï¿½
 
-	// ‹–ìŠp“à‚ÉƒvƒŒƒCƒ„[‚ª‘¶İ‚µ‚È‚¢‚Æ‚«
+	// ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½Éƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½
 	if (m_TrakingPlayerFlag == false) {
 		m_ActState = CALLEND;
 	}
@@ -107,9 +107,9 @@ void Enemy_Search::Update_OnCallEnd()
 {
 	Rotaition();
 	Enemy::Act_CallEnd();
-	m_enAnimationState = IDLE;	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg‚ğİ’è
+	m_enAnimationState = IDLE;	// ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½İ’ï¿½
 
-	// ƒGƒlƒ~[‚ğŒ³‚É–ß‚·
+	// ï¿½Gï¿½lï¿½~ï¿½[ï¿½ï¿½ï¿½ï¿½É–ß‚ï¿½
 	if (Enemy::Act_CallEnd() == true) {
 		m_ActState = SEARCH;
 	}
@@ -117,10 +117,10 @@ void Enemy_Search::Update_OnCallEnd()
 
 void Enemy_Search::Update_OnConfusion()
 {
-	// ö—
+	// ï¿½ï¿½ï¿½ï¿½
 	Enemy::Act_HitFlashBullet();
 
-	// d’¼‚ª‰ğ‚¯‚Ä‚¢‚é‚Æ‚«
+	// ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Æ‚ï¿½
 	if (Enemy::GetHitFlushBullet() == false) {
 		m_ActState = SEARCH;
 	}
