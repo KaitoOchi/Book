@@ -16,7 +16,8 @@ namespace
 
 Wipe::Wipe()
 {
-
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = -290;   //‰æ–Ê¶ã‚ÌxÀ•W
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY = 662;   //‰æ–Ê¶ã‚ÌyÀ•W
 }
 
 Wipe::~Wipe()

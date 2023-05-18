@@ -40,9 +40,10 @@ namespace
 	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);			//���C�g�̃J���[
-	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
+	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);			//���C�g�̃J���[
+	const float		LIGHTRANGE = 600.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
+	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 0.0f };
 }
 
 Enemy::Enemy()
@@ -894,14 +895,12 @@ bool Enemy::Act_Stop(float time,int i)
 
 void Enemy::SpotLight_New(Vector3 position, int num)
 {
-	Vector3 forward = Vector3::AxisY;
-
 	m_spotLight.SetSpotLight(
 		num,
 		position,
 		LIGHTCOLOR,
 		LIGHTRANGE,
-		forward,
+		LIGHT_DIRECTION,
 		ANGLE
 	);
 }
@@ -912,7 +911,7 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	//Y��
 	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
 	//�v���C���[�̐���
-	Vector3 m_front = Vector3(0.0f, 0.0f, 1.0f);
+	Vector3 m_front = Vector3(0.0f, -0.3f, 0.9f);
 	lightrotaition.Apply(m_front);
 	//���̓�̐����ȃx�N�g��
 	Vector3 m_vertical = Cross(m_Yup, m_front);

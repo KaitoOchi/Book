@@ -26,7 +26,7 @@ bool LightSensor::Start()
 		m_number,
 		m_position,
 		Vector3(10.0f, 0.0f, 0.0f),
-		500.0f,
+		400.0f,
 		m_direction,
 		m_angle
 	);
