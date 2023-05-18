@@ -16,7 +16,7 @@ namespace
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
 	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
-									{ 200.0f, 50.0f, 50.0f }, 
+									{ 100.0f, 50.0f, 50.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
 									{ 220.0f, 5.0f, 0.0f },
 									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
@@ -56,7 +56,8 @@ bool Event::Start()
 {
 	//お宝モデルの設定
 	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
-	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
+	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, -10.0f));
+	m_tresureModelRender.SetScale(Vector3(3.0f, 3.0f, 3.0f));
 	m_tresureModelRender.Update();
 
 	m_tresurePos.y -= 50.0f;

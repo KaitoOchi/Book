@@ -585,6 +585,8 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 	float3 r = reflect(dirLig.dirDirection, normal);
 	float3 t = max(0.0f, dot(toEye, r));
 	t = pow(t, 5.0f);
+
+	t = min(t, 1.0f);
 	
 	return t;
 }
