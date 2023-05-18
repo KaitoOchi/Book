@@ -35,13 +35,13 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
 
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(25.0f, 1.0f, 0.0f);			//���C�g�̃J���[
-	const float		LIGHTRANGE = 300.0f;					//���C�g�̉e���͈�
+	const float		LIGHTRANGE = 350.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
 }
 
@@ -300,7 +300,7 @@ void Enemy::Act_SeachPlayer()
 				return;
 			}
 			//m_TrakingPlayerFlag = true;
-			//Efect_FIndPlayer();
+			//Efect_FindPlayer();
 		}
 	}
 }
@@ -419,6 +419,14 @@ void Enemy::Act_SearchMissingPlayer()
 	// 見渡すモーションを再生
 	m_enAnimationState = LOSS;
 
+	// プレイヤーを発見したとき
+	if (m_TrakingPlayerFlag == true) {
+		// 再度追跡する
+		Efect_FindPlayer();
+		m_ActState = TRACKING;
+		return;
+	}
+
 	// モーションを再生
 	if (Act_Stop(7.0f, 3) == true) {
 
@@ -428,13 +436,6 @@ void Enemy::Act_SearchMissingPlayer()
 		m_addTimer[3] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
-		// プレイヤーを発見したとき
-		if (m_TrakingPlayerFlag == true) {
-			// 再度追跡する
-			Efect_FindPlayer();
-			m_ActState = TRACKING;
-			return;
-		}
 		m_ActState = BACKBASEDON;
 	}
 }
@@ -662,7 +663,8 @@ void Enemy::Act_Charge(float time)
 {
 	Vector3 diff;
 
-	Enemy::Act_Charge_HitWall();		// 壁との衝突判定
+	// 壁との衝突判定
+	Act_Charge_HitWall();
 
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
@@ -688,6 +690,7 @@ void Enemy::Act_Charge(float time)
 		m_sumPos += moveSpeed;
 
 		m_enAnimationState = RUN;
+		return;
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
@@ -723,7 +726,7 @@ void Enemy::Act_ChargeEnd()
 	Efect_MissingPlayer();
 
 	// いないときは巡回状態に戻る
-	m_ActState = MISSING_SEARCHPLAYER;
+	m_ActState = BACKBASEDON;
 }
 
 void Enemy::Act_Charge_HitWall()

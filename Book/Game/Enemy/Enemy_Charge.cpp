@@ -137,15 +137,20 @@ void Enemy_Charge::Update_OnCraw()
 	if (m_TrakingPlayerFlag == true) {
 		m_ActState = CHARGE;
 	}
+
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
+	}
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
+										// 関数内で巡回状態に戻る処理を記述
 
 	// 移動距離の長さが一定以上のとき
-	if (m_sumPos.Length() > MOVING_DISTANCE) {
-		// 突進を終了する
+	if (m_sumPos.Length() >= MOVING_DISTANCE) {
 		m_ActState = CHARGEEND;
 	}
 
