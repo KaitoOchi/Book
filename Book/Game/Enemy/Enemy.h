@@ -119,12 +119,13 @@ public:
 	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
 
+	// エネミーの種類
 	enum EnemyType
 	{
-		Normal,
-		Charge,
-		Search,
-		Clear
+		TYPE_NORMAL,
+		TYPE_CHARGE,
+		TYPE_SEARCH,
+		TYPE_CLEAR
 	};
 	EnemyType m_enemyType;
 

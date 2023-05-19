@@ -6,7 +6,6 @@
 #include "Game.h"
 #include "GameManager.h"
 
-#define FIELDOF_VIEW (Math::PI / 180.0f) * 120.0f			// エネミーの視野角(初期:120)
 #define SEACH_DECISION 100.0f * 100.0f						// ベクトルを作成する範囲
 
 namespace
@@ -67,7 +66,7 @@ bool Enemy::Start()
 	SetScale(MODEL_SCALE);
 
 	// 行動パターンを初期化
-	if (m_enemyType == SEARCH) {
+	if (m_enemyType == TYPE_SEARCH) {
 		m_ActState = SEARCH;
 	}
 	else {
@@ -281,48 +280,21 @@ void Enemy::Act_SeachPlayer()
 
 	// スポットライトの中にプレイヤーがいるとき
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
+
+		m_playerPos = m_playerManagement->GetPosition();
+
+		// 衝突判定を行う
+		if (WallAndHit(m_playerPos) == false) {
+			// 壁に衝突したとき
+			m_TrakingPlayerFlag = false;
+			m_efectDrawFlag[1] = false;
+			return;
+		}
+
 		// 追跡フラグをtrueにする
 		m_TrakingPlayerFlag = true;
 		// エフェクトを生成
 		Efect_FindPlayer();
-		return;
-	}
-	else {
-		if (m_enemyType == SEARCH) {
-			// 追跡フラグをfalseにする
-			m_TrakingPlayerFlag = false;
-			// エフェクトを生成
-			Efect_MissingPlayer();
-			return;
-		}
-	}
-
-	m_forward = Vector3::AxisZ;
-	m_rotation.Apply(m_forward);
-
-	m_playerPos = m_playerManagement->GetPosition();
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerPos - m_position;
-	float length = diff.Length();
-
-	// ベクトルの長さが一定範囲内のとき
-	if(length < SEACH_DECISION){
-		// 正規化
-		diff.Normalize();
-		// 内積を計算
-		float cos = m_forward.Dot(diff);
-		// 角度を計算
-		float angle = acosf(cos);
-		// 角度が視野角内のとき
-		if (angle <= FIELDOF_VIEW) {
-			// 衝突判定を行う
-			if (WallAndHit(m_playerPos) == false) {
-				// 壁に衝突したとき
-				m_TrakingPlayerFlag = false;
-				m_efectDrawFlag[1] = false;
-				return;
-			}
-		}
 	}
 }
 
@@ -466,7 +438,7 @@ void Enemy::Act_SearchMissingPlayer()
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
 			// 索敵するタイプなら
-		if (m_enemyType == SEARCH) {
+		if (m_enemyType == TYPE_SEARCH) {
 			// 索敵状態に戻す
 			m_ActState = SEARCH;
 			return;
@@ -545,7 +517,17 @@ void Enemy::Act_HitSoundBullet()
 
 void Enemy::Act_Craw()
 {
-	// 巡回
+	// プレイヤーを発見したとき
+	if (m_TrakingPlayerFlag == true) {
+		// 突進タイプのとき
+		if (m_enemyType == TYPE_CHARGE) {
+			m_ActState = CHARGE;
+			return;
+		}
+		// それ以外
+		m_ActState = TRACKING;
+		return;
+	}
 	
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
@@ -584,17 +566,6 @@ void Enemy::Act_Craw()
 	else {
 		// 歩きアニメーションを再生
 		m_enAnimationState = IDLE;
-	}
-
-	// プレイヤーを発見したとき
-	if (m_TrakingPlayerFlag == true) {
-		// 突進タイプのとき
-		if (m_enemyType == CHARGE) {
-			m_ActState = CHARGE;
-			return;
-		}
-		// それ以外
-		m_ActState = TRACKING;
 	}
 }
 
@@ -854,7 +825,7 @@ void Enemy::Act_Called()
 	// プレイヤーを見つけたとき
 	if (m_TrakingPlayerFlag == true) {
 		// 追跡する
-		if (m_enemyType == CHARGE) {
+		if (m_enemyType == TYPE_CHARGE) {
 			m_ActState = CHARGE;
 			return;
 		}
