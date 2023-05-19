@@ -376,6 +376,8 @@ protected:
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
+	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
+
 
 	Quaternion m_rotation = Quaternion::Identity;	// 回転
 

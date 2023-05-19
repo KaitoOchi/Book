@@ -38,9 +38,9 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 150.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 180.0f;					// 突進時に追加する長さ
 
-	const float     VIGILANCETIME = 0.3f;					//警戒度UP時間
+	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
 	const float		ANGLE = 45.0f;							//��]�p�x
 	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);			//���C�g�̃J���[
@@ -339,10 +339,10 @@ bool Enemy::WallAndHit(Vector3 pos)
 	end.setIdentity();
 
 	// 始点はエネミーの座標
-	start.setOrigin(btVector3(m_position.x, m_position.y + 20.0f, m_position.z));
+	start.setOrigin(btVector3(m_position.x,  20.0f, m_position.z));
 
 	// 終点はプレイヤーの座標 (突進時は始点の少し前)
-	end.setOrigin(btVector3(pos.x, m_position.y + 20.0f, pos.z));
+	end.setOrigin(btVector3(pos.x, 20.0f, pos.z));
 
 	SweepResultWall callback;
 
@@ -432,9 +432,14 @@ void Enemy::Act_SearchMissingPlayer()
 		m_addTimer[3] = 0.0f;			// タイマーをリセット
 
 		// 索敵するタイプなら
-		if (m_enemyType == SEARCH) {
+		if (m_enemyType == TYPE_SEARCH) {
 			// 周りの敵を呼ぶ
 			m_ActState = CALL;
+			return;
+		}
+		else if (m_enemyType == TYPE_CHARGE) {
+			// 突進する
+			m_ActState = CHARGE;
 			return;
 		}
 
@@ -689,8 +694,6 @@ void Enemy::Act_Access()
 
 void Enemy::Act_Charge(float time)
 {
-	Vector3 diff;
-
 	// 移動距離の長さが一定以上のとき
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
 		// 突進を終了する
@@ -712,14 +715,15 @@ void Enemy::Act_Charge(float time)
 
 			// 何度も実行しないようにtrueにする
 			m_CalculatedFlag = true;
+
+			// エネミーからプレイヤーへ向かうベクトル
+			m_chargeDiff = m_playerChargePosition - m_position;
+			m_chargeDiff.y = 0.0f;
+			m_chargeDiff.Normalize();
 		}
 
-		// エネミーからプレイヤーへ向かうベクトル
-		diff = m_playerChargePosition - m_position;
-		diff.Normalize();
-
 		// 移動速度に加算
-		Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
+		Vector3 moveSpeed = m_chargeDiff * (MOVE_SPEED * ADD_SPEED);
 		m_position += moveSpeed * m_move;
 
 		// 総移動距離を計算
@@ -729,15 +733,15 @@ void Enemy::Act_Charge(float time)
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
-		diff = m_playerManagement->GetPosition() - m_position;
-		diff.Normalize();
+		m_chargeDiff = m_playerManagement->GetPosition() - m_position;
+		m_chargeDiff.Normalize();
 
 		// 待機アニメーションを再生
 		m_enAnimationState = IDLE;
 	}
 
 	// 回転を教える
-	Rotation(diff);
+	Rotation(m_chargeDiff);
 }
 
 void Enemy::Act_ChargeEnd()
