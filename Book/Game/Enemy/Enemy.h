@@ -37,7 +37,7 @@ public:
 	/// <summary>
 	/// ナビメッシュを作成する
 	/// </summary>
-	void Nav(Vector3 pos);
+	void CreateNavimesh(Vector3 pos);
 	/// <summary>
 	/// 巡回行動
 	/// </summary>
@@ -191,8 +191,6 @@ public:
 	/// <param name="LISTEN">				：音爆弾を使用したとき						</param>
 	/// <param name="CATCH">				：捕獲										</param>
 	EnEnemyActState m_ActState;
-
-	void SearchPass(EnEnemyActState state);
 
 	// 指定できるパス移動
 	enum EnEnemyPassState

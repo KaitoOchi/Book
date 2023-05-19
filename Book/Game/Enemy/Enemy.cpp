@@ -228,7 +228,7 @@ void Enemy::Rotation(Vector3 rot)
 
 }
 
-void Enemy::Nav(Vector3 pos)
+void Enemy::CreateNavimesh(Vector3 pos)
 {
 	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
@@ -503,7 +503,7 @@ void Enemy::Act_HitSoundBullet()
 
 	if (length > 50.0f) {
 		// アイテムの座標を基にしてナビメッシュを作成
-		Nav(m_itemPos);
+		CreateNavimesh(m_itemPos);
 		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
 		// エフェクトの再生フラグをfalseにしておく
@@ -564,7 +564,7 @@ void Enemy::Act_Craw()
 		m_position += moveSpeed;
 	}
 	else {
-		// 歩きアニメーションを再生
+		// 待機アニメーションを再生
 		m_enAnimationState = IDLE;
 	}
 }
@@ -574,7 +574,7 @@ void Enemy::Act_Tracking()
 	// プレイヤーの座標
 	m_playerPos = m_playerManagement->GetPosition();
 	// ナビメッシュを作成
-	Nav(m_playerPos);
+	CreateNavimesh(m_playerPos);
 
 	if (m_ChachPlayerFlag == false) {
 		// 走るアニメーションを再生
@@ -679,12 +679,12 @@ void Enemy::Act_Charge(float time)
 
 	// 移動距離の長さが一定以上のとき
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
+		// 突進を終了する
 		m_ActState = CHARGEEND;
+		// 総移動距離をリセット
+		m_sumPos = Vector3::Zero;
 		return;
 	}
-
-	// 壁との衝突判定
-	Act_Charge_HitWall();
 
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
@@ -708,9 +708,8 @@ void Enemy::Act_Charge(float time)
 
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
-
+		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
-		return;
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
@@ -757,27 +756,19 @@ void Enemy::Act_Charge_HitWall()
 	//// 正規化
 	diff.Normalize();
 
-	// 壁に衝突したとき
+	// 壁に衝突したかどうか
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
 	if (Enemy::WallAndHit(m_position + (diff * ADD_LENGTH)) == false) {
+		// 衝突したとき
 		m_move = 0.0f;
 		m_CalculatedFlag = false;
-
-		m_ActState = MISSING_SEARCHPLAYER;		// 状態を移行
+		// 行動を混乱状態にする
+		m_ActState = CONFUSION;
 		return;
 	}
-	else {
-		m_move = 1.0f;
-	}
-}
 
-void Enemy::SearchPass(EnEnemyActState state)
-{
-	// 経路探索をしない
-	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	if (diff.Length() < 1500.0f) {
-		m_ActState = state;
-	}
+	// 衝突していないときは続行する
+	m_move = 1.0f;
 }
 
 void Enemy::Act_Call()
@@ -836,7 +827,7 @@ void Enemy::Act_Called()
 	// 目標までの長さが一定以上のとき
 	if (length >= CALL_DISTANCE_MIN) {
 		// 座標を基にしてナビメッシュを作成
-		Nav(m_setPos);
+		CreateNavimesh(m_setPos);
 		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
 		// エフェクトの再生フラグをfalseにしておく
@@ -876,16 +867,8 @@ void Enemy::Act_Loss()
 	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	Nav(m_point->s_position);
-
-	//// エネミーからプレイヤーへ向かうベクトル
-	//Vector3 moveSpeed = m_point->s_position - m_position;
-	//// 正規化
-	//moveSpeed.Normalize();
-	//// 移動速度に乗算
-	//moveSpeed *= MOVE_SPEED;
-	//// 回転
-	//Rotation(moveSpeed);
+	// ナビメッシュを作成
+	CreateNavimesh(m_point->s_position);
 
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;

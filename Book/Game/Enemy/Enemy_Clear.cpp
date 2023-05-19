@@ -45,6 +45,9 @@ void Enemy_Clear::Update()
 {
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
+		if (m_soundEffect != nullptr) {
+			m_soundEffect->Stop();
+		}
 		return;
 	}
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
