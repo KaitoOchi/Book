@@ -122,17 +122,12 @@ void Enemy_Normal::Update_OnCraw()
 		return;
 	}
 
-	Enemy::Act_Craw();				// ����s��
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
-	}
-
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
+
+	Enemy::Act_Craw();				// ����s��
 }
 
 void Enemy_Normal::Update_OnTracking()
@@ -141,25 +136,13 @@ void Enemy_Normal::Update_OnTracking()
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
-	// 
-	Enemy::Act_Tracking();			// �ǐՍs��
 
-	// ����p�Ƀv���C���[�����Ȃ��Ƃ�
-	if (m_TrakingPlayerFlag == false) {
-		// �v���C���[����������̂̂ŁA�����������̍��W��L������B
-		m_playerMissionPosition = m_playerManagement->GetPosition();
-		m_ActState = MISSING_MOVEPOSITON;
-	}
+	Enemy::Act_Tracking();			// �ǐՍs��
 }
 
 void Enemy_Normal::Update_OnCalled()
 {
 	Enemy::Act_Called();
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
-	}
 }
 
 void Enemy_Normal::Update_OnMoveMissingPosition()
@@ -177,17 +160,11 @@ void Enemy_Normal::Update_OnSearchMissingPlayer()
 void Enemy_Normal::Update_OnBackBasedOn()
 {
 	Enemy::Act_Loss();
-	m_ActState = CRAW;
 }
 
 void Enemy_Normal::Update_OnConfusion()
 {
 	Enemy::Act_HitFlashBullet();		// �M���e�ɓ��������Ƃ��̏���
-
-	// �d��������Ă���Ƃ�
-	if (m_HitFlashBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 

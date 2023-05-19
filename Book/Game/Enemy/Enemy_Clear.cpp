@@ -22,13 +22,19 @@ bool Enemy_Clear::Start()
 	Animation();
 
 	// ���f���̓ǂݍ���
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 3);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_clearModelRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 3);
 
 	Enemy::Start();
 
 	m_enemyRender.SetScale(m_scale);
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
+
+	m_clearModelRender.SetScale(m_scale);
+	m_clearModelRender.SetPosition(m_position);
+	m_clearModelRender.SetRotation(m_rotation);
+	m_clearModelRender.PlayAnimation(m_enAnimation_Walk);
 
 	// �p�X�ړ�
 	m_point = &m_pointList[0];
@@ -39,6 +45,9 @@ void Enemy_Clear::Update()
 {
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
+		if (m_soundEffect != nullptr) {
+			m_soundEffect->Stop();
+		}
 		return;
 	}
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
@@ -110,26 +119,26 @@ void Enemy_Clear::Update()
 	Enemy::Act_SeachPlayer();
 
 	m_enemyRender.Update();	// �X�V
+
+	m_clearModelRender.SetPosition(m_position);
+	m_clearModelRender.SetRotation(m_rotation);
+	m_clearModelRender.Update();
 }
 
 void Enemy_Clear::Update_OnCraw()
 {
+	// 捕まえているとき
 	if (m_ActState == CATCH) {
 		m_enAnimationState = IDLE;
 		return;
-	}
-
-	Enemy::Act_Craw();				// ����s��
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
 	}
 
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
+
+	Enemy::Act_Craw();				// ����s��
 }
 
 void Enemy_Clear::Update_OnTracking()
@@ -140,23 +149,11 @@ void Enemy_Clear::Update_OnTracking()
 	}
 	// 
 	Enemy::Act_Tracking();			// �ǐՍs��
-
-	// ����p�Ƀv���C���[�����Ȃ��Ƃ�
-	if (m_TrakingPlayerFlag == false) {
-		// �v���C���[����������̂̂ŁA�����������̍��W��L������B
-		m_playerMissionPosition = m_playerManagement->GetPosition();
-		m_ActState = MISSING_MOVEPOSITON;
-	}
 }
 
 void Enemy_Clear::Update_OnCalled()
 {
 	Enemy::Act_Called();
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
-	}
 }
 
 void Enemy_Clear::Update_OnMoveMissingPosition()
@@ -174,17 +171,11 @@ void Enemy_Clear::Update_OnSearchMissingPlayer()
 void Enemy_Clear::Update_OnBackBasedOn()
 {
 	Enemy::Act_Loss();
-	m_ActState = CRAW;
 }
 
 void Enemy_Clear::Update_OnConfusion()
 {
 	Enemy::Act_HitFlashBullet();		// �M���e�ɓ��������Ƃ��̏���
-
-	// �d��������Ă���Ƃ�
-	if (m_HitFlashBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 
@@ -199,11 +190,6 @@ void Enemy_Clear::UpDate_OnListen()
 	}
 
 	Enemy::Act_HitSoundBullet();
-
-	// ���ʂ��I�������Ƃ�
-	if (m_HitSoundBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 void Enemy_Clear::ClearChange()
@@ -233,16 +219,16 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
-	//���������
-	//if (m_clearFlag == false)
-	//{
-	//	if (m_NotDrawFlag == false) {
-	//		m_enemyRender.Draw(rc);
-	//	}
-	//}
+	if (m_NotDrawFlag == true) {
+		return;
+	}
 
-	if (m_NotDrawFlag == false) {
+	if (m_clearFlag) {
+		m_clearModelRender.Draw(rc);
+	}
+	else {
 		m_enemyRender.Draw(rc);
 	}
+
 	
 }
