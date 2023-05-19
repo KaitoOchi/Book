@@ -14,8 +14,10 @@ Enemy_Increase::~Enemy_Increase()
 {
 
 }
+
 bool Enemy_Increase::Start()
 {
+	NewEnemy(1);
 	return	true;
 }
 
@@ -26,11 +28,11 @@ void Enemy_Increase::Update()
 
 void Enemy_Increase::NewEnemy(int number)
 {
-	/*switch (number)
+	switch (number)
 	{
 	case 0:
 		Enemy_Normal * normal = NewGO<Enemy_Normal>(0, "enemyNormal");
-		normal->m_enemyType = Enemy :: Normal;
+		normal->m_enemyType = Enemy::TYPE_NORMAL;
 		normal->SetPosition(m_position);
 		normal->SetRotation(m_rotation);
 		normal->SetScale(m_scale);
@@ -39,7 +41,7 @@ void Enemy_Increase::NewEnemy(int number)
 		break;
 	case 1:
 		Enemy_Charge * charge = NewGO<Enemy_Charge>(0, "enemyCharge");
-		charge->m_enemyType = Enemy::Charge;
+		charge->m_enemyType = Enemy::TYPE_CHARGE;
 		charge->SetPosition(m_position);
 		charge->SetRotation(m_rotation);
 		charge->SetScale(m_scale);
@@ -48,7 +50,7 @@ void Enemy_Increase::NewEnemy(int number)
 		break;
 	case 2:
 		Enemy_Clear * clear = NewGO<Enemy_Clear>(0,"enemyClear");
-		clear->m_enemyType = Enemy::Clear;
+		clear->m_enemyType = Enemy::TYPE_CLEAR;
 		clear->SetPosition(m_position);
 		clear->SetRotation(m_rotation);
 		clear->SetScale(m_scale);
@@ -57,7 +59,7 @@ void Enemy_Increase::NewEnemy(int number)
 		break;
 	default:
 		break;
-	}*/
+	}
 }
 
 void Enemy_Increase::Enemy_Open()
