@@ -7,7 +7,6 @@ namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// 線形補完のフレーム数
 	const float		STOP_TIMER = 1.5f;				// 溜め時間
-	const float		MOVING_DISTANCE = 400.0f;		// 移動距離
 }
 
 Enemy_Charge::Enemy_Charge()
@@ -131,28 +130,23 @@ void Enemy_Charge::Update_OnCraw()
 		return;
 	}
 
-	Enemy::Act_Craw();					// 巡回行動
-
-	// 視野角にプレイヤーがいるとき
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = CHARGE;
+	// プレイヤーを捕まえたとき
+	if (Act_CatchPlayer() == true) {
+		m_ActState = CATCH;
 	}
+
+	Enemy::Act_Craw();					// 巡回行動
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
-	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
-										// 関数内で巡回状態に戻る処理を記述
-
-	// 移動距離の長さが一定以上のとき
-	if (m_sumPos.Length() >= MOVING_DISTANCE) {
-		m_ActState = CHARGEEND;
-	}
-
 	// プレイヤーを捕まえたとき
 	if (Enemy::Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
+
+	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
+										// 関数内で巡回状態に戻る処理を記述
 }
 
 void Enemy_Charge::Update_OnChargeEnd()
@@ -170,17 +164,11 @@ void Enemy_Charge::Update_OnBackBasedOn()
 {
 	// 突進⇒巡回への切り替え
 	Enemy::Act_Loss();					// 追跡行動からの切り替え
-	m_ActState = CRAW;
 }
 
 void Enemy_Charge::Update_OnCalled()
 {
 	Enemy::Act_Called();
-
-	// 視野角にプレイヤーがいるとき
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = CHARGE;
-	}
 }
 
 void Enemy_Charge::Update_OnConfusion()
@@ -203,8 +191,6 @@ void Enemy_Charge::UpDate_OnListen()
 void Enemy_Charge::Update_OnCatch()
 {
 	Enemy::Act_CatchPlayer();
-
-	m_ActState = CRAW;
 }
 
 void Enemy_Charge::Render(RenderContext& rc)

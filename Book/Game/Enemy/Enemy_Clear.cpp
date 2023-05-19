@@ -45,6 +45,9 @@ void Enemy_Clear::Update()
 {
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
+		if (m_soundEffect != nullptr) {
+			m_soundEffect->Stop();
+		}
 		return;
 	}
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
@@ -124,22 +127,18 @@ void Enemy_Clear::Update()
 
 void Enemy_Clear::Update_OnCraw()
 {
+	// 捕まえているとき
 	if (m_ActState == CATCH) {
 		m_enAnimationState = IDLE;
 		return;
-	}
-
-	Enemy::Act_Craw();				// ����s��
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
 	}
 
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
 	}
+
+	Enemy::Act_Craw();				// ����s��
 }
 
 void Enemy_Clear::Update_OnTracking()
@@ -150,23 +149,11 @@ void Enemy_Clear::Update_OnTracking()
 	}
 	// 
 	Enemy::Act_Tracking();			// �ǐՍs��
-
-	// ����p�Ƀv���C���[�����Ȃ��Ƃ�
-	if (m_TrakingPlayerFlag == false) {
-		// �v���C���[����������̂̂ŁA�����������̍��W��L������B
-		m_playerMissionPosition = m_playerManagement->GetPosition();
-		m_ActState = MISSING_MOVEPOSITON;
-	}
 }
 
 void Enemy_Clear::Update_OnCalled()
 {
 	Enemy::Act_Called();
-
-	// ����p�Ƀv���C���[������Ƃ�
-	if (m_TrakingPlayerFlag == true) {
-		m_ActState = TRACKING;
-	}
 }
 
 void Enemy_Clear::Update_OnMoveMissingPosition()
@@ -184,17 +171,11 @@ void Enemy_Clear::Update_OnSearchMissingPlayer()
 void Enemy_Clear::Update_OnBackBasedOn()
 {
 	Enemy::Act_Loss();
-	m_ActState = CRAW;
 }
 
 void Enemy_Clear::Update_OnConfusion()
 {
 	Enemy::Act_HitFlashBullet();		// �M���e�ɓ��������Ƃ��̏���
-
-	// �d��������Ă���Ƃ�
-	if (m_HitFlashBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 
@@ -209,11 +190,6 @@ void Enemy_Clear::UpDate_OnListen()
 	}
 
 	Enemy::Act_HitSoundBullet();
-
-	// ���ʂ��I�������Ƃ�
-	if (m_HitSoundBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
 }
 
 void Enemy_Clear::ClearChange()
