@@ -161,7 +161,7 @@ void Game::LevelDesign()
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
 
 		// 名前が Normal のとき
-		if (objData.EqualObjectName(L"Normal") == true) {
+		if (objData.ForwardMatchName(L"Normal") == true) {
 			 //エネミーを生成
 			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
@@ -174,14 +174,14 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(0);
+			enemyNormal->Pass(objData.number);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
 		}
 
 		// 名前が Charge のとき
-		if (objData.EqualObjectName(L"Charge") == true) {
+		if (objData.ForwardMatchName(L"Charge") == true) {
 			// エネミーを生成
 			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			// 自身の属性を教える
@@ -194,7 +194,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(1);
+			enemyCharge->Pass(objData.number);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -219,7 +219,7 @@ void Game::LevelDesign()
 		}
 
 		// 名前が Clear のとき
-		if (objData.EqualObjectName(L"Clear") == true) {
+		if (objData.ForwardMatchName(L"Clear") == true) {
 			// エネミーを生成
 			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			// 自身の属性を教える
@@ -232,7 +232,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(2);
+			enemyClear->Pass(objData.number);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
