@@ -496,6 +496,7 @@ void Game::NotifyDuringGamePlay()
 void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
+	m_fade->SetEnableTips(false);
 	m_fade->StartFadeOut();
 	GameManager::GetInstance()->DeleteBGM();
 	m_isWaitFadeOut = true;
@@ -527,6 +528,7 @@ void Game::NotifyEventEnd()
 void Game::NotifyGameClear()
 {
 	m_isWaitFadeOut = true;
+	m_fade->SetEnableTips(true);
 	m_fade->StartFadeOut();
 	m_gameState = m_enGameState_GameClear;
 }
@@ -535,6 +537,7 @@ void Game::NotifyGameOver()
 {
 	m_isWaitFadeOut = true;
 	m_fade->StartFadeOut();
+	m_fade->SetEnableTips(true);
 	m_gameState = m_enGameState_GameOver;
 }
 

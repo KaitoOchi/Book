@@ -291,6 +291,7 @@ void Enemy::Act_SeachPlayer()
 			return;
 		}
 
+		m_NaviTimer = 0.0f;
 		// 追跡フラグをtrueにする
 		m_TrakingPlayerFlag = true;
 		// エフェクトを生成
@@ -429,6 +430,7 @@ void Enemy::Act_SearchMissingPlayer()
 	if (m_TrakingPlayerFlag == true) {
 		// 再度追跡する
 		Efect_FindPlayer();
+		m_NaviTimer = 0.0f;
 		m_addTimer[3] = 0.0f;			// タイマーをリセット
 
 		// 索敵するタイプなら
