@@ -18,7 +18,7 @@ namespace
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		ADD_SPEED = 1.8f;						// 乗算速度
 
-	const float		MOVING_DISTANCE = 400.0f;				// 突進する移動距離
+	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 180.0f;				// 呼ぶことができる最小値
@@ -295,6 +295,19 @@ void Enemy::Act_SeachPlayer()
 		m_TrakingPlayerFlag = true;
 		// エフェクトを生成
 		Efect_FindPlayer();
+		return;
+	}
+
+	if (m_TrakingPlayerFlag == true) {
+		m_playerPos = m_playerManagement->GetPosition();
+
+		// 衝突判定を行う
+		if (WallAndHit(m_playerPos) == false) {
+			// 壁に衝突したとき
+			m_TrakingPlayerFlag = false;
+			m_efectDrawFlag[1] = false;
+			return;
+		}
 	}
 }
 
@@ -416,6 +429,7 @@ void Enemy::Act_SearchMissingPlayer()
 	if (m_TrakingPlayerFlag == true) {
 		// 再度追跡する
 		Efect_FindPlayer();
+		m_addTimer[3] = 0.0f;			// タイマーをリセット
 
 		// 索敵するタイプなら
 		if (m_enemyType == SEARCH) {
@@ -437,7 +451,7 @@ void Enemy::Act_SearchMissingPlayer()
 		m_addTimer[3] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
 
-			// 索敵するタイプなら
+		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 索敵状態に戻す
 			m_ActState = SEARCH;
@@ -458,7 +472,7 @@ void Enemy::Act_HitFlashBullet()
 
 	// プレイヤーを確保したフラグがtrueになったら
 	if (m_ChachPlayerFlag == true) {
-		// バグらないように補正する
+		// falseにする
 		m_ChachPlayerFlag = false;
 	}
 
@@ -686,6 +700,8 @@ void Enemy::Act_Charge(float time)
 		return;
 	}
 
+	Act_Charge_HitWall();
+
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
 
@@ -740,12 +756,13 @@ void Enemy::Act_ChargeEnd()
 		m_ActState = CHARGE;
 		return;
 	}
+	else {
+		// エフェクトを生成
+		Efect_MissingPlayer();
 
-	// エフェクトを生成
-	Efect_MissingPlayer();
-
-	// いないときは巡回状態に戻る
-	m_ActState = BACKBASEDON;
+		// いないときは巡回状態に戻る
+		m_ActState = MISSING_SEARCHPLAYER;
+	}
 }
 
 void Enemy::Act_Charge_HitWall()
