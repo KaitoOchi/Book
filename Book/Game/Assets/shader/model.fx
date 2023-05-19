@@ -703,5 +703,5 @@ void Dithering(SPSIn psIn)
 	int dither = pattern[y][x];
 
 	//40以下ならピクセルキル
-	clip(dither - 40);
+	clip(dither - 50);
 }
