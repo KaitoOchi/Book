@@ -17,7 +17,6 @@ Enemy_Increase::~Enemy_Increase()
 
 bool Enemy_Increase::Start()
 {
-	NewEnemy(1);
 	return	true;
 }
 
@@ -28,7 +27,7 @@ void Enemy_Increase::Update()
 
 void Enemy_Increase::NewEnemy(int number)
 {
-	switch (number)
+	/*switch (number)
 	{
 	case 0:
 		Enemy_Normal * normal = NewGO<Enemy_Normal>(0, "enemyNormal");
@@ -59,7 +58,7 @@ void Enemy_Increase::NewEnemy(int number)
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void Enemy_Increase::Enemy_Open()
