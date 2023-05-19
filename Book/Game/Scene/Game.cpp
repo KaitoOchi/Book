@@ -39,7 +39,7 @@
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	// はてなマークのエフェクト
 	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
 	//ビックリマーク
@@ -160,6 +160,7 @@ void Game::LevelDesign()
 
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
+		//名前がプレイヤーの時
 		if (objData.EqualObjectName(L"Player") == true)
 		{
 			m_player3D->SetPosition(objData.position);
@@ -248,8 +249,7 @@ void Game::LevelDesign()
 		// ステージのレベル
 		{
 			//名前がbackgroundなら
-			if (objData.EqualObjectName(L"base") == true)
-			/*if (objData.EqualObjectName(L"debug") == true)*/ {
+			if (objData.EqualObjectName(L"base") == true){
 				// 背景を生成
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);
@@ -359,9 +359,8 @@ void Game::LevelDesign()
 			m_SecurityCameraList.emplace_back(securityCamera);
 			return true;
 		}
-
-		//if (objData.EqualObjectName(L"debugtoumei") == true) {
 		if (objData.EqualObjectName(L"push") == true) {
+			//プレイヤーを押し出す先の座標を与える
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
@@ -382,6 +381,7 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
+			//透明なブロックを作成する
 			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
 			m_ghostBox->SetPosition(objData.position);
 			m_ghostBox->SetScale(objData.scale);

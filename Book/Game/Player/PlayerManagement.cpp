@@ -144,6 +144,10 @@ void PlayerManagement::SetChange(EnManagementState manaState)
 	m_player2D->SetMoveSpeed(Vector3::Zero);
 	m_manageStateTmp = manaState;
 	m_enMananagementState = m_enPlayer_Changing;
+	//スタミナの情報を渡す
+	m_player3D->SetStamina(m_player2D->GetStamina());
+	m_player3D->SetRunState(m_player2D->GetRunState());
+
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(13);
 	se->Play(false);
@@ -156,6 +160,7 @@ void PlayerManagement::PlayerChange2D()
 	m_player2D->Activate();//�v���C���[2D��A�N�e�B�u�ɂ���
 	m_player2D->SetPosition(m_player3D->GetPosition());//2D��3D�̃|�W�V������^����
 	m_player2D->SetStamina(m_player3D->GetStamina());
+	m_player2D->SetRunState(m_player3D->GetRunState());
 	m_player2D->ModelRenderUpdate();//���f����X�V����
 	m_player3D->PlayerChang();//�v���C���[3D��f�B�A�N�e�B�u�ɂ���
 	m_player2D->CreatCharcon();//�L�����R���𐶐�����
@@ -169,6 +174,7 @@ void PlayerManagement::PlayerChange3D()
 	m_player3D->Activate();//�v���C���[3D��A�N�e�B�u�ɂ���
 	m_player3D->SetPosition(m_player2D->GetPosition());//3D��2D�̃|�W�V������^����
 	m_player3D->SetStamina(m_player2D->GetStamina());
+	m_player3D->SetRunState(m_player2D->GetRunState());
 	m_player3D->ModelRenderUpdate();//���f����X�V����
 	m_player2D->PlayerChang();//�v���C���[2D��f�B�A�N�e�B�u�ɂ���
 	m_player3D->CreatCharcon();//�L�����R���𐶐�����

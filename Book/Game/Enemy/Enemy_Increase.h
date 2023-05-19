@@ -1,5 +1,6 @@
 #pragma once
 class Game;
+class Gage;
 class Enemy_Increase :public IGameObject
 {
 public:
@@ -60,7 +61,10 @@ public:
 		return m_scale;
 	}
 private:
-
+	/// <summary>
+	/// エネミーを起動させる
+	/// </summary>
+	void Enemy_Open();
 
 private:
 	Vector3 m_position = Vector3::Zero;				//座標
@@ -68,5 +72,6 @@ private:
 	Quaternion m_rotation;							//回転
 
 	Game* m_game = nullptr;
+	Gage* m_gage = nullptr;
 };
 

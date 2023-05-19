@@ -79,7 +79,8 @@ void Treasure::Hit()
 		m_gage->m_leverState = m_gage->m_enLever_MAX;
 
 		m_game->SetTresurePosition(m_position);
-
+		
+		Deactivate();
 	}
 }
 
