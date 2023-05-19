@@ -72,11 +72,6 @@ public:
 	/// </summary>
 	void Act_Called();
 	/// <summary>
-	/// 視野角内にプレイヤーが存在しないときの行動
-	/// </summary>
-	/// <returns></returns>
-	bool Act_CallEnd();
-	/// <summary>
 	/// 見失ったときの処理
 	/// </summary>
 	void Act_Loss();
@@ -172,7 +167,6 @@ public:
 		MISSING_SEARCHPLAYER,	// 見失ったプレイヤーを探す
 		CALL,					// 周りの敵を呼ぶ
 		CALLED,					// CALL時にSearch以外が実行
-		CALLEND,				// 視野角内にプレイヤーがいないとき周りの敵を元の位置に戻す
 		CHARGE,					// 突進
 		CHARGEEND,				// 突進終了
 		BACKBASEDON,			// 巡回状態に戻る
@@ -183,20 +177,19 @@ public:
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
 	/// </summary>
-	/// <param name="CRAW">					巡回										</param>
-	/// <param name="TRACKING">				追跡										</param>
-	/// <param name="SEARCH">				待機										</param>
-	/// <param name="MISSING_MOVEPOSITON">	見失った座標まで移動した					</param>
-	/// <param name="MISSING_SEARCHPLAYER">	見失ったプレイヤーを探す					</param>
-	/// <param name="CALL">					周りの敵を呼ぶ								</param>
-	/// <param name="CALLED">				CALL時にSearch以外が実行					</param>
-	/// <param name="CALLEND">				視野角内にプレイヤーが存在しないとき実行	</param>
-	/// <param name="CHARGE">				突進										</param>
-	/// <param name="BACKBASEDON">			巡回状態に戻る								</param>
-	/// <param name="CONFUSION">			閃光弾にあたったとき						</param>
-	/// <param name="LISTEN">				音爆弾を使用したとき						</param>
-	/// <param name="CATCH">				捕獲										</param>
-	EnEnemyActState m_ActState = CRAW;
+	/// <param name="CRAW">					：巡回										</param>
+	/// <param name="TRACKING">				：追跡										</param>
+	/// <param name="SEARCH">				：待機										</param>
+	/// <param name="MISSING_MOVEPOSITON">	：見失った座標まで移動した					</param>
+	/// <param name="MISSING_SEARCHPLAYER">	：見失ったプレイヤーを探す					</param>
+	/// <param name="CALL">					：周りの敵を呼ぶ							</param>
+	/// <param name="CALLED">				：CALL時にSearch以外が実行					</param>
+	/// <param name="CHARGE">				：突進										</param>
+	/// <param name="BACKBASEDON">			：巡回状態に戻る							</param>
+	/// <param name="CONFUSION">			：閃光弾にあたったとき						</param>
+	/// <param name="LISTEN">				：音爆弾を使用したとき						</param>
+	/// <param name="CATCH">				：捕獲										</param>
+	EnEnemyActState m_ActState;
 
 	void SearchPass(EnEnemyActState state);
 
@@ -217,14 +210,14 @@ public:
 	/// <summary>
 	/// エネミーの巡回パターンを指定
 	/// </summary>
-	/// <param name="0">	縦				</param>
-	/// <param name="1">	横				</param>
-	/// <param name="2">	右回り(正方形)	</param>
-	/// <param name="3">	左回り(正方形)	</param>
-	/// <param name="4">	右に直角		</param>
-	/// <param name="6">	右に直角		</param>
-	/// <param name="7">	右回り(長方形)	</param>
-	/// <param name="8">	左回り(長方形)	</param>
+	/// <param name="0">	：縦				</param>
+	/// <param name="1">	：横				</param>
+	/// <param name="2">	：右回り(正方形)	</param>
+	/// <param name="3">	：左回り(正方形)	</param>
+	/// <param name="4">	：右に直角		</param>
+	/// <param name="6">	：右に直角		</param>
+	/// <param name="7">	：右回り(長方形)	</param>
+	/// <param name="8">	：左回り(長方形)	</param>
 	void Pass(int num);
 
 	/// <summary>
@@ -399,14 +392,20 @@ protected:
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
 
-	std::array<bool,3>m_efectDrawFlag;		// エフェクト描画フラグ
+	/// <summary>
+	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
+	/// </summary>
+	/// <param name="0">	：☆のエフェクト	</param>
+	/// <param name="1">	：!のエフェクト		</param>
+	/// <param name="2">	：?のエフェクト		</param>
+	std::array<bool, 3>m_efectDrawFlag;
 
 	/// <summary>
-	/// <param name="0">	閃光弾を受けたときの再行動時間		</param>
-	/// <param name="1">	巡回時のパスに留まる時間			</param>
-	/// <param name="2">	突進を行うまでの待機時間			</param>
-	/// <param name="3">	プレイヤーを見失った時の待機時間	</param>
 	/// </summary>
+	/// <param name="0">	：閃光弾を受けたときの再行動時間	</param>
+	/// <param name="1">	：巡回時のパスに留まる時間			</param>
+	/// <param name="2">	：突進を行うまでの待機時間			</param>
+	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
 	std::array<float, 4>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
