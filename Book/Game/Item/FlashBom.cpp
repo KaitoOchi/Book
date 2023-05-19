@@ -28,7 +28,7 @@ bool FlashBom::Start()
 	Item::Start();
 	m_sphereCollider.Create(0.1f);
 	//ポイントライト
-	m_pointLight.SetPointLight(3, m_position, LIGHTNO, MAXRANGE);
+	m_pointLight.SetPointLight(2, m_position, LIGHTNO, MAXRANGE);
 	m_pointLight.Update();
 	
 	//フラッシュ
@@ -130,7 +130,7 @@ void FlashBom::FlashEffect()
 	
 	m_color = max(m_color, 1.0f);
 
-	m_pointLight.SetPointLight(3, m_position, Vector3(m_color, m_color, m_color), m_range);
+	m_pointLight.SetPointLight(2, m_position, Vector3(m_color, m_color, m_color), m_range);
 	m_pointLight.Update();
 }
 
@@ -140,14 +140,14 @@ void FlashBom::SetFlashEffect()
 	//ポイントライトの初期化
 	m_color = MAXCOLOR;
 
-	m_pointLight.SetPointLight(3,m_position, Vector3(m_color, m_color, m_color),m_range);
+	m_pointLight.SetPointLight(2,m_position, Vector3(m_color, m_color, m_color),m_range);
 	m_pointLight.Update();
 	
 	//フラッシュ時の値を入れる
 	m_alpha = MAXALPHA;
 	m_range = MAXRANGE;
 	m_ambient = MAXAMBIENT;
-	RenderingEngine::GetInstance()->GetLightCB().ptNum = 4;
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 
 	
 
@@ -177,12 +177,12 @@ void FlashBom::ProcessFlashingState()
 	//フラッシュが終わったらすべてを初期化する
 	if (m_alpha <= 0.0f && m_range <= 0.0f)
 	{
-		m_pointLight.SetPointLight(3, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
+		m_pointLight.SetPointLight(2, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 		m_pointLight.Update();
 		m_alpha = 0.0f;
-		RenderingEngine::GetInstance()->SetAmbient(0.7f);
+		RenderingEngine::GetInstance()->SetAmbient(0.1f);
 		m_FlashState = m_enFlash_No;
-		RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
+		RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;
 	}
 }
 

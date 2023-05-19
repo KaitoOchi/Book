@@ -18,6 +18,7 @@ namespace nsBookEngine {
 		//2Dゲージのクリップ
 		if (clipMode == 1) {
 			initData.m_vsEntryPointFunc = "VSMain1";
+			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
@@ -25,6 +26,7 @@ namespace nsBookEngine {
 		//BGMのクリップ
 		else if (clipMode == 2) {
 			initData.m_vsEntryPointFunc = "VSMain2";
+			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
@@ -32,14 +34,21 @@ namespace nsBookEngine {
 		//SFXのクリップ
 		else if (clipMode == 3) {
 			initData.m_vsEntryPointFunc = "VSMain3";
+			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}
-
 		//UVスクロール
-		if (clipMode == 4) {
+		else if (clipMode == 4) {
 			initData.m_psEntryPoinFunc = "PSMainUVScroll";
+			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		}
+		//円形ゲージ
+		else if (clipMode == 5) {
+			initData.m_psEntryPoinFunc = "PSCircleGauge";
+			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 		}

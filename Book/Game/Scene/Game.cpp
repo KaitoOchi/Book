@@ -104,36 +104,11 @@ Game::~Game()
 	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
 }
 
-void Game::GameDelete(const int nextScene)
-{		
-	m_nextScene = nextScene;
-	m_isWaitFadeOut = true;	
-	m_fade->StartFadeOut();
-	GameManager::GetInstance()->DeleteBGM();
-}
-	
-void Game::GamePos()
-{
-	switch (m_nextScene) {
-	case 1:
-		//リトライ画面へ移行
-		NewGO<Game>(0, "game");
-		break;
-	case 2:
-		//タイトル画面へ移行
-		NewGO<Title>(0, "title");
-		break;
-	default:
-		break;
-	}
-}
-
 bool Game::Start()
 {
 	//環境光を初期化する
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, -1), Vector3(0.01f, 0.01f, 0.01f));
 	RenderingEngine::GetInstance()->SetAmbient(0.0f);
-	//RenderingEngine::GetInstance()->Setm_directionLig(Vector3(1, -1, 1),0.0f, Vector3(0.2f, 0.2f, 0.2f));
 
 	//スタート時を知らせる
 	NotifyGameStart();
@@ -150,7 +125,6 @@ bool Game::Start()
 	m_player3D = NewGO<Player3D>(0, "player3d");
 	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
-	m_playerManagement->SetPlayer2DAND3D(m_player3D, m_player2D);
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
@@ -162,24 +136,11 @@ bool Game::Start()
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
 
-	for (int i = 0; i < 3; i++) {
-		m_pointLight[i].Update();
-	}
 
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
 	//�E�t�E�F�E�[�E�h�E�̏��E��E�
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
-	
-
-
-	//�����_���Ȓl�𐶐�����
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int>dist(0, 2);
-	m_lightNumber = dist(mt);
-	m_position = m_pointLight[m_lightNumber].GetPosition();
-
 
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
 
@@ -189,6 +150,13 @@ bool Game::Start()
 
 void Game::LevelDesign()
 {
+	//クリア地点を0～2でランダムに生成
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int>dist(0, 2);
+	int clearNumber = dist(mt);
+	int clearNumTmp = 0;
+
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
 
@@ -350,14 +318,18 @@ void Game::LevelDesign()
 				duct->SetScale(objData.scale);
 				m_wallList.emplace_back(duct);
 
-				SetClearPosition(objData.position);
-				m_pointLight[lights].SetPointLight(
-					lights,
-					Vector3(m_position.x, m_position.y + 10.0f, m_position.z),
-					Vector3::Zero,
-					400.0f
-				);
-				lights++;
+				if (clearNumber == clearNumTmp) {
+					m_clearPos = objData.position;
+
+					m_pointLight.SetPointLight(
+						0,
+						Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z),
+						Vector3::Zero,
+						400.0f
+					);
+					RenderingEngine::GetInstance()->GetLightCB().ptNum = 1;
+				}
+				clearNumTmp++;
 				return true;
 			}
 		}
@@ -426,12 +398,6 @@ void Game::Update()
 		ClearableState();
 	}
 
-	
-
-	for (int i = 0; i < 3; i++) {
-		m_pointLight[i].Update();
-	}
-
 	//フェードの待機時間
 	if (m_isWaitFadeOut) {
 		//フェードし終えたら
@@ -492,7 +458,7 @@ void Game::Update()
 void Game::ClearableState()
 {
 	
-	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight[m_lightNumber].GetPosition();
+	Vector3 diff = m_playerManagement->GetPosition() - m_pointLight.GetPosition();
 	if (diff.LengthSq() <= 120.0f * 120.0f)
 	{
 		NotifyGameClear();
@@ -550,7 +516,7 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	//ミニマップに脱出口を表示
-	m_miniMap->SetTreasurePos(m_position);
+	m_miniMap->SetTreasurePos(m_clearPos);
 
 	m_fade->StartFadeIn();
 

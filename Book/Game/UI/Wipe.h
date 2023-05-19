@@ -66,7 +66,9 @@ private:
 
 private:
 	SpriteRender		m_outlineSpriteRender;		//ワイプの輪郭画像
+	SpriteRender		m_warningSpriteRender;		//警告画像
 	LevelRender			m_levelRender;				//レベルレンダー
+	PointLight			m_pointLight;				//ポイントライト
 	AnimationClip*		m_enemyAnim = nullptr;		//敵のアニメーション
 	BackGround*			m_backGround = nullptr;		//地面
 	std::vector<Wall*>	m_stage;					//ステージ
@@ -77,4 +79,5 @@ private:
 	bool				m_isWipe = false;			//ワイプを表示するかどうか
 	float				m_timer = 0.0f;				//タイマー
 	float				m_outlineTimer = 0.0f;		//ワイプ用タイマー
+	float				m_alpha = 0.0f;				//透明
 };

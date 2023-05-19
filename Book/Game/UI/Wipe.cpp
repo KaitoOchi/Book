@@ -16,7 +16,8 @@ namespace
 
 Wipe::Wipe()
 {
-
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = -290;   //画面左上のx座標
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY = 662;   //画面左上のy座標
 }
 
 Wipe::~Wipe()
@@ -36,15 +37,30 @@ bool Wipe::Start()
 	m_wipePos = WIPE_POS_MIN;
 	m_outlinePos = OUTLINE_POS_MIN;
 
-	//アニメーション設定
-	m_enemyAnim = new AnimationClip;
-	m_enemyAnim->Load("Assets/animData/enemy/run_battle.tka");
-	m_enemyAnim->SetLoopFlag(true);
+	//スポットライトの設定
+	m_pointLight.SetPointLight(
+		1,
+		Vector3(11500.0f, 150.0f, 1200.0f),
+		Vector3(1.5f, 0.5f, 0.5f),
+		1500.0f
+	);
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;
 
 	//輪郭線の設定
 	m_outlineSpriteRender.Init("Assets/sprite/UI/Gauge/wipe_outline.DDS", 262.0f, 205.0f);
 	m_outlineSpriteRender.SetPosition(m_outlinePos);
 	m_outlineSpriteRender.Update();
+
+	//警告画像
+	m_warningSpriteRender.Init("Assets/sprite/UI/gauge/image_test.DDS", 414.0f, 121.0f);
+	m_warningSpriteRender.SetPosition(Vector3(-675.0f, -125.0f, 0.0f));
+	m_warningSpriteRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
+	m_warningSpriteRender.Update();
+
+	//アニメーション設定
+	m_enemyAnim = new AnimationClip;
+	m_enemyAnim->Load("Assets/animData/enemy/run_battle.tka");
+	m_enemyAnim->SetLoopFlag(true);
 
 	//敵の初期化
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
@@ -200,6 +216,20 @@ void Wipe::WipeOutline()
 	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = m_wipePos.x;
 	m_outlineSpriteRender.SetPosition(m_outlinePos);
 	m_outlineSpriteRender.Update();
+
+	//透明度を求める
+	m_alpha += g_gameTime->GetFrameDeltaTime();
+	if (m_alpha > 1.0f)
+		m_alpha = -0.5f;
+	float alpha = fabsf(-pow(m_alpha, 2.0f) + (2 * m_alpha));
+
+	Vector3 warningPos = m_outlinePos;
+	warningPos.y += 150.0f;
+
+	//警告画像の設定
+	m_warningSpriteRender.SetPosition(warningPos);
+	m_warningSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
+	m_warningSpriteRender.Update();
 }
 
 void Wipe::Render(RenderContext& rc)
@@ -217,5 +247,6 @@ void Wipe::Render(RenderContext& rc)
 		m_enemy[i].modelRender.Draw(rc);
 	}
 
+	m_warningSpriteRender.Draw(rc);
 	m_outlineSpriteRender.Draw(rc);
 }

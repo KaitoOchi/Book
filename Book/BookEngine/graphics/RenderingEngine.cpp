@@ -22,12 +22,12 @@ namespace nsBookEngine {
 		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
 		//環境光の設定
-		SetAmbient(0.0f);
+		SetAmbient(0.1f);
 
 		//半球光の設定
 		SetHemiSphereLight(
-			Vector3(0.6f, 0.5f, 0.5f),
-			Vector3(0.5f, 0.6f, 0.5f),
+			Vector3(0.1f, 0.1f, 0.2f),
+			Vector3(0.2f, 0.2f, 0.3f),
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
@@ -175,6 +175,8 @@ namespace nsBookEngine {
 	{
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
+		m_lightCB.directionLig.eyePos.x += 2000.0f;
+		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
 		ZPrepass(rc);
 

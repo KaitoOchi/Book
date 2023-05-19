@@ -52,11 +52,14 @@ void Result::InitScore()
 		m_score[0] *= 100;
 	}
 
+	//スコアを計算する
 	m_score[1] = m_resultState;
 	m_score[2] = GameManager::GetInstance()->GetSearchNum();
 	m_score[3] = m_score[0] +
 		(m_score[1] * 50000) +
 		(m_score[2] * -500);
+
+	m_score[3] = max(m_score[3], 0);
 
 	char rank = 'E';
 	//スコアからランクを設定

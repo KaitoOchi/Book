@@ -22,13 +22,19 @@ bool Enemy_Clear::Start()
 	Animation();
 
 	// ���f���̓ǂݍ���
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 3);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_clearModelRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 3);
 
 	Enemy::Start();
 
 	m_enemyRender.SetScale(m_scale);
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
+
+	m_clearModelRender.SetScale(m_scale);
+	m_clearModelRender.SetPosition(m_position);
+	m_clearModelRender.SetRotation(m_rotation);
+	m_clearModelRender.PlayAnimation(m_enAnimation_Walk);
 
 	// �p�X�ړ�
 	m_point = &m_pointList[0];
@@ -110,6 +116,10 @@ void Enemy_Clear::Update()
 	Enemy::Act_SeachPlayer();
 
 	m_enemyRender.Update();	// �X�V
+
+	m_clearModelRender.SetPosition(m_position);
+	m_clearModelRender.SetRotation(m_rotation);
+	m_clearModelRender.Update();
 }
 
 void Enemy_Clear::Update_OnCraw()
@@ -206,16 +216,16 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
-	//���������
-	//if (m_clearFlag == false)
-	//{
-	//	if (m_NotDrawFlag == false) {
-	//		m_enemyRender.Draw(rc);
-	//	}
-	//}
+	if (m_NotDrawFlag == true) {
+		return;
+	}
 
-	if (m_NotDrawFlag == false) {
+	if (m_clearFlag) {
+		m_clearModelRender.Draw(rc);
+	}
+	else {
 		m_enemyRender.Draw(rc);
 	}
+
 	
 }
