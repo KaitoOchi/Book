@@ -41,6 +41,8 @@ private:
 	/// </summary>
 	void ClearChange();
 
+	ModelRender m_clearModelRender;		//”¼“§–¾‚Ìƒ‚ƒfƒ‹
+
 	//“§–¾‰»‚ğØ‚è‘Ö‚¦‚é
 	bool m_clearFlag=true;							//true‚È‚ç“§–¾‰»false‚È‚ç‰ğœ
 	EnEnemyActState m_SetActState=m_ActState;		//‚Ç‚¿‚ç‚Ìó‘Ô‰»‚ğ‹L‰¯‚·‚é

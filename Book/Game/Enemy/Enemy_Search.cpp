@@ -8,6 +8,8 @@ namespace
 	
 	const float ANGLE = 45.0f;
 	const float RODADD = 0.01f;
+
+	const float SEARCHPLAYER_TIMER = 7.0f;
 }
 Enemy_Search::Enemy_Search()
 {
@@ -28,8 +30,6 @@ bool Enemy_Search::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.SetScale(m_scale);
-
-	m_ActState = SEARCH;		// �s���p�^�[����ݒ�
 
 	return true;
 }
@@ -60,8 +60,8 @@ void Enemy_Search::Update()
 	case CALL:
 		Update_OnCall();
 		break;
-	case CALLEND:
-		Update_OnCallEnd();
+	case MISSING_SEARCHPLAYER:
+		Update_OnMissingPlayer();
 		break;
 	case CONFUSION:
 		Update_OnConfusion();
@@ -83,10 +83,11 @@ void Enemy_Search::Update_OnSearch()
 {
 	// ���G
 	Rotaition();
-	m_enAnimationState = IDLE;	// �A�j���[�V�����X�e�[�g��ݒ�
 
 	// ����p��Ƀv���C���[�����݂���Ƃ�
 	if (m_TrakingPlayerFlag == true) {
+		// フラグを降ろす
+		m_efectDrawFlag[2] = false;
 		m_ActState = CALL;
 	}
 }
@@ -95,35 +96,18 @@ void Enemy_Search::Update_OnCall()
 {
 	// ����̓G��Ă�
 	Enemy::Act_Call();
-	m_enAnimationState = IDLE;	// �A�j���[�V�����X�e�[�g��ݒ�
-
-	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
-	if (m_TrakingPlayerFlag == false) {
-		m_ActState = CALLEND;
-	}
-}
-
-void Enemy_Search::Update_OnCallEnd()
-{
-	Rotaition();
-	Enemy::Act_CallEnd();
-	m_enAnimationState = IDLE;	// �A�j���[�V�����X�e�[�g��ݒ�
-
-	// �G�l�~�[����ɖ߂�
-	if (Enemy::Act_CallEnd() == true) {
-		m_ActState = SEARCH;
-	}
 }
 
 void Enemy_Search::Update_OnConfusion()
 {
 	// ����
 	Enemy::Act_HitFlashBullet();
+}
 
-	// �d��������Ă���Ƃ�
-	if (Enemy::GetHitFlushBullet() == false) {
-		m_ActState = SEARCH;
-	}
+void Enemy_Search::Update_OnMissingPlayer()
+{
+	// プレイヤーを見失った時
+	Enemy::Act_SearchMissingPlayer();
 }
 
 void Enemy_Search::Rotaition()
@@ -156,7 +140,7 @@ void Enemy_Search::Rotaition()
 		break;
 	}
 	
-	
+	m_enAnimationState = IDLE;	// �A�j���[�V�����X�e�[�g��ݒ�
 }
 void Enemy_Search::Render(RenderContext& rc)
 {

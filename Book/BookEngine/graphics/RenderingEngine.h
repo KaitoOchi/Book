@@ -179,9 +179,9 @@ namespace nsBookEngine {
 		/// シャドウ用の構造体を取得。
 		/// </summary>
 		/// <returns></returns>
-		Vector3& GetShadowCB()
+		ShadowParamCB& GetShadowCB()
 		{
-			return m_lightCB.shadowCB.lightPos;
+			return m_lightCB.shadowCB;
 		}
 
 		/// <summary>

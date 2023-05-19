@@ -16,12 +16,12 @@ namespace
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
 	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
-									{ 200.0f, 50.0f, 50.0f }, 
+									{ 170.0f, 50.0f, 70.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
 									{ 220.0f, 5.0f, 0.0f },
 									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
 	const Vector3 CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
-									{ 0.0f, 50.0f, 50.0f },
+									{ 0.0f, 50.0f, 70.0f },
 									{ 0.0f, 50.0f, 0.0f },
 									{ 200.0f, 5.0f, 0.0f },
 									{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
@@ -55,15 +55,16 @@ Event::~Event()
 bool Event::Start()
 {
 	//お宝モデルの設定
-	m_tresureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
-	m_tresureModelRender.SetPosition(m_tresurePos + Vector3(0.0f, 0.0f, 30.0f));
-	m_tresureModelRender.Update();
+	m_treasureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_treasureModelRender.SetPosition(m_treasurePos);
+	m_treasureModelRender.SetScale(Vector3(3.0f, 3.0f, 3.0f));
+	m_treasureModelRender.Update();
 
-	m_tresurePos.y -= 50.0f;
-	m_tresurePos.z -= 10.0f;
+	m_treasurePos.y -= 48.0f;
+	m_treasurePos.z -= 10.0f;
 
 	//プレイヤーとライトの座標を設定
-	Vector3 playerPos = m_tresurePos;
+	Vector3 playerPos = m_treasurePos;
 	playerPos.z -= 50.0f;
 
 	//プレイヤーモデルを設定
@@ -274,8 +275,8 @@ void Event::Camera()
 			g_camera3D->SetTarget(m_cameraTarget);
 		}
 		else {
-			g_camera3D->SetPosition(m_tresurePos + m_cameraPos);
-			g_camera3D->SetTarget(m_tresurePos + m_cameraTarget);
+			g_camera3D->SetPosition(m_treasurePos + m_cameraPos);
+			g_camera3D->SetTarget(m_treasurePos + m_cameraTarget);
 		}
 		g_camera3D->Update();
 	}
@@ -308,7 +309,7 @@ void Event::Render(RenderContext& rc)
 
 	if (TRESURE_ENABLE[m_cameraScene] == true) {
 		//お宝モデルの描画
-		m_tresureModelRender.Draw(rc);
+		m_treasureModelRender.Draw(rc);
 	}
 
 	if (PLAYER_ENABLE[m_cameraScene] == true) {

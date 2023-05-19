@@ -16,7 +16,8 @@ namespace
 
 Wipe::Wipe()
 {
-
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = -290;   //‰æ–Ê¶ã‚ÌxÀ•W
+	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY = 662;   //‰æ–Ê¶ã‚ÌyÀ•W
 }
 
 Wipe::~Wipe()
@@ -52,7 +53,7 @@ bool Wipe::Start()
 
 	//Œx‰æ‘œ
 	m_warningSpriteRender.Init("Assets/sprite/UI/gauge/image_test.DDS", 414.0f, 121.0f);
-	m_warningSpriteRender.SetPosition(Vector3(-700.0f, -125.0f, 0.0f));
+	m_warningSpriteRender.SetPosition(Vector3(-675.0f, -125.0f, 0.0f));
 	m_warningSpriteRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_warningSpriteRender.Update();
 
@@ -216,11 +217,18 @@ void Wipe::WipeOutline()
 	m_outlineSpriteRender.SetPosition(m_outlinePos);
 	m_outlineSpriteRender.Update();
 
+	//“§–¾“x‚ğ‹‚ß‚é
+	m_alpha += g_gameTime->GetFrameDeltaTime();
+	if (m_alpha > 1.0f)
+		m_alpha = -0.5f;
+	float alpha = fabsf(-pow(m_alpha, 2.0f) + (2 * m_alpha));
+
 	Vector3 warningPos = m_outlinePos;
 	warningPos.y += 150.0f;
 
 	//Œx‰æ‘œ‚Ìİ’è
 	m_warningSpriteRender.SetPosition(warningPos);
+	m_warningSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
 	m_warningSpriteRender.Update();
 }
 
@@ -239,6 +247,6 @@ void Wipe::Render(RenderContext& rc)
 		m_enemy[i].modelRender.Draw(rc);
 	}
 
-	m_outlineSpriteRender.Draw(rc);
 	m_warningSpriteRender.Draw(rc);
+	m_outlineSpriteRender.Draw(rc);
 }

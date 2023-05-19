@@ -180,7 +180,7 @@ void FlashBom::ProcessFlashingState()
 		m_pointLight.SetPointLight(2, m_position, Vector3(0.0f, 0.0f, 0.0f), 0.0f);
 		m_pointLight.Update();
 		m_alpha = 0.0f;
-		RenderingEngine::GetInstance()->SetAmbient(0.7f);
+		RenderingEngine::GetInstance()->SetAmbient(0.1f);
 		m_FlashState = m_enFlash_No;
 		RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;
 	}

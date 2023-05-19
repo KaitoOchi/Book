@@ -176,7 +176,7 @@ namespace nsBookEngine {
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 		m_lightCB.directionLig.eyePos.x += 2000.0f;
-		m_lightCB.directionLig.eyePos.y += 1000.0f;
+		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
 		ZPrepass(rc);
 

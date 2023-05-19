@@ -90,19 +90,23 @@ namespace nsBookEngine {
 			modelInitData.m_psEntryPointFunc = "PSMain";
 		}
 
-		if (m_skeleton.IsInited()) { 
-			//スケルトンを指定する。
-			modelInitData.m_skeleton = &m_skeleton;
-			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		//アニメーション有りモデルなら
+		if (m_skeleton.IsInited()) {
+		//スケルトンを指定する。
+		modelInitData.m_skeleton = &m_skeleton;
+		modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 		
 		//輪郭線を設定
+		//プレイヤーモデルなら
 		if (outlineMode == 1) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinPlayer";
 		}
+		//敵モデルなら
 		else if (outlineMode == 2) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemy";
 		}
+		//半透明敵モデルなら
 		else if (outlineMode == 3) {
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemyClear";
 		}
