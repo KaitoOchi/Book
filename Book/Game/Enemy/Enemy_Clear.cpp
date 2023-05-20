@@ -227,6 +227,8 @@ void Enemy_Clear::Render(RenderContext& rc)
 {
 	if (m_activeFlag == true)
 	{
+		Vector3 move{ 0.0f,-300.0f,0.0f };
+		m_characterController.Execute(move, 1.0f);
 		return;
 	}
 	if (m_NotDrawFlag == true) {

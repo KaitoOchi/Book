@@ -934,6 +934,7 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 			ANGLE
 		);
 	}
+
 	
 }
 
