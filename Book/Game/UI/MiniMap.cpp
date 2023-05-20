@@ -59,7 +59,7 @@ bool MiniMap::Start()
 	}
 
 	// お宝
-	m_TreasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_2.DDS", 10,10);
+	m_TreasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_treasure.DDS", 20,20);
 	// マップ上の色を黄色に設定。エネミーより少し大きく描画する
 	m_TreasureSpriteRender.SetMulColor({ 5.0f,3.0f,0.0f,1.0f });
 
