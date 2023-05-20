@@ -21,7 +21,7 @@ namespace
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
-	const float		CALL_DISTANCE_MIN = 180.0f;				// 呼ぶことができる最小値
+	const float		CALL_DISTANCE_MIN = 150.0f;				// 呼ぶことができる最小値
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 180.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -286,26 +286,26 @@ void Enemy::Act_SeachPlayer()
 		// 衝突判定を行う
 		if (WallAndHit(m_playerPos) == false) {
 			// 壁に衝突したとき
-			m_TrakingPlayerFlag = false;
+			m_TrackingPlayerFlag = false;
 			m_efectDrawFlag[1] = false;
 			return;
 		}
 
 		m_NaviTimer = 0.0f;
 		// 追跡フラグをtrueにする
-		m_TrakingPlayerFlag = true;
+		m_TrackingPlayerFlag = true;
 		// エフェクトを生成
 		Efect_FindPlayer();
 		return;
 	}
 
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		m_playerPos = m_playerManagement->GetPosition();
 
 		// 衝突判定を行う
 		if (WallAndHit(m_playerPos) == false) {
 			// 壁に衝突したとき
-			m_TrakingPlayerFlag = false;
+			m_TrackingPlayerFlag = false;
 			m_efectDrawFlag[1] = false;
 			return;
 		}
@@ -427,7 +427,7 @@ void Enemy::Act_SearchMissingPlayer()
 	m_enAnimationState = LOSS;
 
 	// プレイヤーを発見したとき
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		// 再度追跡する
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
@@ -472,9 +472,9 @@ void Enemy::Act_SearchMissingPlayer()
 void Enemy::Act_HitFlashBullet()
 {
 	// プレイヤーを追跡するフラグがtrueになったら
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		// falseにする
-		m_TrakingPlayerFlag = false;
+		m_TrackingPlayerFlag = false;
 	}
 
 	// プレイヤーを確保したフラグがtrueになったら
@@ -494,7 +494,7 @@ void Enemy::Act_HitFlashBullet()
 		m_efectDrawFlag[0] = false;
 
 		// フラグを降ろす
-		m_TrakingPlayerFlag = false;
+		m_TrackingPlayerFlag = false;
 		m_HitFlashBulletFlag = false;
 
 		// タイマーをリセット
@@ -513,18 +513,27 @@ void Enemy::Act_HitFlashBullet()
 	}
 }
 
-void Enemy::Act_HitSoundBullet()
+void Enemy::Act_GoLocationListenSound(Vector3 pos)
 {
-	// 音爆弾の処理
-	// trueのとき当たった
-
 	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = m_itemPos - m_position;
+	Vector3 diff = pos - m_position;
 	float length = diff.Length();
 
-	if (length > 50.0f) {
+	// プレイヤーを発見したとき
+	if (m_TrackingPlayerFlag == true) {
+		// 突進タイプのとき
+		if (m_enemyType == TYPE_CHARGE) {
+			m_ActState = CHARGE;
+			return;
+		}
+		m_ActState = TRACKING;
+		return;
+	}
+
+	// 長さが一定以上のとき
+	if (length >= CALL_DISTANCE_MIN) {
 		// アイテムの座標を基にしてナビメッシュを作成
-		CreateNavimesh(m_itemPos);
+		CreateNavimesh(pos);
 		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
 		// エフェクトの再生フラグをfalseにしておく
@@ -533,13 +542,14 @@ void Enemy::Act_HitSoundBullet()
 	else {
 		// 見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;
+		m_HearedSoundBulletFlag = false;
 	}
 }
 
 void Enemy::Act_Craw()
 {
 	// プレイヤーを発見したとき
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
 			m_ActState = CHARGE;
@@ -603,7 +613,7 @@ void Enemy::Act_Tracking()
 	}
 
 	// 見失った時
-	if (m_TrakingPlayerFlag == false) {
+	if (m_TrackingPlayerFlag == false) {
 		// プレイヤーの座標を参照する
 		m_playerMissionPosition = m_playerManagement->GetPosition();
 		m_ActState = MISSING_MOVEPOSITON;
@@ -757,15 +767,12 @@ void Enemy::Act_ChargeEnd()
 	m_efectDrawFlag[2] = false;		//　!のエフェクトのフラグを降ろす
 
 	// プレイヤーが視野角内にいるとき
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		// 再度突進する
 		m_ActState = CHARGE;
 		return;
 	}
 	else {
-		// エフェクトを生成
-		Efect_MissingPlayer();
-
 		// いないときは巡回状態に戻る
 		m_ActState = MISSING_SEARCHPLAYER;
 	}
@@ -805,8 +812,10 @@ void Enemy::Act_Call()
 		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		float length = diff.Length();
 
-		// 長さが一定以内のとき
-		if (length > CALL_DISTANCE_MIN && length < CALL_DISTANCE_MAX) {
+		// 長さが一定以内のとき かつ まだ呼んでいないとき
+		if (length > CALL_DISTANCE_MIN &&
+			length < CALL_DISTANCE_MAX &&
+			m_game->GetEnemyList()[i]->m_ActState != CALLED) {
 
 			m_game->GetEnemyList()[i]->m_ActState = CALLED;				// 行動パターンを変更する
 			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
@@ -819,47 +828,13 @@ void Enemy::Act_Call()
 	}
 
 	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
-	if (m_TrakingPlayerFlag == false) {
+	if (m_TrackingPlayerFlag == false) {
 		// フラグを降ろす
 		m_efectDrawFlag[1] = false;
 		m_ActState = MISSING_SEARCHPLAYER;
 	}
 
 	m_enAnimationState = IDLE;
-}
-
-void Enemy::Act_Called()
-{
-	// 呼ばれた時の処理
-
-	// 目標地点へ向かうナビメッシュを作成
-	Vector3 diff = m_setPos - m_position;
-	float length = diff.Length();
-
-	// プレイヤーを見つけたとき
-	if (m_TrakingPlayerFlag == true) {
-		// 追跡する
-		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = CHARGE;
-			return;
-		}
-		m_ActState = TRACKING;
-		return;
-	}
-
-	// 目標までの長さが一定以上のとき
-	if (length >= CALL_DISTANCE_MIN) {
-		// 座標を基にしてナビメッシュを作成
-		CreateNavimesh(m_setPos);
-		// 走るアニメーションを再生
-		m_enAnimationState = RUN;
-		// エフェクトの再生フラグをfalseにしておく
-		m_efectDrawFlag[2] = false;
-	}
-	else {
-		// 見失ったプレイヤーを探す
-		m_ActState = MISSING_SEARCHPLAYER;
-	}
 }
 
 void Enemy::Act_Loss()

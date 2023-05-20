@@ -60,9 +60,9 @@ void Enemy_Normal::Update()
 	}
 
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
-	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		// �M���e��D�悷��
-		m_HitSoundBulletFlag = false;
+		m_HearedSoundBulletFlag = false;
 	}
 
 	// �M���e�ɓ�������
@@ -70,7 +70,7 @@ void Enemy_Normal::Update()
 		m_ActState = CONFUSION;
 	}
 	// �����e��g�p����
-	if (m_HitSoundBulletFlag == true) {
+	if (m_HearedSoundBulletFlag == true) {
 		m_ActState = LISTEN;
 	}
 
@@ -151,7 +151,7 @@ void Enemy_Normal::Update_OnTracking()
 
 void Enemy_Normal::Update_OnCalled()
 {
-	Enemy::Act_Called();
+	Enemy::Act_GoLocationListenSound(m_setPos);
 }
 
 void Enemy_Normal::Update_OnMoveMissingPosition()
@@ -179,20 +179,8 @@ void Enemy_Normal::Update_OnConfusion()
 
 void Enemy_Normal::UpDate_OnListen()
 {
-	// �����e��g�����Ƃ�
-
-	// �M���e��H����Ă���Ƃ��͎��s���Ȃ�
-	if (m_HitFlashBulletFlag == true) {
-		m_HitFlashBulletFlag = false;
-		return;
-	}
-
-	Enemy::Act_HitSoundBullet();
-
-	// ���ʂ��I�������Ƃ�
-	if (m_HitSoundBulletFlag == false) {
-		m_ActState = BACKBASEDON;
-	}
+	// 音爆弾を使ったとき
+	Enemy::Act_GoLocationListenSound(m_itemPos);
 }
 
 void Enemy_Normal::Render(RenderContext& rc)
