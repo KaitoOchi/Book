@@ -11,6 +11,7 @@ class Treasure;
 namespace
 {
 	const int ENEMY_NUM = 50;							// 表示するかどうかのフラグ用。多めに用意してます
+	const int WALL_NUM = 10;
 }
 
 class MiniMap:public IGameObject
@@ -28,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="pos">変換するエネミーの座標</param>
 	/// <param name="num">配列番号</param>
-	void DrawMap(Vector3 enemyPos,int num);		
+	void DrawMap();		
 	/// <summary>
 	/// お宝を描画する
 	/// </summary>
@@ -63,16 +64,19 @@ private:
 	SpriteRender m_OutLineSpriteRender;						// スプライトレンダー。ミニマップの装飾部分
 	SpriteRender m_PlayerSpriteRender;						// スプライトレンダー。プレイヤー
 	std::array<SpriteRender,ENEMY_NUM>m_EnemySpriteRender;	// スプライトレンダー。エネミー
+	std::array< SpriteRender, WALL_NUM > m_wallSpriteRender;
 	SpriteRender m_TreasureSpriteRender;					// スプライトレンダー。お宝
 
 	PlayerManagement* m_playerManagement = nullptr;
 	Game* m_game = nullptr;
 	Treasure* m_treasure = nullptr;
 
-	std::vector<Enemy*> m_enemyList;				// エネミーのリスト
+	std::vector<Enemy*> m_enemyList;						// エネミーのリスト
+	std::vector<PhysicsGhost*> m_physicsGhostList;	//壁のリスト
 
 	Vector3 m_treasurePos = Vector3::Zero;			// お宝の位置
 
 	std::array<bool,ENEMY_NUM>m_isImage;						// 表示するかどうかのフラグ。エネミーの数分用意する
+	std::array< bool, WALL_NUM > m_enableWallSprite;
 };
 
