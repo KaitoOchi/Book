@@ -58,6 +58,7 @@ void Enemy_Clear::Update()
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+
 		m_ChangeDefaultFlag = false;
 	}
 

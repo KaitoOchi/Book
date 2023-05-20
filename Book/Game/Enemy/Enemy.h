@@ -352,8 +352,8 @@ public:
 		return m_activeFlag;
 	}
 
-	//スポットライトの取得
-	SpotLight GetSpotLight() {
+	// スポットライトを渡す
+	const SpotLight GetSpotLight() {
 		return m_spotLight;
 	}
 
@@ -386,7 +386,6 @@ protected:
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
-	Vector3 m_firstPosition = Vector3::Zero;// エネミーの最初の位置情報
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
@@ -399,7 +398,6 @@ protected:
 
 
 	Quaternion m_rotation = Quaternion::Identity;		// 回転
-	Quaternion m_firstRotation = Quaternion::Identity;	// エネミーの最初の回転情報
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
