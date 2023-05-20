@@ -368,18 +368,20 @@ protected:
 	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
+	Vector3 m_firstPosition = Vector3::Zero;// エネミーの最初の位置情報
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 	Vector3 m_playerChargePosition = Vector3::Zero;			// 突進用。プレイヤーの座標
-	Vector3 m_playerMissionPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
+	Vector3 m_playerMissionPosition = Vector3::Zero;		// 見失った時用。プレイヤーの座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
 
 
-	Quaternion m_rotation = Quaternion::Identity;	// 回転
+	Quaternion m_rotation = Quaternion::Identity;		// 回転
+	Quaternion m_firstRotation = Quaternion::Identity;	// エネミーの最初の回転情報
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
