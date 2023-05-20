@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 180.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
