@@ -50,7 +50,9 @@ void Enemy_Search::Update()
 	}
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
 	if (m_ChangeDefaultFlag == true) {
+
 		m_ActState = SEARCH;
+
 		m_ChangeDefaultFlag = false;
 	}
 

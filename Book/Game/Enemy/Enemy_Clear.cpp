@@ -58,6 +58,7 @@ void Enemy_Clear::Update()
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+
 		m_ChangeDefaultFlag = false;
 	}
 
@@ -224,7 +225,7 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
-	if (m_activeFlag == false)
+	if (m_activeFlag == true)
 	{
 		return;
 	}
