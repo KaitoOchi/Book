@@ -225,6 +225,7 @@ private:
 
 
 	std::vector<Enemy*>				m_enemyList;
+	std::vector<Vector3>			m_enemyFirstPositions;			// エネミーの初期座標
 	std::vector<Wall*>				m_wallList;
 	std::vector<Vector3>			m_treasurePositions;
 	std::vector<Sensor*>			m_sensorList;

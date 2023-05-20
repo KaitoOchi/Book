@@ -185,6 +185,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyNormal->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
@@ -205,6 +207,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyCharge->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -223,6 +227,8 @@ void Game::LevelDesign()
 
 			enemySearch->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemySearch);
 			return true;
@@ -243,6 +249,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyClear->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
@@ -263,6 +271,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyNormal->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			//追加する前なので描画しない
 			enemyNormal->SetActiveFlag(true);
 			// エネミーのリストに追加する
@@ -284,6 +294,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyCharge->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			//追加前なので描画しない
 			enemyCharge->SetActiveFlag(true);
 			// エネミーのリストに追加する
@@ -306,6 +318,8 @@ void Game::LevelDesign()
 			// パス移動の順路を指定
 			enemyClear->Pass(objData.number);
 			enemyClear->SetActiveFlag(true);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
@@ -324,6 +338,8 @@ void Game::LevelDesign()
 			enemySearch->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			enemySearch->SetActiveFlag(true);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemySearch);
 			return true;
@@ -561,6 +577,10 @@ void Game::NotDraw_Enemy(bool flag)
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_enemyList[i]->SetNotDrawFlag(flag);
 		m_enemyList[i]->SetTrueChangeDefaultFlag();
+		for (int j = 0; j < m_enemyFirstPositions.size(); j++) {
+			// 座標を教える
+			m_enemyList[i]->SetPosition(m_enemyFirstPositions[i]);
+		}
 	}
 }
 

@@ -352,7 +352,10 @@ public:
 		return m_activeFlag;
 	}
 
-	//--------------------------------------------
+	// スポットライトを渡す
+	const SpotLight GetSpotLight() {
+		return m_spotLight;
+	}
 
 protected:
 
@@ -387,12 +390,14 @@ protected:
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 	Vector3 m_playerChargePosition = Vector3::Zero;			// 突進用。プレイヤーの座標
-	Vector3 m_playerMissionPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
+	Vector3 m_playerMissionPosition = Vector3::Zero;		// 見失った時用。プレイヤーの座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
+	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
 
-	Quaternion m_rotation = Quaternion::Identity;	// 回転
+
+	Quaternion m_rotation = Quaternion::Identity;		// 回転
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
