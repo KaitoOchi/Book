@@ -37,6 +37,12 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		return;
+	}
+
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -189,7 +195,8 @@ void Enemy_Normal::UpDate_OnListen()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// �`��
-	if (m_NotDrawFlag == false) {
+	if (m_NotDrawFlag == false&&
+		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 

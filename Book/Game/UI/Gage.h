@@ -18,6 +18,17 @@ public:
 	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
 	void GageUp(const int GageUp, const bool isEnemy);
 
+
+	enum EnLeverState
+	{
+		m_enLever_1,		//Œx‰ú“xƒŒƒxƒ‹‚P
+		m_enLever_2,		//Œx‰ú“xƒŒƒxƒ‹‚Q
+		m_enLever_3,		//Œx‰ú“xƒŒƒxƒ‹‚R
+		m_enLever_MAX,		//Œx‰ú“xƒŒƒxƒ‹MAX
+	};
+
+	EnLeverState m_leverState = m_enLever_1;
+
 private:
 	
 	/// <summary>
@@ -32,15 +43,10 @@ private:
 	
 	void Gage_ColorChange(); 
 
-	enum EnLeverState
-	{
-		m_enLever_1,		//Œx‰ú“xƒŒƒxƒ‹‚P
-		m_enLever_2,		//Œx‰ú“xƒŒƒxƒ‹‚Q
-		m_enLever_3,		//Œx‰ú“xƒŒƒxƒ‹‚R
-		m_enLever_MAX,		//Œx‰ú“xƒŒƒxƒ‹MAX
-	};
-
-	EnLeverState m_leverState= m_enLever_1;
+	/// <summary>
+	/// Œx‰ú“x‚ªMAX‚Ì‚Ìˆ—
+	/// </summary>
+	void Gage_MAX();
 
 	EnLeverState m_GetState = m_leverState;
 

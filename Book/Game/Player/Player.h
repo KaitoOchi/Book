@@ -106,6 +106,12 @@ public:
 	{
 		m_moveSpeed = speed;
 	}
+
+	const Vector3 GetMoveSpeed()
+	{
+		return m_moveSpeed;
+	}
+
 	/// <summary>
 	/// プレイヤーステートの変更
 	/// </summary>
@@ -131,12 +137,44 @@ public:
 	{
 		return m_stamina;
 	}
-
+	/// <summary>
+	/// スタミナの設定
+	/// </summary>
+	/// <param name="stamina"></param>
+	/// <returns></returns>
 	const void SetStamina(const float stamina)
 	{
 		m_stamina = stamina;
 	}
 
+	/// <summary>
+	/// 走れるかどうかの判定
+	/// </summary>
+	/// <param name="run">trueなら走れる</param>
+	/// <returns></returns>
+	const void SetRunState(const bool run)
+	{
+		m_runState = run;
+	}
+
+	/// <summary>
+	/// 走れるかどうかの判定の取得
+	/// </summary>
+	/// <returns></returns>
+	const bool GetRunState()
+	{
+		return m_runState;
+	}
+
+	const void SetRotation(const Quaternion rot)
+	{
+		m_rotation = rot;
+	}
+
+	const Quaternion GetRotation()
+	{
+		return m_rotation;
+	}
 
 protected:
 	

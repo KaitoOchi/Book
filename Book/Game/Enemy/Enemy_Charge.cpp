@@ -40,6 +40,12 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	//s“®‚Å‚«‚é‚©’²‚×‚é
+	if (m_activeFlag == true)
+	{
+		return;
+	}
+
 	// •`‰æ‚µ‚È‚¢ƒtƒ‰ƒO‚ªtrue‚Ì‚Æ‚«
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -195,7 +201,8 @@ void Enemy_Charge::Update_OnCatch()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false) {
+	if (m_NotDrawFlag == false&&
+		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

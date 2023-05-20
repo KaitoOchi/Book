@@ -223,6 +223,7 @@ private:
 	Gage*							m_gage = nullptr;
 	MiniMap*						m_miniMap = nullptr;
 
+
 	std::vector<Enemy*>				m_enemyList;
 	std::vector<Wall*>				m_wallList;
 	std::vector<Vector3>			m_treasurePositions;

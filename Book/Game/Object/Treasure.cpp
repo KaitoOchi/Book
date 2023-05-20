@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Treasure.h"
 #include "Game.h"
+#include "Gage.h"
 #include <random>
 
 namespace
 {
-	const Vector3 BOXSIZE{ 50.0f,50.0f,50.0f };
+	const Vector3 BOXSIZE{ 150.0f,50.0f,150.0f };
 	const float GAGESIZE = 10.0f;
 }
 Treasure::Treasure()
@@ -18,10 +19,14 @@ Treasure::~Treasure()
 }
 bool Treasure::Start()
 {
+	//‚¨•ó‚ÌÀ•W‚ğƒ‰ƒ“ƒ_ƒ€‚Å¶¬‚·‚é
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
+
+	m_gage = FindGO<Gage>("gage");
+
 	Object::Start();
 	m_position = m_game->GetTreasurePositionList()[m_randTreasure];
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
@@ -70,8 +75,11 @@ void Treasure::Hit()
 		m_game->GetPointLight().Update();
 
 		m_game->NotifyEventStart();
-		m_game->SetTresurePosition(m_position);
 
+		m_gage->m_leverState = m_gage->m_enLever_MAX;
+
+		m_game->SetTresurePosition(m_position);
+		
 		Deactivate();
 	}
 }
