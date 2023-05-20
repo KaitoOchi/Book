@@ -95,7 +95,7 @@ void Enemy_Search::Update_OnSearch()
 	Rotaition();
 
 	// ����p��Ƀv���C���[�����݂���Ƃ�
-	if (m_TrakingPlayerFlag == true) {
+	if (m_TrackingPlayerFlag == true) {
 		// フラグを降ろす
 		m_efectDrawFlag[2] = false;
 		m_ActState = CALL;
