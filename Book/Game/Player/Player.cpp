@@ -9,8 +9,8 @@
 #include "Stage/Wall/Wall.h"
 namespace
 {
-	const float		WALK = 40.0f;										//歩き時の乗算量
-	const float		RUN = 80.0f;										//走り時の乗算量
+	const float		WALK = 30.0f;										//歩き時の乗算量
+	const float		RUN = 60.0f;										//走り時の乗算量
 	const float		JUMPVOLUM = 200.0f;									//ジャンプ量
 	const float		GRAVITY = 400.0f;									//重力
 	const float		SPEEDDOWN = 0.8;									//速度減速率

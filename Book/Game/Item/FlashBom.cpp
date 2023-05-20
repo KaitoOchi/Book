@@ -78,39 +78,44 @@ void FlashBom::ItemHit()
 	//近くにいるエネミーたちを探す
 	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
-		Vector3 diff = m_position - m_game->GetEnemyList()[i]->GetPosition();
-        if (diff.Length() < pow(FLASHRANGE, 2.0f))
+		//エネミーが行動しているなら
+		if (!m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
-			btTransform start, end;
-			start.setIdentity();
-			end.setIdentity();
-			Vector3 enemyPosition = m_game->GetEnemyList()[i]->GetPosition();
-			//始点はアイテムの座標
-			start.setOrigin(btVector3(m_position.x,10.0f, m_position.z));
-			//終点はエネミーの座標
-			end.setOrigin(btVector3(enemyPosition.x, 10.0f, enemyPosition.z));
-			SweepResyltWall callback;
-			//コライダーを始点から終点までを動かして。
-			//衝突するかどうか調べる
-			PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
-			//壁と衝突していない
-			if (callback.isHit == false)
+			Vector3 diff = m_position - m_game->GetEnemyList()[i]->GetPosition();
+			if (diff.Length() < pow(FLASHRANGE, 2.0f))
 			{
-				//次にエネミーがこちらの法を向いているか調べる
-				//アイテムからエネミーに向かうベクトルを正規化する
-				diff.Normalize();
-				//エネミーの正面ベクトルとアイテムからエネミーに向かうベクトルの内積(cosθ)を求める
-				float cos = m_game->GetEnemyList()[i]->GetFoward().Dot(diff);
-				//内積から角度を求める
-				float angle = acosf(cos);
-				if (angle <= (Math::PI / 180.0f) * 90.0f)
+				btTransform start, end;
+				start.setIdentity();
+				end.setIdentity();
+				Vector3 enemyPosition = m_game->GetEnemyList()[i]->GetPosition();
+				//始点はアイテムの座標
+				start.setOrigin(btVector3(m_position.x, 10.0f, m_position.z));
+				//終点はエネミーの座標
+				end.setOrigin(btVector3(enemyPosition.x, 10.0f, enemyPosition.z));
+				SweepResyltWall callback;
+				//コライダーを始点から終点までを動かして。
+				//衝突するかどうか調べる
+				PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+				//壁と衝突していない
+				if (callback.isHit == false)
 				{
-					//エネミーフラグをtrueに。
-					m_game->GetEnemyList()[i]->SetHitFlashBullet(true);
+					//次にエネミーがこちらの法を向いているか調べる
+					//アイテムからエネミーに向かうベクトルを正規化する
+					diff.Normalize();
+					//エネミーの正面ベクトルとアイテムからエネミーに向かうベクトルの内積(cosθ)を求める
+					float cos = m_game->GetEnemyList()[i]->GetFoward().Dot(diff);
+					//内積から角度を求める
+					float angle = acosf(cos);
+					if (angle <= (Math::PI / 180.0f) * 90.0f)
+					{
+						//エネミーフラグをtrueに。
+						m_game->GetEnemyList()[i]->SetHitFlashBullet(true);
+					}
 				}
+
 			}
-			
 		}
+		
 	}
 	
 }
