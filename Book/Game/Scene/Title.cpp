@@ -213,6 +213,12 @@ void Title::StateChange()
 				}
 			}
 			else {
+				if (m_titleState_tmp == 2) {
+					m_fade->SetEnableTips(true);
+				}
+				else {
+					m_fade->SetEnableTips(false);
+				}
 				m_isWaitFadeOut = true;
 				m_fade->StartFadeOut();
 			}

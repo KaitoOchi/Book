@@ -54,6 +54,9 @@ PSInput VSMain3(VSInput vsIn)
 	return VSMain(vsIn, 3.0f);
 }
 
+/// <summary>
+/// ピクセルシェーダーのコア関数。
+/// </summary>
 float4 PSMainCore(PSInput In)
 {
     float4 albedo = albedoTexture.Sample(Sampler, In.uv) * mulColor;
@@ -61,11 +64,17 @@ float4 PSMainCore(PSInput In)
     return albedo;
 }
 
+/// <summary>
+/// 通常のエントリー関数。
+/// </summary>
 float4 PSMain(PSInput In) : SV_Target0
 {
     return PSMainCore(In);
 }
 
+/// <summary>
+/// クリップ用のエントリー関数。
+/// </summary>
 float4 PSClip(PSInput In) : SV_Target0
 {
     //ゲームシーンなら
@@ -83,6 +92,9 @@ float4 PSClip(PSInput In) : SV_Target0
     return PSMainCore(In);
 }
 
+/// <summary>
+/// 円形ゲージ用のエントリー関数。
+/// </summary>
 float4 PSCircleGauge(PSInput In) : SV_Target0
 {
     //中心から上方向のベクトル
@@ -108,6 +120,9 @@ float4 PSCircleGauge(PSInput In) : SV_Target0
     return PSMainCore(In);
 }
 
+/// <summary>
+/// UVスクロール用のエントリー関数。
+/// </summary>
 float4 PSMainUVScroll(PSInput In) : SV_Target0
 {
     float2 offset = float2(clipSize.z, 0);
@@ -120,5 +135,3 @@ float4 PSMainUVScroll(PSInput In) : SV_Target0
 
     return albedo;
 }
-
-

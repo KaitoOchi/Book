@@ -98,8 +98,9 @@ SPSIn VSSkinMain( SVSIn vsIn )
 	return VSMainCore(vsIn, true);
 }
 
-
-// モデル用のピクセルシェーダーのエントリーポイント
+/// <summary>
+/// ピクセルシェーダーのコア関数。
+/// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
     return float4( psIn.depth.x, psIn.depth.y, psIn.depth.z, 1.0f );

@@ -133,6 +133,7 @@ public:
 	{
 		m_nextScene = nextScene;
 		m_isWaitFadeOut = true;
+		m_fade->SetEnableTips(true);
 		m_fade->StartFadeOut();
 		GameManager::GetInstance()->DeleteBGM();
 	}

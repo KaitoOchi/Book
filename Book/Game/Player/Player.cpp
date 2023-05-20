@@ -164,6 +164,7 @@ void Player::Move()
 	//カメラの前方向と、右方向の取得
 	Vector3 cameraFoward = g_camera3D->GetForward();
 	Vector3 cameraRight = g_camera3D->GetRight();
+	
 	//XZ平面での前方方向と右方向を取得
 	cameraFoward.y = 0.0f;
 	cameraFoward.Normalize();

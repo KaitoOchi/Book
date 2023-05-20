@@ -241,6 +241,9 @@ SPSIn VSSkinEnemyClear( SVSIn vsIn )
 	return VSMainCore(vsIn, true, float4(1.0f, 0.0f, 0.0f, 0.9f));
 }
 
+/// <summary>
+/// ピクセルシェーダーのコア関数。
+/// </summary>
 float4 PSMainCore(SPSIn In, uniform bool hasShadow, float4 albedo)
 {
 	//ノーマルマップを求める
@@ -674,7 +677,7 @@ float4 Outline(SPSIn psIn, float4 albedo)
     depth2 /= 8.0f;
 
     // 自身の深度値と近傍8テクセルの深度値の差を調べる
-    if(abs(depth - depth2) > 0.05f)
+    if(abs(depth - depth2) > 0.2f)
     {
         // 深度値が結構違う場合はピクセルカラーを黒にする
         return psIn.outlineColor;

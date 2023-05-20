@@ -59,7 +59,7 @@ bool MiniMap::Start()
 	}
 
 	// お宝
-	m_TreasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_treasure.DDS", 20,20);
+	m_TreasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 20.0f, 20.0f);
 	// マップ上の色を黄色に設定。エネミーより少し大きく描画する
 	m_TreasureSpriteRender.SetMulColor({ 5.0f,3.0f,0.0f,1.0f });
 
@@ -71,8 +71,6 @@ void MiniMap::Update()
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		// マップ座標に変換
 		DrawMap(m_enemyList[i]->GetPosition(), i);
-		// 更新
-		m_EnemySpriteRender[i].Update();
 	}
 
 	// お宝を描画
@@ -92,8 +90,14 @@ void MiniMap::DrawMap(Vector3 enemyPos, int num)
 	// マップに表示する範囲に敵がいたら
 	if (WorldPositionConvertToMapPosition(playerPos, enemyPos, mapPos, false)) {
 
+		Vector3 diff = enemyPos - playerPos;
+		diff.y = 0.0f;
+		float alpha = (pow(LIMITED_RANGE_IMAGE, 2.0f) - diff.LengthSq()) / 100000.0f;
+
 		// spriteRenderに座標を設定
 		m_EnemySpriteRender[num].SetPosition(mapPos);
+		m_EnemySpriteRender[num].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
+		m_EnemySpriteRender[num].Update();
 		// マップに表示する
 		m_isImage[num] = true;
 	}
@@ -116,7 +120,7 @@ void MiniMap::DrawMap_Treasure(Vector3 TreasurePos)
 	m_TreasureSpriteRender.Update();
 }
 
-const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition, Vector3& mapPosition, const bool isTresure)
+const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition, Vector3& mapPosition, const bool isTreasure)
 {
 	// Y座標はマップとは関係ないので0.0fを設定
 	worldCenterPosition.y = 0.0f;
@@ -126,11 +130,10 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 	Vector3 diff = worldPosition - worldCenterPosition;
 	Vector3 diff2 = diff;
 
-	if (!isTresure) {
+	if (!isTreasure) {
 
 		// 	計算したベクトルが一定以上離れていたら
 		if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
-
 			// 範囲外に存在しているのでマップに表示しない
 			return false;
 		}
@@ -147,7 +150,6 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 	// ベクトルにカメラの回転を適用
 	rot.Apply(diff);
-
 	// ベクトルを正規化
 	diff.Normalize();
 
@@ -158,12 +160,18 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 	// マップの中央座標と上記ベクトルを加算する
 	mapPosition = Vector3(CENTER_POSITION.x + diff.x, CENTER_POSITION.y + diff.z, 0.0f);
 
-	if (isTresure) {
+	if (isTreasure) {
+
+		//お宝がある方向へ回転させる
+		rot.SetRotationZ(atan2(mapPosition.y - CENTER_POSITION.y, mapPosition.x - CENTER_POSITION.x) + 0.5);
+		m_TreasureSpriteRender.SetRotation(rot);
+
 		// 	計算したベクトルが一定以上離れていたら
 		if (diff2.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
 			//お宝座標の方向を求める
 			diff2 =	Vector3(mapPosition.x - CENTER_POSITION.x, mapPosition.y - CENTER_POSITION.y, 0.0f);
 			length = diff2.Length();
+
 			//マップ上に写す座標を求める
 			mapPosition.x = CENTER_POSITION.x + (diff2.x / length) * MAP_RADIUS;
 			mapPosition.y = CENTER_POSITION.y + (diff2.y / length) * MAP_RADIUS;

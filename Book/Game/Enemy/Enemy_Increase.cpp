@@ -7,6 +7,10 @@
 #include "PlayerManagement.h"
 #include "Game.h"
 #include "Gage.h"
+namespace
+{
+	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);				//索敵範囲のカラー
+}
 Enemy_Increase::Enemy_Increase()
 {
 
@@ -59,8 +63,9 @@ void Enemy_Increase::Enemy_Open()
 				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
 				{
 					//エネミーアクティブにする
-					m_game->GetEnemyList()[i]->SetActiveFlag(false);
-
+					//m_game->GetEnemyList()[i]->SetActiveFlag(false);
+					m_game->GetEnemyList()[i]->GetSpotLight().SetColor(LIGHTCOLOR);
+					m_game->GetEnemyList()[i]->GetSpotLight().Update();
 				}
 			}
 		}

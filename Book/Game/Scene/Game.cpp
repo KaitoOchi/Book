@@ -289,7 +289,6 @@ void Game::LevelDesign()
 			enemyCharge->SetPosition(objData.position);
 			enemyCharge->SetRotation(objData.rotation);
 			enemyCharge->SetScale(objData.scale);
-
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
@@ -298,6 +297,7 @@ void Game::LevelDesign()
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加前なので描画しない
 			enemyCharge->SetActiveFlag(true);
+
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -523,11 +523,12 @@ void Game::Update()
 				NotDraw_Enemy(true);
 
 				m_gameUI->Deactivate();
+				m_gage->SetWipeEnd();
 				m_gage->Deactivate();
 				m_gamecamera->Deactivate();
 				m_miniMap->Deactivate();
-				m_playerManagement->Deactivate();
 				m_player3D->Deactivate();
+				m_playerManagement->Deactivate();
 
 				m_isWaitFadeOut = false;
 				
@@ -605,6 +606,7 @@ void Game::NotifyDuringGamePlay()
 void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
+	m_fade->SetEnableTips(false);
 	m_fade->StartFadeOut();
 	GameManager::GetInstance()->DeleteBGM();
 	m_isWaitFadeOut = true;
@@ -612,7 +614,7 @@ void Game::NotifyEventStart()
 
 void Game::NotifyEventEnd()
 {
-	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
+	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 	NotDraw_Enemy(false);
@@ -636,6 +638,7 @@ void Game::NotifyEventEnd()
 void Game::NotifyGameClear()
 {
 	m_isWaitFadeOut = true;
+	m_fade->SetEnableTips(true);
 	m_fade->StartFadeOut();
 	m_gameState = m_enGameState_GameClear;
 }
@@ -644,6 +647,7 @@ void Game::NotifyGameOver()
 {
 	m_isWaitFadeOut = true;
 	m_fade->StartFadeOut();
+	m_fade->SetEnableTips(true);
 	m_gameState = m_enGameState_GameOver;
 }
 

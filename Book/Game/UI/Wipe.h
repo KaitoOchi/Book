@@ -40,6 +40,15 @@ public:
 		m_outlineTimer = 0.0f;
 	}
 
+	/// <summary>
+	/// ワイプの終了処理。
+	/// </summary>
+	void WipeEnd()
+	{
+		m_timer = 0.0f;
+		m_isWipe = false;
+	}
+
 private:
 	/// <summary>
 	/// レベルレンダー処理。

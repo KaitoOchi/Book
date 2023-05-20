@@ -5,6 +5,14 @@ class Player3D;
 class Player2D:public Player
 {
 public:
+	enum EnAnimationClip {
+		enAnimationClip_Idle,
+		enAnimationClip_Change,
+		enAnimationClip_Num
+	};
+	AnimationClip m_changeAnimation[enAnimationClip_Num];
+
+public:
 	Player2D();
 	~Player2D()override;
 	bool Start()override;
