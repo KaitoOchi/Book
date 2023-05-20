@@ -42,14 +42,20 @@ void SoundBom::ItemHit()
 	m_soundEffect->SetPosition(Vector3(m_position.x,10.0f,m_position.z));
 	m_soundEffect->Play();
 	
+	
 	//近くにいるエネミーたちを探す
 	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
-		Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-		if (diff.Length() < pow(SOUNDRANGE, 2.0f))
+		//エネミーが行動しているなら
+		if (!m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
-			m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
-			m_game->GetEnemyList()[i]->SetItemPos(m_position);
+			Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
+			if (diff.Length() < pow(SOUNDRANGE, 2.0f))
+			{
+				m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
+				m_game->GetEnemyList()[i]->SetItemPos(m_position);
+			}
+
 		}
 		
 	}
