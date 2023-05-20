@@ -7,6 +7,7 @@ class Enemy_Charge;
 class Game;
 class Enemy;
 class Treasure;
+class PhysicsGhost;
 
 namespace
 {
@@ -24,17 +25,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	/// <summary>
-	/// マップに描画するかどうかの判定
-	/// </summary>
-	/// <param name="pos">変換するエネミーの座標</param>
-	/// <param name="num">配列番号</param>
-	void DrawMap();		
-	/// <summary>
-	/// お宝を描画する
-	/// </summary>
-	void DrawMap_Treasure(Vector3 TreasurePos);
-
+public:
 	/// <summary>
 	/// 永続表示する座標を設定。
 	/// </summary>
@@ -46,19 +37,29 @@ public:
 
 private:
 	/// <summary>
-	/// ワールド座標系からマップ座標系に変換
+	/// 描画処理。
+	/// </summary>
+	bool DrawMap(const Vector3& mapPos, float& alpha);
+
+	/// <summary>
+	/// 敵を描画する処理。
+	/// </summary>
+	void DrawMap_Enemy();		
+
+	/// <summary>
+	/// ワールド座標系からマップ座標系に変換。
 	/// </summary>
 	/// <param name="worldcenterPosition">マップの中心とするオブジェクトのワールド座標</param>
 	/// <param name="worldPosition">マップに表示したいオブジェクトのワールド座標</param>
-	/// <param name="mapPosirion">変換した後のマップ座標</param>
 	/// <param name="isTresure">trueなら範囲外でも表示する</param>
 	/// <returns></returns>
 	const bool WorldPositionConvertToMapPosition(
 		Vector3 worldcenterPosition,
 		Vector3 worldPosition,
-		Vector3& mapPosirion,
 		const bool isTreasure
 	);
+
+private:
 
 	SpriteRender m_SpriteRender;							// スプライトレンダー。ミニマップのベース
 	SpriteRender m_OutLineSpriteRender;						// スプライトレンダー。ミニマップの装飾部分
@@ -74,7 +75,9 @@ private:
 	std::vector<Enemy*> m_enemyList;						// エネミーのリスト
 	std::vector<PhysicsGhost*> m_physicsGhostList;	//壁のリスト
 
-	Vector3 m_treasurePos = Vector3::Zero;			// お宝の位置
+	Vector3 m_treasurePos;			// お宝の位置
+	Vector3 m_playerPos;							//マップ上のプレイヤーの座標
+	Vector3 m_mapPos;								//計算したマップに乗せる対象の座標
 
 	std::array<bool,ENEMY_NUM>m_isImage;						// 表示するかどうかのフラグ。エネミーの数分用意する
 	std::array< bool, WALL_NUM > m_enableWallSprite;
