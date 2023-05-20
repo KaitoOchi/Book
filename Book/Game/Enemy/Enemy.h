@@ -352,7 +352,7 @@ public:
 		return m_activeFlag;
 	}
 
-	// ï¿½Xï¿½|ï¿½bï¿½gï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½nï¿½ï¿½
+	// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ğ“n‚·
 	const SpotLight GetSpotLight() {
 		return m_spotLight;
 	}
@@ -386,7 +386,6 @@ protected:
 	FontRender m_fontRender;				// ƒtƒHƒ“ƒgƒŒƒ“ƒ_[
 
 	Vector3 m_position = Vector3::Zero;		// ƒGƒlƒ~[‚ÌÀ•W
-	Vector3 m_firstPosition = Vector3::Zero;// ƒGƒlƒ~[‚ÌÅ‰‚ÌˆÊ’uî•ñ
 	Vector3 m_forward = Vector3::AxisZ;		// ƒGƒlƒ~[‚Ì‘O•ûŒü
 	Vector3 m_scale = Vector3::One;			// ƒXƒP[ƒ‹
 	Vector3 m_playerPos = Vector3::Zero;	// ƒvƒŒƒCƒ„[‚ÌÀ•W
@@ -399,7 +398,6 @@ protected:
 
 
 	Quaternion m_rotation = Quaternion::Identity;		// ‰ñ“]
-	Quaternion m_firstRotation = Quaternion::Identity;	// ƒGƒlƒ~[‚ÌÅ‰‚Ì‰ñ“]î•ñ
 
 	ModelRender m_enemyRender;				//ƒGƒlƒ~[ƒ‚ƒfƒ‹
 	SpotLight m_spotLight;					//ƒXƒ|ƒbƒgƒ‰ƒCƒg
