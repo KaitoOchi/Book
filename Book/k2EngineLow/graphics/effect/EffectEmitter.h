@@ -95,7 +95,19 @@ namespace nsK2EngineLow {
 		{
 			return m_effect.IsPlay();
 		}
+
+		/// <summary>
+		/// 外部から消すかを決める
+		/// </summary>
+		/// <param name="dele"></param>
+		/// <returns></returns>
+		const void SetDeleteState(bool dele)
+		{
+			m_autoDelete = dele;
+		}
+
 	private:
 		Effect m_effect;					//エフェクト。
+		bool m_autoDelete = false;			//falseならstopや終了時に自動で消える
 	};
 }

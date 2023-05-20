@@ -13,6 +13,7 @@
 #include "Enemy_Search.h"
 #include "Enemy_Charge.h"
 #include "Enemy_Clear.h"
+#include "Enemy_Increase.h"
 #include "BackGround.h"
 #include "Stage/Wall/Wall.h"
 #include "Stage/Wall/Wall_Decoration.h"
@@ -132,6 +133,8 @@ bool Game::Start()
 
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
+
+	NewGO<Enemy_Increase>(0, "enemyIncrease");
 	LevelDesign();
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
@@ -159,6 +162,13 @@ void Game::LevelDesign()
 
 	// レベルデザイン処理
 	m_levelRender.Init("Assets/level3D/level0_1.tkl", [&](LevelObjectData& objData){
+		//名前がプレイヤーの時
+		if (objData.EqualObjectName(L"Player") == true)
+		{
+			m_player3D->SetPosition(objData.position);
+			m_player3D->SetRotation(objData.rotation);
+			return true;
+		}
 
 		// 名前が Normal のとき
 		if (objData.ForwardMatchName(L"Normal") == true) {
@@ -175,6 +185,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyNormal->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
@@ -195,6 +207,8 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyCharge->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
@@ -213,11 +227,13 @@ void Game::LevelDesign()
 
 			enemySearch->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemySearch);
 			return true;
 		}
-
+		
 		// 名前が Clear のとき
 		if (objData.ForwardMatchName(L"Clear") == true) {
 			// エネミーを生成
@@ -233,16 +249,105 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyClear->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
 		}
 
-		// ステージのレベル
+		//名前がAddNormalのとき
+		if (objData.ForwardMatchName(L"AddNormal") == true) {
+			//エネミーを生成
+			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
+			// 自身の属性を教える
+			enemyNormal->m_enemyType = Enemy::TYPE_NORMAL;
+			// 座標・回転・スケールを教える
+			enemyNormal->SetPosition(objData.position);
+			enemyNormal->SetRotation(objData.rotation);
+			enemyNormal->SetScale(objData.scale);
+
+			enemyNormal->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			// パス移動の順路を指定
+			enemyNormal->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
+			//追加する前なので描画しない
+			enemyNormal->SetActiveFlag(true);
+			// エネミーのリストに追加する
+			m_enemyList.push_back(enemyNormal);
+			return true;
+		}
+
+		if (objData.ForwardMatchName(L"AddCharge") == true) {
+			// エネミーを生成
+			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
+			// 自身の属性を教える
+			enemyCharge->m_enemyType = Enemy::TYPE_CHARGE;
+			// 座標・回転・スケールを教える
+			enemyCharge->SetPosition(objData.position);
+			enemyCharge->SetRotation(objData.rotation);
+			enemyCharge->SetScale(objData.scale);
+			enemyCharge->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			// パス移動の順路を指定
+			enemyCharge->Pass(objData.number);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
+			//追加前なので描画しない
+			enemyCharge->SetActiveFlag(true);
+
+			// エネミーのリストに追加する
+			m_enemyList.push_back(enemyCharge);
+			return true;
+		}
+
+		if (objData.ForwardMatchName(L"AddClear") == true) {
+			// エネミーを生成
+			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
+			// 自身の属性を教える
+			enemyClear->m_enemyType = Enemy::TYPE_CLEAR;
+			// 座標・回転・スケールを教える
+			enemyClear->SetPosition(objData.position);
+			enemyClear->SetRotation(objData.rotation);
+			enemyClear->SetScale(objData.scale);
+
+			enemyClear->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			// パス移動の順路を指定
+			enemyClear->Pass(objData.number);
+			enemyClear->SetActiveFlag(true);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
+			// エネミーのリストに追加する
+			m_enemyList.push_back(enemyClear);
+			return true;
+		}
+		// 名前が Search のとき
+		if (objData.ForwardMatchName(L"AddSearch") == true) {
+			// エネミーを生成
+			Enemy_Search* enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
+			// 自身の属性を教える
+			enemySearch->m_enemyType = Enemy::TYPE_SEARCH;
+			// 座標・回転・スケールを教える
+			enemySearch->SetPosition(objData.position);
+			enemySearch->SetRotation(objData.rotation);
+			enemySearch->SetScale(objData.scale);
+
+			enemySearch->SetSpotLigNum(m_spotLigNum);
+			m_spotLigNum++;
+			enemySearch->SetActiveFlag(true);
+			// 初期座標を記憶する
+			m_enemyFirstPositions.push_back(objData.position);
+			// エネミーのリストに追加する
+			m_enemyList.push_back(enemySearch);
+			return true;
+		}
+			// ステージのレベル
 		{
 			//名前がbackgroundなら
-			if (objData.EqualObjectName(L"base") == true)
-			/*if (objData.EqualObjectName(L"debug") == true)*/ {
+			if (objData.EqualObjectName(L"base") == true){
 				// 背景を生成
 				m_backGround = NewGO<BackGround>(0, "backGround");
 				m_backGround->SetPosition(objData.position);
@@ -352,9 +457,8 @@ void Game::LevelDesign()
 			m_SecurityCameraList.emplace_back(securityCamera);
 			return true;
 		}
-
-		//if (objData.EqualObjectName(L"debugtoumei") == true) {
 		if (objData.EqualObjectName(L"push") == true) {
+			//プレイヤーを押し出す先の座標を与える
 			m_player3D->m_ghostpositions.push_back(objData.position);
 			return true;
 		}
@@ -375,6 +479,7 @@ void Game::LevelDesign()
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
+			//透明なブロックを作成する
 			m_ghostBox = NewGO<GhostBox>(0,"ghostBox");
 			m_ghostBox->SetPosition(objData.position);
 			m_ghostBox->SetScale(objData.scale);
@@ -473,6 +578,10 @@ void Game::NotDraw_Enemy(bool flag)
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_enemyList[i]->SetNotDrawFlag(flag);
 		m_enemyList[i]->SetTrueChangeDefaultFlag();
+		for (int j = 0; j < m_enemyFirstPositions.size(); j++) {
+			// 座標を教える
+			m_enemyList[i]->SetPosition(m_enemyFirstPositions[i]);
+		}
 	}
 }
 

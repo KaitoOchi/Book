@@ -35,6 +35,14 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		Vector3 move{ 0.0f,-300.0f,0.0f };
+		m_characterController.Execute(move, 1.0f);
+		return;
+	}
+
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -44,7 +52,9 @@ void Enemy_Search::Update()
 	}
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
 	if (m_ChangeDefaultFlag == true) {
+
 		m_ActState = SEARCH;
+
 		m_ChangeDefaultFlag = false;
 	}
 
@@ -144,7 +154,8 @@ void Enemy_Search::Rotaition()
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false) {
+	if (m_NotDrawFlag == false&&
+		m_activeFlag==false) {
 		m_enemyRender.Draw(rc);
 	}
 }

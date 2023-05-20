@@ -40,6 +40,14 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		Vector3 move{0.0f,-300.0f,0.0f};
+		m_characterController.Execute(move, 1.0f);
+		return;
+	}
+
 	// 描画しないフラグがtrueのとき
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -50,6 +58,7 @@ void Enemy_Charge::Update()
 	// デフォルトに戻すフラグがtrueのとき
 	if(m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+
 		m_ChangeDefaultFlag = false;
 	}
 
@@ -195,7 +204,8 @@ void Enemy_Charge::Update_OnCatch()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false) {
+	if (m_NotDrawFlag == false&&
+		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

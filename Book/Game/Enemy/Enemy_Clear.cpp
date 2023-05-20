@@ -43,6 +43,11 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		return;
+	}
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -53,6 +58,7 @@ void Enemy_Clear::Update()
 	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
 	if (m_ChangeDefaultFlag == true) {
 		m_ActState = CRAW;
+
 		m_ChangeDefaultFlag = false;
 	}
 
@@ -219,6 +225,12 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
+	if (m_activeFlag == true)
+	{
+		Vector3 move{ 0.0f,-300.0f,0.0f };
+		m_characterController.Execute(move, 1.0f);
+		return;
+	}
 	if (m_NotDrawFlag == true) {
 		return;
 	}

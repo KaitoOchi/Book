@@ -12,9 +12,9 @@
 
 namespace
 {
-	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//ï¿½{ï¿½bï¿½Nï¿½Xï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½Ì‘å‚«ï¿½ï¿½
-	const float		SPEEDDOWN = 0.8;									//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	const float		PLAYERSTAMINA = 10.0f;								//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒXï¿½^ï¿½~ï¿½i
+	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//E½{E½bE½NE½XE½RE½E½E½CE½_E½[E½Ì‘å‚«E½E½
+	const float		SPEEDDOWN = 0.8;									//E½E½E½xE½E½E½E½E½E½
+	const float		PLAYERSTAMINA = 10.0f;								//E½vE½E½E½CE½E½E½[E½ÌƒXE½^E½~E½i
 }
 
 Player3D::Player3D()
@@ -39,15 +39,16 @@ bool Player3D::Start()
 	m_characon = new CharacterController;
 	Player::Start();
 	
-	//ï¿½Mï¿½ï¿½ï¿½eï¿½ÌŒÄ‚Ñoï¿½ï¿½
+	//E½ME½E½E½eE½ÌŒÄ‚ÑoE½E½
 	m_flashBom = NewGO<FlashBom>(0, "flashBom");
-	//ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ÌŒÄ‚Ñoï¿½ï¿½
+	//E½E½E½E½E½eE½ÌŒÄ‚ÑoE½E½
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
-	//3Dï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ì“Ç‚İï¿½ï¿½ï¿½
+
+	//3DƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
 	Player::Animation3D();
 	
-	//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ìì¬
+	//E½LE½E½E½E½E½RE½E½E½E½RE½E½E½WE½E½E½E½E½Ìì¬
 	m_characon->Init(BOXSIZE, m_position);
 	m_collisionObject->CreateBox(
 	    Vector3(m_position.x,m_position.y+70.0f,m_position.z),
@@ -58,11 +59,11 @@ bool Player3D::Start()
 
 	m_modelRender= new ModelRender;
 	
-	//ï¿½}ï¿½lï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ÌŒÄ‚Ñoï¿½ï¿½
+	//E½}E½lE½WE½E½E½E½E½gE½ÌŒÄ‚ÑoE½E½
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_playerManagement->SetCharacon(m_characon);
 	
-	//ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½ï¿½
+	//E½E½E½fE½E½E½E½Ç‚İï¿½E½E½
 	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, 1, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
@@ -86,17 +87,17 @@ void Player3D::Update()
 	{
 		return;
 	}
-	//ï¿½Ç‚É–ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½
+	//E½Ç‚É–ï¿½E½Ü‚ï¿½E½Ä‚ï¿½E½È‚ï¿½E½È‚ï¿½
 	if (m_ghostHit)
 	{
-		//atn2ï¿½Å‚RDï¿½Ì‰ï¿½]ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
+		//atn2E½Å‚RDE½Ì‰ï¿½]E½E½E½E½ß‚ï¿½
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-		//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½
+		//E½vE½E½E½CE½E½E½[E½Ìï¿½E½E½E½E½Ä‚ÑoE½E½
 		Player::Update();
 		
 
-		//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÚ“ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
-		//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Åï¿½ï¿½Wï¿½ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+		//E½vE½E½E½CE½E½E½[E½ÌˆÚ“ï¿½E½E½pE½E½E½E½E½E½B
+		//E½LE½E½E½E½E½RE½E½E½Åï¿½E½WE½E½Ú“ï¿½E½E½E½E½E½E½B
 		m_characon->SetPosition(m_position);
 		m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
 		m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
@@ -105,7 +106,7 @@ void Player3D::Update()
 		m_modelRender->Update();
 		m_collisionObject->Update();
 	}
-	//ï¿½Ç‚É–ï¿½ï¿½Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½È‚ï¿½
+	//E½Ç‚É–ï¿½E½Ü‚ï¿½E½Ä‚ï¿½E½E½È‚ï¿½
 	else
 	{
 		PlayerPush();
@@ -123,7 +124,7 @@ void Player3D::PlayerPush()
 	m_modelRender->Update();
 	m_characon->SetPosition(m_position);
 	m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
-	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‰ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//E½vE½E½E½CE½E½E½[E½E½E½E½E½E½oE½E½E½E½E½E½E½É‰ï¿½]E½E½E½E½E½E½
 	m_pushRotPos = GetPushPosition()-GetGhostPosition();
 	m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 	m_rotation.SetRotationY(m_pushRot);
@@ -144,12 +145,12 @@ void Player3D::PlayerChang()
 {
 	delete(m_characon);
 	m_characon = nullptr;
-	//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+	//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 	ProcessCommonStateTransition();
 	Deactivate();
 	
 }
-//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½Ìì¬ï¿½Öï¿½
+//E½LE½E½E½E½E½RE½E½E½Ìì¬E½Öï¿½
 void Player3D::CreatCharcon()
 {
 	m_characon = new CharacterController;
@@ -157,7 +158,7 @@ void Player3D::CreatCharcon()
 }
 void Player3D::Animation()
 {
-	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌƒXï¿½eï¿½[ï¿½gï¿½É‚ï¿½ï¿½ï¿½Ä•Ï‚ï¿½ï¿½ï¿½
+	//E½vE½E½E½CE½E½E½[E½ÌƒXE½eE½[E½gE½É‚ï¿½E½E½Ä•Ï‚ï¿½E½E½
 	switch (m_playerState)
 	{
 	case Player::m_enPlayer_Idle:
@@ -182,7 +183,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Throw, 0.5f);
 		break;
 	case Player::m_enPlayer_Down:
-		//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‰ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//E½vE½E½E½CE½E½E½[E½E½E½E½E½E½oE½E½E½E½E½E½E½É‰ï¿½]E½E½E½E½E½E½
 		m_pushRotPos = GetPushPosition() - GetGhostPosition();
 		m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 		m_rotation.SetRotationY(m_pushRot);
@@ -204,26 +205,26 @@ void Player3D::Animation()
 void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
 	(void)clipName;
-	//ï¿½Lï¿½[ï¿½Ì–ï¿½ï¿½Oï¿½ï¿½Attack_Startï¿½Ìï¿½
+	//E½LE½[E½Ì–ï¿½E½OE½E½Attack_StartE½Ìï¿½
 	if (wcscmp(eventName, L"Attack_Start") == 0)
 	{
 		switch (m_enItemState)
 		{
-		//ï¿½Mï¿½ï¿½ï¿½eï¿½ğ“Š‚ï¿½ï¿½ï¿½
+		//E½ME½E½E½eE½ğ“Š‚E½E½E½
 		case Player::m_enItem_Flash:
 			if (m_flashBom->m_flashCount > 0&&
 				m_flashBom->m_FlashState==m_flashBom->m_enFlash_No)
 			{
 				m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
 				m_flashBom->SetItemPosition(m_position);
-				//SEï¿½ï¿½Â‚ç‚·
+				//SEE½E½Â‚ç‚·
 				SoundSource* se = NewGO<SoundSource>(0);
 				se->Init(9);
 				se->SetVolume(GameManager::GetInstance()->GetSFX());
 				se->Play(false);
 			}
 			break;
-		//ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ğ“Š‚ï¿½ï¿½ï¿½
+		//E½E½E½E½E½eE½ğ“Š‚E½E½E½
 		case Player::m_enItem_SoundBom:
 			if (m_soundBom->m_soundState == m_soundBom->m_enSoundState_End&&
 				m_soundBom->GetSoundBomNumber()>0)
@@ -262,17 +263,17 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 
 void Player3D::ProcessIdleStateTransition()
 {
-	//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+	//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessWalkStateTransition()
 {
-	//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+	//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessRunStateTransition()
 {
-	//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+	//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessJumpStateTransition()
@@ -288,7 +289,7 @@ void Player3D::ProcessJumpendStateTransition()
 
 	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
 	{
-		//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+		//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 		ProcessCommonStateTransition();
 	}
 
@@ -296,32 +297,33 @@ void Player3D::ProcessJumpendStateTransition()
 void Player3D::ProcessChangeStateTransition()
 {
 
-	//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+	//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 	ProcessCommonStateTransition();
 }
 
 void Player3D::ProcessDownStateTransition()
 {
-	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//E½E½E½xE½E½E½E½E½E½E½
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;
 	auto laststar = m_game->GetEnemyList().size();
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½ï¿½
+		//E½XE½eE½[E½gE½Ì‘JE½E½
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
+		m_modelRender->SetAnimationSpeed(1.0f);
 	}
 }
 void Player3D::ProcessThrowStateTransition()
 {
-	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//E½E½E½xE½E½E½E½E½E½E½
 	m_moveSpeed.x *= SPEEDDOWN;
 	m_moveSpeed.z *= SPEEDDOWN;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½B
+		//E½XE½eE½[E½gE½E½JE½Ú‚ï¿½E½E½B
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
 	}
@@ -338,7 +340,7 @@ void Player3D::ProcessFoundStateTransition()
 
 void Player3D::ProcessCaughtStateTransition()
 {
-	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//E½E½E½xE½E½E½E½E½E½E½
 	m_moveSpeed.x *= 0.0f;
 	m_moveSpeed.z *= 0.0f;
 	m_Player_Act = false;

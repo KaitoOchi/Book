@@ -329,7 +329,6 @@ public:
 		m_ChangeDefaultFlag = true;
 	}
 
-	//------------------------------------------
 	//エネミーの前方向を求める
 	const Vector3 GetFoward()const
 	{
@@ -337,6 +336,32 @@ public:
 	}
 
 	Vector3 m_foward=Vector3::AxisZ;
+
+	/// <summary>
+	/// 動かすかどうか決める
+	/// </summary>
+	/// <param name="active">trueなら動けない</param>
+	void SetActiveFlag(bool active)
+	{
+		m_activeFlag = active;
+	}
+
+	const bool GetActiveFlag()
+	{
+		return m_activeFlag;
+	}
+
+	// スポットライトを渡す
+	SpotLight GetSpotLight() {
+		return m_spotLight;
+	}
+
+	//--------------------------------------------
+	CharacterController& GetCharCon()
+	{
+		return m_characterController;
+	}
+
 	//--------------------------------------------
 
 protected:
@@ -372,12 +397,14 @@ protected:
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
 	Vector3 m_playerChargePosition = Vector3::Zero;			// 突進用。プレイヤーの座標
-	Vector3 m_playerMissionPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
+	Vector3 m_playerMissionPosition = Vector3::Zero;		// 見失った時用。プレイヤーの座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
+	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
 
-	Quaternion m_rotation = Quaternion::Identity;	// 回転
+
+	Quaternion m_rotation = Quaternion::Identity;		// 回転
 
 	ModelRender m_enemyRender;				//エネミーモデル
 	SpotLight m_spotLight;					//スポットライト
@@ -390,6 +417,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
+	bool m_activeFlag = false;				//最初から動けるかそうか
 
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
