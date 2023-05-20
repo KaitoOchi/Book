@@ -40,6 +40,7 @@ public:
 	void SetTreasurePos(const Vector3& pos)
 	{
 		m_treasurePos = pos;
+		m_TreasureSpriteRender.SetMulColor({ 1.0f,0.0f,0.0f,1.0f });
 	}
 
 private:
@@ -55,7 +56,7 @@ private:
 		Vector3 worldcenterPosition,
 		Vector3 worldPosition,
 		Vector3& mapPosirion,
-		const bool isTresure
+		const bool isTreasure
 	);
 
 	SpriteRender m_SpriteRender;							// スプライトレンダー。ミニマップのベース

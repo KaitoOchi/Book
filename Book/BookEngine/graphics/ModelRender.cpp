@@ -92,9 +92,9 @@ namespace nsBookEngine {
 
 		//アニメーション有りモデルなら
 		if (m_skeleton.IsInited()) {
-		//スケルトンを指定する。
-		modelInitData.m_skeleton = &m_skeleton;
-		modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
 		}
 		
 		//輪郭線を設定

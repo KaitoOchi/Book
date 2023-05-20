@@ -49,8 +49,8 @@ public:
 			m_tipsSpriteRender[i].Update();
 		}
 
-		m_enableTips = tips;
-		m_spriteNum = rand() % 4;
+		//m_enableTips = tips;
+		//m_spriteNum = rand() % 4;
 	}
 
 private:

@@ -1,7 +1,7 @@
 #pragma once
 class Game;
 class Enemy;
-class Wipe;
+#include "Wipe.h"
 
 class Gage:public IGameObject
 {
@@ -17,6 +17,14 @@ public:
 	/// </summary>
 	/// <param name="GageUp">警戒度を増やす量</param>
 	void GageUp(const int GageUp, const bool isEnemy);
+
+	/// <summary>
+	/// ワイプの終了処理。
+	/// </summary>
+	void SetWipeEnd()
+	{
+		m_wipe->WipeEnd();
+	}
 
 private:
 	

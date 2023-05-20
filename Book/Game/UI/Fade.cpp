@@ -65,6 +65,9 @@ void Fade::Update()
 			m_state = enState_Idle;
 		}
 		break;
+
+	case enState_Idle:
+		break;
 	}
 
 	if (m_alpha < 0.0f) {

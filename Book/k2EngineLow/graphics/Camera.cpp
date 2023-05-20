@@ -24,6 +24,12 @@ namespace nsK2EngineLow {
 				m_projectionMatrix.MakeOrthoProjectionMatrix(m_width, m_height, m_near, m_far);
 			}
 		}
+		auto forward = m_target - m_position;
+		forward.Normalize();
+		if (fabsf(forward.Dot(m_up)) > 0.998f) {
+			// 視点から注視点に向かって伸びるベクトルが上方向のベクトルとほぼ一致
+			return;
+		}
 		// ビュー行列の算出
 		m_viewMatrix.MakeLookAt(m_position, m_target, m_up);
 		// ビュープロジェクション行列の作成。
