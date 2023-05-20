@@ -43,6 +43,8 @@ void Enemy_Charge::Update()
 	//s“®‚Å‚«‚é‚©’²‚×‚é
 	if (m_activeFlag == true)
 	{
+		Vector3 move{0.0f,-300.0f,0.0f};
+		m_characterController.Execute(move, 1.0f);
 		return;
 	}
 

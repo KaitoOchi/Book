@@ -329,7 +329,6 @@ public:
 		m_ChangeDefaultFlag = true;
 	}
 
-	//------------------------------------------
 	//エネミーの前方向を求める
 	const Vector3 GetFoward()const
 	{
@@ -353,9 +352,17 @@ public:
 	}
 
 	// スポットライトを渡す
-	const SpotLight GetSpotLight() {
+	SpotLight GetSpotLight() {
 		return m_spotLight;
 	}
+
+	//--------------------------------------------
+	CharacterController& GetCharCon()
+	{
+		return m_characterController;
+	}
+
+	//--------------------------------------------
 
 protected:
 

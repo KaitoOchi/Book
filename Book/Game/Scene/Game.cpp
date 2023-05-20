@@ -289,7 +289,6 @@ void Game::LevelDesign()
 			enemyCharge->SetPosition(objData.position);
 			enemyCharge->SetRotation(objData.rotation);
 			enemyCharge->SetScale(objData.scale);
-
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
@@ -298,6 +297,7 @@ void Game::LevelDesign()
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加前なので描画しない
 			enemyCharge->SetActiveFlag(true);
+
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
