@@ -79,6 +79,11 @@ void Gage::Update()
 		Gage_ColorChange();
 		m_GetState = m_leverState;
 	}
+	if (m_leverState == m_enLever_MAX)
+	{
+		Gage_MAX();
+	}
+
 }
 
 void Gage::GageUp(const int GageUp, const bool isEnemy)
@@ -175,6 +180,7 @@ void Gage::VigilaceLeverChange()
 			break;
 		}
 	}
+	
 }
 
 void Gage::Gage_ColorChange()
@@ -212,6 +218,19 @@ void Gage::Gage_ColorChange()
 		break;
 	}
 }
+
+void Gage::Gage_MAX()
+{
+	m_vigilanceGage = 10;
+	for (int i = 0; i < MAXGAGECOUNT; i++)
+	{
+		m_Color += 0.008 * i;
+
+		m_vigilanceRender[i].SetMulColor(Vector4(m_Color, 0.0f, 0.0f, 1.0f));
+		m_vigilanceRender[i].Update();
+	}
+}
+
 
 void Gage::Render(RenderContext& rc)
 {

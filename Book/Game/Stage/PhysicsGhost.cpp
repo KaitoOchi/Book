@@ -3,7 +3,7 @@
 #include "PlayerManagement.h"
 namespace
 {
-	const float EFFECT_SIZE = 2.0f;						//エフェクトサイズ
+	const float EFFECT_SIZE = 1.50f;						//エフェクトサイズ
 }
 PhysicsGhost::PhysicsGhost()
 {
@@ -11,14 +11,14 @@ PhysicsGhost::PhysicsGhost()
 }
 PhysicsGhost::~PhysicsGhost()
 {
-	if (m_kirakiraEffect->IsPlay())
-	{
-		m_kirakiraEffect->Stop();
-	}
+	m_kirakiraEffect->SetDeleteState(false);
+	m_kirakiraEffect->Stop();
 }
 
 bool PhysicsGhost::Start()
 {
+	
+
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	Ghost::Start();
 	m_physicsGhostObj.CreateBox(
@@ -29,19 +29,23 @@ bool PhysicsGhost::Start()
 	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Ground);
 	//エフェクトの読み込み
 	m_kirakiraEffect = NewGO<EffectEmitter>(5);
+	m_kirakiraEffect->SetDeleteState(true);
 	m_kirakiraEffect->Init(5);
 	m_kirakiraEffect->SetPosition(Vector3{ m_position.x,m_position.y + 50.0f,m_position.z });
 	m_kirakiraEffect->SetScale(Vector3::One * EFFECT_SIZE);
 	//エフェクトの座標の設定
-	//m_kirakiraEffect->Play();
-	//m_kirakiraEffect->Update();
+	m_kirakiraEffect->Play();
+	m_kirakiraEffect->Update();
 
 	return true;
 }
 void PhysicsGhost::Update()
 {
 	EffectDraw();
-//	m_kirakiraEffect->Update();
+	if (m_kirakiraEffect == nullptr)
+	{
+		return;
+	}
 }
 
 void PhysicsGhost::EffectDraw()
@@ -49,14 +53,18 @@ void PhysicsGhost::EffectDraw()
 	Vector3 diff = m_position-m_playerManagement->GetPosition() ;
 	if (diff.Length() < pow(30.0f,2))
 	{
-		if (m_kirakiraEffect->IsPlay()==false)
+		if (m_kirakiraEffect->IsPlay() == false)
 		{
-			//m_kirakiraEffect->Play();
+			m_kirakiraEffect->Play();
 		}
 	}
 	else
 	{
-		//m_kirakiraEffect->Stop();
+		if (m_kirakiraEffect != nullptr)
+		{
+			
+			m_kirakiraEffect->Stop();
+		}
 	}
 	
 }

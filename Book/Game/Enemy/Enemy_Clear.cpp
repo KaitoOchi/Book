@@ -43,6 +43,11 @@ bool Enemy_Clear::Start()
 }
 void Enemy_Clear::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		return;
+	}
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -219,6 +224,10 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
+	if (m_activeFlag == true)
+	{
+		return;
+	}
 	if (m_NotDrawFlag == true) {
 		return;
 	}
