@@ -17,6 +17,7 @@ class GhostBox;
 class PhysicsGhost;
 class Sensor;
 class SecurityCamera;
+class Enemy_Increase;
 #include "PhysicsGhost.h"
 #include "GameManager.h"
 #include "Title.h"
@@ -222,6 +223,8 @@ private:
 	GameUI*							m_gameUI = nullptr;
 	Gage*							m_gage = nullptr;
 	MiniMap*						m_miniMap = nullptr;
+	Enemy_Increase*					m_enemy_Increase = nullptr;
+
 
 	std::vector<Enemy*>				m_enemyList;
 	std::vector<Wall*>				m_wallList;

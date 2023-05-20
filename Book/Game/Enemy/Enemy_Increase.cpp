@@ -4,6 +4,7 @@
 #include "Enemy_Normal.h"
 #include "Enemy_Charge.h"
 #include "Enemy_Clear.h"
+#include "PlayerManagement.h"
 #include "Game.h"
 #include "Gage.h"
 Enemy_Increase::Enemy_Increase()
@@ -17,6 +18,9 @@ Enemy_Increase::~Enemy_Increase()
 
 bool Enemy_Increase::Start()
 {
+	m_game = FindGO<Game>("game");
+	m_gage = FindGO<Gage>("gage");
+	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	return	true;
 }
 
@@ -25,43 +29,37 @@ void Enemy_Increase::Update()
 	Enemy_Open();
 }
 
-void Enemy_Increase::NewEnemy(int number)
-{
-	/*switch (number)
-	{
-	case 0:
-		Enemy_Normal * normal = NewGO<Enemy_Normal>(0, "enemyNormal");
-		normal->m_enemyType = Enemy::TYPE_NORMAL;
-		normal->SetPosition(m_position);
-		normal->SetRotation(m_rotation);
-		normal->SetScale(m_scale);
-		normal->Pass(0);
-		m_game->GetEnemyList().emplace_back(normal);
-		break;
-	case 1:
-		Enemy_Charge * charge = NewGO<Enemy_Charge>(0, "enemyCharge");
-		charge->m_enemyType = Enemy::TYPE_CHARGE;
-		charge->SetPosition(m_position);
-		charge->SetRotation(m_rotation);
-		charge->SetScale(m_scale);
-		charge->Pass(1);
-		m_game->GetEnemyList().emplace_back(charge);
-		break;
-	case 2:
-		Enemy_Clear * clear = NewGO<Enemy_Clear>(0,"enemyClear");
-		clear->m_enemyType = Enemy::TYPE_CLEAR;
-		clear->SetPosition(m_position);
-		clear->SetRotation(m_rotation);
-		clear->SetScale(m_scale);
-		clear-> Pass(2);
-		m_game->GetEnemyList().emplace_back(clear);
-		break;
-	default:
-		break;
-	}*/
-}
-
 void Enemy_Increase::Enemy_Open()
 {
+	if (m_increaseEnemy <= 2)
+	{
+		//エネミーの大きさを求める
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+		{
+			//アクティブになっていないエネミーを探す
+			if (m_game->GetEnemyList()[i]->IsActive()==false)
+			{
+				//プレイヤーとエネミーの距離を求める
+				Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
+				//最も距離のある値を求める
+				if (pos.LengthSq()> m_nearposition)
+				{
+					m_nearposition = pos.Length();
+					m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
+				}
+			}
+		}
 
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+		{
+			//アクティブになっていないエネミーを探す
+			if (!m_game->GetEnemyList()[i]->IsActive())
+			{
+				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
+				{
+					m_game->GetEnemyList()[i]->Activate();
+				}
+			}
+		}
+	}
 }
