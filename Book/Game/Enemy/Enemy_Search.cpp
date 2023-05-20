@@ -35,6 +35,12 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
+	//行動できるか調べる
+	if (m_activeFlag == true)
+	{
+		return;
+	}
+
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
 		if (m_soundEffect != nullptr) {
@@ -144,7 +150,8 @@ void Enemy_Search::Rotaition()
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false) {
+	if (m_NotDrawFlag == false&&
+		m_activeFlag==false) {
 		m_enemyRender.Draw(rc);
 	}
 }

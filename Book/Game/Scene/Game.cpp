@@ -134,8 +134,7 @@ bool Game::Start()
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 
-	m_enemy_Increase = NewGO<Enemy_Increase>(0, "enemyIncrease");
-
+	NewGO<Enemy_Increase>(0, "enemyIncrease");
 	LevelDesign();
 	//お宝を作成する
 	m_treaSure = NewGO<Treasure>(0, "treaSure");
@@ -250,7 +249,7 @@ void Game::LevelDesign()
 		}
 
 		//名前がAddNormalのとき
-		if (objData.EqualObjectName(L"AddNormal") == true) {
+		if (objData.ForwardMatchName(L"AddNormal") == true) {
 			//エネミーを生成
 			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
@@ -265,13 +264,13 @@ void Game::LevelDesign()
 			// パス移動の順路を指定
 			enemyNormal->Pass(objData.number);
 			//追加する前なので描画しない
-			enemyNormal->Deactivate();
+			enemyNormal->SetActiveFlag(true);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyNormal);
 			return true;
 		}
 
-		if (objData.EqualObjectName(L"AddCharge") == true) {
+		if (objData.ForwardMatchName(L"AddCharge") == true) {
 			// エネミーを生成
 			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			// 自身の属性を教える
@@ -286,13 +285,13 @@ void Game::LevelDesign()
 			// パス移動の順路を指定
 			enemyCharge->Pass(objData.number);
 			//追加前なので描画しない
-			enemyCharge->Deactivate();
+			enemyCharge->SetActiveFlag(true);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyCharge);
 			return true;
 		}
 
-		if (objData.EqualObjectName(L"AddClear") == true) {
+		if (objData.ForwardMatchName(L"AddClear") == true) {
 			// エネミーを生成
 			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			// 自身の属性を教える
@@ -306,13 +305,13 @@ void Game::LevelDesign()
 			m_spotLigNum++;
 			// パス移動の順路を指定
 			enemyClear->Pass(objData.number);
-			enemyClear->Deactivate();
+			enemyClear->SetActiveFlag(true);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemyClear);
 			return true;
 		}
 		// 名前が Search のとき
-		if (objData.EqualObjectName(L"AddSearch") == true) {
+		if (objData.ForwardMatchName(L"AddSearch") == true) {
 			// エネミーを生成
 			Enemy_Search* enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
 			// 自身の属性を教える
@@ -324,7 +323,7 @@ void Game::LevelDesign()
 
 			enemySearch->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
-			enemySearch->Deactivate();
+			enemySearch->SetActiveFlag(true);
 			// エネミーのリストに追加する
 			m_enemyList.push_back(enemySearch);
 			return true;

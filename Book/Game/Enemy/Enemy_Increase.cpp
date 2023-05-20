@@ -37,7 +37,7 @@ void Enemy_Increase::Enemy_Open()
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 		{
 			//アクティブになっていないエネミーを探す
-			if (m_game->GetEnemyList()[i]->IsActive()==false)
+			if (m_game->GetEnemyList()[i]->GetActiveFlag())
 			{
 				//プレイヤーとエネミーの距離を求める
 				Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
@@ -53,13 +53,17 @@ void Enemy_Increase::Enemy_Open()
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 		{
 			//アクティブになっていないエネミーを探す
-			if (!m_game->GetEnemyList()[i]->IsActive())
+			if (m_game->GetEnemyList()[i]->GetActiveFlag())
 			{
+				//座標が同じなら探しているエネミーなので
 				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
 				{
-					m_game->GetEnemyList()[i]->Activate();
+					//エネミーアクティブにする
+					m_game->GetEnemyList()[i]->SetActiveFlag(false);
+
 				}
 			}
 		}
+		m_increaseEnemy++;
 	}
 }
