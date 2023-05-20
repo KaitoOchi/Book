@@ -352,8 +352,8 @@ public:
 		return m_activeFlag;
 	}
 
-	// ï¿½Xï¿½|ï¿½bï¿½gï¿½ï¿½ï¿½Cï¿½gï¿½ï¿½nï¿½ï¿½
-	const SpotLight GetSpotLight() {
+	//ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌŽæ“¾
+	SpotLight GetSpotLight() {
 		return m_spotLight;
 	}
 
