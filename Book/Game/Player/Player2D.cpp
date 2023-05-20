@@ -23,13 +23,17 @@ Player2D::~Player2D()
 {
 	if (IsActive())
 	{
-
+		delete m_changeAnimation;
 		delete(m_characon);
 		delete(m_modelRender);
 	}
 }
 bool Player2D::Start()
 {
+	m_changeAnimation[enAnimationClip_Idle].Load("Assets/animData/player_2D/player2D_idle.tka");
+	m_changeAnimation[enAnimationClip_Idle].SetLoopFlag(true);
+	m_changeAnimation[enAnimationClip_Change].Load("Assets/animData/player_2D/player2D_change.tka");
+	m_changeAnimation[enAnimationClip_Change].SetLoopFlag(false);
 
 	Player::Start();
 	m_characon = new CharacterController;
@@ -37,8 +41,10 @@ bool Player2D::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
 	//モデルの読み込み
-	m_modelRender->Init("Assets/modelData/player/test.tkm",0,0,enModelUpAxisZ, true, true, 4, D3D12_CULL_MODE_NONE);
+	m_modelRender->Init("Assets/modelData/player/player2D.tkm", m_changeAnimation, enAnimationClip_Num, enModelUpAxisZ, true, true, 4, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetScale(MODELSIZE);
+	m_modelRender->PlayAnimation(enAnimationClip_Idle, 0.0f);
+	m_modelRender->Update();
 
 	
 	m_characon->Init(BOXSIZE, m_position);
@@ -222,7 +228,7 @@ void Player2D::ProcessCaughtStateTransition()
 	m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
 	m_player3D->SetPlayerState(m_player3D->m_enPlayer_Caught);
 	m_playerState = m_enPlayer_Catching;
-	
+
 }
 
 

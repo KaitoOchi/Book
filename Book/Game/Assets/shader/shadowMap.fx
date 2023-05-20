@@ -101,7 +101,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
 }
 
 /// <summary>
-/// シャドウマップ描画用のピクセルシェーダー
+/// ピクセルシェーダーのコア関数。
 /// </summary>
 float4 PSMainCore(SPSIn psIn)
 {
@@ -109,11 +109,17 @@ float4 PSMainCore(SPSIn psIn)
     return float4(psIn.depth.x, psIn.depth.y, 0.0f, 1.0f);
 }
 
+/// <summary>
+/// 通常のエントリー関数。
+/// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
     return PSMainCore(psIn);
 }
 
+/// <summary>
+/// 2Dプレイヤー用のエントリー関数。
+/// </summary>
 float4 PSPlayer2D(SPSIn psIn) : SV_Target0
 {
     //アニメーションの番号からUV座標を求める

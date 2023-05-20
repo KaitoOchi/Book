@@ -21,7 +21,7 @@ bool SoundBom::Start()
 {
 	Item::Start();
 	m_gameUI->SetSoundSlot(m_soundCount);
-	//ƒfƒBƒAƒNƒeƒBƒu
+	//ãƒ‡ã‚£ã‚¢ã‚¯ãƒ†ã‚£ãƒ–
 	Deactivate();
 	return true;
 }
@@ -36,20 +36,26 @@ void SoundBom::ItemHit()
 	
 	m_soundEffect = NewGO<EffectEmitter>(1);
 	m_soundEffect->Init(1);
-	//ƒGƒtƒFƒNƒg‚Ì‘å‚«‚³‚ğw’è‚·‚é
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å¤§ãã•ã‚’æŒ‡å®šã™ã‚‹
 	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
-	//ƒGƒtƒFƒNƒg‚ÌÀ•W‚Ìİ’è
+	//ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åº§æ¨™ã®è¨­å®š
 	m_soundEffect->SetPosition(Vector3(m_position.x,10.0f,m_position.z));
 	m_soundEffect->Play();
 	
-	//‹ß‚­‚É‚¢‚éƒGƒlƒ~[‚½‚¿‚ğ’T‚·
+	
+	//è¿‘ãã«ã„ã‚‹ã‚¨ãƒãƒŸãƒ¼ãŸã¡ã‚’æ¢ã™
 	for (int i = 0; i<m_game->GetEnemyList().size(); i++)
 	{
-		Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-		if (diff.Length() < pow(SOUNDRANGE, 2.0f))
+		//ã‚¨ãƒãƒŸãƒ¼ãŒè¡Œå‹•ã—ã¦ã„ã‚‹ãªã‚‰
+		if (!m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
-			m_game->GetEnemyList()[i]->SetHearedSoundBullet(true);
-			m_game->GetEnemyList()[i]->SetItemPos(m_position);
+			Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
+			if (diff.Length() < pow(SOUNDRANGE, 2.0f))
+			{
+				m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
+				m_game->GetEnemyList()[i]->SetItemPos(m_position);
+			}
+      
 		}
 		
 	}
