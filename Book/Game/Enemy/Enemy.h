@@ -337,6 +337,21 @@ public:
 	}
 
 	Vector3 m_foward=Vector3::AxisZ;
+
+	/// <summary>
+	/// 動かすかどうか決める
+	/// </summary>
+	/// <param name="active">trueなら動けない</param>
+	void SetActiveFlag(bool active)
+	{
+		m_activeFlag = active;
+	}
+
+	const bool GetActiveFlag()
+	{
+		return m_activeFlag;
+	}
+
 	//--------------------------------------------
 
 protected:
@@ -390,6 +405,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
+	bool m_activeFlag = false;				//最初から動けるかそうか
 
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した

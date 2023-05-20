@@ -33,7 +33,6 @@ private:
 	Vector3 m_toCameraPosOld = Vector3::Zero;//注視点から視点に向かうベクトル変更前座標
 	Vector3 m_target=Vector3::Zero;//注視点
 	
-	Quaternion qRot;//Y軸周りの回転
 	
 	Vector3 axisX;//X軸周りの回転
 	Vector3 m_cameraposition;
@@ -46,10 +45,18 @@ private:
 	float m_cameraMove = 0.0f;
 	Vector3 m_cameraPosition = Vector3::Zero;
 
+	Vector3 m_camePos = Vector3::Zero;
+	Quaternion qRot;											//カメラの回転
 private:
 	/// <summary>
 	/// プレイヤーが捕まった時のカメラの動き
 	/// </summary>
 	void CatchMove();
+
+	/// <summary>
+	/// プレイヤーが向いている方向に回転させる
+	/// </summary>
+	void RotCamera();
+
 };
 

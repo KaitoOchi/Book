@@ -27,7 +27,8 @@ GameCamera::~GameCamera()
 bool GameCamera::Start()
 {
 	//�����_���王�_�܂ł̃x�N�g����ݒ�
-	m_toCameraPos.Set(BEKUTORU);
+	//m_toCameraPos.Set(BEKUTORU);
+	m_toCameraPos = { 0.0f ,BEKUTORU.y, BEKUTORU.z };
 	//�v���C���[�Ǘ��̃C���X�^���X
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
@@ -43,11 +44,7 @@ void GameCamera::Update()
 	{
 		//���_�ƒ����_�̍X�V
 		UpdatePositionAndTarget();
-		//視点を元に戻す
-		if (g_pad[0]->IsTrigger(enButtonLB2))
-		{
-			m_toCameraPos.Set(BEKUTORU);
-		}
+		
 	}
 	else
 	{
@@ -73,43 +70,18 @@ void GameCamera::UpdatePositionAndTarget()
 	float x = g_pad[0]->GetRStickXF();
 	float y = g_pad[0]->GetRStickYF();
 	//Y������̉�]
-	Quaternion qRot;
 	qRot.SetRotationDeg(Vector3::AxisY, 1.5f * x);
 	qRot.Apply(m_toCameraPos);
 	//X������̉�]
-	/*Vector3 axisX;
-	axisX.Cross(Vector3::AxisY, m_toCameraPos);
-	axisX.Normalize();
-	qRot.SetRotationDeg(axisX,1.5f * y);
-	qRot.Apply(m_toCameraPos);*/
-	//�J�����̉�]�̏����`�F�b�N����B
-	Vector3 toPosDir = m_toCameraPos;
-	toPosDir.Normalize();
-	//if (toPosDir.y < YUP)
-	//{
-	//	//���������
-	//	m_toCameraPos = m_toCameraPosOld;
-	//}
-	//else if (toPosDir.y > YDOWN)
-	//{
-	//	//���������
-	//	m_toCameraPos = m_toCameraPosOld;
-	//}
-	//if (toPosDir.x > XRIGHT)
-	//{
-	//	//���������
-	//	m_toCameraPos = m_toCameraPosOld;
-	//}
-	//else if (toPosDir.x < XLEFT)
-	//{
-	//	//���������
-	//	m_toCameraPos = m_toCameraPosOld;
-	//}
-
-	//���_�̌v�Z
-	Vector3 pos = m_target + m_toCameraPos;
+	
+	//視点をプレイヤーが向いている方向にする
+	if (g_pad[0]->IsTrigger(enButtonRB3))
+	{
+		RotCamera();
+	}
+	m_camePos = m_target + m_toCameraPos;
 	//�J�����ɒ����_�Ǝ��_��ݒ肷��
-	g_camera3D->SetPosition(pos);
+	g_camera3D->SetPosition(m_camePos);
 	g_camera3D->SetTarget(m_target);
 
 }
@@ -126,4 +98,14 @@ void GameCamera::CatchMove()
 		return;
 	}
 	g_camera3D->SetPosition(m_cameraPosition);
+}
+
+void GameCamera::RotCamera()
+{
+	Vector3 pos = m_playerManagement->GetMoveSpeed();
+	pos.y = 0.0f;
+	pos.Normalize();
+	pos *= -1.0f;
+	
+	m_toCameraPos = { pos.x * 300.0f ,BEKUTORU.y,pos.z * 300.0f };
 }
