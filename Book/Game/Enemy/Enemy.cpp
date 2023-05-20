@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 140.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -101,7 +101,7 @@ bool Enemy::Start()
 	}
 
 	// 視野を作成
-	SpotLight_New(m_position, m_spotNum);
+	//SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
 	m_foward = Vector3::AxisZ;
@@ -560,7 +560,7 @@ void Enemy::Act_Craw()
 		return;
 	}
 	
-	// エネミーからプレイヤーへ向かうベクトル
+	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
 	// 長さが一定のとき
@@ -871,7 +871,14 @@ void Enemy::Act_Loss()
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 
-	m_ActState = CRAW;
+
+	// エネミーからパスへ向かうベクトル
+	Vector3 diff = m_point->s_position - m_position;
+
+	// 長さが一定のとき
+	if (diff.Length() <= CHANGING_DISTANCE) {
+		m_ActState = CRAW;
+	}
 }
 
 bool Enemy::Act_Stop(float time,int i)
