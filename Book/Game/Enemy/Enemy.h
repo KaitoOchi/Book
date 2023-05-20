@@ -352,7 +352,10 @@ public:
 		return m_activeFlag;
 	}
 
-	//--------------------------------------------
+	// �X�|�b�g���C�g��n��
+	const SpotLight GetSpotLight() {
+		return m_spotLight;
+	}
 
 protected:
 
