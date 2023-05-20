@@ -18,6 +18,13 @@ public:
 	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
 	void GageUp(const int GageUp, const bool isEnemy);
 
+	/// <summary>
+	/// ãƒ¯ã‚¤ãƒ—ã®çµ‚äº†å‡¦ç†ã€‚
+	/// </summary>
+	void SetWipeEnd()
+	{
+		m_wipe->WipeEnd();
+	}
 
 	/// <summary>
 	/// ƒƒCƒv‚ÌI—¹ˆ—B
