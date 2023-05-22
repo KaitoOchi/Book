@@ -175,9 +175,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 	psIn.pos = mul(mProj, psIn.pos);
 
 	//頂点法線をピクセルシェーダーにわたす
-	psIn.normal = mul(m, vsIn.normal);
-
-	//ワールド空間に変換
+	psIn.normal = normalize(mul(m, vsIn.normal));
+	//接ベクトルと従ベクトルをワールド空間に変換
 	psIn.tangent = normalize(mul(m, vsIn.tangent));
 	psIn.biNormal = normalize(mul(m, vsIn.biNormal));
 
@@ -573,6 +572,10 @@ float3 CalcNormal(SPSIn psIn)
 	float3 newNormal = psIn.tangent * localNormal.x
 					+ psIn.biNormal * localNormal.y
 					+ psIn.normal * localNormal.z;
+
+	if(isnan(newNormal.x)){
+		newNormal = (0.0f, 0.0f, 0.0f);
+	}
 
 	newNormal = min(max(newNormal, -1.0f), 1.0f);
 
