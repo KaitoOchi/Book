@@ -30,45 +30,46 @@ bool Enemy_Increase::Start()
 
 void Enemy_Increase::Update()
 {
-	Enemy_Open();
+	if (g_pad[0]->IsTrigger(enButtonLB2))
+	{
+		Enemy_Open();
+	}
+	
 }
 
 void Enemy_Increase::Enemy_Open()
 {
-	if (m_increaseEnemy <= 2)
+	//エネミーの大きさを求める
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		//エネミーの大きさを求める
-		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+		//アクティブになっていないエネミーを探す
+		if (m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
-			//アクティブになっていないエネミーを探す
-			if (m_game->GetEnemyList()[i]->GetActiveFlag())
+			//プレイヤーとエネミーの距離を求める
+			Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
+			//最も距離のある値を求める
+			if (pos.LengthSq()> m_nearposition)	
 			{
-				//プレイヤーとエネミーの距離を求める
-				Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-				//最も距離のある値を求める
-				if (pos.LengthSq()> m_nearposition)
-				{
-					m_nearposition = pos.Length();
-					m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
-				}
+				m_nearposition = pos.LengthSq();
+				m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
 			}
 		}
+	}
 
-		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	{
+		//アクティブになっていないエネミーを探す
+		if (m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
-			//アクティブになっていないエネミーを探す
-			if (m_game->GetEnemyList()[i]->GetActiveFlag())
+			//座標が同じなら探しているエネミーなので
+			if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
 			{
-				//座標が同じなら探しているエネミーなので
-				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
-				{
-					//エネミーアクティブにする
-					//m_game->GetEnemyList()[i]->SetActiveFlag(false);
-					m_game->GetEnemyList()[i]->GetSpotLight().SetColor(LIGHTCOLOR);
-					m_game->GetEnemyList()[i]->GetSpotLight().Update();
-				}
+				//エネミーアクティブにする
+				m_game->GetEnemyList()[i]->SetActiveFlag(false);
+				m_game->GetEnemyList()[i]->GetSpotLight().SetColor(LIGHTCOLOR);	
+				m_game->GetEnemyList()[i]->GetSpotLight().Update();
+				m_nearposition = FLT_MIN;
 			}
 		}
-		m_increaseEnemy++;
 	}
 }
