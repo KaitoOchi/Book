@@ -50,7 +50,7 @@ bool MiniMap::Start()
 
 	// ƒGƒlƒ~[‰æ‘œ‚Ìİ’è
 	for (int i = 0; i < m_enemyList.size(); i++) {
-		m_enemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
+		m_enemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_enemy.DDS", 15, 15);
 		m_enableEnemySprites[i] = false;
 	}
 
@@ -61,8 +61,8 @@ bool MiniMap::Start()
 	}
 
 	// ‚¨•ó‰æ‘œ‚Ìİ’è
-	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 20.0f, 20.0f);
-	m_treasureSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 32.0f, 32.0f);
+	m_treasureSpriteRender.SetMulColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	return true;
 }
@@ -170,7 +170,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(const Vector3& worldCenter
 	if (m_isTreasure) {
 
 		//‚¨•ó‚ª‚ ‚é•ûŒü‚Ö‰ñ“]‚³‚¹‚é
-		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) + 0.5);
+		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) - 1.5f);
 		m_treasureSpriteRender.SetRotation(rot);
 
 		// 	ŒvZ‚µ‚½ƒxƒNƒgƒ‹‚ªˆê’èˆÈã—£‚ê‚Ä‚¢‚½‚ç
@@ -198,8 +198,13 @@ void MiniMap::Render(RenderContext& rc)
 	//˜g‰æ‘œ‚Ì•`‰æ
 	m_outlineSpriteRender.Draw(rc);
 
-	//‚¨•ó‰æ‘œ‚Ì•`‰æ
-	m_treasureSpriteRender.Draw(rc);
+	//“G‰æ‘œ‚Ì•`‰æ
+	for (int i = 0; i < m_enemyList.size(); i++)
+	{
+		if (m_enableEnemySprites[i] == true) {
+			m_enemySpriteRender[i].Draw(rc);
+		}
+	}
 
 	//•Ç‰æ‘œ‚Ì•`‰æ
 	for (int i = 0; i < m_physicsGhostList.size(); i++)
@@ -209,13 +214,8 @@ void MiniMap::Render(RenderContext& rc)
 		}
 	}
 
-	//“G‰æ‘œ‚Ì•`‰æ
-	for (int i = 0; i < m_enemyList.size(); i++)
-	{
-		if (m_enableEnemySprites[i] == true) {
-			m_enemySpriteRender[i].Draw(rc);
-		}
-	}
+	//‚¨•ó‰æ‘œ‚Ì•`‰æ
+	m_treasureSpriteRender.Draw(rc);
 
 	//ƒvƒŒƒCƒ„[‰æ‘œ‚Ì•`‰æ
 	m_playerSpriteRender.Draw(rc);

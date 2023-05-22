@@ -145,7 +145,7 @@ bool Game::Start()
 	//お宝の座標をランダムで決める
 	m_treasure->SetTreasurePosition();
 	//決めた座標をミニマップに反映
-	m_miniMap->SetTreasurePos(m_treasure->GetPosition(), false);
+	m_miniMap->SetTreasurePos(m_treasure->GetPosition());
 
 	//フェードイン処理
 	m_fade = FindGO<Fade>("fade");
@@ -524,8 +524,11 @@ void Game::Update()
 				Event* event = NewGO<Event>(0, "event");
 				event->SetTresurePosition(m_tresurePos);
 
+				//ライトを非表示
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
 				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+
+				//敵を非表示
 				NotDraw_Enemy(true);
 
 				m_gameUI->Deactivate();
@@ -583,7 +586,7 @@ void Game::NotDraw_Enemy(bool flag)
 	// 描画するかどうか決定する
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_enemyList[i]->SetNotDrawFlag(flag);
-		m_enemyList[i]->SetTrueChangeDefaultFlag();
+
 		for (int j = 0; j < m_enemyFirstPositions.size(); j++) {
 			// 座標を教える
 			m_enemyList[i]->SetPosition(m_enemyFirstPositions[i]);
@@ -612,17 +615,30 @@ void Game::NotifyDuringGamePlay()
 void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
-	m_fade->SetEnableTips(false);
-	m_fade->StartFadeOut();
-	GameManager::GetInstance()->DeleteBGM();
 	m_isWaitFadeOut = true;
+
+	//ヒント画像を表示しない
+	m_fade->SetEnableTips(false);
+
+	//フェードアウトを開始
+	m_fade->StartFadeOut();
+
+	//BGMの削除
+	GameManager::GetInstance()->DeleteBGM();
+
+	//隙間エフェクトを非表示
+	StopWallEffect();
 }
 
 void Game::NotifyEventEnd()
 {
 	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
+
+	//ライトを戻す
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
+
+	//敵を表示する
 	NotDraw_Enemy(false);
 
 	m_gamecamera->Activate();
@@ -633,8 +649,12 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	//ミニマップに脱出口を表示
-	m_miniMap->SetTreasurePos(m_clearPos, true);
+	m_miniMap->SetTreasurePos(m_clearPos);
 
+	//隙間エフェクトを表示
+	PlayWallEffect();
+
+	//フェードインを開始
 	m_fade->StartFadeIn();
 
 	NotifyGameClearable();
