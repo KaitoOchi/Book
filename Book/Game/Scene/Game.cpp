@@ -524,8 +524,11 @@ void Game::Update()
 				Event* event = NewGO<Event>(0, "event");
 				event->SetTresurePosition(m_tresurePos);
 
+				//ライトを非表示
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
 				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+
+				//敵を非表示
 				NotDraw_Enemy(true);
 
 				m_gameUI->Deactivate();
@@ -612,17 +615,30 @@ void Game::NotifyDuringGamePlay()
 void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
-	m_fade->SetEnableTips(false);
-	m_fade->StartFadeOut();
-	GameManager::GetInstance()->DeleteBGM();
 	m_isWaitFadeOut = true;
+
+	//ヒント画像を表示しない
+	m_fade->SetEnableTips(false);
+
+	//フェードアウトを開始
+	m_fade->StartFadeOut();
+
+	//BGMの削除
+	GameManager::GetInstance()->DeleteBGM();
+
+	//隙間エフェクトを非表示
+	StopWallEffect();
 }
 
 void Game::NotifyEventEnd()
 {
 	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
+
+	//ライトを戻す
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
+
+	//敵を表示する
 	NotDraw_Enemy(false);
 
 	m_gamecamera->Activate();
@@ -635,6 +651,10 @@ void Game::NotifyEventEnd()
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos, true);
 
+	//隙間エフェクトを表示
+	PlayWallEffect();
+
+	//フェードインを開始
 	m_fade->StartFadeIn();
 
 	NotifyGameClearable();
