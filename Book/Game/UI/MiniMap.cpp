@@ -7,7 +7,6 @@
 #include "Enemy_Charge.h"
 #include "Game.h"
 #include "Enemy.h"
-#include "Treasure.h"
 
 namespace
 {
@@ -30,13 +29,9 @@ bool MiniMap::Start()
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
-	m_treasure = FindGO<Treasure>("treaSure");
 	// エネミーのリストを持ってくる
 	m_enemyList = m_game->GetEnemyList();
 	m_physicsGhostList = m_game->GetPhysicsGhostList();
-	// お宝の位置
-	m_treasurePos = m_treasure->GetPosition();
-
 	// 画像を用意する
 	// マップ画像の設定
 	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
@@ -87,6 +82,7 @@ void MiniMap::DrawMap_Enemy()
 	Vector3 mapPos;
 	Vector3 enemyPos;
 	float alpha = 0.0f;
+	m_isTreasure = false;
 
 	//敵をマップに描画
 	for (int i = 0; i < m_enemyList.size(); i++) {
@@ -111,6 +107,7 @@ void MiniMap::DrawMap_Enemy()
 	}
 
 	//お宝をマップに描画
+	m_isTreasure = true;
 	DrawMap(m_treasurePos, alpha);
 	//お宝画像の設定
 	m_TreasureSpriteRender.SetPosition(m_mapPos);
@@ -120,7 +117,7 @@ void MiniMap::DrawMap_Enemy()
 bool MiniMap::DrawMap(const Vector3& enemyPos, float& alpha)
 {
 	// マップに表示する範囲に敵がいたら
-	if (WorldPositionConvertToMapPosition(m_playerPos, enemyPos, false)) {
+	if (WorldPositionConvertToMapPosition(m_playerPos, enemyPos)) {
 
 		Vector3 diff = enemyPos - m_playerPos;
 		diff.y = 0.0f;
@@ -134,7 +131,7 @@ bool MiniMap::DrawMap(const Vector3& enemyPos, float& alpha)
 	}
 }
 
-const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition, const bool isTreasure)
+const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition)
 {
 	// Y座標はマップとは関係ないので0.0fを設定
 	worldCenterPosition.y = 0.0f;
@@ -144,7 +141,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 	Vector3 diff = worldPosition - worldCenterPosition;
 	Vector3 diff2 = diff;
 
-	if (!isTreasure) {
+	if (!m_isTreasure) {
 
 		// 	計算したベクトルが一定以上離れていたら
 		if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
@@ -174,7 +171,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 	// マップの中央座標と上記ベクトルを加算する
 	m_mapPos = Vector3(CENTER_POSITION.x + diff.x, CENTER_POSITION.y + diff.z, 0.0f);
 
-	if (isTreasure) {
+	if (m_isTreasure) {
 
 		//お宝がある方向へ回転させる
 		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) + 0.5);

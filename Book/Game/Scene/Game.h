@@ -79,14 +79,6 @@ public:
 	}
 
 	/// <summary>
-	/// 宝座標リストの取得。
-	/// </summary>
-	std::vector<Vector3> GetTreasurePositionList()
-	{
-		return m_treasurePositions;
-	}
-
-	/// <summary>
 	/// 壁リストの取得。
 	/// </summary>
 	std::vector<Wall*>GetWallList()
@@ -214,7 +206,7 @@ private:
 	Player3D*						m_player3D = nullptr;
 	PlayerManagement*				m_playerManagement = nullptr;
 	BackGround*						m_backGround = nullptr;
-	Treasure*						m_treaSure = nullptr;
+	Treasure*						m_treasure = nullptr;
 	Ghost*							m_ghost = nullptr;
 	PhysicsGhost*					m_physicsGhost = nullptr;
 	GhostBox*						m_ghostBox = nullptr;
@@ -228,7 +220,6 @@ private:
 	std::vector<Enemy*>				m_enemyList;
 	std::vector<Vector3>			m_enemyFirstPositions;			// エネミーの初期座標
 	std::vector<Wall*>				m_wallList;
-	std::vector<Vector3>			m_treasurePositions;
 	std::vector<Sensor*>			m_sensorList;
 	std::vector<SecurityCamera*>	m_SecurityCameraList;
 	std::vector<PhysicsGhost*>		m_physicsGhostList;
