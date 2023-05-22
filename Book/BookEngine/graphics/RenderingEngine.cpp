@@ -49,7 +49,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(20.0f);
+		SetBloomThreshold(0.2f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
@@ -175,7 +175,7 @@ namespace nsBookEngine {
 	{
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
-		m_lightCB.directionLig.eyePos.x += 3000.0f;
+		//m_lightCB.directionLig.eyePos.x += 3000.0f;
 		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
 		ZPrepass(rc);
