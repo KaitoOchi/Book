@@ -18,6 +18,13 @@ public:
 	/// <param name="GageUp">�x���x�𑝂₷��</param>
 	void GageUp(const int GageUp, const bool isEnemy);
 
+	/// <summary>
+	/// ワイプの終了処理。
+	/// </summary>
+	void SetWipeEnd()
+	{
+		m_wipe->WipeEnd();
+	}
 
 	enum EnLeverState
 	{

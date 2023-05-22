@@ -68,10 +68,6 @@ public:
 	/// </summary>
 	void Act_Call();
 	/// <summary>
-	/// 呼ばれた時の行動
-	/// </summary>
-	void Act_Called();
-	/// <summary>
 	/// 見失ったときの処理
 	/// </summary>
 	void Act_Loss();
@@ -80,9 +76,10 @@ public:
 	/// </summary>
 	void Act_HitFlashBullet();
 	/// <summary>
-	/// 音爆弾が当たったときの処理
+	/// 音が聞こえた場所に行く処理
 	/// </summary>
-	void Act_HitSoundBullet();
+	/// <param name="pos">目標地点</param>
+	void Act_GoLocationListenSound(Vector3 pos);
 	/// <summary>
 	/// 行動停止
 	/// </summary>
@@ -268,8 +265,8 @@ public:
 	/// 音爆弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
-	void SetHitSoundBullet(bool b) {
-		m_HitSoundBulletFlag = b;
+	void SetHearedSoundBullet(bool b) {
+		m_HearedSoundBulletFlag = b;
 	};
 
 	/// <summary>
@@ -277,7 +274,7 @@ public:
 	/// </summary>
 	/// <returns>被弾したかどうかどうか判定する。trueなら被弾したと判定</returns>
 	bool GetHitSoundBullet() {
-		return m_HitSoundBulletFlag;
+		return m_HearedSoundBulletFlag;
 	}
 
 	/// <summary>
@@ -420,9 +417,9 @@ protected:
 	SpotLight m_spotLight;					//スポットライト
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool m_HitSoundBulletFlag = false;		// 音爆弾
+	bool m_HearedSoundBulletFlag = false;		// 音爆弾
 	bool m_CountFlag = false;				// カウントするフラグ
-	bool m_TrakingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
+	bool m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか

@@ -65,8 +65,8 @@ void Enemy_Charge::Update()
 	}
 
 
-	if (m_HitSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
-		m_HitSoundBulletFlag = false;
+	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		m_HearedSoundBulletFlag = false;
 	}
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
@@ -74,7 +74,7 @@ void Enemy_Charge::Update()
 		m_ActState = CONFUSION;
 	}
 	// ‰¹”š’e‚ğg—p‚µ‚½
-	if (m_HitSoundBulletFlag == true) {
+	if (m_HearedSoundBulletFlag == true) {
 		m_ActState = LISTEN;
 	}
 
@@ -178,7 +178,7 @@ void Enemy_Charge::Update_OnBackBasedOn()
 
 void Enemy_Charge::Update_OnCalled()
 {
-	Enemy::Act_Called();
+	Enemy::Act_GoLocationListenSound(m_setPos);
 }
 
 void Enemy_Charge::Update_OnConfusion()
@@ -189,13 +189,7 @@ void Enemy_Charge::Update_OnConfusion()
 void Enemy_Charge::UpDate_OnListen()
 {
 	// ‰¹”š’e‚ğg‚Á‚½‚Æ‚«
-	Enemy::Act_HitSoundBullet();
-
-	// ‘MŒõ’e‚ğH‚ç‚Á‚Ä‚¢‚é‚Æ‚«‚ÍÀs‚µ‚È‚¢
-	if (m_HitFlashBulletFlag == true) {
-		m_HitFlashBulletFlag = false;
-		return;
-	}
+	Enemy::Act_GoLocationListenSound(m_itemPos);
 }
 
 void Enemy_Charge::Update_OnCatch()
