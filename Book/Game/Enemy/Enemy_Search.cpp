@@ -50,13 +50,6 @@ void Enemy_Search::Update()
 		}
 		return;
 	}
-	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
-	if (m_ChangeDefaultFlag == true) {
-
-		m_ActState = SEARCH;
-
-		m_ChangeDefaultFlag = false;
-	}
 
 	// �M���e�ɓ�������
 	if (m_HitFlashBulletFlag == true) {
@@ -64,6 +57,7 @@ void Enemy_Search::Update()
 	}
 
 	switch (m_ActState) {
+	case CRAW:
 	case SEARCH:
 		Update_OnSearch();
 		break;

@@ -101,7 +101,7 @@ bool Enemy::Start()
 	}
 
 	// 視野を作成
-	//SpotLight_New(m_position, m_spotNum);
+	SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
 	m_foward = Vector3::AxisZ;

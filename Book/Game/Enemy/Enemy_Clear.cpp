@@ -55,12 +55,6 @@ void Enemy_Clear::Update()
 		}
 		return;
 	}
-	// �f�t�H���g�ɖ߂��t���O��true�̂Ƃ�
-	if (m_ChangeDefaultFlag == true) {
-		m_ActState = CRAW;
-
-		m_ChangeDefaultFlag = false;
-	}
 
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
