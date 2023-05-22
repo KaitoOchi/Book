@@ -13,7 +13,6 @@ namespace
 	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
 	const float		MAP_RADIUS = 140.0f;									// マップの半径
 	const float		LIMITED_RANGE_IMAGE = 650.0f;							// マップの範囲
-	const float		ALPHA = 0.75f;											// α値
 }
 
 MiniMap::MiniMap()
@@ -28,56 +27,56 @@ bool MiniMap::Start()
 {
 	// インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
-	m_game = FindGO<Game>("game");
-	// エネミーのリストを持ってくる
-	m_enemyList = m_game->GetEnemyList();
-	m_physicsGhostList = m_game->GetPhysicsGhostList();
-	// 画像を用意する
-	// マップ画像の設定
-	m_SpriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
-	m_SpriteRender.SetPosition(CENTER_POSITION);
-	//m_SpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, ALPHA });
-	m_SpriteRender.Update();
+	Game* game = FindGO<Game>("game");
 
-	// アウトライン画像の設定
-	m_OutLineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);
-	m_OutLineSpriteRender.SetPosition({ 640.0f, -210.0f, 0.0f });
-	m_OutLineSpriteRender.Update();
+	// エネミーのリストを持ってくる
+	m_enemyList = game->GetEnemyList();
+	m_physicsGhostList = game->GetPhysicsGhostList();
+
+	// 背景画像の設定
+	m_spriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
+	m_spriteRender.SetPosition(CENTER_POSITION);
+	m_spriteRender.Update();
+
+	// 装飾画像の設定
+	m_outlineSpriteRender.Init("Assets/sprite/UI/miniMap/base_outLine.DDS", 362, 519);
+	m_outlineSpriteRender.SetPosition({ 640.0f, -210.0f, 0.0f });
+	m_outlineSpriteRender.Update();
 
 	// プレイヤー画像の設定
-	m_PlayerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
-	m_PlayerSpriteRender.SetPosition(CENTER_POSITION);
-	m_PlayerSpriteRender.Update();
+	m_playerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
+	m_playerSpriteRender.SetPosition(CENTER_POSITION);
+	m_playerSpriteRender.Update();
 
 	// エネミー画像の設定
 	for (int i = 0; i < m_enemyList.size(); i++) {
-		m_EnemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
-		m_isImage[i] = false;
+		m_enemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
+		m_enableEnemySprites[i] = false;
 	}
 
 	//壁画像の設定
 	for (int i = 0; i < m_physicsGhostList.size(); i++) {
 		m_wallSpriteRender[i].Init("Assets/sprite/UI/miniMap/map_wall.DDS", 20.0f, 20.0f);
-		m_enableWallSprite[i] = false;
+		m_enableWallSprites[i] = false;
 	}
 
 	// お宝画像の設定
-	m_TreasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 20.0f, 20.0f);
-	m_TreasureSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 20.0f, 20.0f);
+	m_treasureSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 
-return true;
+	return true;
 }
 
 void MiniMap::Update()
 {
-	// プレイヤーの座標
+	// プレイヤーの座標を取得
 	m_playerPos = m_playerManagement->GetPosition();
 
 	// マップ座標に変換
-	DrawMap_Enemy();
+	DrawMap_Actor();
 }
 
-void MiniMap::DrawMap_Enemy()
+void MiniMap::DrawMap_Actor()
 {
 	Vector3 mapPos;
 	Vector3 enemyPos;
@@ -88,18 +87,18 @@ void MiniMap::DrawMap_Enemy()
 	for (int i = 0; i < m_enemyList.size(); i++) {
 
 		enemyPos =  m_enemyList[i]->GetPosition();
-		m_isImage[i] = DrawMap(enemyPos, alpha);
+		m_enableEnemySprites[i] = DrawMap(enemyPos, alpha);
 		//敵画像の設定
-		m_EnemySpriteRender[i].SetPosition(m_mapPos);
-		m_EnemySpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
-		m_EnemySpriteRender[i].Update();
+		m_enemySpriteRender[i].SetPosition(m_mapPos);
+		m_enemySpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
+		m_enemySpriteRender[i].Update();
 	}
 
 	//壁をマップに描画
 	for (int i = 0; i < m_physicsGhostList.size(); i++) {
 
 		enemyPos = m_physicsGhostList[i]->GetPosition();
-		m_enableWallSprite[i] = DrawMap(enemyPos, alpha);
+		m_enableWallSprites[i] = DrawMap(enemyPos, alpha);
 		//壁画像の設定
 		m_wallSpriteRender[i].SetPosition(m_mapPos);
 		m_wallSpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
@@ -110,8 +109,8 @@ void MiniMap::DrawMap_Enemy()
 	m_isTreasure = true;
 	DrawMap(m_treasurePos, alpha);
 	//お宝画像の設定
-	m_TreasureSpriteRender.SetPosition(m_mapPos);
-	m_TreasureSpriteRender.Update();
+	m_treasureSpriteRender.SetPosition(m_mapPos);
+	m_treasureSpriteRender.Update();
 }
 
 bool MiniMap::DrawMap(const Vector3& enemyPos, float& alpha)
@@ -131,14 +130,11 @@ bool MiniMap::DrawMap(const Vector3& enemyPos, float& alpha)
 	}
 }
 
-const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPosition, Vector3 worldPosition)
+const bool MiniMap::WorldPositionConvertToMapPosition(const Vector3& worldCenterPosition, const Vector3& worldPosition)
 {
-	// Y座標はマップとは関係ないので0.0fを設定
-	worldCenterPosition.y = 0.0f;
-	worldPosition.y = 0.0f;
-
 	// 中心の座標から表示したいオブジェクトの座標へ向かうベクトルを計算
 	Vector3 diff = worldPosition - worldCenterPosition;
+	diff.y = 0.0f;
 	Vector3 diff2 = diff;
 
 	if (!m_isTreasure) {
@@ -175,7 +171,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 		//お宝がある方向へ回転させる
 		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) + 0.5);
-		m_TreasureSpriteRender.SetRotation(rot);
+		m_treasureSpriteRender.SetRotation(rot);
 
 		// 	計算したベクトルが一定以上離れていたら
 		if (diff2.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
@@ -196,31 +192,31 @@ const bool MiniMap::WorldPositionConvertToMapPosition(Vector3 worldCenterPositio
 
 void MiniMap::Render(RenderContext& rc)
 {
-	//ミニマップ画像の描画
-	m_SpriteRender.Draw(rc);
+	//背景画像の描画
+	m_spriteRender.Draw(rc);
 
 	//枠画像の描画
-	m_OutLineSpriteRender.Draw(rc);
-
-	//プレイヤー画像の描画
-	m_PlayerSpriteRender.Draw(rc);
+	m_outlineSpriteRender.Draw(rc);
 
 	//お宝画像の描画
-	m_TreasureSpriteRender.Draw(rc);
-
-	//敵画像の描画
-	for (int i = 0; i < m_enemyList.size(); i++) {
-
-		if (m_isImage[i] == true) {
-			m_EnemySpriteRender[i].Draw(rc);
-		}
-	}
+	m_treasureSpriteRender.Draw(rc);
 
 	//壁画像の描画
-	for (int i = 0; i < m_physicsGhostList.size(); i++) {
-
-		if (m_enableWallSprite[i]) {
+	for (int i = 0; i < m_physicsGhostList.size(); i++)
+	{
+		if (m_enableWallSprites[i]) {
 			m_wallSpriteRender[i].Draw(rc);
 		}
 	}
+
+	//敵画像の描画
+	for (int i = 0; i < m_enemyList.size(); i++)
+	{
+		if (m_enableEnemySprites[i] == true) {
+			m_enemySpriteRender[i].Draw(rc);
+		}
+	}
+
+	//プレイヤー画像の描画
+	m_playerSpriteRender.Draw(rc);
 }

@@ -299,6 +299,7 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 {
 	//アルベドマップを読み込む
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	albedo.a = 1.0f;
 
 	return PSMainCore(psIn, false, albedo);
 }
@@ -310,6 +311,7 @@ float4 PSMainShadow( SPSIn psIn ) : SV_Target0
 {
 	//アルベドマップを読み込む
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	albedo.a = 1.0f;
 
 	return PSMainCore(psIn, true, albedo);
 }
