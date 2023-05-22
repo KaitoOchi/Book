@@ -145,7 +145,7 @@ bool Game::Start()
 	//お宝の座標をランダムで決める
 	m_treasure->SetTreasurePosition();
 	//決めた座標をミニマップに反映
-	m_miniMap->SetTreasurePos(m_treasure->GetPosition(), false);
+	m_miniMap->SetTreasurePos(m_treasure->GetPosition());
 
 	//フェードイン処理
 	m_fade = FindGO<Fade>("fade");
@@ -649,7 +649,7 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	//ミニマップに脱出口を表示
-	m_miniMap->SetTreasurePos(m_clearPos, true);
+	m_miniMap->SetTreasurePos(m_clearPos);
 
 	//隙間エフェクトを表示
 	PlayWallEffect();

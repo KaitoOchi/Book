@@ -62,7 +62,7 @@ bool MiniMap::Start()
 
 	// ‚¨•ó‰æ‘œ‚Ìİ’è
 	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 32.0f, 32.0f);
-	m_treasureSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	m_treasureSpriteRender.SetMulColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	return true;
 }
@@ -198,9 +198,6 @@ void MiniMap::Render(RenderContext& rc)
 	//˜g‰æ‘œ‚Ì•`‰æ
 	m_outlineSpriteRender.Draw(rc);
 
-	//‚¨•ó‰æ‘œ‚Ì•`‰æ
-	m_treasureSpriteRender.Draw(rc);
-
 	//“G‰æ‘œ‚Ì•`‰æ
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
@@ -209,9 +206,6 @@ void MiniMap::Render(RenderContext& rc)
 		}
 	}
 
-	//ƒvƒŒƒCƒ„[‰æ‘œ‚Ì•`‰æ
-	m_playerSpriteRender.Draw(rc);
-
 	//•Ç‰æ‘œ‚Ì•`‰æ
 	for (int i = 0; i < m_physicsGhostList.size(); i++)
 	{
@@ -219,4 +213,10 @@ void MiniMap::Render(RenderContext& rc)
 			m_wallSpriteRender[i].Draw(rc);
 		}
 	}
+
+	//‚¨•ó‰æ‘œ‚Ì•`‰æ
+	m_treasureSpriteRender.Draw(rc);
+
+	//ƒvƒŒƒCƒ„[‰æ‘œ‚Ì•`‰æ
+	m_playerSpriteRender.Draw(rc);
 }
