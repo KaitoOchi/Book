@@ -43,10 +43,10 @@ namespace
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);			//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 600.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
-	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 0.0f };
+	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
 }
 
 Enemy::Enemy()

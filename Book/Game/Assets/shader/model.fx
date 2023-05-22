@@ -487,10 +487,10 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 
 		//影響力がマイナスにならないように補正をかける
 		if (affect < 0.0f) {
-			affect = 0.0f;
+			continue;
 		}
 		//影響の仕方を指数関数的にする
-		affect = pow(affect, 3.0f);
+		affect = pow(affect, 1.0f);
 
 		//影響率を乗算して反射光を弱める
 		diffSpotLight *= affect;

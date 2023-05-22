@@ -19,22 +19,12 @@ public:
 	void GageUp(const int GageUp, const bool isEnemy);
 
 	/// <summary>
-	/// ãƒ¯ã‚¤ãƒ—ã®çµ‚äº†å‡¦ç†ã€‚
-	/// </summary>
-	void SetWipeEnd()
-	{
-		m_wipe->WipeEnd();
-	}
-
-	/// <summary>
 	/// ƒƒCƒv‚ÌI—¹ˆ—B
 	/// </summary>
 	void SetWipeEnd()
 	{
 		m_wipe->WipeEnd();
 	}
-
-
 
 	enum EnLeverState
 	{

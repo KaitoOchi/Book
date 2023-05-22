@@ -49,7 +49,7 @@ namespace nsBookEngine {
 		);
 
 		//ブルームを設定
-		SetBloomThreshold(20.0f);
+		SetBloomThreshold(0.5f);
 		m_bloom.Init(m_mainRenderTarget);
 
 		Init2DRenderTarget();
