@@ -46,6 +46,10 @@ void Enemy_Clear::Update()
 	//行動できるか調べる
 	if (m_activeFlag == true)
 	{
+		Vector3 move{ 0.0f,-3000.0f,0.0f };
+		m_characterController.Execute(move, 1.0f);
+		m_spotLight.SetPosition(move);
+		m_spotLight.Update();
 		return;
 	}
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�

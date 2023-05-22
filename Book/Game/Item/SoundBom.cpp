@@ -50,7 +50,7 @@ void SoundBom::ItemHit()
 		if (!m_game->GetEnemyList()[i]->GetActiveFlag())
 		{
 			Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-			if (diff.Length() < pow(SOUNDRANGE, 2.0f))
+			if (diff.LengthSq() < pow(SOUNDRANGE, 2.0f))
 			{
 				m_game->GetEnemyList()[i]->SetHitSoundBullet(true);
 				m_game->GetEnemyList()[i]->SetItemPos(m_position);

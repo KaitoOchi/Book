@@ -523,7 +523,7 @@ void Game::Update()
 				NotDraw_Enemy(true);
 
 				m_gameUI->Deactivate();
-				m_gage->SetWipeEnd();
+				
 				m_gage->Deactivate();
 				m_gamecamera->Deactivate();
 				m_miniMap->Deactivate();

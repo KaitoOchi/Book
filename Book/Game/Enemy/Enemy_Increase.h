@@ -77,7 +77,6 @@ private:
 	PlayerManagement*			m_playerManagement = nullptr;			//プレイヤーマネジメント
 
 	int m_increaseEnemy = 0;
-	
 
 };
 
