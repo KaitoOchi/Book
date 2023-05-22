@@ -47,6 +47,7 @@ public:
 	{
 		m_timer = 0.0f;
 		m_isWipe = false;
+		
 	}
 
 private:

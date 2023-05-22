@@ -4,6 +4,7 @@ class GameCamera;
 class Game;
 class Treasure;  
 class GameCamera;
+class GameUI;
 class Player : public IGameObject
 {
 public:
@@ -165,15 +166,27 @@ public:
 	{
 		return m_runState;
 	}
-
+	/// <summary>
+	/// プレイヤーの回転の設定
+	/// </summary>
+	/// <param name="rot"></param>
+	/// <returns></returns>
 	const void SetRotation(const Quaternion rot)
 	{
 		m_rotation = rot;
 	}
-
+	/// <summary>
+	/// プレイヤーの回転の取得
+	/// </summary>
+	/// <returns></returns>
 	const Quaternion GetRotation()
 	{
 		return m_rotation;
+	}
+
+	ModelRender* GetModel()
+	{
+		return m_modelRender;
 	}
 
 protected:
@@ -280,11 +293,6 @@ protected:
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
-	/// <summary>
-	/// スタミナゲージの変更
-	/// </summary>
-	void StaminaGage(float stamina);
-
 protected:
 
 
@@ -333,6 +341,7 @@ protected:
 	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
 	Treasure* m_treasure = nullptr;
 	Game* m_game = nullptr;
+	GameUI* m_gameUI = nullptr;
 
 
 	Vector3 m_ghostPosition = Vector3::Zero;
@@ -345,11 +354,5 @@ protected:
 	bool m_runState = true;
 
 	float m_stamina = 0.0f;										//プレイヤーのスタミナ
-
-	SpriteRender		m_staminaBaseRender;					//スタミナゲージベース画像
-	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像
-	Vector2				m_spritePosition = Vector2::Zero;
-	Vector3				m_stamianGageScale = Vector3::One;
-
 	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム
 };	

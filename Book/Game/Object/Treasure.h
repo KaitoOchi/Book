@@ -1,6 +1,5 @@
 #pragma once
 #include "Object.h"
-class Gage;
 class Treasure :public Object 
 {
 public:
@@ -17,6 +16,4 @@ public:
 private:
 	int						m_treasures = 0;
 	int						m_randTreasure = 0;
-	Gage*					m_gage = nullptr;
-	
 };

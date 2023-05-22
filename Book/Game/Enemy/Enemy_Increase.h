@@ -59,11 +59,13 @@ public:
 	{
 		return m_scale;
 	}
-private:
+
 	/// <summary>
 	/// エネミーを起動させる
 	/// </summary>
 	void Enemy_Open();
+private:
+	
 
 private:
 	Vector3						m_position = Vector3::Zero;				//座標

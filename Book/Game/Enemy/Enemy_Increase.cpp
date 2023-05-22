@@ -28,12 +28,7 @@ bool Enemy_Increase::Start()
 }
 
 void Enemy_Increase::Update()
-{
-	if (g_pad[0]->IsTrigger(enButtonLB2))
-	{
-		Enemy_Open();
-	}
-	
+{	
 }
 
 void Enemy_Increase::Enemy_Open()
@@ -54,7 +49,6 @@ void Enemy_Increase::Enemy_Open()
 			}
 		}
 	}
-	int j = 0;
 
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{

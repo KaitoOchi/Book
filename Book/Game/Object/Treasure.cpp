@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Treasure.h"
-#include "Game.h"
 #include "Gage.h"
 #include <random>
 
@@ -24,8 +23,6 @@ bool Treasure::Start()
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int>dist(0, 2);
 	m_randTreasure = dist(mt);
-
-	m_gage = FindGO<Gage>("gage");
 
 	Object::Start();
 	m_position = m_game->GetTreasurePositionList()[m_randTreasure];
@@ -76,7 +73,7 @@ void Treasure::Hit()
 
 		m_game->NotifyEventStart();
 
-		m_gage->m_leverState = m_gage->m_enLever_MAX;
+		
 
 		m_game->SetTresurePosition(m_position);
 		

@@ -630,8 +630,8 @@ void Game::NotifyEventEnd()
 	m_miniMap->SetTreasurePos(m_clearPos);
 
 	m_fade->StartFadeIn();
-
 	NotifyGameClearable();
+	m_gage->m_leverState = m_gage->m_enLever_MAX;
 }
 
 

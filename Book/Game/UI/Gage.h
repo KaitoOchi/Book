@@ -1,8 +1,9 @@
 #pragma once
 class Game;
 class Enemy;
+class Fade;
 #include "Wipe.h"
-
+class Enemy_Increase;
 class Gage:public IGameObject
 {
 public:
@@ -24,6 +25,7 @@ public:
 	void SetWipeEnd()
 	{
 		m_wipe->WipeEnd();
+		m_leverState = m_enLever_MAX;
 	}
 
 	enum EnLeverState
@@ -61,6 +63,7 @@ private:
 	SpriteRender m_baseRender;									//���ɒu���摜
 	std::array<SpriteRender,10>m_vigilanceRender;				//�x���x�摜
 	bool m_isFind = false;										//�������ꂽ���ǂ���
+	bool m_MaxEnd=true;
 	int m_vigilanceGage = 0;									//�x���x�Q�[�W��
 	float m_vigilanceTime = 2.0f;								//�x���x�ɓ���N�[���^�C��
 
@@ -71,5 +74,7 @@ private:
 
 	Game* m_game = nullptr;
 	Wipe* m_wipe = nullptr;
+	Fade* m_fade = nullptr;
+	Enemy_Increase* m_enemy_Increase = nullptr;					//エネミーの増加
 };
 
