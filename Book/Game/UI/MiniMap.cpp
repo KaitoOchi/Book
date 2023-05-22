@@ -50,7 +50,7 @@ bool MiniMap::Start()
 
 	// エネミー画像の設定
 	for (int i = 0; i < m_enemyList.size(); i++) {
-		m_enemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_2.DDS", 15, 15);
+		m_enemySpriteRender[i].Init("Assets/sprite/UI/miniMap/map_enemy.DDS", 15, 15);
 		m_enableEnemySprites[i] = false;
 	}
 
@@ -61,7 +61,7 @@ bool MiniMap::Start()
 	}
 
 	// お宝画像の設定
-	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 20.0f, 20.0f);
+	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 32.0f, 32.0f);
 	m_treasureSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 
 	return true;
@@ -170,7 +170,7 @@ const bool MiniMap::WorldPositionConvertToMapPosition(const Vector3& worldCenter
 	if (m_isTreasure) {
 
 		//お宝がある方向へ回転させる
-		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) + 0.5);
+		rot.SetRotationZ(atan2(m_mapPos.y - CENTER_POSITION.y, m_mapPos.x - CENTER_POSITION.x) - 1.5f);
 		m_treasureSpriteRender.SetRotation(rot);
 
 		// 	計算したベクトルが一定以上離れていたら
@@ -201,14 +201,6 @@ void MiniMap::Render(RenderContext& rc)
 	//お宝画像の描画
 	m_treasureSpriteRender.Draw(rc);
 
-	//壁画像の描画
-	for (int i = 0; i < m_physicsGhostList.size(); i++)
-	{
-		if (m_enableWallSprites[i]) {
-			m_wallSpriteRender[i].Draw(rc);
-		}
-	}
-
 	//敵画像の描画
 	for (int i = 0; i < m_enemyList.size(); i++)
 	{
@@ -219,4 +211,12 @@ void MiniMap::Render(RenderContext& rc)
 
 	//プレイヤー画像の描画
 	m_playerSpriteRender.Draw(rc);
+
+	//壁画像の描画
+	for (int i = 0; i < m_physicsGhostList.size(); i++)
+	{
+		if (m_enableWallSprites[i]) {
+			m_wallSpriteRender[i].Draw(rc);
+		}
+	}
 }

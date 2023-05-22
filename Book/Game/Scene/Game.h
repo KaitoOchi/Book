@@ -102,7 +102,7 @@ public:
 	{
 		for (auto& effect : m_physicsGhostList)
 		{
-			effect->GetEffect()->Play();
+			effect->InitEffect();
 		}
 	}
 
@@ -113,7 +113,7 @@ public:
 	{
 		for (auto& effect : m_physicsGhostList)
 		{
-			effect->GetEffect()->Stop();
+			DeleteGO(effect);
 		}
 	}
 
