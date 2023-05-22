@@ -324,8 +324,9 @@ public:
 
 		// ステートを巡回状態に戻す
 		m_ActState = CRAW;
-		// 追跡フラグをfalseにする
+		// 追跡・捕獲フラグをfalseにする
 		m_TrackingPlayerFlag = false;
+		m_ChachPlayerFlag = false;
 	}
 
 	//エネミーの前方向を求める
