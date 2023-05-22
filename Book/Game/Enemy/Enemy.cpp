@@ -291,7 +291,6 @@ void Enemy::Act_SeachPlayer()
 			return;
 		}
 
-		m_NaviTimer = 0.0f;
 		// 追跡フラグをtrueにする
 		m_TrackingPlayerFlag = true;
 		// エフェクトを生成
@@ -877,6 +876,7 @@ void Enemy::Act_Loss()
 
 	// 長さが一定のとき
 	if (diff.Length() <= CHANGING_DISTANCE) {
+		m_NaviTimer = 0.0f;
 		m_ActState = CRAW;
 	}
 }
