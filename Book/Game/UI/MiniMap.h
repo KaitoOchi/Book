@@ -26,14 +26,9 @@ public:
 	/// 永続表示する座標を設定。
 	/// </summary>
 	/// <param name="pos">座標。</param>
-	/// <param name="color">trueなら色を変更。</param>
-	void SetTreasurePos(const Vector3& pos, bool color)
+	void SetTreasurePos(const Vector3& pos)
 	{
 		m_treasurePos = pos;
-
-		if (color) {
-			m_treasureSpriteRender.SetMulColor({ 1.0f,0.0f,0.0f,1.0f });
-		}
 	}
 
 private:
