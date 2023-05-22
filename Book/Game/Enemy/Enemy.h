@@ -315,15 +315,18 @@ public:
 	/// 描画するかどうか決定する。trueのとき描画しない
 	/// </summary>
 	/// <param name="flag"></param>
-	void SetNotDrawFlag(bool flag) {
-		m_NotDrawFlag = flag;
-	}
+	void SetNotDrawFlag(bool b) {
+		m_NotDrawFlag = b;
 
-	/// <summary>
-	/// 行動パターンを戻す
-	/// </summary>
-	void SetTrueChangeDefaultFlag() {
-		m_ChangeDefaultFlag = true;
+		if (b == false) {
+			return;
+		}
+
+		// ステートを巡回状態に戻す
+		m_ActState = CRAW;
+		// 追跡・捕獲フラグをfalseにする
+		m_TrackingPlayerFlag = false;
+		m_ChachPlayerFlag = false;
 	}
 
 	//エネミーの前方向を求める
@@ -413,7 +416,6 @@ protected:
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
-	bool m_ChangeDefaultFlag = false;		// デフォルトに切り替えるかどうか
 	bool m_activeFlag = false;				//最初から動けるかそうか
 
 	/// <summary>

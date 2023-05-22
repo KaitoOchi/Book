@@ -25,7 +25,7 @@ bool LightSensor::Start()
 	m_spotLight.SetSpotLight(
 		m_number,
 		m_position,
-		Vector3(10.0f, 0.0f, 0.0f),
+		Vector3(1.5f, 0.1f, 0.0f),
 		400.0f,
 		m_direction,
 		m_angle

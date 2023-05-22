@@ -37,11 +37,11 @@ bool Wipe::Start()
 	m_wipePos = WIPE_POS_MIN;
 	m_outlinePos = OUTLINE_POS_MIN;
 
-	//スポットライトの設定
+	//ポイントライトの設定
 	m_pointLight.SetPointLight(
 		1,
 		Vector3(11500.0f, 150.0f, 1200.0f),
-		Vector3(1.5f, 0.5f, 0.5f),
+		Vector3(1.0f, 0.2f, 0.2f),
 		1500.0f
 	);
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 2;

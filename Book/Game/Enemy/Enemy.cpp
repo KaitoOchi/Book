@@ -38,15 +38,15 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 100.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 140.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
 	const float		ANGLE = 45.0f;							//��]�p�x
-	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);			//���C�g�̃J���[
+	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			//���C�g�̃J���[
 	const float		LIGHTRANGE = 600.0f;					//���C�g�̉e���͈�
 	const float		LIGHTPOSITION = 80.0f;					//���C�g�̃|�W�V����
-	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 0.0f };
+	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
 }
 
 Enemy::Enemy()
@@ -291,7 +291,6 @@ void Enemy::Act_SeachPlayer()
 			return;
 		}
 
-		m_NaviTimer = 0.0f;
 		// 追跡フラグをtrueにする
 		m_TrackingPlayerFlag = true;
 		// エフェクトを生成
@@ -560,7 +559,7 @@ void Enemy::Act_Craw()
 		return;
 	}
 	
-	// エネミーからプレイヤーへ向かうベクトル
+	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
 	// 長さが一定のとき
@@ -871,7 +870,15 @@ void Enemy::Act_Loss()
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 
-	m_ActState = CRAW;
+
+	// エネミーからパスへ向かうベクトル
+	Vector3 diff = m_point->s_position - m_position;
+
+	// 長さが一定のとき
+	if (diff.Length() <= CHANGING_DISTANCE) {
+		m_NaviTimer = 0.0f;
+		m_ActState = CRAW;
+	}
 }
 
 bool Enemy::Act_Stop(float time,int i)

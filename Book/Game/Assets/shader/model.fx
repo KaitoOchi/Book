@@ -175,9 +175,8 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 	psIn.pos = mul(mProj, psIn.pos);
 
 	//頂点法線をピクセルシェーダーにわたす
-	psIn.normal = mul(m, vsIn.normal);
-
-	//ワールド空間に変換
+	psIn.normal = normalize(mul(m, vsIn.normal));
+	//接ベクトルと従ベクトルをワールド空間に変換
 	psIn.tangent = normalize(mul(m, vsIn.tangent));
 	psIn.biNormal = normalize(mul(m, vsIn.biNormal));
 
@@ -300,6 +299,7 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 {
 	//アルベドマップを読み込む
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	albedo.a = 1.0f;
 
 	return PSMainCore(psIn, false, albedo);
 }
@@ -311,6 +311,7 @@ float4 PSMainShadow( SPSIn psIn ) : SV_Target0
 {
 	//アルベドマップを読み込む
     float4 albedo = g_albedo.Sample(g_sampler, psIn.uv);
+	albedo.a = 1.0f;
 
 	return PSMainCore(psIn, true, albedo);
 }
@@ -487,10 +488,10 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 
 		//影響力がマイナスにならないように補正をかける
 		if (affect < 0.0f) {
-			affect = 0.0f;
+			continue;
 		}
 		//影響の仕方を指数関数的にする
-		affect = pow(affect, 3.0f);
+		affect = pow(affect, 1.0f);
 
 		//影響率を乗算して反射光を弱める
 		diffSpotLight *= affect;
@@ -573,6 +574,10 @@ float3 CalcNormal(SPSIn psIn)
 	float3 newNormal = psIn.tangent * localNormal.x
 					+ psIn.biNormal * localNormal.y
 					+ psIn.normal * localNormal.z;
+
+	if(isnan(newNormal.x)){
+		newNormal = (0.0f, 0.0f, 0.0f);
+	}
 
 	newNormal = min(max(newNormal, -1.0f), 1.0f);
 
