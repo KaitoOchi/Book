@@ -16,12 +16,12 @@ namespace
 	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
 	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
 	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
-									{ 170.0f, 50.0f, 50.0f }, 
+									{ 170.0f, 50.0f, 30.0f }, 
 									{ 100.0f, 50.0f, 50.0f },
 									{ 220.0f, 5.0f, 0.0f },
 									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
 	const Vector3 CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
-									{ 0.0f, 50.0f, 50.0f },
+									{ 0.0f, 50.0f, 30.0f },
 									{ 0.0f, 50.0f, 0.0f },
 									{ 200.0f, 5.0f, 0.0f },
 									{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点

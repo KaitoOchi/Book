@@ -86,7 +86,7 @@ Game::~Game()
 		DeleteGO(m_wallList[i]);
 	}
 	//�E�A�E�C�E�e�E��E�
-	DeleteGO(m_treaSure);
+	DeleteGO(m_treasure);
 	
 
 	for (int i = 0; i < m_SecurityCameraList.size(); i++)
@@ -135,13 +135,19 @@ bool Game::Start()
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 
 	NewGO<Enemy_Increase>(0, "enemyIncrease");
-	LevelDesign();
+
 	//お宝を作成する
-	m_treaSure = NewGO<Treasure>(0, "treaSure");
-
-
+	m_treasure = NewGO<Treasure>(0, "treaSure");
 	m_miniMap = NewGO<MiniMap>(0, "miniMap");
-	//�E�t�E�F�E�[�E�h�E�̏��E��E�
+
+	LevelDesign();
+
+	//お宝の座標をランダムで決める
+	m_treasure->SetTreasurePosition();
+	//決めた座標をミニマップに反映
+	m_miniMap->SetTreasurePos(m_treasure->GetPosition(), false);
+
+	//フェードイン処理
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 
@@ -464,7 +470,7 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"otakara") == true) {
 
-			m_treasurePositions.push_back(objData.position);
+			m_treasure->SetTreasureList(objData.position);
 			
 			return true;
 		}
@@ -577,7 +583,7 @@ void Game::NotDraw_Enemy(bool flag)
 	// 描画するかどうか決定する
 	for (int i = 0; i < m_enemyList.size(); i++) {
 		m_enemyList[i]->SetNotDrawFlag(flag);
-		m_enemyList[i]->SetTrueChangeDefaultFlag();
+
 		for (int j = 0; j < m_enemyFirstPositions.size(); j++) {
 			// 座標を教える
 			m_enemyList[i]->SetPosition(m_enemyFirstPositions[i]);
@@ -627,7 +633,7 @@ void Game::NotifyEventEnd()
 	m_player3D->Activate();
 
 	//ミニマップに脱出口を表示
-	m_miniMap->SetTreasurePos(m_clearPos);
+	m_miniMap->SetTreasurePos(m_clearPos, true);
 
 	m_fade->StartFadeIn();
 	NotifyGameClearable();

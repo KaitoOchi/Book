@@ -130,9 +130,6 @@
     <ClCompile Include="Item\SoundBom.cpp">
       <Filter>Item</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Gage.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI\CountDown.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -158,6 +155,10 @@
     <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
     <ClCompile Include="Scene\Game.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Enemy_Increase.cpp" />
+    <ClCompile Include="UI\Gage.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +258,6 @@
     <ClInclude Include="Item\SoundBom.h">
       <Filter>Item</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Gage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="UI\CountDown.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -286,5 +284,9 @@
       <Filter>Stage\Wall</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Wall\Wall_Duct.h" />
+    <ClInclude Include="Enemy\Enemy_Increase.h" />
+    <ClInclude Include="UI\Gage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
