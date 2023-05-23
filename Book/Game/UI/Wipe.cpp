@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Wipe.h"
+#include "Gage.h"
 
 #include "BackGround.h"
 #include "Stage/Wall/Wall.h"

@@ -1,8 +1,9 @@
 #pragma once
 class Game;
 class Enemy;
+class Fade;
 #include "Wipe.h"
-
+class Enemy_Increase;
 class Gage:public IGameObject
 {
 public:
@@ -13,25 +14,26 @@ public:
 	void Render(RenderContext& rc);
 
 	/// <summary>
-	/// Œx‰ú“x‚ğã‚°‚é
+	/// ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ã‚°ï¿½ï¿½
 	/// </summary>
-	/// <param name="GageUp">Œx‰ú“x‚ğ‘‚â‚·—Ê</param>
+	/// <param name="GageUp">ï¿½xï¿½ï¿½ï¿½xï¿½ğ‘‚â‚·ï¿½ï¿½</param>
 	void GageUp(const int GageUp, const bool isEnemy);
 
 	/// <summary>
-	/// ƒƒCƒv‚ÌI—¹ˆ—B
+	/// ãƒ¯ã‚¤ãƒ—ã®çµ‚äº†å‡¦ç†ã€‚
 	/// </summary>
 	void SetWipeEnd()
 	{
 		m_wipe->WipeEnd();
+		m_leverState = m_enLever_MAX;
 	}
 
 	enum EnLeverState
 	{
-		m_enLever_1,		//Œx‰ú“xƒŒƒxƒ‹‚P
-		m_enLever_2,		//Œx‰ú“xƒŒƒxƒ‹‚Q
-		m_enLever_3,		//Œx‰ú“xƒŒƒxƒ‹‚R
-		m_enLever_MAX,		//Œx‰ú“xƒŒƒxƒ‹MAX
+		m_enLever_1,		//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½P
+		m_enLever_2,		//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Q
+		m_enLever_3,		//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½R
+		m_enLever_MAX,		//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½MAX
 	};
 
 	EnLeverState m_leverState = m_enLever_1;
@@ -39,37 +41,40 @@ public:
 private:
 	
 	/// <summary>
-	/// Œx‰ú“x‚ğ‰º‚°‚é
+	/// ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	/// </summary>
 	void GageDown();
 
 	/// <summary>
-	/// Œx‰ú“xƒŒƒxƒ‹‚ğØ‚è‘Ö‚¦‚é
+	/// ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½Ø‚ï¿½Ö‚ï¿½ï¿½ï¿½
 	/// </summary>
 	void VigilaceLeverChange();
 	
 	void Gage_ColorChange(); 
 
 	/// <summary>
-	/// Œx‰ú“x‚ªMAX‚Ì‚Ìˆ—
+	/// ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½MAXï¿½Ìï¿½ï¿½Ìï¿½ï¿½ï¿½
 	/// </summary>
 	void Gage_MAX();
 
 	EnLeverState m_GetState = m_leverState;
 
-	std::array<SpriteRender,4>m_LeverUPRender;					//Œx‰ú“xƒŒƒxƒ‹‰æ‘œ
-	SpriteRender m_baseRender;									//‰º‚É’u‚­‰æ‘œ
-	std::array<SpriteRender,10>m_vigilanceRender;				//Œx‰ú“x‰æ‘œ
-	bool m_isFind = false;										//”­Œ©‚³‚ê‚½‚©‚Ç‚¤‚©
-	int m_vigilanceGage = 0;									//Œx‰ú“xƒQ[ƒW—Ê
-	float m_vigilanceTime = 2.0f;								//Œx‰ú“x‚É“ü‚éƒN[ƒ‹ƒ^ƒCƒ€
+	std::array<SpriteRender,4>m_LeverUPRender;					//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½æ‘œ
+	SpriteRender m_baseRender;									//ï¿½ï¿½ï¿½É’uï¿½ï¿½ï¿½æ‘œ
+	std::array<SpriteRender,10>m_vigilanceRender;				//ï¿½xï¿½ï¿½ï¿½xï¿½æ‘œ
+	bool m_isFind = false;										//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½
+	bool m_MaxEnd=true;
+	int m_vigilanceGage = 0;									//ï¿½xï¿½ï¿½ï¿½xï¿½Qï¿½[ï¿½Wï¿½ï¿½
+	float m_vigilanceTime = 2.0f;								//ï¿½xï¿½ï¿½ï¿½xï¿½É“ï¿½ï¿½ï¿½Nï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½
 
-	float m_Color=0.7f;											//Œx‰ú“xƒJƒ‰[						
+	float m_Color=0.7f;											//ï¿½xï¿½ï¿½ï¿½xï¿½Jï¿½ï¿½ï¿½[						
 
 	float m_HitTime = 5.0f;
-	float m_vigilaceDownTime = 2.0f;							//Œx‰ú“x‚ğ‰º‚°‚éƒN[ƒ‹ƒ^ƒCƒ€
+	float m_vigilaceDownTime = 2.0f;							//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½
 
 	Game* m_game = nullptr;
 	Wipe* m_wipe = nullptr;
+	Fade* m_fade = nullptr;
+	Enemy_Increase* m_enemy_Increase = nullptr;					//ã‚¨ãƒãƒŸãƒ¼ã®å¢—åŠ 
 };
 

@@ -373,10 +373,5 @@ void Player3D::ProcessGameOverStateTransition()
 }
 void Player3D::Render(RenderContext& rc)
 {
-	if (m_stamina!=PLAYERSTAMINA)
-	{
-		m_staminaBaseRender.Draw(rc);
-		m_staminaGageRender.Draw(rc);
-	}
 	m_modelRender->Draw(rc);
 }

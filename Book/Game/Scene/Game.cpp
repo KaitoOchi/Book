@@ -79,6 +79,8 @@ Game::~Game()
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+
+	DeleteGO(FindGO<Enemy_Increase>("enemyIncrease"));
 	//壁や床の削除
 	DeleteGO(m_backGround);
 	for (int i = 0; i < m_wallList.size(); i++)
@@ -532,7 +534,7 @@ void Game::Update()
 				NotDraw_Enemy(true);
 
 				m_gameUI->Deactivate();
-				m_gage->SetWipeEnd();
+				
 				m_gage->Deactivate();
 				m_gamecamera->Deactivate();
 				m_miniMap->Deactivate();
@@ -656,8 +658,8 @@ void Game::NotifyEventEnd()
 
 	//フェードインを開始
 	m_fade->StartFadeIn();
-
 	NotifyGameClearable();
+	m_gage->m_leverState = m_gage->m_enLever_MAX;
 }
 
 

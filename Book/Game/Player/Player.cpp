@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Treasure.h"
 #include "GameCamera.h"
+#include "GameUI.h"
 #include "Stage/Wall/Wall.h"
 namespace
 {
@@ -37,22 +38,15 @@ bool Player::Start()
 
 	
 	m_stamina = PLAYERSTAMINA;
+	
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_game = FindGO<Game>("game");
 	//お宝の呼び出し
 	m_treasure = FindGO<Treasure>("treaSure");
-
-	//スタミナゲージのベース画像の設定
-	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/base.DDS", 18.0f, 166.0f);
-	m_staminaBaseRender.Update();
-
-	//スタミナゲージ画像の設定
-	m_staminaGageRender.Init("Assets/sprite/UI/stamina/staminagage.DDS", 10.0f, 118.0f);
-	m_staminaGageRender.SetPivot(Vector2(0.5, 0.0));
-	m_staminaGageRender.SetScale(m_stamianGageScale);
-	m_staminaGageRender.Update();
+	m_gameUI = FindGO<GameUI>("gameUI");
+	m_gameUI->StaminaGage(m_stamina,m_position);
 	//クールタイムを初期化
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 
@@ -141,7 +135,7 @@ void Player::Update()
 	PlayerCatch();
 	Animation();
 	ManageState();
-	StaminaGage(m_stamina);
+	m_gameUI->StaminaGage(m_stamina,m_position);
 	for (int i=0; i < m_game->GetWallList().size(); i++)
 	{
 		m_game->GetWallList()[i]->SetWallRenderPosition(m_position);
@@ -457,20 +451,6 @@ void Player::ManageState()
 
 void Player::Animation()
 {
-}
-
-void Player::StaminaGage(float stamina)
-{
-	m_stamianGageScale.y *=  stamina/10;
-
-	Vector3 position = m_position;
-	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
-	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_BASE_POSITION, 0.0f));
-	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f));
-	m_staminaGageRender.SetScale(Vector3(1.0f , stamina / 10, 1.0f));
-	m_staminaBaseRender.Update();
-	m_staminaGageRender.Update();
 }
 
 void Player::Render(RenderContext& rc)

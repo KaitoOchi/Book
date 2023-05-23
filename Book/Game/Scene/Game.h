@@ -73,7 +73,7 @@ public:
 	/// 敵リストの取得。
 	/// </summary>
 	/// <returns></returns>
-	std::vector<Enemy*> GetEnemyList()
+	inline std::vector<Enemy*> GetEnemyList()
 	{
 		return m_enemyList;
 	}

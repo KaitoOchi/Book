@@ -311,6 +311,11 @@ public:
 		m_spotNum = num;
 	}
 
+	const int GetSpotLigNum()
+	{
+		return m_spotNum;
+	}
+
 	/// <summary>
 	/// •`‰æ‚·‚é‚©‚Ç‚¤‚©Œˆ’è‚·‚éBtrue‚Ì‚Æ‚«•`‰æ‚µ‚È‚¢
 	/// </summary>
@@ -346,7 +351,7 @@ public:
 		m_activeFlag = active;
 	}
 
-	const bool GetActiveFlag()
+	inline bool GetActiveFlag()
 	{
 		return m_activeFlag;
 	}
@@ -360,6 +365,11 @@ public:
 	CharacterController& GetCharCon()
 	{
 		return m_characterController;
+	}
+
+	const int GetNumber()
+	{
+		return m_spotNum;
 	}
 
 	//--------------------------------------------

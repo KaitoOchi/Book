@@ -19,6 +19,9 @@ namespace
 	const Vector3	SOUND_FONT_POSITION = { 745.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
 	const float		FLASH_SCALE_MAX = 1.3f;								//閃光弾UIの最大のスケール
 	const float		SOUND_SCALE_MAX = 1.3f;								//音爆弾UIの最大のスケール
+	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
+	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
+	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
 
 
 }
@@ -71,6 +74,21 @@ bool GameUI::Start()
 	m_itemSoundRender.Init("Assets/sprite/UI/ItemSlot/soundbom.DDS", 69, 69);
 	m_itemSoundRender.SetPosition(ITEM_SOUND_POSITION);
 	m_itemSoundRender.Update();
+
+
+	//スタミナゲージのベース画像の設定
+	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/base.DDS", 18.0f, 166.0f);
+	
+
+	//スタミナゲージ画像の設定
+	m_staminaGageRender.Init("Assets/sprite/UI/stamina/staminagage.DDS", 10.0f, 118.0f);
+	m_staminaGageRender.SetPivot(Vector2(0.5, 0.0));
+	m_staminaGageRender.SetScale(m_stamianGageScale);
+
+	
+	m_staminaBaseRender.Update();
+	m_staminaGageRender.Update();
+
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -277,6 +295,20 @@ void GameUI::ItemScaleUp()
 	}
 }
 
+void GameUI::StaminaGage(float stamina,Vector3 pos)
+{
+	m_stamianGageScale.y *= stamina / 10;
+
+	Vector3 position = pos;
+	//ワールド座標からスクリーン座標を計算
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
+	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_BASE_POSITION, 0.0f));
+	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f));
+	m_staminaPosition.Set(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f);
+	m_staminaGageRender.SetScale(Vector3(1.0f, stamina / 10, 1.0f));
+	m_staminaBaseRender.Update();
+	m_staminaGageRender.Update();
+}
 
 void GameUI::Render(RenderContext& rc)
 {
@@ -290,4 +322,10 @@ void GameUI::Render(RenderContext& rc)
 	m_itemSoundRender.Draw(rc);
 	m_itemFlashNumber.Draw(rc);
 	m_itemSoundNumber.Draw(rc);
+	if (m_playerManagement->GetStamina() != 10.0f)
+	{
+		m_staminaBaseRender.Draw(rc);
+		m_staminaGageRender.Draw(rc);
+	}
+	
 }

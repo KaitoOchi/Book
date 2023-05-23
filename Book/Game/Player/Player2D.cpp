@@ -35,7 +35,7 @@ bool Player2D::Start()
 	m_changeAnimation[enAnimationClip_Change].Load("Assets/animData/player_2D/player2D_change.tka");
 	m_changeAnimation[enAnimationClip_Change].SetLoopFlag(false);
 
-	Player::Start();
+	
 	m_characon = new CharacterController;
 	m_modelRender = new ModelRender;
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
@@ -50,6 +50,9 @@ bool Player2D::Start()
 	m_characon->Init(BOXSIZE, m_position);
 	delete(m_characon);
 	m_characon = nullptr;
+
+	Player::Start();
+
 	Deactivate();
 
 	return true;
@@ -61,34 +64,16 @@ void Player2D::Update()
 	angle = atan2(-m_moveSpeed.z, -m_moveSpeed.x);
 
 	Player::Update();
-	Rotation2D();
 	if (GetCharacon() == nullptr)
 	{
 		return;
 	}
-
-	
 	m_characon->SetPosition(m_position);
 	m_characon->SetRotaition(m_rotation);
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();	
-}
-void Player2D::Rotation2D()
-{
-	if (m_Lstic.y > 0.0f&&
-		m_Lstic.x<0.5f&&
-		m_Lstic.x>-0.5f)
-	{
-		m_rot.AddRotationY(90.0f);
-	}
-	if (m_Lstic.y < 0.0f &&
-		m_Lstic.x<0.5f &&
-		m_Lstic.x>-0.5f)
-	{
-		m_rot.AddRotationY(-90.0f);
-	}
 }
 void Player2D::PlayerChang()
 {
@@ -152,6 +137,7 @@ void Player2D::Animation()
 	
 		break;
 	case Player::m_enPlayer_Change:
+		m_modelRender->PlayAnimation(enAnimationClip_Change, 0.0f);
 		break;
 	case Player::m_enPlayer_2DChanging:
 		break;
@@ -189,16 +175,11 @@ void Player2D::ProcessRunStateTransition()
 }
 void Player2D::ProcessJumpStateTransition()
 {
-	if (m_modelRender->IsPlayingAniamtion() == false)
-	{
-		m_playerState = m_enPlayer_Jumpend;
-
-	}
+	m_playerState = m_enPlayer_Jumpend;
 }
 void Player2D::ProcessJumpendStateTransition()
 {
-
-	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
+	if (m_characon->IsOnGround())
 	{
 		//ステートを遷移する。
 		ProcessCommonStateTransition();
@@ -207,9 +188,13 @@ void Player2D::ProcessJumpendStateTransition()
 }
 void Player2D::ProcessChangeStateTransition()
 {
-
-	//ステートを遷移する。
-	ProcessCommonStateTransition();
+	if (m_modelRender->IsPlayingAniamtion() == false)
+	{
+		//ステートを遷移する。
+		ProcessCommonStateTransition();
+		m_modelRender->PlayAnimation(enAnimationClip_Idle, 0.0f);
+		m_modelRender->Update();
+	}
 }
 void Player2D::ProcessFoundStateTransition()
 {
@@ -231,8 +216,6 @@ void Player2D::ProcessCaughtStateTransition()
 
 }
 
-
-
 void Player2D::ProcessClearStateTransition()
 {
 	//ステートを遷移する。
@@ -247,11 +230,7 @@ void Player2D::ProcessGameOverStateTransition()
 
 void Player2D::Render(RenderContext& rc)
 {
-	if (m_stamina != PLAYERSTAMINA)
-	{
-		m_staminaBaseRender.Draw(rc);
-		m_staminaGageRender.Draw(rc);
-	}
+	
 	m_modelRender->Draw(rc);
 }
 
