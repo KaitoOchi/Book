@@ -175,7 +175,6 @@ void Gage::VigilaceLeverChange()
 			m_leverState = m_enLever_2;
 			m_vigilanceGage = 0;
 			m_wipe->Reset();
-			m_enemy_Increase->Enemy_Open();
 			break;
 		case Gage::m_enLever_2:
 			m_leverState = m_enLever_3;

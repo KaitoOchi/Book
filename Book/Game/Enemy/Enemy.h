@@ -351,7 +351,7 @@ public:
 		m_activeFlag = active;
 	}
 
-	const bool GetActiveFlag()
+	inline bool GetActiveFlag()
 	{
 		return m_activeFlag;
 	}

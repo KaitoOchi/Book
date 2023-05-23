@@ -79,6 +79,8 @@ Game::~Game()
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+
+	DeleteGO(FindGO<Enemy_Increase>("enemyIncrease"));
 	//壁や床の削除
 	DeleteGO(m_backGround);
 	for (int i = 0; i < m_wallList.size(); i++)
