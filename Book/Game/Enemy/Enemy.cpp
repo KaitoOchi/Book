@@ -21,7 +21,7 @@ namespace
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
-	const float		CALL_DISTANCE_MIN = 150.0f;				// 呼ぶことができる最小値
+	const float		CALL_DISTANCE_MIN = 180.0f;				// 呼ぶことができる最小値
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
@@ -802,10 +802,22 @@ void Enemy::Act_Charge_HitWall()
 
 void Enemy::Act_Call()
 {
-	// 周りの敵を呼ぶ処理
+	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
+	if (m_TrackingPlayerFlag == false) {
+		// フラグを降ろす
+		m_efectDrawFlag[1] = false;
+		m_ActState = MISSING_SEARCHPLAYER;
+
+		return;
+	}
 
 	// エネミーのリストを検索
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
+
+		// 混乱中だったときはそれ以降は実行しない
+		if (m_game->GetEnemyList()[i]->m_ActState == CONFUSION) {
+			return;
+		}
 
 		// 各エネミーから該当エネミーへ向かうベクトル
 		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
@@ -824,13 +836,6 @@ void Enemy::Act_Call()
 			// 移動速度を加算
 			m_game->GetEnemyList()[i]->m_position += diff * MOVE_SPEED;
 		}
-	}
-
-	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
-	if (m_TrackingPlayerFlag == false) {
-		// フラグを降ろす
-		m_efectDrawFlag[1] = false;
-		m_ActState = MISSING_SEARCHPLAYER;
 	}
 
 	m_enAnimationState = IDLE;
@@ -896,30 +901,14 @@ bool Enemy::Act_Stop(float time,int i)
 
 void Enemy::SpotLight_New(Vector3 position, int num)
 {
-	if (m_activeFlag == false)
-	{
-		m_spotLight.SetSpotLight(
-			num,
-			position,
-			LIGHTCOLOR,
-			LIGHTRANGE,
-			LIGHT_DIRECTION,
-			ANGLE
-		);
-	}
-	else
-	{
-		m_spotLight.SetSpotLight(
-			num,
-			position,
-			Vector3::Zero,
-			LIGHTRANGE,
-			LIGHT_DIRECTION,
-			ANGLE
-		);
-	}
-
-	
+	m_spotLight.SetSpotLight(
+		num,
+		position,
+		LIGHTCOLOR,
+		LIGHTRANGE,
+		LIGHT_DIRECTION,
+		ANGLE
+	);
 }
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
