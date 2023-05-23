@@ -75,57 +75,44 @@ void Title_Guide::Update()
 void Title_Guide::Input()
 {
 	//右ボタンが押されたら
-	if (g_pad[0]->IsTrigger(enButtonRight))
-	{
+	if (g_pad[0]->IsTrigger(enButtonRight)) {
 		m_cursor++;
-		m_isWaitState = true;
-		//可能ならSEを再生
-		m_title->IsCanPlaySound(true);
-
-		if (m_cursor == 1) {
-			m_timer = 1.0f;
-		}
-		else {
-			m_timer = 0.0f;
-		}
-
-		if (m_cursor > 1) {
-			m_cursor = 0;
-		}
-
+		KeyPush();
 	}
 	//左ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonLeft)) {
 		m_cursor--;
-		m_isWaitState = true;
-		//可能ならSEを再生
-		m_title->IsCanPlaySound(true);
-
-		if (m_cursor == 1) {
-			m_timer = 1.0f;
-		}
-		else {
-			m_timer = 0.0f;
-		}
-
-		if (m_cursor < 0) {
-			m_cursor = 1;
-		}
+		m_guide_reverse = true;
+		KeyPush();
 	}
 	//Bボタンが押されたら
-	else if (g_pad[0]->IsTrigger(enButtonB))
-	{
+	else if (g_pad[0]->IsTrigger(enButtonB)) {
 		m_isSceneChange = true;
-		m_timer = 1.0f;
-		m_isWaitState = true;
-		//可能ならSEを再生
-		m_title->IsCanPlaySound(false);
+		KeyPush();
 	}
+}
+
+void Title_Guide::KeyPush()
+{
+	//0～1の範囲に収める
+	if (m_cursor > 1) {
+		m_cursor = 0;
+	}
+	else if (m_cursor < 0) {
+		m_cursor = 1;
+	}
+
+	m_timer = 1.0f;
+
+	//ウェイト状態にする
+	m_isWaitState = true;
+
+	//可能ならSEを再生
+	m_title->IsCanPlaySound(true);
 }
 
 void Title_Guide::StateChange()
 {
-
 	if (m_isWaitFadeOut) {
 		//フェードし終えたら
 		if (!m_fade->IsFade()) {
@@ -145,16 +132,14 @@ void Title_Guide::StateChange()
 			}
 			else {
 				m_isWaitState = false;
-				m_timer = 0.0f;
+				m_timer = min(max(m_timer, 0.0f), 1.0f);
 			}
+			m_isForward = false;
+			m_guide_reverse = false;
 		}
 		else {
-			if (m_isSceneChange || m_cursor == 1) {
-				m_timer -= g_gameTime->GetFrameDeltaTime();
-			}
-			else {
-				m_timer += g_gameTime->GetFrameDeltaTime();
-			}
+
+			m_timer -= g_gameTime->GetFrameDeltaTime();
 		}
 	}
 
@@ -178,26 +163,52 @@ void Title_Guide::Animation()
 	m_bezierPos[1].Lerp(m_timer, BEZIER_POS[1], BEZIER_POS[2]);
 	m_bezierPos[2].Lerp(m_timer, BEZIER_POS[2], BEZIER_POS[3]);
 	m_bezierPos[3].Lerp(m_timer, BEZIER_POS[3], BEZIER_POS[0]);
+
+	m_bezierPos[4].Lerp(m_timer, BEZIER_POS[2], BEZIER_POS[1]);
+	m_bezierPos[5].Lerp(m_timer, BEZIER_POS[1], BEZIER_POS[0]);
+	m_bezierPos[6].Lerp(m_timer, BEZIER_POS[0], BEZIER_POS[3]);
+	m_bezierPos[7].Lerp(m_timer, BEZIER_POS[3], BEZIER_POS[2]);
+
 	m_guidePos[0].Lerp(m_timer, m_bezierPos[0], m_bezierPos[1]);
 	m_guidePos[1].Lerp(m_timer, m_bezierPos[2], m_bezierPos[3]);
-
+	m_guidePos[2].Lerp(m_timer, m_bezierPos[4], m_bezierPos[5]);
+	m_guidePos[3].Lerp(m_timer, m_bezierPos[6], m_bezierPos[7]);
 
 	if (m_cursor == 1) {
-		m_guideSpriteRender[0].SetPosition(m_guidePos[0]);
-		m_guideSpriteRender[0].Update();
-		m_guideSpriteRender[1].SetPosition(m_guidePos[1]);
-		m_guideSpriteRender[1].Update();
+		if (m_guide_reverse) {
+			m_guideSpriteRender[0].SetPosition(m_guidePos[3]);
+			m_guideSpriteRender[0].Update();
+			m_guideSpriteRender[1].SetPosition(m_guidePos[2]);
+			m_guideSpriteRender[1].Update();
+		}
+		else {
+			m_guideSpriteRender[0].SetPosition(m_guidePos[0]);
+			m_guideSpriteRender[0].Update();
+			m_guideSpriteRender[1].SetPosition(m_guidePos[1]);
+			m_guideSpriteRender[1].Update();
+		}
 	}
 	else {
-		m_guideSpriteRender[0].SetPosition(m_guidePos[1]);
-		m_guideSpriteRender[0].Update();
-		m_guideSpriteRender[1].SetPosition(m_guidePos[0]);
-		m_guideSpriteRender[1].Update();
+		if (m_guide_reverse) {
+			m_guideSpriteRender[0].SetPosition(m_guidePos[2]);
+			m_guideSpriteRender[0].Update();
+			m_guideSpriteRender[1].SetPosition(m_guidePos[3]);
+			m_guideSpriteRender[1].Update();
+		}
+		else {
+			m_guideSpriteRender[0].SetPosition(m_guidePos[1]);
+			m_guideSpriteRender[0].Update();
+			m_guideSpriteRender[1].SetPosition(m_guidePos[0]);
+			m_guideSpriteRender[1].Update();
+		}
 	}
 
-	//画像の全面を反転させる
-	if (m_timer < 0.5f && m_timer > 0.48f) {
-		m_forward = !m_forward;
+	if (!m_isForward) {
+		//画像の全面を反転させる
+		if (m_timer < 0.5f && m_timer > 0.4f) {
+			m_forward = !m_forward;
+			m_isForward = true;
+		}
 	}
 }
 
