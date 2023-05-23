@@ -19,7 +19,7 @@ namespace nsBookEngine {
 	void RenderingEngine::Init()
 	{
 		//ディレクショナルライトの設定
-		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.1f, 0.1f, 0.1f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
 		//環境光の設定
 		SetAmbient(0.1f);

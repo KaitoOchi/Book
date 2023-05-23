@@ -62,7 +62,6 @@ bool MiniMap::Start()
 
 	// ‚¨•ó‰æ‘œ‚Ìİ’è
 	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 32.0f, 32.0f);
-	m_treasureSpriteRender.SetMulColor({ 1.0f,0.0f,0.0f,1.0f });
 
 	return true;
 }
