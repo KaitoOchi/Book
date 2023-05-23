@@ -6,7 +6,7 @@
 #include "GameUI.h"
 namespace
 {
-	const float SOUNDRANGE = 30.0f;
+	const float SOUNDRANGE = 500.0f;
 	const float EFFECTSIZE = 2.0f;
 }
 SoundBom::SoundBom()
