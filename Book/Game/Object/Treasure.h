@@ -2,7 +2,7 @@
 #include "Object.h"
 #include <random>
 class Gage;
-
+class GameUI;
 class Treasure :public Object 
 {
 public:
@@ -38,6 +38,7 @@ public:
 
 private:
 	Gage*					m_gage = nullptr;
+	GameUI*					m_gameUI = nullptr;
 	std::vector< Vector3 >	m_treasurePositions;
 	float					m_gaugeCount = 0;
 	

@@ -41,9 +41,24 @@ public:
 	}
 
 	/// <summary>
-/// スタミナゲージの変更
-/// </summary>
+	/// スタミナゲージの変更
+	/// </summary>
 	void StaminaGage(float stamina, Vector3 pos);
+
+
+	/// <summary>
+	/// 円形ゲージを増やせるかどうか
+	/// </summary>
+	/// <param name="state"></param>
+	void SetCircleState(bool state)
+	{
+		m_circleState = state;
+	}
+
+	const bool GetCircleMAXState()
+	{
+		return m_circleMaxState;
+	}
 
 private:
 	/// <summary>
@@ -67,6 +82,11 @@ private:
 	void ItemSlot();
 
 	void ItemScaleUp();
+
+	/// <summary>
+	/// 円形ゲージの変更
+	/// </summary>
+	void CircleChange();
 
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
@@ -107,6 +127,12 @@ private:
 	Vector2				m_spritePosition = Vector2::Zero;
 	Vector3				m_stamianGageScale = Vector3::One;
 	Vector3				m_staminaPosition = Vector3::Zero;
-	
+
+	SpriteRender		m_circleBaseSpriteRender;			//円形ゲージのベース画像
+	SpriteRender		m_circleSpriteRender;				//円形ゲージのゲージ画像
+
+	float				m_degree=0.0f;						//ゲージの角度
+	bool				m_circleState = false;				//trueなら増加falseなら減少
+	bool				m_circleMaxState = false;			//MAXかどうか
 };
 
