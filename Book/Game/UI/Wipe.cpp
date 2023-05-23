@@ -53,7 +53,7 @@ bool Wipe::Start()
 	m_outlineSpriteRender.Update();
 
 	//Œx‰æ‘œ
-	m_warningSpriteRender.Init("Assets/sprite/UI/gauge/image_test.DDS", 414.0f, 121.0f);
+	m_warningSpriteRender.Init("Assets/sprite/UI/gauge/image_werning.DDS", 414.0f, 121.0f);
 	m_warningSpriteRender.SetPosition(Vector3(-675.0f, -125.0f, 0.0f));
 	m_warningSpriteRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_warningSpriteRender.Update();
