@@ -4,7 +4,9 @@
 #include "Game.h"
 #include "Enemy.h"
 #include "Wipe.h"
+#include "Fade.h"
 #include "GameManager.h"
+#include "Enemy_Increase.h"
 
 namespace
 {
@@ -35,6 +37,10 @@ bool Gage::Start()
 	m_game = FindGO<Game>("game");
 
 	m_wipe = NewGO<Wipe>(0, "wipe");
+
+	m_fade = FindGO<Fade>("fade");
+
+	m_enemy_Increase = FindGO<Enemy_Increase>("enemyIncrease");
 
 	//基盤の更新
 	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
@@ -67,9 +73,14 @@ bool Gage::Start()
 
 void Gage::Update()
 {
+
+	if (m_leverState == m_enLever_MAX)
+	{
+		Gage_MAX();
+	}
 	//警戒度のクールタイムを計算
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
-	if (m_vigilanceGage != 0) {
+	if (m_vigilanceGage != 0&& m_leverState != m_enLever_MAX) {
 		GageDown();
 	}
 
@@ -79,10 +90,7 @@ void Gage::Update()
 		Gage_ColorChange();
 		m_GetState = m_leverState;
 	}
-	if (m_leverState == m_enLever_MAX)
-	{
-		Gage_MAX();
-	}
+
 
 }
 
@@ -172,11 +180,14 @@ void Gage::VigilaceLeverChange()
 			m_leverState = m_enLever_3;
 			m_vigilanceGage = 0;
 			m_wipe->Reset();
+			m_enemy_Increase->Enemy_Open();
 			break;
 		case Gage::m_enLever_3:
 			m_vigilanceGage = 10;
+			m_enemy_Increase->Enemy_Open();
 			break;
-		default:
+		case Gage::m_enLever_MAX:
+			
 			break;
 		}
 	}
@@ -221,6 +232,10 @@ void Gage::Gage_ColorChange()
 
 void Gage::Gage_MAX()
 {
+	if (!m_MaxEnd)
+	{
+		return;
+	}
 	m_vigilanceGage = 10;
 	for (int i = 0; i < MAXGAGECOUNT; i++)
 	{
@@ -229,6 +244,13 @@ void Gage::Gage_MAX()
 		m_vigilanceRender[i].SetMulColor(Vector4(m_Color, 0.0f, 0.0f, 1.0f));
 		m_vigilanceRender[i].Update();
 	}
+	if (m_fade->IsFade() == false)
+	{
+		m_wipe->Reset();
+		m_enemy_Increase->Enemy_Open();
+		m_MaxEnd = false;
+	}
+	
 }
 
 

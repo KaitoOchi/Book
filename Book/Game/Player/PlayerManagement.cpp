@@ -157,12 +157,13 @@ void PlayerManagement::SetChange(EnManagementState manaState)
 
 void PlayerManagement::PlayerChange2D()
 {
-	m_player2D->Activate();//�v���C���[2D��A�N�e�B�u�ɂ���
-	m_player2D->SetPosition(m_player3D->GetPosition());//2D��3D�̃|�W�V������^����
+	m_player2D->Activate();//アクティブにする
+	m_player2D->SetPosition(m_player3D->GetPosition());
 	m_player2D->SetStamina(m_player3D->GetStamina());
 	m_player2D->SetRunState(m_player3D->GetRunState());
-	m_player2D->ModelRenderUpdate();//���f����X�V����
-	m_player3D->PlayerChang();//�v���C���[3D��f�B�A�N�e�B�u�ɂ���
+	m_player2D->SetPlayerState(Player::m_enPlayer_Change);
+	m_player2D->ModelRenderUpdate();//モデルの更新
+	m_player3D->PlayerChang();//3Dプレイヤーをディアクティブにする
 	m_player2D->CreatCharcon();//�L�����R���𐶐�����
 	SetCharacon(m_player2D->GetCharacon());//�L�����R���̏��𓾂�
 	//�v���C���[��2D�ɂ���

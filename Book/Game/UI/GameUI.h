@@ -40,8 +40,10 @@ public:
 		m_soundNumber = sound;
 	}
 
-	
-
+	/// <summary>
+/// スタミナゲージの変更
+/// </summary>
+	void StaminaGage(float stamina, Vector3 pos);
 
 private:
 	/// <summary>
@@ -98,6 +100,13 @@ private:
 
 	bool				m_falshState = true;			//閃光弾のステート
 	bool				m_soundState = false;			//音爆弾のステート
+
+
+	SpriteRender		m_staminaBaseRender;					//スタミナゲージベース画像
+	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像
+	Vector2				m_spritePosition = Vector2::Zero;
+	Vector3				m_stamianGageScale = Vector3::One;
+	Vector3				m_staminaPosition = Vector3::Zero;
 	
 };
 

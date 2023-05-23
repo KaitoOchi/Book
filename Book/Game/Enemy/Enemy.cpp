@@ -901,30 +901,14 @@ bool Enemy::Act_Stop(float time,int i)
 
 void Enemy::SpotLight_New(Vector3 position, int num)
 {
-	if (m_activeFlag == false)
-	{
-		m_spotLight.SetSpotLight(
-			num,
-			position,
-			LIGHTCOLOR,
-			LIGHTRANGE,
-			LIGHT_DIRECTION,
-			ANGLE
-		);
-	}
-	else
-	{
-		m_spotLight.SetSpotLight(
-			num,
-			position,
-			Vector3::Zero,
-			LIGHTRANGE,
-			LIGHT_DIRECTION,
-			ANGLE
-		);
-	}
-
-	
+	m_spotLight.SetSpotLight(
+		num,
+		position,
+		LIGHTCOLOR,
+		LIGHTRANGE,
+		LIGHT_DIRECTION,
+		ANGLE
+	);
 }
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)

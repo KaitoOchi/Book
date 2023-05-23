@@ -9,7 +9,6 @@
 #include "Gage.h"
 namespace
 {
-	const Vector3   LIGHTCOLOR(15.0f, 1.0f, 0.0f);				//索敵範囲のカラー
 }
 Enemy_Increase::Enemy_Increase()
 {
@@ -29,12 +28,7 @@ bool Enemy_Increase::Start()
 }
 
 void Enemy_Increase::Update()
-{
-	if (g_pad[0]->IsTrigger(enButtonLB2))
-	{
-		Enemy_Open();
-	}
-	
+{	
 }
 
 void Enemy_Increase::Enemy_Open()
@@ -66,8 +60,8 @@ void Enemy_Increase::Enemy_Open()
 			{
 				//エネミーアクティブにする
 				m_game->GetEnemyList()[i]->SetActiveFlag(false);
-				m_game->GetEnemyList()[i]->GetSpotLight().SetColor(LIGHTCOLOR);	
-				m_game->GetEnemyList()[i]->GetSpotLight().Update();
+				Vector3 move{ 0.0f, 20.0f, 0.0f };
+				m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
 				m_nearposition = FLT_MIN;
 			}
 		}

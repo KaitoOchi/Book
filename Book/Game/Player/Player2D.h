@@ -18,7 +18,6 @@ public:
 	bool Start()override;
 	void Update()override;
 	void PlayerChang();
-	void Rotation2D();
 	void Throw()override;
 	/// <summary>
 	/// キャラコンの作成の関数
@@ -93,5 +92,7 @@ private:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition()override;
+
+	
 };
 

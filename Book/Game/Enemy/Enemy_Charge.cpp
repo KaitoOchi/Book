@@ -43,8 +43,10 @@ void Enemy_Charge::Update()
 	//s“®‚Å‚«‚é‚©’²‚×‚é
 	if (m_activeFlag == true)
 	{
-		Vector3 move{0.0f,-300.0f,0.0f};
+		Vector3 move{0.0f,-3000.0f,0.0f};
 		m_characterController.Execute(move, 1.0f);
+		m_spotLight.SetPosition(move);
+		m_spotLight.Update();
 		return;
 	}
 
@@ -119,7 +121,6 @@ void Enemy_Charge::Update()
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	// ‹–ìŠp
 	Enemy::Act_SeachPlayer();
-
 	m_enemyRender.Update();
 }
 

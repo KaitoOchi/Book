@@ -56,7 +56,7 @@ void Treasure::Update()
 void Treasure::Hit()
 {
 
-	if (g_pad[0]->IsPress(enButtonB) && m_gaugeCount <=GAGESIZE)
+	if (g_pad[0]->IsPress(enButtonB) && m_gaugeCount <= GAGESIZE)
 	{
 		m_gaugeCount += g_gameTime->GetFrameDeltaTime();
 	}
@@ -69,10 +69,8 @@ void Treasure::Hit()
 
 		m_game->NotifyEventStart();
 
-		m_gage->m_leverState = m_gage->m_enLever_MAX;
-
 		m_game->SetTresurePosition(m_position);
-		
+
 		Deactivate();
 	}
 }
