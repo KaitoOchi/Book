@@ -11,6 +11,7 @@ namespace nsK2EngineLow {
 	}
 	PhysicsBoxObject::~PhysicsBoxObject()
 	{
+
 	}
 	void PhysicsBoxObject::CreateFromModel(const Model& model, const Matrix& worldMatrix, const Vector3 scale)
 	{

@@ -8,7 +8,7 @@ Wall_Normal::Wall_Normal()
 
 Wall_Normal::~Wall_Normal()
 {
-
+	
 }
 
 bool Wall_Normal::Start()

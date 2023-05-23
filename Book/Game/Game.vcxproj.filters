@@ -152,13 +152,21 @@
     <ClCompile Include="Stage\PhysicsGhost.cpp">
       <Filter>Stage\Wall</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Wall\Wall_Duct.cpp" />
     <ClCompile Include="Scene\Game.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\Enemy_Increase.cpp" />
     <ClCompile Include="UI\Gage.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Wall\Wall_Duct.cpp">
+      <Filter>Stage\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Title_Setting.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Title_Guide.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,10 +291,18 @@
     <ClInclude Include="Stage\PhysicsGhost.h">
       <Filter>Stage\Wall</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\Wall\Wall_Duct.h" />
     <ClInclude Include="Enemy\Enemy_Increase.h" />
     <ClInclude Include="UI\Gage.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Wall\Wall_Duct.h">
+      <Filter>Stage\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title_Setting.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title_Guide.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

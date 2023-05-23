@@ -3,6 +3,7 @@
 
 #include "Game.h"
 #include "Gage.h"
+#include "GameUI.h"
 
 namespace
 {
@@ -23,7 +24,7 @@ Treasure::~Treasure()
 bool Treasure::Start()
 {
 	m_gage = FindGO<Gage>("gage");
-
+	m_gameUI = FindGO<GameUI>("gameUI");
 	Object::Start();
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
@@ -49,6 +50,7 @@ bool Treasure::Start()
 
 void Treasure::Update()
 {
+	m_gameUI->SetCircleState(false);
 	Collision();
 	m_modelRender.Update();
 }
@@ -56,11 +58,11 @@ void Treasure::Update()
 void Treasure::Hit()
 {
 
-	if (g_pad[0]->IsPress(enButtonB) && m_gaugeCount <= GAGESIZE)
+	if (g_pad[0]->IsPress(enButtonB))
 	{
-		m_gaugeCount += g_gameTime->GetFrameDeltaTime();
+		m_gameUI->SetCircleState(true);
 	}
-	if (m_gaugeCount >= 1.0f)
+	if (m_gameUI->GetCircleMAXState())
 	{
 		m_player3d->m_enPlayer3D_Steal;
 		m_game->NotifyGameClearable();
