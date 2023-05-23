@@ -179,7 +179,7 @@ void Enemy::Efect_Dizzy()
 		m_soundEffect = NewGO<EffectEmitter>(2);
 		m_soundEffect->Init(2);
 		// エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * 1.5f);
+		m_soundEffect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
 		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_soundEffect->Play();

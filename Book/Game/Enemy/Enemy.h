@@ -256,28 +256,12 @@ public:
 	};
 
 	/// <summary>
-	/// ‘MŒõ’e‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©•Ô‚·
-	/// </summary>
-	/// <returns>”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</returns>
-	bool GetHitFlushBullet() {
-		return m_HitFlashBulletFlag;
-	}
-
-	/// <summary>
 	/// ‰¹”š’e‚Ì”í’eƒtƒ‰ƒO‚ğİ’è
 	/// </summary>
 	/// <param name="">”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</param>
 	void SetHearedSoundBullet(bool b) {
 		m_HearedSoundBulletFlag = b;
 	};
-
-	/// <summary>
-	/// ‰¹”š’e‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©•Ô‚·
-	/// </summary>
-	/// <returns>”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</returns>
-	bool GetHitSoundBullet() {
-		return m_HearedSoundBulletFlag;
-	}
 
 	/// <summary>
 	/// ƒAƒCƒeƒ€‚ÌÀ•W‚ğ“n‚·
