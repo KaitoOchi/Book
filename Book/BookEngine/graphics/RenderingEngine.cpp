@@ -19,7 +19,7 @@ namespace nsBookEngine {
 	void RenderingEngine::Init()
 	{
 		//ディレクショナルライトの設定
-		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
+		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.3f, 0.3f, 0.3f));
 
 		//環境光の設定
 		SetAmbient(0.1f);
@@ -120,8 +120,8 @@ namespace nsBookEngine {
 		//シャドウマップ用レンダーターゲットの初期化
 		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		m_shadowMapRenderTarget.Create(
-			8184,
-			8184,
+			5192,
+			5192,
 			1,
 			1,
 			DXGI_FORMAT_R32G32_FLOAT,
