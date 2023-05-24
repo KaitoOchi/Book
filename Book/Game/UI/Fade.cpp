@@ -6,6 +6,7 @@
 Fade::Fade()
 {
 	srand(time(0));
+	m_spriteNum = rand() % 4;
 }
 
 Fade::~Fade()

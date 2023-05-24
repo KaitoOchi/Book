@@ -1,8 +1,7 @@
 #pragma once
 #include "GameManager.h"
 #include "level2DRender/Level2DRender.h"
-
-class Fade;
+#include"Fade.h"
 
 class Title :public IGameObject
 {
@@ -13,96 +12,28 @@ public:
 	void Update();
 	void Render(RenderContext &rc);
 
-private:
-
-	/// <summary>
-	/// スプライトの初期化処理。
-	/// </summary>
-	void InitSprite();
-
-	/// <summary>
-	/// ステートの遷移中の処理。
-	/// </summary>
-	void StateChange();
-
-	/// <summary>
-	/// 入力処理。
-	/// </summary>
-	void Input();
-
-	/// <summary>
-	/// 入力による値の更新処理。
-	/// </summary>
-	void ValueUpdate(bool vertical);
-
+public:
 	/// <summary>
 	/// アニメーション処理。
 	/// </summary>
-	void Animation();
+	/// <param name="time">時間。</param>
+	void Animation(float& time, float& alpha);
 
 	/// <summary>
-	/// ステートの遷移処理。
+	/// アクティブ状態を設定。
 	/// </summary>
-	void ManageState();
-
-	/// <summary>
-	/// タイトル画面の処理。
-	/// </summary>
-	void TitleScreen();
-
-	/// <summary>
-	/// メニュー画面の処理。
-	/// </summary>
-	void MenuScreen();
-
-	/// <summary>
-	/// ゲームスタート時の処理。
-	/// </summary>
-	void StartScreen();
-
-	/// <summary>
-	/// 説明画面の処理。
-	/// </summary>
-	void HowToScreen();
-
-	/// <summary>
-	/// 設定画面の処理。
-	/// </summary>
-	void SettingScreen();
-
-	/// <summary>
-	/// ボタン画像の処理。
-	/// </summary>
-	void EnableButtonSprite();
-
-	/// <summary>
-	/// データ配列にセーブデータを入れて保存する処理。
-	/// </summary>
-	void SetDataArray()
+	void SetActive(const bool active)
 	{
-		m_saveDataArray[0] = m_saveData.bgm * 100;
-		m_saveDataArray[1] = m_saveData.sfx * 100;
+		m_active = active;
 
-		float frame = m_saveData.frameRate - 60.0f;
-		for (int i = 0; i < 2; i++) {
-			frame -= 30.0f;
-
-			if (frame < 0) {
-				m_saveDataArray[2] = i;
-				break;
-			}
+		if (active) {
+			m_fade->StartFadeIn();
+			m_titleState_tmp = 1;
+			m_titleState = 1;
+			m_cursor = 1;
+			m_animTime = -0.11f;
+			m_isWaitState = true;
 		}
-	}
-
-	/// <summary>
-	/// セーブデータにデータ配列を入れて保存する処理。
-	/// </summary>
-	void SetSaveData()
-	{
-		m_saveData.bgm = (float)m_saveDataArray[0] / 100.0f;
-		m_saveData.sfx = (float)m_saveDataArray[1] / 100.0f;
-		m_saveData.frameRate = 60 + (m_saveDataArray[2] * 30);
-		GameManager::GetInstance()->DataSave(m_saveData);
 	}
 
 	/// <summary>
@@ -132,6 +63,48 @@ private:
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 	}
 
+
+private:
+	/// <summary>
+	/// スプライトの初期化処理。
+	/// </summary>
+	void InitSprite();
+
+	/// <summary>
+	/// ステートの遷移中の処理。
+	/// </summary>
+	void StateChange();
+
+	/// <summary>
+	/// シーンの遷移処理。
+	/// </summary>
+	void SceneChange();
+
+	/// <summary>
+	/// 入力処理。
+	/// </summary>
+	void Input();
+
+	/// <summary>
+	/// 入力による値の更新処理。
+	/// </summary>
+	void ValueUpdate(bool vertical);
+
+	/// <summary>
+	/// ステートの遷移処理。
+	/// </summary>
+	void ManageState();
+
+	/// <summary>
+	/// タイトル画面の処理。
+	/// </summary>
+	void TitleScreen();
+
+	/// <summary>
+	/// メニュー画面の処理。
+	/// </summary>
+	void MenuScreen();
+
 private:
 	enum EnAnimationClip {
 		animationClip_Idle,
@@ -141,33 +114,24 @@ private:
 	AnimationClip m_animationClips[animationClip_Num];
 
 private:
-	ModelRender				m_backGroundModelRender;		//背景モデル
-	ModelRender				m_playerModelRender;			//プレイヤーモデル
-	SpriteRender			m_titleSpriteRender;			//タイトル画像
-	SpriteRender			m_pressSpriteRender;			//press画像
-	SpriteRender			m_menuSpriteRender;				//メニュー画像
-	SpriteRender			m_guideBackSpriteRender;		//遊び方背景画像
-	std::array<SpriteRender,2>m_guideSpriteRender;			//ガイド画像
-	SpriteRender			m_settingSpriteRender;			//設定画像
-	std::array<SpriteRender,2>m_gaugeSpriteRender;			//BGMのメーター
-	std::array<SpriteRender,3>m_settingTextSpriteRender;	//設定の説明画像
-	SpriteRender			m_cursorSpriteRender;			//カーソル画像
-	std::array<SpriteRender,3>m_buttonSpriteRender;			//ボタン画像
-	std::vector<SpriteRender*> m_sprites;					//SpriteRenderのベクター型
+	ModelRender						m_backGroundModelRender;		//背景モデル
+	ModelRender						m_playerModelRender;			//プレイヤーモデル
+	SpriteRender					m_titleSpriteRender;			//タイトル画像
+	SpriteRender					m_pressSpriteRender;			//press画像
+	SpriteRender					m_menuSpriteRender;				//メニュー画像
+	SpriteRender					m_cursorSpriteRender;			//カーソル画像
+	std::array< SpriteRender,2 >	m_buttonSpriteRender;			//ボタン画像
+	std::vector< SpriteRender* >	m_sprites;						//SpriteRenderのベクター型
 
-	Level2DRender*			m_level2DRender = nullptr;		//レベルレンダー
-	Fade*					m_fade = nullptr;				//フェードクラス
-	GameManager::SaveData	m_saveData;						//セーブデータの構造体
-	std::array<Vector3,3>	m_buttonSpritePos;				//ボタン画像の座標
-	bool					m_isWaitState = false;			//ステートの遷移中かどうか
-	bool					m_isWaitFadeOut = false;		//フェード状態かどうか
-	std::array<bool,3>		m_enableButtonSprite;			//ボタン画像を表示するかどうか
-	int						m_titleState = 0;				//タイトルステート
-	int						m_titleState_tmp = 0;			//タイトルステートの一時的変数
-	int						m_cursor_vertical = 0;			//縦カーソル
-	int						m_cursor_horizontal = 0;		//横カーソル
-	std::array<int,4>		m_saveDataArray;				//セーブデータの一時的な配列
-	float					m_alpha = 0.0f;					//色のアルファ値
-	float					m_timer = 0.0f;					//時間
-	float					m_animTime = 1.0f;				//アニメーション時間
+	Level2DRender*					m_level2DRender = nullptr;		//レベルレンダー
+	Fade*							m_fade = nullptr;				//フェードクラス
+	bool							m_isWaitState = false;			//ステートの遷移中かどうか
+	bool							m_isWaitFadeOut = false;		//フェード状態かどうか
+	bool							m_active = true;				//アクティブ状態
+	int								m_titleState = 0;				//タイトルステート
+	int								m_titleState_tmp = 0;			//タイトルステートの一時的変数
+	int								m_cursor = 0;			//縦カーソル
+	float							m_alpha = 0.0f;					//色のアルファ値
+	float							m_timer = 0.0f;					//時間
+	float							m_animTime = 1.0f;				//アニメーション時間
 };

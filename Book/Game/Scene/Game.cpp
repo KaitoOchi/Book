@@ -35,7 +35,6 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
-#include "Wipe.h"
 
 Game::Game()
 {
@@ -665,18 +664,22 @@ void Game::NotifyEventEnd()
 
 void Game::NotifyGameClear()
 {
-	m_isWaitFadeOut = true;
-	m_fade->SetEnableTips(true);
-	m_fade->StartFadeOut();
-	m_gameState = m_enGameState_GameClear;
+	if (!m_isWaitFadeOut) {
+		m_isWaitFadeOut = true;
+		m_fade->SetEnableTips(true);
+		m_fade->StartFadeOut();
+		m_gameState = m_enGameState_GameClear;
+	}
 }
 
 void Game::NotifyGameOver()
 {
-	m_isWaitFadeOut = true;
-	m_fade->StartFadeOut();
-	m_fade->SetEnableTips(true);
-	m_gameState = m_enGameState_GameOver;
+	if (!m_isWaitFadeOut) {
+		m_isWaitFadeOut = true;
+		m_fade->StartFadeOut();
+		m_fade->SetEnableTips(true);
+		m_gameState = m_enGameState_GameOver;
+	}
 }
 
 void Game::NotifyGameClearable()
