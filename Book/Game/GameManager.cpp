@@ -41,6 +41,8 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(15, "Assets/sound/countDown/count.wav");
 	//カウントダウン終了の音
 	g_soundEngine->ResistWaveFileBank(16, "Assets/sound/countDown/count_end.wav");
+	//Searchが周りの敵を呼ぶときの音
+	g_soundEngine->ResistWaveFileBank(17, "Assets/sound/game/whistle_sound.wav");
 
 	//タイトルBGMの設定
 	g_soundEngine->ResistWaveFileBank(20, "Assets/sound/bgm/bgm_title.wav");

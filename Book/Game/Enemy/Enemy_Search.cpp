@@ -24,6 +24,7 @@ bool Enemy_Search::Start()
 	Animation();
 
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_searchModelRender.Init("Assets/modelData/object/whistle/whistle.tkm");
 
 	Enemy::Start();
 
@@ -63,7 +64,7 @@ void Enemy_Search::Update()
 	case SEARCH:
 		Update_OnSearch();
 		break;
-	case CALL:
+	case CALLING_AROUND_ENEMY:
 		Update_OnCall();
 		break;
 	case MISSING_SEARCHPLAYER:
@@ -94,7 +95,7 @@ void Enemy_Search::Update_OnSearch()
 	if (m_TrackingPlayerFlag == true) {
 		// フラグを降ろす
 		m_efectDrawFlag[2] = false;
-		m_ActState = CALL;
+		m_ActState = CALLING_AROUND_ENEMY;
 	}
 }
 
