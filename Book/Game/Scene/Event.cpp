@@ -7,33 +7,35 @@
 
 namespace
 {
-	const int SCENE_MAX = 5;													//シーンの最大数
+	const int		SCENE_MAX = 5;													//シーンの最大数
+	const float		CIRCLE_MAX = 360.0f;											//円形ゲージの最大数
+	const double	PI = 3.14159;													//円周率
 
-	const bool PLAYER_ENABLE[SCENE_MAX] = { true, true, true, false, true };	//プレイヤーの表示状態
-	const bool TRESURE_ENABLE[SCENE_MAX] = { true, true, true, false, false };	//お宝の表示状態
-	const bool ENEMY_ENABLE[SCENE_MAX] = { false, false, false, true, false };	//エネミーの表示状態
-	const bool LIGHT_ENABLE[SCENE_MAX] = { false, false, true, false, true };	//ライトの表示状態
-	const bool CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
-	const float SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
-	const Vector3 CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
-									{ 170.0f, 50.0f, 30.0f }, 
-									{ 100.0f, 50.0f, 50.0f },
-									{ 220.0f, 5.0f, 0.0f },
-									{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
-	const Vector3 CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
-									{ 0.0f, 50.0f, 30.0f },
-									{ 0.0f, 50.0f, 0.0f },
-									{ 200.0f, 5.0f, 0.0f },
-									{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
-	const Vector3 CAMERA_SPEED[5] = { {0.0f, -5.0f, 0.0f},
-									{ 0.0f, 0.0f, -3.0f },
-									{ 0.0f, 0.0f, 0.0f },
-									{ 0.0f, 0.0f, -150.0f },
-									{ 0.0f, 3.0f, 0.0f } };			//カメラ速度
-	const Vector3 FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
-								{ 750.0f, 0.0f, 0.0f },
-								{ 0.0f, 420.0f, 0.0f },
-								{ 0.0f, -420.0f, 0.0f } };			//フィルムの座標
+	const bool		PLAYER_ENABLE[SCENE_MAX] = { true, true, true, false, true };	//プレイヤーの表示状態
+	const bool		TRESURE_ENABLE[SCENE_MAX] = { true, true, true, false, false };	//お宝の表示状態
+	const bool		ENEMY_ENABLE[SCENE_MAX] = { false, false, false, true, false };	//エネミーの表示状態
+	const bool		LIGHT_ENABLE[SCENE_MAX] = { false, false, true, false, true };	//ライトの表示状態
+	const bool		CAMERA_SET_POS[SCENE_MAX] = { true, true, false, true, true };	//カメラの座標変更をするか
+	const float		SCENE_TIME[SCENE_MAX] = { 2.0f, 3.0f, 1.5f, 2.7f, 2.0f };		//シーン遷移するための時間
+	const Vector3	CAMERA_POS[SCENE_MAX] = { { 0.0f, 50.0f, 200.0f },
+											{ 170.0f, 50.0f, 30.0f }, 
+											{ 100.0f, 50.0f, 50.0f },
+											{ 220.0f, 5.0f, 0.0f },
+											{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
+	const Vector3	CAMERA_TARGET[5] = { {0.0f, 75.0f, 0.0f},
+											{ 0.0f, 50.0f, 30.0f },
+											{ 0.0f, 50.0f, 0.0f },
+											{ 200.0f, 5.0f, 0.0f },
+											{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
+	const Vector3	CAMERA_SPEED[5] = { {0.0f, -5.0f, 0.0f},
+											{ 0.0f, 0.0f, -3.0f },
+											{ 0.0f, 0.0f, 0.0f },
+											{ 0.0f, 0.0f, -150.0f },
+											{ 0.0f, 3.0f, 0.0f } };			//カメラ速度
+	const Vector3	FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
+									{ 750.0f, 0.0f, 0.0f },
+									{ 0.0f, 420.0f, 0.0f },
+									{ 0.0f, -420.0f, 0.0f } };			//フィルムの座標
 }
 
 Event::Event()
@@ -42,8 +44,10 @@ Event::Event()
 
 Event::~Event()
 {
-	//警告音を削除
-	m_alert->Stop();
+	if (m_alert != nullptr) {
+		//警告音を削除
+		m_alert->Stop();
+	}
 
 	//ゲームクラスにイベント終了を通知
 	Game* game = FindGO<Game>("game");
@@ -120,11 +124,19 @@ bool Event::Start()
 	m_filmSpriteRender[1].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
 	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
 	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
-
 	for (int i = 0; i < 4; i++) {
 		m_filmSpriteRender[i].SetPosition(FILM_POS[i]);
 		m_filmSpriteRender[i].Update();
 	}
+
+	//スキップ画像の設定
+	m_skipSpriteRender[0].Init("Assets/sprite/UI/PressAndHoldGauge/skip_base.DDS", 157.0f, 178.0f);
+	m_skipSpriteRender[1].Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 178.0f, AlphaBlendMode_Trans, 5);
+	for (int i = 0; i < 2; i++) {
+		m_skipSpriteRender[i].SetPosition(Vector3(700.0f, -350.0f, 0.0f));
+		m_skipSpriteRender[i].Update();
+	}
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
 
 	//カメラの設定
 	m_cameraPos = CAMERA_POS[0];
@@ -162,6 +174,8 @@ void Event::Update()
 		}
 	}
 
+	Input();
+
 	Animation();
 
 	Time();
@@ -177,6 +191,27 @@ void Event::Time()
 	//フィルム用の時間を計測
 	m_filmTimer += 0.0005;
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.z = m_filmTimer;
+}
+
+void Event::Input()
+{
+	//Aボタンが押されたら
+	if (g_pad[0]->IsPress(enButtonA)) {
+		m_degree -= 120.0f * g_gameTime->GetFrameDeltaTime();
+
+		//ゲージが最大になったらスキップ
+		if (m_degree < 0.0f) {
+			m_isWaitFadeOut = true;
+			m_fade->SetEnableTips(false);
+			m_fade->StartFadeOut();
+		}
+	}
+	else {
+		//押されてない時、徐々に減少
+		m_degree += 60.0f * g_gameTime->GetFrameDeltaTime();
+		m_degree = min(m_degree, CIRCLE_MAX);
+	}
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
 }
 
 void Event::Animation()
@@ -323,5 +358,11 @@ void Event::Render(RenderContext& rc)
 			//敵モデルの描画
 			m_enemyModelRender[i].Draw(rc);
 		}
+	}
+
+	//ゲージ画像の描画
+	if (m_degree < 360.0f) {
+		m_skipSpriteRender[1].Draw(rc);
+		m_skipSpriteRender[0].Draw(rc);
 	}
 }
