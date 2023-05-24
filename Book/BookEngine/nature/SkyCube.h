@@ -12,6 +12,14 @@ namespace nsBookEngine {
 
 	public:
 		/// <summary>
+		/// í—Ş‚ğİ’èB
+		/// </summary>
+		void SetType(const int type)
+		{
+			m_number = type;
+		}
+
+		/// <summary>
 		/// À•W‚ğİ’èB
 		/// </summary>
 		/// <param name="pos"></param>
@@ -61,6 +69,7 @@ namespace nsBookEngine {
 		ModelRender		m_modelRender;
 		Vector3			m_position;
 		Vector3			m_scale = Vector3::One  * 1000.0f;
+		int				m_number = 0;
 		float			m_luminance = 0.75f;
 	};
 }

@@ -4,6 +4,7 @@
 #include "Fade.h"
 #include "GameManager.h"
 #include "Game.h"
+#include "nature/SkyCube.h"
 
 namespace
 {
@@ -12,23 +13,23 @@ namespace
 	const double	PI = 3.14159;													//円周率
 
 	const bool		CAMERA_SET_POS[SCENE_MAX] = { true, false, true, true, true };	//カメラの座標変更をするか
-	const float		SCENE_TIME[SCENE_MAX] = { 3.0f, 3.0f, 3.0f, 2.7f, 2.0f };		//シーン遷移するための時間
+	const float		SCENE_TIME[SCENE_MAX] = { 3.0f, 4.0f, 5.0f, 2.7f, 2.0f };		//シーン遷移するための時間
 
-	const Vector3	CAMERA_POS[SCENE_MAX] = { { 50.0f, 20.0f, 100.0f },
-										{ 170.0f, 50.0f, 30.0f },
-										{ 100.0f, 50.0f, 50.0f },
-										{ 220.0f, 5.0f, 0.0f },
-										{ 0.0f, 50.0f, 200.0f } };			//カメラの座標
-	const Vector3	CAMERA_TARGET[5] = { {0.0f, 20.0f, 0.0f},
-											{ 0.0f, 50.0f, 30.0f },
+	const Vector3	CAMERA_POS[SCENE_MAX] = { { -50.0f, 20.0f, 50.0f },
+										{ -50.0f, 20.0f, 0.0f },
+										{ 0.0f, 50.0f, -50.0f },
+										{ 0.0f, 50.0f, 100.0f },
+										{ 0.0f, 60.0f, 40.0f } };			//カメラの座標
+	const Vector3	CAMERA_TARGET[5] = { { 0.0f, 20.0f, 50.0f},
+											{ 0.0f, 20.0f, 0.0f },
 											{ 0.0f, 50.0f, 0.0f },
-											{ 200.0f, 5.0f, 0.0f },
-											{ 0.0f, 75.0f, 0.0f } };			//カメラの注視点
-	const Vector3	CAMERA_SPEED[5] = { {0.0f, 0.0f, 50.0f},
 											{ 0.0f, 50.0f, 0.0f },
-											{ 0.0f, 0.0f, 0.0f },
-											{ 0.0f, 0.0f, -150.0f },
-											{ 0.0f, 3.0f, 0.0f } };			//カメラ速度
+											{ 0.0f, 65.0f, 0.0f } };			//カメラの注視点
+	const Vector3	CAMERA_SPEED[5] = { { 0.0f, 0.0f, -16.0f},
+											{ 0.0f, 5.0f, 0.0f },
+											{ 0.0f, 0.0f, 10.0f },
+											{ 0.0f, 0.0f, -10.0f },
+											{ 0.0f, 0.0f, -5.0f } };			//カメラ速度
 	const Vector3	FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
 									{ 750.0f, 0.0f, 0.0f },
 									{ 0.0f, 420.0f, 0.0f },
@@ -42,43 +43,28 @@ Opening::Opening()
 
 Opening::~Opening()
 {
+	DeleteGO(m_skyCube);
+
 	//ゲームを開始
 	NewGO<Game>(0, "game");
 	DeleteGO(this);
 
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
+	RenderingEngine::GetInstance()->SetBloomThreshold(0.2f);
 }
 
 bool Opening::Start()
 {
-	m_animationClips[animationClip_Idle].Load("Assets/animData/player/idle.tka");
-	m_animationClips[animationClip_Idle].SetLoopFlag(true);
-	m_animationClips[animationClip_Walk].Load("Assets/animData/player/event/walk_start.tka");
-	m_animationClips[animationClip_Walk].SetLoopFlag(false);
-	m_animationClips[animationClip_Put].Load("Assets/animData/player/idle_act.tka");
-	m_animationClips[animationClip_Put].SetLoopFlag(false);
+	RenderingEngine::GetInstance()->SetBloomThreshold(20.0f);
+	g_camera3D->SetFar(10000.0f);
 
-	//プレイヤーモデルの設定
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	InitModel();
 
-	//フィルム画像の設定
-	m_filmSpriteRender[0].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
-	m_filmSpriteRender[1].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
-	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
-	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
-	for (int i = 0; i < 4; i++) {
-		m_filmSpriteRender[i].SetPosition(FILM_POS[i]);
-		m_filmSpriteRender[i].Update();
-	}
+	InitSprite();
 
-	//スキップ画像の設定
-	m_skipSpriteRender[0].Init("Assets/sprite/UI/PressAndHoldGauge/skip_base.DDS", 157.0f, 178.0f);
-	m_skipSpriteRender[1].Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 178.0f, AlphaBlendMode_Trans, 5);
-	for (int i = 0; i < 2; i++) {
-		m_skipSpriteRender[i].SetPosition(Vector3(700.0f, -350.0f, 0.0f));
-		m_skipSpriteRender[i].Update();
-	}
-	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+	m_skyCube = NewGO<SkyCube>(0, "skyCube");
+	m_skyCube->SetType(1);
+	m_skyCube->SetScale(Vector3(700.0f, 700.0f, 700.0f));
 
 	//カメラの設定
 	m_cameraPos = CAMERA_POS[0];
@@ -98,6 +84,56 @@ bool Opening::Start()
 	return true;
 }
 
+void Opening::InitModel()
+{
+	m_animationClips[animationClip_Idle].Load("Assets/animData/player/idle.tka");
+	m_animationClips[animationClip_Idle].SetLoopFlag(true);
+	m_animationClips[animationClip_Walk].Load("Assets/animData/player/event/walk_start.tka");
+	m_animationClips[animationClip_Walk].SetLoopFlag(false);
+	m_animationClips[animationClip_Put].Load("Assets/animData/player/idle_act.tka");
+	m_animationClips[animationClip_Put].SetLoopFlag(false);
+
+	//プレイヤーモデルの設定
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+
+	//アニメーションイベントを設定
+	m_playerModelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName)
+		{
+			OnAnimationEvent(clipName, eventName);
+		});
+
+	//壁モデルの設定
+	m_wallModelRender.Init("Assets/modelData/event/wall.tkm", 0, 0, enModelUpAxisZ, true, true);
+	m_wallModelRender.SetPosition(Vector3(0.0f, 0.0f, 100.0f));
+	m_wallModelRender.Update();
+
+	//床モデルの設定
+	m_backGroundModelRender.Init("Assets/modelData/level_test/tkm/base.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+}
+
+void Opening::InitSprite()
+{
+	//フィルム画像の設定
+	m_filmSpriteRender[0].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
+	m_filmSpriteRender[1].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
+	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
+	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
+	for (int i = 0; i < 4; i++) {
+		m_filmSpriteRender[i].SetPosition(FILM_POS[i]);
+		m_filmSpriteRender[i].Update();
+	}
+
+	//スキップ画像の設定
+	m_skipSpriteRender[0].Init("Assets/sprite/UI/PressAndHoldGauge/skip_base.DDS", 157.0f, 178.0f);
+	m_skipSpriteRender[1].Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 178.0f, AlphaBlendMode_Trans, 5);
+	for (int i = 0; i < 2; i++) {
+		m_skipSpriteRender[i].SetPosition(Vector3(700.0f, -350.0f, 0.0f));
+		m_skipSpriteRender[i].Update();
+	}
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+}
+
+
 void Opening::Update()
 {
 	//フェードの待機時間
@@ -112,7 +148,6 @@ void Opening::Update()
 		if (m_cameraScene == SCENE_MAX - 1 &&
 			m_timer > 1.0f) {
 			m_isWaitFadeOut = true;
-			m_fade->SetEnableTips(false);
 			m_fade->StartFadeOut();
 		}
 	}
@@ -120,6 +155,10 @@ void Opening::Update()
 	Time();
 
 	Input();
+
+	Animation();
+
+	Camera();
 }
 
 void Opening::Time()
@@ -141,7 +180,6 @@ void Opening::Input()
 		//ゲージが最大になったらスキップ
 		if (m_degree < 0.0f) {
 			m_isWaitFadeOut = true;
-			m_fade->SetEnableTips(false);
 			m_fade->StartFadeOut();
 		}
 	}
@@ -151,6 +189,32 @@ void Opening::Input()
 		m_degree = min(m_degree, CIRCLE_MAX);
 	}
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+}
+
+void Opening::Animation()
+{
+	switch (m_cameraScene)
+	{
+	case 0:
+		if (m_timer < 2.0f) {
+			m_playerModelRender.SetAnimationSpeed(0.5f);
+			m_playerModelRender.PlayAnimation(animationClip_Walk, 0.0f);
+		}
+		else {
+			m_playerModelRender.SetAnimationSpeed(1.0f);
+			m_playerModelRender.PlayAnimation(animationClip_Idle, 0.2f);
+		}
+		break;
+
+	case 3:
+		m_playerModelRender.PlayAnimation(animationClip_Put, 0.0f);
+		break;
+
+	default:
+		m_playerModelRender.PlayAnimation(animationClip_Idle, 0.5f);
+		break;
+	}
+	m_playerModelRender.Update();
 }
 
 void Opening::Camera()
@@ -167,30 +231,45 @@ void Opening::Camera()
 		m_cameraScene += 1;
 		m_timer = 0.0f;
 
-		//カメラの位置を設定
-		m_cameraPos = CAMERA_POS[m_cameraScene];
-		m_cameraTarget = CAMERA_TARGET[m_cameraScene];
+		if (CAMERA_SET_POS[m_cameraScene]) {
+			//カメラの位置を設定
+			m_cameraPos = CAMERA_POS[m_cameraScene];
+			m_cameraTarget = CAMERA_TARGET[m_cameraScene];
+		}
 	}
 
-	//カメラが移動可能なシーンなら
-	if (CAMERA_SET_POS[m_cameraScene]) {
+	//カメラの移動
+	g_camera3D->SetPosition(m_cameraPos);
+	g_camera3D->SetTarget(m_cameraTarget);
+	g_camera3D->Update();
+}
 
-		//カメラの移動
-		if (m_cameraScene == 3) {
-			g_camera3D->SetPosition(m_cameraPos);
-			g_camera3D->SetTarget(m_cameraTarget);
-		}
-		else {
-			g_camera3D->SetPosition(m_cameraPos);
-			g_camera3D->SetTarget(m_cameraTarget);
-		}
-		g_camera3D->Update();
+void Opening::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	(void)clipName;
+	//キーの名前がAttack_Startの時
+	if (wcscmp(eventName, L"Step") == 0) {
+		//足音を再生
+		SoundSource* se = NewGO<SoundSource>(0);
+		se->Init(6);
+		se->SetVolume(GameManager::GetInstance()->GetSFX());
+		se->Play(false);
+
 	}
 }
 
-
 void Opening::Render(RenderContext& rc)
 {
+	m_backGroundModelRender.Draw(rc);
+
+	//壁の描画
+	m_wallModelRender.Draw(rc);
+
+	//プレイヤーの描画
+	if (m_cameraScene != 2) {
+		m_playerModelRender.Draw(rc);
+	}
+
 	//フィルム画像の描画
 	for (int i = 0; i < 4; i++) {
 		m_filmSpriteRender[i].Draw(rc);

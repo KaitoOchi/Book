@@ -211,7 +211,7 @@
     <ClCompile Include="level2DRender\Level2DRender.cpp" />
     <ClCompile Include="level3DRender\LevelRender.cpp" />
     <ClCompile Include="level3DRender\MapChipRender.cpp" />
-    <ClCompile Include="SkyCube.cpp" />
+    <ClCompile Include="nature\SkyCube.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

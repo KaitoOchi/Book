@@ -108,10 +108,6 @@ Game::~Game()
 
 bool Game::Start()
 {
-	//環境光を初期化する
-	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, -1), Vector3(0.01f, 0.01f, 0.01f));
-	RenderingEngine::GetInstance()->SetAmbient(10.0f);
-
 	//スタート時を知らせる
 	NotifyGameStart();
 
@@ -130,8 +126,8 @@ bool Game::Start()
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
+	
 	NewGO<SkyCube>(0, "skyCube");
-
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 

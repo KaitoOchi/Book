@@ -28,12 +28,16 @@ Title::~Title()
 		m_sprites.pop_back();
 	}
 	m_sprites.shrink_to_fit();
+
+	//ŠÂ‹«Œõ‚ğ‰Šú‰»‚·‚é
+	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
+	RenderingEngine::GetInstance()->SetAmbient(0.2f);
 }
 
 bool Title::Start()
 {
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(-1.5f, -1, 1), Vector3(3.0f,3.0f,0.8f));
-	RenderingEngine::GetInstance()->SetAmbient(1.0f);
+	RenderingEngine::GetInstance()->SetAmbient(0.0f);
 	InitSprite();
 
 	//ƒJƒƒ‰‚Ìİ’è
