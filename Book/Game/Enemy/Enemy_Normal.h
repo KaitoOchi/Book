@@ -20,6 +20,4 @@ public:
 	void UpDate_OnListen();				// ‰¹”š’e‚ðŽg—p‚µ‚½‚Æ‚«
 
 private:
-
-	Enemy* enemy;
 };

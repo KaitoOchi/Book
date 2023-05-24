@@ -144,7 +144,7 @@ void Result::InitSprite()
 	m_backGroundSpriteRender.Init("Assets/sprite/UI/result/base.DDS", 1920.0f, 1080.0f);
 
 	//É{É^ÉìÇÃê›íË
-	m_cursorSpriteRender.Init("Assets/sprite/UI/title/button.DDS", 640.0f, 150.0f);
+	m_cursorSpriteRender.Init("Assets/sprite/UI/result/button.DDS", 765.0f, 150.0f);
 	m_cursorSpriteRender.SetPosition(Vector3(0.0f, -400.0f, 0.0f));
 	m_cursorSpriteRender.Update();
 
