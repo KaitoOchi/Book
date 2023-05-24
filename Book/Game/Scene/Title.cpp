@@ -4,13 +4,14 @@
 #include "GameManager.h"
 #include "Fade.h"
 #include "Game.h"
+#include "Title_Setting.h"
+#include "Title_Guide.h"
 
 namespace
 {
-	const int CURSOR_VERTICAL_MAX[5] = { 0, 3, 2, 0, 3 };		//各ステートの縦カーソル最大値
-	const int CURSOR_HORIZONTAL_MAX[4] = { 0, 100, 100, 2};		//各設定の横カーソル最大値
+	const int		CURSOR_VERTICAL_MAX = 3;							//メニュー画面の縦カーソル最大値
 
-	const Vector3 CURSOR_POS_MENU[3] = { { -725.0f,  80.0f, 0.0f},
+	const Vector3	CURSOR_POS_MENU[3] = { { -725.0f,  80.0f, 0.0f},
 										{ -725.0f,  -120.0f, 0.0f},
 										{ -725.0f,  -270.0f, 0.0f} };	//メニュー画面のカーソル座標
 }
@@ -39,10 +40,6 @@ bool Title::Start()
 	g_camera3D->SetPosition({ 0.0f, 0.0f, -600.0f });
 	g_camera3D->SetTarget({ 0.0f, 00.0f, 0.0f });
 	g_camera3D->Update();
-
-	//セーブデータのロード
-	m_saveData = GameManager::GetInstance()->DataLoad();
-	SetDataArray();
 
 	//フェードの処理
 	m_fade = FindGO<Fade>("fade");
@@ -103,64 +100,18 @@ void Title::InitSprite()
 	m_menuSpriteRender.Init("Assets/sprite/UI/title/title_2_all.DDS", 1920.0f, 1080.0f);
 	m_sprites.push_back(&m_menuSpriteRender);
 
-	//ガイド背景画面の設定
-	m_guideBackSpriteRender.Init("Assets/sprite/UI/guide/guide_all2.DDS", 1920.0f, 1080.0f);
-	//m_guideBackSpriteRender.SetPosition(Vector3(-50.0f, 35.0f, 0.0f));
-	m_guideBackSpriteRender.Update();
-	m_sprites.push_back(&m_guideBackSpriteRender);
-
-	//ガイド画面の設定
-	m_guideSpriteRender[0].Init("Assets/sprite/UI/guide/guide_playguide.DDS", 1403.0f, 637.0f);
-	m_guideSpriteRender[1].Init("Assets/sprite/UI/guide/rule.DDS", 1141.0f, 541.0f);
-
-	for (int i = 0; i < 2; i++) {
-		m_guideSpriteRender[i].SetPosition(Vector3(0.0f, -10.0f, 0.0f));
-		m_guideSpriteRender[i].Update();
-		m_sprites.push_back(&m_guideSpriteRender[i]);
-	}
-
-
-
-	//設定画面の設定
-	m_settingSpriteRender.Init("Assets/sprite/UI/title/setting_all.DDS", 1920.0f, 1080.0f);
-	m_sprites.push_back(&m_settingSpriteRender);
-
-	//設定テキストの設定
-	m_settingTextSpriteRender[0].Init("Assets/sprite/UI/setting/BGM_text.DDS", 443.0f, 31.0f);
-	m_settingTextSpriteRender[1].Init("Assets/sprite/UI/setting/SE_text.DDS", 443.0f, 31.0f);
-	m_settingTextSpriteRender[2].Init("Assets/sprite/UI/setting/FPS_text.DDS", 443.0f, 31.0f);
-
-	for (int i = 0; i < 3; i++) {
-		m_settingTextSpriteRender[i].SetPosition(Vector3(0.0f, -400.0f, 0.0f));
-		m_settingTextSpriteRender[i].Update();
-		m_sprites.push_back(&m_settingTextSpriteRender[i]);
-	}
-
-	m_gaugeSpriteRender[0].SetPosition(Vector3(-210.2, 166.4f, 0.0f));
-	m_gaugeSpriteRender[1].SetPosition(Vector3(-211.3, -33.0f, 0.0f));
-
-	//BGMとSFX音量の画像を設定
-	for (int i = 0; i < 2; i++) {
-		m_gaugeSpriteRender[i].Init("Assets/sprite/UI/setting/gauge.DDS", 750.0f, 67.0f, AlphaBlendMode_Trans, 2 + i);
-		m_gaugeSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
-		m_gaugeSpriteRender[i].Update();
-		m_sprites.push_back(&m_gaugeSpriteRender[i]);
-	}
-
 	//カーソル画像の設定
 	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
 	m_sprites.push_back(&m_cursorSpriteRender);
 
 	//ボタン画像の設定
 	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Abutton.DDS", 287.0f, 152.0f);
-	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
-	m_buttonSpriteRender[2].Init("Assets/sprite/UI/button/text_crosskey.DDS", 198.0f, 133.0f);
-
-	for (int i = 0; i < 3; i++) {
-		m_buttonSpritePos[i] = { -825.0f, -375.0f - (i * 50.0f), 0.0f };
+	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 198.0f, 133.0f);
+	for (int i = 0; i < 2; i++) {
+		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -375.0f - (i * 50.0f), 0.0f));
 		m_buttonSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_buttonSpriteRender[i].SetScale(Vector3(0.75f, 0.75f, 0.0f));
-		m_buttonSpriteRender[2].SetScale(Vector3(1.0f, 1.0f, 0.0f));
+		m_buttonSpriteRender[1].SetScale(Vector3(1.0f, 1.0f, 0.0f));
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
 	}
@@ -168,6 +119,10 @@ void Title::InitSprite()
 
 void Title::Update()
 {
+	if (!m_active) {
+		return;
+	}
+
 	//ステートの遷移処理
 	ManageState();
 
@@ -189,54 +144,43 @@ void Title::Update()
 	Input();
 
 	//アニメーション処理
-	Animation();
+	Animation(m_timer, m_alpha);
 }
 
 void Title::StateChange()
 {
-	//一時的な変数の値を入れる
-	if (m_animTime < 0.1f && m_animTime > -0.1f) {
+	m_animTime -= g_gameTime->GetFrameDeltaTime();
 
-		//メニュー画面以降なら
-		if (m_titleState_tmp > 1 || m_titleState > 2) {
+	//フェードアウト中の処理
+	if (m_isWaitFadeOut) {
+		//フェードアウトが終了したら
+		if (!m_fade->IsFade()) {
+			SceneChange();
+		}
+		return;
+	}
+	else {
+		//画像のアニメーションが終了したら
+		if (m_animTime < 0.0f) {
 
-			//フェードアウトの待機時間
-			if (m_isWaitFadeOut) {
-				//フェードアウトし終えたら
-				if (!m_fade->IsFade()) {
-					//フェードインの処理
-					m_fade->StartFadeIn();
-					m_isWaitFadeOut = false;
-					m_titleState = m_titleState_tmp;
-					m_animTime = -0.11f;
-					EnableButtonSprite();
-				}
-			}
-			else {
-				if (m_titleState_tmp == 2) {
-					m_fade->SetEnableTips(true);
-				}
-				else {
-					m_fade->SetEnableTips(false);
-				}
+			//メニュー画面以降なら
+			if (m_titleState_tmp > 1 || m_titleState > 2) {
+				//フェードアウトする
 				m_isWaitFadeOut = true;
 				m_fade->StartFadeOut();
+				return;
 			}
-			return;
+			else {
+				m_titleState = m_titleState_tmp;
+			}
 		}
-		else {
-			m_titleState = m_titleState_tmp;
-			EnableButtonSprite();
+
+		//ステート遷移を終了する
+		if (m_animTime < -1.0f) {
+			m_isWaitState = false;
+			m_animTime = 1.0f;
 		}
 	}
-	//ステート遷移を終了する
-	else if (m_animTime < -1.0f) {
-
-		m_isWaitState = false;
-		m_animTime = 1.0f;
-	}
-
-	m_animTime -= g_gameTime->GetFrameDeltaTime();
 
 	//画像の透明度を変更
 	for (auto& sprites : m_sprites)
@@ -246,35 +190,55 @@ void Title::StateChange()
 	}
 }
 
+void Title::SceneChange()
+{
+	//ゲームスタートなら
+	if (m_titleState_tmp == 2) {
+		NewGO<Game>(0, "game");
+		DeleteGO(this);
+	}
+	//ガイド画面なら
+	else if (m_titleState_tmp == 3) {
+		Title_Guide* guide = NewGO<Title_Guide>(0, "title_guide");
+		guide->SetTitlePtr(this);
+	}
+	//設定画面なら
+	else if (m_titleState_tmp == 4) {
+		Title_Setting* setting = NewGO<Title_Setting>(0, "title_setting");
+		setting->SetTitlePtr(this);
+	}
+
+	SetActive(false);
+	m_isWaitFadeOut = false;
+	m_isWaitState = false;
+}
+
 void Title::Input()
 {
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
+		//画像のアニメーションを行う
+		m_isWaitState = true;
+
+		//可能ならSEを再生
+		IsCanPlaySound(true);
+
 		//タイトルとメニュー画面なら
 		if (m_titleState_tmp <= 1) {
-
-			m_titleState_tmp = m_cursor_vertical + 1;
-			m_cursor_vertical = 1;
+			//ヒント画像を非表示
+			m_fade->SetEnableTips(false);
+			m_titleState_tmp = m_cursor + 1;
+			m_cursor = 1;
 			ValueUpdate(true);
 
-			//画像のアニメーションを行う
-			m_isWaitState = true;
-
-			IsCanPlaySound(true);
-		}
-		//説明画面なら
-		else if (m_titleState_tmp == 3) {
-
-			if (m_cursor_horizontal != 0) {
-				m_titleState_tmp = 1;
-				m_cursor_vertical = 1;
-				m_isWaitState = true;
+			//ゲームスタートなら
+			if (m_titleState_tmp == 2) {
+				//ヒント画像を表示する{
+				m_fade->SetEnableTips(true);
+				//BGMを削除する
+				GameManager::GetInstance()->DeleteBGM();
 			}
-			else {
-				m_cursor_horizontal++;
-			}
-			IsCanPlaySound(true);
 		}
 	}
 	//Bボタンが押されたら
@@ -283,28 +247,15 @@ void Title::Input()
 		if (m_titleState_tmp == 0) {
 			return;
 		}
-
-		//説明画面なら
-		if (m_titleState_tmp == 3) {
-
-			if (m_cursor_horizontal == 1) {
-				m_cursor_horizontal = 0;
-			}
-			else {
-				m_titleState_tmp = 1;
-				m_cursor_vertical = 1;
-				m_isWaitState = true;
-			}
-		}
 		//メニュー画面以降なら
 		else if (m_titleState_tmp >= 2) {
 			m_titleState_tmp = 1;
-			m_cursor_vertical = 1;
+			m_cursor = 1;
 			m_isWaitState = true;
 		}
 		else {
 			m_titleState_tmp--;
-			m_cursor_vertical = 0;
+			m_cursor = 0;
 			m_isWaitState = true;
 		}
 
@@ -313,109 +264,52 @@ void Title::Input()
 
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
-		m_cursor_vertical--;
+		m_cursor--;
 		ValueUpdate(true);
 	}
 	//下ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonDown)) {
-		m_cursor_vertical++;
+		m_cursor++;
 		ValueUpdate(true);
-	}
-
-	//設定画面なら
-	if (m_titleState_tmp == 4) {
-
-		//BGM、SFX設定なら
-		if (m_cursor_vertical == 1 || m_cursor_vertical == 2) {
-			//左ボタンが押されたら
-			if (g_pad[0]->IsPress(enButtonLeft)) {
-				m_cursor_horizontal--;
-				ValueUpdate(false);
-			}
-			//右ボタンが押されたら
-			else if (g_pad[0]->IsPress(enButtonRight)) {
-				m_cursor_horizontal++;
-				ValueUpdate(false);
-			}
-		}
-		else {
-			//左ボタンが押されたら
-			if (g_pad[0]->IsTrigger(enButtonLeft)) {
-				m_cursor_horizontal--;
-				ValueUpdate(false);
-			}
-			//右ボタンが押されたら
-			else if (g_pad[0]->IsTrigger(enButtonRight)) {
-				m_cursor_horizontal++;
-				ValueUpdate(false);
-			}
-		}
 	}
 }
 
 void Title::ValueUpdate(bool vertical)
 {
-	int cursor_v = m_cursor_vertical;
-	int cursor_h = m_cursor_horizontal;
+	int cursor_v = m_cursor;
 
 	//範囲外にはみ出さないようにする
-	m_cursor_vertical = min(max(m_cursor_vertical, 1), CURSOR_VERTICAL_MAX[m_titleState_tmp]);
-	m_cursor_horizontal = min(max(m_cursor_horizontal, 0), CURSOR_HORIZONTAL_MAX[m_cursor_vertical]);
+	m_cursor = min(max(m_cursor, 1), CURSOR_VERTICAL_MAX);
 
 	//メニュー画面なら
 	if (m_titleState_tmp == 1) {
 
 		//音を鳴らす
-		if (m_cursor_vertical == cursor_v &&
-			m_cursor_horizontal == cursor_h)
+		if (m_cursor == cursor_v)
 		{
-			Sound(2);
-		}
-	}
-	//設定画面なら
-	else if (m_titleState_tmp == 4) {
-
-		//音を鳴らす
-		if (m_cursor_vertical == cursor_v &&
-			m_cursor_horizontal == cursor_h)
-		{
-			Sound(2);
-		}
-
-		//今保持している設定の値に移動する
-		if (vertical) {
-			m_cursor_horizontal = m_saveDataArray[m_cursor_vertical - 1];
-		}
-		//配列に値を保存する
-		else {
-			m_saveDataArray[m_cursor_vertical - 1] = m_cursor_horizontal;
-			//保存する
-			SetSaveData();
-			GameManager::GetInstance()->SetVolume();
-
 			Sound(2);
 		}
 	}
 }
 
-void Title::Animation()
+void Title::Animation(float& time, float& alpha)
 {
 	//時間の処理
-	m_timer += g_gameTime->GetFrameDeltaTime();
-	if (m_timer > 1.0f)
-		m_timer = -0.5f;
+	time += g_gameTime->GetFrameDeltaTime();
+	if (time > 1.0f)
+		time = -0.5f;
 
 	// -t^2 + 2t
-	m_alpha = fabsf(-pow(m_timer, 2.0f) + (2 * m_timer));
-	m_alpha = min(m_alpha, 1.0f);
+	alpha = fabsf(-pow(time, 2.0f) + (2 * time));
+	alpha = min(alpha, 1.0f);
 
-	if (m_titleState_tmp == 1 || m_titleState_tmp == 4) {
-		m_alpha *= 3.0f;
-		m_alpha = max(m_alpha, 1.0f);
+	if (m_titleState == 1 || m_titleState == 4) {
+		alpha *= 3.0f;
+		alpha = max(alpha, 1.0f);
 	}
 
 	//透明度を変更
-	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
+	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, alpha));
 }
 
 void Title::ManageState()
@@ -430,21 +324,6 @@ void Title::ManageState()
 	//メニュー画面なら
 	case 1:
 		MenuScreen();
-		break;
-
-	//ゲームスタートなら
-	case 2:
-		StartScreen();
-		break;
-
-	//操作方法画面なら
-	case 3:
-		HowToScreen();
-		break;
-
-	//設定画面なら
-	case 4:
-		SettingScreen();
 		break;
 	}
 }
@@ -467,110 +346,18 @@ void Title::MenuScreen()
 	m_titleSpriteRender.Update();
 
 	if (!m_isWaitState || m_animTime < 0.0f) {
-		m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[m_cursor_vertical - 1]);
+		m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[m_cursor - 1]);
 		m_cursorSpriteRender.Update();
-	}
-}
-
-void Title::StartScreen()
-{
-	//フェードの待機時間
-	if (m_isWaitFadeOut) {
-		//フェードし終えたら
-		if (!m_fade->IsFade()) {
-
-			//BGMが削除されたら
-			if (GameManager::GetInstance()->IsDeleteBGM()) {
-				//ゲーム画面へ遷移
-				NewGO<Game>(0, "game");
-				DeleteGO(this);
-			}
-		}
-	}
-	else {
-		m_isWaitFadeOut = true;
-		m_fade->StartFadeOut();
-
-		//BGMを削除する
-		GameManager::GetInstance()->DeleteBGM();
-	}
-}
-
-void Title::HowToScreen()
-{
-
-}
-
-void Title::SettingScreen()
-{
-	if (!m_isWaitState || m_animTime < 0.0f) {
-		//FPSの設定
-		if (m_cursor_vertical == 3) {
-			m_cursorSpriteRender.SetPosition(Vector3(-200.0f + (m_cursor_horizontal * 275.0f), -240.0f, 0.0f));
-		}
-		//音量の設定
-		else {
-			m_cursorSpriteRender.SetPosition(Vector3(-600.0f, 370.0f + (-205.0f * m_cursor_vertical), 0.0f));
-		}
-		m_cursorSpriteRender.Update();
-	}
-
-	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = 590.0f + (m_saveDataArray[0] * 7.5f);
-	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = 590.0f + (m_saveDataArray[1] * 7.5f);
-	//BGMとSFX音量のゲージを変更
-	for (int i = 0; i < 2; i++) {
-		m_gaugeSpriteRender[i].Update();
-	}
-}
-
-void Title::EnableButtonSprite()
-{
-	//ボタンの表示状態を設定
-	switch (m_titleState)
-	{
-	case 0:
-		for (int i = 0; i < 3; i++) {
-			m_enableButtonSprite[i] = false;
-		}
-		break;
-
-	case 1:
-		m_enableButtonSprite[0] = true;
-		m_enableButtonSprite[1] = false;
-		m_enableButtonSprite[2] = true;
-		break;
-
-	case 2:
-		break;
-
-	case 3:
-		m_enableButtonSprite[0] = true;
-		m_enableButtonSprite[1] = true;
-		m_enableButtonSprite[2] = false;
-		break;
-
-	case 4:
-		m_enableButtonSprite[0] = false;
-		m_enableButtonSprite[1] = true;
-		m_enableButtonSprite[2] = true;
-		break;
-	}
-
-	int num = 0;
-
-	//ボタンの座標を設定
-	for (int i = 0; i < 3; i++) {
-
-		if (m_enableButtonSprite[i] == true) {
-			m_buttonSpriteRender[i].SetPosition(m_buttonSpritePos[num]);
-			num++;
-		}
 	}
 }
 
 void Title::Render(RenderContext &rc)
 {
 	m_backGroundModelRender.Draw(rc);
+
+	if (!m_active) {
+		return;
+	}
 
 	switch (m_titleState)
 	{
@@ -592,29 +379,10 @@ void Title::Render(RenderContext &rc)
 	//ゲームスタート画面なら
 	case 2:
 		break;
-
-	//操作方法画面なら
-	case 3:
-		m_guideBackSpriteRender.Draw(rc);
-		m_guideSpriteRender[m_cursor_horizontal].Draw(rc);
-		break;
-
-	//設定画面なら
-	case 4:
-		for (int i = 0; i < 2; i++) {
-			m_gaugeSpriteRender[i].Draw(rc);
-		}
-
-		m_settingSpriteRender.Draw(rc);
-		m_settingTextSpriteRender[m_cursor_vertical -1].Draw(rc);
-		m_cursorSpriteRender.Draw(rc);
-		break;
 	}
 
 	//ボタン画像の描画
-	for (int i = 0; i < 3; i++) {
-		if (m_enableButtonSprite[i] == true) {
-			m_buttonSpriteRender[i].Draw(rc);
-		}
+	for (int i = 0; i < 2; i++) {
+		m_buttonSpriteRender[i].Draw(rc);
 	}
 }

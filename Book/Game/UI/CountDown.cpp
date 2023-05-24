@@ -5,6 +5,7 @@
 #include "PlayerManagement.h"
 #include "GameManager.h"
 #include "Pause.h"
+#include "GoalSprite.h"
 
 
 CountDown::CountDown()
@@ -42,8 +43,14 @@ void CountDown::Update()
 			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
 			player->SetGameState(true);
 
+			//ゲームクラスにゲーム中を通知
 			Game* game = FindGO<Game>("game");
 			game->NotifyDuringGamePlay();
+
+			//目標画像を出す
+			GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
+			goalSprite->InitSprite(false);
+
 			DeleteGO(this);
 			return;
 		}

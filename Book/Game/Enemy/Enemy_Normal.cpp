@@ -187,8 +187,4 @@ void Enemy_Normal::Render(RenderContext& rc)
 		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);
 	}
-
-	if (Enemy::Act_CatchPlayer() == true) {
-		m_fontRender.Draw(rc);
-	}
 }

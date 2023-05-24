@@ -27,6 +27,7 @@ public:
 	/// </summary>
 	void StartFadeOut()
 	{
+		m_spriteNum = rand() % 4;
 		m_state = enState_FadeOut;
 	}
 	
@@ -48,9 +49,7 @@ public:
 			m_tipsSpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 			m_tipsSpriteRender[i].Update();
 		}
-
-		//m_enableTips = tips;
-		//m_spriteNum = rand() % 4;
+		m_enableTips = tips;
 	}
 
 private:

@@ -6,7 +6,7 @@ class Wall :public IGameObject
 {
 public:
 	Wall();
-	virtual ~Wall()=0;
+	virtual ~Wall();
 	bool Start();
 	void WipeRender(RenderContext& rc);
 	void Render(RenderContext& rc);
