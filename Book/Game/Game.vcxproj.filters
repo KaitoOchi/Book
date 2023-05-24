@@ -168,6 +168,9 @@
     <ClCompile Include="Scene\Title_Guide.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="UI\GoalSprite.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="Scene\Title_Guide.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GoalSprite.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

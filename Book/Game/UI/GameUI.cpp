@@ -111,14 +111,18 @@ bool GameUI::Start()
 void GameUI::Update()
 {
 	ItemSlot();
+
 	ItemScaleUp();
+
 	if (m_game->m_gameState == Game::m_enGameState_GameStart ||
 		m_game->m_gameState == Game::m_enGameState_GameOver) {
 		return;
 	}
 
 	Time();
+
 	CircleChange();
+
 	ChangeGage();
 }
 
@@ -176,6 +180,7 @@ void GameUI::TimeMove(const int& m, const int& s)
 
 	m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION, m_timePosition, 0.0f });
 }
+
 void GameUI::ChangeGage()
 {
 	//ÉQÅ[ÉWÇ™ñûÉ^ÉìÇ»ÇÁ
@@ -370,6 +375,4 @@ void GameUI::Render(RenderContext& rc)
 		m_circleBaseSpriteRender.Draw(rc);
 
 	}
-
-	
 }

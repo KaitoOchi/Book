@@ -7,6 +7,7 @@
 #include "Fade.h"
 #include "GameManager.h"
 #include "Enemy_Increase.h"
+#include "GoalSprite.h"
 
 namespace
 {
@@ -246,7 +247,12 @@ void Gage::Gage_MAX()
 	}
 	if (m_fade->IsFade() == false)
 	{
+		//ワイプを出す
 		m_wipe->Reset();
+		//目標画像を出す
+		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
+		goalSprite->InitSprite(true);
+
 		m_enemy_Increase->Enemy_Open();
 		m_MaxEnd = false;
 	}

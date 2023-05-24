@@ -231,12 +231,14 @@ void Title::Input()
 			m_titleState_tmp = m_cursor + 1;
 			m_cursor = 1;
 			ValueUpdate(true);
-		}
-		else if (m_titleState_tmp == 2) {
-			//ヒント画像を表示する{
-			m_fade->SetEnableTips(true);
-			//BGMを削除する
-			GameManager::GetInstance()->DeleteBGM();
+
+			//ゲームスタートなら
+			if (m_titleState_tmp == 2) {
+				//ヒント画像を表示する{
+				m_fade->SetEnableTips(true);
+				//BGMを削除する
+				GameManager::GetInstance()->DeleteBGM();
+			}
 		}
 	}
 	//Bボタンが押されたら

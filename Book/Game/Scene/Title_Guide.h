@@ -47,13 +47,10 @@ private:
 	std::array< SpriteRender, 2 >		m_guideSpriteRender;		//ガイド画像
 	std::array< SpriteRender, 2 >		m_buttonSpriteRender;		//ボタン画像
 	std::vector< SpriteRender* >		m_sprites;					//SpriteRenderのベクター型
-
 	Fade*								m_fade = nullptr;
 	Title*								m_title = nullptr;
-
 	Vector3								m_bezierPos[8];				//ベジェ曲線の座標
 	Vector3								m_guidePos[4];				//ガイドの座標
-
 	bool								m_isWaitState = false;		//ステートの遷移待ちかどうか
 	bool								m_isSceneChange = false;	//シーンを遷移するかどうか
 	bool								m_isWaitFadeOut = false;	//フェード中かどうか
