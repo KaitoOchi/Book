@@ -3,6 +3,7 @@
 #include "PlayerManagement.h"
 #include "Player3D.h"
 #include "Game.h"
+#include "Treasure.h"
 namespace
 {
 	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
@@ -27,7 +28,7 @@ namespace
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
 
 	const double	PI = 3.14159;										//円周率
-	const float		CIRCLE_SIZE_MAX = 360.0f;							//円形ゲージ最大
+	const float		CIRCLE_SIZE_MAX = 0.0f;							//円形ゲージ最大
 }
 
 GameUI::GameUI()
@@ -45,6 +46,7 @@ bool GameUI::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
 	m_player3D = FindGO<Player3D>("player3d");
+	m_treasure = FindGO<Treasure>("treaSure");
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 
@@ -320,23 +322,25 @@ void GameUI::StaminaGage(float stamina,Vector3 pos)
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
 	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_BASE_POSITION, 0.0f));
 	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f));
-	m_staminaPosition.Set(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f);
+	//スタミナゲージの変更
 	m_staminaGageRender.SetScale(Vector3(1.0f, stamina / 10, 1.0f));
+	
 	m_staminaBaseRender.Update();
 	m_staminaGageRender.Update();
 }
 
 void GameUI::CircleChange()
 {
+	//ゲージの変更
 	if (m_circleState)
 	{
-		m_degree += 50.0f*g_gameTime->GetFrameDeltaTime();
+		m_degree -= 120.0f*g_gameTime->GetFrameDeltaTime();
 		m_degree = min(m_degree, CIRCLE_SIZE_MAX);
 	}
 	else if(m_degree!= CIRCLE_SIZE_MAX)
 	{
-		m_degree -= 36.0f * g_gameTime->GetFrameDeltaTime();
-		m_degree = max(m_degree, 0.0f);
+		m_degree += 36.0f * g_gameTime->GetFrameDeltaTime();
+		m_degree = max(m_degree, 360.0f);
 	}
 
 	if (m_degree == CIRCLE_SIZE_MAX)
@@ -345,6 +349,15 @@ void GameUI::CircleChange()
 	}
 	
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+
+	//ゲージの座標の変更
+	Vector3 m_woldPosition = m_treasure->GetPosition();
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_circleposition, m_woldPosition);
+
+
+	m_circleBaseSpriteRender.SetPosition(Vector3{ m_circleposition.x,m_circleposition.y + 100.0f,0.0f });
+	m_circleSpriteRender.SetPosition(Vector3{ m_circleposition.x,m_circleposition.y + 100.0f,0.0f });
+	m_circleBaseSpriteRender.Update();
 	m_circleSpriteRender.Update();
 }
 
@@ -367,9 +380,14 @@ void GameUI::Render(RenderContext& rc)
 		m_staminaBaseRender.Draw(rc);
 		m_staminaGageRender.Draw(rc);
 	}
+	//お宝に触れていないなら描画しない
+	if (!m_circleDrawState)
+	{
+		return;
+	}
+
 	//円形ゲージが満タンのときか0の時は描画しない
-	if (m_degree != 360.0f &&
-		m_degree > 0.0f)
+	if (m_degree != 0.0f)
 	{
 		m_circleSpriteRender.Draw(rc);
 		m_circleBaseSpriteRender.Draw(rc);
