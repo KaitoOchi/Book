@@ -35,9 +35,6 @@ void Wall_Decoration::Load_Model(int num)
 	}
 
 	m_wallRender.SetScale({ 50.0f, 50.0f, 50.0f });
-
-	// “–‚½‚è”»’è‚ğì¬
-	Wall::CreateBoxObj();
 }
 
 void Wall_Decoration::Render(RenderContext& rc)
