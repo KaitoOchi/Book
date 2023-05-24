@@ -335,12 +335,12 @@ void GameUI::CircleChange()
 	if (m_circleState)
 	{
 		m_degree -= 120.0f*g_gameTime->GetFrameDeltaTime();
-		m_degree = min(m_degree, CIRCLE_SIZE_MAX);
+		m_degree = max(m_degree, CIRCLE_SIZE_MAX);
 	}
 	else if(m_degree!= CIRCLE_SIZE_MAX)
 	{
 		m_degree += 36.0f * g_gameTime->GetFrameDeltaTime();
-		m_degree = max(m_degree, 360.0f);
+		m_degree = min(m_degree, 360.0f);
 	}
 
 	if (m_degree == CIRCLE_SIZE_MAX)
