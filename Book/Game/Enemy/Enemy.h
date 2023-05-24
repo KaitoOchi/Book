@@ -318,6 +318,13 @@ public:
 		// 追跡・捕獲フラグをfalseにする
 		m_TrackingPlayerFlag = false;
 		m_ChachPlayerFlag = false;
+		m_NaviTimer = 0.0f;
+		m_addTimer[1] = 0.0f;
+		m_addTimer[3] = 0.0f;
+
+		m_efectDrawFlag[0] = false;
+		m_efectDrawFlag[1] = false;
+		m_efectDrawFlag[2] = false;
 	}
 
 	//エネミーの前方向を求める

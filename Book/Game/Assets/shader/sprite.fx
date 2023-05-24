@@ -113,7 +113,7 @@ float4 PSCircleGauge(PSInput In) : SV_Target0
     }
 
     //小さければピクセルを破棄
-    if (Deg >= clipSize.y){
+    if (Deg <= clipSize.y){
         clip(-1);
     }
 
