@@ -64,7 +64,7 @@ void Treasure::Hit()
 	//円形ゲージを増やす
 	m_gameUI->SetCircleDrawState(true);
 	//Bボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonB))
+	if (g_pad[0]->IsPress(enButtonA))
 	{
 		//増やせる状態にする
 		m_gameUI->SetCircleState(true);

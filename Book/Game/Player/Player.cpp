@@ -97,13 +97,16 @@ void Player::Update()
 {
 	m_treasure = FindGO<Treasure>("treaSure");
 	//行動できるなら
-	if (m_Player_Act&&m_playerManagement->GetGameState()
+	if (m_Player_Act&&
+		m_playerManagement->GetGameState()
 		) {
 		Move();
 		Rotation();
 		ItemChange();
 		//2Dならお宝の近くに居てもジャンプさせる
-		if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
+		//スタミナがない時はジャンプできない
+		if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging&&
+			m_runState != false)
 		{
 			Jump();
 		}
@@ -111,7 +114,8 @@ void Player::Update()
 		{
 			//お宝のコリジョンがない時は普通にジャンプさせる
 			if (m_treasure->GetCollision() == nullptr ||
-				m_collisionObject->IsHit(m_treasure->GetCollision()) == false)
+				m_collisionObject->IsHit(m_treasure->GetCollision()) == false&&
+				m_runState != false)
 			{
 				Jump();
 			}
@@ -164,46 +168,59 @@ void Player::Move()
 	cameraFoward.Normalize();
 	cameraRight.y = 0.0f;
 	cameraRight.Normalize();
-	//もしAボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonA)&& 
-		m_characon->IsOnGround() == true&&
-		m_runState==true)
+	if (m_runState == true)
 	{
-		if(m_Lstic.x != 0 || m_Lstic.y != 0)
-		PlayerRun();
+		//もしAボタンが押されているなら
+		if (g_pad[0]->IsPress(enButtonA) &&
+			m_characon->IsOnGround() == true)
+		{
+			if (m_Lstic.x != 0 || m_Lstic.y != 0)
+				PlayerRun();
+		}
+		else
+		{
+			//クールタイムがなくなるまで回復しない
+			m_staminaCoolTime -= g_gameTime->GetFrameDeltaTime();
+			if (m_staminaCoolTime < 0.0f)
+			{
+				//プレイヤーが動いていないなら
+				if (m_moveSpeed.x >= 0.0f &&
+					m_moveSpeed.y >= 0.0f &&
+					m_moveSpeed.z >= 0.0f)
+				{
+					//スタミナの回復量を1.5にする
+					m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
+					m_stamina = min(m_stamina, PLAYERSTAMINA);
+				}
+				else
+				{
+					//スタミナの回復量を1にする
+					m_stamina += STAMINAHEAL * g_gameTime->GetFrameDeltaTime();
+					m_stamina = min(m_stamina, PLAYERSTAMINA);
+				}
+
+			}
+			//左ステックと歩く速度を乗算させる
+			m_moveSpeed += cameraFoward * m_Lstic.y * WALK;
+			m_moveSpeed += cameraRight * m_Lstic.x * WALK;
+		}
 	}
 	else
 	{
-		//クールタイムがなくなるまで回復しない
-		m_staminaCoolTime -= g_gameTime->GetFrameDeltaTime();
-		if (m_staminaCoolTime < 0.0f)
-		{
-			//プレイヤーが動いていないなら
-			if (m_moveSpeed.x >= 0.0f &&
-				m_moveSpeed.y >= 0.0f &&
-				m_moveSpeed.z >= 0.0f)
-			{
-				//スタミナの回復量を1.5にする
-				m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
-				m_stamina = min(m_stamina, PLAYERSTAMINA);
-			}
-			else
-			{
-				//スタミナの回復量を1にする
-				m_stamina += STAMINAHEAL * g_gameTime->GetFrameDeltaTime();
-				m_stamina = min(m_stamina, PLAYERSTAMINA);
-			}
-
-		}
-		//左ステックと歩く速度を乗算させる
-		m_moveSpeed += cameraFoward* m_Lstic.y * WALK;
-		m_moveSpeed += cameraRight*m_Lstic.x * WALK;
+		//スタミナがない場合行動できないようにする
+		m_moveSpeed *=0.0f;
+		//スタミナの回復する
+		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
+		m_stamina = min(m_stamina, PLAYERSTAMINA);
+		//スタミナが全快したなら
 		if (m_stamina == PLAYERSTAMINA)
 		{
+			//走れるようにする
 			m_runState = true;
 		}
 	}
-
+	
+	
 }
 
 void Player::PlayerRun()
