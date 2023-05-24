@@ -208,7 +208,7 @@ void Player::Move()
 	else
 	{
 		//スタミナがない場合行動できないようにする
-		m_moveSpeed *=0.0f;
+		m_moveSpeed *=SPEEDDOWN;
 		//スタミナの回復する
 		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
 		m_stamina = min(m_stamina, PLAYERSTAMINA);
