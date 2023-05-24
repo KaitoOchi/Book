@@ -27,6 +27,11 @@ private:
 	void Time();
 
 	/// <summary>
+	/// 入力処理。
+	/// </summary>
+	void Input();
+
+	/// <summary>
 	/// アニメーション処理。
 	/// </summary>
 	void Animation();
@@ -60,19 +65,21 @@ private:
 	AnimationClip m_enemyAnimClips[enemyAnimClip_Num];
 
 private:
-	ModelRender		m_playerModelRender;				//プレイヤーモデル
-	ModelRender		m_treasureModelRender;				//お宝モデル
-	std::array<ModelRender,3>m_enemyModelRender;		//エネミーモデル
-	ModelRender		m_volumeLightModelRender;			//ボリュームライトモデル
-	std::array<SpriteRender,4>m_filmSpriteRender;		//フィルム画像
-	SoundSource*	m_alert = nullptr;
-	Fade*			m_fade = nullptr;
-	Vector3			m_treasurePos;						//宝の座標
-	Vector3			m_cameraPos;						//カメラ座標
-	Vector3			m_cameraTarget;						//カメラ注視点
-	bool			m_isWaitFadeOut;					//フェードアウト中
-	int				m_cameraScene = 0;					//カメラシーン
-	float			m_timer = 0.0f;						//タイマー
-	float			m_filmTimer = 0.0f;					//フィルム用タイマー
+	ModelRender						m_playerModelRender;				//プレイヤーモデル
+	ModelRender						m_treasureModelRender;				//お宝モデル
+	ModelRender						m_volumeLightModelRender;			//ボリュームライトモデル
+	std::array< ModelRender, 3 >	m_enemyModelRender;					//エネミーモデル
+	std::array< SpriteRender, 4 >	m_filmSpriteRender;					//フィルム画像
+	std::array< SpriteRender, 2 >	m_skipSpriteRender;					//スキップ画像
+	SoundSource*					m_alert = nullptr;
+	Fade*							m_fade = nullptr;
+	Vector3							m_treasurePos;						//宝の座標
+	Vector3							m_cameraPos;						//カメラ座標
+	Vector3							m_cameraTarget;						//カメラ注視点
+	bool							m_isWaitFadeOut;					//フェードアウト中
+	int								m_cameraScene = 0;					//カメラシーン
+	float							m_timer = 0.0f;						//タイマー
+	float							m_filmTimer = 0.0f;					//フィルム用タイマー
+	float							m_degree = 360.0f;					//ゲージの角度
 };
 

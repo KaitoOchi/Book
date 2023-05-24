@@ -3,9 +3,9 @@
 
 #include "GameManager.h"
 #include "Fade.h"
-#include "Game.h"
 #include "Title_Setting.h"
 #include "Title_Guide.h"
+#include "Opening.h"
 
 namespace
 {
@@ -194,7 +194,7 @@ void Title::SceneChange()
 {
 	//ゲームスタートなら
 	if (m_titleState_tmp == 2) {
-		NewGO<Game>(0, "game");
+		NewGO<Opening>(0, "opening");
 		DeleteGO(this);
 	}
 	//ガイド画面なら

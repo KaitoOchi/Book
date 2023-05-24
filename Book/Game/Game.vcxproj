@@ -242,6 +242,7 @@
     <ClCompile Include="Player\Player.cpp" />
     <ClCompile Include="Scene\Event.cpp" />
     <ClCompile Include="Scene\Game.cpp" />
+    <ClCompile Include="Scene\Opening.cpp" />
     <ClCompile Include="Scene\Title_Guide.cpp" />
     <ClCompile Include="Scene\Title_Setting.cpp" />
     <ClCompile Include="Stage\GhostBox.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="Player\Player.h" />
     <ClInclude Include="Scene\Event.h" />
     <ClInclude Include="Scene\Game.h" />
+    <ClInclude Include="Scene\Opening.h" />
     <ClInclude Include="Scene\Title_Guide.h" />
     <ClInclude Include="Scene\Title_Setting.h" />
     <ClInclude Include="Stage\GhostBox.h" />
