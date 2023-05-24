@@ -529,9 +529,6 @@ void Game::Update()
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
 				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
 
-				//敵を非表示
-				NotDraw_Enemy(true);
-
 				m_gameUI->Deactivate();
 				
 				m_gage->Deactivate();
@@ -617,6 +614,9 @@ void Game::NotifyEventStart()
 {
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
+
+	//敵を非表示
+	NotDraw_Enemy(true);
 
 	//ヒント画像を表示しない
 	m_fade->SetEnableTips(false);
