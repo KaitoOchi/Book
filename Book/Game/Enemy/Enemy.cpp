@@ -16,7 +16,7 @@ namespace
 	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 1.8f;						// 乗算速度
+	const float		ADD_SPEED = 1.5f;						// 乗算速度
 
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
@@ -80,7 +80,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(18.0f);
+	m_sphereCollider.Create(15.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -134,6 +134,9 @@ void Enemy::Animation()
 
 	m_enAnimationClips[m_enAnimation_Loss].Load("Assets/animData/enemy/search.tka");
 	m_enAnimationClips[m_enAnimation_Loss].SetLoopFlag(true);
+
+	m_enAnimationClips[m_enAnimation_Call].Load("Assets/animData/enemy/search_idle.tka");
+	m_enAnimationClips[m_enAnimation_Call].SetLoopFlag(true);
 }
 
 void Enemy::PlayAnimation()
@@ -162,6 +165,9 @@ void Enemy::PlayAnimation()
 	case LOSS:
 		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
 		break;
+	case CALL:
+		m_enemyRender.PlayAnimation(m_enAnimation_Call, LINEAR_COMPLETION);
+		break;
 	}
 }
 
@@ -173,7 +179,7 @@ void Enemy::Efect_Dizzy()
 		m_soundEffect = NewGO<EffectEmitter>(2);
 		m_soundEffect->Init(2);
 		// エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * 1.5f);
+		m_soundEffect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
 		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_soundEffect->Play();
@@ -435,7 +441,7 @@ void Enemy::Act_SearchMissingPlayer()
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 周りの敵を呼ぶ
-			m_ActState = CALL;
+			m_ActState = CALLING_AROUND_ENEMY;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
@@ -802,14 +808,24 @@ void Enemy::Act_Charge_HitWall()
 
 void Enemy::Act_Call()
 {
+	// seを鳴らす
+	SoundSource* se = NewGO<SoundSource>(0);
+	se->Init(17);
+	se->SetVolume(GameManager::GetInstance()->GetSFX());
+	se->Play(false);
+
 	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
 	if (m_TrackingPlayerFlag == false) {
 		// フラグを降ろす
 		m_efectDrawFlag[1] = false;
 		m_ActState = MISSING_SEARCHPLAYER;
+		se->Stop();
 
 		return;
 	}
+
+	Vector3 rot = m_playerManagement->GetPosition() - m_position;
+	rot.Normalize();
 
 	// エネミーのリストを検索
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
@@ -838,7 +854,9 @@ void Enemy::Act_Call()
 		}
 	}
 
-	m_enAnimationState = IDLE;
+	Rotation(rot);
+
+	m_enAnimationState = CALL;
 }
 
 void Enemy::Act_Loss()

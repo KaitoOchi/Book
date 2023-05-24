@@ -137,6 +137,7 @@ public:
 		m_enAnimation_Damege,	// 被弾
 		m_enAnimation_Dizzy,	// 閃光弾を受けたとき
 		m_enAnimation_Loss,		// プレイヤーを見失った時
+		m_enAnimation_Call,		// 他のエネミーを呼ぶ
 		m_enAnimation_Num
 	};
 	// アニメーションステート
@@ -151,7 +152,8 @@ public:
 		ATTACK,
 		DAMEGE,
 		DIZZY,
-		LOSS
+		LOSS,
+		CALL
 	};
 	EnAnimationState m_enAnimationState = IDLE;
 
@@ -163,7 +165,7 @@ public:
 		SEARCH,					// 索敵
 		MISSING_MOVEPOSITON,	// 見失った座標まで移動した
 		MISSING_SEARCHPLAYER,	// 見失ったプレイヤーを探す
-		CALL,					// 周りの敵を呼ぶ
+		CALLING_AROUND_ENEMY,	// 周りの敵を呼ぶ
 		CALLED,					// CALL時にSearch以外が実行
 		CHARGE,					// 突進
 		CHARGEEND,				// 突進終了
@@ -254,28 +256,12 @@ public:
 	};
 
 	/// <summary>
-	/// 閃光弾に当たったかどうか返す
-	/// </summary>
-	/// <returns>被弾したかどうかどうか判定する。trueなら被弾したと判定</returns>
-	bool GetHitFlushBullet() {
-		return m_HitFlashBulletFlag;
-	}
-
-	/// <summary>
 	/// 音爆弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHearedSoundBullet(bool b) {
 		m_HearedSoundBulletFlag = b;
 	};
-
-	/// <summary>
-	/// 音爆弾に当たったかどうか返す
-	/// </summary>
-	/// <returns>被弾したかどうかどうか判定する。trueなら被弾したと判定</returns>
-	bool GetHitSoundBullet() {
-		return m_HearedSoundBulletFlag;
-	}
 
 	/// <summary>
 	/// アイテムの座標を渡す
@@ -399,8 +385,6 @@ protected:
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー
-
-	FontRender m_fontRender;				// フォントレンダー
 
 	Vector3 m_position = Vector3::Zero;		// エネミーの座標
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
