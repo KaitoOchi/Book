@@ -34,6 +34,13 @@ public:
 		m_position = m_treasurePositions[dist(mt)];
 	}
 
+	/// <summary>
+	/// ‚¨•ó‚ÌˆÊ’u‚ðŽæ“¾
+	/// </summary>
+	const Vector3 GetPosition()
+	{
+		return m_position;
+	}
 	void Hit()override;
 
 private:
