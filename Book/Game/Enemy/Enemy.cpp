@@ -16,7 +16,7 @@ namespace
 	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 1.8f;						// 乗算速度
+	const float		ADD_SPEED = 1.5f;						// 乗算速度
 
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
