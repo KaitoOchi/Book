@@ -5,7 +5,7 @@
 namespace
 {
 	const float EFFECT_SIZE = 1.5f;				//エフェクトサイズ
-	const float DISTANCE = pow(1450.0f, 2.0f);	//エフェクトが見える距離
+	const float DISTANCE = pow(1200.0f, 2.0f);	//エフェクトが見える距離
 }
 
 PhysicsGhost::PhysicsGhost()
