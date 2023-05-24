@@ -51,15 +51,22 @@ bool Treasure::Start()
 void Treasure::Update()
 {
 	m_gameUI->SetCircleState(false);
+	if (m_gameUI->GetDegree() <= 0.0f)
+	{
+		m_gameUI->SetCircleDrawState(false);
+	}
 	Collision();
 	m_modelRender.Update();
 }
 
 void Treasure::Hit()
 {
-
+	//円形ゲージを増やす
+	m_gameUI->SetCircleDrawState(true);
+	//Bボタンが押されているなら
 	if (g_pad[0]->IsPress(enButtonB))
 	{
+		//増やせる状態にする
 		m_gameUI->SetCircleState(true);
 	}
 	if (m_gameUI->GetCircleMAXState())

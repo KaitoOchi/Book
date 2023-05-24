@@ -3,6 +3,7 @@
 class PlayerManagement;
 class Game;
 class Player3D;
+class Treasure;
 class GameUI : public IGameObject	
 {
 public:
@@ -54,12 +55,32 @@ public:
 	{
 		m_circleState = state;
 	}
-
+	/// <summary>
+	/// 円形ゲージが最大化どうかの判定
+	/// </summary>
+	/// <returns></returns>
 	const bool GetCircleMAXState()
 	{
 		return m_circleMaxState;
 	}
 
+	/// <summary>
+	/// 円形ゲージを描画するかどうか
+	/// </summary>
+	/// <param name="state">trueなら描画</param>
+	/// <returns></returns>
+	const void SetCircleDrawState(bool state)
+	{
+		m_circleDrawState = state;
+	}
+	/// <summary>
+	/// 円形ゲージの角度を取得
+	/// </summary>
+	/// <returns></returns>
+	const float GetDegree()
+	{
+		return m_degree;
+	}
 private:
 	/// <summary>
 	/// 時間計測処理。
@@ -103,6 +124,7 @@ private:
 	PlayerManagement*	m_playerManagement;
 	Game*				m_game;
 	Player3D*			m_player3D;
+	Treasure*			m_treasure;
 
 	bool				m_isTimerEnable = true;			//タイマーの表示状態
 	int					m_vigilanceGage = 1;			//警戒度
@@ -126,13 +148,14 @@ private:
 	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像
 	Vector2				m_spritePosition = Vector2::Zero;
 	Vector3				m_stamianGageScale = Vector3::One;
-	Vector3				m_staminaPosition = Vector3::Zero;
 
 	SpriteRender		m_circleBaseSpriteRender;			//円形ゲージのベース画像
 	SpriteRender		m_circleSpriteRender;				//円形ゲージのゲージ画像
 
-	float				m_degree=0.0f;						//ゲージの角度
+	float				m_degree=360.0f;					//ゲージの角度
 	bool				m_circleState = false;				//trueなら増加falseなら減少
 	bool				m_circleMaxState = false;			//MAXかどうか
+	bool				m_circleDrawState = false;			//円形ゲージを描画するかどうか
+	Vector2				m_circleposition = Vector2::Zero;	//円形ゲージの座標
 };
 
