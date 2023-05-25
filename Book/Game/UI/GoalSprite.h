@@ -17,7 +17,7 @@ public:
 	void InitSprite(const bool change)
 	{
 		if (change) {
-			m_goalSpriteRender.Init("Assets/sprite/UI/Gauge/image_target2.DDS", 207.0f, 60.0f);
+			m_goalSpriteRender.Init("Assets/sprite/UI/Gauge/image_target2.DDS", 231.0f, 60.0f);
 		}
 		else {
 			m_goalSpriteRender.Init("Assets/sprite/UI/Gauge/image_target.DDS", 231.0f, 60.0f);

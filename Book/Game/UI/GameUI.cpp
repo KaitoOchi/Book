@@ -94,11 +94,13 @@ bool GameUI::Start()
 
 	//円形ゲージのベース画像
 	m_circleBaseSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/base.DDS", 162.0f, 183.0f);
-	m_circleBaseSpriteRender.SetPosition(Vector3::Zero);
+	m_circleBaseSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
 	m_circleBaseSpriteRender.Update();
 
 	//円形ゲージのゲージ画像
 	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS",157.0f, 178.0f, AlphaBlendMode_Trans, 5);
+	m_circleSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
+	m_circleSpriteRender.Update();
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
 
 
@@ -380,17 +382,10 @@ void GameUI::Render(RenderContext& rc)
 		m_staminaBaseRender.Draw(rc);
 		m_staminaGageRender.Draw(rc);
 	}
-	//お宝に触れていないなら描画しない
-	if (!m_circleDrawState)
-	{
-		return;
-	}
 
-	//円形ゲージが満タンのときか0の時は描画しない
-	if (m_degree != 0.0f)
-	{
+	//円形ゲージの描画
+	if (m_circleDrawState) {
 		m_circleSpriteRender.Draw(rc);
 		m_circleBaseSpriteRender.Draw(rc);
-
 	}
 }

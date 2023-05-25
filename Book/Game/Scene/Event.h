@@ -80,6 +80,7 @@ private:
 	int								m_cameraScene = 0;					//カメラシーン
 	float							m_timer = 0.0f;						//タイマー
 	float							m_filmTimer = 0.0f;					//フィルム用タイマー
+	float							m_processTimer = 0.0f;				//加工用タイマー
 	float							m_degree = 360.0f;					//ゲージの角度
 };
 

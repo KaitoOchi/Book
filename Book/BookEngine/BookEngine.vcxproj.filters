@@ -91,7 +91,7 @@
     <ClCompile Include="level2DRender\Level2DRender.cpp">
       <Filter>level2DRender</Filter>
     </ClCompile>
-    <ClCompile Include="SkyCube.cpp">
+    <ClCompile Include="nature\SkyCube.cpp">
       <Filter>nature</Filter>
     </ClCompile>
   </ItemGroup>

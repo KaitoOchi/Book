@@ -35,28 +35,30 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
+#include "GoalSprite.h"
 
 Game::Game()
 {
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
-	// はてなマークのエフェクト
-	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
-	//ビックリマーク
-	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/e/exclamation/exmark.efk");
-	//星エフェクト
-	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/e/star/star.efk");
-	//音と煙のエフェクト
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
 	//煙のエフェクト
-	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/kemuri/kemuri.efk");
+	//音と煙のエフェクト
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/otokemuri/otokemuri.efk");
+	//星エフェクト
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/star/star.efk");
+	//ビックリマーク
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/exclamation/exmark.efk");
+	// はてなマークのエフェクト
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/question/hatena.efk");
 	//隙間のキラキラエフェクト
-	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/e/sukima/sukima.efk");
+	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/sukima/sukima.efk");
+	//お宝のキラキラエフェクト
+	EffectEngine::GetInstance()->ResistEffect(6, u"Assets/effect/treasure/kirakira.efk");
 }
 
 Game::~Game()
 {
-
 	for (int i = 0; i < m_physicsGhostList.size(); i++)
 	{
 		DeleteGO(m_physicsGhostList[i]);
@@ -73,47 +75,35 @@ Game::~Game()
 	{
 		DeleteGO(m_sensorList[i]);
 	}
-	
+
+	//UIの削除
 	DeleteGO(m_gameUI);
-	DeleteGO(FindGO<Gage>("gage"));
+	DeleteGO(m_gage);
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
 
+	DeleteGO(FindGO<GoalSprite>("goalSprite"));
+
 	DeleteGO(FindGO<Enemy_Increase>("enemyIncrease"));
+
 	//壁や床の削除
 	DeleteGO(m_backGround);
 	for (int i = 0; i < m_wallList.size(); i++)
 	{
 		DeleteGO(m_wallList[i]);
 	}
-	//�E�A�E�C�E�e�E��E�
-	DeleteGO(m_treasure);
-	
-
+	//監視カメラの削除
 	for (int i = 0; i < m_SecurityCameraList.size(); i++)
 	{
 		DeleteGO(m_SecurityCameraList[i]);
 	}
+	//お宝の削除
+	DeleteGO(m_treasure);
 
+	//プレイヤーの削除
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
 	DeleteGO(m_playerManagement);
-
-	DeleteGO(FindGO<CountDown>("countDown"));
-
-	// ライトの数を0に
-	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
-	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
-}
-
-bool Game::Start()
-{
-	//環境光を初期化する
-	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, -1), Vector3(0.01f, 0.01f, 0.01f));
-	RenderingEngine::GetInstance()->SetAmbient(10.0f);
-
-	//スタート時を知らせる
-	NotifyGameStart();
 
 	//リストの初期化
 	m_enemyList.clear();
@@ -122,6 +112,15 @@ bool Game::Start()
 	m_sensorList.clear();
 	m_SecurityCameraList.clear();
 
+	// ライトの数を0に
+	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
+	RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+}
+
+bool Game::Start()
+{
+	//スタート時を知らせる
+	NotifyGameStart();
 
 	m_player2D = NewGO<Player2D>(0,"player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
@@ -130,8 +129,8 @@ bool Game::Start()
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
+	
 	NewGO<SkyCube>(0, "skyCube");
-
 
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 
@@ -144,17 +143,21 @@ bool Game::Start()
 	LevelDesign();
 
 	//お宝の座標をランダムで決める
-	m_treasure->SetTreasurePosition();
+	m_treasurePos = m_treasure->SetTreasurePosition();
 	//決めた座標をミニマップに反映
-	m_miniMap->SetTreasurePos(m_treasure->GetPosition());
+	m_miniMap->SetTreasurePos(m_treasurePos);
+
+	//ポイントライトの設定
+	m_pointLight.SetPointLight(
+		0,
+		Vector3(m_treasurePos.x, m_treasurePos.y + 10.0f, m_treasurePos.z),
+		Vector3(1.0f, 1.0f, 0.0f),
+		400.0f
+	);
 
 	//フェードイン処理
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
-
-	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
-
-	GameManager::GetInstance()->SetBGM(21);
 	return true;
 }
 
@@ -432,14 +435,6 @@ void Game::LevelDesign()
 
 				if (clearNumber == clearNumTmp) {
 					m_clearPos = objData.position;
-
-					m_pointLight.SetPointLight(
-						0,
-						Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z),
-						Vector3::Zero,
-						400.0f
-					);
-					RenderingEngine::GetInstance()->GetLightCB().ptNum = 1;
 				}
 				clearNumTmp++;
 				return true;
@@ -523,11 +518,15 @@ void Game::Update()
 			if (m_gameState == m_enGameState_EventStart) {
 				//イベントシーンを呼ぶ
 				Event* event = NewGO<Event>(0, "event");
-				event->SetTresurePosition(m_tresurePos);
+				event->SetTresurePosition(m_treasurePos);
 
 				//ライトを非表示
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
 				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+
+				//脱出口にポイントライトを置く
+				m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
+				m_pointLight.Update();
 
 				m_gameUI->Deactivate();
 				
@@ -603,6 +602,12 @@ void Game::DuringGamePlayState()
 void Game::NotifyGameStart()
 {
 	m_gameState = m_enGameState_GameStart;
+
+	//ステートをゲーム状態にする
+	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
+
+	//BGMを設定
+	GameManager::GetInstance()->SetBGM(21);
 }
 
 void Game::NotifyDuringGamePlay()
@@ -612,6 +617,9 @@ void Game::NotifyDuringGamePlay()
 
 void Game::NotifyEventStart()
 {
+	//クリア可能にする
+	NotifyGameClearable();
+
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
 
@@ -633,6 +641,7 @@ void Game::NotifyEventStart()
 
 void Game::NotifyEventEnd()
 {
+	//ステートをお宝取得後に設定
 	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
 
 	//ライトを戻す
@@ -642,6 +651,7 @@ void Game::NotifyEventEnd()
 	//敵を表示する
 	NotDraw_Enemy(false);
 
+	//クラスをアクティブ状態にする
 	m_gamecamera->Activate();
 	m_gameUI->Activate();
 	m_gage->Activate();
@@ -652,22 +662,32 @@ void Game::NotifyEventEnd()
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos);
 
+	//警戒度レベルをMAXにする
+	m_gage->m_leverState = m_gage->m_enLever_MAX;
+
 	//隙間エフェクトを表示
 	PlayWallEffect();
 
 	//フェードインを開始
 	m_fade->StartFadeIn();
 	NotifyGameClearable();
-	m_gage->m_leverState = m_gage->m_enLever_MAX;
 }
 
 
 void Game::NotifyGameClear()
 {
 	if (!m_isWaitFadeOut) {
+		//フェードアウトを開始する
 		m_isWaitFadeOut = true;
-		m_fade->SetEnableTips(true);
 		m_fade->StartFadeOut();
+
+		//ヒント画像を表示する
+		m_fade->SetEnableTips(true);
+
+		//BGMの削除
+		GameManager::GetInstance()->DeleteBGM();
+
+		//ステートをクリアステートにする
 		m_gameState = m_enGameState_GameClear;
 	}
 }
@@ -675,9 +695,17 @@ void Game::NotifyGameClear()
 void Game::NotifyGameOver()
 {
 	if (!m_isWaitFadeOut) {
+		//フェードアウトを開始する
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
+
+		//ヒント画像を表示する
 		m_fade->SetEnableTips(true);
+
+		//BGMの削除
+		GameManager::GetInstance()->DeleteBGM();
+
+		//ステートをクリアステートにする
 		m_gameState = m_enGameState_GameOver;
 	}
 }

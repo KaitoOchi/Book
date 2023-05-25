@@ -18,7 +18,6 @@ public:
 	/// </summary>
 	enum EnGameState
 	{
-		enState_Title,
 		enState_Game,
 		enState_GetTresure,
 		enState_Result
@@ -68,7 +67,7 @@ public:
 		m_saveData = data;
 
 		//フレームレートの設定
-		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
+		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, m_saveData.frameRate);
 	}
 
 	/// <summary>
@@ -84,7 +83,7 @@ public:
 		}
 
 		//フレームレートの設定
-		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
+		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Fix, m_saveData.frameRate);
 
 		return m_saveData;
 	}

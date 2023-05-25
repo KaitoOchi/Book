@@ -4,7 +4,7 @@
 namespace
 {
 	const Vector3	GOALSPRITE_FIRST_POS = { -1100.0f, -50.0f, 0.0f };		//目標画像の初期座標
-	const float		GOALSPRITE_MOVESPEED = 10.3f;							//移動速度
+	const float		GOALSPRITE_MOVESPEED = 10.5f;							//移動速度
 	const float		GOALSPRITE_MAX_POS_X = -670.0f;							//X座標の最大値
 	const float		GOALSPRITE_ENABLE_TIME = 4.0f;							//表示時間(1/2)
 }

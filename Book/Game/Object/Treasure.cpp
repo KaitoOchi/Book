@@ -7,8 +7,7 @@
 
 namespace
 {
-	const Vector3 BOXSIZE{ 150.0f,50.0f,150.0f };
-	const float GAGESIZE = 10.0f;
+	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
 }
 
 Treasure::Treasure()
@@ -18,12 +17,17 @@ Treasure::Treasure()
 
 Treasure::~Treasure()
 {
+	if (m_kirakiraEffect != nullptr) {
+		m_kirakiraEffect->Stop();
+	}
+
+	DeleteGO(m_kirakiraEffect);
+
 	DeleteGO(m_collisionObject);
 }
 
 bool Treasure::Start()
 {
-	m_gage = FindGO<Gage>("gage");
 	m_gameUI = FindGO<GameUI>("gameUI");
 	Object::Start();
 
@@ -45,17 +49,27 @@ bool Treasure::Start()
 	m_collisionObject->SetName("otakara");
 	m_collisionObject->Update();
 
+	//お宝のエフェクトの設定
+	m_kirakiraEffect = NewGO<EffectEmitter>(0);
+	m_kirakiraEffect->Init(6);
+	m_kirakiraEffect->SetPosition(m_position);
+	m_kirakiraEffect->Play();
+	m_kirakiraEffect->Update();
+
 	return true;
 }
 
 void Treasure::Update()
 {
 	m_gameUI->SetCircleState(false);
-	if (m_gameUI->GetDegree() <= 0.0f)
+
+	if (m_gameUI->GetDegree() >= 360.0f)
 	{
 		m_gameUI->SetCircleDrawState(false);
 	}
+
 	Collision();
+
 	m_modelRender.Update();
 }
 
@@ -63,24 +77,29 @@ void Treasure::Hit()
 {
 	//円形ゲージを増やす
 	m_gameUI->SetCircleDrawState(true);
-	//Bボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonA))
-	{
+
+	//Aボタンが押されているなら
+	if (g_pad[0]->IsPress(enButtonA)) {
+
 		//増やせる状態にする
 		m_gameUI->SetCircleState(true);
-	}
-	if (m_gameUI->GetCircleMAXState())
-	{
-		m_player3d->m_enPlayer3D_Steal;
-		m_game->NotifyGameClearable();
-		m_game->GetPointLight().SetColor(Vector3(2.0f, 0.0f, 0.0f));
-		m_game->GetPointLight().Update();
 
-		m_game->NotifyEventStart();
+		//ゲージが最大までいったら
+		if (m_gameUI->GetCircleMAXState())
+		{
 
-		m_game->SetTresurePosition(m_position);
+			m_gameUI->SetCircleDrawState(false);
 
-		Deactivate();
+			m_player3d->m_enPlayer3D_Steal;
+
+			//イベントの開始
+			m_game->NotifyEventStart();
+
+			//エフェクトの停止
+			m_kirakiraEffect->Stop();
+
+			Deactivate();
+		}
 	}
 }
 
