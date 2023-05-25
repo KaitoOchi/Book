@@ -283,9 +283,6 @@ namespace nsBookEngine {
 
 		m_mainSprite.Draw(rc);
 
-		//ここでエフェクトドロー。
-		EffectEngine::GetInstance()->Draw();
-
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRender2D(rc);
 		}
