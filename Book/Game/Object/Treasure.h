@@ -47,9 +47,7 @@ public:
 	void Hit()override;
 
 private:
-	Gage*					m_gage = nullptr;
-	GameUI*					m_gameUI = nullptr;
-	std::vector< Vector3 >	m_treasurePositions;
-	float					m_gaugeCount = 0;
-	
+	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
+	GameUI*					m_gameUI = nullptr;				//ゲームUI
+	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
 };

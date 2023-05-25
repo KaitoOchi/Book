@@ -18,12 +18,13 @@ Treasure::Treasure()
 
 Treasure::~Treasure()
 {
+	DeleteGO(m_kirakiraEffect);
+
 	DeleteGO(m_collisionObject);
 }
 
 bool Treasure::Start()
 {
-	m_gage = FindGO<Gage>("gage");
 	m_gameUI = FindGO<GameUI>("gameUI");
 	Object::Start();
 
@@ -44,6 +45,13 @@ bool Treasure::Start()
 	m_collisionObject->SetIsEnableAutoDelete(false);
 	m_collisionObject->SetName("otakara");
 	m_collisionObject->Update();
+
+	//お宝のエフェクトの設定
+	m_kirakiraEffect = NewGO<EffectEmitter>(0);
+	m_kirakiraEffect->Init(6);
+	m_kirakiraEffect->SetPosition(m_position);
+	m_kirakiraEffect->Play();
+	m_kirakiraEffect->Update();
 
 	return true;
 }

@@ -42,17 +42,19 @@ Game::Game()
 	//・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ阡ｻ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽL・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ・ｽE・ｽ
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 	//煙のエフェクト
-	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/e/kemuri/kemuri.efk");
+	EffectEngine::GetInstance()->ResistEffect(0, u"Assets/effect/kemuri/kemuri.efk");
 	//音と煙のエフェクト
-	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/e/otokemuri/otokemuri.efk");
+	EffectEngine::GetInstance()->ResistEffect(1, u"Assets/effect/otokemuri/otokemuri.efk");
 	//星エフェクト
-	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/e/star/star.efk");
+	EffectEngine::GetInstance()->ResistEffect(2, u"Assets/effect/star/star.efk");
 	//ビックリマーク
-	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/e/exclamation/exmark.efk");
+	EffectEngine::GetInstance()->ResistEffect(3, u"Assets/effect/exclamation/exmark.efk");
 	// はてなマークのエフェクト
-	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/e/question/hatena.efk");
+	EffectEngine::GetInstance()->ResistEffect(4, u"Assets/effect/question/hatena.efk");
 	//隙間のキラキラエフェクト
-	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/e/sukima/sukima.efk");
+	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/sukima/sukima.efk");
+	//お宝のキラキラエフェクト
+	EffectEngine::GetInstance()->ResistEffect(6, u"Assets/effect/treasure/kirakira.efk");
 }
 
 Game::~Game()
