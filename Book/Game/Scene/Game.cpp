@@ -143,16 +143,23 @@ bool Game::Start()
 	LevelDesign();
 
 	//お宝の座標をランダムで決める
-	m_treasure->SetTreasurePosition();
+	m_treasurePos = m_treasure->SetTreasurePosition();
 	//決めた座標をミニマップに反映
 	m_miniMap->SetTreasurePos(m_treasure->GetPosition());
+
+	//ポイントライトの設定
+	m_pointLight.SetPointLight(
+		0,
+		Vector3(m_treasurePos.x, m_treasurePos.y + 10.0f, m_treasurePos.z),
+		Vector3(1.0f, 1.0f, 0.0f),
+		400.0f
+	);
 
 	//フェードイン処理
 	m_fade = FindGO<Fade>("fade");
 	m_fade->StartFadeIn();
 
 	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
-
 	GameManager::GetInstance()->SetBGM(21);
 	return true;
 }
@@ -431,14 +438,6 @@ void Game::LevelDesign()
 
 				if (clearNumber == clearNumTmp) {
 					m_clearPos = objData.position;
-
-					m_pointLight.SetPointLight(
-						0,
-						Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z),
-						Vector3::Zero,
-						400.0f
-					);
-					RenderingEngine::GetInstance()->GetLightCB().ptNum = 1;
 				}
 				clearNumTmp++;
 				return true;
@@ -522,7 +521,7 @@ void Game::Update()
 			if (m_gameState == m_enGameState_EventStart) {
 				//イベントシーンを呼ぶ
 				Event* event = NewGO<Event>(0, "event");
-				event->SetTresurePosition(m_tresurePos);
+				event->SetTresurePosition(m_treasurePos);
 
 				//ライトを非表示
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
@@ -650,6 +649,10 @@ void Game::NotifyEventEnd()
 
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos);
+
+	//脱出口にポイントライトを置く
+	m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
+	m_pointLight.Update();
 
 	//隙間エフェクトを表示
 	PlayWallEffect();
