@@ -57,16 +57,7 @@ public:
 	/// </summary>
 	void SetTresurePosition(const Vector3& pos)
 	{
-		m_tresurePos = pos;
-	}
-
-	/// <summary>
-	/// ポイントライトの取得。
-	/// </summary>
-	/// <returns></returns>
-	PointLight& GetPointLight()
-	{
-		return m_pointLight;
+		m_treasurePos = pos;
 	}
 
 	/// <summary>
@@ -224,7 +215,7 @@ private:
 	std::vector<SecurityCamera*>	m_SecurityCameraList;
 	std::vector<PhysicsGhost*>		m_physicsGhostList;
 
-	Vector3							m_tresurePos;					//宝座標
+	Vector3							m_treasurePos;					//宝座標
 	Vector3							m_clearPos;						//クリア座標
 
 	bool							m_isWaitFadeOut = false;		//フェード状態かどうか

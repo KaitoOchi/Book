@@ -18,12 +18,17 @@ Treasure::Treasure()
 
 Treasure::~Treasure()
 {
+	if (m_kirakiraEffect != nullptr) {
+		m_kirakiraEffect->Stop();
+	}
+
+	DeleteGO(m_kirakiraEffect);
+
 	DeleteGO(m_collisionObject);
 }
 
 bool Treasure::Start()
 {
-	m_gage = FindGO<Gage>("gage");
 	m_gameUI = FindGO<GameUI>("gameUI");
 	Object::Start();
 
@@ -44,6 +49,13 @@ bool Treasure::Start()
 	m_collisionObject->SetIsEnableAutoDelete(false);
 	m_collisionObject->SetName("otakara");
 	m_collisionObject->Update();
+
+	//お宝のエフェクトの設定
+	m_kirakiraEffect = NewGO<EffectEmitter>(0);
+	m_kirakiraEffect->Init(6);
+	m_kirakiraEffect->SetPosition(m_position);
+	m_kirakiraEffect->Play();
+	m_kirakiraEffect->Update();
 
 	return true;
 }
@@ -72,14 +84,13 @@ void Treasure::Hit()
 	if (m_gameUI->GetCircleMAXState())
 	{
 		m_player3d->m_enPlayer3D_Steal;
-		m_game->NotifyGameClearable();
-		m_game->GetPointLight().SetColor(Vector3(2.0f, 0.0f, 0.0f));
-		m_game->GetPointLight().Update();
 
+		//イベントの開始
 		m_game->NotifyEventStart();
 
-		m_game->SetTresurePosition(m_position);
-
+		//エフェクトの停止
+		m_kirakiraEffect->Stop();
+		
 		Deactivate();
 	}
 }

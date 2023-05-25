@@ -38,8 +38,9 @@ namespace nsBookEngine {
 		struct SpriteCB
 		{
 			Vector3 clipSize;
-			float pad;
 			int clipMode = 0;
+			int processMode = 0;
+			float processRate = 0.0f;
 		};
 
 	private:
@@ -153,6 +154,15 @@ namespace nsBookEngine {
 		void SetBloomThreshold(const float threshold)
 		{
 			m_bloom.SetThreshold(threshold);
+		}
+
+		/// <summary>
+		/// 画像加工の設定。
+		/// </summary>
+		/// <param name="mode">1でセピア調</param>
+		void SetScreenProcess(const int mode)
+		{
+			m_spriteCB.processMode = mode;
 		}
 
 		/// <summary>

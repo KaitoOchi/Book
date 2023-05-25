@@ -26,6 +26,10 @@ bool CountDown::Start()
 	m_countDownSpriteRender[2].Init("Assets/sprite/UI/countDown/2.dds", 161.0f, 234.0f);
 	m_countDownSpriteRender[3].Init("Assets/sprite/UI/countDown/3.dds", 166.0f, 255.0f);
 
+	for (int i = 0; i < 4; i++) {
+		m_countDownSpriteRender[i].SetPosition(Vector3(0.0f, 150.0f, 0.0f));
+	}
+
 
 	return true;
 }

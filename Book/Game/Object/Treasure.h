@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Game.h"
 #include <random>
 class Gage;
 class GameUI;
@@ -24,7 +25,7 @@ public:
 	/// <summary>
 	/// ランダムにお宝の位置を設定。
 	/// </summary>
-	void SetTreasurePosition()
+	const Vector3& SetTreasurePosition()
 	{
 		//お宝の座標をランダムで生成する
 		std::random_device rd;
@@ -32,6 +33,8 @@ public:
 		std::uniform_int_distribution<int>dist(0, 2);
 
 		m_position = m_treasurePositions[dist(mt)];
+
+		return m_position;
 	}
 
 	/// <summary>
@@ -44,9 +47,7 @@ public:
 	void Hit()override;
 
 private:
-	Gage*					m_gage = nullptr;
-	GameUI*					m_gameUI = nullptr;
-	std::vector< Vector3 >	m_treasurePositions;
-	float					m_gaugeCount = 0;
-	
+	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
+	GameUI*					m_gameUI = nullptr;				//ゲームUI
+	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
 };
