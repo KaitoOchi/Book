@@ -7,7 +7,6 @@
 #include "GameManager.h"
 
 #define SEACH_DECISION	100.0f * 100.0f									// ベクトルを作成する範囲
-#define VOL				GameManager::GetInstance()->GetSFX() - 20.0f	// SEの音量調整
 
 namespace
 {
@@ -102,7 +101,7 @@ bool Enemy::Start()
 	}
 
 	// 視野を作成
-	//SpotLight_New(m_position, m_spotNum);
+	SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
 	m_foward = Vector3::AxisZ;
@@ -812,7 +811,7 @@ void Enemy::Act_Call()
 	// seを鳴らす
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(17);
-	se->SetVolume(VOL);
+	se->SetVolume(GameManager::GetInstance()->GetSFX() * 0.1f);
 	se->Play(false);
 
 	// ����p��Ƀv���C���[�����݂��Ȃ��Ƃ�
