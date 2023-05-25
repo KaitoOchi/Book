@@ -7,8 +7,7 @@
 
 namespace
 {
-	const Vector3 BOXSIZE{ 150.0f,50.0f,150.0f };
-	const float GAGESIZE = 10.0f;
+	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
 }
 
 Treasure::Treasure()
@@ -63,11 +62,14 @@ bool Treasure::Start()
 void Treasure::Update()
 {
 	m_gameUI->SetCircleState(false);
-	if (m_gameUI->GetDegree() <= 0.0f)
+
+	if (m_gameUI->GetDegree() >= 360.0f)
 	{
 		m_gameUI->SetCircleDrawState(false);
 	}
+
 	Collision();
+
 	m_modelRender.Update();
 }
 
@@ -75,23 +77,29 @@ void Treasure::Hit()
 {
 	//円形ゲージを増やす
 	m_gameUI->SetCircleDrawState(true);
-	//Bボタンが押されているなら
-	if (g_pad[0]->IsPress(enButtonA))
-	{
+
+	//Aボタンが押されているなら
+	if (g_pad[0]->IsPress(enButtonA)) {
+
 		//増やせる状態にする
 		m_gameUI->SetCircleState(true);
-	}
-	if (m_gameUI->GetCircleMAXState())
-	{
-		m_player3d->m_enPlayer3D_Steal;
 
-		//イベントの開始
-		m_game->NotifyEventStart();
+		//ゲージが最大までいったら
+		if (m_gameUI->GetCircleMAXState())
+		{
 
-		//エフェクトの停止
-		m_kirakiraEffect->Stop();
-		
-		Deactivate();
+			m_gameUI->SetCircleDrawState(false);
+
+			m_player3d->m_enPlayer3D_Steal;
+
+			//イベントの開始
+			m_game->NotifyEventStart();
+
+			//エフェクトの停止
+			m_kirakiraEffect->Stop();
+
+			Deactivate();
+		}
 	}
 }
 
