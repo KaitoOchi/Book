@@ -66,8 +66,8 @@ namespace nsBookEngine {
 		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
 
 		m_2DRenderTarget.Create(
-			UI_SPACE_WIDTH,
-			UI_SPACE_HEIGHT,
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -75,22 +75,27 @@ namespace nsBookEngine {
 			clearColor
 		);
 
-		//スプライトデータの初期化。
+		//最終合成用スプライトの初期化
+		SpriteInitData finalSpriteInitData;
+		finalSpriteInitData.m_textures[0] = &m_2DRenderTarget.GetRenderTargetTexture();
+		finalSpriteInitData.m_width = m_mainRenderTarget.GetWidth();
+		finalSpriteInitData.m_height = m_mainRenderTarget.GetHeight();
+		finalSpriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		finalSpriteInitData.m_vsEntryPointFunc = "VSMainFinalSprite";
+		finalSpriteInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
+		finalSpriteInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+		finalSpriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
+		finalSpriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
+
+		m_2DSprite.Init(finalSpriteInitData);
+
+		//2D統合用スプライトの初期化
 		SpriteInitData spriteInitData;
-		spriteInitData.m_textures[0] = &m_2DRenderTarget.GetRenderTargetTexture();
-		spriteInitData.m_width = m_mainRenderTarget.GetWidth();
-		spriteInitData.m_height = m_mainRenderTarget.GetHeight();
-		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
-		spriteInitData.m_vsEntryPointFunc = "VSMain";
-		spriteInitData.m_psEntryPoinFunc = "PSMain";
-		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
-		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
-
-		m_2DSprite.Init(spriteInitData);
-
 		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
 		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
 		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
 		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
 
 		m_mainSprite.Init(spriteInitData);
@@ -186,9 +191,6 @@ namespace nsBookEngine {
 
 		m_bloom.Render(rc, m_mainRenderTarget);
 
-		//ここでエフェクトドロー。
-		EffectEngine::GetInstance()->Draw();
-
 		Render2D(rc);
 
 		m_renderObjects.clear();
@@ -270,8 +272,36 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Render2D(RenderContext& rc)
 	{
+		//レンダリングターゲット書き込み待ち
+		rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
+
+		//レンダリングターゲットの設定
+		rc.SetRenderTargetAndViewport(m_2DRenderTarget);
+
+		//レンダリングターゲットをクリア
+		rc.ClearRenderTargetView(m_2DRenderTarget);
+
+		m_mainSprite.Draw(rc);
+
+		//ここでエフェクトドロー。
+		EffectEngine::GetInstance()->Draw();
+
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRender2D(rc);
 		}
+
+		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
+
+
+		rc.SetRenderTarget(
+			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
+			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
+		);
+
+		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+
+		m_2DSprite.Draw(rc);
+
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 	}
 }

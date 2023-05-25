@@ -48,12 +48,6 @@ Event::~Event()
 		//警告音を削除
 		m_alert->Stop();
 	}
-
-	//ゲームクラスにイベント終了を通知
-	Game* game = FindGO<Game>("game");
-	game->NotifyEventEnd();
-
-	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
 }
 
 bool Event::Start()
@@ -146,6 +140,9 @@ bool Event::Start()
 	g_camera3D->SetTarget(m_cameraTarget);
 	g_camera3D->Update();
 
+	//セピア調にする
+	RenderingEngine::GetInstance()->SetScreenProcess(1);
+
 	//BGMの設定
 	GameManager::GetInstance()->SetBGM(23);
 
@@ -162,7 +159,21 @@ void Event::Update()
 		//フェードが終了したら
 		if (!m_fade->IsFade()) {
 			DeleteGO(this);
+
+			//ゲームクラスにイベント終了を通知
+			Game* game = FindGO<Game>("game");
+			game->NotifyEventEnd();
+
+			GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
+
+			//加工を終了する
+			RenderingEngine::GetInstance()->SetScreenProcess(0);
 		}
+
+		//加工を終了させる
+		m_processTimer -= g_gameTime->GetFrameDeltaTime();
+		m_processTimer = max(m_processTimer, 0.0f);
+		RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
 	}
 	else {
 		//フェードアウトを始める
@@ -172,9 +183,16 @@ void Event::Update()
 			m_fade->SetEnableTips(false);
 			m_fade->StartFadeOut();
 		}
-	}
 
-	Input();
+		if (m_fade->IsFade()) {
+			//セピア調に加工する
+			m_processTimer += g_gameTime->GetFrameDeltaTime() * 0.5f;
+			m_processTimer = min(m_processTimer, 1.0f);
+			RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
+		}
+
+		Input();
+	}
 
 	Animation();
 

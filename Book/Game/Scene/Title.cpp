@@ -28,10 +28,6 @@ Title::~Title()
 		m_sprites.pop_back();
 	}
 	m_sprites.shrink_to_fit();
-
-	//環境光を初期化する
-	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
-	RenderingEngine::GetInstance()->SetAmbient(0.2f);
 }
 
 bool Title::Start()
@@ -198,6 +194,10 @@ void Title::SceneChange()
 {
 	//ゲームスタートなら
 	if (m_titleState_tmp == 2) {
+		//環境光を初期化する
+		RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
+		RenderingEngine::GetInstance()->SetAmbient(0.2f);
+
 		NewGO<Opening>(0, "opening");
 		DeleteGO(this);
 	}

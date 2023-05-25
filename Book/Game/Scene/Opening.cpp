@@ -44,19 +44,15 @@ Opening::Opening()
 Opening::~Opening()
 {
 	DeleteGO(m_skyCube);
-
-	//ゲームを開始
-	NewGO<Game>(0, "game");
-	DeleteGO(this);
-
-	GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
-	RenderingEngine::GetInstance()->SetBloomThreshold(0.2f);
 }
 
 bool Opening::Start()
 {
 	RenderingEngine::GetInstance()->SetBloomThreshold(20.0f);
 	g_camera3D->SetFar(10000.0f);
+
+	//セピア調にする
+	RenderingEngine::GetInstance()->SetScreenProcess(1);
 
 	InitModel();
 
@@ -141,7 +137,21 @@ void Opening::Update()
 		//フェードが終了したら
 		if (!m_fade->IsFade()) {
 			DeleteGO(this);
+
+			//ゲームを開始
+			NewGO<Game>(0, "game");
+
+			GameManager::GetInstance()->SetGameState(GameManager::enState_Game);
+			RenderingEngine::GetInstance()->SetBloomThreshold(0.2f);
+
+			//画像加工を通常に戻す
+			RenderingEngine::GetInstance()->SetScreenProcess(0);
 		}
+
+		//加工を終了させる
+		m_processTimer -= g_gameTime->GetFrameDeltaTime();
+		m_processTimer = max(m_processTimer, 0.0f);
+		RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
 	}
 	else {
 		//フェードアウトを始める
@@ -150,11 +160,18 @@ void Opening::Update()
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
 		}
+
+		if (m_fade->IsFade()) {
+			//セピア調に加工する
+			m_processTimer += g_gameTime->GetFrameDeltaTime() * 0.5f;
+			m_processTimer = min(m_processTimer, 1.0f);
+			RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
+		}
+
+		Input();
 	}
 
 	Time();
-
-	Input();
 
 	Animation();
 

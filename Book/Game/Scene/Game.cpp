@@ -35,6 +35,7 @@
 #include "SecurityCamera.h"
 #include "Event.h"
 #include "nature/SkyCube.h"
+#include "GoalSprite.h"
 
 Game::Game()
 {
@@ -78,6 +79,8 @@ Game::~Game()
 	DeleteGO(FindGO<Gage>("gage"));
 	DeleteGO(m_miniMap);
 	DeleteGO(m_gamecamera);
+
+	DeleteGO(FindGO<GoalSprite>("goalSprite"));
 
 	DeleteGO(FindGO<Enemy_Increase>("enemyIncrease"));
 	//壁や床の削除
