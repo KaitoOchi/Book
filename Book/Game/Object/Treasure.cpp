@@ -18,6 +18,10 @@ Treasure::Treasure()
 
 Treasure::~Treasure()
 {
+	if (m_kirakiraEffect != nullptr) {
+		m_kirakiraEffect->Stop();
+	}
+
 	DeleteGO(m_kirakiraEffect);
 
 	DeleteGO(m_collisionObject);
@@ -80,12 +84,13 @@ void Treasure::Hit()
 	if (m_gameUI->GetCircleMAXState())
 	{
 		m_player3d->m_enPlayer3D_Steal;
-		m_game->NotifyGameClearable();
 
+		//イベントの開始
 		m_game->NotifyEventStart();
 
-		m_game->SetTresurePosition(m_position);
-
+		//エフェクトの停止
+		m_kirakiraEffect->Stop();
+		
 		Deactivate();
 	}
 }

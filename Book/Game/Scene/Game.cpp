@@ -524,6 +524,10 @@ void Game::Update()
 				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
 				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
 
+				//脱出口にポイントライトを置く
+				m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
+				m_pointLight.Update();
+
 				m_gameUI->Deactivate();
 				
 				m_gage->Deactivate();
@@ -613,6 +617,9 @@ void Game::NotifyDuringGamePlay()
 
 void Game::NotifyEventStart()
 {
+	//クリア可能にする
+	NotifyGameClearable();
+
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
 
@@ -654,10 +661,6 @@ void Game::NotifyEventEnd()
 
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos);
-
-	//脱出口にポイントライトを置く
-	m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
-	m_pointLight.Update();
 
 	//警戒度レベルをMAXにする
 	m_gage->m_leverState = m_gage->m_enLever_MAX;

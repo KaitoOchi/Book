@@ -149,7 +149,7 @@ void Opening::Update()
 		}
 
 		//‰ÁH‚ðI—¹‚³‚¹‚é
-		m_processTimer -= g_gameTime->GetFrameDeltaTime();
+		m_processTimer -= g_gameTime->GetFrameDeltaTime() * 0.5f;
 		m_processTimer = max(m_processTimer, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
 	}

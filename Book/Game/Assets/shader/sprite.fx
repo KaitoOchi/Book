@@ -94,9 +94,9 @@ float4 CalcSepiaTone(float4 albedo)
 
     //乗算してセピア調に加工する
     float3 sepiaColor;
-    sepiaColor.r = Y * 0.9f;
-    sepiaColor.g = Y * 0.7f;
-    sepiaColor.b = Y * 0.4f;
+    sepiaColor.r = Y * 1.1f;
+    sepiaColor.g = Y * 0.9f;
+    sepiaColor.b = Y * 0.6f;
 
     albedo.xyz = lerp(albedo.xyz, sepiaColor, processRate);
 

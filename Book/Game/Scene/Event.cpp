@@ -143,6 +143,8 @@ bool Event::Start()
 	//セピア調にする
 	RenderingEngine::GetInstance()->SetScreenProcess(1);
 
+	RenderingEngine::GetInstance()->SetBloomThreshold(20.0f);
+
 	//BGMの設定
 	GameManager::GetInstance()->SetBGM(23);
 
@@ -166,12 +168,14 @@ void Event::Update()
 
 			GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
 
+			RenderingEngine::GetInstance()->SetBloomThreshold(0.2f);
+
 			//加工を終了する
 			RenderingEngine::GetInstance()->SetScreenProcess(0);
 		}
 
 		//加工を終了させる
-		m_processTimer -= g_gameTime->GetFrameDeltaTime();
+		m_processTimer -= g_gameTime->GetFrameDeltaTime() * 0.5f;
 		m_processTimer = max(m_processTimer, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
 	}
@@ -186,7 +190,7 @@ void Event::Update()
 
 		if (m_fade->IsFade()) {
 			//セピア調に加工する
-			m_processTimer += g_gameTime->GetFrameDeltaTime() * 0.5f;
+			m_processTimer += g_gameTime->GetFrameDeltaTime() * 1.5f;
 			m_processTimer = min(m_processTimer, 1.0f);
 			RenderingEngine::GetInstance()->GetSpriteCB().processRate = m_processTimer;
 		}

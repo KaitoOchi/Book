@@ -266,15 +266,17 @@ void Title::Input()
 		IsCanPlaySound(false);
 	}
 
-	//上ボタンが押されたら
-	if (g_pad[0]->IsTrigger(enButtonUp)) {
-		m_cursor--;
-		ValueUpdate(true);
-	}
-	//下ボタンが押されたら
-	else if (g_pad[0]->IsTrigger(enButtonDown)) {
-		m_cursor++;
-		ValueUpdate(true);
+	if (m_titleState != 0) {
+		//上ボタンが押されたら
+		if (g_pad[0]->IsTrigger(enButtonUp)) {
+			m_cursor--;
+			ValueUpdate(true);
+		}
+		//下ボタンが押されたら
+		else if (g_pad[0]->IsTrigger(enButtonDown)) {
+			m_cursor++;
+			ValueUpdate(true);
+		}
 	}
 }
 

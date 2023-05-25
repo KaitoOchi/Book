@@ -70,6 +70,7 @@ bool Title_Setting::Start()
 	//セーブデータのロード
 	m_saveData = GameManager::GetInstance()->DataLoad();
 	SetDataArray();
+	m_cursor_horizontal = m_saveDataArray[m_cursor_vertical];
 
 	SpriteUpdate();
 
