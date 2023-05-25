@@ -18,7 +18,6 @@ public:
 	/// </summary>
 	enum EnGameState
 	{
-		enState_Title,
 		enState_Game,
 		enState_GetTresure,
 		enState_Result
