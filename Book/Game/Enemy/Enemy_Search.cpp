@@ -48,8 +48,8 @@ void Enemy_Search::Update()
 
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
-		if (m_soundEffect != nullptr) {
-			m_soundEffect->Stop();
+		if (m_Effect != nullptr) {
+			m_Effect->Stop();
 		}
 		return;
 	}

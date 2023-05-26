@@ -16,7 +16,7 @@ Logo::~Logo()
 
 bool Logo::Start()
 {
-	m_logoSpriteRender.Init("Assets/sprite/UI/title/image_rogo.DDS", 216.0f, 89.0f);
+	m_logoSpriteRender.Init("Assets/sprite/UI/title/image_rogo.DDS", 216.0f, 129.0f);
 	m_logoSpriteRender.SetScale(Vector3(1.5f, 1.5f, 0.0f));
 
 	return true;
