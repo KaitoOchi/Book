@@ -91,6 +91,11 @@ private:
 	void ValueUpdate(bool vertical);
 
 	/// <summary>
+	/// カーソルの移動処理。
+	/// </summary>
+	void CursorMove();
+
+	/// <summary>
 	/// ステートの遷移処理。
 	/// </summary>
 	void ManageState();
@@ -125,13 +130,16 @@ private:
 
 	Level2DRender*					m_level2DRender = nullptr;		//レベルレンダー
 	Fade*							m_fade = nullptr;				//フェードクラス
+	Vector3							m_cursorPos;					//カーソル座標
 	bool							m_isWaitState = false;			//ステートの遷移中かどうか
 	bool							m_isWaitFadeOut = false;		//フェード状態かどうか
 	bool							m_active = true;				//アクティブ状態
 	int								m_titleState = 0;				//タイトルステート
 	int								m_titleState_tmp = 0;			//タイトルステートの一時的変数
-	int								m_cursor = 0;			//縦カーソル
+	int								m_cursor = 0;					//縦カーソル
+	int								m_nextCursor = 0;				//次に移動するカーソル
 	float							m_alpha = 0.0f;					//色のアルファ値
 	float							m_timer = 0.0f;					//時間
 	float							m_animTime = 1.0f;				//アニメーション時間
+	float							m_cursorTimer = 1.0f;			//カーソルタイマー
 };

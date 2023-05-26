@@ -13,23 +13,23 @@ namespace
 	const double	PI = 3.14159;													//円周率
 
 	const bool		CAMERA_SET_POS[SCENE_MAX] = { true, false, true, true, true };	//カメラの座標変更をするか
-	const float		SCENE_TIME[SCENE_MAX] = { 3.0f, 4.0f, 5.0f, 2.7f, 2.0f };		//シーン遷移するための時間
+	const float		SCENE_TIME[SCENE_MAX] = { 3.0f, 4.0f, 5.0f, 2.7f, 4.0f };		//シーン遷移するための時間
 
 	const Vector3	CAMERA_POS[SCENE_MAX] = { { -50.0f, 20.0f, 50.0f },
 										{ -50.0f, 20.0f, 0.0f },
 										{ 0.0f, 50.0f, -50.0f },
 										{ 0.0f, 50.0f, 100.0f },
-										{ 0.0f, 60.0f, 40.0f } };					//カメラの座標
+										{ 0.0f, 40.0f, 0.0f } };					//カメラの座標
 	const Vector3	CAMERA_TARGET[5] = { { 0.0f, 20.0f, 50.0f},
 											{ 0.0f, 20.0f, 0.0f },
 											{ 0.0f, 50.0f, 0.0f },
 											{ 0.0f, 50.0f, 0.0f },
-											{ 0.0f, 65.0f, 0.0f } };				//カメラの注視点
+											{ 0.0f, 40.0f, 50.0f } };				//カメラの注視点
 	const Vector3	CAMERA_SPEED[5] = { { 0.0f, 0.0f, -16.0f},
 											{ 0.0f, 5.0f, 0.0f },
 											{ 0.0f, 0.0f, 10.0f },
 											{ 0.0f, 0.0f, -10.0f },
-											{ 0.0f, 0.0f, -5.0f } };				//カメラ速度
+											{ 0.0f, 0.0f, 5.0f } };				//カメラ速度
 	const Vector3	FILM_POS[4] = { { -750.0f, 0.0f, 0.0f },
 									{ 750.0f, 0.0f, 0.0f },
 									{ 0.0f, 420.0f, 0.0f },
@@ -156,7 +156,7 @@ void Opening::Update()
 	else {
 		//フェードアウトを始める
 		if (m_cameraScene == SCENE_MAX - 1 &&
-			m_timer > 1.0f) {
+			m_timer > 3.0f) {
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
 		}

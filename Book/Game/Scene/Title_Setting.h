@@ -29,9 +29,19 @@ private:
 	void Input();
 
 	/// <summary>
+	/// カーソルの移動処理。
+	/// </summary>
+	void CursorMove();
+
+	/// <summary>
 	/// 入力による値の更新処理。
 	/// </summary>
-	void ValueUpdate(bool vertical);
+	void ValueUpdate(const bool vertical, const bool vol);
+
+	/// <summary>
+	/// コマンド処理。
+	/// </summary>
+	void Command(char command);
 
 	/// <summary>
 	/// 画像の更新処理。
@@ -77,11 +87,12 @@ private:
 private:
 	SpriteRender					m_settingSpriteRender;			//設定画像
 	SpriteRender					m_cursorSpriteRender;			//カーソル画像
+	SpriteRender					m_fpsCursorSpriteRender;		//FPSカーソル
 	std::array< SpriteRender, 2 >	m_gaugeSpriteRender;			//BGMのメーター
 	std::array< SpriteRender, 3 >	m_settingTextSpriteRender;		//設定の説明画像
 	std::array< SpriteRender, 2 >	m_buttonSpriteRender;			//ボタン画像
-
 	std::vector<SpriteRender*>		m_sprites;						//SpriteRenderのベクター型
+	FontRender						m_percentFontRender;			//パーセント文字
 
 	Fade* m_fade = nullptr;
 	Title* m_title = nullptr;
@@ -89,10 +100,16 @@ private:
 	GameManager::SaveData			m_saveData;						//セーブデータの構造体
 	std::array< int, 4 >			m_saveDataArray;				//セーブデータの一時的な配列
 
+	Vector3 m_cursorPos;
+
+	char							m_commandList[16] = {"NNNNNNNNNNNNNN0"};		//コマンドリスト
 	bool							m_isWaitState = false;			//ステートの遷移待ちかどうか
 	bool							m_isWaitFadeOut = false;		//フェード中かどうか
+	bool							m_isSetFPS = false;				//FPSをセットするか
 	int								m_cursor_vertical = 0;			//縦カーソル
 	int								m_cursor_horizontal = 0;		//横カーソル
+	int								m_nextCursor = 1;				//次に移動するカーソル
 	float							m_timer = 0.0f;					//時間
 	float							m_alpha = 0.0f;					//透明度
+	float							m_cursorTimer = 1.0f;			//カーソルタイマー
 };

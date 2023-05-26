@@ -9,6 +9,13 @@ namespace
 {
 	const int CURSOR_VERTICAL_MAX = 2;							//縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[3] = { 100, 100, 2 };		//各設定の横カーソル最大値
+	const char COMMAND[8] = { 'b','b','7','7','b','b','7','7'};
+	const Vector3 CURSOR_POS_VERTICAL[3] = { Vector3(-600.0f, 165.0f , 0.0f),
+											Vector3(-600.0f, -40.0f, 0.0f),
+											Vector3(-600.0f, -240.0f, 0.0f) };				//縦カーソルの座標
+	const Vector3 CURSOR_POS_HORIZONTAL[3] = { Vector3(-120.0f, -240.0f , 0.0f),
+											Vector3(155.0f, -240.0f, 0.0f),
+											Vector3(425.0f, -240.0f, 0.0f) };				//横カーソルの座標
 }
 
 Title_Setting::Title_Setting()
@@ -43,7 +50,16 @@ bool Title_Setting::Start()
 
 	//カーソル画像の設定
 	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
+	m_cursorSpriteRender.SetPosition(CURSOR_POS_VERTICAL[0]);
+	m_cursorSpriteRender.Update();
 	m_sprites.push_back(&m_cursorSpriteRender);
+
+	//FPSカーソル画像の設定
+	m_fpsCursorSpriteRender.Init("Assets/sprite/UI/setting/light.DDS", 991.0f, 932.0f);
+	m_fpsCursorSpriteRender.SetPosition(CURSOR_POS_HORIZONTAL[0]);
+	m_fpsCursorSpriteRender.SetScale(Vector3(0.1f, 0.1f, 0.0f));
+	m_fpsCursorSpriteRender.Update();
+	m_sprites.push_back(&m_fpsCursorSpriteRender);
 
 	//ゲージ画像の設定
 	m_gaugeSpriteRender[0].SetPosition(Vector3(-210.2, 166.4f, 0.0f));
@@ -66,6 +82,11 @@ bool Title_Setting::Start()
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
 	}
+
+	//パーセント文字の設定
+	m_percentFontRender.SetPosition(Vector3(-310.0f, 210.0f, 0.0f));
+	m_percentFontRender.SetScale(0.9f);
+	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	//セーブデータのロード
 	m_saveData = GameManager::GetInstance()->DataLoad();
@@ -97,6 +118,12 @@ void Title_Setting::Update()
 
 void Title_Setting::Input()
 {
+	//カーソルの移動中は、入力を受け付けない
+	if (m_cursorTimer < 1.0f) {
+		CursorMove();
+		return;
+	}
+
 	//Bボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonB))
 	{
@@ -109,12 +136,26 @@ void Title_Setting::Input()
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
 		m_cursor_vertical--;
-		ValueUpdate(true);
+		ValueUpdate(true, false);
+		m_nextCursor = 1;
+		m_isSetFPS = false;
+		Command('w');
 	}
 	//下ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonDown)) {
 		m_cursor_vertical++;
-		ValueUpdate(true);
+		ValueUpdate(true, false);
+		m_nextCursor = -1;
+		m_isSetFPS = false;
+		Command('s');
+	}
+	//RB1ボタンが押されたら
+	else if (g_pad[0]->IsTrigger(enButtonRB1)) {
+		Command('7');
+	}
+	//LB1ボタンが押されたら
+	else if (g_pad[0]->IsTrigger(enButtonLB1)) {
+		Command('b');
 	}
 
 	//BGM、SFX設定なら
@@ -122,12 +163,12 @@ void Title_Setting::Input()
 		//左ボタンが押されたら
 		if (g_pad[0]->IsPress(enButtonLeft)) {
 			m_cursor_horizontal--;
-			ValueUpdate(false);
+			ValueUpdate(false, true);
 		}
 		//右ボタンが押されたら
 		else if (g_pad[0]->IsPress(enButtonRight)) {
 			m_cursor_horizontal++;
-			ValueUpdate(false);
+			ValueUpdate(false, true);
 		}
 	}
 	//FPS設定なら
@@ -135,17 +176,42 @@ void Title_Setting::Input()
 		//左ボタンが押されたら
 		if (g_pad[0]->IsTrigger(enButtonLeft)) {
 			m_cursor_horizontal--;
-			ValueUpdate(false);
+			ValueUpdate(false, false);
+			m_nextCursor = 1;
+			m_isSetFPS = true;
 		}
 		//右ボタンが押されたら
 		else if (g_pad[0]->IsTrigger(enButtonRight)) {
 			m_cursor_horizontal++;
-			ValueUpdate(false);
+			ValueUpdate(false, false);
+			m_nextCursor = -1;
+			m_isSetFPS = true;
 		}
 	}
 }
 
-void Title_Setting::ValueUpdate(bool vertical)
+void Title_Setting::CursorMove()
+{
+	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 3.0f;
+
+	// -t^2 + 2t
+	float rate = ((pow(m_cursorTimer, 2.0f) * -1.0f) + (2.0f * m_cursorTimer));
+	rate = min(rate, 1.0f);
+
+	//カーソルを移動
+	if (m_isSetFPS) {
+		m_cursorPos.Lerp(rate, CURSOR_POS_HORIZONTAL[m_cursor_horizontal + m_nextCursor], CURSOR_POS_HORIZONTAL[m_cursor_horizontal]);
+		m_fpsCursorSpriteRender.SetPosition(m_cursorPos);
+		m_fpsCursorSpriteRender.Update();
+	}
+	else{
+		m_cursorPos.Lerp(rate, CURSOR_POS_VERTICAL[m_cursor_vertical + m_nextCursor], CURSOR_POS_VERTICAL[m_cursor_vertical]);
+		m_cursorSpriteRender.SetPosition(m_cursorPos);
+		m_cursorSpriteRender.Update();
+	}
+}
+
+void Title_Setting::ValueUpdate(const bool vertical, const bool vol)
 {
 	int cursor_v = m_cursor_vertical;
 	int cursor_h = m_cursor_horizontal;
@@ -154,11 +220,15 @@ void Title_Setting::ValueUpdate(bool vertical)
 	m_cursor_vertical = min(max(m_cursor_vertical, 0), CURSOR_VERTICAL_MAX);
 	m_cursor_horizontal = min(max(m_cursor_horizontal, 0), CURSOR_HORIZONTAL_MAX[m_cursor_vertical]);
 
-	//音を鳴らす
 	if (m_cursor_vertical == cursor_v &&
 		m_cursor_horizontal == cursor_h)
 	{
+		//音を鳴らす
 		m_title->Sound(2);
+
+		if (!vol) {
+			m_cursorTimer = 0.0f;
+		}
 	}
 
 	//今保持している設定の値に移動する
@@ -172,24 +242,48 @@ void Title_Setting::ValueUpdate(bool vertical)
 		SetSaveData();
 		GameManager::GetInstance()->SetVolume();
 
-		m_title->Sound(2);
+		//m_title->Sound(2);
 	}
 
 	//画像の更新処理
 	SpriteUpdate();
 }
 
+void Title_Setting::Command(char command)
+{
+	//配列の最後に入力する
+	m_commandList[15] = command;
+
+	int j = 0;
+	//コマンドが合ってるかどうか判定
+	for (int i = sizeof(COMMAND) / sizeof(char); i < 16; i++) {
+		//コマンドリストと同じでないなら
+		if (m_commandList[i] != COMMAND[j]) {
+			break;
+		}
+		j++;
+
+		//コマンド成功なら
+		if (j == sizeof(COMMAND) / sizeof(char)) {
+			m_percentFontRender.SetText(L"AAAAAAAAA\nBBBBBB");
+			m_percentFontRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+			m_percentFontRender.SetScale(2.0f);
+			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+			m_percentFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+	}
+
+	//配列を一つ分ずらす
+	for (int i = 0; i < 15; i++) {
+		m_commandList[i] = m_commandList[i + 1];
+	}
+}
+
 void Title_Setting::SpriteUpdate()
 {
-	//FPSの設定
-	if (m_cursor_vertical == 2) {
-		m_cursorSpriteRender.SetPosition(Vector3(-200.0f + (m_cursor_horizontal * 275.0f), -240.0f, 0.0f));
-	}
-	//音量の設定
-	else {
-		m_cursorSpriteRender.SetPosition(Vector3(-600.0f, 165.0f + (-205.0f * m_cursor_vertical), 0.0f));
-	}
-	m_cursorSpriteRender.Update();
+	wchar_t text[255];
+	swprintf_s(text, 255, L"%d\n\n\n\n\n\n%d", m_saveDataArray[0], m_saveDataArray[1]);
+	m_percentFontRender.SetText(text);
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = 590.0f + (m_saveDataArray[0] * 7.5f);
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = 590.0f + (m_saveDataArray[1] * 7.5f);
@@ -227,6 +321,8 @@ void Title_Setting::StateChange()
 		sprites->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, fabsf(m_timer)));
 		sprites->Update();
 	}
+
+	m_percentFontRender.SetColor(Vector4(1.0f, 1.0f, 1.0f, m_timer));
 }
 
 void Title_Setting::Render(RenderContext& rc)
@@ -241,7 +337,18 @@ void Title_Setting::Render(RenderContext& rc)
 		m_buttonSpriteRender[i].Draw(rc);
 	}
 
+	//fpsカーソルの描画
+	m_fpsCursorSpriteRender.Draw(rc);
+
+	//ベース画像の描画
 	m_settingSpriteRender.Draw(rc);
+
+	//説明画像の描画
 	m_settingTextSpriteRender[m_cursor_vertical].Draw(rc);
+
+	//パーセント文字の描画
+	m_percentFontRender.Draw(rc);
+
+	//カーソルの描画
 	m_cursorSpriteRender.Draw(rc);
 }
