@@ -24,7 +24,7 @@ bool Enemy_Search::Start()
 	Animation();
 
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
-	m_searchModelRender.Init("Assets/modelData/object/whistle/whistle.tkm");
+
 
 	Enemy::Start();
 

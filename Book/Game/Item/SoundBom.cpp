@@ -28,6 +28,10 @@ bool SoundBom::Start()
 void SoundBom::Update()
 {
 	Item::Update();
+
+	if (m_soundEffect != nullptr) {
+		//m_soundEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 5.0f);
+	}
 }
 
 void SoundBom::ItemHit()
@@ -40,8 +44,8 @@ void SoundBom::ItemHit()
 	m_soundEffect->SetScale(Vector3::One * EFFECTSIZE);
 	//エフェクトの座標の設定
 	m_soundEffect->SetPosition(Vector3(m_position.x,10.0f,m_position.z));
+	m_soundEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 5.0f);
 	m_soundEffect->Play();
-	
 	
 	//近くにいるエネミーたちを探す
 	for (int i = 0; i<m_game->GetEnemyList().size(); i++)

@@ -5,6 +5,13 @@
 #include "Game.h"
 #include "Title.h"
 
+namespace
+{
+	const Vector3	CURSOR_POS_MENU[3] = { Vector3(-250.0f, 125.0f, 0.0f),
+										Vector3(-250.0f, -110.0f, 0.0f),
+										Vector3(-250.0f, -345.0f, 0.0f) };	//メニュー画面のカーソル座標
+}
+
 
 Pause::Pause()
 {
@@ -67,6 +74,12 @@ void Pause::PauseUpdate()
 
 void Pause::PauseScreen()
 {
+	//カーソルの移動中は、入力を受け付けない
+	if (m_cursorTimer < 1.0f) {
+		CursorMove();
+		return;
+	}
+
 	//スタートボタンを押したら
 	if (g_pad[0]->IsTrigger(enButtonStart)) {
 		GameObjectManager::GetInstance()->SetStop(false);
@@ -110,7 +123,9 @@ void Pause::PauseScreen()
 		if (m_cursor == cursor) {
 			//選択音を出す
 			PlaySE(2);
+			m_cursorTimer = 0.0f;
 		}
+		m_nextCursor = 1;
 	}
 	//下ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonDown)) {
@@ -122,10 +137,23 @@ void Pause::PauseScreen()
 		if (m_cursor == cursor) {
 			//選択音を出す
 			PlaySE(2);
+			m_cursorTimer = 0.0f;
 		}
+		m_nextCursor = -1;
 	}
+}
 
-	m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * -235.0f), 0.0f));
+void Pause::CursorMove()
+{
+	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 3.0f;
+
+	// -t^2 + 2t
+	float rate = ((pow(m_cursorTimer, 2.0f) * -1.0f) + (2.0f * m_cursorTimer));
+	rate = min(rate, 1.0f);
+
+	//カーソルを移動
+	m_cursorPos.Lerp(rate, CURSOR_POS_MENU[m_cursor + m_nextCursor], CURSOR_POS_MENU[m_cursor]);
+	m_cursorSpriteRender.SetPosition(m_cursorPos);
 	m_cursorSpriteRender.Update();
 }
 

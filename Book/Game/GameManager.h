@@ -19,7 +19,7 @@ public:
 	enum EnGameState
 	{
 		enState_Game,
-		enState_GetTresure,
+		enState_GetTreasure,
 		enState_Result
 	};
 

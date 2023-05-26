@@ -115,8 +115,10 @@ void Gage::GageUp(const int GageUp, const bool isEnemy)
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 
 	if (!m_isFind) {
-		//BGM‚ð•ÏX
-		GameManager::GetInstance()->SetBGM(22);
+		if (GameManager::GetInstance()->GetGameState() != GameManager::enState_GetTreasure) {
+			//BGM‚ð•ÏX
+			GameManager::GetInstance()->SetBGM(22);
+		}
 		m_isFind = true;
 	}
 

@@ -36,7 +36,7 @@ private:
 	/// <summary>
 	/// 入力による値の更新処理。
 	/// </summary>
-	void ValueUpdate(const bool vertical, const bool vol);
+	void ValueUpdate(const bool vertical, const bool vol, const bool setFPS);
 
 	/// <summary>
 	/// コマンド処理。
@@ -63,7 +63,7 @@ private:
 		m_saveDataArray[1] = m_saveData.sfx * 100;
 
 		float frame = m_saveData.frameRate - 60.0f;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			frame -= 30.0f;
 
 			if (frame < 0) {
@@ -98,7 +98,7 @@ private:
 	Title* m_title = nullptr;
 
 	GameManager::SaveData			m_saveData;						//セーブデータの構造体
-	std::array< int, 4 >			m_saveDataArray;				//セーブデータの一時的な配列
+	std::array< int, 3 >			m_saveDataArray;				//セーブデータの一時的な配列
 
 	Vector3 m_cursorPos;
 

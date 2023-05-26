@@ -86,6 +86,8 @@ void PlayerManagement::Input()
 		m_smokeEffect->Init(0);
 		//エフェクトの大きさを指定する
 		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
+		//エフェクトの再生速度を指定する
+		m_smokeEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
 		//エフェクトの座標の設定
 		m_smokeEffect->Play();
 

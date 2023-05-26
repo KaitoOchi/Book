@@ -329,7 +329,7 @@ float4 PSPlayer2D( SPSIn psIn ) : SV_Target0
 	uv.y = (psIn.uv.y / 4) + (y * 0.25);
 	float4 albedo = g_albedo.Sample(g_sampler, uv);
 
-	if(albedo.a < 0.001f){
+	if(albedo.a < 0.1f){
 		clip(-1);
 	}
 
