@@ -388,7 +388,7 @@ protected:
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
 
-	EffectEmitter* m_soundEffect = nullptr;		// エフェクト
+	EffectEmitter* m_Effect = nullptr;		// エフェクト
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー

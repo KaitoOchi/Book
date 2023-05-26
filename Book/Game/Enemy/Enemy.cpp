@@ -58,6 +58,11 @@ Enemy::~Enemy()
 {
 	m_pointList.clear();
 	m_pointList.shrink_to_fit();
+
+	if (m_Effect != nullptr) {
+		m_Effect->Stop();
+		DeleteGO(m_Effect);
+	}
 }
 
 bool Enemy::Start()
@@ -176,13 +181,13 @@ void Enemy::Efect_Dizzy()
 	if (m_efectDrawFlag[0] == false) {
 
 		// ☆のエフェクトを生成
-		m_soundEffect = NewGO<EffectEmitter>(2);
-		m_soundEffect->Init(2);
+		m_Effect = NewGO<EffectEmitter>(2);
+		m_Effect->Init(2);
 		// エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * 1.0f);
+		m_Effect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
-		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_soundEffect->Play();
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->Play();
 
 		m_efectDrawFlag[0] = true;
 	}
@@ -192,13 +197,13 @@ void Enemy::Efect_FindPlayer()
 {
 	if (m_efectDrawFlag[1] == false) {
 		// !のエフェクトを生成
-		m_soundEffect = NewGO<EffectEmitter>(3);
-		m_soundEffect->Init(3);
+		m_Effect = NewGO<EffectEmitter>(3);
+		m_Effect->Init(3);
 		// エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * 1.2f);
+		m_Effect->SetScale(Vector3::One * 1.2f);
 		// エフェクトの座標の設定
-		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_soundEffect->Play();
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->Play();
 
 		m_efectDrawFlag[1] = true;
 	}
@@ -208,13 +213,13 @@ void Enemy::Efect_MissingPlayer()
 {
 	if (m_efectDrawFlag[2] == false) {
 		// ?のエフェクトを生成
-		m_soundEffect = NewGO<EffectEmitter>(4);
-		m_soundEffect->Init(4);
+		m_Effect = NewGO<EffectEmitter>(4);
+		m_Effect->Init(4);
 		// エフェクトの大きさを指定する
-		m_soundEffect->SetScale(Vector3::One * 1.5f);
+		m_Effect->SetScale(Vector3::One * 1.5f);
 		// エフェクトの座標の設定
-		m_soundEffect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_soundEffect->Play();
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->Play();
 
 		m_efectDrawFlag[2] = true;
 	}
