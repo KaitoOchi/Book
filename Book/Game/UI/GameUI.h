@@ -69,7 +69,7 @@ public:
 	/// </summary>
 	/// <param name="state">trueなら描画</param>
 	/// <returns></returns>
-	const void SetCircleDrawState(bool state)
+	const void SetCircleDrawState(const bool state)
 	{
 		m_circleDrawState = state;
 	}
@@ -152,7 +152,7 @@ private:
 	SpriteRender		m_circleBaseSpriteRender;			//円形ゲージのベース画像
 	SpriteRender		m_circleSpriteRender;				//円形ゲージのゲージ画像
 
-	float				m_degree=360.0f;					//ゲージの角度
+	float				m_degree = 360.0f;					//ゲージの角度
 	bool				m_circleState = false;				//trueなら増加falseなら減少
 	bool				m_circleMaxState = false;			//MAXかどうか
 	bool				m_circleDrawState = false;			//円形ゲージを描画するかどうか
