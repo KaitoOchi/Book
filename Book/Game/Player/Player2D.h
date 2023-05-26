@@ -32,6 +32,7 @@ private:
 	Quaternion m_rot;
 	PlayerManagement* m_playerManagement = nullptr;
 	Player3D* m_player3D = nullptr;
+	EffectEmitter* m_smokeEffect = nullptr;
 private:
 	/// <summary>
 	/// 待機ステートの遷移処理

@@ -22,6 +22,7 @@ namespace
 	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
 	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
+	const float 	EFFECTSIZE = 2.0f;
 }
 
 Player::Player()
@@ -49,7 +50,6 @@ bool Player::Start()
 	m_gameUI->StaminaGage(m_stamina,m_position);
 	//クールタイムを初期化
 	m_staminaCoolTime = STAMINA_COOL_TIME;
-
 	return true;
 }
 void Player::Animation3D()
@@ -100,8 +100,9 @@ void Player::Update()
 	if (m_Player_Act&&
 		m_playerManagement->GetGameState()
 		) {
-		Move();
+		
 		Rotation();
+		Move();
 		ItemChange();
 		//2Dならお宝の近くに居てもジャンプさせる
 		//スタミナがない時はジャンプできない
@@ -207,8 +208,13 @@ void Player::Move()
 	}
 	else
 	{
+		if (m_stamina == 0.0f)
+		{
+			TireEffect();
+		}
+		
 		//スタミナがない場合行動できないようにする
-		m_moveSpeed *=SPEEDDOWN;
+		m_moveSpeed *=0.9;
 		//スタミナの回復する
 		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
 		m_stamina = min(m_stamina, PLAYERSTAMINA);
@@ -217,6 +223,7 @@ void Player::Move()
 		{
 			//走れるようにする
 			m_runState = true;
+			m_tireEffect->Stop();
 		}
 	}
 	
@@ -245,6 +252,38 @@ void Player::PlayerRun()
 	m_moveSpeed += cameraRight * m_Lstic.x * RUN;
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
+
+void Player::TireEffect()
+{
+	m_tireEffect = NewGO<EffectEmitter>(0);
+	m_tireEffect->Init(7);
+
+	Vector3 effectPos = m_position;
+	effectPos += (m_forward * -1.0f) * 15.0f;
+	effectPos.y = 50.0f;
+
+	m_tireEffect->SetPosition(effectPos);
+	m_tireEffect->SetScale(Vector3::One * EFFECTSIZE);
+
+
+	Vector3 cameraFoward = g_camera3D->GetForward();
+	Vector3 pos =m_position-m_gamecamera->GetPosition();
+	Vector3 move = m_moveSpeed;
+
+	Quaternion rot = Quaternion::Identity;
+	if (move.x < 0.0f)
+	{
+		pos *= -1.0f;
+	}
+
+	rot.SetRotationYFromDirectionXZ(pos);
+
+	m_tireEffect->SetRotation(rot);
+	m_tireEffect->Play();
+	m_tireEffect->Update();
+}
+
+
 void Player::Jump()
 {
 	if (GetCharacon() == nullptr)

@@ -8,6 +8,7 @@ namespace
 {
 	const float SOUNDRANGE = 500.0f;
 	const float EFFECTSIZE = 2.0f;
+	const int	SOUNDNUMBER = 5;
 }
 SoundBom::SoundBom()
 {
@@ -20,7 +21,9 @@ SoundBom::~SoundBom()
 bool SoundBom::Start()
 {
 	Item::Start();
+	m_soundCount = SOUNDNUMBER;
 	m_gameUI->SetSoundSlot(m_soundCount);
+	m_soundCount = SOUNDNUMBER;
 	//ディアクティブ
 	Deactivate();
 	return true;
