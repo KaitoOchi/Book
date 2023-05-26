@@ -568,6 +568,13 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 	}
+
+	// 回転を教える
+	Vector3 rot = pos - m_position;
+	rot.Normalize();
+
+	Rotation(rot);
+
 }
 
 void Enemy::Act_Craw()

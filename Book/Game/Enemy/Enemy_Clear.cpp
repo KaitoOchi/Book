@@ -34,7 +34,6 @@ bool Enemy_Clear::Start()
 	m_clearModelRender.SetScale(m_scale);
 	m_clearModelRender.SetPosition(m_position);
 	m_clearModelRender.SetRotation(m_rotation);
-	m_clearModelRender.PlayAnimation(m_enAnimation_Walk);
 
 	// �p�X�ړ�
 	m_point = &m_pointList[0];
@@ -79,32 +78,40 @@ void Enemy_Clear::Update()
 		// ����
 	case CRAW:
 		Update_OnCraw();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 		// �ǐ�
 	case TRACKING:
 		Update_OnTracking();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 	case MISSING_MOVEPOSITON:
 		Update_OnMoveMissingPosition();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 	case MISSING_SEARCHPLAYER:
 		Update_OnSearchMissingPlayer();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Loss, 1.0f);
 		break;
 		// �Ă΂ꂽ�Ƃ�
 	case CALLED:
 		Update_OnCalled();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 		// �����Ԃɖ߂�
 	case BACKBASEDON:
 		Update_OnBackBasedOn();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 		// �M���e�ɓ�������
 	case CONFUSION:
 		Update_OnConfusion();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Dizzy, 1.0f);
 		break;
 		// �����e��g�p�����Ƃ�
 	case LISTEN:
 		UpDate_OnListen();
+		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 	}
 
