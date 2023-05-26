@@ -16,7 +16,7 @@ namespace
 	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
-	const float		ADD_SPEED = 1.5f;						// 乗算速度
+	const float		ADD_SPEED = 1.3f;						// 乗算速度
 
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
@@ -520,12 +520,16 @@ void Enemy::Act_HitFlashBullet()
 
 void Enemy::Act_GoLocationListenSound(Vector3 pos)
 {
+	Efect_FindPlayer();
+
 	// エネミーからアイテムへ向かうベクトルを作成
 	Vector3 diff = pos - m_position;
 	float length = diff.Length();
 
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
+		Efect_FindPlayer();
+
 		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
 			m_ActState = CHARGE;
@@ -539,15 +543,30 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 	if (length >= CALL_DISTANCE_MIN) {
 		// アイテムの座標を基にしてナビメッシュを作成
 		CreateNavimesh(pos);
+
+		// 経過時間を計測
+		m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
+
 		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[2] = false;
 	}
+	// 長さが一定以上かつ一定時間が経過したとき(壁にぶつかったときの対処策)
+	else if (m_addTimer[4] < 10.0f) {
+		// 見失ったプレイヤーを探す
+		m_ActState = MISSING_SEARCHPLAYER;
+		m_HearedSoundBulletFlag = false;
+		// タイマーをリセット
+		m_addTimer[4] = 0.0f;
+		m_efectDrawFlag[1] = false;
+		return;
+	}
 	else {
 		// 見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
+		m_efectDrawFlag[1] = false;
 	}
 }
 
@@ -897,11 +916,17 @@ void Enemy::Act_Loss()
 	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 
+	float length = diff.Length();
+
 	// 長さが一定のとき
-	if (diff.Length() <= CHANGING_DISTANCE) {
+	if (length <= CHANGING_DISTANCE) {
 		m_NaviTimer = 0.0f;
 		m_ActState = CRAW;
 	}
+
+	// 回転を教える
+	diff.Normalize();
+	Rotation(diff);
 }
 
 bool Enemy::Act_Stop(float time,int i)
