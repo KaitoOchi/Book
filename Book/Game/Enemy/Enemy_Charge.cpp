@@ -15,7 +15,6 @@ Enemy_Charge::Enemy_Charge()
 
 Enemy_Charge::~Enemy_Charge()
 {
-
 }
 
 bool Enemy_Charge::Start()
@@ -52,8 +51,8 @@ void Enemy_Charge::Update()
 
 	// •`‰æ‚µ‚È‚¢ƒtƒ‰ƒO‚ªtrue‚Ì‚Æ‚«
 	if (m_NotDrawFlag == true) {
-		if (m_soundEffect != nullptr) {
-			m_soundEffect->Stop();
+		if (m_Effect != nullptr) {
+			m_Effect->Stop();
 		}
 		return;
 	}
