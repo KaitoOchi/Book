@@ -25,7 +25,7 @@ namespace
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
-	const float		CANMOVE_TIMER = 9.5f;					// 再度行動できるまでの待機時間
+	const float		CANMOVE_TIMER = 5.5f;					// 再度行動できるまでの待機時間
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		SEARCHPLAYER_TIMER = 7.0f;				// プレイヤーを見失った時の待機時間
 
@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 140.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 50.0f;					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -963,6 +963,11 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
+	// 混乱状態の時は実行しない
+	if (m_ActState == DIZZY) {
+		return;
+	}
+
 	lightpos.y = LIGHTPOSITION;
 	//Y��
 	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
