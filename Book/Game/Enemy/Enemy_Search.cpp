@@ -24,7 +24,7 @@ bool Enemy_Search::Start()
 	Animation();
 
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
-	m_searchModelRender.Init("Assets/modelData/object/whistle/whistle.tkm");
+
 
 	Enemy::Start();
 
@@ -48,8 +48,8 @@ void Enemy_Search::Update()
 
 	// �`�悵�Ȃ��t���O��true�̂Ƃ�
 	if (m_NotDrawFlag == true) {
-		if (m_soundEffect != nullptr) {
-			m_soundEffect->Stop();
+		if (m_Effect != nullptr) {
+			m_Effect->Stop();
 		}
 		return;
 	}

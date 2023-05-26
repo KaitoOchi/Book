@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Title.h"
 #include "Fade.h"
+#include "Logo.h"
 
 #include "Event.h"
 #include "Opening.h"
@@ -17,8 +18,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// �Q�[���̏������B
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Carta Gatto"));
 
-	NewGO<Title>(0, "title");
-	//NewGO<Game>(0, "game");
+	//NewGO<Logo>(10, "logo");
+	
+	//NewGO<Title>(0, "title");
+	NewGO<Game>(0, "game");
 
 	//NewGO<Event>(0, "event");
 	//NewGO<Opening>(0, "opening");

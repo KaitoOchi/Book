@@ -452,10 +452,10 @@ void Game::LevelDesign()
 			return true;
 		}
 
-		if (objData.EqualObjectName(L"camera") == true) {
+		if (objData.ForwardMatchName(L"camera") == true) {
 			SecurityCamera* securityCamera = NewGO<SecurityCamera>(0, "securityCamera");
 			securityCamera->SetPosition(objData.position);
-			securityCamera->SetType(1);
+			securityCamera->SetType(objData.number);
 			securityCamera->SetNumber(m_spotLigNum);
 			m_spotLigNum++;
 			m_SecurityCameraList.emplace_back(securityCamera);
@@ -644,7 +644,7 @@ void Game::NotifyEventStart()
 void Game::NotifyEventEnd()
 {
 	//ステートをお宝取得後に設定
-	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
+	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTreasure);
 
 	//ライトを戻す
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;

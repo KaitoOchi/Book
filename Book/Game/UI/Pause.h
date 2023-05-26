@@ -31,6 +31,11 @@ private:
 	void PauseScreen();
 
 	/// <summary>
+	/// カーソルの移動処理。
+	/// </summary>
+	void CursorMove();
+
+	/// <summary>
 	/// フェードイン処理。
 	/// </summary>
 	void FadeIn();
@@ -62,7 +67,10 @@ private:
 	SpriteRender	m_cursorSpriteRender;			//カーソル画像
 	PauseState		m_pauseState = enState_Game;	//ポーズステート
 	Game*			m_game = nullptr;				//ゲームクラス
+	Vector3			m_cursorPos;
 	bool			m_isPause = false;				//ポーズしたかどうか
 	int				m_cursor = 0;					//カーソル
+	int				m_nextCursor = 0;
 	float			m_timer = 0.0f;					//タイマー
+	float			m_cursorTimer = 1.0f;			//カーソルタイマー
 };

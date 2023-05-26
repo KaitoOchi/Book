@@ -274,6 +274,7 @@
     <ClCompile Include="Stage\Ghost.cpp" />
     <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="UI\GoalSprite.cpp" />
+    <ClCompile Include="UI\Logo.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -331,6 +332,7 @@
     <ClInclude Include="Stage\Ghost.h" />
     <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\GoalSprite.h" />
+    <ClInclude Include="UI\Logo.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

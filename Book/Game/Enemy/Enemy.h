@@ -388,7 +388,7 @@ protected:
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
 
-	EffectEmitter* m_soundEffect = nullptr;		// エフェクト
+	EffectEmitter* m_Effect = nullptr;		// エフェクト
 
 	CharacterController m_characterController;	// キャラクターコントローラー
 	SphereCollider m_sphereCollider;			// スフィアコライダー
@@ -433,7 +433,8 @@ protected:
 	/// <param name="1">	：巡回時のパスに留まる時間			</param>
 	/// <param name="2">	：突進を行うまでの待機時間			</param>
 	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
-	std::array<float, 4>m_addTimer;
+	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
+	std::array<float, 5>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;

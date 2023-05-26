@@ -56,6 +56,8 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(24, "Assets/sound/bgm/bgm_result.wav");
 	//ゲームオーバーリザルトBGMの設定
 	g_soundEngine->ResistWaveFileBank(25, "Assets/sound/bgm/bgm_result_clear.wav");
+	//オープニングBGMの設定
+	g_soundEngine->ResistWaveFileBank(26, "Assets/sound/bgm/bgm_opening.wav");
 
 	//データのロード
 	DataLoad();

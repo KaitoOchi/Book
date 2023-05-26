@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Fade.h"
 
-
-
 Fade::Fade()
 {
 	srand(time(0));
@@ -30,11 +28,17 @@ bool Fade::Start()
 	m_loadingSpriteRender.SetPosition(Vector3(280.0f, -425.0f, 0.0f));
 	m_loadingSpriteRender.Update();
 
-	m_tipsSpriteRender[0].Init("Assets/sprite/UI/tips/1.DDS", 1178.0f, 755.0f);
-	m_tipsSpriteRender[1].Init("Assets/sprite/UI/tips/2.DDS", 1178.0f, 755.0f);
-	m_tipsSpriteRender[2].Init("Assets/sprite/UI/tips/3.DDS", 1178.0f, 755.0f);
-	m_tipsSpriteRender[3].Init("Assets/sprite/UI/tips/5.DDS", 1178.0f, 755.0f);
-	m_tipsSpriteRender[4].Init("Assets/sprite/UI/tips/9.DDS", 1178.0f, 755.0f);
+	//tipâÊëú1Å`15Çê›íË
+	wchar_t path[255];
+	char finalFilePath[100];
+	for (int i = 1; i < TIPS_MAX + 1; i++) {
+		
+		swprintf_s(path, 255, L"Assets/sprite/UI/tips/%d.DDS", i);
+		//wchar_tÇcharÇ…ïœä∑
+		wcstombs(finalFilePath, path, sizeof(path));
+		//tipsâÊëúÇÃê›íË
+		m_tipsSpriteRender[i - 1].Init(finalFilePath, 1178.0f, 755.0f);
+	}
 	return true;
 }
 

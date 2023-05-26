@@ -11,7 +11,8 @@ namespace
 {
 	const int		CURSOR_VERTICAL_MAX = 3;							//メニュー画面の縦カーソル最大値
 
-	const Vector3	CURSOR_POS_MENU[3] = { { -725.0f,  80.0f, 0.0f},
+	const Vector3	CURSOR_POS_MENU[4] = { { 0.0f,  0.0f, 0.0f },
+										{ -725.0f,  80.0f, 0.0f},
 										{ -725.0f,  -120.0f, 0.0f},
 										{ -725.0f,  -270.0f, 0.0f} };	//メニュー画面のカーソル座標
 }
@@ -102,6 +103,8 @@ void Title::InitSprite()
 
 	//カーソル画像の設定
 	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
+	m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[1]);
+	m_cursorSpriteRender.Update();
 	m_sprites.push_back(&m_cursorSpriteRender);
 
 	//ボタン画像の設定
@@ -163,6 +166,10 @@ void Title::StateChange()
 		//画像のアニメーションが終了したら
 		if (m_animTime < 0.0f) {
 
+			m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[1]);
+			m_cursorSpriteRender.Update();
+			m_cursorTimer = 1.0f;
+
 			//メニュー画面以降なら
 			if (m_titleState_tmp > 1 || m_titleState > 2) {
 				//フェードアウトする
@@ -215,10 +222,17 @@ void Title::SceneChange()
 	SetActive(false);
 	m_isWaitFadeOut = false;
 	m_isWaitState = false;
+
 }
 
 void Title::Input()
 {
+	//カーソルの移動中は、入力を受け付けない
+	if (m_cursorTimer < 1.0f) {
+		CursorMove();
+		return;
+	}
+
 	//Aボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
@@ -271,11 +285,13 @@ void Title::Input()
 		if (g_pad[0]->IsTrigger(enButtonUp)) {
 			m_cursor--;
 			ValueUpdate(true);
+			m_nextCursor = 1;
 		}
 		//下ボタンが押されたら
 		else if (g_pad[0]->IsTrigger(enButtonDown)) {
 			m_cursor++;
 			ValueUpdate(true);
+			m_nextCursor = -1;
 		}
 	}
 }
@@ -294,8 +310,23 @@ void Title::ValueUpdate(bool vertical)
 		if (m_cursor == cursor_v)
 		{
 			Sound(2);
+			m_cursorTimer = 0.0f;
 		}
 	}
+}
+
+void Title::CursorMove()
+{
+	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 3.0f;
+
+	// -t^2 + 2t
+	float rate = ((pow(m_cursorTimer, 2.0f) * -1.0f) + (2.0f * m_cursorTimer));
+	rate = min(rate, 1.0f);
+
+	//カーソルを移動
+	m_cursorPos.Lerp(rate, CURSOR_POS_MENU[m_cursor + m_nextCursor], CURSOR_POS_MENU[m_cursor]);
+	m_cursorSpriteRender.SetPosition(m_cursorPos);
+	m_cursorSpriteRender.Update();
 }
 
 void Title::Animation(float& time, float& alpha)
@@ -350,11 +381,6 @@ void Title::MenuScreen()
 	m_titleSpriteRender.SetPosition(Vector3(-675.0f, 400.0f, 0.0f));
 	m_titleSpriteRender.SetScale(Vector3(0.25f, 0.25f, 0.0f));
 	m_titleSpriteRender.Update();
-
-	if (!m_isWaitState || m_animTime < 0.0f) {
-		m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[m_cursor - 1]);
-		m_cursorSpriteRender.Update();
-	}
 }
 
 void Title::Render(RenderContext &rc)

@@ -95,7 +95,14 @@ namespace nsK2EngineLow {
 		{
 			return m_effect.IsPlay();
 		}
-
+		/// <summary>
+		/// Ä¶‘¬“x‚ğİ’èB
+		/// </summary>
+		/// <returns></returns>
+		void SetTime(const float time)
+		{
+			m_effect.SetTime(time);
+		}
 		/// <summary>
 		/// ŠO•”‚©‚çÁ‚·‚©‚ğŒˆ‚ß‚é
 		/// </summary>

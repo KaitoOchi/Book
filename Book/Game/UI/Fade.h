@@ -2,7 +2,7 @@
 
 namespace
 {
-	const int TIPS_MAX = 5;
+	const int TIPS_MAX = 15;
 }
 
 class Fade : public IGameObject
@@ -27,7 +27,7 @@ public:
 	/// </summary>
 	void StartFadeOut()
 	{
-		m_spriteNum = rand() % 4;
+		m_spriteNum = rand() % TIPS_MAX;
 		m_state = enState_FadeOut;
 	}
 	
