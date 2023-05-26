@@ -964,7 +964,7 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
 	// 混乱状態の時は実行しない
-	if (m_ActState == DIZZY) {
+	if (m_ActState == CONFUSION) {
 		return;
 	}
 
