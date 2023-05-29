@@ -531,12 +531,6 @@ void Enemy::Act_HitFlashBullet()
 
 void Enemy::Act_GoLocationListenSound(Vector3 pos)
 {
-	Efect_FindPlayer();
-
-	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = pos - m_position;
-	float length = diff.Length();
-
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 		Efect_FindPlayer();
@@ -549,6 +543,12 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_ActState = TRACKING;
 		return;
 	}
+
+	Efect_FindPlayer();
+
+	// エネミーからアイテムへ向かうベクトルを作成
+	Vector3 diff = pos - m_position;
+	float length = diff.Length();
 
 	// 長さが一定以上のとき
 	if (length >= CALL_DISTANCE_MIN) {

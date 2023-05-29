@@ -163,6 +163,7 @@ void PlayerManagement::PlayerChange2D()
 	m_player2D->SetPosition(m_player3D->GetPosition());
 	m_player2D->SetStamina(m_player3D->GetStamina());
 	m_player2D->SetRunState(m_player3D->GetRunState());
+	m_player2D->SetTireEffect(m_player3D->GetTireEffect());
 	m_player2D->SetPlayerState(Player::m_enPlayer_Change);
 	m_player2D->ModelRenderUpdate();//モデルの更新
 	m_player3D->PlayerChang();//3Dプレイヤーをディアクティブにする
@@ -178,6 +179,7 @@ void PlayerManagement::PlayerChange3D()
 	m_player3D->SetPosition(m_player2D->GetPosition());//3D��2D�̃|�W�V������^����
 	m_player3D->SetStamina(m_player2D->GetStamina());
 	m_player3D->SetRunState(m_player2D->GetRunState());
+	m_player3D->SetTireEffect(m_player2D->GetTireEffect());
 	m_player3D->ModelRenderUpdate();//���f����X�V����
 	m_player2D->PlayerChang();//�v���C���[2D��f�B�A�N�e�B�u�ɂ���
 	m_player3D->CreatCharcon();//�L�����R���𐶐�����

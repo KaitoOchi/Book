@@ -13,7 +13,7 @@ namespace
 	const float MAXALPHA = 0.9;					//α値の範囲
 	const float MAXAMBIENT = 1.0f;				//環境の強さ
 	const float MAXCOLOR = 10.0f;
-	
+	const int	FLASHNUMBER = 2;
 }
 FlashBom::FlashBom()
 {
@@ -26,6 +26,9 @@ FlashBom::~FlashBom()
 bool FlashBom::Start()
 {
 	Item::Start();
+
+	m_flashCount= FLASHNUMBER;
+
 	m_sphereCollider.Create(0.1f);
 	//ポイントライト
 	m_pointLight.SetPointLight(2, m_position, LIGHTNO, MAXRANGE);

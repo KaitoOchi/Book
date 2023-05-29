@@ -120,5 +120,6 @@ private:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition()override;
+	
 };
 
