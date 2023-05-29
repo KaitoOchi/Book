@@ -63,6 +63,7 @@ bool Treasure::Start()
 void Treasure::Update()
 {
 	m_gameUI->SetCircleState(false);
+	m_hitState = false;
 
 	if (m_gameUI->GetDegree() >= 360.0f)
 	{
@@ -78,7 +79,7 @@ void Treasure::Hit()
 {
 	//円形ゲージを増やす
 	m_gameUI->SetCircleDrawState(true);
-
+	m_hitState = true;
 	//Aボタンが押されているなら
 	if (g_pad[0]->IsPress(enButtonA)) {
 
@@ -88,6 +89,7 @@ void Treasure::Hit()
 		//ゲージが最大までいったら
 		if (m_gameUI->GetCircleMAXState())
 		{
+			m_hitState = false;
 
 			m_gameUI->SetCircleDrawState(false);
 

@@ -14,6 +14,7 @@ namespace
 	float			RUBVALUM = 3.0f;
 	const float		SPEEDDOWN = 0.8;									//速度減速率
 	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
+	const float EFFECTSIZE = 1.5f;
 }
 Player2D::Player2D()
 {
@@ -137,6 +138,7 @@ void Player2D::Animation()
 	
 		break;
 	case Player::m_enPlayer_Change:
+		
 		m_modelRender->PlayAnimation(enAnimationClip_Change, 0.0f);
 		break;
 	case Player::m_enPlayer_2DChanging:

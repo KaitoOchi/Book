@@ -153,10 +153,43 @@ public:
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetStamina();
 		}
-		else {
+		else if (m_enMananagementState == m_enPlayer_2DChanging) {
 			return m_player2D->GetStamina();
 		}
+		else if (m_manageStateTmp == m_enPlayer_3DChanging)
+		{
+			return m_player2D->GetStamina();
+		}
+		else if (m_manageStateTmp == m_enPlayer_2DChanging)
+		{
+			return m_player3D->GetStamina();
+		}
 	}
+
+	/// <summary>
+	/// 走れるかどうかの取得
+	/// </summary>
+	/// <returns></returns>
+	const bool GetRunState()
+	{
+		// 今アクティブなプレイヤーの座標を返す
+		if (m_enMananagementState == m_enPlayer_3DChanging) {
+			return m_player3D->GetRunState();
+		}
+		else if (m_enMananagementState == m_enPlayer_2DChanging) {
+			return m_player2D->GetRunState();
+		}
+		else if (m_manageStateTmp == m_enPlayer_3DChanging)
+		{
+			return m_player2D->GetRunState();
+		}
+		else if (m_manageStateTmp == m_enPlayer_2DChanging)
+		{
+			return m_player3D->GetRunState();
+		}
+	}
+
+
 
 private:
 	
@@ -198,7 +231,7 @@ private:
 	bool					m_GameStartState = false;						//ゲームが始まっているかどうか
 	float					m_changeTime = 0.0f;							//プレイヤーを切り替える時間
 
-	EffectEmitter* m_smokeEffect = nullptr;
+	EffectEmitter*			m_smokeEffect = nullptr;
 
 };
 

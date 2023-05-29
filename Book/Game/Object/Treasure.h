@@ -45,9 +45,19 @@ public:
 		return m_position;
 	}
 	void Hit()override;
+	/// <summary>
+	/// お宝に触れているか取得
+	/// </summary>
+	/// <returns>trueなら触れている</returns>
+	const bool GetHitState()
+	{
+		return m_hitState;
+	}
+
 
 private:
 	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
 	GameUI*					m_gameUI = nullptr;				//ゲームUI
 	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
+	bool					m_hitState = false;				//trueならお宝に触れている
 };

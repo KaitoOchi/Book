@@ -23,12 +23,12 @@ namespace
 	const float		FLASH_SCALE_MAX = 1.3f;								//閃光弾UIの最大のスケール
 	const float		SOUND_SCALE_MAX = 1.3f;								//音爆弾UIの最大のスケール
 	
-	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
-	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
+	const float		STAMINA_POSITION = 60.0f;						//スタミナベース画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
 
 	const double	PI = 3.14159;										//円周率
 	const float		CIRCLE_SIZE_MAX = 0.0f;							//円形ゲージ最大
+	const float		CIRCLE_SIZE_MIN = 360.0f;						//円形ゲージ最低
 }
 
 GameUI::GameUI()
@@ -83,14 +83,15 @@ bool GameUI::Start()
 
 
 	//スタミナゲージのベース画像の設定
-	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/base.DDS", 18.0f, 166.0f);
+	m_staminaBaseRender.Init("Assets/sprite/UI/stamina/stamina_base.DDS", 162.0f, 183.0f);
+	m_staminaBaseRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_staminaBaseRender.Update();
 
 	//スタミナゲージ画像の設定
-	m_staminaGageRender.Init("Assets/sprite/UI/stamina/staminagage.DDS", 10.0f, 118.0f);
-	m_staminaGageRender.SetPivot(Vector2(0.5, 0.0));
-	m_staminaGageRender.SetScale(m_stamianGageScale);
+	m_staminaGageRender.Init("Assets/sprite/UI/stamina/stamina.DDS", 162.0f, 183.0f,AlphaBlendMode_Trans, 5);
+	m_staminaGageRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_staminaGageRender.Update();
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_staminaDegree * PI) / 180.0f;
 
 	//円形ゲージのベース画像
 	m_circleBaseSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/base.DDS", 162.0f, 183.0f);
@@ -101,7 +102,7 @@ bool GameUI::Start()
 	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS",157.0f, 178.0f, AlphaBlendMode_Trans, 5);
 	m_circleSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
 	m_circleSpriteRender.Update();
-	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+	//RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
 
 
 
@@ -124,10 +125,13 @@ void GameUI::Update()
 	}
 
 	Time();
-
-	CircleChange();
-
 	ChangeGage();
+
+
+	if (m_treasure->GetHitState())
+	{
+		CircleChange();
+	}
 }
 
 void GameUI::Time()
@@ -317,16 +321,19 @@ void GameUI::ItemScaleUp()
 
 void GameUI::StaminaGage(float stamina,Vector3 pos)
 {
-	m_stamianGageScale.y *= stamina / 10;
+	float m_stamina = stamina;
+	m_staminaDegree = 360.0f-(36*m_stamina);
+	m_staminaDegree = max(m_staminaDegree, CIRCLE_SIZE_MAX);
+	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_staminaDegree * PI) / 180.0f;
+
 
 	Vector3 position = pos;
 	//ワールド座標からスクリーン座標を計算
 	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
-	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_BASE_POSITION, 0.0f));
-	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_GAGE_POSITION, 0.0f));
-	//スタミナゲージの変更
-	m_staminaGageRender.SetScale(Vector3(1.0f, stamina / 10, 1.0f));
-	
+	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_POSITION, 0.0f));
+	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_POSITION, 0.0f));
+
+
 	m_staminaBaseRender.Update();
 	m_staminaGageRender.Update();
 }
@@ -377,15 +384,22 @@ void GameUI::Render(RenderContext& rc)
 	m_itemFlashNumber.Draw(rc);
 	m_itemSoundNumber.Draw(rc);
 	
-	if (m_playerManagement->GetStamina() != 10.0f)
-	{
-		m_staminaBaseRender.Draw(rc);
-		m_staminaGageRender.Draw(rc);
-	}
-
+	
 	//円形ゲージの描画
-	if (m_circleDrawState) {
+	if (m_circleDrawState
+		&&m_treasure->GetHitState()) {
 		m_circleSpriteRender.Draw(rc);
 		m_circleBaseSpriteRender.Draw(rc);
 	}
+
+
+
+	if (m_playerManagement->GetStamina() != 10.0f&&
+		!m_circleDrawState)
+	{
+		m_staminaGageRender.Draw(rc);
+		m_staminaBaseRender.Draw(rc);
+
+	}
+
 }

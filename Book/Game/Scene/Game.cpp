@@ -55,6 +55,8 @@ Game::Game()
 	EffectEngine::GetInstance()->ResistEffect(5, u"Assets/effect/sukima/sukima.efk");
 	//お宝のキラキラエフェクト
 	EffectEngine::GetInstance()->ResistEffect(6, u"Assets/effect/treasure/kirakira.efk");
+	//疲れた時のエフェクト
+	EffectEngine::GetInstance()->ResistEffect(7, u"Assets/effect/tire/tire.efk");
 }
 
 Game::~Game()

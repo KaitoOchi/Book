@@ -28,6 +28,15 @@ public:
 		return m_cameraposition;
 	}
 
+	/// <summary>
+	/// カメラの座標
+	/// </summary>
+	/// <returns></returns>
+	const Vector3 GetPosition()
+	{
+		return m_camePos;
+	}
+
 private:
 	Vector3 m_toCameraPos = Vector3::Zero;//注視点から視点に向かうベクトル
 	Vector3 m_toCameraPosOld = Vector3::Zero;//注視点から視点に向かうベクトル変更前座標
