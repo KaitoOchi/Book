@@ -189,6 +189,24 @@ public:
 		return m_modelRender;
 	}
 
+	/// <summary>
+	/// 疲れた時のエフェクトを取得
+	/// </summary>
+	/// <param name="m_effect"></param>
+	/// <returns></returns>
+	void SetTireEffect(EffectEmitter* m_effect)
+	{
+		m_tireEffect = m_effect;
+	}
+	/// <summary>
+	/// 疲れた時のエフェクトの情報を取得
+	/// </summary>
+	/// <returns></returns>
+	EffectEmitter* GetTireEffect() const
+	{
+		return m_tireEffect;
+	}
+
 protected:
 	
 
@@ -298,6 +316,10 @@ protected:
 	/// つれた時のエフェクトの処理
 	/// </summary>
 	void TireEffect();
+
+
+
+
 protected:
 
 

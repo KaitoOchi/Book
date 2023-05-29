@@ -109,7 +109,7 @@ void FlashBom::ItemHit()
 					float cos = m_game->GetEnemyList()[i]->GetFoward().Dot(diff);
 					//内積から角度を求める
 					float angle = acosf(cos);
-					if (angle <= (Math::PI / 180.0f) * 45.0f)
+					if (angle <= (Math::PI / 180.0f) * 90.0f)
 					{
 						//エネミーフラグをtrueに。
 						m_game->GetEnemyList()[i]->SetHitFlashBullet(true);

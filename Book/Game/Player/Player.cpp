@@ -123,7 +123,8 @@ void Player::Update()
 		}
 		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
 			m_Player_Act&&
-			m_playerState!=m_enPlayer_Jump)
+			m_playerState!=m_enPlayer_Jump&&
+			m_runState==true)
 		{
 			Throw();
 		}
@@ -140,7 +141,11 @@ void Player::Update()
 	PlayerCatch();
 	Animation();
 	ManageState();
-	m_gameUI->StaminaGage(m_stamina,m_position);
+	if (!m_treasure->GetHitState())
+	{
+		m_gameUI->StaminaGage(m_stamina, m_position);
+	}
+	
 	for (int i=0; i < m_game->GetWallList().size(); i++)
 	{
 		m_game->GetWallList()[i]->SetWallRenderPosition(m_position);
@@ -150,8 +155,6 @@ void Player::Update()
 
 void Player::Move()
 {
-
-
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//速度を初期化
@@ -217,7 +220,15 @@ void Player::Move()
 		m_moveSpeed *=0.9;
 		//スタミナの回復する
 		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
-		m_stamina = min(m_stamina, PLAYERSTAMINA);
+		if (!m_treasure->GetHitState())
+		{
+			m_stamina = min(m_stamina, PLAYERSTAMINA);
+		}
+		if (m_treasure == nullptr)
+		{
+			m_stamina = min(m_stamina, PLAYERSTAMINA);
+		}
+		
 		//スタミナが全快したなら
 		if (m_stamina == PLAYERSTAMINA)
 		{
@@ -496,6 +507,10 @@ void Player::ManageState()
 		ProcessDownStateTransition();
 		break;
 	case m_enPlayer_Caught:
+		if (m_tireEffect->IsPlay() == true)
+		{
+			m_tireEffect->Stop();
+		}
 		ProcessCaughtStateTransition();
 	case m_enPlayer_Catching:
 		ProcessCatchingStateTransition();
