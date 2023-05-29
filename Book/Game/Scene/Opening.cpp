@@ -10,6 +10,7 @@ namespace
 {
 	const int		SCENE_MAX = 5;													//シーンの最大数
 	const float		CIRCLE_MAX = 360.0f;											//円形ゲージの最大数
+	const float		CIRCLE_SPEED = 280.0f;											//ゲージの進む速さ
 	const double	PI = 3.14159;													//円周率
 
 	const bool		CAMERA_SET_POS[SCENE_MAX] = { true, false, true, true, true };	//カメラの座標変更をするか
@@ -71,7 +72,7 @@ bool Opening::Start()
 	g_camera3D->Update();
 
 	//BGMの設定
-	GameManager::GetInstance()->SetBGM(23);
+	GameManager::GetInstance()->SetBGM(26);
 
 	//フェードの設定
 	m_fade = FindGO<Fade>("fade");
@@ -192,7 +193,7 @@ void Opening::Input()
 {
 	//Aボタンが押されたら
 	if (g_pad[0]->IsPress(enButtonA)) {
-		m_degree -= 120.0f * g_gameTime->GetFrameDeltaTime();
+		m_degree -= CIRCLE_SPEED * g_gameTime->GetFrameDeltaTime();
 
 		//ゲージが最大になったらスキップ
 		if (m_degree < 0.0f) {

@@ -307,9 +307,6 @@
     <ClInclude Include="Stage\Wall\Wall_Duct.h">
       <Filter>Stage\Wall</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Title_Setting.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Title_Guide.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -321,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="UI\Logo.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title_Setting.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

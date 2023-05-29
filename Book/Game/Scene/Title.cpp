@@ -166,6 +166,10 @@ void Title::StateChange()
 		//画像のアニメーションが終了したら
 		if (m_animTime < 0.0f) {
 
+			m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[1]);
+			m_cursorSpriteRender.Update();
+			m_cursorTimer = 1.0f;
+
 			//メニュー画面以降なら
 			if (m_titleState_tmp > 1 || m_titleState > 2) {
 				//フェードアウトする
@@ -219,8 +223,6 @@ void Title::SceneChange()
 	m_isWaitFadeOut = false;
 	m_isWaitState = false;
 
-	m_cursorSpriteRender.SetPosition(CURSOR_POS_MENU[1]);
-	m_cursorSpriteRender.Update();
 }
 
 void Title::Input()

@@ -88,6 +88,14 @@ namespace nsK2EngineLow {
 		{
 			return EffectEngine::GetInstance()->IsPlay(m_handle);
 		}
+		/// <summary>
+		/// 再生速度を設定。
+		/// </summary>
+		/// <returns></returns>
+		void SetTime(const float time)
+		{
+			m_speed = time;
+		}
 		/*!
 		 *@brief	更新。
 		 */
@@ -95,6 +103,7 @@ namespace nsK2EngineLow {
 	private:
 		Effekseer::EffectRef m_effect;	//エフェクト
 		int	m_handle = -1;				//再生中のエフェクトのハンドル。
+		float m_speed = 1.0f;			//再生速度
 		Vector3 m_position;				//座標。
 		Quaternion m_rotation;;			//回転。
 		Vector3 m_scale = g_vec3One;	//拡大率。

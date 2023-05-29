@@ -642,7 +642,7 @@ void Game::NotifyEventStart()
 void Game::NotifyEventEnd()
 {
 	//ステートをお宝取得後に設定
-	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTresure);
+	GameManager::GetInstance()->SetGameState(GameManager::enState_GetTreasure);
 
 	//ライトを戻す
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;

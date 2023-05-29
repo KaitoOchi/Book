@@ -34,6 +34,11 @@ Title_Setting::~Title_Setting()
 
 bool Title_Setting::Start()
 {
+	//セーブデータのロード
+	m_saveData = GameManager::GetInstance()->DataLoad();
+	SetDataArray();
+	m_cursor_horizontal = m_saveDataArray[m_cursor_vertical];
+
 	//設定画面の設定
 	m_settingSpriteRender.Init("Assets/sprite/UI/title/setting_all.DDS", 1920.0f, 1080.0f);
 	m_sprites.push_back(&m_settingSpriteRender);
@@ -56,7 +61,7 @@ bool Title_Setting::Start()
 
 	//FPSカーソル画像の設定
 	m_fpsCursorSpriteRender.Init("Assets/sprite/UI/setting/light.DDS", 991.0f, 932.0f);
-	m_fpsCursorSpriteRender.SetPosition(CURSOR_POS_HORIZONTAL[0]);
+	m_fpsCursorSpriteRender.SetPosition(CURSOR_POS_HORIZONTAL[m_saveDataArray[2]]);
 	m_fpsCursorSpriteRender.SetScale(Vector3(0.1f, 0.1f, 0.0f));
 	m_fpsCursorSpriteRender.Update();
 	m_sprites.push_back(&m_fpsCursorSpriteRender);
@@ -87,11 +92,6 @@ bool Title_Setting::Start()
 	m_percentFontRender.SetPosition(Vector3(-310.0f, 210.0f, 0.0f));
 	m_percentFontRender.SetScale(0.9f);
 	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-
-	//セーブデータのロード
-	m_saveData = GameManager::GetInstance()->DataLoad();
-	SetDataArray();
-	m_cursor_horizontal = m_saveDataArray[m_cursor_vertical];
 
 	SpriteUpdate();
 
@@ -136,17 +136,22 @@ void Title_Setting::Input()
 	//上ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonUp)) {
 		m_cursor_vertical--;
-		ValueUpdate(true, false);
-		m_nextCursor = 1;
 		m_isSetFPS = false;
+		ValueUpdate(true, false, false);
+		m_nextCursor = 1;
 		Command('w');
 	}
 	//下ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonDown)) {
 		m_cursor_vertical++;
-		ValueUpdate(true, false);
-		m_nextCursor = -1;
 		m_isSetFPS = false;
+		if (m_cursor_vertical == 2) {
+			ValueUpdate(true, false, true);
+		}
+		else {
+			ValueUpdate(true, false, false);
+		}
+		m_nextCursor = -1;
 		Command('s');
 	}
 	//RB1ボタンが押されたら
@@ -163,12 +168,12 @@ void Title_Setting::Input()
 		//左ボタンが押されたら
 		if (g_pad[0]->IsPress(enButtonLeft)) {
 			m_cursor_horizontal--;
-			ValueUpdate(false, true);
+			ValueUpdate(false, true, false);
 		}
 		//右ボタンが押されたら
 		else if (g_pad[0]->IsPress(enButtonRight)) {
 			m_cursor_horizontal++;
-			ValueUpdate(false, true);
+			ValueUpdate(false, true, false);
 		}
 	}
 	//FPS設定なら
@@ -176,16 +181,16 @@ void Title_Setting::Input()
 		//左ボタンが押されたら
 		if (g_pad[0]->IsTrigger(enButtonLeft)) {
 			m_cursor_horizontal--;
-			ValueUpdate(false, false);
-			m_nextCursor = 1;
 			m_isSetFPS = true;
+			ValueUpdate(false, false, false);
+			m_nextCursor = 1;
 		}
 		//右ボタンが押されたら
 		else if (g_pad[0]->IsTrigger(enButtonRight)) {
 			m_cursor_horizontal++;
-			ValueUpdate(false, false);
-			m_nextCursor = -1;
 			m_isSetFPS = true;
+			ValueUpdate(false, false, false);
+			m_nextCursor = -1;
 		}
 	}
 }
@@ -211,7 +216,7 @@ void Title_Setting::CursorMove()
 	}
 }
 
-void Title_Setting::ValueUpdate(const bool vertical, const bool vol)
+void Title_Setting::ValueUpdate(const bool vertical, const bool vol, const bool setFPS)
 {
 	int cursor_v = m_cursor_vertical;
 	int cursor_h = m_cursor_horizontal;
@@ -220,9 +225,7 @@ void Title_Setting::ValueUpdate(const bool vertical, const bool vol)
 	m_cursor_vertical = min(max(m_cursor_vertical, 0), CURSOR_VERTICAL_MAX);
 	m_cursor_horizontal = min(max(m_cursor_horizontal, 0), CURSOR_HORIZONTAL_MAX[m_cursor_vertical]);
 
-	if (m_cursor_vertical == cursor_v &&
-		m_cursor_horizontal == cursor_h)
-	{
+	if ((m_cursor_vertical == cursor_v && m_cursor_horizontal == cursor_h) || setFPS) {
 		//音を鳴らす
 		m_title->Sound(2);
 
@@ -241,8 +244,6 @@ void Title_Setting::ValueUpdate(const bool vertical, const bool vol)
 		//保存する
 		SetSaveData();
 		GameManager::GetInstance()->SetVolume();
-
-		//m_title->Sound(2);
 	}
 
 	//画像の更新処理
@@ -321,8 +322,8 @@ void Title_Setting::StateChange()
 		sprites->SetMulColor(Vector4(1.0f, 1.0f, 1.0f, fabsf(m_timer)));
 		sprites->Update();
 	}
-
-	m_percentFontRender.SetColor(Vector4(1.0f, 1.0f, 1.0f, m_timer));
+	m_percentFontRender.SetColor(Vector4(m_timer, m_timer, m_timer, m_timer));
+	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(m_timer, m_timer, m_timer, m_timer));
 }
 
 void Title_Setting::Render(RenderContext& rc)

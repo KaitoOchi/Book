@@ -53,6 +53,7 @@ bool Treasure::Start()
 	m_kirakiraEffect = NewGO<EffectEmitter>(0);
 	m_kirakiraEffect->Init(6);
 	m_kirakiraEffect->SetPosition(m_position);
+	m_kirakiraEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
 	m_kirakiraEffect->Play();
 	m_kirakiraEffect->Update();
 
