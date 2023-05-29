@@ -244,6 +244,17 @@ void Enemy::CreateNavimesh(Vector3 pos)
 	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 moveSpeed = pos - m_position;
+
+	// 回転を教える
+	float angle = atan2(-moveSpeed.x, moveSpeed.z);
+	Quaternion rot = Quaternion::Identity;
+	rot.SetRotationY(-angle);
+
+	// 回転を教える
+	m_enemyRender.SetRotation(rot);
+
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
 		return;
@@ -269,17 +280,6 @@ void Enemy::CreateNavimesh(Vector3 pos)
 		MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
 		isEnd							// 移動したときtrue
 	);
-
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = pos - m_position;
-
-	// 回転を教える
-	float angle = atan2(-moveSpeed.x, moveSpeed.z);
-	Quaternion rot = Quaternion::Identity;
-	rot.SetRotationY(-angle);
-
-	// 回転を教える
-	m_enemyRender.SetRotation(rot);
 }
 
 void Enemy::Act_SeachPlayer()
@@ -573,13 +573,6 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 	}
-
-	// 回転を教える
-	Vector3 rot = pos - m_position;
-	rot.Normalize();
-
-	Rotation(rot);
-
 }
 
 void Enemy::Act_Craw()
@@ -927,7 +920,6 @@ void Enemy::Act_Loss()
 
 	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
-
 	float length = diff.Length();
 
 	// 長さが一定のとき
@@ -935,10 +927,6 @@ void Enemy::Act_Loss()
 		m_NaviTimer = 0.0f;
 		m_ActState = CRAW;
 	}
-
-	// 回転を教える
-	diff.Normalize();
-	Rotation(diff);
 }
 
 bool Enemy::Act_Stop(float time,int i)
