@@ -172,7 +172,8 @@ public:
 		BACKBASEDON,			// 巡回状態に戻る
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
-		CATCH					// 捕獲した
+		CATCH,					// 捕獲した
+		EVENT					// イベント時の行動
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
