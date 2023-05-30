@@ -33,7 +33,7 @@ void Enemy_Increase::Update()
 
 void Enemy_Increase::Enemy_Open()
 {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		//エネミーの大きさを求める
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
@@ -58,13 +58,21 @@ void Enemy_Increase::Enemy_Open()
 			if (m_game->GetEnemyList()[i]->GetActiveFlag())
 			{
 				//座標が同じなら探しているエネミーなので
-				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
+				if ( abs ( m_ifPosition.LengthSq() - m_game->GetEnemyList()[i]->GetPosition().LengthSq()) <= 0.001f)
 				{
 					//エネミーアクティブにする
 					m_game->GetEnemyList()[i]->SetActiveFlag(false);
-					Vector3 move{ 0.0f, 1000.0f, 0.0f };
-					Vector3 pos=m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
+
+					Vector3 pos = m_game->GetEnemyList()[i]->GetPosition();
+					pos.y = 0.0f;
+
+					m_game->GetEnemyList()[i]->SetPosition(pos);
+
+					m_game->GetEnemyList()[i]->GetCharCon().SetPosition(pos);
+
 					m_game->GetEnemyList()[i]->GetModelRender().SetPosition(pos);
+					m_game->GetEnemyList()[i]->GetModelRender().Update();
+
 					m_nearposition = FLT_MIN;
 					m_game->GetEnemyList()[i]->Update();
 				}
