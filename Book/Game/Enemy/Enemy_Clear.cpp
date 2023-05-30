@@ -55,6 +55,7 @@ void Enemy_Clear::Update()
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
+			DeleteGO(m_Effect);
 		}
 		return;
 	}
