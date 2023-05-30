@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 50.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 150.0f;						// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -746,8 +746,6 @@ void Enemy::Act_Charge(float time)
 		return;
 	}
 
-	Act_Charge_HitWall();
-
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
 
@@ -783,6 +781,8 @@ void Enemy::Act_Charge(float time)
 		m_enAnimationState = IDLE;
 	}
 
+	Act_Charge_HitWall();
+
 	// 回転を教える
 	Rotation(m_chargeDiff);
 }
@@ -813,7 +813,7 @@ void Enemy::Act_Charge_HitWall()
 {
 	// 壁に衝突する判定
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerPos - m_position;
+	Vector3 diff = m_playerChargePosition - m_position;
 	//// 正規化
 	diff.Normalize();
 

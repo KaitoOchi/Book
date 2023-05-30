@@ -13,10 +13,10 @@ Wall_Duct::~Wall_Duct()
 
 bool Wall_Duct::Start()
 {
-	Wall::Start();
-
 	// ƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş
 	m_wallRender.Init("Assets/modelData/level_test/tkm/duct.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
+
+	Wall::Start();
 
 	return true;
 }
