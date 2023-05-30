@@ -5,6 +5,7 @@
 #include "Gage.h"
 #include "Game.h"
 #include "GameManager.h"
+#include "Treasure.h"
 
 #define SEACH_DECISION	100.0f * 100.0f									// ベクトルを作成する範囲
 
@@ -94,6 +95,7 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
+	m_treasure = FindGO<Treasure>("treasure");
 
 	// 各タイマーのリセット
 	for (int i = 0; i < 4; i++) {
@@ -1004,5 +1006,59 @@ void Enemy::VigilanceCount()
 		//ステートの遷移
 		m_gage->GageUp(1, true);
 		m_Vicount = VIGILANCETIME;
+	}
+}
+
+void Enemy::Event()
+{
+	// プレイヤーを発見したとき
+	if (m_TrackingPlayerFlag == true) {
+		Efect_FindPlayer();
+
+		// 突進タイプのとき
+		if (m_enemyType == TYPE_CHARGE) {
+			m_ActState = CHARGE;
+			return;
+		}
+		else {
+			m_ActState = TRACKING;
+			return;
+		}
+	}
+
+	Efect_FindPlayer();
+
+	// アイテムの座標を基にしてナビメッシュを作成
+	CreateNavimesh(m_treasure->GetPosition());
+
+	// 経過時間を計測
+	m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
+
+	// 走るアニメーションを再生
+	m_enAnimationState = RUN;
+	// エフェクトの再生フラグをfalseにしておく
+	m_efectDrawFlag[2] = false;
+
+	// エネミーからアイテムへ向かうベクトルを作成
+	Vector3 diff = m_treasure->GetPosition() - m_position;
+	float length = diff.Length();
+
+	// 長さが一定以下のとき
+	if (length < CALL_DISTANCE_MIN) {
+		// 見失ったプレイヤーを探す
+		m_ActState = MISSING_SEARCHPLAYER;
+		m_HearedSoundBulletFlag = false;
+		m_efectDrawFlag[1] = false;
+		return;
+	}
+	// 長さが一定以上かつ一定時間が経過したとき(壁にぶつかったときの対処策)
+	else if (m_addTimer[4] < 10.0f) {
+		// 見失ったプレイヤーを探す
+		m_ActState = MISSING_SEARCHPLAYER;
+		m_HearedSoundBulletFlag = false;
+		// タイマーをリセット
+		m_addTimer[4] = 0.0f;
+		m_efectDrawFlag[1] = false;
+		return;
 	}
 }

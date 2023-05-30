@@ -7,6 +7,7 @@
 class PlayerManagement;
 class Gage;
 class Game;
+class Treasure;
 class Enemy :public IGameObject
 {
 public:
@@ -116,6 +117,8 @@ public:
 	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
 
+	void Event();
+
 	// エネミーの種類
 	enum EnemyType
 	{
@@ -173,6 +176,7 @@ public:
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
 		CATCH,					// 捕獲した
+		EVENT
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -412,6 +416,7 @@ protected:
 	PlayerManagement* m_playerManagement = nullptr;
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
+	Treasure* m_treasure = nullptr;
 
 	EffectEmitter* m_Effect = nullptr;		// エフェクト
 
@@ -443,6 +448,7 @@ protected:
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_activeFlag = false;				//最初から動けるかそうか
+	bool m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
