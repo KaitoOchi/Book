@@ -30,7 +30,7 @@ private:
 	/// <summary>
 	/// 押された時の処理。
 	/// </summary>
-	void KeyPush();
+	void KeyPush(const bool sfx);
 
 	/// <summary>
 	/// ステートの遷移処理。
