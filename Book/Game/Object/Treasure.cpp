@@ -101,6 +101,7 @@ void Treasure::Hit()
 
 			m_player3d->m_Player_Act = false;
 			m_player2d->m_Player_Act = false;
+			m_gameUI->SetStaminaDrawState(false);
 			//イベントの開始
 			m_game->NotifyEventStart();
 
