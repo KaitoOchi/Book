@@ -24,6 +24,7 @@ namespace
 	const float		RENDER_XPOSITION=280.0f;
 	const Vector3	BASE_POSITION(230.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
 	const Vector3	LEVERUPPOSITION(240.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
+	const float		GAUGE_LEVER_MAX = 0.3f;
 }
 Gage::Gage()
 {
@@ -90,6 +91,7 @@ void Gage::Update()
 	if (m_leverState == m_enLever_MAX)
 	{
 		Gage_MAX();
+		Gauge_Move();
 	}
 	//�x���x�̃N�[���^�C����v�Z
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
@@ -103,7 +105,7 @@ void Gage::Update()
 		Gage_ColorChange();
 		m_GetState = m_leverState;
 	}
-
+	
 
 }
 
@@ -280,6 +282,32 @@ void Gage::Gage_MAX()
 		m_MaxEnd = false;
 	}
 	
+}
+
+void Gage::Gauge_Move()
+{
+	if (!m_maxState)
+	{
+		m_gaugeScaleY += 1.0f * g_gameTime->GetFrameDeltaTime();
+		m_gaugeScaleY = min(m_gaugeScaleY, GAUGE_LEVER_MAX);
+		m_gaugeScaleX += 0.2 * g_gameTime->GetFrameDeltaTime();
+		if (m_gaugeScaleY == GAUGE_LEVER_MAX)
+		{
+			m_maxState = true;
+		}
+	}
+	else
+	{
+		m_gaugeScaleY -= 1.0f * g_gameTime->GetFrameDeltaTime();
+		m_gaugeScaleY = max(m_gaugeScaleY, 0.0f);
+		m_gaugeScaleX -= 0.2 * g_gameTime->GetFrameDeltaTime();
+		if (m_gaugeScaleY == 0.0f)
+		{
+			m_maxState = false;
+		}
+	}
+	m_maxLeverRender.SetScale(Vector3{ 0.2f+ m_gaugeScaleX,1.0f+ m_gaugeScaleY,0.0f });
+	m_maxLeverRender.Update();
 }
 
 

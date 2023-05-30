@@ -94,6 +94,11 @@ public:
 		m_changeGaugeState = state;
 	}
 
+	void SetStaminaDrawState(bool state)
+	{
+		m_staminaDrawState = state;
+	}
+
 private:
 	/// <summary>
 	/// 時間計測処理。
@@ -121,6 +126,9 @@ private:
 	/// 円形ゲージの変更
 	/// </summary>
 	void CircleChange();
+
+	
+
 
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
@@ -165,7 +173,8 @@ private:
 	Vector2				m_spritePosition = Vector2::Zero;
 	Vector3				m_stamianGageScale = Vector3::One;
 	float				m_staminaDegree = 360.0f;
-	
+	bool				m_staminaDrawState = true;
+
 
 	SpriteRender		m_circleBaseSpriteRender;			//円形ゲージのベース画像
 	SpriteRender		m_circleSpriteRender;				//円形ゲージのゲージ画像
@@ -175,5 +184,7 @@ private:
 	bool				m_circleMaxState = false;			//MAXかどうか
 	bool				m_circleDrawState = false;			//円形ゲージを描画するかどうか
 	Vector2				m_circleposition = Vector2::Zero;	//円形ゲージの座標
+
+
 };
 
