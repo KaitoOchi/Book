@@ -113,6 +113,7 @@ void Enemy_Charge::Update()
 		UpDate_OnListen();
 		break;
 	case EVENT:
+		Update_OnEvent();
 		break;
 	}
 

@@ -19,5 +19,6 @@ public:
 	void Update_OnConfusion();			// 閃光弾に当たったとき
 	void UpDate_OnListen();				// 音爆弾を使用したとき
 	void Update_OnCatch();				// 捕獲
+	void Update_OnEvent();				// イベント時の処理
 private:
 };

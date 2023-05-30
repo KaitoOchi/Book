@@ -109,6 +109,9 @@ void Enemy_Normal::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		break;
+	case EVENT:
+		Update_OnEvent();
+		break;
 	}
 
 	Enemy::PlayAnimation();		// �A�j���[�V����

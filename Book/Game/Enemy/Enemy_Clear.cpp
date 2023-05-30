@@ -120,6 +120,9 @@ void Enemy_Clear::Update()
 		UpDate_OnListen();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
+	case EVENT:
+		Update_OnEvent();
+		break;
 	}
 
 	Enemy::PlayAnimation();		// �A�j���[�V����
