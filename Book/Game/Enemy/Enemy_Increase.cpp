@@ -62,9 +62,11 @@ void Enemy_Increase::Enemy_Open()
 				{
 					//エネミーアクティブにする
 					m_game->GetEnemyList()[i]->SetActiveFlag(false);
-					Vector3 move{ 0.0f, 20.0f, 0.0f };
-					m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
+					Vector3 move{ 0.0f, 1000.0f, 0.0f };
+					Vector3 pos=m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
+					m_game->GetEnemyList()[i]->GetModelRender().SetPosition(pos);
 					m_nearposition = FLT_MIN;
+					m_game->GetEnemyList()[i]->Update();
 				}
 			}
 		}

@@ -19,7 +19,7 @@ namespace
 	const float		VIGIRANCE_XSIZE = 66.0f;							//�x���x�̏c�̑傫��
 	const float		VIGIRANCE_YSIZE = 76.0f;							//�x���x�̉��̑傫��
 	const int		MAXGAGECOUNT = 10;
-	const int		MAXLEVERCOUNT = 4;
+	const int		MAXLEVERCOUNT = 3;
 	const float		RENDER_YPOSITION = 350.0f;
 	const float		RENDER_XPOSITION=280.0f;
 	const Vector3	BASE_POSITION(230.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
@@ -65,12 +65,21 @@ bool Gage::Start()
 	m_LeverUPRender[0].Init("Assets/sprite/UI/Gauge/1.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[1].Init("Assets/sprite/UI/Gauge/2.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[2].Init("Assets/sprite/UI/Gauge/3.DDS", BASEXSIZE, BASEYSIZE);
-	m_LeverUPRender[3].Init("Assets/sprite/UI/Gauge/max.DDS", BASEXSIZE, BASEYSIZE);
+	m_LeverUPRender[3].Init("Assets/sprite/UI/Gauge/max_base.DDS", 154.0f, 154.0f);
+	m_LeverUPRender[3].SetPosition(Vector3{ 435.0f + RENDER_XPOSITION,RENDER_YPOSITION ,0.0 });
+	m_LeverUPRender[3].Update();
 	for (int i = 0; i < MAXLEVERCOUNT ; i++)
 	{
 		m_LeverUPRender[i].SetPosition(LEVERUPPOSITION);
 		m_LeverUPRender[i].Update();
 	}
+
+	//maxフォントの描画
+	m_maxLeverRender.Init("Assets/sprite/UI/Gauge/max.DDS", BASEXSIZE, BASEYSIZE);
+	m_maxLeverRender.SetScale(Vector3{ 0.2f,1.0f,0.0f });
+	m_maxLeverRender.SetPosition(Vector3{ 435.0f + RENDER_XPOSITION, RENDER_YPOSITION, 0.0f });
+	m_maxLeverRender.Update();
+
 
 	return true;
 }
@@ -294,6 +303,7 @@ void Gage::Render(RenderContext& rc)
 		break;
 	case Gage::m_enLever_MAX:
 		m_LeverUPRender[3].Draw(rc);
+		m_maxLeverRender.Draw(rc);
 		break;
 	default:
 		break;
