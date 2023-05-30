@@ -112,6 +112,8 @@ void Enemy_Charge::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		break;
+	case EVENT:
+		break;
 	}
 
 	Enemy::PlayAnimation();		// アニメーション
