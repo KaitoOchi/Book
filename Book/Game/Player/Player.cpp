@@ -22,7 +22,7 @@ namespace
 	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
 	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
-	const float 	EFFECTSIZE = 1.0f;
+	const float 	EFFECTSIZE = 0.5f;
 }
 
 Player::Player()
@@ -271,24 +271,26 @@ void Player::TireEffect()
 	m_tireEffect->Init(7);
 
 	Vector3 effectPos = m_position;
-	//effectPos += (m_forward * -1.0f) * 15.0f;
-	effectPos.y = 50.0f;
-
-	m_tireEffect->SetPosition(effectPos);
-	m_tireEffect->SetScale(Vector3::One * EFFECTSIZE);
+	Vector3 effectfoward = m_forward;
+	
 
 
 	Vector3 cameraFoward = g_camera3D->GetForward();
 	Vector3 pos =m_position-m_gamecamera->GetPosition();
 	Vector3 move = m_moveSpeed;
-	pos.y = 0.0f;
+	move.y = 0.0f;
+	
 	Quaternion rot = Quaternion::Identity;
-	if (pos.x < 0.0f)
-	{
-		pos *= -1.0f;
-	}
+	move *= -1.0f;
 
-	rot.SetRotationYFromDirectionXZ(pos);
+	move.Normalize();
+	rot.SetRotationYFromDirectionXZ(move);
+	
+	effectPos +=move * 10.0f;
+	effectPos.y = 110.0f;
+
+	m_tireEffect->SetPosition(effectPos);
+	m_tireEffect->SetScale(Vector3::One * EFFECTSIZE);
 
 	m_tireEffect->SetRotation(rot);
 	m_tireEffect->Play();
@@ -508,11 +510,17 @@ void Player::ManageState()
 		ProcessDownStateTransition();
 		break;
 	case m_enPlayer_Caught:
+		if (m_tireEffect == nullptr)
+		{
+			ProcessCaughtStateTransition();
+			break;
+		}
 		if (m_tireEffect->IsPlay() == true)
 		{
 			m_tireEffect->Stop();
 		}
 		ProcessCaughtStateTransition();
+		break;
 	case m_enPlayer_Catching:
 		ProcessCatchingStateTransition();
 		break;
