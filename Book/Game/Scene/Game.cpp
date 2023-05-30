@@ -761,24 +761,9 @@ void Game::PlayWallEffect()
 		}
 	}
 
-	//敵エフェクトを再生
-	for (auto& effect : m_enemyList)
-	{
-		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-			effect->GetEffect()->Update();
-		}
-	}
-
 	//お宝エフェクトを再生
 	if (m_treasure->GetEffect() != nullptr) {
 		m_treasure->GetEffect()->Play();
-	}
-
-	//煙幕エフェクトを再生
-	if (m_playerManagement->GetEffect() != nullptr) {
-		m_playerManagement->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-		m_playerManagement->GetEffect()->Update();
 	}
 }
 
@@ -792,24 +777,9 @@ void Game::StopWallEffect()
 		}
 	}
 
-	//敵エフェクトを停止
-	for (auto& effect : m_enemyList)
-	{
-		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->SetTime(0.0f);
-			effect->GetEffect()->Update();
-		}
-	}
-
 	//お宝エフェクトを停止
 	if (m_treasure->GetEffect() != nullptr) {
 		m_treasure->GetEffect()->Stop();
-	}
-
-	//煙幕エフェクトを停止
-	if (m_playerManagement->GetEffect() != nullptr) {
-		m_playerManagement->GetEffect()->SetTime(0.0f);
-		m_playerManagement->GetEffect()->Update();
 	}
 }
 
