@@ -187,7 +187,9 @@ void Enemy::Efect_Dizzy()
 		m_Effect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
 		m_Effect->Play();
+		m_Effect->Update();
 
 		m_efectDrawFlag[0] = true;
 	}
@@ -203,7 +205,9 @@ void Enemy::Efect_FindPlayer()
 		m_Effect->SetScale(Vector3::One * 1.2f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
 		m_Effect->Play();
+		m_Effect->Update();
 
 		m_efectDrawFlag[1] = true;
 	}
@@ -219,7 +223,9 @@ void Enemy::Efect_MissingPlayer()
 		m_Effect->SetScale(Vector3::One * 1.5f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
 		m_Effect->Play();
+		m_Effect->Update();
 
 		m_efectDrawFlag[2] = true;
 	}
@@ -243,6 +249,17 @@ void Enemy::CreateNavimesh(Vector3 pos)
 {
 	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
+
+	// エネミーからプレイヤーへ向かうベクトル
+	Vector3 moveSpeed = pos - m_position;
+
+	// 回転を教える
+	float angle = atan2(-moveSpeed.x, moveSpeed.z);
+	Quaternion rot = Quaternion::Identity;
+	rot.SetRotationY(-angle);
+
+	// 回転を教える
+	m_enemyRender.SetRotation(rot);
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
@@ -269,17 +286,6 @@ void Enemy::CreateNavimesh(Vector3 pos)
 		MOVE_SPEED * ADD_SPEED,			// 移動速度（パス移動よりも速め）
 		isEnd							// 移動したときtrue
 	);
-
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = pos - m_position;
-
-	// 回転を教える
-	float angle = atan2(-moveSpeed.x, moveSpeed.z);
-	Quaternion rot = Quaternion::Identity;
-	rot.SetRotationY(-angle);
-
-	// 回転を教える
-	m_enemyRender.SetRotation(rot);
 }
 
 void Enemy::Act_SeachPlayer()
@@ -525,12 +531,6 @@ void Enemy::Act_HitFlashBullet()
 
 void Enemy::Act_GoLocationListenSound(Vector3 pos)
 {
-	Efect_FindPlayer();
-
-	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = pos - m_position;
-	float length = diff.Length();
-
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 		Efect_FindPlayer();
@@ -543,6 +543,12 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_ActState = TRACKING;
 		return;
 	}
+
+	Efect_FindPlayer();
+
+	// エネミーからアイテムへ向かうベクトルを作成
+	Vector3 diff = pos - m_position;
+	float length = diff.Length();
 
 	// 長さが一定以上のとき
 	if (length >= CALL_DISTANCE_MIN) {
@@ -573,13 +579,6 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 	}
-
-	// 回転を教える
-	Vector3 rot = pos - m_position;
-	rot.Normalize();
-
-	Rotation(rot);
-
 }
 
 void Enemy::Act_Craw()
@@ -927,7 +926,6 @@ void Enemy::Act_Loss()
 
 	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
-
 	float length = diff.Length();
 
 	// 長さが一定のとき
@@ -935,10 +933,6 @@ void Enemy::Act_Loss()
 		m_NaviTimer = 0.0f;
 		m_ActState = CRAW;
 	}
-
-	// 回転を教える
-	diff.Normalize();
-	Rotation(diff);
 }
 
 bool Enemy::Act_Stop(float time,int i)

@@ -261,6 +261,9 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 
 }
 
+
+
+
 void Player3D::ProcessIdleStateTransition()
 {
 	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
@@ -303,6 +306,7 @@ void Player3D::ProcessChangeStateTransition()
 
 void Player3D::ProcessDownStateTransition()
 {
+	
 	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;

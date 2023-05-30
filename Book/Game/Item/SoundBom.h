@@ -52,7 +52,7 @@ public:
 	
 private:
 	EffectEmitter* m_soundEffect=nullptr;
-	int m_soundCount = 5;						//フラッシュボムの所持数
+	int m_soundCount = 0;						//フラッシュボムの所持数
 private:
 	/// <summary>
 	/// ステートの遷移

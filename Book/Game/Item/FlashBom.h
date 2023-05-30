@@ -25,7 +25,7 @@ public:
 	};
 
 	EnFlashState m_FlashState = m_enFlash_No;
-	int m_flashCount = 5;						//フラッシュボムの所持数
+	int m_flashCount = 0;						//フラッシュボムの所持数
 private:
 	/// <summary>
 	/// フラッシュの効果

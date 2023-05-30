@@ -189,6 +189,24 @@ public:
 		return m_modelRender;
 	}
 
+	/// <summary>
+	/// 疲れた時のエフェクトを取得
+	/// </summary>
+	/// <param name="m_effect"></param>
+	/// <returns></returns>
+	void SetTireEffect(EffectEmitter* m_effect)
+	{
+		m_tireEffect = m_effect;
+	}
+	/// <summary>
+	/// 疲れた時のエフェクトの情報を取得
+	/// </summary>
+	/// <returns></returns>
+	EffectEmitter* GetTireEffect() const
+	{
+		return m_tireEffect;
+	}
+
 protected:
 	
 
@@ -293,6 +311,15 @@ protected:
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
+
+	/// <summary>
+	/// つれた時のエフェクトの処理
+	/// </summary>
+	void TireEffect();
+
+
+
+
 protected:
 
 
@@ -320,39 +347,41 @@ protected:
 	
 	
 protected:
-	bool m_characonState = true;								//キャラコンを作るかどうか
+	bool				m_characonState = true;					//キャラコンを作るかどうか
 
-	Vector3 m_moveSpeed=Vector3::Zero;							//移動速度
-	Vector3 m_Lstic = Vector3::Zero;							//左ステック
-	Vector3 m_position = Vector3::Zero;				//初期座標
-	Vector3 m_forward = Vector3::AxisZ;							//プレイヤーの正面ベクトル
+	Vector3				m_moveSpeed=Vector3::Zero;				//移動速度
+	Vector3				m_Lstic = Vector3::Zero;				//左ステック
+	Vector3				m_position = Vector3::Zero;				//初期座標
+	Vector3				m_forward = Vector3::AxisZ;				//プレイヤーの正面ベクトル
 	
 	float angle=0;												//回転角度
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
-	std::array<nsK2EngineLow::Texture,14> m_player2D;						//テクスチャ
+	std::array<nsK2EngineLow::Texture,14> m_player2D;			//テクスチャ
 	
 	Quaternion m_rotation;										//回転
 	
-	CharacterController *m_characon;							//キャラコン
-	CollisionObject* m_collisionObject = nullptr;				//コリジョン
+	CharacterController*m_characon;								//キャラコン
+	CollisionObject*	m_collisionObject = nullptr;			//コリジョン
 
-	GameCamera* m_gamecamera=nullptr;							//ゲームカメラ
-	PlayerManagement* m_playerManagement=nullptr;				//プレイヤー管理
-	Treasure* m_treasure = nullptr;
-	Game* m_game = nullptr;
-	GameUI* m_gameUI = nullptr;
+	GameCamera*			m_gamecamera=nullptr;					//ゲームカメラ
+	PlayerManagement*	m_playerManagement=nullptr;				//プレイヤー管理
+	Treasure*			m_treasure = nullptr;
+	Game*				m_game = nullptr;
+	GameUI*				m_gameUI = nullptr;
 
 
-	Vector3 m_ghostPosition = Vector3::Zero;
-	Vector3 m_setGhostpos=Vector3::Zero;
+	Vector3				m_ghostPosition = Vector3::Zero;
+	Vector3				m_setGhostpos=Vector3::Zero;
 
-	float m_downTime = 3.0f;									//気絶時間
+	float				m_downTime = 3.0f;						//気絶時間
 
-	bool m_playerCaught = true;
+	bool				m_playerCaught = true;
 
-	bool m_runState = true;
+	bool				m_runState = true;
 
-	float m_stamina = 0.0f;										//プレイヤーのスタミナ
+	float				m_stamina = 0.0f;						//プレイヤーのスタミナ
 	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム
+
+	EffectEmitter*		m_tireEffect;
 };	
