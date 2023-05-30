@@ -876,11 +876,6 @@ void Enemy::Act_Call()
 
 			m_game->GetEnemyList()[i]->m_ActState = CALLED;				// 行動パターンを変更する
 			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;	// 自身の座標-キャラコンを目標地点として渡す
-
-			// 正規化
-			diff.Normalize();
-			// 移動速度を加算
-			m_game->GetEnemyList()[i]->m_position += diff * MOVE_SPEED;
 		}
 	}
 
