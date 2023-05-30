@@ -78,10 +78,10 @@ bool Title_Setting::Start()
 
 	//ボタン画像の設定
 	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 284.0f, 152.0f);
-	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 207.0f, 152.0f);
+	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 284.0f, 152.0f);
 	m_buttonSpriteRender[2].Init("Assets/sprite/UI/setting/Button_tryangle.DDS", 284.0f, 152.0f);
 	for (int i = 0; i < 3; i++) {
-		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -275.0f - (i * 50.0f), 0.0f));
+		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -325.0f - (i * 50.0f), 0.0f));
 		m_buttonSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
@@ -279,7 +279,7 @@ void Title_Setting::Command(char command)
 		//コマンド成功なら
 		if (j == sizeof(COMMAND) / sizeof(char)) {
 			m_percentFontRender.SetText(L"NEKO NEKO POWER 29");
-			m_percentFontRender.SetPosition(Vector3(0.0f, 300.0f, 0.0f));
+			m_percentFontRender.SetPosition(Vector3(0.0f, 400.0f, 0.0f));
 			m_percentFontRender.SetScale(2.0f);
 			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 			m_percentFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));

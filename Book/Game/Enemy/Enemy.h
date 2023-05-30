@@ -379,7 +379,10 @@ public:
 	/// <returns></returns>
 	EffectEmitter* GetEffect()
 	{
-		return m_Effect;
+		if (m_Effect != nullptr) {
+			return m_Effect;
+		}
+		return nullptr;
 	}
 
 protected:

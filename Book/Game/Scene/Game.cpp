@@ -36,6 +36,7 @@
 #include "Event.h"
 #include "nature/SkyCube.h"
 #include "GoalSprite.h"
+#include "Painting.h"
 
 Game::Game()
 {
@@ -101,6 +102,12 @@ Game::~Game()
 	}
 	//お宝の削除
 	DeleteGO(m_treasure);
+
+	//絵画の削除
+	QueryGOs<Painting>("painting", [&](Painting* painting) {
+		DeleteGO(painting);
+		return true;
+		});
 
 	//プレイヤーの削除
 	DeleteGO(m_player3D);
@@ -412,6 +419,16 @@ void Game::LevelDesign()
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
 				m_wallList.emplace_back(decoration);
+				return true;
+			}
+
+			// 名前がphotoFrameのとき
+			if (objData.ForwardMatchName(L"photoFrame") == true) {
+				// 絵画を生成
+				Painting* painting = NewGO<Painting>(0, "painting");
+				painting->SetPosition(objData.position);
+				painting->SetRotation(objData.rotation);
+				painting->SetType();
 				return true;
 			}
 
@@ -761,24 +778,9 @@ void Game::PlayWallEffect()
 		}
 	}
 
-	//敵エフェクトを再生
-	for (auto& effect : m_enemyList)
-	{
-		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-			effect->GetEffect()->Update();
-		}
-	}
-
 	//お宝エフェクトを再生
 	if (m_treasure->GetEffect() != nullptr) {
 		m_treasure->GetEffect()->Play();
-	}
-
-	//煙幕エフェクトを再生
-	if (m_playerManagement->GetEffect() != nullptr) {
-		m_playerManagement->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-		m_playerManagement->GetEffect()->Update();
 	}
 }
 
@@ -792,24 +794,9 @@ void Game::StopWallEffect()
 		}
 	}
 
-	//敵エフェクトを停止
-	for (auto& effect : m_enemyList)
-	{
-		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->SetTime(0.0f);
-			effect->GetEffect()->Update();
-		}
-	}
-
 	//お宝エフェクトを停止
 	if (m_treasure->GetEffect() != nullptr) {
 		m_treasure->GetEffect()->Stop();
-	}
-
-	//煙幕エフェクトを停止
-	if (m_playerManagement->GetEffect() != nullptr) {
-		m_playerManagement->GetEffect()->SetTime(0.0f);
-		m_playerManagement->GetEffect()->Update();
 	}
 }
 
