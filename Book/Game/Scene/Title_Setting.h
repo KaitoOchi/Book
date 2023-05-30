@@ -126,7 +126,6 @@ private:
 	bool							m_isWaitState = false;			//ステートの遷移待ちかどうか
 	bool							m_isWaitFadeOut = false;		//フェード中かどうか
 	bool							m_isSetFPS = false;				//FPSをセットするか
-	bool							m_isSecret = false;				//要素
 	int								m_cursor_vertical = 0;			//縦カーソル
 	int								m_cursor_horizontal = 0;		//横カーソル
 	int								m_nextCursor = 1;				//次に移動するカーソル

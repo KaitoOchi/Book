@@ -17,6 +17,7 @@ PhysicsGhost::~PhysicsGhost()
 {
 	m_kirakiraEffect->SetDeleteState(false);
 	m_kirakiraEffect->Stop();
+	DeleteGO(m_kirakiraEffect);
 }
 
 bool PhysicsGhost::Start()

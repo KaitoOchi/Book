@@ -9,9 +9,9 @@ class Treasure :public Object
 {
 public:
 	Treasure();
-	~Treasure()override;
-	bool Start()override ;
-	void Update()override;
+	~Treasure() override;
+	bool Start() override;
+	void Update() override;
 	void Render(RenderContext& rc);
 
 public:
@@ -55,6 +55,13 @@ public:
 		return m_hitState;
 	}
 
+	/// <summary>
+	/// エフェクトを取得。
+	/// </summary>
+	EffectEmitter* GetEffect()
+	{
+		return m_kirakiraEffect;
+	}
 
 private:
 	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
