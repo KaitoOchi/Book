@@ -246,6 +246,7 @@
     <ClCompile Include="Scene\Title_Guide.cpp" />
     <ClCompile Include="Scene\Title_Setting.cpp" />
     <ClCompile Include="Stage\GhostBox.cpp" />
+    <ClCompile Include="Stage\Painting.cpp" />
     <ClCompile Include="Stage\PhysicsGhost.cpp" />
     <ClCompile Include="Stage\Wall\Wall.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Decoration.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="Scene\Title_Guide.h" />
     <ClInclude Include="Scene\Title_Setting.h" />
     <ClInclude Include="Stage\GhostBox.h" />
+    <ClInclude Include="Stage\Painting.h" />
     <ClInclude Include="Stage\PhysicsGhost.h" />
     <ClInclude Include="Stage\Wall\Wall.h" />
     <ClInclude Include="Stage\Wall\Wall_Decoration.h" />

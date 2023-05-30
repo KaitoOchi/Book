@@ -36,6 +36,7 @@
 #include "Event.h"
 #include "nature/SkyCube.h"
 #include "GoalSprite.h"
+#include "Painting.h"
 
 Game::Game()
 {
@@ -101,6 +102,12 @@ Game::~Game()
 	}
 	//お宝の削除
 	DeleteGO(m_treasure);
+
+	//絵画の削除
+	QueryGOs<Painting>("painting", [&](Painting* painting) {
+		DeleteGO(painting);
+		return true;
+		});
 
 	//プレイヤーの削除
 	DeleteGO(m_player3D);
@@ -412,6 +419,16 @@ void Game::LevelDesign()
 				decoration->SetRotation(objData.rotation);
 				decoration->SetScale(objData.scale);
 				m_wallList.emplace_back(decoration);
+				return true;
+			}
+
+			// 名前がphotoFrameのとき
+			if (objData.ForwardMatchName(L"photoFrame") == true) {
+				// 絵画を生成
+				Painting* painting = NewGO<Painting>(0, "painting");
+				painting->SetPosition(objData.position);
+				painting->SetRotation(objData.rotation);
+				painting->SetType();
 				return true;
 			}
 

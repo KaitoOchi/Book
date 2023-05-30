@@ -2,6 +2,8 @@
 #include "Enemy_Charge.h"
 
 #include "GameManager.h"
+#include "PlayerManagement.h"
+#include "Gage.h"
 
 namespace 
 {
