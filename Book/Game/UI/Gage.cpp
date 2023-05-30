@@ -2,6 +2,7 @@
 #include "Gage.h"
 
 #include "Game.h"
+#include "Player3D.h"
 #include "Enemy.h"
 #include "Wipe.h"
 #include "Fade.h"
@@ -11,12 +12,12 @@
 
 namespace
 {
-	const float		VIGILANCE_TIME_MAX = 2.0f;							//Œx‰ú’l‚ÌÅ‘åŠÔ
-	const float		VIGILANCE_DOWN_TIME = 5.0f;						//Œx‰ú“x‚ª©‘RŒ¸­‚·‚éŠÔ
-	const float		BASEYSIZE = 154.0f;									//basec‚Ì‘å‚«‚³
-	const float     BASEXSIZE = 553.0f;									//base‰¡‚Ì‘å‚«‚³
-	const float		VIGIRANCE_XSIZE = 66.0f;							//Œx‰ú“x‚Ìc‚Ì‘å‚«‚³
-	const float		VIGIRANCE_YSIZE = 76.0f;							//Œx‰ú“x‚Ì‰¡‚Ì‘å‚«‚³
+	const float		VIGILANCE_TIME_MAX = 2.0f;							//ï¿½xï¿½ï¿½ï¿½lï¿½ÌÅ‘åï¿½ï¿½
+	const float		VIGILANCE_DOWN_TIME = 5.0f;						//ï¿½xï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½éï¿½ï¿½
+	const float		BASEYSIZE = 154.0f;									//baseï¿½cï¿½Ì‘å‚«ï¿½ï¿½
+	const float     BASEXSIZE = 553.0f;									//baseï¿½ï¿½ï¿½Ì‘å‚«ï¿½ï¿½
+	const float		VIGIRANCE_XSIZE = 66.0f;							//ï¿½xï¿½ï¿½ï¿½xï¿½Ìcï¿½Ì‘å‚«ï¿½ï¿½
+	const float		VIGIRANCE_YSIZE = 76.0f;							//ï¿½xï¿½ï¿½ï¿½xï¿½Ì‰ï¿½ï¿½Ì‘å‚«ï¿½ï¿½
 	const int		MAXGAGECOUNT = 10;
 	const int		MAXLEVERCOUNT = 4;
 	const float		RENDER_YPOSITION = 350.0f;
@@ -34,7 +35,7 @@ Gage::~Gage()
 }
 bool Gage::Start()
 {
-	//ƒQ[ƒ€‚Ìî•ñ‚ğ‚Á‚Ä‚­‚é
+	//ï¿½Qï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 	m_game = FindGO<Game>("game");
 
 	m_wipe = NewGO<Wipe>(0, "wipe");
@@ -43,11 +44,13 @@ bool Gage::Start()
 
 	m_enemy_Increase = FindGO<Enemy_Increase>("enemyIncrease");
 
-	//Šî”Õ‚ÌXV
+	m_player3D = FindGO<Player3D>("player3d");
+
+	//ï¿½ï¿½Õ‚ÌXï¿½V
 	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
 	m_baseRender.SetPosition(BASE_POSITION);
 	m_baseRender.Update();
-	//ƒQ[ƒW‚Ìì¬
+	//ï¿½Qï¿½[ï¿½Wï¿½Ìì¬
 	for (int i = 0; i < MAXGAGECOUNT; i++)
 	{
 		m_vigilanceRender[i].Init("Assets/sprite/UI/Gauge/gaugeCount.DDS", VIGIRANCE_XSIZE, VIGIRANCE_YSIZE);
@@ -58,7 +61,7 @@ bool Gage::Start()
 		m_vigilanceRender[i].Update();
 	}
 
-	//ƒŒƒxƒ‹‚Ìì¬
+	//ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½Ìì¬
 	m_LeverUPRender[0].Init("Assets/sprite/UI/Gauge/1.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[1].Init("Assets/sprite/UI/Gauge/2.DDS", BASEXSIZE, BASEYSIZE);
 	m_LeverUPRender[2].Init("Assets/sprite/UI/Gauge/3.DDS", BASEXSIZE, BASEYSIZE);
@@ -79,7 +82,7 @@ void Gage::Update()
 	{
 		Gage_MAX();
 	}
-	//Œx‰ú“x‚ÌƒN[ƒ‹ƒ^ƒCƒ€‚ğŒvZ
+	//ï¿½xï¿½ï¿½ï¿½xï¿½ÌƒNï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½vï¿½Z
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
 	if (m_vigilanceGage != 0&& m_leverState != m_enLever_MAX) {
 		GageDown();
@@ -97,12 +100,17 @@ void Gage::Update()
 
 void Gage::GageUp(const int GageUp, const bool isEnemy)
 {
-	//ƒN[ƒ‹ƒ_ƒEƒ“‚ª‚Ü‚¾‚È‚ç
+	//ï¿½Nï¿½[ï¿½ï¿½ï¿½_ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½È‚ï¿½
 	if (m_vigilanceTime > 0.0f) {
 		return;
 	}
 
-	//”­Œ©‰¹‚ğo‚·
+	//ï¿½ß‚Ü‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½È‚ï¿½SEï¿½ğ—¬‚ï¿½ï¿½È‚ï¿½
+	if (m_player3D->m_playerState == m_player3D->m_enPlayer_Catching) {
+		return;
+	}
+
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
 	SoundSource* se = NewGO<SoundSource>(0);
 
 	if (isEnemy) {
@@ -116,7 +124,7 @@ void Gage::GageUp(const int GageUp, const bool isEnemy)
 
 	if (!m_isFind) {
 		if (GameManager::GetInstance()->GetGameState() != GameManager::enState_GetTreasure) {
-			//BGM‚ğ•ÏX
+			//BGMï¿½ï¿½ÏX
 			GameManager::GetInstance()->SetBGM(22);
 		}
 		m_isFind = true;
@@ -158,7 +166,7 @@ void Gage::GageDown()
 				m_vigilanceGage -= 1;
 
 				if (m_isFind) {
-					//BGM‚ğ•ÏX
+					//BGMï¿½ï¿½ÏX
 					GameManager::GetInstance()->SetBGM(21);
 					m_isFind = false;
 				}
@@ -249,10 +257,11 @@ void Gage::Gage_MAX()
 	}
 	if (m_fade->IsFade() == false)
 	{
-		//ƒƒCƒv‚ğo‚·
+		//ï¿½ï¿½ï¿½Cï¿½vï¿½ï¿½oï¿½ï¿½
 		m_wipe->Reset();
-		//–Ú•W‰æ‘œ‚ğo‚·
+		//ï¿½Ú•Wï¿½æ‘œï¿½ï¿½oï¿½ï¿½
 		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
+		goalSprite->SetSpriteNum(true);
 		for (int i = 0; i < 3; i++)
 		{
 			m_enemy_Increase->Enemy_Open();

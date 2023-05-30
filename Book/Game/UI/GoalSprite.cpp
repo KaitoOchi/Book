@@ -26,6 +26,7 @@ bool GoalSprite::Start()
 
 	for (int i = 0; i < 2; i++) {
 		m_goalSpriteRender[i].SetPosition(GOALSPRITE_FIRST_POS);
+		m_goalSpriteRender[i].SetScale(Vector3(2.0f, 2.0f, 2.0f));
 		m_goalSpriteRender[i].Update();
 	}
 

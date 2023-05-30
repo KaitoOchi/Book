@@ -58,6 +58,11 @@ void Enemy_Charge::Update()
 		return;
 	}
 
+	// プレイヤーを捕まえたとき
+	if (m_ActState == CATCH) {
+		m_enAnimationState = IDLE;
+		return;
+	}
 
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
@@ -126,14 +131,6 @@ void Enemy_Charge::Update()
 
 void Enemy_Charge::Update_OnCraw()
 {
-	// 巡回
-
-	// プレイヤーを捕まえたとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
-		return;
-	}
-
 	// プレイヤーを捕まえたとき
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;
