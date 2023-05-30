@@ -15,7 +15,6 @@ CountDown::CountDown()
 
 CountDown::~CountDown()
 {
-	NewGO<Pause>(2, "pause");
 }
 
 bool CountDown::Start()
@@ -53,7 +52,9 @@ void CountDown::Update()
 
 			//–Ú•W‰æ‘œ‚ğo‚·
 			GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
-			goalSprite->InitSprite(false);
+			goalSprite->SetSpriteNum(false);
+
+			NewGO<Pause>(2, "pause");
 
 			DeleteGO(this);
 			return;

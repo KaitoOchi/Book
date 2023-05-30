@@ -22,8 +22,13 @@ GoalSprite::~GoalSprite()
 
 bool GoalSprite::Start()
 {
-	m_goalSpriteRender.SetPosition(GOALSPRITE_FIRST_POS);
-	m_goalSpriteRender.Update();
+	m_goalSpriteRender[0].Init("Assets/sprite/UI/Gauge/image_target.DDS", 231.0f, 60.0f);
+	m_goalSpriteRender[1].Init("Assets/sprite/UI/Gauge/image_target2.DDS", 231.0f, 60.0f);
+
+	for (int i = 0; i < 2; i++) {
+		m_goalSpriteRender[i].SetPosition(GOALSPRITE_FIRST_POS);
+		m_goalSpriteRender[i].Update();
+	}
 
 	m_goalPos = GOALSPRITE_FIRST_POS;
 
@@ -61,12 +66,12 @@ void GoalSprite::Update()
 		m_goalPos.x = min(m_goalPos.x, GOALSPRITE_MAX_POS_X);
 
 		//‰æ‘œ‚ÌÝ’è
-		m_goalSpriteRender.SetPosition(m_goalPos);
-		m_goalSpriteRender.Update();
+		m_goalSpriteRender[m_enableNum].SetPosition(m_goalPos);
+		m_goalSpriteRender[m_enableNum].Update();
 	}
 }
 
 void GoalSprite::Render(RenderContext& rc)
 {
-	m_goalSpriteRender.Draw(rc);
+	m_goalSpriteRender[m_enableNum].Draw(rc);
 }
