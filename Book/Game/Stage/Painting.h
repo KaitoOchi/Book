@@ -14,8 +14,11 @@ public:
 	/// </summary>
 	void SetPosition(const Vector3& pos)
 	{
-		m_modelRender.SetPosition(pos);
-		m_frameModelRender.SetPosition(pos);
+		Vector3 position = pos;
+		position.y += 50.0f;
+
+		m_modelRender.SetPosition(position);
+		m_frameModelRender.SetPosition(position);
 	}
 
 	/// <summary>
@@ -23,7 +26,11 @@ public:
 	/// </summary>
 	void SetRotation(const Quaternion& rot)
 	{
-		m_modelRender.SetRotation(rot);
+		Quaternion rotation;
+		rotation.AddRotationDegZ(360.0f);
+		rotation.Multiply(rot);
+
+		m_modelRender.SetRotation(rotation);
 		m_frameModelRender.SetRotation(rot);
 	}
 
@@ -32,7 +39,7 @@ public:
 	/// </summary>
 	void SetType()
 	{
-		int num = rand() % 4;
+		int num = rand() % 12;
 
 		wchar_t path[255];
 		swprintf_s(path, 255,

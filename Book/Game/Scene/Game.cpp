@@ -423,7 +423,7 @@ void Game::LevelDesign()
 			}
 
 			// 名前がphotoFrameのとき
-			if (objData.ForwardMatchName(L"photoFrame") == true) {
+			if (objData.EqualObjectName(L"photoFrame") == true) {
 				// 絵画を生成
 				Painting* painting = NewGO<Painting>(0, "painting");
 				painting->SetPosition(objData.position);
