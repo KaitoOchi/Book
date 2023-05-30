@@ -74,9 +74,6 @@ void Enemy_Search::Update()
 	case CONFUSION:
 		Update_OnConfusion();
 		break;
-	case EVENT:
-		Update_OnEvent();
-		break;
 	}
 
 	Enemy::PlayAnimation();
