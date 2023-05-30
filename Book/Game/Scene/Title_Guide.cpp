@@ -77,22 +77,22 @@ void Title_Guide::Input()
 	//右ボタンが押されたら
 	if (g_pad[0]->IsTrigger(enButtonRight)) {
 		m_cursor++;
-		KeyPush();
+		KeyPush(true);
 	}
 	//左ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonLeft)) {
 		m_cursor--;
 		m_guide_reverse = true;
-		KeyPush();
+		KeyPush(true);
 	}
 	//Bボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonB)) {
 		m_isSceneChange = true;
-		KeyPush();
+		KeyPush(false);
 	}
 }
 
-void Title_Guide::KeyPush()
+void Title_Guide::KeyPush(const bool sfx)
 {
 	//0～1の範囲に収める
 	if (m_cursor > 1) {
@@ -108,7 +108,7 @@ void Title_Guide::KeyPush()
 	m_isWaitState = true;
 
 	//可能ならSEを再生
-	m_title->IsCanPlaySound(true);
+	m_title->IsCanPlaySound(sfx);
 }
 
 void Title_Guide::StateChange()

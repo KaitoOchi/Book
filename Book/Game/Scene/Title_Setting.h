@@ -91,7 +91,7 @@ private:
 	SpriteRender					m_catSpriteRender;				//猫画像
 	std::array< SpriteRender, 2 >	m_gaugeSpriteRender;			//BGMのメーター
 	std::array< SpriteRender, 3 >	m_settingTextSpriteRender;		//設定の説明画像
-	std::array< SpriteRender, 2 >	m_buttonSpriteRender;			//ボタン画像
+	std::array< SpriteRender, 3 >	m_buttonSpriteRender;			//ボタン画像
 	std::vector<SpriteRender*>		m_sprites;						//SpriteRenderのベクター型
 	FontRender						m_percentFontRender;			//パーセント文字
 	Fade* m_fade = nullptr;
