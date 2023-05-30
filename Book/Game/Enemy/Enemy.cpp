@@ -21,7 +21,7 @@ namespace
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
-	const float		CALL_DISTANCE_MIN = 180.0f;				// 呼ぶことができる最小値
+	const float		CALL_DISTANCE_MIN = 190.0f;				// 呼ぶことができる最小値
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
