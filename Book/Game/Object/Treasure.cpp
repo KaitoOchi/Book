@@ -51,7 +51,7 @@ bool Treasure::Start()
 	m_collisionObject->SetName("otakara");
 	m_collisionObject->Update();
 
-	//お宝のエフェクトの設定
+	////お宝のエフェクトの設定
 	m_kirakiraEffect = NewGO<EffectEmitter>(0);
 	m_kirakiraEffect->Init(6);
 	m_kirakiraEffect->SetPosition(m_position);
