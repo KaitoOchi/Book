@@ -253,14 +253,6 @@ void Enemy::CreateNavimesh(Vector3 pos)
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = pos - m_position;
 
-	//// 回転を教える
-	//float angle = atan2(-diff.x, diff.z);
-	//Quaternion rot = Quaternion::Identity;
-	//rot.SetRotationY(-angle);
-
-	//// 回転を教える
-	//m_enemyRender.SetRotation(rot);
-
 	diff.Normalize();
 	Rotation(diff);
 
