@@ -293,8 +293,7 @@ void Gage::Render(RenderContext& rc)
 	switch (m_leverState)
 	{
 	case Gage::m_enLever_1:
-		m_LeverUPRender[3].Draw(rc);
-		m_maxLeverRender.Draw(rc);
+		m_LeverUPRender[0].Draw(rc);
 		break;
 	case Gage::m_enLever_2:
 		m_LeverUPRender[1].Draw(rc);
