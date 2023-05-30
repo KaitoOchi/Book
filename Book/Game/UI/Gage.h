@@ -61,6 +61,8 @@ private:
 	EnLeverState m_GetState = m_leverState;
 
 	std::array<SpriteRender,4>m_LeverUPRender;					//�x���x���x���摜
+	SpriteRender m_maxLeverRender;
+
 	SpriteRender m_baseRender;									//���ɒu���摜
 	std::array<SpriteRender,10>m_vigilanceRender;				//�x���x�摜
 	bool m_isFind = false;										//�������ꂽ���ǂ���
