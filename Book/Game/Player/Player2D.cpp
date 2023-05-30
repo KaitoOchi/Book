@@ -5,6 +5,7 @@
 #include "PlayerManagement.h"
 #include "Enemy.h"
 #include "Game.h"
+#include "GameUI.h"
 namespace
 {
 	const Vector3	BOXSIZE{ 20.0f,120.0f,2.0f };						//ボックスコライダーの大きさ
@@ -75,6 +76,17 @@ void Player2D::Update()
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();	
+
+	if (!m_runState)
+	{
+		m_gameUI->SetChangeGaugeState(false);
+	}
+	else
+	{
+		m_gameUI->SetChangeGaugeState(true);
+	}
+
+
 }
 void Player2D::PlayerChang()
 {

@@ -87,6 +87,13 @@ public:
 	{
 		return m_circleDrawState;
 	}
+
+
+	void SetChangeGaugeState(bool state)
+	{
+		m_changeGaugeState = state;
+	}
+
 private:
 	/// <summary>
 	/// 時間計測処理。
@@ -118,6 +125,9 @@ private:
 private:
 	SpriteRender		m_gageFrameSpriteRender;		//ゲージの枠画像
 	SpriteRender		m_gageSpriteRender;				//ゲージ画像
+
+	bool				m_changeGaugeState = true;
+
 	FontRender			m_timeFontRender;				//タイム文字
 	
 	SpriteRender		m_itemBaseRender;				//アイテムの背景画像
