@@ -116,6 +116,14 @@ public:
 	}
 
 	/// <summary>
+	/// エフェクトの取得。
+	/// </summary>
+	EffectEmitter* GetEffect()
+	{
+		return m_smokeEffect;
+	}
+
+	/// <summary>
 	/// ゲーム開始前のステートを設定。
 	/// </summary>
 	void SetGameState(const bool state)

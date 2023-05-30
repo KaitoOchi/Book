@@ -18,9 +18,9 @@ Treasure::Treasure()
 Treasure::~Treasure()
 {
 	if (m_kirakiraEffect != nullptr) {
+		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
 	}
-
 	DeleteGO(m_kirakiraEffect);
 
 	DeleteGO(m_collisionObject);
@@ -52,8 +52,9 @@ bool Treasure::Start()
 	//お宝のエフェクトの設定
 	m_kirakiraEffect = NewGO<EffectEmitter>(0);
 	m_kirakiraEffect->Init(6);
+	m_kirakiraEffect->SetDeleteState(true);
 	m_kirakiraEffect->SetPosition(m_position);
-	m_kirakiraEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
+	m_kirakiraEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 	m_kirakiraEffect->Play();
 	m_kirakiraEffect->Update();
 

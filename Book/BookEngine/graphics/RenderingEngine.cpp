@@ -1,6 +1,12 @@
 ﻿#include "BookEnginePreCompile.h"
 #include "RenderingEngine.h"
 
+namespace
+{
+	const Vector3 SHADOW_CAMERA_POS = Vector3(1024.0f, 2192.0f, 1024.0f);
+	const Vector3 SHADOW_CAMERA_TAR = Vector3(0.0f, -100.0f, 0.0f);
+}
+
 
 namespace nsBookEngine {
 
@@ -180,7 +186,6 @@ namespace nsBookEngine {
 	{
 		//視点の位置を設定する
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
-		//m_lightCB.directionLig.eyePos.x += 3000.0f;
 		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
 		ZPrepass(rc);
@@ -199,8 +204,8 @@ namespace nsBookEngine {
 	void RenderingEngine::RenderShadowMap(RenderContext& rc)
 	{
 		// カメラの位置を設定
-		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget().x + 1024.0f, g_camera3D->GetTarget().y + 2192.0f, g_camera3D->GetTarget().z + 1024.0f));
-		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget().x + 0.0f, g_camera3D->GetTarget().y - 100.0f, g_camera3D->GetTarget().z + 0.0f));
+		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget() + SHADOW_CAMERA_POS));
+		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget() + SHADOW_CAMERA_TAR));
 		m_lightCamera.Update();
 
 		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();

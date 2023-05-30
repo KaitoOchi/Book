@@ -1,4 +1,9 @@
 #pragma once
+#include "PhysicsGhost.h"
+#include "GameManager.h"
+#include "Title.h"
+#include "Fade.h"
+#include "PlayerManagement.h"
 
 class Player3D;
 class Player2D;
@@ -6,9 +11,8 @@ class GameCamera;
 class MiniMap;
 class BackGround;
 class Enemy;
-class PlayerManagement;
-class Wall;
 class Treasure;
+class Wall;
 class Ghost;
 class GameUI;
 class Gage;
@@ -17,10 +21,6 @@ class GhostBox;
 class PhysicsGhost;
 class Sensor;
 class SecurityCamera;
-#include "PhysicsGhost.h"
-#include "GameManager.h"
-#include "Title.h"
-#include "Fade.h"
 
 class Game : public IGameObject
 {
@@ -90,24 +90,12 @@ public:
 	/// <summary>
 	/// 隙間エフェクトを再生。
 	/// </summary>
-	void PlayWallEffect()
-	{
-		for (auto& effect : m_physicsGhostList)
-		{
-			effect->GetEffect()->Play();
-		}
-	}
+	void PlayWallEffect();
 
 	/// <summary>
 	/// 隙間エフェクトを停止。
 	/// </summary>
-	void StopWallEffect()
-	{
-		for (auto& effect : m_physicsGhostList)
-		{
-			effect->GetEffect()->Stop();
-		}
-	}
+	void StopWallEffect();
 
 public:
 	/// <summary>

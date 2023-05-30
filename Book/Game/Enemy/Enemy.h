@@ -367,6 +367,15 @@ public:
 
 	//--------------------------------------------
 
+	/// <summary>
+	/// エフェクトを取得。
+	/// </summary>
+	/// <returns></returns>
+	EffectEmitter* GetEffect()
+	{
+		return m_Effect;
+	}
+
 protected:
 
 	// パス移動用のポイント構造体

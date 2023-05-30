@@ -34,6 +34,7 @@ Title::~Title()
 
 bool Title::Start()
 {
+
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(-1.5f, -1, 1), Vector3(3.0f,3.0f,0.8f));
 	RenderingEngine::GetInstance()->SetAmbient(0.0f);
 
