@@ -4,13 +4,14 @@
 #include <random>
 class Gage;
 class GameUI;
+class Player2D;
 class Treasure :public Object 
 {
 public:
 	Treasure();
-	~Treasure()override;
-	bool Start()override ;
-	void Update()override;
+	~Treasure() override;
+	bool Start() override;
+	void Update() override;
 	void Render(RenderContext& rc);
 
 public:
@@ -54,10 +55,18 @@ public:
 		return m_hitState;
 	}
 
+	/// <summary>
+	/// エフェクトを取得。
+	/// </summary>
+	EffectEmitter* GetEffect()
+	{
+		return m_kirakiraEffect;
+	}
 
 private:
 	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
 	GameUI*					m_gameUI = nullptr;				//ゲームUI
 	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
 	bool					m_hitState = false;				//trueならお宝に触れている
+	Player2D*				m_player2d = nullptr;
 };

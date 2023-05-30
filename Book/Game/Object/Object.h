@@ -3,12 +3,13 @@
 #include "Game.h";
 class Gage;
 class Player3D;
+
 class Object : public IGameObject
 {
 public:
 	Object();
-	virtual ~Object();
-	virtual bool Start();
+	virtual ~Object() = 0;
+	virtual bool Start() = 0;
 	virtual void Update() = 0;
 
 	/// <summary>

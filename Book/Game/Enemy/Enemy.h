@@ -344,7 +344,13 @@ public:
 		m_activeFlag = active;
 	}
 
-	inline bool GetActiveFlag()
+	
+	
+	/// <summary>
+	///  動かすかどうかの取得
+	/// </summary>
+	/// <param name="m_activeFlag">trueなら動けない</param>	
+	bool GetActiveFlag()
 	{
 		return m_activeFlag;
 	}
@@ -366,6 +372,15 @@ public:
 	}
 
 	//--------------------------------------------
+
+	/// <summary>
+	/// エフェクトを取得。
+	/// </summary>
+	/// <returns></returns>
+	EffectEmitter* GetEffect()
+	{
+		return m_Effect;
+	}
 
 protected:
 

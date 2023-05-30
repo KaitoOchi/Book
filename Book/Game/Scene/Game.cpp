@@ -626,6 +626,8 @@ void Game::NotifyEventEnd()
 	m_miniMap->Activate();
 	m_playerManagement->Activate();
 	m_player3D->Activate();
+	m_player3D->m_Player_Act = true;
+	m_player2D->m_Player_Act = true;
 
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos);
@@ -747,6 +749,68 @@ void Game::ExitGame()
 
 	DeleteGO(FindGO<Pause>("pause"));
 	DeleteGO(this);
+}
+
+void Game::PlayWallEffect()
+{
+	//壁不エフェクトを再生
+	for (auto& effect : m_physicsGhostList)
+	{
+		if (effect->GetEffect() != nullptr) {
+			effect->GetEffect()->Play();
+		}
+	}
+
+	//敵エフェクトを再生
+	for (auto& effect : m_enemyList)
+	{
+		if (effect->GetEffect() != nullptr) {
+			effect->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
+			effect->GetEffect()->Update();
+		}
+	}
+
+	//お宝エフェクトを再生
+	if (m_treasure->GetEffect() != nullptr) {
+		m_treasure->GetEffect()->Play();
+	}
+
+	//煙幕エフェクトを再生
+	if (m_playerManagement->GetEffect() != nullptr) {
+		m_playerManagement->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
+		m_playerManagement->GetEffect()->Update();
+	}
+}
+
+void Game::StopWallEffect()
+{
+	//壁エフェクトを停止
+	for (auto& effect : m_physicsGhostList)
+	{
+		if (effect->GetEffect() != nullptr) {
+			effect->GetEffect()->Stop();
+		}
+	}
+
+	//敵エフェクトを停止
+	for (auto& effect : m_enemyList)
+	{
+		if (effect->GetEffect() != nullptr) {
+			effect->GetEffect()->SetTime(0.0f);
+			effect->GetEffect()->Update();
+		}
+	}
+
+	//お宝エフェクトを停止
+	if (m_treasure->GetEffect() != nullptr) {
+		m_treasure->GetEffect()->Stop();
+	}
+
+	//煙幕エフェクトを停止
+	if (m_playerManagement->GetEffect() != nullptr) {
+		m_playerManagement->GetEffect()->SetTime(0.0f);
+		m_playerManagement->GetEffect()->Update();
+	}
 }
 
 void Game::Render(RenderContext& rc)

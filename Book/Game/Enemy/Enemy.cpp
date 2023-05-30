@@ -187,7 +187,7 @@ void Enemy::Efect_Dizzy()
 		m_Effect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 
@@ -205,7 +205,7 @@ void Enemy::Efect_FindPlayer()
 		m_Effect->SetScale(Vector3::One * 1.2f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 
@@ -223,7 +223,7 @@ void Enemy::Efect_MissingPlayer()
 		m_Effect->SetScale(Vector3::One * 1.5f);
 		// エフェクトの座標の設定
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
-		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 50.0f);
+		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 

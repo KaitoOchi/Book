@@ -33,36 +33,39 @@ void Enemy_Increase::Update()
 
 void Enemy_Increase::Enemy_Open()
 {
-	//エネミーの大きさを求める
-	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
+	for (int i = 0; i < 2; i++)
 	{
-		//アクティブになっていないエネミーを探す
-		if (m_game->GetEnemyList()[i]->GetActiveFlag())
+		//エネミーの大きさを求める
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 		{
-			//プレイヤーとエネミーの距離を求める
-			Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
-			//最も距離のある値を求める
-			if (pos.LengthSq()> m_nearposition)	
+			//アクティブになっていないエネミーを探す
+			if (m_game->GetEnemyList()[i]->GetActiveFlag())
 			{
-				m_nearposition = pos.LengthSq();
-				m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
+				//プレイヤーとエネミーの距離を求める
+				Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
+				//最も距離のある値を求める
+				if (pos.LengthSq() > m_nearposition)
+				{
+					m_nearposition = pos.LengthSq();
+					m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
+				}
 			}
 		}
-	}
 
-	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
-	{
-		//アクティブになっていないエネミーを探す
-		if (m_game->GetEnemyList()[i]->GetActiveFlag())
+		for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 		{
-			//座標が同じなら探しているエネミーなので
-			if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
+			//アクティブになっていないエネミーを探す
+			if (m_game->GetEnemyList()[i]->GetActiveFlag())
 			{
-				//エネミーアクティブにする
-				m_game->GetEnemyList()[i]->SetActiveFlag(false);
-				Vector3 move{ 0.0f, 20.0f, 0.0f };
-				m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
-				m_nearposition = FLT_MIN;
+				//座標が同じなら探しているエネミーなので
+				if (m_ifPosition.LengthSq() == m_game->GetEnemyList()[i]->GetPosition().LengthSq())
+				{
+					//エネミーアクティブにする
+					m_game->GetEnemyList()[i]->SetActiveFlag(false);
+					Vector3 move{ 0.0f, 20.0f, 0.0f };
+					m_game->GetEnemyList()[i]->GetCharCon().Execute(move, 1.0f);
+					m_nearposition = FLT_MIN;
+				}
 			}
 		}
 	}

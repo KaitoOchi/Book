@@ -9,7 +9,7 @@ namespace
 {
 	const int CURSOR_VERTICAL_MAX = 2;							//縦カーソル最大値
 	const int CURSOR_HORIZONTAL_MAX[3] = { 100, 100, 2 };		//各設定の横カーソル最大値
-	const char COMMAND[8] = { 'b','b','7','7','b','b','7','7'};
+	const char COMMAND[8] = { 'w','s','s','j','b','7','s','j'};
 	const Vector3 CURSOR_POS_VERTICAL[3] = { Vector3(-600.0f, 165.0f , 0.0f),
 											Vector3(-600.0f, -40.0f, 0.0f),
 											Vector3(-600.0f, -240.0f, 0.0f) };				//縦カーソルの座標
@@ -90,6 +90,8 @@ bool Title_Setting::Start()
 	}
 
 	m_catSpriteRender.Init("Assets/sprite/UI/setting/cat.DDS", 854.0f, 480.0f);
+	m_catSpriteRender.SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
+	m_catSpriteRender.Update();
 	m_sprites.push_back(&m_catSpriteRender);
 
 	//パーセント文字の設定
@@ -128,9 +130,12 @@ void Title_Setting::Input()
 		return;
 	}
 
+	//Aボタンが押されたら
+	if (g_pad[0]->IsTrigger(enButtonA)) {
+		Command('j');
+	}
 	//Bボタンが押されたら
-	if (g_pad[0]->IsTrigger(enButtonB))
-	{
+	else if (g_pad[0]->IsTrigger(enButtonB)) {
 		m_timer = 1.0f;
 		m_isWaitState = true;
 
@@ -275,11 +280,12 @@ void Title_Setting::Command(char command)
 		//コマンド成功なら
 		if (j == sizeof(COMMAND) / sizeof(char)) {
 			m_percentFontRender.SetText(L"NEKO NEKO POWER 29");
-			m_percentFontRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+			m_percentFontRender.SetPosition(Vector3(0.0f, 300.0f, 0.0f));
 			m_percentFontRender.SetScale(2.0f);
 			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 			m_percentFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-			m_isSecret = true;
+			m_catSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			m_catSpriteRender.Update();
 		}
 	}
 
@@ -362,8 +368,6 @@ void Title_Setting::Render(RenderContext& rc)
 	//カーソルの描画
 	m_cursorSpriteRender.Draw(rc);
 
-	//猫画像の描画
-	if (m_isSecret) {
-		m_catSpriteRender.Draw(rc);
-	}
+	//ねこ画像の描画
+	m_catSpriteRender.Draw(rc);
 }
