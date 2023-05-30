@@ -44,7 +44,7 @@ bool Result::Start()
 void Result::InitScore()
 {
 	//リザルトを保存
-	int time = m_score[0];
+	int time = 600 - m_score[0];
 	if (m_resultState == enState_GameOver) {
 		m_score[0] = (600 - m_score[0]) * 10;
 	}
@@ -237,6 +237,9 @@ void Result::Input()
 			//フェードを始める
 			m_isWaitFadeOut = true;
 			m_fade->StartFadeOut();
+
+			//ヒント画像を表示する
+			m_fade->SetEnableTips(true);
 
 			GameManager::GetInstance()->DeleteBGM();
 			GameManager::GetInstance()->ResetSearchNum();

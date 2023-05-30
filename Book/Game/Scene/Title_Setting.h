@@ -88,24 +88,22 @@ private:
 	SpriteRender					m_settingSpriteRender;			//設定画像
 	SpriteRender					m_cursorSpriteRender;			//カーソル画像
 	SpriteRender					m_fpsCursorSpriteRender;		//FPSカーソル
+	SpriteRender					m_catSpriteRender;				//猫画像
 	std::array< SpriteRender, 2 >	m_gaugeSpriteRender;			//BGMのメーター
 	std::array< SpriteRender, 3 >	m_settingTextSpriteRender;		//設定の説明画像
 	std::array< SpriteRender, 2 >	m_buttonSpriteRender;			//ボタン画像
 	std::vector<SpriteRender*>		m_sprites;						//SpriteRenderのベクター型
 	FontRender						m_percentFontRender;			//パーセント文字
-
 	Fade* m_fade = nullptr;
 	Title* m_title = nullptr;
-
 	GameManager::SaveData			m_saveData;						//セーブデータの構造体
 	std::array< int, 3 >			m_saveDataArray;				//セーブデータの一時的な配列
-
-	Vector3 m_cursorPos;
-
-	char							m_commandList[16] = {"NNNNNNNNNNNNNN0"};		//コマンドリスト
+	Vector3							m_cursorPos;					//カーソル座標
+	char							m_commandList[16] = {"NNNNNNNNNNNNNN0"};	//コマンドリスト
 	bool							m_isWaitState = false;			//ステートの遷移待ちかどうか
 	bool							m_isWaitFadeOut = false;		//フェード中かどうか
 	bool							m_isSetFPS = false;				//FPSをセットするか
+	bool							m_isSecret = false;				//要素
 	int								m_cursor_vertical = 0;			//縦カーソル
 	int								m_cursor_horizontal = 0;		//横カーソル
 	int								m_nextCursor = 1;				//次に移動するカーソル

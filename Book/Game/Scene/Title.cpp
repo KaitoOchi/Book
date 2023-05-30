@@ -19,7 +19,7 @@ namespace
 
 Title::Title()
 {
-
+	m_sprites.reserve(8);
 }
 
 Title::~Title()
@@ -28,6 +28,7 @@ Title::~Title()
 	{
 		m_sprites.pop_back();
 	}
+	m_sprites.clear();
 	m_sprites.shrink_to_fit();
 }
 
@@ -35,6 +36,7 @@ bool Title::Start()
 {
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(-1.5f, -1, 1), Vector3(3.0f,3.0f,0.8f));
 	RenderingEngine::GetInstance()->SetAmbient(0.0f);
+
 	InitSprite();
 
 	//ƒJƒƒ‰‚ÌÝ’è
@@ -203,7 +205,7 @@ void Title::SceneChange()
 	if (m_titleState_tmp == 2) {
 		//ŠÂ‹«Œõ‚ð‰Šú‰»‚·‚é
 		RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
-		RenderingEngine::GetInstance()->SetAmbient(0.2f);
+		RenderingEngine::GetInstance()->SetAmbient(0.1f);
 
 		NewGO<Opening>(0, "opening");
 		DeleteGO(this);
