@@ -60,6 +60,12 @@ void Enemy_Clear::Update()
 		return;
 	}
 
+	// プレイヤーを捕まえたとき
+	if (m_ActState == CATCH) {
+		m_enAnimationState = IDLE;
+		return;
+	}
+
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		// �M���e��D�悷��
@@ -139,12 +145,6 @@ void Enemy_Clear::Update()
 
 void Enemy_Clear::Update_OnCraw()
 {
-	// 捕まえているとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
-		return;
-	}
-
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
 		m_ActState = CATCH;

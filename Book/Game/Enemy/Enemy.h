@@ -155,7 +155,7 @@ public:
 		LOSS,
 		CALL
 	};
-	EnAnimationState m_enAnimationState = IDLE;
+	EnAnimationState m_enAnimationState;
 
 	// エネミーの行動パターン
 	enum EnEnemyActState

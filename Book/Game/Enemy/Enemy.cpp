@@ -85,7 +85,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(15.0f);
+	m_sphereCollider.Create(17.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -251,15 +251,18 @@ void Enemy::CreateNavimesh(Vector3 pos)
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = pos - m_position;
+	Vector3 diff = pos - m_position;
 
-	// 回転を教える
-	float angle = atan2(-moveSpeed.x, moveSpeed.z);
-	Quaternion rot = Quaternion::Identity;
-	rot.SetRotationY(-angle);
+	//// 回転を教える
+	//float angle = atan2(-diff.x, diff.z);
+	//Quaternion rot = Quaternion::Identity;
+	//rot.SetRotationY(-angle);
 
-	// 回転を教える
-	m_enemyRender.SetRotation(rot);
+	//// 回転を教える
+	//m_enemyRender.SetRotation(rot);
+
+	diff.Normalize();
+	Rotation(diff);
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
@@ -397,8 +400,8 @@ bool Enemy::Act_CatchPlayer()
 		m_enAnimationState = ATTACK;
 
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-			// 捕まえたのでフラグをtrueにする
-			m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
+			// ステートを変動させる
+			m_game->GetEnemyList()[i]->m_ActState = CATCH;
 		}
 
 		return true;
@@ -578,6 +581,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
+		return;
 	}
 }
 
