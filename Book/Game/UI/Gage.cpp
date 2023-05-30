@@ -253,7 +253,7 @@ void Gage::Gage_MAX()
 		m_wipe->Reset();
 		//–Ú•W‰æ‘œ‚ğo‚·
 		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
-		goalSprite->InitSprite(true);
+		goalSprite->SetSpriteNum(true);
 
 		m_enemy_Increase->Enemy_Open();
 		m_MaxEnd = false;
