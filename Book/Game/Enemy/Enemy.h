@@ -344,7 +344,13 @@ public:
 		m_activeFlag = active;
 	}
 
-	inline bool GetActiveFlag()
+	
+	
+	/// <summary>
+	///  “®‚©‚·‚©‚Ç‚¤‚©‚ÌŽæ“¾
+	/// </summary>
+	/// <param name="m_activeFlag">true‚È‚ç“®‚¯‚È‚¢</param>	
+	bool GetActiveFlag()
 	{
 		return m_activeFlag;
 	}

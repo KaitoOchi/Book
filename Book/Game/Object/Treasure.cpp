@@ -4,7 +4,8 @@
 #include "Game.h"
 #include "Gage.h"
 #include "GameUI.h"
-
+#include "Player2D.h"
+#include "Player3D.h"
 namespace
 {
 	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
@@ -29,6 +30,7 @@ Treasure::~Treasure()
 bool Treasure::Start()
 {
 	m_gameUI = FindGO<GameUI>("gameUI");
+	m_player2d = FindGO<Player2D>("player2d");
 	Object::Start();
 
 	//モデルの読み込み
@@ -49,7 +51,7 @@ bool Treasure::Start()
 	m_collisionObject->SetName("otakara");
 	m_collisionObject->Update();
 
-	//お宝のエフェクトの設定
+	////お宝のエフェクトの設定
 	m_kirakiraEffect = NewGO<EffectEmitter>(0);
 	m_kirakiraEffect->Init(6);
 	m_kirakiraEffect->SetPosition(m_position);
@@ -64,6 +66,7 @@ void Treasure::Update()
 {
 	m_gameUI->SetCircleState(false);
 	m_hitState = false;
+	m_gameUI->SetCircleDrawState(false);
 
 	if (m_gameUI->GetDegree() >= 360.0f)
 	{
@@ -95,6 +98,8 @@ void Treasure::Hit()
 
 			m_player3d->m_enPlayer3D_Steal;
 
+			m_player3d->m_Player_Act = false;
+			m_player2d->m_Player_Act = false;
 			//イベントの開始
 			m_game->NotifyEventStart();
 

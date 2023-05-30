@@ -81,6 +81,12 @@ public:
 	{
 		return m_degree;
 	}
+
+
+	const bool GetCircleDrawState()
+	{
+		return m_circleDrawState;
+	}
 private:
 	/// <summary>
 	/// 時間計測処理。
@@ -148,7 +154,7 @@ private:
 	SpriteRender		m_staminaGageRender;					//スタミナゲージ画像
 	Vector2				m_spritePosition = Vector2::Zero;
 	Vector3				m_stamianGageScale = Vector3::One;
-	float				m_staminaDegree = 0.0f;
+	float				m_staminaDegree = 360.0f;
 	
 
 	SpriteRender		m_circleBaseSpriteRender;			//円形ゲージのベース画像
