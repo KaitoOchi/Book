@@ -21,7 +21,7 @@ namespace
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
-	const float		CALL_DISTANCE_MIN = 180.0f;				// 呼ぶことができる最小値
+	const float		CALL_DISTANCE_MIN = 190.0f;				// 呼ぶことができる最小値
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
@@ -38,7 +38,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 50.0f;					// 突進時に追加する長さ
+	const float		ADD_LENGTH = 150.0f;						// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -85,7 +85,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(15.0f);
+	m_sphereCollider.Create(17.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -251,15 +251,10 @@ void Enemy::CreateNavimesh(Vector3 pos)
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 moveSpeed = pos - m_position;
+	Vector3 diff = pos - m_position;
 
-	// 回転を教える
-	float angle = atan2(-moveSpeed.x, moveSpeed.z);
-	Quaternion rot = Quaternion::Identity;
-	rot.SetRotationY(-angle);
-
-	// 回転を教える
-	m_enemyRender.SetRotation(rot);
+	diff.Normalize();
+	Rotation(diff);
 
 	// 一定時間以下のときreturn
 	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
@@ -397,8 +392,8 @@ bool Enemy::Act_CatchPlayer()
 		m_enAnimationState = ATTACK;
 
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-			// 捕まえたのでフラグをtrueにする
-			m_game->GetEnemyList()[i]->m_ChachPlayerFlag = true;
+			// ステートを変動させる
+			m_game->GetEnemyList()[i]->m_ActState = CATCH;
 		}
 
 		return true;
@@ -578,6 +573,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 pos)
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
+		return;
 	}
 }
 
@@ -750,8 +746,6 @@ void Enemy::Act_Charge(float time)
 		return;
 	}
 
-	Act_Charge_HitWall();
-
 	// タイマーがtrueのとき
 	if (Act_Stop(time,2) == true) {
 
@@ -787,6 +781,8 @@ void Enemy::Act_Charge(float time)
 		m_enAnimationState = IDLE;
 	}
 
+	Act_Charge_HitWall();
+
 	// 回転を教える
 	Rotation(m_chargeDiff);
 }
@@ -817,7 +813,7 @@ void Enemy::Act_Charge_HitWall()
 {
 	// 壁に衝突する判定
 	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerPos - m_position;
+	Vector3 diff = m_playerChargePosition - m_position;
 	//// 正規化
 	diff.Normalize();
 
