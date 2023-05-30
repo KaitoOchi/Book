@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Enemy_Normal.h"
+#include "GameManager.h"
 #include "PlayerManagement.h"
-
+#include "Gage.h"
 namespace
 {
 	const float		LINEAR_COMPLETION = 0.2f;		// ���`�⊮�̃t���[����
@@ -63,6 +64,17 @@ void Enemy_Normal::Update()
 		return;
 	}
 
+	// 警戒度がMAXのとき
+	if (m_gage->m_leverState == m_gage->m_enLever_MAX) {
+
+		Vector3 diff = m_playerManagement->GetPosition() - m_position;
+
+		// 一定の間隔以内のとき
+		if (diff.Length() < 500.0f) {
+			m_ActState = MISSING_SEARCHPLAYER;
+		}
+	}
+
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		// �M���e��D�悷��
@@ -108,9 +120,6 @@ void Enemy_Normal::Update()
 		// �����e��g�p�����Ƃ�
 	case LISTEN:
 		UpDate_OnListen();
-		break;
-	case EVENT:
-		Update_OnEvent();
 		break;
 	}
 

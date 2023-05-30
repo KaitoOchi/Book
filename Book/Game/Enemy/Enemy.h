@@ -79,7 +79,7 @@ public:
 	/// 音が聞こえた場所に行く処理
 	/// </summary>
 	/// <param name="pos">目標地点</param>
-	void Act_GoLocationListenSound(Vector3 pos);
+	void Act_GoLocationListenSound(Vector3 tergetPos);
 	/// <summary>
 	/// 行動停止
 	/// </summary>
@@ -173,7 +173,6 @@ public:
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
 		CATCH,					// 捕獲した
-		EVENT					// イベント時の行動
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -437,7 +436,7 @@ protected:
 	SpotLight m_spotLight;					//スポットライト
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool m_HearedSoundBulletFlag = false;		// 音爆弾
+	bool m_HearedSoundBulletFlag = false;	// 音爆弾
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか

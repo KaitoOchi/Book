@@ -66,6 +66,17 @@ void Enemy_Charge::Update()
 		return;
 	}
 
+	// Œx‰ú“x‚ªMAX‚Ì‚Æ‚«
+	if (m_gage->m_leverState == m_gage->m_enLever_MAX) {
+
+		Vector3 diff = m_playerManagement->GetPosition() - m_position;
+
+		// ˆê’è‚ÌŠÔŠuˆÈ“à‚Ì‚Æ‚«
+		if (diff.Length() < 500.0f) {
+			m_ActState = MISSING_SEARCHPLAYER;
+		}
+	}
+
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
@@ -111,9 +122,6 @@ void Enemy_Charge::Update()
 		// ‰¹”š’e‚ðŽg—p‚µ‚½‚Æ‚«
 	case LISTEN:
 		UpDate_OnListen();
-		break;
-	case EVENT:
-		Update_OnEvent();
 		break;
 	}
 
