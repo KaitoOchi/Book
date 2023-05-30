@@ -152,28 +152,6 @@ void Player::Update()
 		m_game->GetWallList()[i]->SetWallRenderPosition(m_position);
 	}
 
-	if (m_tireEffect != nullptr)
-	{
-		Vector3 effectPos = m_position;
-		Vector3 effectfoward = m_forward;
-
-		Vector3 move = m_moveSpeed;
-		move.y = 0.0f;
-
-		Quaternion rot = Quaternion::Identity;
-		move *= -1.0f;
-
-		move.Normalize();
-		rot.SetRotationYFromDirectionXZ(move);
-
-		effectPos += move * 10.0f;
-		effectPos.y = 110.0f;
-
-		m_tireEffect->SetPosition(effectPos);
-		m_tireEffect->SetRotation(rot);
-		m_tireEffect->Update();
-	}
-
 }
 
 void Player::Move()
@@ -309,7 +287,7 @@ void Player::TireEffect()
 	rot.SetRotationYFromDirectionXZ(move);
 	
 	effectPos +=move * 10.0f;
-	effectPos.y = 110.0f;
+	effectPos.y = 120.0f;
 
 	m_tireEffect->SetPosition(effectPos);
 	m_tireEffect->SetScale(Vector3::One * EFFECTSIZE);

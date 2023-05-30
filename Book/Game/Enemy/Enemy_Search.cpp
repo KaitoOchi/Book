@@ -87,6 +87,7 @@ void Enemy_Search::Update()
 
 	// �X�V
 	m_enemyRender.SetPosition(m_position);
+	m_characterController.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.Update();
 }

@@ -372,6 +372,13 @@ public:
 		return m_spotNum;
 	}
 
+
+	ModelRender& GetModelRender()
+	{
+		return m_enemyRender;
+	}
+
+
 	//--------------------------------------------
 
 	/// <summary>

@@ -125,7 +125,9 @@ void GameUI::Update()
 	}
 
 	Time();
+	
 	ChangeGage();
+	
 
 
 	if (m_treasure->GetHitState())
@@ -219,7 +221,11 @@ void GameUI::ChangeGage()
 		if (m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Caught &&
 			m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Catching)
 		{
-			m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
+			if (m_changeGaugeState)
+			{
+
+				m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
+			}
 		}
 	}
 	if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_3DChanging && m_gage < GAGE_MAX) {
