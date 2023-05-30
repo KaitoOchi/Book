@@ -3,6 +3,7 @@
 #include "Game.h";
 class Gage;
 class Player3D;
+
 class Object : public IGameObject
 {
 public:

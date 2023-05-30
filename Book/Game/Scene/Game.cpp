@@ -660,6 +660,8 @@ void Game::NotifyEventEnd()
 	m_miniMap->Activate();
 	m_playerManagement->Activate();
 	m_player3D->Activate();
+	m_player3D->m_Player_Act = true;
+	m_player2D->m_Player_Act = true;
 
 	//ミニマップに脱出口を表示
 	m_miniMap->SetTreasurePos(m_clearPos);

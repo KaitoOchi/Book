@@ -81,6 +81,12 @@ public:
 	{
 		return m_degree;
 	}
+
+
+	const bool GetCircleDrawState()
+	{
+		return m_circleDrawState;
+	}
 private:
 	/// <summary>
 	/// ŠÔŒv‘ªˆ—B

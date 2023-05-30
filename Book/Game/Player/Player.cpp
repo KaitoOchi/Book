@@ -22,7 +22,7 @@ namespace
 	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
 	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
-	const float 	EFFECTSIZE = 2.0f;
+	const float 	EFFECTSIZE = 1.0f;
 }
 
 Player::Player()
@@ -141,7 +141,8 @@ void Player::Update()
 	PlayerCatch();
 	Animation();
 	ManageState();
-	if (!m_treasure->GetHitState())
+	if (!m_treasure->GetHitState()&&
+		!m_gameUI->GetCircleDrawState())
 	{
 		m_gameUI->StaminaGage(m_stamina, m_position);
 	}
@@ -270,7 +271,7 @@ void Player::TireEffect()
 	m_tireEffect->Init(7);
 
 	Vector3 effectPos = m_position;
-	effectPos += (m_forward * -1.0f) * 15.0f;
+	//effectPos += (m_forward * -1.0f) * 15.0f;
 	effectPos.y = 50.0f;
 
 	m_tireEffect->SetPosition(effectPos);
@@ -280,9 +281,9 @@ void Player::TireEffect()
 	Vector3 cameraFoward = g_camera3D->GetForward();
 	Vector3 pos =m_position-m_gamecamera->GetPosition();
 	Vector3 move = m_moveSpeed;
-
+	pos.y = 0.0f;
 	Quaternion rot = Quaternion::Identity;
-	if (move.x < 0.0f)
+	if (pos.x < 0.0f)
 	{
 		pos *= -1.0f;
 	}
