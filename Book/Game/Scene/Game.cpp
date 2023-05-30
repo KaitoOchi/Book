@@ -612,7 +612,7 @@ void Game::NotifyEventEnd()
 	);
 	RenderingEngine::GetInstance()->SetHemiSphereLight(
 		Vector3(0.2f, 0.1f, 0.1f),
-		Vector3(0.3f, 0.1f, 0.1f),
+		Vector3(0.2f, 0.1f, 0.1f),
 		Vector3(0.0f, 1.0f, 0.0f)
 	);
 

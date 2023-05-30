@@ -12,21 +12,17 @@ public:
 
 public:
 	/// <summary>
-	/// 画像の初期化。
+	/// 表示するスプライトを設定。
 	/// </summary>
-	void InitSprite(const bool change)
+	void SetSpriteNum(const bool enable)
 	{
-		if (change) {
-			m_goalSpriteRender.Init("Assets/sprite/UI/Gauge/image_target2.DDS", 231.0f, 60.0f);
-		}
-		else {
-			m_goalSpriteRender.Init("Assets/sprite/UI/Gauge/image_target.DDS", 231.0f, 60.0f);
-		}
+		m_enableNum = enable;
 	}
 
 private:
-	SpriteRender	m_goalSpriteRender;		//目標画像
+	SpriteRender	m_goalSpriteRender[2];	//目標画像
 	Vector3			m_goalPos;				//座標
-	bool			m_reverse = false;		//反転させるかどうか
+	bool			m_enableNum;			//どちらを表示するか
 	float			m_goalTimer = 0.0f;		//タイマー
+	float			m_alphaTimer = 0.0f;	//透明度タイマー
 };

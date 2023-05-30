@@ -7,8 +7,8 @@ public:
 	/// セーブデータの構造体
 	/// </summary>
 	struct SaveData {
-		float bgm = 0.1f;
-		float sfx = 0.1f;
+		float bgm = 0.5f;
+		float sfx = 0.5f;
 		int frameRate = 60;
 	};
 

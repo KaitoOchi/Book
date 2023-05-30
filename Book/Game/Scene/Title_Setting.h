@@ -1,8 +1,8 @@
 #pragma once
 #include "GameManager.h"
+#include "Title.h"
 
 class Fade;
-class Title;
 
 class Title_Setting : public IGameObject
 {
@@ -84,6 +84,29 @@ private:
 		GameManager::GetInstance()->DataSave(m_saveData);
 	}
 
+	/// <summary>
+	/// セーブデータをリセットする処理。
+	/// </summary>
+	void ResetSaveData()
+	{
+		//SaveData構造体にデフォルトの値を入れてセーブ
+		GameManager::SaveData defaultSaveData;
+		m_saveData = defaultSaveData;
+		GameManager::GetInstance()->DataSave(m_saveData);
+
+		//配列に初期化したセーブデータを入れる
+		SetDataArray();
+
+		//値に応じて音量と画像を設定
+		GameManager::GetInstance()->SetVolume();
+		SpriteUpdate();
+		m_cursor_horizontal = 0;
+		m_fpsCursorSpriteRender.SetPosition(Vector3(-120.0f, -240.0f, 0.0f));
+		m_fpsCursorSpriteRender.Update();
+
+		m_title->Sound(1);
+	}
+
 private:
 	SpriteRender					m_settingSpriteRender;			//設定画像
 	SpriteRender					m_cursorSpriteRender;			//カーソル画像
@@ -91,7 +114,7 @@ private:
 	SpriteRender					m_catSpriteRender;				//猫画像
 	std::array< SpriteRender, 2 >	m_gaugeSpriteRender;			//BGMのメーター
 	std::array< SpriteRender, 3 >	m_settingTextSpriteRender;		//設定の説明画像
-	std::array< SpriteRender, 2 >	m_buttonSpriteRender;			//ボタン画像
+	std::array< SpriteRender, 3 >	m_buttonSpriteRender;			//ボタン画像
 	std::vector<SpriteRender*>		m_sprites;						//SpriteRenderのベクター型
 	FontRender						m_percentFontRender;			//パーセント文字
 	Fade* m_fade = nullptr;
