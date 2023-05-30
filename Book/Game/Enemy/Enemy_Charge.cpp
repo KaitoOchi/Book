@@ -2,6 +2,8 @@
 #include "Enemy_Charge.h"
 
 #include "GameManager.h"
+#include "PlayerManagement.h"
+#include "Gage.h"
 
 namespace 
 {
@@ -64,6 +66,11 @@ void Enemy_Charge::Update()
 		return;
 	}
 
+	// Œx‰ú“x‚ªMAX‚Ì‚Æ‚«
+	if (m_gage->m_leverState = m_gage->m_enLever_MAX) {
+		m_ActState = EVENT;
+	}
+
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
@@ -109,6 +116,9 @@ void Enemy_Charge::Update()
 		// ‰¹”š’e‚ðŽg—p‚µ‚½‚Æ‚«
 	case LISTEN:
 		UpDate_OnListen();
+		break;
+	case EVENT:
+		Update_OnEvent();
 		break;
 	}
 
@@ -186,6 +196,12 @@ void Enemy_Charge::UpDate_OnListen()
 void Enemy_Charge::Update_OnCatch()
 {
 	Enemy::Act_CatchPlayer();
+}
+
+void Enemy_Charge::Update_OnEvent()
+{
+	// ‚¨•ó‚ÌêŠ‚ÖŒü‚©‚¤
+	Enemy::Event(m_playerManagement->GetPosition());
 }
 
 void Enemy_Charge::Render(RenderContext& rc)
