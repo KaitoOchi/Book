@@ -5,7 +5,7 @@ namespace
 {
 	const Vector3	GOALSPRITE_FIRST_POS = { -0.0f, 300.0f, 0.0f };		//画像の座標
 	const float		GOALSPRITE_MOVESPEED = 30.0f;						//移動速度
-	const float		GOALSPRITE_ENABLE_TIME = 4.0f;						//表示時間
+	const float		GOALSPRITE_ENABLE_TIME = 4.5f;						//表示時間
 }
 
 
@@ -26,7 +26,7 @@ bool GoalSprite::Start()
 
 	for (int i = 0; i < 2; i++) {
 		m_goalSpriteRender[i].SetPosition(GOALSPRITE_FIRST_POS);
-		m_goalSpriteRender[i].SetScale(Vector3(2.0f, 2.0f, 2.0f));
+		m_goalSpriteRender[i].SetScale(Vector3(1.5f, 1.5f, 1.5f));
 		m_goalSpriteRender[i].Update();
 	}
 

@@ -44,12 +44,11 @@ bool Title_Guide::Start()
 	}
 
 	//ƒ{ƒ^ƒ“‰æ‘œ‚Ìİ’è
-	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
-	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 287.0f, 152.0f);
+	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 284.0f, 152.0f);
+	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 284.0f, 152.0f);
 	for (int i = 0; i < 2; i++) {
 		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -375.0f - (i * 50.0f), 0.0f));
 		m_buttonSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
-		m_buttonSpriteRender[i].SetScale(Vector3(0.75f, 0.75f, 0.0f));
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
 	}
