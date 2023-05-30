@@ -44,6 +44,7 @@ public:
 	~Game();
 	bool Start();
 	void Update();
+	void Render(RenderContext& rc);
 
 public:
 	/// <summary>
@@ -187,9 +188,13 @@ private:
 	/// ゲーム中
 	/// </summary>
 	void DuringGamePlayState();
+	/// <summary>
+	/// ゲームの終了処理。
+	/// </summary>
+	void ExitGame();
 
 private:
-
+	ModelRender						m_grassModelRender;				//草
 	LevelRender						m_levelRender;					//レベルレンダー
 	PointLight						m_pointLight;					//ポイントライト
 

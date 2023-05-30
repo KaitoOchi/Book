@@ -39,12 +39,19 @@ namespace
 
 Opening::Opening()
 {
-
+	m_levelModelRender.reserve(16);
 }
 
 Opening::~Opening()
 {
 	DeleteGO(m_skyCube);
+
+	for (auto& model : m_levelModelRender)
+	{
+		delete model;
+	}
+	m_levelModelRender.clear();
+	m_levelModelRender.shrink_to_fit();
 }
 
 bool Opening::Start()
@@ -58,6 +65,8 @@ bool Opening::Start()
 	InitModel();
 
 	InitSprite();
+
+	LevelDesign();
 
 	m_skyCube = NewGO<SkyCube>(0, "skyCube");
 	m_skyCube->SetType(1);
@@ -128,6 +137,60 @@ void Opening::InitSprite()
 		m_skipSpriteRender[i].Update();
 	}
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
+}
+
+void Opening::LevelDesign()
+{
+	// レベルレンダー処理
+	m_levelRender.Init("Assets/level3D/level_opening.tkl", [&](LevelObjectData& objData) {
+
+		if (objData.EqualObjectName(L"House_2") == true) {
+			ModelRender* modelRender = new ModelRender;
+			modelRender->Init("Assets/modelData/event/house_2.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->SetPosition(objData.position);
+			modelRender->SetRotation(objData.rotation);
+			modelRender->Update();
+			m_levelModelRender.push_back(modelRender);
+			return true;
+		}
+		else if (objData.EqualObjectName(L"House_3") == true) {
+			ModelRender* modelRender = new ModelRender;
+			modelRender->Init("Assets/modelData/event/house_3.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->SetPosition(objData.position);
+			modelRender->SetRotation(objData.rotation);
+			modelRender->Update();
+			m_levelModelRender.push_back(modelRender);
+			return true;
+		}
+		else if (objData.EqualObjectName(L"House_5") == true) {
+			ModelRender* modelRender = new ModelRender;
+			modelRender->Init("Assets/modelData/event/house_5.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->SetPosition(objData.position);
+			modelRender->SetRotation(objData.rotation);
+			modelRender->Update();
+			m_levelModelRender.push_back(modelRender);
+			return true;
+		}
+		else if (objData.EqualObjectName(L"lampPost") == true) {
+			ModelRender* modelRender = new ModelRender;
+			modelRender->Init("Assets/modelData/event/lampPost.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->SetPosition(objData.position);
+			modelRender->SetRotation(objData.rotation);
+			modelRender->Update();
+			m_levelModelRender.push_back(modelRender);
+			return true;
+		}
+		else if (objData.EqualObjectName(L"Church") == true) {
+			ModelRender* modelRender = new ModelRender;
+			modelRender->Init("Assets/modelData/event/charch.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->SetPosition(objData.position);
+			modelRender->SetRotation(objData.rotation);
+			modelRender->Update();
+		m_levelModelRender.push_back(modelRender);
+			return true;
+		}
+		return true;
+	});
 }
 
 
@@ -282,6 +345,12 @@ void Opening::Render(RenderContext& rc)
 
 	//壁の描画
 	m_wallModelRender.Draw(rc);
+
+	//ステージの描画
+	for (auto& model : m_levelModelRender)
+	{
+		model->Draw(rc);
+	}
 
 	//プレイヤーの描画
 	if (m_cameraScene != 2) {

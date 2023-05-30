@@ -146,6 +146,7 @@ namespace nsBookEngine {
 			m_hemiSphereLig.SetGroundColor(grdColor);
 			m_hemiSphereLig.SetSkyColor(skyColor);
 			m_hemiSphereLig.SetGroundNormal(grdNormal);
+			GetLightCB().hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 		}
 
 		/// <summary>

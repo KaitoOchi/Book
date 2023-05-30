@@ -14,7 +14,7 @@ namespace
 
 Title_Guide::Title_Guide()
 {
-
+	m_sprites.reserve(8);
 }
 
 Title_Guide::~Title_Guide()
