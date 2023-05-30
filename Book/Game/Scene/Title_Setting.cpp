@@ -20,7 +20,7 @@ namespace
 
 Title_Setting::Title_Setting()
 {
-
+	m_sprites.reserve(16);
 }
 
 Title_Setting::~Title_Setting()
@@ -87,6 +87,9 @@ bool Title_Setting::Start()
 		m_buttonSpriteRender[i].Update();
 		m_sprites.push_back(&m_buttonSpriteRender[i]);
 	}
+
+	m_catSpriteRender.Init("Assets/sprite/UI/setting/cat.DDS", 854.0f, 480.0f);
+	m_sprites.push_back(&m_catSpriteRender);
 
 	//パーセント文字の設定
 	m_percentFontRender.SetPosition(Vector3(-310.0f, 210.0f, 0.0f));
@@ -271,6 +274,7 @@ void Title_Setting::Command(char command)
 			m_percentFontRender.SetScale(2.0f);
 			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
 			m_percentFontRender.SetShadowParam(true, 2.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+			m_isSecret = true;
 		}
 	}
 
@@ -352,4 +356,9 @@ void Title_Setting::Render(RenderContext& rc)
 
 	//カーソルの描画
 	m_cursorSpriteRender.Draw(rc);
+
+	//猫画像の描画
+	if (m_isSecret) {
+		m_catSpriteRender.Draw(rc);
+	}
 }

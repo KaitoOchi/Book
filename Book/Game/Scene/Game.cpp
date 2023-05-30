@@ -490,8 +490,9 @@ void Game::LevelDesign()
 		return true;
 		}
 	);
-
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
+
+	m_grassModelRender.Init("Assets/modelData/level_test/grass.tkm");
 }
 
 void Game::Update()
@@ -515,53 +516,7 @@ void Game::Update()
 				return;
 			}
 
-			if (m_gameState == m_enGameState_EventStart) {
-				//イベントシーンを呼ぶ
-				Event* event = NewGO<Event>(0, "event");
-				event->SetTresurePosition(m_treasurePos);
-
-				//ライトを非表示
-				GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
-				RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
-
-				//脱出口にポイントライトを置く
-				m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
-				m_pointLight.Update();
-
-				m_gameUI->Deactivate();
-				
-				m_gage->Deactivate();
-				m_gamecamera->Deactivate();
-				m_miniMap->Deactivate();
-				m_player3D->Deactivate();
-				m_playerManagement->Deactivate();
-
-				m_isWaitFadeOut = false;
-				
-				return;
-			}
-
-			if (m_gameState ==m_enGameState_GameBuck)
-			{
-				GamePos();
-				
-			}
-			else if(m_gameState==m_enGameState_GameClear)
-			{
-				//ゲームクリアにする
-				Result* result = NewGO<Result>(0, "result");
-				result->SetResult(true);
-				result->SetTime(m_gameUI->GetTime());
-			}
-			else if (m_gameState == m_enGameState_GameOver)
-			{
-				//ゲームオーバーにする
-				Result* result = NewGO<Result>(0, "result");
-				result->SetResult(false);
-				result->SetTime(m_gameUI->GetTime());
-			}
-			DeleteGO(FindGO<Pause>("pause"));
-			DeleteGO(this);
+			ExitGame();
 		}
 	}
 	
@@ -648,6 +603,17 @@ void Game::NotifyEventEnd()
 	RenderingEngine::GetInstance()->GetLightCB().spNum = m_spotLigNum;
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 3;
 
+	//ライトを変更
+	RenderingEngine::GetInstance()->SetDirectionLight(
+		Vector3(1, -1, 1),
+		Vector3(0.1f, 0.1f, 0.1f)
+	);
+	RenderingEngine::GetInstance()->SetHemiSphereLight(
+		Vector3(0.2f, 0.1f, 0.1f),
+		Vector3(0.3f, 0.1f, 0.1f),
+		Vector3(0.0f, 1.0f, 0.0f)
+	);
+
 	//敵を表示する
 	NotDraw_Enemy(false);
 
@@ -680,9 +646,6 @@ void Game::NotifyGameClear()
 		//フェードアウトを開始する
 		m_isWaitFadeOut = true;
 		m_fade->StartFadeOut();
-
-		//ヒント画像を表示する
-		m_fade->SetEnableTips(true);
 
 		//BGMの削除
 		GameManager::GetInstance()->DeleteBGM();
@@ -718,4 +681,73 @@ void Game::NotifyGameClearable()
 void Game::NotifyGameBack()
 {
 	m_gameState = m_enGameState_GameBuck;
+}
+
+void Game::ExitGame()
+{
+	//イベントの開始処理が呼ばれているなら
+	if (m_gameState == m_enGameState_EventStart) {
+		//イベントシーンを呼ぶ
+		Event* event = NewGO<Event>(0, "event");
+		event->SetTresurePosition(m_treasurePos);
+
+		//ライトを非表示
+		GameManager::GetInstance()->SetGameState(GameManager::enState_Result);
+		RenderingEngine::GetInstance()->GetLightCB().spNum = 0;
+
+		//脱出口にポイントライトを置く
+		m_pointLight.SetPosition(Vector3(m_clearPos.x, m_clearPos.y + 10.0f, m_clearPos.z));
+		m_pointLight.Update();
+
+		m_gameUI->Deactivate();
+
+		m_gage->Deactivate();
+		m_gamecamera->Deactivate();
+		m_miniMap->Deactivate();
+		m_player3D->Deactivate();
+		m_playerManagement->Deactivate();
+
+		m_isWaitFadeOut = false;
+
+		return;
+	}
+
+	//ポーズ画面が呼ばれているなら
+	if (m_gameState == m_enGameState_GameBuck)
+	{
+		GamePos();
+	}
+	//ゲームクリアなら
+	else if (m_gameState == m_enGameState_GameClear)
+	{
+		//ゲームクリアにする
+		Result* result = NewGO<Result>(0, "result");
+		result->SetResult(true);
+		result->SetTime(m_gameUI->GetTime());
+	}
+	//ゲームオーバーが呼ばれているなら
+	else if (m_gameState == m_enGameState_GameOver)
+	{
+		//ゲームオーバーにする
+		Result* result = NewGO<Result>(0, "result");
+		result->SetResult(false);
+		result->SetTime(m_gameUI->GetTime());
+	}
+
+	//ライトを戻す
+	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
+
+	RenderingEngine::GetInstance()->SetHemiSphereLight(
+		Vector3(0.3f, 0.3f, 0.4f),
+		Vector3(0.1f, 0.1f, 0.2f),
+		Vector3(0.0f, 1.0f, 0.0f)
+	);
+
+	DeleteGO(FindGO<Pause>("pause"));
+	DeleteGO(this);
+}
+
+void Game::Render(RenderContext& rc)
+{
+	m_grassModelRender.Draw(rc);
 }

@@ -19,6 +19,11 @@ private:
 	void InitModel();
 
 	/// <summary>
+	/// レベルの初期化。
+	/// </summary>
+	void LevelDesign();
+
+	/// <summary>
 	/// 画像の初期化。
 	/// </summary>
 	void InitSprite();
@@ -61,9 +66,10 @@ private:
 	ModelRender						m_playerModelRender;			//プレイヤーモデル
 	ModelRender						m_wallModelRender;				//壁モデル
 	ModelRender						m_backGroundModelRender;		//床モデル
-
+	std::vector< ModelRender* >		m_levelModelRender;				//レベル用のモデル
 	std::array< SpriteRender, 2 >	m_skipSpriteRender;				//スキップ画像
 	std::array< SpriteRender, 4 >	m_filmSpriteRender;				//フィルム画像
+	LevelRender						m_levelRender;					//レベルレンダー
 
 	Fade*							m_fade = nullptr;
 	SkyCube* m_skyCube = nullptr;
