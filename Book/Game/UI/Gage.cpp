@@ -2,6 +2,7 @@
 #include "Gage.h"
 
 #include "Game.h"
+#include "Player3D.h"
 #include "Enemy.h"
 #include "Wipe.h"
 #include "Fade.h"
@@ -42,6 +43,8 @@ bool Gage::Start()
 	m_fade = FindGO<Fade>("fade");
 
 	m_enemy_Increase = FindGO<Enemy_Increase>("enemyIncrease");
+
+	m_player3D = FindGO<Player3D>("player3d");
 
 	//基盤の更新
 	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
@@ -99,6 +102,11 @@ void Gage::GageUp(const int GageUp, const bool isEnemy)
 {
 	//クールダウンがまだなら
 	if (m_vigilanceTime > 0.0f) {
+		return;
+	}
+
+	//捕まっているならSEを流さない
+	if (m_player3D->m_playerState == m_player3D->m_enPlayer_Catching) {
 		return;
 	}
 
@@ -253,7 +261,7 @@ void Gage::Gage_MAX()
 		m_wipe->Reset();
 		//目標画像を出す
 		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
-		goalSprite->InitSprite(true);
+		goalSprite->SetSpriteNum(true);
 		for (int i = 0; i < 3; i++)
 		{
 			m_enemy_Increase->Enemy_Open();

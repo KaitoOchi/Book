@@ -85,6 +85,10 @@ void MiniMap::DrawMap_Actor()
 	//“G‚ğƒ}ƒbƒv‚É•`‰æ
 	for (int i = 0; i < m_enemyList.size(); i++) {
 
+		if (m_enemyList[i]->GetActiveFlag()) {
+			continue;
+		}
+
 		enemyPos =  m_enemyList[i]->GetPosition();
 		m_enableEnemySprites[i] = DrawMap(enemyPos, alpha);
 		//“G‰æ‘œ‚Ìİ’è

@@ -4,6 +4,7 @@ class Enemy;
 class Fade;
 #include "Wipe.h"
 class Enemy_Increase;
+class Player3D;
 class Gage:public IGameObject
 {
 public:
@@ -75,6 +76,7 @@ private:
 	Game* m_game = nullptr;
 	Wipe* m_wipe = nullptr;
 	Fade* m_fade = nullptr;
+	Player3D* m_player3D = nullptr;
 	Enemy_Increase* m_enemy_Increase = nullptr;					//エネミーの増加
 };
 
