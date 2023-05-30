@@ -148,6 +148,7 @@ void Player2D::Animation()
 	case Player::m_enPlayer_Found:
 		break;
 	case Player::m_enPlayer_Caught:
+		
 		break;
 	case Player::m_enPlayer_Clear:
 		break;

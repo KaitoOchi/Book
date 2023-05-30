@@ -4,6 +4,7 @@
 #include <random>
 class Gage;
 class GameUI;
+class Player2D;
 class Treasure :public Object 
 {
 public:
@@ -67,4 +68,5 @@ private:
 	GameUI*					m_gameUI = nullptr;				//ƒQ[ƒ€UI
 	std::vector< Vector3 >	m_treasurePositions;			//‚¨•ó‚ÌÀ•W
 	bool					m_hitState = false;				//true‚È‚ç‚¨•ó‚ÉG‚ê‚Ä‚¢‚é
+	Player2D*				m_player2d = nullptr;
 };

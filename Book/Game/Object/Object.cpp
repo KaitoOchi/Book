@@ -16,6 +16,7 @@ Object::~Object()
 bool Object::Start()
 {
 	m_player = FindGO<PlayerManagement>("playerManagement");
+	m_player3d = FindGO<Player3D>("player3d");
 	m_game = FindGO<Game>("game");
 	return true;
 }
