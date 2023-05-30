@@ -1,8 +1,8 @@
 #pragma once
 #include "GameManager.h"
+#include "Title.h"
 
 class Fade;
-class Title;
 
 class Title_Setting : public IGameObject
 {
@@ -82,6 +82,29 @@ private:
 		m_saveData.sfx = (float)m_saveDataArray[1] / 100.0f;
 		m_saveData.frameRate = 60 + (m_saveDataArray[2] * 30);
 		GameManager::GetInstance()->DataSave(m_saveData);
+	}
+
+	/// <summary>
+	/// セーブデータをリセットする処理。
+	/// </summary>
+	void ResetSaveData()
+	{
+		//SaveData構造体にデフォルトの値を入れてセーブ
+		GameManager::SaveData defaultSaveData;
+		m_saveData = defaultSaveData;
+		GameManager::GetInstance()->DataSave(m_saveData);
+
+		//配列に初期化したセーブデータを入れる
+		SetDataArray();
+
+		//値に応じて音量と画像を設定
+		GameManager::GetInstance()->SetVolume();
+		SpriteUpdate();
+		m_cursor_horizontal = 0;
+		m_fpsCursorSpriteRender.SetPosition(Vector3(-120.0f, -240.0f, 0.0f));
+		m_fpsCursorSpriteRender.Update();
+
+		m_title->Sound(1);
 	}
 
 private:

@@ -79,8 +79,9 @@ bool Title_Setting::Start()
 	//ボタン画像の設定
 	m_buttonSpriteRender[0].Init("Assets/sprite/UI/button/text_Bbutton.DDS", 287.0f, 152.0f);
 	m_buttonSpriteRender[1].Init("Assets/sprite/UI/button/text_crosskey.DDS", 198.0f, 133.0f);
-	for (int i = 0; i < 2; i++) {
-		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -375.0f - (i * 50.0f), 0.0f));
+	m_buttonSpriteRender[2].Init("Assets/sprite/UI/setting/Button_tryangle.DDS", 303.0f, 132.0f);
+	for (int i = 0; i < 3; i++) {
+		m_buttonSpriteRender[i].SetPosition(Vector3(-825.0f, -275.0f - (i * 50.0f), 0.0f));
 		m_buttonSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_buttonSpriteRender[i].SetScale(Vector3(0.75f, 0.75f, 0.0f));
 		m_buttonSpriteRender[1].SetScale(Vector3(1.0f, 1.0f, 0.0f));
@@ -92,7 +93,7 @@ bool Title_Setting::Start()
 	m_sprites.push_back(&m_catSpriteRender);
 
 	//パーセント文字の設定
-	m_percentFontRender.SetPosition(Vector3(-310.0f, 210.0f, 0.0f));
+	m_percentFontRender.SetPosition(Vector3(-320.0f, 210.0f, 0.0f));
 	m_percentFontRender.SetScale(0.9f);
 	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
@@ -164,6 +165,10 @@ void Title_Setting::Input()
 	//LB1ボタンが押されたら
 	else if (g_pad[0]->IsTrigger(enButtonLB1)) {
 		Command('b');
+	}
+	//SELECTボタンが押されたら
+	else if (g_pad[0]->IsTrigger(enButtonSelect)) {
+		ResetSaveData();
 	}
 
 	//BGM、SFX設定なら
@@ -269,7 +274,7 @@ void Title_Setting::Command(char command)
 
 		//コマンド成功なら
 		if (j == sizeof(COMMAND) / sizeof(char)) {
-			m_percentFontRender.SetText(L"AAAAAAAAA\nBBBBBB");
+			m_percentFontRender.SetText(L"NEKO NEKO POWER 29");
 			m_percentFontRender.SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 			m_percentFontRender.SetScale(2.0f);
 			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -338,7 +343,7 @@ void Title_Setting::Render(RenderContext& rc)
 	}
 
 	//ボタン画像の描画
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		m_buttonSpriteRender[i].Draw(rc);
 	}
 
