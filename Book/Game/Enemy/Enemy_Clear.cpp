@@ -74,7 +74,7 @@ void Enemy_Clear::Update()
 
 		// 一定の間隔以内のとき
 		if (diff.Length() < 500.0f) {
-			m_ActState = MISSING_SEARCHPLAYER;
+			m_ActState = EVENT;
 			m_SearchFlag = true;
 		}
 	}

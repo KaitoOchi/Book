@@ -95,7 +95,8 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
-	m_treasure = FindGO<Treasure>("treasure");
+	m_treasure = FindGO<Treasure>("treaSure");
+	m_treasurePos = m_treasure->GetPosition();	// お宝の位置を参照する
 
 	// 各タイマーのリセット
 	for (int i = 0; i < 4; i++) {
@@ -530,16 +531,19 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
-		Efect_FindPlayer();
 
-		// 突進タイプのとき
-		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = CHARGE;
-			return;
-		}
-		else {
-			m_ActState = TRACKING;
-			return;
+		if (m_ActState == LISTEN || m_ActState == CALLED) {
+			Efect_FindPlayer();
+
+			// 突進タイプのとき
+			if (m_enemyType == TYPE_CHARGE) {
+				m_ActState = CHARGE;
+				return;
+			}
+			else {
+				m_ActState = TRACKING;
+				return;
+			}
 		}
 	}
 
@@ -562,9 +566,9 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[2] = false;
 	}
-	// 長さが一定以上かつ一定時間が経過したとき(壁にぶつかったときの対処策)
 	else if (m_addTimer[4] < 10.0f) {
-		// 見失ったプレイヤーを探す
+		// 一定時間が経過したとき
+		// 移動を中断して見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
 		// タイマーをリセット
@@ -1013,38 +1017,41 @@ void Enemy::Event()
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
-		Efect_FindPlayer();
 
-		// 突進タイプのとき
-		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = CHARGE;
-			return;
-		}
-		else {
-			m_ActState = TRACKING;
-			return;
+		if (m_ActState == LISTEN || m_ActState == CALLED) {
+			Efect_FindPlayer();
+
+			// 突進タイプのとき
+			if (m_enemyType == TYPE_CHARGE) {
+				m_ActState = CHARGE;
+				return;
+			}
+			else {
+				m_ActState = TRACKING;
+				return;
+			}
 		}
 	}
 
 	Efect_FindPlayer();
 
 	// アイテムの座標を基にしてナビメッシュを作成
-	CreateNavimesh(m_treasure->GetPosition());
-
-	// 経過時間を計測
-	m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
+	CreateNavimesh(m_treasurePos);
 
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
 	// エフェクトの再生フラグをfalseにしておく
 	m_efectDrawFlag[2] = false;
 
+	// 経過時間を計測
+	m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
+
 	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = m_treasure->GetPosition() - m_position;
+	Vector3 diff = m_treasurePos - m_position;
 	float length = diff.Length();
 
 	// 長さが一定以下のとき
-	if (length < CALL_DISTANCE_MIN) {
+	if (length < 20.0f) {
 		// 見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
@@ -1052,7 +1059,7 @@ void Enemy::Event()
 		return;
 	}
 	// 長さが一定以上かつ一定時間が経過したとき(壁にぶつかったときの対処策)
-	else if (m_addTimer[4] < 10.0f) {
+	else if (m_addTimer[4] < 25.0f) {
 		// 見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;
 		m_HearedSoundBulletFlag = false;
