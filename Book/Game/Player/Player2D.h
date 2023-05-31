@@ -29,6 +29,7 @@ private:
 	int i = 0;
 	int j = 0;
 	Vector3 m_InputRot=Vector3::Zero;
+	bool m_chactState2D = false;
 	Quaternion m_rot;
 	PlayerManagement* m_playerManagement = nullptr;
 	Player3D* m_player3D = nullptr;
