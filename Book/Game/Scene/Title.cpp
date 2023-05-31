@@ -407,15 +407,15 @@ void Title::Render(RenderContext &rc)
 		m_titleSpriteRender.Draw(rc);
 		m_playerModelRender.Draw(rc);
 		m_cursorSpriteRender.Draw(rc);
+
+		//ボタン画像の描画
+		for (int i = 0; i < 2; i++) {
+			m_buttonSpriteRender[i].Draw(rc);
+		}
 		break;
 
 	//ゲームスタート画面なら
 	case 2:
 		break;
-	}
-
-	//ボタン画像の描画
-	for (int i = 0; i < 2; i++) {
-		m_buttonSpriteRender[i].Draw(rc);
 	}
 }

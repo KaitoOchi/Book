@@ -312,8 +312,6 @@ void Enemy::Act_SeachPlayer()
 		if (WallAndHit(m_playerPos) == false) {
 			// 壁に衝突したとき
 			m_TrackingPlayerFlag = false;
-			m_efectDrawFlag[1] = false;
-			m_efectDrawFlag[2] = false;
 			return;
 		}
 	}
@@ -550,8 +548,6 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 
-		Efect_FindPlayer();
-
 		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
 			m_ActState = CHARGE;
@@ -582,7 +578,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[2] = false;
 	}
-	else if (m_addTimer[4] < 10.0f) {
+	else if (m_addTimer[4] > 10.0f) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
 		m_ActState = MISSING_SEARCHPLAYER;

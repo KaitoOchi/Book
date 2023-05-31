@@ -278,7 +278,7 @@ void Title_Setting::Command(char command)
 
 		//ÉRÉ}ÉìÉhê¨å˜Ç»ÇÁ
 		if (j == sizeof(COMMAND) / sizeof(char)) {
-			m_percentFontRender.SetText(L"NEKO NEKO POWER 29");
+			m_percentFontRender.SetText(L"NEKONEKO TEAM IS HERE");
 			m_percentFontRender.SetPosition(Vector3(0.0f, 400.0f, 0.0f));
 			m_percentFontRender.SetScale(2.0f);
 			m_percentFontRender.SetColor(Vector4(0.0f, 0.0f, 0.0f, 1.0f));

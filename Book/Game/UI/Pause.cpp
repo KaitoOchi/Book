@@ -96,9 +96,6 @@ void Pause::PauseScreen()
 
 		switch (m_cursor)
 		{
-		case 0:
-			m_pauseState = enState_FadeIn;
-			break;
 		case 1:
 			m_game->GameDelete(1);
 			m_game->NotifyGameBack();
@@ -111,6 +108,8 @@ void Pause::PauseScreen()
 
 		//Œˆ’è‰¹‚ğo‚·
 		PlaySE(1);
+
+		m_pauseState = enState_FadeIn;
 	}
 
 	//ãƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
