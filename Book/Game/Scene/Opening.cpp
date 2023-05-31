@@ -100,7 +100,7 @@ void Opening::InitModel()
 	m_animationClips[animationClip_Put].SetLoopFlag(false);
 
 	//プレイヤーモデルの設定
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, false, false, 0, D3D12_CULL_MODE_BACK);
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 
 	//アニメーションイベントを設定
 	m_playerModelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName)
@@ -109,12 +109,12 @@ void Opening::InitModel()
 		});
 
 	//壁モデルの設定
-	m_wallModelRender.Init("Assets/modelData/event/wall.tkm", 0, 0, enModelUpAxisZ, false, false);
+	m_wallModelRender.Init("Assets/modelData/event/wall.tkm", 0, 0, enModelUpAxisZ, true, false);
 	m_wallModelRender.SetPosition(Vector3(0.0f, 0.0f, 100.0f));
 	m_wallModelRender.Update();
 
 	//床モデルの設定
-	m_backGroundModelRender.Init("Assets/modelData/level_test/tkm/base.tkm", 0, 0, enModelUpAxisZ, false, false, 0, D3D12_CULL_MODE_BACK);
+	m_backGroundModelRender.Init("Assets/modelData/level_test/tkm/base.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
 }
 
 void Opening::InitSprite()
@@ -146,7 +146,7 @@ void Opening::LevelDesign()
 
 		if (objData.EqualObjectName(L"House_2") == true) {
 			ModelRender* modelRender = new ModelRender;
-			modelRender->Init("Assets/modelData/event/house_2.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->Init("Assets/modelData/event/house_2.tkm", 0, 0, enModelUpAxisZ, true, true);
 			modelRender->SetPosition(objData.position);
 			modelRender->SetRotation(objData.rotation);
 			modelRender->Update();
@@ -155,7 +155,7 @@ void Opening::LevelDesign()
 		}
 		else if (objData.EqualObjectName(L"House_3") == true) {
 			ModelRender* modelRender = new ModelRender;
-			modelRender->Init("Assets/modelData/event/house_3.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->Init("Assets/modelData/event/house_3.tkm", 0, 0, enModelUpAxisZ, true, true);
 			modelRender->SetPosition(objData.position);
 			modelRender->SetRotation(objData.rotation);
 			modelRender->Update();
@@ -164,7 +164,7 @@ void Opening::LevelDesign()
 		}
 		else if (objData.EqualObjectName(L"House_5") == true) {
 			ModelRender* modelRender = new ModelRender;
-			modelRender->Init("Assets/modelData/event/house_5.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->Init("Assets/modelData/event/house_5.tkm", 0, 0, enModelUpAxisZ, true, true);
 			modelRender->SetPosition(objData.position);
 			modelRender->SetRotation(objData.rotation);
 			modelRender->Update();
@@ -173,7 +173,7 @@ void Opening::LevelDesign()
 		}
 		else if (objData.EqualObjectName(L"lampPost") == true) {
 			ModelRender* modelRender = new ModelRender;
-			modelRender->Init("Assets/modelData/event/lampPost.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->Init("Assets/modelData/event/lampPost.tkm", 0, 0, enModelUpAxisZ, true, true);
 			modelRender->SetPosition(objData.position);
 			modelRender->SetRotation(objData.rotation);
 			modelRender->Update();
@@ -182,7 +182,7 @@ void Opening::LevelDesign()
 		}
 		else if (objData.EqualObjectName(L"Church") == true) {
 			ModelRender* modelRender = new ModelRender;
-			modelRender->Init("Assets/modelData/event/charch.tkm", 0, 0, enModelUpAxisZ);
+			modelRender->Init("Assets/modelData/event/charch.tkm", 0, 0, enModelUpAxisZ, true, true);
 			modelRender->SetPosition(objData.position);
 			modelRender->SetRotation(objData.rotation);
 			modelRender->Update();

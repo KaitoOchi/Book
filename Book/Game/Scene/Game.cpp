@@ -423,7 +423,7 @@ void Game::LevelDesign()
 			}
 
 			// 名前がphotoFrameのとき
-			if (objData.ForwardMatchName(L"photoFrame") == true) {
+			if (objData.EqualObjectName(L"photoFrame") == true) {
 				// 絵画を生成
 				Painting* painting = NewGO<Painting>(0, "painting");
 				painting->SetPosition(objData.position);
@@ -776,13 +776,17 @@ void Game::PlayWallEffect()
 	for (auto& effect : m_physicsGhostList)
 	{
 		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->Play();
+			effect->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
+			effect->GetEffect()->Update();
 		}
 	}
 
-	//お宝エフェクトを再生
-	if (m_treasure->GetEffect() != nullptr) {
-		m_treasure->GetEffect()->Play();
+	if (m_gameState != m_enGameState_GameClearable) {
+		//お宝エフェクトを再生
+		if (m_treasure->GetEffect() != nullptr) {
+			m_treasure->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
+			m_treasure->GetEffect()->Update();
+		}
 	}
 }
 
@@ -792,13 +796,15 @@ void Game::StopWallEffect()
 	for (auto& effect : m_physicsGhostList)
 	{
 		if (effect->GetEffect() != nullptr) {
-			effect->GetEffect()->Stop();
+			effect->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 0.0f);
+			effect->GetEffect()->Update();
 		}
 	}
 
 	//お宝エフェクトを停止
 	if (m_treasure->GetEffect() != nullptr) {
-		m_treasure->GetEffect()->Stop();
+		m_treasure->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 0.0f);
+		m_treasure->GetEffect()->Update();
 	}
 }
 

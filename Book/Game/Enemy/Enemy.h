@@ -319,9 +319,12 @@ public:
 
 		// ステートを巡回状態に戻す
 		m_ActState = CRAW;
-		// 追跡・捕獲フラグをfalseにする
+		// フラグをfalseにする
+		m_HitFlashBulletFlag = false;
+		m_HearedSoundBulletFlag = false;
 		m_TrackingPlayerFlag = false;
 		m_ChachPlayerFlag = false;
+
 		m_NaviTimer = 0.0f;
 		m_addTimer[1] = 0.0f;
 		m_addTimer[3] = 0.0f;

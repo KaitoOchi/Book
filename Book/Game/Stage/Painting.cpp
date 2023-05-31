@@ -13,17 +13,16 @@ Painting::~Painting()
 
 bool Painting::Start()
 {
-	Quaternion rot;
-	rot.SetRotationDegX(180.0f);
-
-	m_modelRender.Init("Assets/modelData/level_test/tkm/painting.tkm");
-	m_modelRender.SetRotation(rot);
+	//絵画モデルの設定
+	m_modelRender.Init("Assets/modelData/level_test/tkm/painting.tkm", 0, 0, enModelUpAxisZ, false, true);
 	m_modelRender.Update();
 
+	//テクスチャを変更
 	m_modelRender.GetModel().ChangeAlbedoMap("",
 		m_texture
 		);
 
+	//枠モデルの設定
 	m_frameModelRender.Init("Assets/modelData/level_test/tkm/frame.tkm");
 	m_frameModelRender.Update();
 
