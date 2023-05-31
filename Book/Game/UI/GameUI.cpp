@@ -401,7 +401,8 @@ void GameUI::Render(RenderContext& rc)
 
 
 	if (m_playerManagement->GetStamina() != 10.0f&&
-		!m_circleDrawState)
+		!m_circleDrawState&&
+		m_staminaDrawState)
 	{
 		m_staminaGageRender.Draw(rc);
 		m_staminaBaseRender.Draw(rc);
