@@ -658,6 +658,7 @@ void Game::NotifyEventEnd()
 	//フェードインを開始
 	m_fade->StartFadeIn();
 	NotifyGameClearable();
+	m_gamecamera->SetPushState(true);
 }
 
 
