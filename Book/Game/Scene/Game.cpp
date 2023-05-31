@@ -131,10 +131,12 @@ bool Game::Start()
 	//スタート時を知らせる
 	NotifyGameStart();
 
-	m_player2D = NewGO<Player2D>(0,"player2d");
+
+	m_player2D = NewGO<Player2D>(0, "player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
-	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
+	m_gamecamera = NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
+
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
