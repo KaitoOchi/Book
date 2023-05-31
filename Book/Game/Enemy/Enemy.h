@@ -466,8 +466,7 @@ protected:
 	/// <param name="2">	：突進を行うまでの待機時間			</param>
 	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
-	/// <param name="5">	：イベント後の待機時間	</param>
-	std::array<float, 6>m_addTimer;
+	std::array<float, 5>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;
