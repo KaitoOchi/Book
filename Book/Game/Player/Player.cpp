@@ -32,6 +32,10 @@ Player::Player()
 
 Player::~Player()
 {
+	if (m_tireEffect != nullptr)
+	{
+		m_tireEffect->Stop();
+	}
 }
 
 bool Player::Start()

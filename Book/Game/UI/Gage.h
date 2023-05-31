@@ -58,6 +58,9 @@ private:
 	/// </summary>
 	void Gage_MAX();
 
+	void Gauge_Move();
+
+public:
 	EnLeverState m_GetState = m_leverState;
 
 	std::array<SpriteRender,4>m_LeverUPRender;					//�x���x���x���摜
@@ -73,7 +76,11 @@ private:
 	float m_Color=0.7f;											//�x���x�J���[						
 
 	float m_HitTime = 5.0f;
-	float m_vigilaceDownTime = 2.0f;							//�x���x�������N�[���^�C��
+	float m_vigilaceDownTime = 2.0f;							//�x���x�������N�[���^�C��]
+
+	float m_gaugeScaleY = 0.0f;
+	float m_gaugeScaleX = 0.0f;
+	bool m_maxState = false;
 
 	Game* m_game = nullptr;
 	Wipe* m_wipe = nullptr;

@@ -33,7 +33,7 @@ void Enemy_Increase::Update()
 
 void Enemy_Increase::Enemy_Open()
 {
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		//エネミーの大きさを求める
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++)

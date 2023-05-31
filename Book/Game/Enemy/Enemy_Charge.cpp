@@ -44,7 +44,8 @@ void Enemy_Charge::Update()
 	//çsìÆÇ≈Ç´ÇÈÇ©í≤Ç◊ÇÈ
 	if (m_activeFlag == true)
 	{
-		Vector3 move{0.0f,-3000.0f,0.0f};
+		Vector3 move = m_position;
+		move.y -= 30000.0f;
 		m_characterController.Execute(move, 1.0f);
 		m_spotLight.SetPosition(move);
 		m_spotLight.Update();
