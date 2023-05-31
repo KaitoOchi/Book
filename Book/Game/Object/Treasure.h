@@ -66,14 +66,14 @@ public:
 		}
 		return nullptr;
 	}
-
+	bool m_drewState = true;
 private:
 	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
 	GameUI*					m_gameUI = nullptr;				//ゲームUI
 	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
 	bool					m_hitState = false;				//trueならお宝に触れている
 
-	bool m_drewState = true;
+	
 	Player2D*				m_player2d = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 };

@@ -393,7 +393,8 @@ void GameUI::Render(RenderContext& rc)
 	
 	//‰~Œ`ƒQ[ƒW‚Ì•`‰æ
 	if (m_circleDrawState
-		&&m_treasure->GetHitState()) {
+		&&m_treasure->GetHitState()
+		&& m_treasure->m_drewState == true) {
 		m_circleSpriteRender.Draw(rc);
 		m_circleBaseSpriteRender.Draw(rc);
 	}
