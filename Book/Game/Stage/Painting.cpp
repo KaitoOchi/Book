@@ -14,7 +14,7 @@ Painting::~Painting()
 bool Painting::Start()
 {
 	//絵画モデルの設定
-	m_modelRender.Init("Assets/modelData/level_test/tkm/painting.tkm");
+	m_modelRender.Init("Assets/modelData/level_test/tkm/painting.tkm", 0, 0, enModelUpAxisZ, false, true);
 	m_modelRender.Update();
 
 	//テクスチャを変更

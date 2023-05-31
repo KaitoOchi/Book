@@ -1,5 +1,10 @@
 #pragma once
 
+namespace
+{
+	const int PAINTING_MAX = 15;	//ŠG‰æ‚ÌÅ‘å”
+}
+
 class Painting : public IGameObject
 {
 public:
@@ -39,7 +44,7 @@ public:
 	/// </summary>
 	void SetType()
 	{
-		int num = rand() % 12;
+		int num = rand() % PAINTING_MAX;
 
 		wchar_t path[255];
 		swprintf_s(path, 255,
