@@ -117,8 +117,6 @@ public:
 	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
 
-	void Event();
-
 	// エネミーの種類
 	enum EnemyType
 	{
@@ -176,7 +174,6 @@ public:
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
 		CATCH,					// 捕獲した
-		EVENT
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください

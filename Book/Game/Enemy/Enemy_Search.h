@@ -14,7 +14,6 @@ public:
 	void Update_OnCall();				// 周りの敵を呼ぶ
 	void Update_OnConfusion();			// 閃光弾に当たったとき
 	void Update_OnMissingPlayer();		// プレイヤーを見失った時
-	void Update_OnEvent();				// イベント時の処理
 		
 private:
 	ModelRender m_searchModelRender;	// ホイッスルを呼び出すモデル

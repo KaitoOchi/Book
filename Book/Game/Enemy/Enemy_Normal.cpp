@@ -65,18 +65,6 @@ void Enemy_Normal::Update()
 		return;
 	}
 
-	// 警戒度がMAXのとき
-	if (m_gage->m_leverState == m_gage->m_enLever_MAX && m_SearchFlag == false) {
-
-		Vector3 diff = m_playerManagement->GetPosition() - m_position;
-
-		// 一定の間隔以内のとき
-		if (diff.Length() < 500.0f) {
-			m_ActState = EVENT;
-			m_SearchFlag = true;
-		}
-	}
-
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		// �M���e��D�悷��
@@ -126,9 +114,6 @@ void Enemy_Normal::Update()
 		// �����e��g�p�����Ƃ�
 	case LISTEN:
 		UpDate_OnListen();
-		break;
-	case EVENT:
-		UpDate_OnEvent();
 		break;
 	}
 
@@ -201,11 +186,6 @@ void Enemy_Normal::UpDate_OnListen()
 {
 	// 音爆弾を使ったとき
 	Enemy::Act_GoLocationListenSound(m_itemPos);
-}
-
-void Enemy_Normal::UpDate_OnEvent()
-{
-	Enemy::Event();
 }
 
 void Enemy_Normal::Render(RenderContext& rc)
