@@ -48,6 +48,7 @@ void SoundBom::ItemHit()
 	//エフェクトの座標の設定
 	m_soundEffect->SetPosition(Vector3(m_position.x,10.0f,m_position.z));
 	m_soundEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 5.0f);
+	m_soundEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 	m_soundEffect->Play();
 	
 	//近くにいるエネミーたちを探す

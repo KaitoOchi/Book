@@ -17,10 +17,16 @@ namespace
 
 MiniMap::MiniMap()
 {
+	m_enemyList.reserve(ENEMY_NUM);
+	m_physicsGhostList.reserve(WALL_NUM);
 }
 
 MiniMap::~MiniMap()
 {
+	m_enemyList.clear();
+	m_enemyList.shrink_to_fit();
+	m_physicsGhostList.clear();
+	m_physicsGhostList.shrink_to_fit();
 }
 
 bool MiniMap::Start()

@@ -37,6 +37,11 @@ public:
 		return m_camePos;
 	}
 
+	void SetPushState(bool state)
+	{
+		m_pushState = state;
+	}
+
 private:
 	Vector3 m_toCameraPos = Vector3::Zero;//注視点から視点に向かうベクトル
 	Vector3 m_toCameraPosOld = Vector3::Zero;//注視点から視点に向かうベクトル変更前座標
@@ -56,6 +61,8 @@ private:
 
 	Vector3 m_camePos = Vector3::Zero;
 	Quaternion qRot;											//カメラの回転
+
+	bool				m_pushState = true;
 private:
 	/// <summary>
 	/// プレイヤーが捕まった時のカメラの動き

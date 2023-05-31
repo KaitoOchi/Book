@@ -5,6 +5,7 @@
 class Gage;
 class GameUI;
 class Player2D;
+class GameCamera;
 class Treasure :public Object 
 {
 public:
@@ -60,7 +61,10 @@ public:
 	/// </summary>
 	EffectEmitter* GetEffect()
 	{
-		return m_kirakiraEffect;
+		if (m_kirakiraEffect != nullptr) {
+			return m_kirakiraEffect;
+		}
+		return nullptr;
 	}
 
 private:
@@ -69,4 +73,5 @@ private:
 	std::vector< Vector3 >	m_treasurePositions;			//‚¨•ó‚ÌÀ•W
 	bool					m_hitState = false;				//true‚È‚ç‚¨•ó‚ÉG‚ê‚Ä‚¢‚é
 	Player2D*				m_player2d = nullptr;
+	GameCamera* m_gameCamera = nullptr;
 };

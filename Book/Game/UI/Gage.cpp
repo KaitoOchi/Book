@@ -24,7 +24,7 @@ namespace
 	const float		RENDER_XPOSITION=280.0f;
 	const Vector3	BASE_POSITION(230.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
 	const Vector3	LEVERUPPOSITION(240.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
-	const float		GAUGE_LEVER_MAX = 0.3f;
+	const float		GAUGE_LEVER_MAX = 1.0f;
 }
 Gage::Gage()
 {
@@ -286,27 +286,16 @@ void Gage::Gage_MAX()
 
 void Gage::Gauge_Move()
 {
-	if (!m_maxState)
-	{
-		m_gaugeScaleY += 1.0f * g_gameTime->GetFrameDeltaTime();
-		m_gaugeScaleY = min(m_gaugeScaleY, GAUGE_LEVER_MAX);
-		m_gaugeScaleX += 0.2 * g_gameTime->GetFrameDeltaTime();
-		if (m_gaugeScaleY == GAUGE_LEVER_MAX)
-		{
-			m_maxState = true;
-		}
+	m_gaugeTimer += g_gameTime->GetFrameDeltaTime() * 2.0f;
+
+	if (m_gaugeTimer > GAUGE_LEVER_MAX) {
+		m_gaugeTimer = -0.5f;
 	}
-	else
-	{
-		m_gaugeScaleY -= 1.0f * g_gameTime->GetFrameDeltaTime();
-		m_gaugeScaleY = max(m_gaugeScaleY, 0.0f);
-		m_gaugeScaleX -= 0.2 * g_gameTime->GetFrameDeltaTime();
-		if (m_gaugeScaleY == 0.0f)
-		{
-			m_maxState = false;
-		}
-	}
-	m_maxLeverRender.SetScale(Vector3{ 0.2f+ m_gaugeScaleX,1.0f+ m_gaugeScaleY,0.0f });
+
+	m_gaugeScale = ((pow(m_gaugeTimer, 2.0f) * -3.0f) + (2.0f * m_gaugeTimer)) * 0.2f;
+	m_gaugeScale = min(max(m_gaugeScale, 0.0f), 0.1f);
+
+	m_maxLeverRender.SetScale(Vector3(0.3f + m_gaugeScale, 0.7f + m_gaugeScale, 0.0f));
 	m_maxLeverRender.Update();
 }
 
@@ -337,5 +326,4 @@ void Gage::Render(RenderContext& rc)
 	default:
 		break;
 	}
-	
 }

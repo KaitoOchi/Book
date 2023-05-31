@@ -75,7 +75,9 @@ void GameCamera::UpdatePositionAndTarget()
 	//X������̉�]
 	
 	//視点をプレイヤーが向いている方向にする
-	if (g_pad[0]->IsTrigger(enButtonRB3))
+	if (g_pad[0]->IsTrigger(enButtonRB3)&&
+		m_game->m_gameState!=Game::m_enGameState_GameStart()&&
+		m_pushState)
 	{
 		RotCamera();
 	}

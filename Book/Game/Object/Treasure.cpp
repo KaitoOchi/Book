@@ -6,6 +6,7 @@
 #include "GameUI.h"
 #include "Player2D.h"
 #include "Player3D.h"
+#include "GameCamera.h"
 namespace
 {
 	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
@@ -13,11 +14,14 @@ namespace
 
 Treasure::Treasure()
 {
-
+	m_treasurePositions.reserve(3);
 }
 
 Treasure::~Treasure()
 {
+	m_treasurePositions.clear();
+	m_treasurePositions.shrink_to_fit();
+
 	if (m_kirakiraEffect != nullptr) {
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
@@ -31,6 +35,7 @@ bool Treasure::Start()
 {
 	m_gameUI = FindGO<GameUI>("gameUI");
 	m_player2d = FindGO<Player2D>("player2d");
+	m_gameCamera = FindGO<GameCamera>("gameCamera");
 	Object::Start();
 
 	//モデルの読み込み
@@ -86,31 +91,42 @@ void Treasure::Hit()
 	m_hitState = true;
 	//Aボタンが押されているなら
 	if (g_pad[0]->IsPress(enButtonA)) {
-
 		//増やせる状態にする
 		m_gameUI->SetCircleState(true);
+	}
 
-		//ゲージが最大までいったら
-		if (m_gameUI->GetCircleMAXState())
+	//ゲージが最大までいったら
+	if (m_gameUI->GetCircleMAXState())
+	{
+		m_hitState = false;
+
+		m_gameUI->SetCircleDrawState(false);
+
+		m_player3d->m_enPlayer3D_Steal;
+
+		m_player3d->m_Player_Act = false;
+		m_player2d->m_Player_Act = false;
+		m_player2d->SetStamina(10.0f);
+		m_player3d->SetStamina(10.0f);
+		m_player3d->SetMoveSpeed(Vector3::Zero);
+		m_gameCamera->SetPushState(false);
+		if (m_player3d->GetTireEffect() != nullptr)
 		{
-			m_hitState = false;
-
-			m_gameUI->SetCircleDrawState(false);
-
-			m_player3d->m_enPlayer3D_Steal;
-
-			m_player3d->m_Player_Act = false;
-			m_player2d->m_Player_Act = false;
-			m_gameUI->SetStaminaDrawState(false);
-			//イベントの開始
-			m_game->NotifyEventStart();
-
-			//エフェクトの停止
-			m_kirakiraEffect->SetDeleteState(false);
-			m_kirakiraEffect->Stop();
-
-			Deactivate();
+			if (m_player3d->GetTireEffect()->IsPlay() == true)
+			{
+				m_player3d->GetTireEffect()->Stop();
+			}
 		}
+		
+		m_gameUI->SetStaminaDrawState(false);
+		//イベントの開始
+		m_game->NotifyEventStart();
+
+		//エフェクトの停止
+		m_kirakiraEffect->SetDeleteState(false);
+		m_kirakiraEffect->Stop();
+
+		Deactivate();
 	}
 }
 

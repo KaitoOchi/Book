@@ -72,12 +72,6 @@ Game::~Game()
 	{
 		DeleteGO(m_enemyList[i]);
 	}
-	//�I�u�W�F�N�g
-	//�E�I�E�u�E�W�E�F�E�N�E�g
-	for (int i = 0; i < m_sensorList.size(); i++)
-	{
-		DeleteGO(m_sensorList[i]);
-	}
 
 	//UIの削除
 	DeleteGO(m_gameUI);
@@ -95,17 +89,25 @@ Game::~Game()
 	{
 		DeleteGO(m_wallList[i]);
 	}
-	//監視カメラの削除
-	for (int i = 0; i < m_SecurityCameraList.size(); i++)
-	{
-		DeleteGO(m_SecurityCameraList[i]);
-	}
+
 	//お宝の削除
 	DeleteGO(m_treasure);
 
 	//絵画の削除
 	QueryGOs<Painting>("painting", [&](Painting* painting) {
 		DeleteGO(painting);
+		return true;
+		});
+
+	//センサーの削除
+	QueryGOs<Sensor>("sensor", [&](Sensor* sensor) {
+		DeleteGO(sensor);
+		return true;
+		});
+
+	//監視カメラの削除
+	QueryGOs<SecurityCamera>("securityCamera", [&](SecurityCamera* securityCamera) {
+		DeleteGO(securityCamera);
 		return true;
 		});
 
@@ -118,8 +120,6 @@ Game::~Game()
 	m_enemyList.clear();
 	m_wallList.clear();
 	m_physicsGhostList.clear();
-	m_sensorList.clear();
-	m_SecurityCameraList.clear();
 
 	// ライトの数を0に
 	RenderingEngine::GetInstance()->GetLightCB().ptNum = 0;
@@ -464,8 +464,6 @@ void Game::LevelDesign()
 			sensor->SetPosition(objData.position);
 			sensor->SetScale(objData.scale);
 			sensor->SetRotation(objData.rotation);
-			m_sensorList.emplace_back(sensor);
-
 			return true;
 		}
 
@@ -475,7 +473,6 @@ void Game::LevelDesign()
 			securityCamera->SetType(objData.number);
 			securityCamera->SetNumber(m_spotLigNum);
 			m_spotLigNum++;
-			m_SecurityCameraList.emplace_back(securityCamera);
 			return true;
 		}
 		if (objData.EqualObjectName(L"push") == true) {
@@ -654,8 +651,6 @@ void Game::NotifyEventEnd()
 
 	//隙間エフェクトを表示
 	PlayWallEffect();
-	m_player2D->SetStamina(10.0f);
-	m_player3D->SetStamina(10.0f);
 	m_gameUI->SetStaminaDrawState(true);
 	//フェードインを開始
 	m_fade->StartFadeIn();
@@ -784,8 +779,7 @@ void Game::PlayWallEffect()
 	if (m_gameState != m_enGameState_GameClearable) {
 		//お宝エフェクトを再生
 		if (m_treasure->GetEffect() != nullptr) {
-			m_treasure->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-			m_treasure->GetEffect()->Update();
+			m_treasure->GetEffect()->Play();
 		}
 	}
 }
@@ -803,8 +797,7 @@ void Game::StopWallEffect()
 
 	//お宝エフェクトを停止
 	if (m_treasure->GetEffect() != nullptr) {
-		m_treasure->GetEffect()->SetTime(g_gameTime->GetFrameDeltaTime() * 0.0f);
-		m_treasure->GetEffect()->Update();
+		m_treasure->GetEffect()->Stop();
 	}
 }
 

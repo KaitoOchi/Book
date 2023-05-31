@@ -358,7 +358,7 @@ void GameUI::CircleChange()
 		m_degree = min(m_degree, 360.0f);
 	}
 
-	if (m_degree == CIRCLE_SIZE_MAX)
+	if (m_degree -CIRCLE_SIZE_MAX<=0.000001f)
 	{
 		m_circleMaxState = true;
 	}
