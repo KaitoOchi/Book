@@ -19,5 +19,6 @@ public:
 	void Update_OnConfusion();			// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	void UpDate_OnListen();				// ‰¹”š’e‚ðŽg—p‚µ‚½‚Æ‚«
 	void Update_OnCatch();				// •ßŠl
+	void UpDate_OnEvent();
 private:
 };

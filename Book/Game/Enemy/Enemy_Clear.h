@@ -17,6 +17,7 @@ public:
 	void Update_OnBackBasedOn();		// 巡回状態に戻る
 	void Update_OnConfusion();			// 閃光弾に当たったとき
 	void UpDate_OnListen();				// 音爆弾を使用したとき
+	void UpDate_OnEvent();				// イベント時の処理
 
 	/// <summary>
 	/// 透明化するか設定できる

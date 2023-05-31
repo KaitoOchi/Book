@@ -7,6 +7,7 @@
 class PlayerManagement;
 class Gage;
 class Game;
+class Treasure;
 class Enemy :public IGameObject
 {
 public:
@@ -79,7 +80,7 @@ public:
 	/// 音が聞こえた場所に行く処理
 	/// </summary>
 	/// <param name="pos">目標地点</param>
-	void Act_GoLocationListenSound(Vector3 pos);
+	void Act_GoLocationListenSound(Vector3 tergetPos);
 	/// <summary>
 	/// 行動停止
 	/// </summary>
@@ -115,6 +116,8 @@ public:
 	void Efect_Dizzy();
 	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
+
+	void Event();
 
 	// エネミーの種類
 	enum EnemyType
@@ -172,7 +175,8 @@ public:
 		BACKBASEDON,			// 巡回状態に戻る
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
-		CATCH					// 捕獲した
+		CATCH,					// 捕獲した
+		EVENT
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -415,6 +419,7 @@ protected:
 	PlayerManagement* m_playerManagement = nullptr;
 	Gage* m_gage = nullptr;
 	Game* m_game = nullptr;
+	Treasure* m_treasure = nullptr;
 
 	EffectEmitter* m_Effect = nullptr;		// エフェクト
 
@@ -431,6 +436,7 @@ protected:
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
+	Vector3 m_treasurePos = Vector3::Zero;	// お宝の座標
 
 
 	Quaternion m_rotation = Quaternion::Identity;		// 回転
@@ -439,13 +445,14 @@ protected:
 	SpotLight m_spotLight;					//スポットライト
 
 	bool m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool m_HearedSoundBulletFlag = false;		// 音爆弾
+	bool m_HearedSoundBulletFlag = false;	// 音爆弾
 	bool m_CountFlag = false;				// カウントするフラグ
 	bool m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
 	bool m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
 	bool m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
 	bool m_NotDrawFlag = false;				// 描画するかどうか
 	bool m_activeFlag = false;				//最初から動けるかそうか
+	bool m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
@@ -462,7 +469,8 @@ protected:
 	/// <param name="2">	：突進を行うまでの待機時間			</param>
 	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
-	std::array<float, 5>m_addTimer;
+	/// <param name="5">	：イベント後の待機時間	</param>
+	std::array<float, 6>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;
