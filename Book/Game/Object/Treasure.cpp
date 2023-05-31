@@ -90,7 +90,9 @@ void Treasure::Hit()
 	m_gameUI->SetCircleDrawState(true);
 	m_hitState = true;
 	//Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é‚È‚ç
-	if (g_pad[0]->IsPress(enButtonA)) {
+	if (g_pad[0]->IsPress(enButtonA) &&
+		m_player->m_enMananagementState != PlayerManagement::m_enPlayer_2DChanging&&
+		m_player->m_enMananagementState != PlayerManagement::m_enPlayer_Changing) {
 		//‘‚â‚¹‚éó‘Ô‚É‚·‚é
 		m_gameUI->SetCircleState(true);
 	}
