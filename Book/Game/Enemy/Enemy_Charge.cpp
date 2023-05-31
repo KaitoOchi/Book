@@ -83,6 +83,10 @@ void Enemy_Charge::Update()
 		m_HearedSoundBulletFlag = false;
 	}
 
+	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+		m_HearedSoundBulletFlag = false;
+	}
+
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
@@ -144,6 +148,7 @@ void Enemy_Charge::Update()
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	// Ž‹–ìŠp
 	Enemy::Act_SeachPlayer();
+
 	m_enemyRender.Update();
 }
 

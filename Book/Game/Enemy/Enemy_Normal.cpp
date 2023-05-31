@@ -83,6 +83,10 @@ void Enemy_Normal::Update()
 		m_HearedSoundBulletFlag = false;
 	}
 
+	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+		m_HearedSoundBulletFlag = false;
+	}
+
 	// �M���e�ɓ�������
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = CONFUSION;
