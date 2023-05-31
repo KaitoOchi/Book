@@ -128,11 +128,15 @@ void Treasure::Hit()
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
 
-		Deactivate();
+		m_drawState = false;
 	}
 }
 
 void Treasure::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
+	if (m_drawState)
+	{
+		m_modelRender.Draw(rc);
+	}
+	
 }

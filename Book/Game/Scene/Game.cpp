@@ -111,6 +111,8 @@ Game::~Game()
 		return true;
 		});
 
+	DeleteGO(m_treasure);
+
 	//プレイヤーの削除
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
@@ -594,6 +596,8 @@ void Game::NotifyEventStart()
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
 
+	
+
 	//敵を非表示
 	NotDraw_Enemy(true);
 
@@ -776,9 +780,9 @@ void Game::PlayWallEffect()
 		}
 	}
 
-	if (m_gameState != m_enGameState_GameClearable) {
+	if (GameManager::GetInstance()->GetGameState() != GameManager::enState_GetTreasure) {
 		//お宝エフェクトを再生
-		if (m_treasure->GetEffect() != nullptr) {
+		if (m_treasure != nullptr) {
 			m_treasure->GetEffect()->Play();
 		}
 	}
@@ -796,7 +800,7 @@ void Game::StopWallEffect()
 	}
 
 	//お宝エフェクトを停止
-	if (m_treasure->GetEffect() != nullptr) {
+	if (m_treasure != nullptr) {
 		m_treasure->GetEffect()->Stop();
 	}
 }

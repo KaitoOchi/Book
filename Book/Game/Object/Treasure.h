@@ -74,4 +74,5 @@ private:
 	bool					m_hitState = false;				//true‚È‚ç‚¨•ó‚ÉG‚ê‚Ä‚¢‚é
 	Player2D*				m_player2d = nullptr;
 	GameCamera* m_gameCamera = nullptr;
+	bool  m_drawState = true;
 };
