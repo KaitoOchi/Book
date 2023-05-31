@@ -95,8 +95,8 @@ void PlayerManagement::Input()
 		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
 		//エフェクトの再生速度を指定する
 		m_smokeEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-		//エフェクトの座標の設定
-		m_smokeEffect->Play();
+		
+		
 
 		switch (m_enMananagementState)
 		{
@@ -108,8 +108,10 @@ void PlayerManagement::Input()
 			SetPosition(m_player2D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
+			//エフェクトの座標の設定
 			m_smokeEffect->SetPosition(m_player2D->GetPosition());
-			
+			m_smokeEffect->Play();
+			m_smokeEffect->Update();
 			break;
 			//3D�̏ꍇ2D��Ăяo��
 		case PlayerManagement::m_enPlayer_3DChanging:
@@ -119,7 +121,10 @@ void PlayerManagement::Input()
 			SetPosition(m_player3D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
+			//エフェクトの座標の設定
 			m_smokeEffect->SetPosition(m_player3D->GetPosition());
+			m_smokeEffect->Play();
+			m_smokeEffect->Update();
 			break;
 		}
 
@@ -130,7 +135,7 @@ void PlayerManagement::Input()
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 
 		m_enMananagementState = m_enPlayer_Changing;
-		m_smokeEffect->Update();
+		
 	}
 }
 
