@@ -295,6 +295,13 @@ void Enemy::Act_SeachPlayer()
 
 		m_playerPos = m_playerManagement->GetPosition();
 
+		// 衝突判定を行う
+		if (WallAndHit(m_playerPos) == false) {
+			// 壁に衝突したとき
+			m_TrackingPlayerFlag = false;
+			return;
+		}
+
 		// 追跡フラグをtrueにする
 		m_TrackingPlayerFlag = true;
 		// エフェクトを生成
