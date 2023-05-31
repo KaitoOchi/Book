@@ -225,10 +225,13 @@ void Player2D::ProcessStealStateTransition()
 
 void Player2D::ProcessCaughtStateTransition()
 {
-	m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
-	m_player3D->SetPlayerState(m_player3D->m_enPlayer_Caught);
-	m_playerState = m_enPlayer_Catching;
-
+	if (!m_chactState2D)
+	{
+		m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
+		m_player3D->SetPlayerState(m_player3D->m_enPlayer_Caught);
+		m_playerState = m_enPlayer_Catching;
+		m_chactState2D = true;
+	}
 }
 
 void Player2D::ProcessClearStateTransition()

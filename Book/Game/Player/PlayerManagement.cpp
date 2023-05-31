@@ -50,8 +50,12 @@ void PlayerManagement::Update()
 		{
 			if (m_player3D->IsActive() == false)
 			{
+
+				m_smokeEffect->Stop();
 				PlayerChange3D();
 				m_player3D->SetPosition(m_player2D->GetPosition());
+				return;
+
 			}
 			else
 			{
@@ -67,17 +71,20 @@ void PlayerManagement::Update()
 		IsChanging();
 		return;
 	}
-	if (m_player3D->m_Player_Act == true || 
-		m_player2D->m_Player_Act == true)
+	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		if (m_player3D->GetPlayerState() != Player::m_enPlayer_Down)
+		if (m_player3D->m_Player_Act == true ||
+			m_player2D->m_Player_Act == true)
 		{
-			Input();
+			if (m_player3D->GetPlayerState() != Player::m_enPlayer_Down&&
+				m_game->GetEnemyList()[i]->GetChachPlayerFlag() == false)
+			{
+
+				Input();
+			}
+
 		}
-		
-	}
-	
-	
+	}	
 }
 void PlayerManagement::Input()
 {
