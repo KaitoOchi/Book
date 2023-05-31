@@ -241,5 +241,7 @@ private:
 
 	EffectEmitter*			m_smokeEffect = nullptr;
 
+	bool					m_chachState = false;
+
 };
 
