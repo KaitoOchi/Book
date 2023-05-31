@@ -39,7 +39,7 @@ namespace
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
-	const float		ADD_LENGTH = 150.0f;						// 突進時に追加する長さ
+	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };					// 突進時に追加する長さ
 
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
 
@@ -86,7 +86,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(17.0f);
+	m_sphereCollider.Create(20.0f);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -298,14 +298,6 @@ void Enemy::Act_SeachPlayer()
 
 		m_playerPos = m_playerManagement->GetPosition();
 
-		// 衝突判定を行う
-		if (WallAndHit(m_playerPos) == false) {
-			// 壁に衝突したとき
-			m_TrackingPlayerFlag = false;
-			m_efectDrawFlag[1] = false;
-			return;
-		}
-
 		// 追跡フラグをtrueにする
 		m_TrackingPlayerFlag = true;
 		// エフェクトを生成
@@ -321,6 +313,7 @@ void Enemy::Act_SeachPlayer()
 			// 壁に衝突したとき
 			m_TrackingPlayerFlag = false;
 			m_efectDrawFlag[1] = false;
+			m_efectDrawFlag[2] = false;
 			return;
 		}
 	}
@@ -354,16 +347,17 @@ bool Enemy::WallAndHit(Vector3 pos)
 	end.setIdentity();
 
 	// 始点はエネミーの座標
-	start.setOrigin(btVector3(m_position.x,  20.0f, m_position.z));
+	start.setOrigin(btVector3(m_position.x,  25.0f, m_position.z));
 
 	// 終点はプレイヤーの座標 (突進時は始点の少し前)
-	end.setOrigin(btVector3(pos.x, 20.0f, pos.z));
+	end.setOrigin(btVector3(pos.x, 25.0f, pos.z));
 
 	SweepResultWall callback;
 
 	// コライダーを始点から終点まで動かして、
 	// 衝突するかどうか調べる
-	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(),
+		start, end, callback);
 
 	// 壁と衝突した
 	if (callback.isHit == true) {
@@ -373,6 +367,7 @@ bool Enemy::WallAndHit(Vector3 pos)
 	// 壁と衝突していない
 	// プレイヤーを見つけた
 	return true;
+
 }
 
 bool Enemy::Act_CatchPlayer()
@@ -407,6 +402,29 @@ bool Enemy::Act_CatchPlayer()
 
 void Enemy::Act_MoveMissingPosition()
 {
+	// プレイヤーを発見したとき
+	if (m_TrackingPlayerFlag == true) {
+		// 再度追跡する
+		Efect_FindPlayer();
+		m_NaviTimer = 0.0f;
+		m_addTimer[3] = 0.0f;			// タイマーをリセット
+
+		// 索敵するタイプなら
+		if (m_enemyType == TYPE_SEARCH) {
+			// 周りの敵を呼ぶ
+			m_ActState = CALLING_AROUND_ENEMY;
+			return;
+		}
+		else if (m_enemyType == TYPE_CHARGE) {
+			// 突進する
+			m_ActState = CHARGE;
+			return;
+		}
+
+		m_ActState = TRACKING;
+		return;
+	}
+
 	// ベクトルを作成
 	Vector3 diff = m_playerMissionPosition - m_position;
 
@@ -437,9 +455,6 @@ void Enemy::Act_SearchMissingPlayer()
 	// エフェクトを生成
 	Efect_MissingPlayer();
 
-	// 見渡すモーションを再生
-	m_enAnimationState = LOSS;
-
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 		// 再度追跡する
@@ -462,6 +477,9 @@ void Enemy::Act_SearchMissingPlayer()
 		m_ActState = TRACKING;
 		return;
 	}
+
+	// 見渡すモーションを再生
+	m_enAnimationState = LOSS;
 
 	// モーションを再生
 	if (Act_Stop(SEARCHPLAYER_TIMER, 3) == true) {
@@ -532,18 +550,16 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 
-		if (m_ActState == LISTEN || m_ActState == CALLED) {
-			Efect_FindPlayer();
+		Efect_FindPlayer();
 
-			// 突進タイプのとき
-			if (m_enemyType == TYPE_CHARGE) {
-				m_ActState = CHARGE;
-				return;
-			}
-			else {
-				m_ActState = TRACKING;
-				return;
-			}
+		// 突進タイプのとき
+		if (m_enemyType == TYPE_CHARGE) {
+			m_ActState = CHARGE;
+			return;
+		}
+		else {
+			m_ActState = TRACKING;
+			return;
 		}
 	}
 
@@ -749,6 +765,7 @@ void Enemy::Act_Charge(float time)
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
 		// 突進を終了する
 		m_ActState = CHARGEEND;
+
 		// 総移動距離をリセット
 		m_sumPos = Vector3::Zero;
 		return;
@@ -779,6 +796,9 @@ void Enemy::Act_Charge(float time)
 		m_sumPos += moveSpeed;
 		// 走るアニメーションを再生
 		m_enAnimationState = RUN;
+
+		// 衝突判定
+		Act_Charge_HitWall();
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
@@ -788,8 +808,6 @@ void Enemy::Act_Charge(float time)
 		// 待機アニメーションを再生
 		m_enAnimationState = IDLE;
 	}
-
-	Act_Charge_HitWall();
 
 	// 回転を教える
 	Rotation(m_chargeDiff);
@@ -804,9 +822,11 @@ void Enemy::Act_ChargeEnd()
 	m_CalculatedFlag = false;		// フラグを降ろす
 
 	m_efectDrawFlag[2] = false;		//　!のエフェクトのフラグを降ろす
+	m_efectDrawFlag[1] = false;
 
 	// プレイヤーが視野角内にいるとき
 	if (m_TrackingPlayerFlag == true) {
+		Efect_FindPlayer();
 		// 再度突進する
 		m_ActState = CHARGE;
 		return;
@@ -820,17 +840,19 @@ void Enemy::Act_ChargeEnd()
 void Enemy::Act_Charge_HitWall()
 {
 	// 壁に衝突する判定
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerChargePosition - m_position;
-	//// 正規化
-	diff.Normalize();
 
 	// 壁に衝突したかどうか
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
-	if (Enemy::WallAndHit(m_position + (diff * ADD_LENGTH)) == false) {
+	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
 		// 衝突したとき
 		m_move = 0.0f;
-		m_CalculatedFlag = false;
+		
+		m_addTimer[2] = 0.0f;			// タイマーをリセット
+		m_sumPos = Vector3::Zero;		// 移動距離をリセット
+		m_CalculatedFlag = false;		// フラグを降ろすjj
+
+		m_efectDrawFlag[2] = false;		//　!のエフェクトのフラグを降ろす
+
 		// 行動を混乱状態にする
 		m_ActState = CONFUSION;
 		return;
@@ -1010,66 +1032,5 @@ void Enemy::VigilanceCount()
 		//ステートの遷移
 		m_gage->GageUp(1, true);
 		m_Vicount = VIGILANCETIME;
-	}
-}
-
-void Enemy::Event()
-{
-	if (Act_Stop(5, 0.5f) == false) {
-		return;
-	}
-
-	// プレイヤーを発見したとき
-	if (m_TrackingPlayerFlag == true) {
-
-		if (m_ActState == LISTEN || m_ActState == CALLED) {
-			Efect_FindPlayer();
-
-			// 突進タイプのとき
-			if (m_enemyType == TYPE_CHARGE) {
-				m_ActState = CHARGE;
-				return;
-			}
-			else {
-				m_ActState = TRACKING;
-				return;
-			}
-		}
-	}
-
-	Efect_FindPlayer();
-
-	// アイテムの座標を基にしてナビメッシュを作成
-	CreateNavimesh(m_treasurePos);
-
-	// 走るアニメーションを再生
-	m_enAnimationState = RUN;
-	// エフェクトの再生フラグをfalseにしておく
-	m_efectDrawFlag[2] = false;
-
-	// 経過時間を計測
-	m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
-
-	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = m_treasurePos - m_position;
-	float length = diff.Length();
-
-	// 長さが一定以下のとき
-	if (length < 20.0f) {
-		// 見失ったプレイヤーを探す
-		m_ActState = MISSING_SEARCHPLAYER;
-		m_HearedSoundBulletFlag = false;
-		m_efectDrawFlag[1] = false;
-		return;
-	}
-	// 長さが一定以上かつ一定時間が経過したとき(壁にぶつかったときの対処策)
-	else if (m_addTimer[4] < 25.0f) {
-		// 見失ったプレイヤーを探す
-		m_ActState = MISSING_SEARCHPLAYER;
-		m_HearedSoundBulletFlag = false;
-		// タイマーをリセット
-		m_addTimer[4] = 0.0f;
-		m_efectDrawFlag[1] = false;
-		return;
 	}
 }

@@ -67,19 +67,11 @@ void Enemy_Charge::Update()
 		return;
 	}
 
-	// Œx‰ú“x‚ªMAX‚Ì‚Æ‚«
-	if (m_gage->m_leverState == m_gage->m_enLever_MAX && m_SearchFlag == false) {
-
-		Vector3 diff = m_playerManagement->GetPosition() - m_position;
-
-		// ˆê’è‚ÌŠÔŠuˆÈ“à‚Ì‚Æ‚«
-		if (diff.Length() < 500.0f) {
-			m_ActState = EVENT;
-			m_SearchFlag = true;
-		}
+	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
 
@@ -125,9 +117,6 @@ void Enemy_Charge::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		break;
-	case EVENT:
-		UpDate_OnEvent();
-		break;
 	}
 
 	Enemy::PlayAnimation();		// ƒAƒjƒ[ƒVƒ‡ƒ“
@@ -144,6 +133,7 @@ void Enemy_Charge::Update()
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	// Ž‹–ìŠp
 	Enemy::Act_SeachPlayer();
+
 	m_enemyRender.Update();
 }
 
@@ -204,11 +194,6 @@ void Enemy_Charge::UpDate_OnListen()
 void Enemy_Charge::Update_OnCatch()
 {
 	Enemy::Act_CatchPlayer();
-}
-
-void Enemy_Charge::UpDate_OnEvent()
-{
-	Enemy::Event();
 }
 
 void Enemy_Charge::Render(RenderContext& rc)

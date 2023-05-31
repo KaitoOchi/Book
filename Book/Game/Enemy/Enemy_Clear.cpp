@@ -68,21 +68,13 @@ void Enemy_Clear::Update()
 		return;
 	}
 
-	// 警戒度がMAXのとき
-	if (m_gage->m_leverState == m_gage->m_enLever_MAX && m_SearchFlag == false) {
-
-		Vector3 diff = m_playerManagement->GetPosition() - m_position;
-
-		// 一定の間隔以内のとき
-		if (diff.Length() < 500.0f) {
-			m_ActState = EVENT;
-			m_SearchFlag = true;
-		}
-	}
-
 	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
 		// �M���e��D�悷��
+		m_HearedSoundBulletFlag = false;
+	}
+
+	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
 
@@ -133,9 +125,6 @@ void Enemy_Clear::Update()
 	case LISTEN:
 		UpDate_OnListen();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
-		break;
-	case EVENT:
-		UpDate_OnEvent();
 		break;
 	}
 
@@ -236,11 +225,6 @@ void Enemy_Clear::ClearChange()
 		m_clearChangeTime = 1.0f;
 	
 	}
-}
-
-void Enemy_Clear::UpDate_OnEvent()
-{
-	Enemy::Event();
 }
 
 void Enemy_Clear::Render(RenderContext& rc)

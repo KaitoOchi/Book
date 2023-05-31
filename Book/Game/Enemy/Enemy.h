@@ -117,8 +117,6 @@ public:
 	void Efect_FindPlayer();
 	void Efect_MissingPlayer();
 
-	void Event();
-
 	// エネミーの種類
 	enum EnemyType
 	{
@@ -176,7 +174,6 @@ public:
 		CONFUSION,				// 閃光弾にあたったとき
 		LISTEN,					// 音爆弾を使用したとき
 		CATCH,					// 捕獲した
-		EVENT
 	};
 	/// <summary>
 	/// エネミーの行動パターン。switchで管理してください
@@ -469,8 +466,7 @@ protected:
 	/// <param name="2">	：突進を行うまでの待機時間			</param>
 	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
-	/// <param name="5">	：イベント後の待機時間	</param>
-	std::array<float, 6>m_addTimer;
+	std::array<float, 5>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
 	float m_move = 1.0f;
