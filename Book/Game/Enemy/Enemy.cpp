@@ -1015,6 +1015,10 @@ void Enemy::VigilanceCount()
 
 void Enemy::Event()
 {
+	if (Act_Stop(5, 5.0f) == false) {
+		return;
+	}
+
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 
