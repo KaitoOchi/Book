@@ -145,7 +145,7 @@ void Pause::PauseScreen()
 
 void Pause::CursorMove()
 {
-	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 3.0f;
+	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 4.0f;
 
 	// -t^2 + 2t
 	float rate = ((pow(m_cursorTimer, 2.0f) * -1.0f) + (2.0f * m_cursorTimer));
