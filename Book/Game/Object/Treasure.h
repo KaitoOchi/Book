@@ -72,6 +72,8 @@ private:
 	GameUI*					m_gameUI = nullptr;				//ƒQ[ƒ€UI
 	std::vector< Vector3 >	m_treasurePositions;			//‚¨•ó‚ÌÀ•W
 	bool					m_hitState = false;				//true‚È‚ç‚¨•ó‚ÉG‚ê‚Ä‚¢‚é
+
+	bool m_drewState = true;
 	Player2D*				m_player2d = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 };

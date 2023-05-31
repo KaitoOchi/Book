@@ -596,7 +596,7 @@ void Game::NotifyEventStart()
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
 
-	DeleteGO(m_treasure);
+	//DeleteGO(m_treasure);
 
 	//敵を非表示
 	NotDraw_Enemy(true);
