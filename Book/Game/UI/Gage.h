@@ -78,9 +78,8 @@ public:
 	float m_HitTime = 5.0f;
 	float m_vigilaceDownTime = 2.0f;							//�x���x�������N�[���^�C��]
 
-	float m_gaugeScaleY = 0.0f;
-	float m_gaugeScaleX = 0.0f;
-	bool m_maxState = false;
+	float m_gaugeScale = 0.0f;
+	float m_gaugeTimer = 0.0f;
 
 	Game* m_game = nullptr;
 	Wipe* m_wipe = nullptr;

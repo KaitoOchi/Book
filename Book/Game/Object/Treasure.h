@@ -60,7 +60,10 @@ public:
 	/// </summary>
 	EffectEmitter* GetEffect()
 	{
-		return m_kirakiraEffect;
+		if (m_kirakiraEffect != nullptr) {
+			return m_kirakiraEffect;
+		}
+		return nullptr;
 	}
 
 private:

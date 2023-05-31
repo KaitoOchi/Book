@@ -13,11 +13,14 @@ namespace
 
 Treasure::Treasure()
 {
-
+	m_treasurePositions.reserve(3);
 }
 
 Treasure::~Treasure()
 {
+	m_treasurePositions.clear();
+	m_treasurePositions.shrink_to_fit();
+
 	if (m_kirakiraEffect != nullptr) {
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
