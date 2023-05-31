@@ -314,13 +314,14 @@ public:
 			return;
 		}
 
-		// ステートを巡回状態に戻す
-		m_ActState = CRAW;
 		// フラグをfalseにする
 		m_HitFlashBulletFlag = false;
 		m_HearedSoundBulletFlag = false;
 		m_TrackingPlayerFlag = false;
 		m_ChachPlayerFlag = false;
+
+		// ステートを巡回状態に戻す
+		m_ActState = CRAW;
 
 		m_NaviTimer = 0.0f;
 		m_addTimer[1] = 0.0f;
@@ -433,7 +434,6 @@ protected:
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
-	Vector3 m_treasurePos = Vector3::Zero;	// お宝の座標
 
 
 	Quaternion m_rotation = Quaternion::Identity;		// 回転

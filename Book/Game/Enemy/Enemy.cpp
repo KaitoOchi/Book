@@ -5,7 +5,6 @@
 #include "Gage.h"
 #include "Game.h"
 #include "GameManager.h"
-#include "Treasure.h"
 
 #define SEACH_DECISION	100.0f * 100.0f									// ベクトルを作成する範囲
 
@@ -95,8 +94,6 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
-	m_treasure = FindGO<Treasure>("treaSure");
-	m_treasurePos = m_treasure->GetPosition();	// お宝の位置を参照する
 
 	// 各タイマーのリセット
 	for (int i = 0; i < 4; i++) {

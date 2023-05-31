@@ -98,7 +98,7 @@ void Treasure::Hit()
 	}
 
 	//ゲージが最大までいったら
-	if (m_gameUI->GetCircleMAXState())
+	if (m_gameUI->GetCircleMAXState()&& m_drewState)
 	{
 		m_hitState = false;
 
@@ -127,10 +127,16 @@ void Treasure::Hit()
 		//エフェクトの停止
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
+		m_drewState = false;
+		
 	}
 }
 
 void Treasure::Render(RenderContext& rc)
 {
-	m_modelRender.Draw(rc);
+	if (m_drewState)
+	{
+		m_modelRender.Draw(rc);
+	}
+	
 }
