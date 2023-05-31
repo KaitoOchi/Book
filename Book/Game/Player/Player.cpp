@@ -99,7 +99,6 @@ void Player::Animation2D()
 }
 void Player::Update()
 {
-	m_treasure = FindGO<Treasure>("treaSure");
 	//s“®‚Å‚«‚é‚È‚ç
 	if (m_Player_Act&&
 		m_playerManagement->GetGameState()

@@ -125,8 +125,6 @@ void Treasure::Hit()
 		//エフェクトの停止
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
-
-		Deactivate();
 	}
 }
 
