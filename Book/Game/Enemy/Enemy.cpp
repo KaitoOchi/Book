@@ -1015,7 +1015,7 @@ void Enemy::VigilanceCount()
 
 void Enemy::Event()
 {
-	if (Act_Stop(5, 5.0f) == false) {
+	if (Act_Stop(5, 0.5f) == false) {
 		return;
 	}
 
