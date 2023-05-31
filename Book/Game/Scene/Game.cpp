@@ -654,8 +654,6 @@ void Game::NotifyEventEnd()
 
 	//隙間エフェクトを表示
 	PlayWallEffect();
-	m_player2D->SetStamina(10.0f);
-	m_player3D->SetStamina(10.0f);
 	m_gameUI->SetStaminaDrawState(true);
 	//フェードインを開始
 	m_fade->StartFadeIn();
