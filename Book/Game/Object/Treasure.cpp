@@ -89,31 +89,33 @@ void Treasure::Hit()
 	m_hitState = true;
 	//Aボタンが押されているなら
 	if (g_pad[0]->IsPress(enButtonA)) {
-
 		//増やせる状態にする
 		m_gameUI->SetCircleState(true);
+	}
 
-		//ゲージが最大までいったら
-		if (m_gameUI->GetCircleMAXState())
-		{
-			m_hitState = false;
+	//ゲージが最大までいったら
+	if (m_gameUI->GetCircleMAXState())
+	{
+		m_hitState = false;
 
-			m_gameUI->SetCircleDrawState(false);
+		m_gameUI->SetCircleDrawState(false);
 
-			m_player3d->m_enPlayer3D_Steal;
+		m_player3d->m_enPlayer3D_Steal;
 
-			m_player3d->m_Player_Act = false;
-			m_player2d->m_Player_Act = false;
-			m_gameUI->SetStaminaDrawState(false);
-			//イベントの開始
-			m_game->NotifyEventStart();
+		m_player3d->m_Player_Act = false;
+		m_player2d->m_Player_Act = false;
+		m_player2d->SetStamina(10.0f);
+		m_player3d->SetStamina(10.0f);
+		m_player3d->SetMoveSpeed(Vector3::Zero);
+		m_gameUI->SetStaminaDrawState(false);
+		//イベントの開始
+		m_game->NotifyEventStart();
 
-			//エフェクトの停止
-			m_kirakiraEffect->SetDeleteState(false);
-			m_kirakiraEffect->Stop();
+		//エフェクトの停止
+		m_kirakiraEffect->SetDeleteState(false);
+		m_kirakiraEffect->Stop();
 
-			Deactivate();
-		}
+		Deactivate();
 	}
 }
 

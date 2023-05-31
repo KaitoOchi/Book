@@ -225,14 +225,7 @@ void Player::Move()
 		m_moveSpeed *=0.9;
 		//スタミナの回復する
 		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
-		if (!m_treasure->GetHitState())
-		{
-			m_stamina = min(m_stamina, PLAYERSTAMINA);
-		}
-		if (m_treasure == nullptr)
-		{
-			m_stamina = min(m_stamina, PLAYERSTAMINA);
-		}
+		m_stamina = min(m_stamina, PLAYERSTAMINA);
 		
 		//スタミナが全快したなら
 		if (m_stamina == PLAYERSTAMINA)
