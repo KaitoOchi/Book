@@ -6,6 +6,7 @@
 #include "GameUI.h"
 #include "Player2D.h"
 #include "Player3D.h"
+#include "GameCamera.h"
 namespace
 {
 	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
@@ -34,6 +35,7 @@ bool Treasure::Start()
 {
 	m_gameUI = FindGO<GameUI>("gameUI");
 	m_player2d = FindGO<Player2D>("player2d");
+	m_gameCamera = FindGO<GameCamera>("gameCamera");
 	Object::Start();
 
 	//モデルの読み込み
@@ -107,6 +109,15 @@ void Treasure::Hit()
 		m_player2d->SetStamina(10.0f);
 		m_player3d->SetStamina(10.0f);
 		m_player3d->SetMoveSpeed(Vector3::Zero);
+		m_gameCamera->SetPushState(false);
+		if (m_player3d->GetTireEffect() != nullptr)
+		{
+			if (m_player3d->GetTireEffect()->IsPlay() == true)
+			{
+				m_player3d->GetTireEffect()->Stop();
+			}
+		}
+		
 		m_gameUI->SetStaminaDrawState(false);
 		//イベントの開始
 		m_game->NotifyEventStart();
