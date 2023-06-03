@@ -1,10 +1,9 @@
 #pragma once
+using namespace std;
 
 class PlayerManagement;
 class Enemy;
 class PhysicsGhost;
-
-using namespace std;
 
 namespace
 {
@@ -12,7 +11,10 @@ namespace
 	const int WALL_NUM = 10;	//隙間の数。少し多めに
 }
 
-class MiniMap:public IGameObject
+/// <summary>
+/// ミニマップクラス。
+/// </summary>
+class MiniMap : public IGameObject
 {
 public:
 	MiniMap();
@@ -32,6 +34,11 @@ public:
 	}
 
 private:
+	/// <summary>
+	/// 画像の初期化処理。
+	/// </summary>
+	void InitSprite();
+
 	/// <summary>
 	/// 描画共通処理。
 	/// </summary>

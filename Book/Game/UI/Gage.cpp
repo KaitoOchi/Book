@@ -12,73 +12,69 @@
 
 namespace
 {
-	const float		VIGILANCE_TIME_MAX = 2.0f;							//�x���l�̍ő厞��
-	const float		VIGILANCE_DOWN_TIME = 5.0f;						//�x���x�����R�������鎞��
-	const float		BASEYSIZE = 154.0f;									//base�c�̑傫��
-	const float     BASEXSIZE = 553.0f;									//base���̑傫��
-	const float		VIGIRANCE_XSIZE = 66.0f;							//�x���x�̏c�̑傫��
-	const float		VIGIRANCE_YSIZE = 76.0f;							//�x���x�̉��̑傫��
-	const int		MAXGAGECOUNT = 10;
-	const int		MAXLEVERCOUNT = 3;
-	const float		RENDER_YPOSITION = 350.0f;
-	const float		RENDER_XPOSITION=280.0f;
-	const Vector3	BASE_POSITION(230.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
-	const Vector3	LEVERUPPOSITION(240.0f+ RENDER_XPOSITION, RENDER_YPOSITION, 0.0f);
-	const float		GAUGE_LEVER_MAX = 1.0f;
+	const int		GAUGE_MAX = 10;																			//ゲージの最大値
+	const int		LEVEL_MAX = 3;																			//レベルの最大値
+	const float		VIGILANCE_TIME_MAX = 2.0f;																//警戒度の増加のクールダウン
+	const float		VIGILANCE_DOWN_TIME = 5.0f;																//警戒度の減少のクールダウン
+	const float		LEVEL_TIME_MAX = 1.0f;																	//レベルアニメーションタイマーの最大値
+	const Vector2	VIGIRANCE_SIZE = Vector2(66.0f, 76.0f);													//警戒度の値画像のサイズ
+	const Vector2	BASE_SIZE = Vector2(553.0f, 154.0f);													//ベースの画像のサイズ
+	const Vector2	VIGIRANCE_POSITION = Vector2(280.0f, 350.0f);											//ゲージ画像の座標
+	const Vector3	BASE_POSITION = Vector3(230.0f + VIGIRANCE_POSITION.x, VIGIRANCE_POSITION.y, 0.0f);		//ベース画像の座標
+	const Vector3	LEVELUP_POSITION = Vector3(240.0f + VIGIRANCE_POSITION.x, VIGIRANCE_POSITION.y, 0.0f);	//レベル画像の座標
 }
+
 Gage::Gage()
 {
 
 }
+
 Gage::~Gage()
 {
 	DeleteGO(m_wipe);
 }
+
 bool Gage::Start()
 {
-	//�Q�[���̏�������Ă���
-	m_game = FindGO<Game>("game");
-
 	m_wipe = NewGO<Wipe>(0, "wipe");
 
+	//ゲームオブジェクトを検索
+	m_game = FindGO<Game>("game");
 	m_fade = FindGO<Fade>("fade");
-
 	m_enemy_Increase = FindGO<Enemy_Increase>("enemyIncrease");
-
 	m_player3D = FindGO<Player3D>("player3d");
 
-	//��Ղ̍X�V
-	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASEXSIZE, BASEYSIZE);
+	//背景画像の設定
+	m_baseRender.Init("Assets/sprite/UI/Gauge/base.DDS", BASE_SIZE.x, BASE_SIZE.y);
 	m_baseRender.SetPosition(BASE_POSITION);
 	m_baseRender.Update();
-	//�Q�[�W�̍쐬
-	for (int i = 0; i < MAXGAGECOUNT; i++)
-	{
-		m_vigilanceRender[i].Init("Assets/sprite/UI/Gauge/gaugeCount.DDS", VIGIRANCE_XSIZE, VIGIRANCE_YSIZE);
-		m_vigilanceRender[i].SetPosition(Vector3(40.0f * i+RENDER_XPOSITION, RENDER_YPOSITION, 0.0f));
+
+	//警戒度の値画像の設定
+	for (int i = 0; i < GAUGE_MAX; i++) {
+		m_vigilanceRender[i].Init("Assets/sprite/UI/Gauge/gaugeCount.DDS", VIGIRANCE_SIZE.x, VIGIRANCE_SIZE.y);
+		m_vigilanceRender[i].SetPosition(Vector3((40.0f * i ) + VIGIRANCE_POSITION.x, VIGIRANCE_POSITION.y, 0.0f));
 		m_Color += 0.008 * i;
 		
 		m_vigilanceRender[i].SetMulColor(Vector4(0.0f, m_Color, m_Color, 1.0f));
 		m_vigilanceRender[i].Update();
 	}
 
-	//���x���̍쐬
-	m_LeverUPRender[0].Init("Assets/sprite/UI/Gauge/1.DDS", BASEXSIZE, BASEYSIZE);
-	m_LeverUPRender[1].Init("Assets/sprite/UI/Gauge/2.DDS", BASEXSIZE, BASEYSIZE);
-	m_LeverUPRender[2].Init("Assets/sprite/UI/Gauge/3.DDS", BASEXSIZE, BASEYSIZE);
+	//レベル画像の設定
+	m_LeverUPRender[0].Init("Assets/sprite/UI/Gauge/1.DDS", BASE_SIZE.x, BASE_SIZE.y);
+	m_LeverUPRender[1].Init("Assets/sprite/UI/Gauge/2.DDS", BASE_SIZE.x, BASE_SIZE.y);
+	m_LeverUPRender[2].Init("Assets/sprite/UI/Gauge/3.DDS", BASE_SIZE.x, BASE_SIZE.y);
 	m_LeverUPRender[3].Init("Assets/sprite/UI/Gauge/max_base.DDS", 154.0f, 154.0f);
-	m_LeverUPRender[3].SetPosition(Vector3{ 435.0f + RENDER_XPOSITION,RENDER_YPOSITION ,0.0 });
+	m_LeverUPRender[3].SetPosition(Vector3{ 435.0f + VIGIRANCE_POSITION.x ,VIGIRANCE_POSITION.y ,0.0 });
 	m_LeverUPRender[3].Update();
-	for (int i = 0; i < MAXLEVERCOUNT ; i++)
-	{
-		m_LeverUPRender[i].SetPosition(LEVERUPPOSITION);
+	for (int i = 0; i < LEVEL_MAX; i++) {
+		m_LeverUPRender[i].SetPosition(LEVELUP_POSITION);
 		m_LeverUPRender[i].Update();
 	}
 
-	//maxフォントの描画
-	m_maxLeverRender.Init("Assets/sprite/UI/Gauge/max.DDS", BASEXSIZE, BASEYSIZE);
-	m_maxLeverRender.SetScale(Vector3{ 0.2f,1.0f,0.0f });
-	m_maxLeverRender.SetPosition(Vector3{ 435.0f + RENDER_XPOSITION, RENDER_YPOSITION, 0.0f });
+	//maxフォントの設定
+	m_maxLeverRender.Init("Assets/sprite/UI/Gauge/max.DDS", BASE_SIZE.x, BASE_SIZE.y);
+	m_maxLeverRender.SetScale(Vector3(0.2f, 1.0f, 0.0f));
+	m_maxLeverRender.SetPosition(Vector3{ 435.0f + VIGIRANCE_POSITION.x, VIGIRANCE_POSITION.y, 0.0f });
 	m_maxLeverRender.Update();
 
 
@@ -87,14 +83,14 @@ bool Gage::Start()
 
 void Gage::Update()
 {
+	if (m_leverState == m_enLever_MAX) {
 
-	if (m_leverState == m_enLever_MAX)
-	{
 		Gage_MAX();
 		Gauge_Move();
 	}
-	//�x���x�̃N�[���^�C����v�Z
+
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
+
 	if (m_vigilanceGage != 0&& m_leverState != m_enLever_MAX) {
 		GageDown();
 	}
@@ -111,19 +107,18 @@ void Gage::Update()
 
 void Gage::GageUp(const int GageUp, const bool isEnemy)
 {
-	//�N�[���_�E�����܂��Ȃ�
+	//ゲージタイマーのクールダウンがまだなら増加しない
 	if (m_vigilanceTime > 0.0f) {
 		return;
 	}
 
-	//�߂܂��Ă���Ȃ�SE�𗬂��Ȃ�
+	//捕まっている最中なら増加しない
 	if (m_player3D->m_playerState == m_player3D->m_enPlayer_Catching) {
 		return;
 	}
 
-	//��������o��
+	//発見SEを鳴らす
 	SoundSource* se = NewGO<SoundSource>(0);
-
 	if (isEnemy) {
 		se->Init(10);
 	}
@@ -133,18 +128,21 @@ void Gage::GageUp(const int GageUp, const bool isEnemy)
 	se->Play(false);
 	se->SetVolume(GameManager::GetInstance()->GetSFX());
 
+	//発見されていないなら
 	if (!m_isFind) {
 		if (GameManager::GetInstance()->GetGameState() != GameManager::enState_GetTreasure) {
-			//BGM��ύX
+			//BGMを変更する
 			GameManager::GetInstance()->SetBGM(22);
 		}
 		m_isFind = true;
 	}
 
+	//ゲージを増加する
 	if (m_vigilanceGage < 11 && m_leverState != m_enLever_MAX) {
 		m_vigilanceGage += GageUp;
 	}
 	
+	//ゲージ増加タイマーを設定
 	m_vigilanceTime = VIGILANCE_TIME_MAX;
 
 	VigilaceLeverChange();
@@ -152,12 +150,14 @@ void Gage::GageUp(const int GageUp, const bool isEnemy)
 
 void Gage::GageDown()
 {
+	//ゲージタイマーのクールダウンがまだなら減少しない
 	if (m_vigilanceTime > -VIGILANCE_DOWN_TIME) {
 		return;
 	}
 
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
+		//エネミーの中に追跡中のステートがいるなら、減少しない
 		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->TRACKING||
 			m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CHARGE)
 		{
@@ -165,13 +165,15 @@ void Gage::GageDown()
 			return;
 		}
 	}
+
 	m_HitTime-= g_gameTime->GetFrameDeltaTime();
+	//エネミーから見つかってしばらく経過したら
 	if (m_HitTime < 0.0f)
 	{
 		m_vigilaceDownTime -= g_gameTime->GetFrameDeltaTime();
-
 		if (m_vigilaceDownTime < 0.0f)
 		{
+			//警戒度を減少させる
 			if (m_vigilanceGage < 11)
 			{
 				m_vigilanceGage -= 1;
@@ -189,6 +191,7 @@ void Gage::GageDown()
 
 void Gage::VigilaceLeverChange()
 {
+	//警戒度が最大を超えたら、レベルを上げる
 	if (m_vigilanceGage >= 11 && m_leverState != m_enLever_MAX)
 	{
 		switch (m_leverState)
@@ -214,7 +217,6 @@ void Gage::VigilaceLeverChange()
 			break;
 		}
 	}
-	
 }
 
 void Gage::Gage_ColorChange()
@@ -222,7 +224,7 @@ void Gage::Gage_ColorChange()
 	switch (m_leverState)
 	{
 	case Gage::m_enLever_1:
-		for (int i = 0; i < MAXGAGECOUNT; i++)
+		for (int i = 0; i < GAUGE_MAX; i++)
 		{
 			m_Color += 0.008 * i;
 
@@ -231,7 +233,7 @@ void Gage::Gage_ColorChange()
 		}
 		break;
 	case Gage::m_enLever_2:
-		for (int i = 0; i < MAXGAGECOUNT; i++)
+		for (int i = 0; i < GAUGE_MAX; i++)
 		{
 			m_Color += 0.008 * i;
 
@@ -240,7 +242,7 @@ void Gage::Gage_ColorChange()
 		}
 		break;
 	case Gage::m_enLever_3:
-		for (int i = 0; i < MAXGAGECOUNT; i++)
+		for (int i = 0; i < GAUGE_MAX; i++)
 		{
 			m_Color += 0.008 * i;
 
@@ -255,30 +257,31 @@ void Gage::Gage_ColorChange()
 
 void Gage::Gage_MAX()
 {
-	if (!m_MaxEnd)
-	{
+	if (!m_MaxEnd) {
 		return;
 	}
+
+	//警戒度を最大にする
 	m_vigilanceGage = 10;
-	for (int i = 0; i < MAXGAGECOUNT; i++)
-	{
+	for (int i = 0; i < GAUGE_MAX; i++) {
 		m_Color += 0.008 * i;
 
 		m_vigilanceRender[i].SetMulColor(Vector4(m_Color, 0.0f, 0.0f, 1.0f));
 		m_vigilanceRender[i].Update();
 	}
-	if (m_fade->IsFade() == false)
-	{
-		//���C�v��o��
+
+	//フェードが終了しているなら
+	if (m_fade->IsFade() == false) {
+		//ワイプのリセット
 		m_wipe->Reset();
-		//�ڕW�摜��o��
+		//目標画像を出す
 		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
 		goalSprite->SetSpriteNum(true);
+		//増援のエネミーを出現
 		for (int i = 0; i < 3; i++)
 		{
 			m_enemy_Increase->Enemy_Open();
 		}
-		
 		m_MaxEnd = false;
 	}
 	
@@ -288,13 +291,15 @@ void Gage::Gauge_Move()
 {
 	m_gaugeTimer += g_gameTime->GetFrameDeltaTime() * 2.0f;
 
-	if (m_gaugeTimer > GAUGE_LEVER_MAX) {
+	if (m_gaugeTimer > LEVEL_TIME_MAX) {
 		m_gaugeTimer = -0.5f;
 	}
 
+	//スケールを調整
 	m_gaugeScale = ((pow(m_gaugeTimer, 2.0f) * -3.0f) + (2.0f * m_gaugeTimer)) * 0.2f;
 	m_gaugeScale = min(max(m_gaugeScale, 0.0f), 0.1f);
 
+	//MAX画像の設定
 	m_maxLeverRender.SetScale(Vector3(0.3f + m_gaugeScale, 0.7f + m_gaugeScale, 0.0f));
 	m_maxLeverRender.Update();
 }
@@ -302,28 +307,19 @@ void Gage::Gauge_Move()
 
 void Gage::Render(RenderContext& rc)
 {
+	//背景画像の描画
 	m_baseRender.Draw(rc);
 
+	//警戒度の画像を描画
 	for (int i = 0; i < m_vigilanceGage; i++) {
 		m_vigilanceRender[i].Draw(rc);
 	}
 
-	switch (m_leverState)
-	{
-	case Gage::m_enLever_1:
-		m_LeverUPRender[0].Draw(rc);
-		break;
-	case Gage::m_enLever_2:
-		m_LeverUPRender[1].Draw(rc);
-		break;
-	case Gage::m_enLever_3:
-		m_LeverUPRender[2].Draw(rc);
-		break;
-	case Gage::m_enLever_MAX:
-		m_LeverUPRender[3].Draw(rc);
+	//レベル画像を描画
+	m_LeverUPRender[m_leverState].Draw(rc);
+
+	//レベル最大の画像を描画
+	if (m_leverState == m_enLever_MAX) {
 		m_maxLeverRender.Draw(rc);
-		break;
-	default:
-		break;
 	}
 }

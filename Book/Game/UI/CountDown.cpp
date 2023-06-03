@@ -27,8 +27,9 @@ bool CountDown::Start()
 
 	for (int i = 0; i < 4; i++) {
 		m_countDownSpriteRender[i].SetPosition(Vector3(0.0f, 150.0f, 0.0f));
+		m_countDownSpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
+		m_countDownSpriteRender[i].Update();
 	}
-
 
 	return true;
 }
@@ -37,51 +38,55 @@ void CountDown::Update()
 {
 	m_timer -= g_gameTime->GetFrameDeltaTime();
 
+	//時間が経過したら
 	if (m_timer < 0.0f) {
+
 		//カウントを進めてタイムをリセットする
 		m_count--;
 		m_timer = 1.0f;
 
-		if (m_count < 0) {
-			PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
-			player->SetGameState(true);
-
-			//ゲームクラスにゲーム中を通知
-			Game* game = FindGO<Game>("game");
-			game->NotifyDuringGamePlay();
-
-			//目標画像を出す
-			GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
-			goalSprite->SetSpriteNum(false);
-
-			NewGO<Pause>(2, "pause");
-
-			DeleteGO(this);
-			return;
-		}
-		else if (m_count == 0) {
-			//カウント終了の音を出す
-			SoundSource* se = NewGO<SoundSource>(0);
-			se->Init(16);
-			se->Play(false);
-			se->SetVolume(GameManager::GetInstance()->GetSFX());
-		}
-		else {
-			//カウントの音を出す
-			SoundSource* se2 = NewGO<SoundSource>(0);
-			se2->Init(15);
-			se2->Play(false);
-			se2->SetVolume(GameManager::GetInstance()->GetSFX());
-		}
+		CountEnd();
+		return;
 	}
 
+	//カウント画像の設定
 	if (m_timer > 0.5f) {
-		//カウント画像の設定
 		m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
 		m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 2.0f - (m_timer * 2.0f)));
 		m_countDownSpriteRender[m_count].Update();
 	}
-	
+}
+
+void CountDown::CountEnd()
+{
+	//STARTの表示が終わったら
+	if (m_count < 0) {
+
+		//プレイヤーの移動をできるようにする
+		PlayerManagement* player = FindGO<PlayerManagement>("playerManagement");
+		player->SetGameState(true);
+
+		//ゲームクラスにゲーム中を通知
+		Game* game = FindGO<Game>("game");
+		game->NotifyDuringGamePlay();
+
+		//目標画像を出す
+		GoalSprite* goalSprite = NewGO<GoalSprite>(0, "goalSprite");
+		goalSprite->SetSpriteNum(false);
+
+		//ポーズを可能にする
+		NewGO<Pause>(2, "pause");
+
+		DeleteGO(this);
+		return;
+	}
+	//1までカウントしたら
+	else if (m_count == 0) {
+		PlaySE(16);
+	}
+	else {
+		PlaySE(15);
+	}
 }
 
 void CountDown::Render(RenderContext& rc)

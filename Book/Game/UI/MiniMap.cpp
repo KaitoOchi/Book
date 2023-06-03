@@ -17,12 +17,14 @@ namespace
 
 MiniMap::MiniMap()
 {
+	//vector型のリストはリサーブする
 	m_enemyList.reserve(ENEMY_NUM);
 	m_physicsGhostList.reserve(WALL_NUM);
 }
 
 MiniMap::~MiniMap()
 {
+	//vector型のリストを解放
 	m_enemyList.clear();
 	m_enemyList.shrink_to_fit();
 	m_physicsGhostList.clear();
@@ -39,6 +41,13 @@ bool MiniMap::Start()
 	m_enemyList = game->GetEnemyList();
 	m_physicsGhostList = game->GetPhysicsGhostList();
 
+	InitSprite();
+
+	return true;
+}
+
+void MiniMap::InitSprite()
+{
 	// 背景画像の設定
 	m_spriteRender.Init("Assets/sprite/UI/miniMap/base.DDS", 340, 340);
 	m_spriteRender.SetPosition(CENTER_POSITION);
@@ -50,7 +59,7 @@ bool MiniMap::Start()
 	m_outlineSpriteRender.Update();
 
 	// プレイヤー画像の設定
-	m_playerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20,40);
+	m_playerSpriteRender.Init("Assets/sprite/UI/miniMap/player.DDS", 20, 40);
 	m_playerSpriteRender.SetPosition(CENTER_POSITION);
 	m_playerSpriteRender.Update();
 
@@ -68,8 +77,6 @@ bool MiniMap::Start()
 
 	// お宝画像の設定
 	m_treasureSpriteRender.Init("Assets/sprite/UI/miniMap/map_exit.DDS", 32.0f, 32.0f);
-
-	return true;
 }
 
 void MiniMap::Update()
@@ -117,6 +124,7 @@ void MiniMap::DrawMap_Actor()
 	//お宝をマップに描画
 	m_isTreasure = true;
 	DrawMap(m_treasurePos, alpha);
+
 	//お宝画像の設定
 	m_treasureSpriteRender.SetPosition(m_mapPos);
 	m_treasureSpriteRender.Update();
@@ -147,7 +155,6 @@ const bool MiniMap::WorldPositionConvertToMapPosition(const Vector3& worldCenter
 	Vector3 diff2 = diff;
 
 	if (!m_isTreasure) {
-
 		// 	計算したベクトルが一定以上離れていたら
 		if (diff.LengthSq() >= LIMITED_RANGE_IMAGE * LIMITED_RANGE_IMAGE) {
 			// 範囲外に存在しているのでマップに表示しない

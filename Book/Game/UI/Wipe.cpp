@@ -10,26 +10,32 @@
 
 namespace
 {
-	const float	MOVE_TIME = 1.3f;				//ˆÚ“®ŽžŠÔ
-	const float MOVE_SPEED = 0.3f;				//ˆÚ“®‘¬“x
-	const float ENEMY_DURATION = 0.1f;			//“G‚ÌŠÔŠu
+	const float	MOVE_TIME = 1.3f;		//ˆÚ“®ŽžŠÔ
+	const float MOVE_SPEED = 0.3f;		//ˆÚ“®‘¬“x
+	const float ENEMY_DURATION = 0.1f;	//“G‚ÌŠÔŠu
 }
 
 Wipe::Wipe()
 {
 	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = -290;   //‰æ–Ê¶ã‚ÌxÀ•W
 	RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftY = 662;   //‰æ–Ê¶ã‚ÌyÀ•W
+
+	m_stage.reserve(16);
 }
 
 Wipe::~Wipe()
 {
 	delete m_enemyAnim;
 
+	//ƒXƒe[ƒW‚ðíœ
 	for (auto& stage : m_stage)
 	{
 		DeleteGO(stage);
 	}
+	m_stage.clear();
+	m_stage.shrink_to_fit();
 
+	//°‚ðíœ
 	DeleteGO(m_backGround);
 }
 
@@ -154,7 +160,7 @@ void Wipe::EnemyMove()
 		return;
 	}
 
-	//Œv‘ªˆ—B
+	//Œv‘ªˆ—
 	m_timer += g_gameTime->GetFrameDeltaTime() * MOVE_SPEED;
 
 	float timer = m_timer;
@@ -239,11 +245,13 @@ void Wipe::Render(RenderContext& rc)
 		return;
 	}
 
+	//ƒXƒe[ƒW‚Ì•`‰æ
 	for (auto& wall : m_stage)
 	{
 		wall->WipeRender(rc);
 	}
 
+	//“G‚Ì•`‰æ
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
 		m_enemy[i].modelRender.Draw(rc);
 	}

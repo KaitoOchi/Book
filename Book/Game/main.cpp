@@ -18,9 +18,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// �Q�[���̏������B
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Carta Gatto"));
 
-	NewGO<Logo>(10, "logo");
+	//NewGO<Logo>(10, "logo");
 	
-	//NewGO<Title>(0, "title");
+	NewGO<Title>(0, "title");
 	//NewGO<Game>(0, "game");
 
 	//NewGO<Event>(0, "event");

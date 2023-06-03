@@ -82,9 +82,6 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="UI\GameUI.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI\MiniMap.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -179,6 +176,9 @@
     </ClCompile>
     <ClCompile Include="Stage\Painting.cpp">
       <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameUI.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
