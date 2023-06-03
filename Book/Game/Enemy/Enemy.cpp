@@ -428,7 +428,7 @@ void Enemy::Act_MoveMissingPosition()
 	}
 
 	// ベクトルを作成
-	Vector3 diff = m_playerMissionPosition - m_position;
+	Vector3 diff = m_playerMissiongPosition - m_position;
 
 	// 長さを計算
 	float length = diff.Length();
@@ -438,7 +438,7 @@ void Enemy::Act_MoveMissingPosition()
 
 	// 移動速度に加算
 	Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
-	m_position += moveSpeed * m_move;
+	m_position += moveSpeed * m_Chargemove;
 
 	// 走るアニメーションを再生
 	m_enAnimationState = RUN;
@@ -670,7 +670,7 @@ void Enemy::Act_Tracking()
 	// 見失った時
 	if (m_TrackingPlayerFlag == false) {
 		// プレイヤーの座標を参照する
-		m_playerMissionPosition = m_playerManagement->GetPosition();
+		m_playerMissiongPosition = m_playerManagement->GetPosition();
 		m_ActState = MISSING_MOVEPOSITON;
 	}
 }
@@ -777,20 +777,20 @@ void Enemy::Act_Charge(float time)
 		// 一度だけ実行する
 		if (m_CalculatedFlag == false) {
 			// 座標を参照
-			m_playerChargePosition = m_playerManagement->GetPosition();
+			m_chargeTergetPosition = m_playerManagement->GetPosition();
 
 			// 何度も実行しないようにtrueにする
 			m_CalculatedFlag = true;
 
 			// エネミーからプレイヤーへ向かうベクトル
-			m_chargeDiff = m_playerChargePosition - m_position;
+			m_chargeDiff = m_chargeTergetPosition - m_position;
 			m_chargeDiff.y = 0.0f;
 			m_chargeDiff.Normalize();
 		}
 
 		// 移動速度に加算
 		Vector3 moveSpeed = m_chargeDiff * (MOVE_SPEED * ADD_SPEED);
-		m_position += moveSpeed * m_move;
+		m_position += moveSpeed * m_Chargemove;
 
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
@@ -845,7 +845,7 @@ void Enemy::Act_Charge_HitWall()
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
 	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
 		// 衝突したとき
-		m_move = 0.0f;
+		m_Chargemove = 0.0f;
 		
 		m_addTimer[2] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
@@ -859,7 +859,7 @@ void Enemy::Act_Charge_HitWall()
 	}
 
 	// 衝突していないときは続行する
-	m_move = 1.0f;
+	m_Chargemove = 1.0f;
 }
 
 void Enemy::Act_Call()
