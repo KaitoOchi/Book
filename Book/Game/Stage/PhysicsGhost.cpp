@@ -25,11 +25,13 @@ bool PhysicsGhost::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 
 	Ghost::Start();
+	Vector3 boxSize = CreateGhostBox();
 
+	//“–‚½‚è”»’è‚ðì¬
 	m_physicsGhostObj.CreateBox(
 		m_position,
 		m_rotation,
-		m_boxSize
+		boxSize
 	);
 	m_physicsGhostObj.GetbtCollisionObject().setUserIndex(enCollisionAttr_Ground);
 
@@ -57,14 +59,13 @@ void PhysicsGhost::EffectDraw()
 {
 	Vector3 diff = m_position - m_playerManagement->GetPosition();
 
-	if (diff.LengthSq() < DISTANCE)
-	{
+	if (diff.LengthSq() < DISTANCE) {
+
 		if (!m_kirakiraEffect->IsPlay()) {
 			m_kirakiraEffect->Play();
 		}
 	}
-	else
-	{
+	else {
 		m_kirakiraEffect->Stop();
 	}
 	

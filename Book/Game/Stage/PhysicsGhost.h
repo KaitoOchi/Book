@@ -1,6 +1,11 @@
 #pragma once
 #include "Ghost.h"
+
 class PlayerManagement;
+
+/// <summary>
+/// 壁用の当たり判定クラス。
+/// </summary>
 class PhysicsGhost:public Ghost
 {
 public:
@@ -9,7 +14,12 @@ public:
 	bool Start();
 	void Update();
 	void EffectDraw();
-	
+
+public:
+	/// <summary>
+	/// エフェクトの取得。
+	/// </summary>
+	/// <returns></returns>
 	EffectEmitter* GetEffect()
 	{
 		if (m_kirakiraEffect != nullptr) {
@@ -21,7 +31,7 @@ public:
 public:
 	PhysicsGhostObject m_physicsGhostObj;
 private:
-	EffectEmitter* m_kirakiraEffect;
-	PlayerManagement* m_playerManagement;
+	EffectEmitter*		m_kirakiraEffect;		//エフェクト
+	PlayerManagement*	m_playerManagement;		//プレイヤーマネジメント
 };
 

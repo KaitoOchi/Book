@@ -1,5 +1,8 @@
 #pragma once
 
+/// <summary>
+/// ゲームマネージャークラス。
+/// </summary>
 class GameManager
 {
 public:
@@ -12,7 +15,6 @@ public:
 		int frameRate = 60;
 	};
 
-public:
 	/// <summary>
 	/// ゲーム状態の列挙型
 	/// </summary>
@@ -197,7 +199,6 @@ public:
 		return m_gameState;
 	}
 
-
 	/// <summary>
 	/// 更新処理。
 	/// </summary>
@@ -211,9 +212,9 @@ private:
 
 private:
 	static GameManager*		m_instance;						//インスタンス
+	SoundSource*			m_bgm = nullptr;				//BGM
 	SaveData				m_saveData;						//セーブデータの構造体
 	EnGameState				m_gameState = enState_Game;	//ゲームステート
-	SoundSource*			m_bgm = nullptr;				//BGM
 	bool					m_isDeleteBGM = false;			//BGMの削除中かどうか
 	int						m_searchNum = 0;				//敵に見つかった回数
 	float					m_timer = 0.0f;					//タイマー

@@ -80,11 +80,12 @@ void GameManager::DeletingBGM()
 		return;
 	}
 
+	//BGM‚ğ¬‚³‚­‚µ‚Ä‚¢‚­
 	m_timer -= (g_gameTime->GetFrameDeltaTime() * 0.4f);
 	m_bgm->SetVolume(m_timer);
 
-	//BGM‚ÌÄ¶‚ğ~‚ß‚é
 	if (m_timer <= 0.0f) {
+		//BGM‚ÌÄ¶‚ğ~‚ß‚é
 		m_isDeleteBGM = false;
 		m_bgm->Stop();
 		m_timer = 0.0f;

@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "GameCamera.h"
+
 #include "Player3D.h"
 #include "Player2D.h"
 #include"PlayerManagement.h"
 #include "Game.h"
+
 namespace
 {
-	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);//�����_���王�_�܂ł̃x�N�g����ݒ�B
+	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);
 
 	const float TAGETUP = 10.0f;//�����_��グ���
 
@@ -16,14 +18,17 @@ namespace
 	const float XRIGHT = 0.5f;//�J�����̉E�����̌��E
 	const float XLEFT = -0.9f;//�J�����̍������̌��E
 }
+
 GameCamera::GameCamera()
 {
 
 }
+
 GameCamera::~GameCamera()
 {
 
 }
+
 bool GameCamera::Start()
 {
 	//�����_���王�_�܂ł̃x�N�g����ݒ�
@@ -38,6 +43,7 @@ bool GameCamera::Start()
 
 	return true;
 }
+
 void GameCamera::Update()
 {
 	if (m_player3D->m_playerState != m_player3D->m_enPlayer_Catching)
@@ -53,15 +59,16 @@ void GameCamera::Update()
 	//�J�����̍X�V
 	g_camera3D->Update();
 }
+
 void GameCamera::UpdatePositionAndTarget()
 {
-	if (m_playerManagement->IsDead()||m_playerManagement->m_enMananagementState==PlayerManagement::m_enPlayer_Changing)
+	if (m_playerManagement->IsDead() ||
+		m_playerManagement->m_enMananagementState == PlayerManagement::m_enPlayer_Changing)
 	{
-		m_getPosition = m_cameraposition;
-
 		SetPosition({m_cameraposition.x,m_cameraposition.y + 100.0f,m_cameraposition.z });
 		return;
 	}
+
 	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//�v���C���[�̑������炿����Ə�𒍎��_�Ƃ���
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
