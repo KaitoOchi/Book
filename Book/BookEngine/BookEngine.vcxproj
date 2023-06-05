@@ -188,7 +188,6 @@
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="level2DRender\Level2DRender.h" />
     <ClInclude Include="level3DRender\LevelRender.h" />
-    <ClInclude Include="level3DRender\MapChipRender.h" />
     <ClInclude Include="nature\SkyCube.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,7 +209,6 @@
     <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="level2DRender\Level2DRender.cpp" />
     <ClCompile Include="level3DRender\LevelRender.cpp" />
-    <ClCompile Include="level3DRender\MapChipRender.cpp" />
     <ClCompile Include="nature\SkyCube.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

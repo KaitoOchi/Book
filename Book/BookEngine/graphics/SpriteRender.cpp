@@ -15,46 +15,58 @@ namespace nsBookEngine {
 		initData.m_height = static_cast<UINT>(h);
 		initData.m_alphaBlendMode = alpha;
 
+		ClipMode(initData, clipMode);
+
+		///Sprite初期化オブジェ1クトを使用して、Spriteを初期化する
+		m_sprite.Init(initData);
+	}
+
+	void SpriteRender::ClipMode(SpriteInitData& initData, const int clipMode)
+	{
+		switch (clipMode)
+		{
 		//2Dゲージのクリップ
-		if (clipMode == 1) {
+		case 1:
 			initData.m_vsEntryPointFunc = "VSMain1";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
-		}
+			break;
+
 		//BGMのクリップ
-		else if (clipMode == 2) {
+		case 2:
 			initData.m_vsEntryPointFunc = "VSMain2";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
-		}
+			break;
+
 		//SFXのクリップ
-		else if (clipMode == 3) {
+		case 3:
 			initData.m_vsEntryPointFunc = "VSMain3";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
-		}
+			break;
+
 		//UVスクロール
-		else if (clipMode == 4) {
+		case 4:
 			initData.m_psEntryPoinFunc = "PSMainUVScroll";
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
-		}
+			break;
+
 		//円形ゲージ
-		else if (clipMode == 5) {
+		case 5:
 			initData.m_psEntryPoinFunc = "PSCircleGauge";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
+			break;
 		}
-		
-		///Sprite初期化オブジェ1クトを使用して、Spriteを初期化する
-		m_sprite.Init(initData);
 	}
 
 	void SpriteRender::Draw(RenderContext& rc)

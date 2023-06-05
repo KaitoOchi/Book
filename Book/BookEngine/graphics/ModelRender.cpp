@@ -2,7 +2,6 @@
 #include "ModelRender.h"
 
 #include "graphics/light/DirectionLight.h"
-//#include "RenderingEngine.h"
 
 
 namespace nsBookEngine {
@@ -176,7 +175,6 @@ namespace nsBookEngine {
 		UpdateWorldMatrixInModes();
 	}
 
-
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
 		if (m_model.IsInited()) {
@@ -195,12 +193,15 @@ namespace nsBookEngine {
 
 	void ModelRender::Update()
 	{
+		//モデルのアップデート
 		UpdateWorldMatrixInModes();
 		
+		//スケルトンのアップデート
 		if (m_skeleton.IsInited()) {
 			m_skeleton.Update(m_model.GetWorldMatrix());
 		}
 
+		//アニメーションのアップデート
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 	}
 

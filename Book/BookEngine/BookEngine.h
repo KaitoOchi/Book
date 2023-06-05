@@ -2,6 +2,9 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// 自作エンジンクラス。
+	/// </summary>
 	class BookEngine {
 	private:
 		/// <summary>

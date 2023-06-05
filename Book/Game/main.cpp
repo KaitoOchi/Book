@@ -6,16 +6,13 @@
 #include "Fade.h"
 #include "Logo.h"
 
-#include "Event.h"
-#include "Opening.h"
-
 
 /// <summary>
-/// ���C���֐�
+/// メイン関数。
 /// </summary>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	// �Q�[���̏������B
+	//ゲームの初期化。
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Carta Gatto"));
 
 	//NewGO<Logo>(10, "logo");
@@ -23,14 +20,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	NewGO<Title>(0, "title");
 	//NewGO<Game>(0, "game");
 
-	//NewGO<Event>(0, "event");
-	//NewGO<Opening>(0, "opening");
-
 	NewGO<Fade>(9, "fade");
 
 	RenderingEngine::GetInstance()->Init();
 
-	// ��������Q�[�����[�v�B
+	//ゲームループ。
 	while (DispatchWindowMessage())
 	{
 		BookEngine::GetInstance()->Execute();

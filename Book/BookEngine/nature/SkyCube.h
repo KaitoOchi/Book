@@ -2,6 +2,9 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// スカイキューブクラス。
+	/// </summary>
 	class SkyCube : public IGameObject
 	{
 	public:
@@ -65,11 +68,11 @@ namespace nsBookEngine {
 		}
 
 	private:
-		Texture			m_texture;
-		ModelRender		m_modelRender;
-		Vector3			m_position;
-		Vector3			m_scale = Vector3::One  * 1000.0f;
-		int				m_number = 0;
-		float			m_luminance = 0.75f;
+		Texture			m_texture;								//テクスチャ
+		ModelRender		m_modelRender;							//天球モデル
+		Vector3			m_position;								//座標　
+		Vector3			m_scale = Vector3::One  * 1000.0f;		//拡大率
+		int				m_number = 0;							//種類
+		float			m_luminance = 0.75f;					//輝度
 	};
 }

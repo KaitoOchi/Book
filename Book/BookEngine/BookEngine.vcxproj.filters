@@ -15,9 +15,6 @@
     <ClInclude Include="level3DRender\LevelRender.h">
       <Filter>level3DRender</Filter>
     </ClInclude>
-    <ClInclude Include="level3DRender\MapChipRender.h">
-      <Filter>level3DRender</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\RenderingEngine.h">
       <Filter>graphics</Filter>
     </ClInclude>
@@ -65,9 +62,6 @@
       <Filter>collision</Filter>
     </ClCompile>
     <ClCompile Include="level3DRender\LevelRender.cpp">
-      <Filter>level3DRender</Filter>
-    </ClCompile>
-    <ClCompile Include="level3DRender\MapChipRender.cpp">
       <Filter>level3DRender</Filter>
     </ClCompile>
     <ClCompile Include="graphics\RenderingEngine.cpp">

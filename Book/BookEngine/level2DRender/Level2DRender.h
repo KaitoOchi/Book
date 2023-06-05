@@ -42,7 +42,7 @@ namespace nsBookEngine {
 	};
 
 	/// <summary>
-	/// レベル2D
+	/// レベル2Dレンダークラス。
 	/// </summary>
 	class Level2DRender
 	{
@@ -53,8 +53,6 @@ namespace nsBookEngine {
 		/// <param name="filePath">caslファイルのファイルパス。</param>
 		/// <param name="hookFunc">オブジェクトを作詞するときの処理をフックするための関数。</param>
 		void Init(const char* filePath, std::function<bool(Level2DObjectData& objData)> hookFunc);
-
-	private:
 	};
 }
 
