@@ -428,13 +428,12 @@ protected:
 	Vector3 m_forward = Vector3::AxisZ;		// エネミーの前方向
 	Vector3 m_scale = Vector3::One;			// スケール
 	Vector3 m_playerPos = Vector3::Zero;	// プレイヤーの座標
-	Vector3 m_playerChargePosition = Vector3::Zero;			// 突進用。プレイヤーの座標
-	Vector3 m_playerMissionPosition = Vector3::Zero;		// 見失った時用。プレイヤーの座標
+	Vector3 m_chargeTergetPosition = Vector3::Zero;			// 突進用。プレイヤーの座標
+	Vector3 m_playerMissiongPosition = Vector3::Zero;		// 見失った時用。プレイヤーの座標
 	Vector3 m_sumPos = Vector3::Zero;		// 総移動距離
 	Vector3 m_setPos = Vector3::Zero;		// 集合する座標
 	Vector3 m_itemPos = Vector3::Zero;		// アイテムの座標
 	Vector3 m_chargeDiff = Vector3::Zero;	// 突進の移動量
-
 
 	Quaternion m_rotation = Quaternion::Identity;		// 回転
 
@@ -469,7 +468,7 @@ protected:
 	std::array<float, 5>m_addTimer;
 
 	float m_NaviTimer = 0.0f;				// ナビメッシュ用のタイマー
-	float m_move = 1.0f;
+	float m_Chargemove = 1.0f;
 	float m_Vicount;						//警戒度を一定回数増やす
 
 	int m_spotNum = 0;						// スポットライトの個数
