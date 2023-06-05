@@ -60,8 +60,8 @@ void Enemy_Normal::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
+	if (m_ActState == m_ActState_CatchPlayer) {
+		m_enAnimationState = m_enAnimationState_Idle;
 		return;
 	}
 
@@ -71,48 +71,48 @@ void Enemy_Normal::Update()
 		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
 
 	// �M���e�ɓ�������
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+		m_ActState = m_ActState_Dizzy;
 	}
 	// �����e��g�p����
 	if (m_HearedSoundBulletFlag == true) {
-		m_ActState = LISTEN;
+		m_ActState = m_ActState_Listen;
 	}
 
 	switch (m_ActState) {
 		// ����
-	case CRAW:
+	case m_ActState_Craw:
 		Update_OnCraw();
 		break;
 		// �ǐ�
-	case TRACKING:
+	case m_ActState_Tracking:
 		Update_OnTracking();
 		break;
-	case MISSING_MOVEPOSITON:
+	case m_ActState_Move_MissingPositon:
 		Update_OnMoveMissingPosition();
 		break;
-	case MISSING_SEARCHPLAYER:
+	case m_ActState_SEarch_MissingPlayer:
 		Update_OnSearchMissingPlayer();
 		break;
 		// �Ă΂ꂽ�Ƃ�
-	case CALLED:
+	case m_ActState_Called:
 		Update_OnCalled();
 		break;
 		// �����Ԃɖ߂�
-	case BACKBASEDON:
+	case m_ActState_BackBasedOn:
 		Update_OnBackBasedOn();
 		break;
 		// �M���e�ɓ�������
-	case CONFUSION:
+	case m_ActState_Dizzy:
 		Update_OnConfusion();
 		break;
 		// �����e��g�p�����Ƃ�
-	case LISTEN:
+	case m_ActState_Listen:
 		UpDate_OnListen();
 		break;
 	}
@@ -138,7 +138,7 @@ void Enemy_Normal::Update_OnCraw()
 {
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
 	Enemy::Act_Craw();				// ����s��
@@ -148,7 +148,7 @@ void Enemy_Normal::Update_OnTracking()
 {
 	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
 	Enemy::Act_Tracking();			// �ǐՍs��

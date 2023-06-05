@@ -158,8 +158,8 @@ void Gage::GageDown()
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
 		//エネミーの中に追跡中のステートがいるなら、減少しない
-		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->TRACKING||
-			m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CHARGE)
+		if (m_game->GetEnemyList()[i]->m_ActState== m_game->GetEnemyList()[i]->m_ActState_Tracking||
+			m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->m_ActState_Charge)
 		{
 			m_HitTime = 5.0f;
 			return;

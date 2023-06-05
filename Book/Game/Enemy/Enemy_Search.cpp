@@ -58,21 +58,21 @@ void Enemy_Search::Update()
 
 	// �M���e�ɓ�������
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+		m_ActState = m_ActState_Dizzy;
 	}
 
 	switch (m_ActState) {
-	case CRAW:
-	case SEARCH:
+	case m_ActState_Craw:
+	case m_ActState_Search:
 		Update_OnSearch();
 		break;
-	case CALLING_AROUND_ENEMY:
+	case m_ActState_Call_AroundEnemy:
 		Update_OnCall();
 		break;
-	case MISSING_SEARCHPLAYER:
+	case m_ActState_SEarch_MissingPlayer:
 		Update_OnMissingPlayer();
 		break;
-	case CONFUSION:
+	case m_ActState_Dizzy:
 		Update_OnConfusion();
 		break;
 	}
@@ -99,7 +99,7 @@ void Enemy_Search::Update_OnSearch()
 	if (m_TrackingPlayerFlag == true) {
 		// フラグを降ろす
 		m_efectDrawFlag[2] = false;
-		m_ActState = CALLING_AROUND_ENEMY;
+		m_ActState = m_ActState_Call_AroundEnemy;
 	}
 }
 
@@ -151,7 +151,7 @@ void Enemy_Search::Rotaition()
 		break;
 	}
 	
-	m_enAnimationState = IDLE;	// �A�j���[�V�����X�e�[�g��ݒ�
+	m_enAnimationState = m_enAnimationState_Idle;	// �A�j���[�V�����X�e�[�g��ݒ�
 }
 void Enemy_Search::Render(RenderContext& rc)
 {

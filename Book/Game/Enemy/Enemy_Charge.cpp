@@ -62,8 +62,8 @@ void Enemy_Charge::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
+	if (m_ActState == m_ActState_CatchPlayer) {
+		m_enAnimationState = m_enAnimationState_Idle;
 		return;
 	}
 
@@ -71,50 +71,50 @@ void Enemy_Charge::Update()
 		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
 		m_HearedSoundBulletFlag = false;
 	}
 
 	// 閃光弾に当たった
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+		m_ActState = m_ActState_Dizzy;
 	}
 	// 音爆弾を使用した
 	if (m_HearedSoundBulletFlag == true) {
-		m_ActState = LISTEN;
+		m_ActState = m_ActState_Listen;
 	}
 
 	switch (m_ActState) {
 		// 巡回
-	case CRAW:
+	case m_ActState_Craw:
 		Update_OnCraw();
 		break;
 		// 突進
-	case CHARGE:
+	case m_ActState_Charge:
 		Update_OnCharge();
 		break;
 		// 突進終了
-	case CHARGEEND:
+	case m_ActState_ChargeEnd:
 		Update_OnChargeEnd();
 		break;
 		// プレイヤーを探す
-	case MISSING_SEARCHPLAYER:
+	case m_ActState_SEarch_MissingPlayer:
 		Update_OnSearchMissingPlayer();
 		break;
 		// 呼ばれたとき
-	case CALLED:
+	case m_ActState_Called:
 		Update_OnCalled();
 		break;
 		// 巡回状態に戻る
-	case BACKBASEDON:
+	case m_ActState_BackBasedOn:
 		Update_OnBackBasedOn();
 		break;
 		// 閃光弾に当たった
-	case CONFUSION:
+	case m_ActState_Dizzy:
 		Update_OnConfusion();
 		break;
 		// 音爆弾を使用したとき
-	case LISTEN:
+	case m_ActState_Listen:
 		UpDate_OnListen();
 		break;
 	}
@@ -141,7 +141,7 @@ void Enemy_Charge::Update_OnCraw()
 {
 	// プレイヤーを捕まえたとき
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
 	Enemy::Act_Craw();					// 巡回行動
@@ -151,7 +151,7 @@ void Enemy_Charge::Update_OnCharge()
 {
 	// プレイヤーを捕まえたとき
 	if (Enemy::Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
 	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
