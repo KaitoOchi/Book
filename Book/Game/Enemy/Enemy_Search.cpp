@@ -20,11 +20,11 @@ Enemy_Search::~Enemy_Search()
 }
 bool Enemy_Search::Start()
 {
-	// �A�j���[�V�����̓ǂݍ���
+	// アニメーションの読み込み
 	Animation();
 
+	// モデルの読み込み
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
-
 
 	Enemy::Start();
 
@@ -36,7 +36,7 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
-	//行動できるか調べる
+	// 行動できるか調べる
 	if (m_activeFlag == true)
 	{
 		Vector3 move = m_position;
@@ -47,7 +47,7 @@ void Enemy_Search::Update()
 		return;
 	}
 
-	// �`�悵�Ȃ��t���O��true�̂Ƃ�
+	// イベント後の処理
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
@@ -56,7 +56,7 @@ void Enemy_Search::Update()
 		return;
 	}
 
-	// �M���e�ɓ�������
+	// 閃光弾に当たったとき
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = m_ActState_Dizzy;
 	}
@@ -64,54 +64,54 @@ void Enemy_Search::Update()
 	switch (m_ActState) {
 	case m_ActState_Craw:
 	case m_ActState_Search:
+		// 索敵
 		Update_OnSearch();
 		break;
 	case m_ActState_Call_AroundEnemy:
-		Update_OnCall();
+		// 周りのエネミーを呼ぶ
+		Update_OnCallAroundEnemy();
 		break;
 	case m_ActState_SEarch_MissingPlayer:
+		// 見失ったプレイヤーを探す
 		Update_OnMissingPlayer();
 		break;
 	case m_ActState_Dizzy:
-		Update_OnConfusion();
+		// 閃光弾を使用されたとき
+		Update_OnDizzy();
 		break;
 	}
 
-	Enemy::PlayAnimation();
+	Enemy::PlayAnimation();							// アニメーション
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);
-	// ����p
-	Enemy::Act_SeachPlayer();
+	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
+	Enemy::Act_SeachPlayer();						// 索敵
 
-	// �X�V
-	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
+
+	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 	m_enemyRender.Update();
 }
 
 void Enemy_Search::Update_OnSearch()
 {
-	// ���G
 	Rotaition();
 
-	// ����p��Ƀv���C���[�����݂���Ƃ�
 	if (m_TrackingPlayerFlag == true) {
-		// フラグを降ろす
 		m_efectDrawFlag[2] = false;
 		m_ActState = m_ActState_Call_AroundEnemy;
 	}
 }
 
-void Enemy_Search::Update_OnCall()
+void Enemy_Search::Update_OnCallAroundEnemy()
 {
-	// ����̓G��Ă�
+	// 周りにいるエネミーを呼ぶ
 	Enemy::Act_Call();
 }
 
-void Enemy_Search::Update_OnConfusion()
+void Enemy_Search::Update_OnDizzy()
 {
-	// ����
+	// 閃光弾に当たったとき
 	Enemy::Act_HitFlashBullet();
 }
 
@@ -151,7 +151,7 @@ void Enemy_Search::Rotaition()
 		break;
 	}
 	
-	m_enAnimationState = m_enAnimationState_Idle;	// �A�j���[�V�����X�e�[�g��ݒ�
+	m_enAnimationState = m_enAnimationState_Idle;
 }
 void Enemy_Search::Render(RenderContext& rc)
 {

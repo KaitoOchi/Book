@@ -5,6 +5,7 @@ class Enemy_Clear:public Enemy
 public:
 	Enemy_Clear();
 	~Enemy_Clear()override;
+
 	bool Start()override;
 	void Update();
 	void Render(RenderContext& rc);
@@ -48,6 +49,5 @@ private:
 	EnEnemyActState m_SetActState=m_ActState;		//‚Ç‚¿‚ç‚Ìó‘Ô‰»‚ğ‹L‰¯‚·‚é
 
 	float m_clearChangeTime = 0.0f;					//Ø‚è‘Ö‚í‚é‚Ü‚Å‚ÌŠÔ
-
 };
 

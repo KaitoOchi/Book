@@ -189,7 +189,7 @@ public:
 		m_ActState_Tracking,				// 追跡
 		m_ActState_Search,					// 索敵
 		m_ActState_Move_MissingPositon,		// 見失った座標まで移動する
-		m_ActState_SEarch_MissingPlayer,	// 見失ったプレイヤーを探す
+		m_ActState_Search_MissingPlayer,	// 見失ったプレイヤーを探す
 		m_ActState_Call_AroundEnemy,		// 周りの敵を呼ぶ
 		m_ActState_Called,					// CALL時にSearch以外が実行
 		m_ActState_Charge,					// 突進
