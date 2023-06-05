@@ -71,7 +71,7 @@ void Enemy_Search::Update()
 		// 周りのエネミーを呼ぶ
 		Update_OnCallAroundEnemy();
 		break;
-	case m_ActState_SEarch_MissingPlayer:
+	case m_ActState_Search_MissingPlayer:
 		// 見失ったプレイヤーを探す
 		Update_OnMissingPlayer();
 		break;

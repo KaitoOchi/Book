@@ -104,7 +104,7 @@ void Enemy_Clear::Update()
 		Update_OnMoveMissingPosition();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
-	case m_ActState_SEarch_MissingPlayer:
+	case m_ActState_Search_MissingPlayer:
 		// 見失ったプレイヤーを探す
 		Update_OnSearchMissingPlayer();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Loss, 1.0f);

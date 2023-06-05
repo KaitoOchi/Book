@@ -98,12 +98,12 @@ void Enemy_Normal::Update()
 		// プレイヤーを最後に見た座標まで移動する
 		Update_OnMoveMissingPosition();
 		break;
-	case m_ActState_SEarch_MissingPlayer:
+	case m_ActState_Search_MissingPlayer:
 		// 見失ったプレイヤーを探す
 		Update_OnSearchMissingPlayer();
 		break;
 	case m_ActState_Called:
-		// Searchに呼ばれた際の処理
+		// Searchの座標近くまで移動する
 		Update_OnCalled();
 		break;
 	case m_ActState_BackBasedOn:

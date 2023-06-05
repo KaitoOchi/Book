@@ -501,7 +501,7 @@ void Enemy::Act_MoveMissingPosition()
 	m_enAnimationState = m_enAnimationState_Run;
 
 	if (length < 10.0f) {
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		return;
 	}
 
@@ -595,7 +595,7 @@ void Enemy::Act_HitFlashBullet()
 		Efect_MissingPlayer();
 
 		// プレイヤーを探す
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 
 	}
 	else {
@@ -642,7 +642,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	else if (m_addTimer[4] > 10.0f) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		// タイマーをリセット
 		m_addTimer[4] = 0.0f;
@@ -651,7 +651,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	}
 	else {
 		// 見失ったプレイヤーを探す
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 		return;
@@ -828,7 +828,7 @@ void Enemy::Act_ChargeEnd()
 	}
 	else {
 		// いないときは巡回状態に戻る
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 	}
 }
 
@@ -868,7 +868,7 @@ void Enemy::Act_Call()
 	if (m_TrackingPlayerFlag == false) {
 		// フラグを降ろす
 		m_efectDrawFlag[1] = false;
-		m_ActState = m_ActState_SEarch_MissingPlayer;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		se->Stop();
 
 		return;
