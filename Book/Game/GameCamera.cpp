@@ -65,11 +65,11 @@ void GameCamera::UpdatePositionAndTarget()
 	if (m_playerManagement->IsDead() ||
 		m_playerManagement->m_enMananagementState == PlayerManagement::m_enPlayer_Changing)
 	{
-		SetPosition({m_cameraposition.x,m_cameraposition.y + 100.0f,m_cameraposition.z });
+		SetTarget({m_playerChangeCameraPosition.x,m_playerChangeCameraPosition.y + 100.0f,m_playerChangeCameraPosition.z });
 		return;
 	}
 
-	SetPosition({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
+	SetTarget({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//�v���C���[�̑������炿����Ə�𒍎��_�Ƃ���
 	m_target += Vector3(0.0f, TAGETUP, 0.0f);
 	m_toCameraPosOld = m_toCameraPos;
@@ -100,13 +100,13 @@ void GameCamera::CatchMove()
 	m_cameraMove += g_gameTime->GetFrameDeltaTime() * 0.5f;
 	Vector3 m_playerPosition = m_player3D->GetPosition();
 	m_playerPosition.y += 100.0f;
-	m_cameraPosition.Lerp(m_cameraMove, m_target+m_toCameraPos, m_playerPosition);
+	m_caughtCameraPosition.Lerp(m_cameraMove, m_target+m_toCameraPos, m_playerPosition);
 	if (m_cameraMove > 0.6f)
 	{
 		m_game->NotifyGameOver();
 		return;
 	}
-	g_camera3D->SetPosition(m_cameraPosition);
+	g_camera3D->SetPosition(m_caughtCameraPosition);
 }
 
 void GameCamera::RotCamera()
