@@ -44,12 +44,12 @@ void GoalSprite::Update()
 	}
 
 	m_goalTimer += g_gameTime->GetFrameDeltaTime();
+
 	m_alphaTimer += g_gameTime->GetFrameDeltaTime();
 
 	if (m_alphaTimer > 1.0f) {
 		m_alphaTimer = -0.5f;
 	}
-
 
 	//“§‰ß—Ê‚ðŒvŽZ‚·‚é
 	float alpha	= fabsf(-pow(m_alphaTimer, 2.0f) + (2.0f * m_alphaTimer));

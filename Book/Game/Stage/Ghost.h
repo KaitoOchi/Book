@@ -1,7 +1,7 @@
 #pragma once
 #include "physics/PhysicsGhostObject.h"
 
-class Ghost:public IGameObject
+class Ghost : public IGameObject
 {
 public:
 	Ghost();
@@ -19,7 +19,11 @@ public:
 	};
 
 public:
-	void CreateGhostBox();
+	/// <summary>
+	/// ボックスのサイズを求める。
+	/// </summary>
+	Vector3& CreateGhostBox();
+	
 	/// <summary>
 	/// 座標を設定。
 	/// </summary>
@@ -74,41 +78,10 @@ public:
 		return m_scale;
 	}
 	
-
-	/// <summary>
-	/// 透明座標を設定。
-	/// </summary>
-	/// <param name="pos"></param>
-	void SetGhostPosition(const Vector3& ghostpos)
-	{
-		m_ghostPosition = ghostpos;
-	}
-
-	/// <summary>
-	/// 透明座標を取得。
-	/// </summary>
-	/// <returns></returns>
-	const Vector3& GetGhostPosition()
-	{
-		return m_ghostPosition;
-	}
-
-	
 protected:
-	Vector3 m_position = Vector3::Zero;
-	Vector3 m_ghostPosition = Vector3::Zero;
-	Vector3 m_scale = Vector3::Zero;
-	Quaternion m_rotation;
-	float posXmax = 0;
-	float posXmin = 1000000.0;
-	float posYmax = 0;
-	float posYmin = 1000000.0;
-	float posZmax = 0;
-	float posZmin = 1000000.0;
-	float posX;
-	float posY;
-	float posZ;
-	Vector3 m_boxSize = Vector3::Zero;
 	ModelRender m_modelRender;
+	Vector3		m_position;
+	Vector3		m_scale = Vector3::One;
+	Quaternion	m_rotation;
 };
 

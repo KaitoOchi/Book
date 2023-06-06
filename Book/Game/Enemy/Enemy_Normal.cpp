@@ -19,10 +19,10 @@ Enemy_Normal::~Enemy_Normal()
 
 bool Enemy_Normal::Start()
 {
-	// �A�j���[�V�����̓ǂݍ���
+	// アニメーションの読み込み
 	Animation();
 
-	// ���f���̓ǂݍ���
+	// モデルの読み込み
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
 
 	Enemy::Start();
@@ -31,6 +31,7 @@ bool Enemy_Normal::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 
+	// パスの初期座標を渡す
 	m_point = &m_pointList[0];
 
 	return true;
@@ -38,7 +39,7 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	//行動できるか調べる
+	// 行動できるか調べる
 	if (m_activeFlag == true)
 	{
 		Vector3 move = m_position;
@@ -50,7 +51,7 @@ void Enemy_Normal::Update()
 		return;
 	}
 
-	// �`�悵�Ȃ��t���O��true�̂Ƃ�
+	// イベント後の処理
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
@@ -60,98 +61,96 @@ void Enemy_Normal::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
+	if (m_ActState == m_ActState_CatchPlayer) {
+		m_enAnimationState = m_enAnimationState_Idle;
 		return;
 	}
 
-	// �M���e�ɓ��������@���@�����e�𕷂����Ƃ�
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
-		// �M���e��D�悷��
+		// 閃光弾を優先する
 		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
+		// 追跡を優先する
 		m_HearedSoundBulletFlag = false;
 	}
 
-	// �M���e�ɓ�������
+	// 閃光弾に当たったとき
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+		m_ActState = m_ActState_Dizzy;
 	}
-	// �����e��g�p����
+	// 音爆弾が使用されたとき
 	if (m_HearedSoundBulletFlag == true) {
-		m_ActState = LISTEN;
+		m_ActState = m_ActState_Listen;
 	}
 
 	switch (m_ActState) {
-		// ����
-	case CRAW:
+	case m_ActState_Craw:
+		// 指定された範囲の巡回
 		Update_OnCraw();
 		break;
-		// �ǐ�
-	case TRACKING:
+	case m_ActState_Tracking:
+		// プレイヤーを追跡する
 		Update_OnTracking();
 		break;
-	case MISSING_MOVEPOSITON:
+	case m_ActState_Move_MissingPositon:
+		// プレイヤーを最後に見た座標まで移動する
 		Update_OnMoveMissingPosition();
 		break;
-	case MISSING_SEARCHPLAYER:
+	case m_ActState_Search_MissingPlayer:
+		// 見失ったプレイヤーを探す
 		Update_OnSearchMissingPlayer();
 		break;
-		// �Ă΂ꂽ�Ƃ�
-	case CALLED:
+	case m_ActState_Called:
+		// Searchの座標近くまで移動する
 		Update_OnCalled();
 		break;
-		// �����Ԃɖ߂�
-	case BACKBASEDON:
+	case m_ActState_BackBasedOn:
+		// 元のパスに戻る
 		Update_OnBackBasedOn();
 		break;
-		// �M���e�ɓ�������
-	case CONFUSION:
-		Update_OnConfusion();
+	case m_ActState_Dizzy:
+		// 混乱
+		Update_OnDizzy();
 		break;
-		// �����e��g�p�����Ƃ�
-	case LISTEN:
+	case m_ActState_Listen:
+		// 音が聞こえた場所に向かう
 		UpDate_OnListen();
 		break;
 	}
 
-	Enemy::PlayAnimation();		// �A�j���[�V����
+	Enemy::PlayAnimation();							// アニメーション
 
 	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
-	// �L�����N�^�[�R���g���[���[����f���̈ʒu�Ɠ���
+	// キャラクターコントローラーを自身の座標と同期
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);
+	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
+	Enemy::Act_SeachPlayer();						// 索敵
 
-	// ����p
-	Enemy::Act_SeachPlayer();
-
-	m_enemyRender.Update();	// �X�V
+	m_enemyRender.Update();
 }
 
 void Enemy_Normal::Update_OnCraw()
 {
-	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
-	Enemy::Act_Craw();				// ����s��
+	Enemy::Act_Craw();
 }
 
 void Enemy_Normal::Update_OnTracking()
 {
-	// �v���C���[��߂܂����Ƃ�
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
-	Enemy::Act_Tracking();			// �ǐՍs��
+	Enemy::Act_Tracking();
 }
 
 void Enemy_Normal::Update_OnCalled()
@@ -161,13 +160,11 @@ void Enemy_Normal::Update_OnCalled()
 
 void Enemy_Normal::Update_OnMoveMissingPosition()
 {
-	// �v���C���[����������ʒu�܂ňړ�����
 	Enemy::Act_MoveMissingPosition();
 }
 
 void Enemy_Normal::Update_OnSearchMissingPlayer()
 {
-	// �v���C���[��T��
 	Enemy::Act_SearchMissingPlayer();
 }
 
@@ -176,9 +173,9 @@ void Enemy_Normal::Update_OnBackBasedOn()
 	Enemy::Act_Loss();
 }
 
-void Enemy_Normal::Update_OnConfusion()
+void Enemy_Normal::Update_OnDizzy()
 {
-	Enemy::Act_HitFlashBullet();		// �M���e�ɓ��������Ƃ��̏���
+	Enemy::Act_HitFlashBullet();
 }
 
 
@@ -190,7 +187,7 @@ void Enemy_Normal::UpDate_OnListen()
 
 void Enemy_Normal::Render(RenderContext& rc)
 {
-	// �`��
+	// 描画
 	if (m_NotDrawFlag == false&&
 		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);

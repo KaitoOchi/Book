@@ -1,25 +1,37 @@
 #include "stdafx.h"
 #include "Ghost.h"
+
+namespace
+{
+	const Vector3 LENGTH_MIN = Vector3(1000000.0f, 1000000.0f, 1000000.0f);
+}
+
 Ghost::Ghost()
 {
 
 }
+
 Ghost::~Ghost()
 {
 
 }
+
 bool Ghost::Start()
 {
 	//モデルを読み込みモデルの大きさを求める
 	m_modelRender.Init("Assets/modelData/level_test/tkm/box.tkm");
 	m_modelRender.Update();
-	CreateGhostBox();
+
 	return true;
 }
-void Ghost::CreateGhostBox()
+
+Vector3& Ghost::CreateGhostBox()
 {
 	const auto& tkmFile = m_modelRender.GetModel().GetTkmFile();
 	const auto& meshParts = tkmFile.GetMeshParts();
+
+	Vector3		lengthMax;
+	Vector3		lengthMin = LENGTH_MIN;
 
 	//メッシュを一つづつ調べていく
 	for (const auto& mesh : meshParts)
@@ -28,42 +40,44 @@ void Ghost::CreateGhostBox()
 		{
 			auto pos = vertex.pos;
 			//モデルの横の長さを求める
-			if (posXmax < pos.x)
+			if (lengthMax.x < pos.x)
 			{
-				posXmax = pos.x;
+				lengthMax.x = pos.x;
 			}
-			if (posXmin > pos.x)
+			if (lengthMin.x > pos.x)
 			{
-				posXmin = pos.x;
+				lengthMin.x = pos.x;
 			}
 			//モデルの高さを求める
-			if (posYmax < pos.y)
+			if (lengthMax.y < pos.y)
 			{
-				posYmax = pos.y;
+				lengthMax.y = pos.y;
 			}
-			if (posYmin > pos.y)
+			if (lengthMin.y > pos.y)
 			{
-				posYmin = pos.y;
+				lengthMin.y = pos.y;
 			}
 			//モデルの奥行を求める
-			if (posZmax < pos.z)
+			if (lengthMax.z < pos.z)
 			{
-				posZmax = pos.z;
+				lengthMax.z = pos.z;
 			}
-			if (posZmin > pos.z)
+			if (lengthMin.z > pos.z)
 			{
-				posZmin = pos.z;
+				lengthMin.z = pos.z;
 			}
 		}
 	}
-	posX = posXmax - posXmin;
-	posY = posYmax - posYmin;
-	posZ = posZmax - posZmin;
+
+	Vector3 length = lengthMax - lengthMin;
+	Vector3 boxSize;
+
 	//サイズを掛ける
-	m_boxSize.x = posX * m_scale.x;
-	m_boxSize.y = posY * m_scale.y*2.0f;
-	m_boxSize.z = posZ * m_scale.z;
-	
+	boxSize.x = length.x * m_scale.x;
+	boxSize.y = length.y * m_scale.y * 2.0f;
+	boxSize.z = length.z * m_scale.z;
+
+	return boxSize;
 }
 void Ghost::Update()
 {

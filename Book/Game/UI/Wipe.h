@@ -5,13 +5,16 @@ class BackGround;
 
 namespace
 {
-	const Vector3 WIPE_POS_MAX = { 8.0f, 662.0f, 0.0f };			//ワイプの最大座標
-	const Vector3 WIPE_POS_MIN = { -270.0f, 662.0f, 0.0f };			//ワイプの最小座標
-	const Vector3 OUTLINE_POS_MAX = { -671.5f, -280.0f, 0.0f };		//輪郭画像の最大座標
-	const Vector3 OUTLINE_POS_MIN = { -950.0f, -280.0f, 0.0f };		//輪郭画像の最小座標
-	const int ENEMY_NUM_WIPE = 4;									//敵の数
+	const Vector3	WIPE_POS_MAX = { 8.0f, 662.0f, 0.0f };			//ワイプの最大座標
+	const Vector3	WIPE_POS_MIN = { -270.0f, 662.0f, 0.0f };		//ワイプの最小座標
+	const Vector3	OUTLINE_POS_MAX = { -671.5f, -280.0f, 0.0f };	//輪郭画像の最大座標
+	const Vector3	OUTLINE_POS_MIN = { -950.0f, -280.0f, 0.0f };	//輪郭画像の最小座標
+	const int		ENEMY_NUM_WIPE = 4;								//敵の数
 }
 
+/// <summary>
+/// ワイプクラス。
+/// </summary>
 class Wipe : public IGameObject
 {
 public:
@@ -27,15 +30,24 @@ public:
 	/// </summary>
 	void Reset()
 	{
+		//敵の座標をリセット
 		for (int i = 0; i < 3; i++) {
 			m_enemy[i].moveSpeed[0] = m_bezierPos[0];
 			m_enemy[i].moveSpeed[1] = m_bezierPos[0];
 			m_enemy[i].moveSpeed[2] = m_bezierPos[1];
 		}
+		
+		//ワイプ座標を初期化
 		m_wipePos = WIPE_POS_MIN;
 		RenderingEngine::GetInstance()->GetWipeViewPort().TopLeftX = m_wipePos.x;
+		
+		//枠組み座標を初期化
 		m_outlinePos = OUTLINE_POS_MIN;
+		
+		//ワイプを表示状態にする
 		m_isWipe = true;
+
+		//タイマーのリセット
 		m_timer = 0.0f;
 		m_outlineTimer = 0.0f;
 	}
@@ -47,7 +59,6 @@ public:
 	{
 		m_timer = 0.0f;
 		m_isWipe = false;
-		
 	}
 
 private:

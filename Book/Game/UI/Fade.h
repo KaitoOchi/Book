@@ -2,9 +2,13 @@
 
 namespace
 {
-	const int TIPS_MAX = 15;
+	const int	TIPS_MAX = 15;		//ヒント画像の数
+	const float CIRCLE_ROADING_ROT = -180.0f;		//ローディング画像の回転量
 }
 
+/// <summary>
+/// フェードクラス。
+/// </summary>
 class Fade : public IGameObject
 {
 public:

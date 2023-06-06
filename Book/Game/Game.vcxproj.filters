@@ -82,9 +82,6 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="UI\GameUI.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI\MiniMap.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
     <ClCompile Include="UI\GoalSprite.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\BackGround.cpp">
-      <Filter>Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Opening.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -179,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="Stage\Painting.cpp">
       <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GameUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\BackGround.cpp">
+      <Filter>Stage\Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="Object\LightSensor.h">
       <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\BackGround.h">
-      <Filter>Stage</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Ghost.h">
       <Filter>Stage</Filter>
@@ -327,6 +324,9 @@
     </ClInclude>
     <ClInclude Include="Stage\Painting.h">
       <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\BackGround.h">
+      <Filter>Stage\Wall</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

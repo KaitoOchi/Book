@@ -3,10 +3,13 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// フォントレンダークラス。
+	/// </summary>
 	class FontRender : public IRenderer
 	{
 	public:
-		static const int MAX_TEXT_SIZE = 256;
+		static const int MAX_TEXT_SIZE = 256;	//文字の最大数
 
 		~FontRender()
 		{
@@ -152,10 +155,10 @@ namespace nsBookEngine {
 		}
 
 	private:
+		Font		m_font;								//フォント
 		Vector2		m_pivot = Sprite::DEFAULT_PIVOT;	//ピボット
 		Vector3		m_position = Vector3::Zero;			//座標
 		Vector4		m_color = g_vec4White;				//色
-		Font		m_font;								//フォント
 		wchar_t		m_text[MAX_TEXT_SIZE];				//文字
 		float		m_scale = 1.0f;						//大きさ
 		float		m_rotation = 0.0f;					//回転

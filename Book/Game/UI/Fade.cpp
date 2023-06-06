@@ -3,8 +3,8 @@
 
 Fade::Fade()
 {
+	//乱数を初期化。
 	srand(time(0));
-	m_spriteNum = rand() % 4;
 }
 
 Fade::~Fade()
@@ -84,35 +84,38 @@ void Fade::Update()
 
 void Fade::SpriteUpdate()
 {
+	Vector4 alpha = Vector4(1.0f, 1.0f, 1.0f, m_alpha);
+
 	//背景画像を設定
-	m_spriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, m_alpha });
+	m_spriteRender.SetMulColor(alpha);
 	m_spriteRender.Update();
 
 	//tips画像を設定
 	if (m_enableTips) {
-		m_tipsSpriteRender[m_spriteNum].SetMulColor({ 1.0f, 1.0f, 1.0f, m_alpha });
+		m_tipsSpriteRender[m_spriteNum].SetMulColor(alpha);
 		m_tipsSpriteRender[m_spriteNum].Update();
 
 		//ローディング文字の設定
-		m_nowLoadingSpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, m_alpha });
+		m_nowLoadingSpriteRender.SetMulColor(alpha);
 		m_nowLoadingSpriteRender.Update();
 
 		//ローディング画像の設定
 		m_rotTimer += g_gameTime->GetFrameDeltaTime();
 		Quaternion rot;
-		rot.SetRotationZ(Math::DegToRad(m_rotTimer * -180.0f));
+		rot.SetRotationZ(Math::DegToRad(m_rotTimer * CIRCLE_ROADING_ROT));
 		m_loadingSpriteRender.SetRotation(rot);
-		m_loadingSpriteRender.SetMulColor({ 1.0f, 1.0f, 1.0f, m_alpha });
+		m_loadingSpriteRender.SetMulColor(alpha);
 		m_loadingSpriteRender.Update();
 	}
 	else {
-		m_tipsSpriteRender[m_spriteNum].SetMulColor({ 1.0f, 1.0f, 1.0f, 0.0f });
+		m_tipsSpriteRender[m_spriteNum].SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
 		m_tipsSpriteRender[m_spriteNum].Update();
 	}
 }
 
 void Fade::Render(RenderContext& rc)
 {
+	//フェードが終了しているなら
 	if (m_alpha < 0.0f) {
 		return;
 	}
@@ -120,6 +123,7 @@ void Fade::Render(RenderContext& rc)
 	//背景画像の描画
 	m_spriteRender.Draw(rc);
 
+	//ヒント画像を出すなら
 	if (m_enableTips) {
 
 		//ヒント画像の描画

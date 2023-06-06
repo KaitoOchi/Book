@@ -3,6 +3,9 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// スプライトレンダークラス。
+	/// </summary>
 	class SpriteRender : public IRenderer
 	{
 	public:
@@ -123,6 +126,11 @@ namespace nsBookEngine {
 		void Draw(RenderContext& rc);
 
 	private:
+		/// <summary>
+		/// クリップボードの設定処理。
+		/// </summary>
+		void ClipMode(SpriteInitData& initData, const int clipMode);
+
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。
 		/// </summary>

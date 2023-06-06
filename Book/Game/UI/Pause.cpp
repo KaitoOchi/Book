@@ -12,7 +12,6 @@ namespace
 										Vector3(-250.0f, -345.0f, 0.0f) };	//メニュー画面のカーソル座標
 }
 
-
 Pause::Pause()
 {
 
@@ -204,6 +203,7 @@ void Pause::Render(RenderContext& rc)
 {
 	PauseUpdate();
 
+	//ポーズ画面の描画
 	if (m_isPause) {
 		m_backGroundSpriteRender.Draw(rc);
 		m_pauseSpriteRender.Draw(rc);

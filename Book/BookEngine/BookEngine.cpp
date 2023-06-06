@@ -47,15 +47,15 @@ namespace nsBookEngine {
 	{
 		auto& renderContext = g_graphicsEngine->GetRenderContext();
 
+		//フレームの開始処理。
 		g_engine->BeginFrame();
 
+		//アップデート処理。
 		g_engine->ExecuteUpdate();
 
 		GameManager::GetInstance()->Update();
 
-		// レンダリングエンジンの更新。
-		//m_renderingEngine.Update();
-
+		//レンダー処理。
 		g_engine->ExecuteRender();
 
 		//レンダリングエンジンを実行。		

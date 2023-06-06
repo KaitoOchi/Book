@@ -10,8 +10,8 @@
 #include "Stage/Wall/Wall.h"
 namespace
 {
-	const float		WALK = 30.0f;										//歩き時の乗算量
-	const float		RUN = 60.0f;										//走り時の乗算量
+	const float		m_enAnimationState_Walk = 30.0f;										//歩き時の乗算量
+	const float		m_enAnimationState_Run = 60.0f;										//走り時の乗算量
 	const float		JUMPVOLUM = 200.0f;									//ジャンプ量
 	const float		GRAVITY = 400.0f;									//重力
 	const float		SPEEDDOWN = 0.8;									//速度減速率
@@ -99,7 +99,6 @@ void Player::Animation2D()
 }
 void Player::Update()
 {
-	m_treasure = FindGO<Treasure>("treaSure");
 	//行動できるなら
 	if (m_Player_Act&&
 		m_playerManagement->GetGameState()
@@ -210,8 +209,8 @@ void Player::Move()
 
 			}
 			//左ステックと歩く速度を乗算させる
-			m_moveSpeed += cameraFoward * m_Lstic.y * WALK;
-			m_moveSpeed += cameraRight * m_Lstic.x * WALK;
+			m_moveSpeed += cameraFoward * m_Lstic.y * m_enAnimationState_Walk;
+			m_moveSpeed += cameraRight * m_Lstic.x * m_enAnimationState_Walk;
 		}
 	}
 	else
@@ -257,8 +256,8 @@ void Player::PlayerRun()
 	cameraRight.Normalize();
 	//ダッシュをさせる
 	//左ステックと走る速度を乗算する
-	m_moveSpeed += cameraFoward * m_Lstic.y * RUN;
-	m_moveSpeed += cameraRight * m_Lstic.x * RUN;
+	m_moveSpeed += cameraFoward * m_Lstic.y * m_enAnimationState_Run;
+	m_moveSpeed += cameraRight * m_Lstic.x * m_enAnimationState_Run;
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
 
@@ -370,7 +369,7 @@ void Player::PlayerCatch()
 {
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH)
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->m_ActState_CatchPlayer)
 		{
 			m_playerState = m_enPlayer_Caught;
 			m_gamecamera->SetCameraPositio(m_position);
@@ -383,7 +382,7 @@ void Player::ProcessCommonStateTransition()
 
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
-		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->CATCH && m_playerCaught)
+		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->m_ActState_CatchPlayer && m_playerCaught)
 		{
 			m_playerState = m_enPlayer_Caught;
 			m_playerCaught = false;

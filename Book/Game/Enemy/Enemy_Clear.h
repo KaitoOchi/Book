@@ -5,6 +5,7 @@ class Enemy_Clear:public Enemy
 public:
 	Enemy_Clear();
 	~Enemy_Clear()override;
+
 	bool Start()override;
 	void Update();
 	void Render(RenderContext& rc);
@@ -15,7 +16,7 @@ public:
 	void Update_OnSearchMissingPlayer();// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
 	void Update_OnCalled();				// CALL‚ÉÀs
 	void Update_OnBackBasedOn();		// „‰ñó‘Ô‚É–ß‚é
-	void Update_OnConfusion();			// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
+	void Update_OnDizzy();				// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	void UpDate_OnListen();				// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
 
 	/// <summary>
@@ -48,6 +49,5 @@ private:
 	EnEnemyActState m_SetActState=m_ActState;		//‚Ç‚¿‚ç‚Ìó‘Ô‰»‚ğ‹L‰¯‚·‚é
 
 	float m_clearChangeTime = 0.0f;					//Ø‚è‘Ö‚í‚é‚Ü‚Å‚ÌŠÔ
-
 };
 

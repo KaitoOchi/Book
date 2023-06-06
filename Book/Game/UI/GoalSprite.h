@@ -1,6 +1,8 @@
 #pragma once
 
-
+/// <summary>
+/// 目標画像クラス。
+/// </summary>
 class GoalSprite : public IGameObject
 {
 public:

@@ -1,13 +1,12 @@
 #pragma once
-//Programmer : KaitoOchi
-
-#include "geometry/AABB.h"
 #include "graphics/light/DirectionLight.h"
 #include "graphics/light/PointLight.h"
-//#include "geometry/geometryData.h"
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// モデルレンダークラス。
+	/// </summary>
 	class ModelRender : public IRenderer
 	{
 	public:
@@ -84,6 +83,7 @@ namespace nsBookEngine {
 		{
 			return m_shadowModel;
 		}
+
 		/// <summary>
 		/// 座標の設定。
 		/// </summary>
@@ -215,22 +215,20 @@ namespace nsBookEngine {
 		void OnWipeForwardRender(RenderContext& rc, Camera& camera) override;
 
 	private:
-		AnimationClip*	m_animationClips = nullptr;
-		int				m_numAnimationClips = 0;
-
-		Vector3			m_position = Vector3::Zero;
-		Quaternion		m_rotation = Quaternion::Identity;
-		Vector3			m_scale = Vector3::One;
-		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;
-		Animation		m_animation;
-		Model			m_model;
-		Model			m_shadowModel;
-		Model			m_zprepassModel;
-		Model			m_wipeModel;
-		bool			m_isUpdateAnimation = true;
-		Skeleton		m_skeleton;
-		bool			m_isUseWipeCamera = false;
-		bool			m_isShadowCaster = true;
+		AnimationClip* m_animationClips = nullptr;			//
+		int				m_numAnimationClips = 0;			//
+		Vector3			m_position = Vector3::Zero;			//
+		Quaternion		m_rotation = Quaternion::Identity;	//
+		Vector3			m_scale = Vector3::One;				//
+		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;		//
+		Animation		m_animation;						//
+		Model			m_model;							//
+		Model			m_shadowModel;						//
+		Model			m_zprepassModel;					//
+		Model			m_wipeModel;						//
+		bool			m_isUpdateAnimation = true;			//
+		Skeleton		m_skeleton;							//
+		bool			m_isUseWipeCamera = false;			//
 		float			m_animationSpeed = 1.0f;
 	};
 }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "tkFile/TknFile.h"
 #include "AI/PathFinding/NaviMesh.h"
 #include "AI/PathFinding/Path.h"
@@ -17,107 +17,131 @@ public:
 	bool Start();
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 	/// </summary>
 	void Animation();
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÄ¶
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å†ç”Ÿ
 	/// </summary>
 	void PlayAnimation();
+
 	/// <summary>
-	/// •Ç‚ÆÕ“Ë‚µ‚½‚©‚Ç‚¤‚©‚Ìˆ—
+	/// å£ã¨è¡çªã—ãŸã‹ã©ã†ã‹ã®å‡¦ç†
 	/// </summary>
-	/// <param name="pos">À•W</param>
+	/// <param name="pos">åº§æ¨™</param>
 	/// <returns></returns>
 	bool WallAndHit(Vector3 pos);
+
 	/// <summary>
-	/// ‰ñ“]ˆ—
+	/// å›è»¢å‡¦ç†
 	/// </summary>
-	/// <param name="rot">©g‚ªŒü‚©‚¤ƒxƒNƒgƒ‹</param>
+	/// <param name="rot">è‡ªèº«ãŒå‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«</param>
 	void Rotation(Vector3 rot);
+
 	/// <summary>
-	/// ƒiƒrƒƒbƒVƒ…‚ğì¬‚·‚é
+	/// ã‚¨ãƒãƒŸãƒ¼ã®å·¡å›ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’æŒ‡å®š
+	/// </summary>
+	/// <param name="0">	ï¼šç¸¦				</param>
+	/// <param name="1">	ï¼šæ¨ª				</param>
+	/// <param name="2">	ï¼šå³å›ã‚Š(æ­£æ–¹å½¢)	</param>
+	/// <param name="3">	ï¼šå·¦å›ã‚Š(æ­£æ–¹å½¢)	</param>
+	/// <param name="4">	ï¼šå³ã«ç›´è§’			</param>
+	/// <param name="6">	ï¼šå³ã«ç›´è§’			</param>
+	/// <param name="7">	ï¼šå³å›ã‚Š(é•·æ–¹å½¢)	</param>
+	/// <param name="8">	ï¼šå·¦å›ã‚Š(é•·æ–¹å½¢)	</param>
+	void SpecifyPath(int pathNumber);
+
+	/// <summary>
+	/// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œæˆã™ã‚‹å‡¦ç†
 	/// </summary>
 	void CreateNavimesh(Vector3 pos);
+
 	/// <summary>
-	/// „‰ñs“®
+	/// å·¡å›è¡Œå‹•
 	/// </summary>
 	void Act_Craw();
 	/// <summary>
-	/// ’ÇÕs“®
+	/// è¿½è·¡è¡Œå‹•
 	/// </summary>
 	void Act_Tracking();
 	/// <summary>
-	/// Ú‹ßs“®
+	/// æ¥è¿‘è¡Œå‹•
 	/// </summary>
 	void Act_Access();
 	/// <summary>
-	/// “Ëis“®
+	/// çªé€²è¡Œå‹•
 	/// </summary>
-	/// <param name="time">“Ëi‚·‚é‚Ü‚Å‚Ìƒ`ƒƒ[ƒWŠÔ</param>
+	/// <param name="time">çªé€²ã™ã‚‹ã¾ã§ã®ãƒãƒ£ãƒ¼ã‚¸æ™‚é–“</param>
 	void Act_Charge(float time);
 	/// <summary>
-	/// “Ëi‚µ‚½Œã‚Ìs“®ˆ—
+	/// çªé€²ã—ãŸå¾Œã®è¡Œå‹•å‡¦ç†
 	/// </summary>
 	void Act_ChargeEnd();
 	/// <summary>
-	/// •Ç‚Æ‚ÌÕ“Ë”»’è
+	/// å£ã¨ã®è¡çªåˆ¤å®š
 	/// </summary>
 	void Act_Charge_HitWall();
 	/// <summary>
-	/// “G‚ğŒÄ‚Ôs“®
+
+	/// æ•µã‚’å‘¼ã¶è¡Œå‹•
 	/// </summary>
 	void Act_Call();
+
 	/// <summary>
-	/// Œ©¸‚Á‚½‚Æ‚«‚Ìˆ—
+	/// è¦‹å¤±ã£ãŸã¨ãã®å‡¦ç†
 	/// </summary>
 	void Act_Loss();
 	/// <summary>
-	/// ‘MŒõ’e‚ª“–‚½‚Á‚½‚Æ‚«‚Ìˆ—
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸå¾Œã®å‡¦ç†
+	/// è¦‹å¤±ã£ãŸä½ç½®ã¾ã§ä½ç½®ã‚’ç§»å‹•ã™ã‚‹
+	/// </summary>
+	void Act_MoveMissingPosition();
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸå¾Œã®å‡¦ç†
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+	/// </summary>
+	void Act_SearchMissingPlayer();
+
+	/// <summary>
+	/// é–ƒå…‰å¼¾ãŒå½“ãŸã£ãŸã¨ãã®å‡¦ç†
 	/// </summary>
 	void Act_HitFlashBullet();
 	/// <summary>
-	/// ‰¹‚ª•·‚±‚¦‚½êŠ‚És‚­ˆ—
+	/// éŸ³ãŒèã“ãˆãŸå ´æ‰€ã«è¡Œãå‡¦ç†
 	/// </summary>
-	/// <param name="pos">–Ú•W’n“_</param>
+	/// <param name="pos">ç›®æ¨™åœ°ç‚¹</param>
 	void Act_GoLocationListenSound(Vector3 tergetPos);
+
 	/// <summary>
-	/// s“®’â~
+	/// è¡Œå‹•åœæ­¢
 	/// </summary>
-	/// <param name="time">’â~‚·‚éŠÔ</param>
-	/// <param name="i">g—p‚·‚éƒ^ƒCƒ}[‚ğw’è</param>
+	/// <param name="time">åœæ­¢ã™ã‚‹æ™‚é–“</param>
+	/// <param name="timerNumber">ä½¿ç”¨ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼ã‚’æŒ‡å®š</param>
 	/// <returns></returns>
-	bool Act_Stop(float time,int i);
+	bool Act_Stop(float time,int timerNumber);
+
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚·‚éˆ—
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç™ºè¦‹ã™ã‚‹å‡¦ç†
 	/// </summary>
 	/// <returns></returns>
 	void Act_SeachPlayer();
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğŠm•Û‚·‚éˆ—
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã™ã‚‹å‡¦ç†
 	/// </summary>
 	/// <returns></returns>
 	bool Act_CatchPlayer();
-	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½‚Ìˆ—
-	/// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÊ’u‚ğˆÚ“®‚·‚é
-	/// </summary>
-	void Act_MoveMissingPosition();
-	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½‚Ìˆ—
-	/// ƒvƒŒƒCƒ„[‚ğ’T‚·
-	/// </summary>
-	void Act_SearchMissingPlayer();
 
 	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
 
-	void Efect_Dizzy();
-	void Efect_FindPlayer();
-	void Efect_MissingPlayer();
+	void Efect_Dizzy();				// â˜†ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+	void Efect_FindPlayer();		// ï¼ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+	void Efect_MissingPlayer();		// ï¼Ÿã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
 
-	// ƒGƒlƒ~[‚Ìí—Ş
+	// ----------------------------------------------------------
+
+	// ã‚¨ãƒãƒŸãƒ¼ã®ç¨®é¡
 	enum EnemyType
 	{
 		TYPE_NORMAL,
@@ -127,121 +151,118 @@ public:
 	};
 	EnemyType m_enemyType;
 
-	// ƒGƒlƒ~[‚ÌƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg
-	// Œp³‚µ‚½”h¶ƒNƒ‰ƒX‚ÅƒAƒjƒ[ƒVƒ‡ƒ“‚ğ“Ç‚İ‚İAŠÖ”‚ğŒÄ‚Ô‚ÆÄ¶‚³‚ê‚Ü‚·B
+	// ã‚¨ãƒãƒŸãƒ¼ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
+	// ç¶™æ‰¿ã—ãŸæ´¾ç”Ÿã‚¯ãƒ©ã‚¹ã§ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’èª­ã¿è¾¼ã¿ã€é–¢æ•°ã‚’å‘¼ã¶ã¨å†ç”Ÿã•ã‚Œã¾ã™ã€‚
 	enum EnAnimationClip
 	{
-		m_enAnimation_Idle,		// ‘Ò‹@
-		m_enAnimation_Walk,		// •à‚­
-		m_enAnimation_Run,		// ‘–‚é
-		m_enAnimation_Attack,	// UŒ‚
-		m_enAnimation_Damege,	// ”í’e
-		m_enAnimation_Dizzy,	// ‘MŒõ’e‚ğó‚¯‚½‚Æ‚«
-		m_enAnimation_Loss,		// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½
-		m_enAnimation_Call,		// ‘¼‚ÌƒGƒlƒ~[‚ğŒÄ‚Ô
+		m_enAnimation_Idle,					// å¾…æ©Ÿ
+		m_enAnimation_Walk,					// æ­©ã
+		m_enAnimation_Run,					// èµ°ã‚‹
+		m_enAnimation_Attack,				// æ”»æ’ƒ
+		m_enAnimation_Damage,				// è¢«å¼¾
+		m_enAnimation_Dizzy,				// é–ƒå…‰å¼¾ã‚’å—ã‘ãŸã¨ã
+		m_enAnimation_Loss,					// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸæ™‚
+		m_enAnimation_Call,					// ä»–ã®ã‚¨ãƒãƒŸãƒ¼ã‚’å‘¼ã¶
 		m_enAnimation_Num
 	};
-	// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒe[ƒg
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
 	AnimationClip m_enAnimationClips[m_enAnimation_Num];
 	
-	// ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶—pƒXƒe[ƒg
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å†ç”Ÿç”¨ã‚¹ãƒ†ãƒ¼ãƒˆ
 	enum EnAnimationState
 	{
-		IDLE,
-		WALK,
-		RUN,
-		ATTACK,
-		DAMEGE,
-		DIZZY,
-		LOSS,
-		CALL
+		m_enAnimationState_Idle,			// å¾…æ©Ÿ
+		m_enAnimationState_Walk,			// æ­©ã
+		m_enAnimationState_Run,				// èµ°ã‚‹
+		m_enAnimationState_Attack,			// æ”»æ’ƒ
+		m_enAnimationState_Damage,			// è¢«å¼¾
+		m_enAnimationState_Dizzy,			// é–ƒå…‰å¼¾ã‚’å—ã‘ãŸã¨ã
+		m_enAnimationState_Loss,			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸæ™‚
+		m_enAnimationState_Call				// ä»–ã®ã‚¨ãƒãƒŸãƒ¼ã‚’å‘¼ã¶
 	};
 	EnAnimationState m_enAnimationState;
 
-	// ƒGƒlƒ~[‚Ìs“®ƒpƒ^[ƒ“
+	// ã‚¨ãƒãƒŸãƒ¼ã®è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³
 	enum EnEnemyActState
 	{
-		CRAW,					// „‰ñ
-		TRACKING,				// ’ÇÕ
-		SEARCH,					// õ“G
-		MISSING_MOVEPOSITON,	// Œ©¸‚Á‚½À•W‚Ü‚ÅˆÚ“®‚µ‚½
-		MISSING_SEARCHPLAYER,	// Œ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·
-		CALLING_AROUND_ENEMY,	// ü‚è‚Ì“G‚ğŒÄ‚Ô
-		CALLED,					// CALL‚ÉSearchˆÈŠO‚ªÀs
-		CHARGE,					// “Ëi
-		CHARGEEND,				// “ËiI—¹
-		BACKBASEDON,			// „‰ñó‘Ô‚É–ß‚é
-		CONFUSION,				// ‘MŒõ’e‚É‚ ‚½‚Á‚½‚Æ‚«
-		LISTEN,					// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
-		CATCH,					// •ßŠl‚µ‚½
+		m_ActState_Craw,					// å·¡å›
+		m_ActState_Tracking,				// è¿½è·¡
+		m_ActState_Search,					// ç´¢æ•µ
+		m_ActState_Move_MissingPositon,		// è¦‹å¤±ã£ãŸåº§æ¨™ã¾ã§ç§»å‹•ã™ã‚‹
+		m_ActState_Search_MissingPlayer,	// è¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+		m_ActState_Call_AroundEnemy,		// å‘¨ã‚Šã®æ•µã‚’å‘¼ã¶
+		m_ActState_Called,					// CALLæ™‚ã«Searchä»¥å¤–ãŒå®Ÿè¡Œ
+		m_ActState_Charge,					// çªé€²
+		m_ActState_ChargeEnd,				// çªé€²çµ‚äº†
+		m_ActState_BackBasedOn,				// å·¡å›çŠ¶æ…‹ã«æˆ»ã‚‹
+		m_ActState_Dizzy,					// é–ƒå…‰å¼¾ã«ã‚ãŸã£ãŸã¨ã
+		m_ActState_Listen,					// éŸ³çˆ†å¼¾ã‚’ä½¿ç”¨ã—ãŸã¨ã
+		m_ActState_CatchPlayer,				// æ•ç²ã—ãŸ
 	};
+
 	/// <summary>
-	/// ƒGƒlƒ~[‚Ìs“®ƒpƒ^[ƒ“Bswitch‚ÅŠÇ—‚µ‚Ä‚­‚¾‚³‚¢
+	/// ã‚¨ãƒãƒŸãƒ¼ã®è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã€‚switchã§ç®¡ç†ã—ã¦ãã ã•ã„
 	/// </summary>
-	/// <param name="CRAW">					F„‰ñ										</param>
-	/// <param name="TRACKING">				F’ÇÕ										</param>
-	/// <param name="SEARCH">				F‘Ò‹@										</param>
-	/// <param name="MISSING_MOVEPOSITON">	FŒ©¸‚Á‚½À•W‚Ü‚ÅˆÚ“®‚µ‚½					</param>
-	/// <param name="MISSING_SEARCHPLAYER">	FŒ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·					</param>
-	/// <param name="CALL">					Fü‚è‚Ì“G‚ğŒÄ‚Ô							</param>
-	/// <param name="CALLED">				FCALL‚ÉSearchˆÈŠO‚ªÀs					</param>
-	/// <param name="CHARGE">				F“Ëi										</param>
-	/// <param name="BACKBASEDON">			F„‰ñó‘Ô‚É–ß‚é							</param>
-	/// <param name="CONFUSION">			F‘MŒõ’e‚É‚ ‚½‚Á‚½‚Æ‚«						</param>
-	/// <param name="LISTEN">				F‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«						</param>
-	/// <param name="CATCH">				F•ßŠl										</param>
+	/// <param name="CRAW">					ï¼šå·¡å›							</param>
+	/// <param name="TRACKING">				ï¼šè¿½è·¡							</param>
+	/// <param name="SEARCH">				ï¼šå¾…æ©Ÿ							</param>
+	/// <param name="MISSING_MOVEPOSITON">	ï¼šè¦‹å¤±ã£ãŸåº§æ¨™ã¾ã§ç§»å‹•ã—ãŸ		</param>
+	/// <param name="MISSING_SEARCHPLAYER">	ï¼šè¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™		</param>
+	/// <param name="CALL">					ï¼šå‘¨ã‚Šã®æ•µã‚’å‘¼ã¶				</param>
+	/// <param name="CALLED">				ï¼šCALLæ™‚ã«Searchä»¥å¤–ãŒå®Ÿè¡Œ		</param>
+	/// <param name="CHARGE">				ï¼šçªé€²							</param>
+	/// <param name="BACKBASEDON">			ï¼šå·¡å›çŠ¶æ…‹ã«æˆ»ã‚‹				</param>
+	/// <param name="CONFUSION">			ï¼šé–ƒå…‰å¼¾ã«ã‚ãŸã£ãŸã¨ã			</param>
+	/// <param name="LISTEN">				ï¼šéŸ³çˆ†å¼¾ã‚’ä½¿ç”¨ã—ãŸã¨ã			</param>
+	/// <param name="CATCH">				ï¼šæ•ç²							</param>
 	EnEnemyActState m_ActState;
 
-	// w’è‚Å‚«‚éƒpƒXˆÚ“®
-	enum EnEnemyPassState
-	{
-		LINE_VERTICAL,					// c
-		LINE_HORIZONTAL,				// ‰¡
-		SQUARE_RIGHT,					// ‰E‰ñ‚è(³•ûŒ`)
-		SQUARE_LEFT,					// ¶‰ñ‚è(³•ûŒ`)
-		ANGLE_RIGHT,					// ‰E‚É’¼Šp
-		ANGLE_LEFT,						// ¶‚É’¼Šp
-		RECTANGLE_RIGHT,				// ‰E‰ñ‚è(’·•ûŒ`)
-		RECTANGLE_LEFT,					// ¶‰ñ‚è(’·•ûŒ`)
-	};
-	EnEnemyPassState PassState;
+	// ----------------------------------------------------------
 
 	/// <summary>
-	/// ƒGƒlƒ~[‚Ì„‰ñƒpƒ^[ƒ“‚ğw’è
+	/// åº§æ¨™ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	/// <param name="0">	Fc				</param>
-	/// <param name="1">	F‰¡				</param>
-	/// <param name="2">	F‰E‰ñ‚è(³•ûŒ`)	</param>
-	/// <param name="3">	F¶‰ñ‚è(³•ûŒ`)	</param>
-	/// <param name="4">	F‰E‚É’¼Šp		</param>
-	/// <param name="6">	F‰E‚É’¼Šp		</param>
-	/// <param name="7">	F‰E‰ñ‚è(’·•ûŒ`)	</param>
-	/// <param name="8">	F¶‰ñ‚è(’·•ûŒ`)	</param>
-	void Pass(int num);
-
-	/// <summary>
-	/// À•W‚ğİ’è‚·‚é
-	/// </summary>
-	void SetPosition(Vector3 pos) {
-		m_position = pos;
+	void SetPosition(Vector3 position) {
+		m_position = position;
 	}
 
 	/// <summary>
-	/// ‰ñ“]‚ğİ’è‚·‚é
+	/// åº§æ¨™ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
-	void SetRotation(Quaternion rot) {
-		m_rotation = rot;
+	const Vector3& GetPosition() const {
+		return m_position;
 	}
 
 	/// <summary>
-	/// ƒXƒP[ƒ‹‚ğİ’è‚·‚é
+	/// å›è»¢ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
-	void SetScale(Vector3 sca) {
-		m_scale = sca;
+	void SetRotation(Quaternion rotation) {
+		m_rotation = rotation;
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ğŠm•Û‚µ‚½‚©‚Ç‚¤‚©•Ô‚·
+	/// å›è»¢ã‚’å–å¾—ã™ã‚‹
+	/// </summary>
+	const Quaternion& GetRotation() const {
+		return m_rotation;
+	}
+
+	/// <summary>
+	/// ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®šã™ã‚‹
+	/// </summary>
+	void SetScale(Vector3 scale) {
+		m_scale = scale;
+	}
+
+	/// <summary>
+	/// ã‚¹ã‚±ãƒ¼ãƒ«ã‚’å–å¾—ã™ã‚‹
+	/// </summary>
+	const Vector3& GetScale() const {
+		return m_scale;
+	}
+
+	/// <summary>
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã—ãŸã‹ã©ã†ã‹è¿”ã™
 	/// </summary>
 	/// <returns></returns>
 	bool GetChachPlayerFlag() {
@@ -249,51 +270,33 @@ public:
 	}
 
 	/// <summary>
-	/// ‘MŒõ’e‚Ì”í’eƒtƒ‰ƒO‚ğİ’è
+	/// é–ƒå…‰å¼¾ã®è¢«å¼¾ãƒ•ãƒ©ã‚°ã‚’è¨­å®š
 	/// </summary>
-	/// <param name="">”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</param>
-	void SetHitFlashBullet(bool b) {
-		m_HitFlashBulletFlag = b;
+	/// <param name="">è¢«å¼¾ã—ãŸã‹ã©ã†ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹ã€‚trueãªã‚‰è¢«å¼¾ã—ãŸã¨åˆ¤å®š</param>
+	void SetHitFlashBullet(bool flag) {
+		m_HitFlashBulletFlag = flag;
 	};
 
 	/// <summary>
-	/// ‰¹”š’e‚Ì”í’eƒtƒ‰ƒO‚ğİ’è
+	/// éŸ³çˆ†å¼¾ã®è¢«å¼¾ãƒ•ãƒ©ã‚°ã‚’è¨­å®š
 	/// </summary>
-	/// <param name="">”í’e‚µ‚½‚©‚Ç‚¤‚©‚Ç‚¤‚©”»’è‚·‚éBtrue‚È‚ç”í’e‚µ‚½‚Æ”»’è</param>
-	void SetHearedSoundBullet(bool b) {
-		m_HearedSoundBulletFlag = b;
+	/// <param name="">è¢«å¼¾ã—ãŸã‹ã©ã†ã‹ã©ã†ã‹åˆ¤å®šã™ã‚‹ã€‚trueãªã‚‰è¢«å¼¾ã—ãŸã¨åˆ¤å®š</param>
+	void SetHearedSoundBullet(bool flag) {
+		m_HearedSoundBulletFlag = flag;
 	};
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€‚ÌÀ•W‚ğ“n‚·
+	/// ã‚¢ã‚¤ãƒ†ãƒ ã®åº§æ¨™ã‚’æ¸¡ã™
 	/// </summary>
 	/// <returns></returns>
-	void SetItemPos(Vector3 pos) {
-		m_itemPos = pos;
+	void SetItemPos(Vector3 position) {
+		m_itemPos = position;
 	}
 
 	/// <summary>
-	/// À•W‚ğæ“¾‚·‚é
+	/// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ç•ªå·ã‚’æ•™ãˆã‚‹
 	/// </summary>
-	const Vector3& GetPosition() const {
-		return m_position;
-	}
-
-	/// <summary>
-	/// ƒXƒP[ƒ‹‚ğæ“¾‚·‚é
-	/// </summary>
-	const Vector3& GetScale() const {
-		return m_scale;
-	}
-
-	/// <summary>
-	/// ‰ñ“]‚ğæ“¾‚·‚é
-	/// </summary>
-	const Quaternion& GetRotation() const {
-		return m_rotation;
-	}
-
-	// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì”Ô†‚ğ‹³‚¦‚é
+	/// <returns></returns>
 	void SetSpotLigNum(int num) {
 		m_spotNum = num;
 	}
@@ -304,23 +307,24 @@ public:
 	}
 
 	/// <summary>
-	/// •`‰æ‚·‚é‚©‚Ç‚¤‚©Œˆ’è‚·‚éBtrue‚Ì‚Æ‚«•`‰æ‚µ‚È‚¢
+	/// æç”»ã™ã‚‹ã‹ã©ã†ã‹æ±ºå®šã™ã‚‹ã€‚trueã®ã¨ãæç”»ã—ãªã„
 	/// </summary>
 	/// <param name="flag"></param>
-	void SetNotDrawFlag(bool b) {
-		m_NotDrawFlag = b;
+	void SetNotDrawFlag(bool flag) {
+		m_NotDrawFlag = flag;
 
-		if (b == false) {
+		if (flag == false) {
 			return;
 		}
 
-		// ƒXƒe[ƒg‚ğ„‰ñó‘Ô‚É–ß‚·
-		m_ActState = CRAW;
-		// ƒtƒ‰ƒO‚ğfalse‚É‚·‚é
+		// ãƒ•ãƒ©ã‚°ã‚’falseã«ã™ã‚‹
 		m_HitFlashBulletFlag = false;
 		m_HearedSoundBulletFlag = false;
 		m_TrackingPlayerFlag = false;
 		m_ChachPlayerFlag = false;
+
+		// ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å·¡å›çŠ¶æ…‹ã«æˆ»ã™
+		m_ActState = m_ActState_Craw;
 
 		m_NaviTimer = 0.0f;
 		m_addTimer[1] = 0.0f;
@@ -331,7 +335,7 @@ public:
 		m_efectDrawFlag[2] = false;
 	}
 
-	//ƒGƒlƒ~[‚Ì‘O•ûŒü‚ğ‹‚ß‚é
+	//ã‚¨ãƒãƒŸãƒ¼ã®å‰æ–¹å‘ã‚’æ±‚ã‚ã‚‹
 	const Vector3 GetFoward()const
 	{
 		return m_forward;
@@ -340,26 +344,24 @@ public:
 	Vector3 m_foward=Vector3::AxisZ;
 
 	/// <summary>
-	/// “®‚©‚·‚©‚Ç‚¤‚©Œˆ‚ß‚é
+	/// å‹•ã‹ã™ã‹ã©ã†ã‹æ±ºã‚ã‚‹
 	/// </summary>
-	/// <param name="active">true‚È‚ç“®‚¯‚È‚¢</param>
+	/// <param name="active">trueãªã‚‰å‹•ã‘ãªã„</param>
 	void SetActiveFlag(bool active)
 	{
 		m_activeFlag = active;
 	}
 
-	
-	
 	/// <summary>
-	///  “®‚©‚·‚©‚Ç‚¤‚©‚Ìæ“¾
+	///  å‹•ã‹ã™ã‹ã©ã†ã‹ã®å–å¾—
 	/// </summary>
-	/// <param name="m_activeFlag">true‚È‚ç“®‚¯‚È‚¢</param>	
+	/// <param name="m_activeFlag">trueãªã‚‰å‹•ã‘ãªã„</param>	
 	bool GetActiveFlag()
 	{
 		return m_activeFlag;
 	}
 
-	// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ğ“n‚·
+	// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã‚’æ¸¡ã™
 	SpotLight GetSpotLight() {
 		return m_spotLight;
 	}
@@ -385,7 +387,7 @@ public:
 	//--------------------------------------------
 
 	/// <summary>
-	/// ƒGƒtƒFƒNƒg‚ğæ“¾B
+	/// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å–å¾—ã€‚
 	/// </summary>
 	/// <returns></returns>
 	EffectEmitter* GetEffect()
@@ -398,79 +400,78 @@ public:
 
 protected:
 
-	// ƒpƒXˆÚ“®—p‚Ìƒ|ƒCƒ“ƒg\‘¢‘Ì
+	// ãƒ‘ã‚¹ç§»å‹•ç”¨ã®ãƒã‚¤ãƒ³ãƒˆæ§‹é€ ä½“
 	struct Point {
-		Vector3 s_position;					// ƒ|ƒCƒ“ƒg‚ÌÀ•W
-		int s_number;						// ƒ|ƒCƒ“ƒg‚Ì”Ô†
+		Vector3					s_position;							// ãƒã‚¤ãƒ³ãƒˆã®åº§æ¨™
+		int						s_number;							// ãƒã‚¤ãƒ³ãƒˆã®ç•ªå·
 	};
+	// ãƒ‘ã‚¹
+	std::vector<Point>			m_pointList;						// ãƒã‚¤ãƒ³ãƒˆæ§‹é€ ä½“ã®é…åˆ—
+	Point*						m_point = nullptr;					// ãƒã‚¤ãƒ³ãƒˆæ§‹é€ ä½“ã®ãƒã‚¤ãƒ³ã‚¿ã€ç¾åœ¨ã®ç›®çš„åœ°ã«ãªã‚‹
 
-	std::vector<Point> m_pointList;			// ƒ|ƒCƒ“ƒg\‘¢‘Ì‚Ì”z—ñ
-	Point* m_point = nullptr;				// ƒ|ƒCƒ“ƒg\‘¢‘Ì‚Ìƒ|ƒCƒ“ƒ^AŒ»İ‚Ì–Ú“I’n‚É‚È‚é
+	// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥
+	TknFile						m_tknFile;							// tknãƒ•ã‚¡ã‚¤ãƒ«
+	PhysicsStaticObject			m_bgObject;							// é™çš„ç‰©ç†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	nsAI::NaviMesh				m_nvmMesh;							// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥
+	nsAI::Path					m_path;								// ãƒ‘ã‚¹
+	nsAI::PathFinding			m_pathFiding;						// ãƒ‘ã‚¹ã‚’æ¢ã™
 
-	TknFile m_tknFile;						// tknƒtƒ@ƒCƒ‹
-	PhysicsStaticObject m_bgObject;			// Ã“I•¨—ƒIƒuƒWƒFƒNƒg
-	nsAI::NaviMesh m_nvmMesh;				// ƒiƒrƒƒbƒVƒ…
-	nsAI::Path m_path;						// ƒpƒX
-	nsAI::PathFinding m_pathFiding;			// ƒpƒX‚ğ’T‚·
+	PlayerManagement*			m_playerManagement = nullptr;		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒãƒã‚¸ãƒ¡ãƒ³ãƒˆ
+	Gage*						m_gage = nullptr;					// è­¦æˆ’åº¦ã‚²ãƒ¼ã‚¸
+	Game*						m_game = nullptr;					// ã‚²ãƒ¼ãƒ 
+	EffectEmitter*				m_Effect = nullptr;					// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 
-	PlayerManagement* m_playerManagement = nullptr;
-	Gage* m_gage = nullptr;
-	Game* m_game = nullptr;
-	Treasure* m_treasure = nullptr;
+	CharacterController			m_characterController;				// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼
+	SphereCollider				m_sphereCollider;					// ã‚¹ãƒ•ã‚£ã‚¢ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼
 
-	EffectEmitter* m_Effect = nullptr;		// ƒGƒtƒFƒNƒg
+	Vector3						m_position = Vector3::Zero;			// ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™
+	Vector3						m_forward = Vector3::AxisZ;			// ã‚¨ãƒãƒŸãƒ¼ã®å‰æ–¹å‘
+	Vector3						m_scale = Vector3::One;				// ã‚¨ãƒãƒŸãƒ¼ã®ã‚¹ã‚±ãƒ¼ãƒ«
 
-	CharacterController m_characterController;	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[
-	SphereCollider m_sphereCollider;			// ƒXƒtƒBƒAƒRƒ‰ƒCƒ_[
+	Vector3						m_chargeTergetPosition = Vector3::Zero;		// çªé€²ç”¨ã€‚ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™
+	Vector3						m_playerMissiongPosition = Vector3::Zero;	// è¦‹å¤±ã£ãŸæ™‚ç”¨ã€‚ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™
 
-	Vector3 m_position = Vector3::Zero;		// ƒGƒlƒ~[‚ÌÀ•W
-	Vector3 m_forward = Vector3::AxisZ;		// ƒGƒlƒ~[‚Ì‘O•ûŒü
-	Vector3 m_scale = Vector3::One;			// ƒXƒP[ƒ‹
-	Vector3 m_playerPos = Vector3::Zero;	// ƒvƒŒƒCƒ„[‚ÌÀ•W
-	Vector3 m_playerChargePosition = Vector3::Zero;			// “Ëi—pBƒvƒŒƒCƒ„[‚ÌÀ•W
-	Vector3 m_playerMissionPosition = Vector3::Zero;		// Œ©¸‚Á‚½—pBƒvƒŒƒCƒ„[‚ÌÀ•W
-	Vector3 m_sumPos = Vector3::Zero;		// ‘ˆÚ“®‹——£
-	Vector3 m_setPos = Vector3::Zero;		// W‡‚·‚éÀ•W
-	Vector3 m_itemPos = Vector3::Zero;		// ƒAƒCƒeƒ€‚ÌÀ•W
-	Vector3 m_chargeDiff = Vector3::Zero;	// “Ëi‚ÌˆÚ“®—Ê
-	Vector3 m_treasurePos = Vector3::Zero;	// ‚¨•ó‚ÌÀ•W
+	Vector3						m_sumPos = Vector3::Zero;			// ç·ç§»å‹•è·é›¢
+	Vector3						m_setPos = Vector3::Zero;			// é›†åˆã™ã‚‹åº§æ¨™
+	Vector3						m_itemPos = Vector3::Zero;			// ã‚¢ã‚¤ãƒ†ãƒ ã®åº§æ¨™
+	Vector3						m_chargeDiff = Vector3::Zero;		// çªé€²ã®ç§»å‹•é‡
 
+	Quaternion					m_rotation = Quaternion::Identity;	// ã‚¨ãƒãƒŸãƒ¼ã®å›è»¢
 
-	Quaternion m_rotation = Quaternion::Identity;		// ‰ñ“]
+	ModelRender					m_enemyRender;						//ã‚¨ãƒãƒŸãƒ¼ãƒ¢ãƒ‡ãƒ«
 
-	ModelRender m_enemyRender;				//ƒGƒlƒ~[ƒ‚ƒfƒ‹
-	SpotLight m_spotLight;					//ƒXƒ|ƒbƒgƒ‰ƒCƒg
+	SpotLight					m_spotLight;						//ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
 
-	bool m_HitFlashBulletFlag = false;		// ‘MŒõ’e‚ª“–‚½‚Á‚½‚©‚Ç‚¤‚©
-	bool m_HearedSoundBulletFlag = false;	// ‰¹”š’e
-	bool m_CountFlag = false;				// ƒJƒEƒ“ƒg‚·‚éƒtƒ‰ƒO
-	bool m_TrackingPlayerFlag = false;		// ƒvƒŒƒCƒ„[‚ğ’Ç‚¢‚©‚¯‚éƒtƒ‰ƒO
-	bool m_ChachPlayerFlag = false;			// ƒvƒŒƒCƒ„[‚ğŠm•Û‚µ‚½‚©‚Ç‚¤‚©
-	bool m_CalculatedFlag = false;			// “Ëi—pƒtƒ‰ƒOBˆê“x‚¾‚¯QÆ‚ğs‚¤
-	bool m_NotDrawFlag = false;				// •`‰æ‚·‚é‚©‚Ç‚¤‚©
-	bool m_activeFlag = false;				//Å‰‚©‚ç“®‚¯‚é‚©‚»‚¤‚©
-	bool m_SearchFlag = false;				// Œx‰ú“x‚ªÅ‘å‚Ì‚Éˆê“x‚¾‚¯Às‚·‚é
-
-	/// <summary>
-	/// ƒGƒtƒFƒNƒg‚ğ•`‰æ‚µ‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒOBtrue‚Ì‚Æ‚«•`‰æ‚µ‚½
-	/// </summary>
-	/// <param name="0">	F™‚ÌƒGƒtƒFƒNƒg	</param>
-	/// <param name="1">	F!‚ÌƒGƒtƒFƒNƒg		</param>
-	/// <param name="2">	F?‚ÌƒGƒtƒFƒNƒg		</param>
-	std::array<bool, 3>m_efectDrawFlag;
+	bool						m_HitFlashBulletFlag = false;		// é–ƒå…‰å¼¾ãŒå½“ãŸã£ãŸã‹ã©ã†ã‹
+	bool						m_HearedSoundBulletFlag = false;	// éŸ³çˆ†å¼¾ãŒ		ã€ƒ
+	bool						m_CountFlag = false;				// ç™ºè¦‹å›æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹ã‹ã©ã†ã‹æ±ºå®šã™ã‚‹
+	bool						m_TrackingPlayerFlag = false;		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½ã„ã‹ã‘ã‚‹ãƒ•ãƒ©ã‚°
+	bool						m_ChachPlayerFlag = false;			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã—ãŸã‹ã©ã†ã‹
+	bool						m_CalculatedFlag = false;			// çªé€²ç”¨ãƒ•ãƒ©ã‚°ã€‚ä¸€åº¦ã ã‘å‚ç…§ã‚’è¡Œã†
+	bool						m_NotDrawFlag = false;				// æç”»ã™ã‚‹ã‹ã©ã†ã‹
+	bool						m_activeFlag = false;				// æœ€åˆã‹ã‚‰å‹•ã‘ã‚‹ã‹ãã†ã‹
+	bool						m_SearchFlag = false;				// è­¦æˆ’åº¦ãŒæœ€å¤§ã®æ™‚ã«ä¸€åº¦ã ã‘å®Ÿè¡Œã™ã‚‹
 
 	/// <summary>
+	/// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æç”»ã—ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°ã€‚trueã®ã¨ãæç”»ã—ãŸ
 	/// </summary>
-	/// <param name="0">	F‘MŒõ’e‚ğó‚¯‚½‚Æ‚«‚ÌÄs“®ŠÔ	</param>
-	/// <param name="1">	F„‰ñ‚ÌƒpƒX‚É—¯‚Ü‚éŠÔ			</param>
-	/// <param name="2">	F“Ëi‚ğs‚¤‚Ü‚Å‚Ì‘Ò‹@ŠÔ			</param>
-	/// <param name="3">	FƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½‚Ì‘Ò‹@ŠÔ	</param>
-	/// <param name="4">	F‰¹”š’e‚ğg—p‚³‚ê‚½‚Ì“’B‚ğ’ú‚ß‚é‚Ü‚Å‚ÌŠÔ	</param>
-	std::array<float, 5>m_addTimer;
+	/// <param name="0">	ï¼šâ˜†ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ	</param>
+	/// <param name="1">	ï¼š!ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ		</param>
+	/// <param name="2">	ï¼š?ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ		</param>
+	std::array<bool, 3>			m_efectDrawFlag;
 
-	float m_NaviTimer = 0.0f;				// ƒiƒrƒƒbƒVƒ…—p‚Ìƒ^ƒCƒ}[
-	float m_move = 1.0f;
-	float m_Vicount;						//Œx‰ú“x‚ğˆê’è‰ñ”‘‚â‚·
+	/// <summary>
+	/// </summary>
+	/// <param name="0">	ï¼šé–ƒå…‰å¼¾ã‚’å—ã‘ãŸã¨ãã®å†è¡Œå‹•æ™‚é–“	</param>
+	/// <param name="1">	ï¼šå·¡å›æ™‚ã®ãƒ‘ã‚¹ã«ç•™ã¾ã‚‹æ™‚é–“			</param>
+	/// <param name="2">	ï¼šçªé€²ã‚’è¡Œã†ã¾ã§ã®å¾…æ©Ÿæ™‚é–“			</param>
+	/// <param name="3">	ï¼šãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸæ™‚ã®å¾…æ©Ÿæ™‚é–“	</param>
+	/// <param name="4">	ï¼šéŸ³çˆ†å¼¾ã‚’ä½¿ç”¨ã•ã‚ŒãŸæ™‚ã®åˆ°é”ã‚’è«¦ã‚ã‚‹ã¾ã§ã®æ™‚é–“	</param>
+	std::array<float, 5>		m_addTimer;
 
-	int m_spotNum = 0;						// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚ÌŒÂ”
+	float						m_NaviTimer = 0.0f;					// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ç”¨ã®ã‚¿ã‚¤ãƒãƒ¼
+	float						m_Chargemove = 1.0f;				// çªé€²ã‚¹ãƒ†ãƒ¼ãƒˆæ™‚ã«ä¹—ç®—ã—ã¦ã„ã‚‹ã‚¹ã‚«ãƒ©ãƒ¼
+	float						m_Vicount;							// è­¦æˆ’åº¦ã‚’ä¸€å®šå›æ•°å¢—ã‚„ã™
+
+	int							m_spotNum = 0;						// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®å€‹æ•°
 };

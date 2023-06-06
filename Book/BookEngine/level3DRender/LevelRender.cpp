@@ -1,6 +1,5 @@
 #include "BookEnginePreCompile.h"
 #include "LevelRender.h"
-#include "MapChipRender.h"
 #include "level3D/TklFile.h"
 
 
@@ -14,22 +13,6 @@ namespace nsBookEngine {
 	LevelRender::~LevelRender()
 	{
 
-	}
-
-	void LevelRender::CreateMapChipRender(const LevelObjectData& objData, const char* filePath)
-	{
-		std::string key = filePath;
-		//マップチップレンダーにまだフックされていなかったら
-		if (m_mapChipRenderPtrs.count(key) == 0) {
-			//フックされていなかったので、マップチップを作成する
-			auto mapChipRender = std::make_shared<MapChipRender>(objData, filePath);
-			m_mapChipRenderPtrs[key] = mapChipRender;
-		}
-		else {
-			auto& mapChipRender = m_mapChipRenderPtrs[key];
-			//マップチップデータを追加する
-			mapChipRender->AddMapChipData(objData);
-		}
 	}
 
 	void LevelRender::Init(
@@ -103,17 +86,7 @@ namespace nsBookEngine {
 				if (hookFunc != nullptr) {
 					isHooked = hookFunc(levelObjData);
 				}
-				//hookがfalseのままなら
-				if (isHooked == false) {
-					//マップチップレンダーを作成
-					CreateMapChipRender(levelObjData, cFilePath);
-				}
 			}
-		}
-
-		for (auto& mapChipRender : m_mapChipRenderPtrs)
-		{
-			//マップチップレンダーを初期化
 		}
 	}
 
@@ -161,22 +134,5 @@ namespace nsBookEngine {
 			//ボーンを積む
 			m_boneList.push_back(std::move(bone));
 			});
-	}
-
-	void LevelRender::Update()
-	{
-		for (auto& mapChipRender : m_mapChipRenderPtrs)
-		{
-			//マップチップレンダーを更新
-			mapChipRender.second->Update();
-		}
-	}
-
-	void LevelRender::Draw(RenderContext& rc)
-	{
-		for (auto mapChipRenderPtr : m_mapChipRenderPtrs)
-		{
-			mapChipRenderPtr.second->Draw(rc);
-		}
 	}
 }

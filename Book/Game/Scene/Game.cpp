@@ -111,8 +111,6 @@ Game::~Game()
 		return true;
 		});
 
-	DeleteGO(m_treasure);
-
 	//プレイヤーの削除
 	DeleteGO(m_player3D);
 	DeleteGO(m_player2D);
@@ -133,10 +131,12 @@ bool Game::Start()
 	//スタート時を知らせる
 	NotifyGameStart();
 
-	m_player2D = NewGO<Player2D>(0,"player2d");
+
+	m_player2D = NewGO<Player2D>(0, "player2d");
 	m_player3D = NewGO<Player3D>(0, "player3d");
-	m_gamecamera=NewGO<GameCamera>(0, "gameCamera");
+	m_gamecamera = NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
+
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
@@ -205,7 +205,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(objData.number);
+			enemyNormal->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -227,7 +227,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(objData.number);
+			enemyCharge->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -269,7 +269,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(objData.number);
+			enemyClear->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -291,7 +291,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(objData.number);
+			enemyNormal->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加する前なので描画しない
@@ -313,7 +313,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(objData.number);
+			enemyCharge->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加前なので描画しない
@@ -337,7 +337,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(objData.number);
+			enemyClear->SpecifyPath(objData.number);
 			enemyClear->SetActiveFlag(true);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
@@ -596,7 +596,7 @@ void Game::NotifyEventStart()
 	m_gameState = m_enGameState_EventStart;
 	m_isWaitFadeOut = true;
 
-	
+	//DeleteGO(m_treasure);
 
 	//敵を非表示
 	NotDraw_Enemy(true);

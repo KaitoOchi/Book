@@ -1,6 +1,8 @@
 #pragma once
 
-
+/// <summary>
+/// ƒƒSƒNƒ‰ƒXB
+/// </summary>
 class Logo : public IGameObject
 {
 public:

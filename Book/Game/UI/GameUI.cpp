@@ -6,29 +6,24 @@
 #include "Treasure.h"
 namespace
 {
+	const Vector2	SET_TIME_POSITION = { -100.0f, 600.0f };			//タイムの移動先座標
 	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
 	const Vector3	TIME_FONT_POSITION = { -100.0f, 500.0f, 0.0f };		//タイムの位置
-	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
-	const float		TIME_MAX = 600.0f;									//最大残り時間
-	const float		MAXTIMEYPOSITION = 600.0f;							//タイムの一番大きい座標
-	const float		SETTIMEYPOSITION = 500.0f;							//タイムの移動先Y座標
-	const float		SETTIMEXPOSITION = -100.0f;							//タイムの移動先X座標
-	
 	const Vector3	ITEM_BASE_POSITION = { 580.0f,250.0f,0.0f };		//アイテムの背景画像の座標
 	const Vector3	ITEM_FLASH_POSITION = { 550.0f,250.0f,0.0f };		//閃光弾の画像の座標
 	const Vector3	FLASH_FONT_POSITION = { 670.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
 	const Vector3	ITEM_SOUND_POSITION = { 615.0f,250.0f,0.0f };		//音爆弾の処理
 	const Vector3	SOUND_FONT_POSITION = { 745.0f,280.0f,0.0f };		//閃光弾の数のフォントの座標
-	
+	const float		GAGE_MAX = 300.0f;									//ゲージの最大値
+	const float		TIME_MAX = 600.0f;									//最大残り時間
+	const float		MAX_TIME_POSITION_Y = 600.0f;						//タイムの一番大きい座標
 	const float		FLASH_SCALE_MAX = 1.3f;								//閃光弾UIの最大のスケール
 	const float		SOUND_SCALE_MAX = 1.3f;								//音爆弾UIの最大のスケール
-	
-	const float		STAMINA_POSITION = 60.0f;						//スタミナベース画像の座標
+	const float		STAMINA_POSITION = 60.0f;							//スタミナベース画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
-
+	const float		CIRCLE_SIZE_MAX = 0.0f;								//円形ゲージ最大
+	const float		CIRCLE_SIZE_MIN = 360.0f;							//円形ゲージ最低
 	const double	PI = 3.14159;										//円周率
-	const float		CIRCLE_SIZE_MAX = 0.0f;							//円形ゲージ最大
-	const float		CIRCLE_SIZE_MIN = 360.0f;						//円形ゲージ最低
 }
 
 GameUI::GameUI()
@@ -43,10 +38,13 @@ GameUI::~GameUI()
 
 bool GameUI::Start()
 {
+	//ゲームオブジェクトを検索
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_game = FindGO<Game>("game");
 	m_player3D = FindGO<Player3D>("player3d");
 	m_treasure = FindGO<Treasure>("treaSure");
+
+	//最大値を設定
 	m_gage = GAGE_MAX;
 	m_timer = TIME_MAX;
 
@@ -102,13 +100,12 @@ bool GameUI::Start()
 	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS",157.0f, 178.0f, AlphaBlendMode_Trans, 5);
 	m_circleSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
 	m_circleSpriteRender.Update();
-	//RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
 
 
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
-	m_timePosition = MAXTIMEYPOSITION;
+	m_timePosition = MAX_TIME_POSITION_Y;
 
 	return true;
 }
@@ -175,7 +172,7 @@ void GameUI::TimeMove(const int& m, const int& s)
 
 		//タイマーの表示
 		m_timePosition -= 100 * g_gameTime->GetFrameDeltaTime();
-		m_timePosition = max(m_timePosition, SETTIMEYPOSITION);
+		m_timePosition = max(m_timePosition, SET_TIME_POSITION.y);
 	}
 	else {
 		//一分ごとにタイマーを表示
@@ -185,10 +182,10 @@ void GameUI::TimeMove(const int& m, const int& s)
 
 		//タイマーの表示
 		m_timePosition += 100 * g_gameTime->GetFrameDeltaTime();
-		m_timePosition = min(m_timePosition, MAXTIMEYPOSITION);
+		m_timePosition = min(m_timePosition, MAX_TIME_POSITION_Y);
 	}
 
-	m_timeFontRender.SetPosition(Vector3{ SETTIMEXPOSITION, m_timePosition, 0.0f });
+	m_timeFontRender.SetPosition(Vector3{ SET_TIME_POSITION.x, m_timePosition, 0.0f });
 }
 
 void GameUI::ChangeGage()
@@ -238,6 +235,7 @@ void GameUI::ChangeGage()
 
 void GameUI::ItemSlot()
 {
+	//アイテムの個数を設定
 	wchar_t flashText[255];
 	swprintf_s(flashText,L"x%d", m_flashNumber);
 	m_itemFlashNumber.SetText(flashText);
@@ -257,8 +255,7 @@ void GameUI::ItemScaleUp()
 	switch (m_player3D->GetItemState())
 	{
 	case Player::m_enItem_Flash:
-		if (m_falshState)
-		{
+		if (m_falshState) {
 			//拡大する
 			m_flashScale += 0.2f*g_gameTime->GetFrameDeltaTime();
 			m_flashScale = min(m_flashScale, FLASH_SCALE_MAX);
@@ -267,8 +264,7 @@ void GameUI::ItemScaleUp()
 				m_falshState = false;
 			}
 		}
-		else
-		{
+		else {
 			//縮小する
 			m_flashScale -= 0.2f * g_gameTime->GetFrameDeltaTime();
 			m_flashScale = max(m_flashScale, 1.0f);
@@ -289,8 +285,7 @@ void GameUI::ItemScaleUp()
 		m_itemSoundRender.Update();
 		break;
 	case Player::m_enItem_SoundBom:
-		if (m_soundState)
-		{
+		if (m_soundState) {
 			//拡大する
 			m_soundScale += 0.2f * g_gameTime->GetFrameDeltaTime();
 			m_soundScale = min(m_soundScale, SOUND_SCALE_MAX);
@@ -299,8 +294,7 @@ void GameUI::ItemScaleUp()
 				m_soundState = false;
 			}
 		}
-		else
-		{
+		else {
 			//縮小する
 			m_soundScale -= 0.2f * g_gameTime->GetFrameDeltaTime();
 			m_soundScale = max(m_soundScale, 1.0f);
@@ -320,26 +314,21 @@ void GameUI::ItemScaleUp()
 		m_itemFlashRender.SetMulColor(Vector4{ 1.0f,1.0f,1.0f,1.0f });
 		m_itemFlashRender.Update();
 		break;
-	default:
-		break;
 	}
 }
 
-void GameUI::StaminaGage(float stamina,Vector3 pos)
+void GameUI::StaminaGage(const float stamina, const Vector3& pos)
 {
-	float m_stamina = stamina;
-	m_staminaDegree = 360.0f-(36*m_stamina);
+	m_staminaDegree = 360.0f - (36.0f * stamina);
 	m_staminaDegree = max(m_staminaDegree, CIRCLE_SIZE_MAX);
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_staminaDegree * PI) / 180.0f;
 
-
-	Vector3 position = pos;
 	//ワールド座標からスクリーン座標を計算
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_spritePosition, position);
-	m_staminaBaseRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_POSITION, 0.0f));
-	m_staminaGageRender.SetPosition(Vector3(m_spritePosition.x + 70.0f, m_spritePosition.y + STAMINA_POSITION, 0.0f));
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_staminaPos, pos);
 
-
+	//スタミナゲージ画像の設定
+	m_staminaBaseRender.SetPosition(Vector3(m_staminaPos.x + 70.0f, m_staminaPos.y + STAMINA_POSITION, 0.0f));
+	m_staminaGageRender.SetPosition(Vector3(m_staminaPos.x + 70.0f, m_staminaPos.y + STAMINA_POSITION, 0.0f));
 	m_staminaBaseRender.Update();
 	m_staminaGageRender.Update();
 }
@@ -358,7 +347,7 @@ void GameUI::CircleChange()
 		m_degree = min(m_degree, 360.0f);
 	}
 
-	if (m_degree -CIRCLE_SIZE_MAX<=0.000001f)
+	if (m_degree - CIRCLE_SIZE_MAX <= 0.000001f)
 	{
 		m_circleMaxState = true;
 	}
@@ -367,11 +356,11 @@ void GameUI::CircleChange()
 
 	//ゲージの座標の変更
 	Vector3 m_woldPosition = m_treasure->GetPosition();
-	g_camera3D->CalcScreenPositionFromWorldPosition(m_circleposition, m_woldPosition);
+	g_camera3D->CalcScreenPositionFromWorldPosition(m_circlePos, m_woldPosition);
 
 
-	m_circleBaseSpriteRender.SetPosition(Vector3{ m_circleposition.x,m_circleposition.y + 100.0f,0.0f });
-	m_circleSpriteRender.SetPosition(Vector3{ m_circleposition.x,m_circleposition.y + 100.0f,0.0f });
+	m_circleBaseSpriteRender.SetPosition(Vector3{ m_circlePos.x, m_circlePos.y + 100.0f,0.0f });
+	m_circleSpriteRender.SetPosition(Vector3{ m_circlePos.x, m_circlePos.y + 100.0f,0.0f });
 	m_circleBaseSpriteRender.Update();
 	m_circleSpriteRender.Update();
 }
@@ -379,29 +368,32 @@ void GameUI::CircleChange()
 
 void GameUI::Render(RenderContext& rc)
 {
+	//警戒度ゲージの描画
 	m_gageFrameSpriteRender.Draw(rc);
 	m_gageSpriteRender.Draw(rc);
 
+	//タイム文字の描画
 	m_timeFontRender.Draw(rc);
 	
+	//アイテムUIの描画
 	m_itemBaseRender.Draw(rc);
 	m_itemFlashRender.Draw(rc);
 	m_itemSoundRender.Draw(rc);
 	m_itemFlashNumber.Draw(rc);
 	m_itemSoundNumber.Draw(rc);
 	
-	
 	//円形ゲージの描画
-	if (m_circleDrawState
-		&&m_treasure->GetHitState()) {
+	if (m_circleDrawState &&
+		m_treasure->GetHitState() &&
+		m_treasure->m_drewState == true)
+	{
 		m_circleSpriteRender.Draw(rc);
 		m_circleBaseSpriteRender.Draw(rc);
 	}
 
-
-
-	if (m_playerManagement->GetStamina() != 10.0f&&
-		!m_circleDrawState&&
+	//スタミナゲージの描画
+	if (m_playerManagement->GetStamina() != 10.0f &&
+		!m_circleDrawState &&
 		m_staminaDrawState)
 	{
 		m_staminaGageRender.Draw(rc);

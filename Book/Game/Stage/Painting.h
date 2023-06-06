@@ -5,6 +5,9 @@ namespace
 	const int PAINTING_MAX = 15;	//絵画の最大数
 }
 
+/// <summary>
+/// 絵画クラス。
+/// </summary>
 class Painting : public IGameObject
 {
 public:
@@ -56,7 +59,7 @@ public:
 	}
 
 private:
-	ModelRender m_modelRender;
-	ModelRender m_frameModelRender;
-	Texture m_texture;
+	ModelRender m_modelRender;			//絵画モデル
+	ModelRender m_frameModelRender;		//額縁モデル
+	Texture m_texture;					//絵画のテクスチャ
 };
