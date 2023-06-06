@@ -52,7 +52,6 @@ void LightSensor::Update()
 	//“–‚½‚è”»’è
 	if (m_spotLight.IsHit(m_player->GetPosition())) {
 		m_gage->GageUp(2, false);
-		
 	}
 }
 

@@ -2,10 +2,15 @@
 #include "Object.h"
 #include "Game.h"
 #include <random>
+
 class Gage;
 class GameUI;
 class Player2D;
 class GameCamera;
+
+/// <summary>
+/// お宝クラス。
+/// </summary>
 class Treasure :public Object 
 {
 public:
@@ -46,7 +51,7 @@ public:
 	{
 		return m_position;
 	}
-	void Hit()override;
+
 	/// <summary>
 	/// お宝に触れているか取得
 	/// </summary>
@@ -66,15 +71,16 @@ public:
 		}
 		return nullptr;
 	}
-	bool m_drewState = true;
-private:
-	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト
-	GameUI*					m_gameUI = nullptr;				//ゲームUI
-	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標
-	bool					m_hitState = false;				//trueならお宝に触れている
 
-	
-	Player2D*				m_player2d = nullptr;
-	GameCamera* m_gameCamera = nullptr;
-	bool  m_drawState = true;
+	void Hit()override;
+
+	bool m_drewState = true;
+
+private:
+	EffectEmitter*			m_kirakiraEffect = nullptr;		//エフェクト。
+	GameUI*					m_gameUI = nullptr;				//ゲームUI。
+	Player2D*				m_player2d = nullptr;			//プレイヤー。
+	GameCamera*				m_gameCamera = nullptr;			//ゲームカメラ。
+	std::vector< Vector3 >	m_treasurePositions;			//お宝の座標。
+	bool					m_hitState = false;				//trueならお宝に触れている。
 };

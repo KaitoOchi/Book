@@ -24,12 +24,14 @@ bool Sensor::Start()
 	m_player = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 
+	//センサーモデルの設定。
 	m_modelRender.Init("Assets/modelData/object/sensor/sensor.tkm");
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.SetRotation(m_rotation);
 	m_modelRender.SetScale(m_scale);
 	m_modelRender.Update();
 
+	//コリジョンの作成。
 	m_collisionObject = NewGO<CollisionObject>(0);
 	m_collisionObject->CreateBox(m_position, m_rotation, m_scale);
 	m_collisionObject->SetIsEnableAutoDelete(false);

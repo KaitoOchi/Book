@@ -3,6 +3,9 @@
 class Fade;
 class Title;
 
+/// <summary>
+/// à–¾‰æ–ÊƒNƒ‰ƒXB
+/// </summary>
 class Title_Guide : public IGameObject
 {
 public:

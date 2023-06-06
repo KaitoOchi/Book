@@ -1,8 +1,11 @@
 #pragma once
 #include "GameManager.h"
 #include "level2DRender/Level2DRender.h"
-#include"Fade.h"
+#include "Fade.h"
 
+/// <summary>
+/// タイトルクラス。
+/// </summary>
 class Title :public IGameObject
 {
 public:
@@ -62,7 +65,6 @@ public:
 		se->Play(false);
 		se->SetVolume(GameManager::GetInstance()->GetSFX());
 	}
-
 
 private:
 	/// <summary>
@@ -127,7 +129,6 @@ private:
 	SpriteRender					m_cursorSpriteRender;			//カーソル画像
 	std::array< SpriteRender,2 >	m_buttonSpriteRender;			//ボタン画像
 	std::vector< SpriteRender* >	m_sprites;						//SpriteRenderのベクター型
-
 	Level2DRender*					m_level2DRender = nullptr;		//レベルレンダー
 	Fade*							m_fade = nullptr;				//フェードクラス
 	Vector3							m_cursorPos;					//カーソル座標

@@ -7,15 +7,15 @@
 
 namespace
 {
-	const int CURSOR_VERTICAL_MAX = 2;							//縦カーソル最大値
-	const int CURSOR_HORIZONTAL_MAX[3] = { 100, 100, 2 };		//各設定の横カーソル最大値
+	const int CURSOR_VERTICAL_MAX = 2;											//縦カーソル最大値
+	const int CURSOR_HORIZONTAL_MAX[3] = { 100, 100, 2 };						//各設定の横カーソル最大値
 	const char COMMAND[8] = { 'w','s','s','j','b','7','s','j'};
 	const Vector3 CURSOR_POS_VERTICAL[3] = { Vector3(-600.0f, 165.0f , 0.0f),
 											Vector3(-600.0f, -40.0f, 0.0f),
-											Vector3(-600.0f, -240.0f, 0.0f) };				//縦カーソルの座標
+											Vector3(-600.0f, -240.0f, 0.0f) };	//縦カーソルの座標
 	const Vector3 CURSOR_POS_HORIZONTAL[3] = { Vector3(-120.0f, -240.0f , 0.0f),
 											Vector3(155.0f, -240.0f, 0.0f),
-											Vector3(425.0f, -240.0f, 0.0f) };				//横カーソルの座標
+											Vector3(425.0f, -240.0f, 0.0f) };	//横カーソルの座標
 }
 
 Title_Setting::Title_Setting()
@@ -39,6 +39,24 @@ bool Title_Setting::Start()
 	SetDataArray();
 	m_cursor_horizontal = m_saveDataArray[m_cursor_vertical];
 
+	InitSprite();
+
+	//パーセント文字の設定
+	m_percentFontRender.SetPosition(Vector3(-320.0f, 210.0f, 0.0f));
+	m_percentFontRender.SetScale(0.9f);
+	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	SpriteUpdate();
+
+	//フェードの処理
+	m_fade = FindGO<Fade>("fade");
+	m_fade->StartFadeIn();
+
+	return true;
+}
+
+void Title_Setting::InitSprite()
+{
 	//設定画面の設定
 	m_settingSpriteRender.Init("Assets/sprite/UI/title/setting_all.DDS", 1920.0f, 1080.0f);
 	m_sprites.push_back(&m_settingSpriteRender);
@@ -92,19 +110,6 @@ bool Title_Setting::Start()
 	m_catSpriteRender.SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
 	m_catSpriteRender.Update();
 	m_sprites.push_back(&m_catSpriteRender);
-
-	//パーセント文字の設定
-	m_percentFontRender.SetPosition(Vector3(-320.0f, 210.0f, 0.0f));
-	m_percentFontRender.SetScale(0.9f);
-	m_percentFontRender.SetShadowParam(true, 1.0f, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-
-	SpriteUpdate();
-
-	//フェードの処理
-	m_fade = FindGO<Fade>("fade");
-	m_fade->StartFadeIn();
-
-	return true;
 }
 
 void Title_Setting::Update()

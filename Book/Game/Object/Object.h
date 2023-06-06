@@ -1,9 +1,13 @@
 #pragma once
 #include "PlayerManagement.h"
 #include "Game.h";
+
 class Gage;
 class Player3D;
 
+/// <summary>
+/// オブジェクトの基底クラス。
+/// </summary>
 class Object : public IGameObject
 {
 public:
@@ -82,18 +86,20 @@ public:
 		return m_isActive;
 	}
 
-	enum EnHitState {
-		m_enObject_null,		//当たっている
-		m_enObject_hit,			//当たっていない
-	};
-
-
-	EnHitState m_HitState = m_enObject_null;
-
+    /// <summary>
+    /// 当たり判定を取得。
+    /// </summary>
+    /// <returns></returns>
     CollisionObject* GetCollision()
 	{
 		return m_collisionObject;
 	}
+
+	enum EnHitState {
+		m_enObject_null,		//当たっている
+		m_enObject_hit,			//当たっていない
+	};
+	EnHitState m_HitState = m_enObject_null;
 
 protected:
 
@@ -107,16 +113,14 @@ protected:
 	/// </summary>
 	virtual void Hit() = 0;
 
-	ModelRender			m_modelRender;
-
-	CollisionObject*	m_collisionObject = nullptr;
-	PlayerManagement*	m_player = nullptr;
-	Game*				m_game = nullptr;
-	Player3D*			m_player3d = nullptr;
-	Vector3				m_position	= Vector3::Zero;
-	Quaternion			m_rotation	= Quaternion::Identity;
-	Vector3				m_scale		= Vector3::One;
-
-	bool m_isActive = true;
+	ModelRender			m_modelRender;					//モデル。
+	CollisionObject*	m_collisionObject = nullptr;	//コリジョン。
+	PlayerManagement*	m_player = nullptr;				//プレイヤーマネジメント。
+	Game*				m_game = nullptr;				//ゲーム。
+	Player3D*			m_player3d = nullptr;			//プレイヤー。
+	Vector3				m_position;						//座標。
+	Quaternion			m_rotation;						//回転。
+	Vector3				m_scale = Vector3::One;			//拡大率。
+	bool				m_isActive = true;				//アクティブかどうか。
 };
 
