@@ -5,7 +5,7 @@
 #include "Gage.h"
 namespace
 {
-	const float		LINEAR_COMPLETION = 0.2f;		// ï¿½ï¿½ï¿½`ï¿½âŠ®ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½
+	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
 }
 
 Enemy_Normal::Enemy_Normal()
@@ -19,10 +19,10 @@ Enemy_Normal::~Enemy_Normal()
 
 bool Enemy_Normal::Start()
 {
-	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®èª­ã¿è¾¼ã¿
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
 	Animation();
 
-	// ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
 
 	Enemy::Start();
@@ -31,7 +31,7 @@ bool Enemy_Normal::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 
-	// ãƒ‘ã‚¹ã®åˆæœŸåº§æ¨™ã‚’æ¸¡ã™
+	// ƒpƒX‚Ì‰ŠúÀ•W‚ğ“n‚·
 	m_point = &m_pointList[0];
 
 	return true;
@@ -39,7 +39,7 @@ bool Enemy_Normal::Start()
 
 void Enemy_Normal::Update()
 {
-	// è¡Œå‹•ã§ãã‚‹ã‹èª¿ã¹ã‚‹
+	// s“®‚Å‚«‚é‚©’²‚×‚é
 	if (m_activeFlag == true)
 	{
 		Vector3 move = m_position;
@@ -51,7 +51,7 @@ void Enemy_Normal::Update()
 		return;
 	}
 
-	// ã‚¤ãƒ™ãƒ³ãƒˆå¾Œã®å‡¦ç†
+	// ƒCƒxƒ“ƒgŒã‚Ìˆ—
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
@@ -60,77 +60,77 @@ void Enemy_Normal::Update()
 		return;
 	}
 
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ•ã¾ãˆãŸã¨ã
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
 	if (m_ActState == m_ActState_CatchPlayer) {
 		m_enAnimationState = m_enAnimationState_Idle;
 		return;
 	}
 
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
-		// é–ƒå…‰å¼¾ã‚’å„ªå…ˆã™ã‚‹
+		// ‘MŒõ’e‚ğ—Dæ‚·‚é
 		m_HearedSoundBulletFlag = false;
 	}
 
 	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
-		// è¿½è·¡ã‚’å„ªå…ˆã™ã‚‹
+		// ’ÇÕ‚ğ—Dæ‚·‚é
 		m_HearedSoundBulletFlag = false;
 	}
 
-	// é–ƒå…‰å¼¾ã«å½“ãŸã£ãŸã¨ã
+	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = m_ActState_Dizzy;
 	}
-	// éŸ³çˆ†å¼¾ãŒä½¿ç”¨ã•ã‚ŒãŸã¨ã
+	// ‰¹”š’e‚ªg—p‚³‚ê‚½‚Æ‚«
 	if (m_HearedSoundBulletFlag == true) {
 		m_ActState = m_ActState_Listen;
 	}
 
 	switch (m_ActState) {
 	case m_ActState_Craw:
-		// æŒ‡å®šã•ã‚ŒãŸç¯„å›²ã®å·¡å›
+		// w’è‚³‚ê‚½”ÍˆÍ‚Ì„‰ñ
 		Update_OnCraw();
 		break;
 	case m_ActState_Tracking:
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½è·¡ã™ã‚‹
+		// ƒvƒŒƒCƒ„[‚ğ’ÇÕ‚·‚é
 		Update_OnTracking();
 		break;
 	case m_ActState_Move_MissingPositon:
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æœ€å¾Œã«è¦‹ãŸåº§æ¨™ã¾ã§ç§»å‹•ã™ã‚‹
+		// ƒvƒŒƒCƒ„[‚ğÅŒã‚ÉŒ©‚½À•W‚Ü‚ÅˆÚ“®‚·‚é
 		Update_OnMoveMissingPosition();
 		break;
 	case m_ActState_Search_MissingPlayer:
-		// è¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+		// Œ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·
 		Update_OnSearchMissingPlayer();
 		break;
 	case m_ActState_Called:
-		// Searchã®åº§æ¨™è¿‘ãã¾ã§ç§»å‹•ã™ã‚‹
+		// Search‚ÌÀ•W‹ß‚­‚Ü‚ÅˆÚ“®‚·‚é
 		Update_OnCalled();
 		break;
 	case m_ActState_BackBasedOn:
-		// å…ƒã®ãƒ‘ã‚¹ã«æˆ»ã‚‹
+		// Œ³‚ÌƒpƒX‚É–ß‚é
 		Update_OnBackBasedOn();
 		break;
 	case m_ActState_Dizzy:
-		// æ··ä¹±
+		// ¬—
 		Update_OnDizzy();
 		break;
 	case m_ActState_Listen:
-		// éŸ³ãŒèã“ãˆãŸå ´æ‰€ã«å‘ã‹ã†
+		// ‰¹‚ª•·‚±‚¦‚½êŠ‚ÉŒü‚©‚¤
 		UpDate_OnListen();
 		break;
 	}
 
-	Enemy::PlayAnimation();							// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	Enemy::PlayAnimation();							// ƒAƒjƒ[ƒVƒ‡ƒ“
 
 	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
-	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’è‡ªèº«ã®åº§æ¨™ã¨åŒæœŸ
+	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğ©g‚ÌÀ•W‚Æ“¯Šú
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);	// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
-	Enemy::Act_SeachPlayer();						// ç´¢æ•µ
+	Enemy::SpotLight_Serch(m_rotation, m_position);	// ƒXƒ|ƒbƒgƒ‰ƒCƒg
+	Enemy::Act_SeachPlayer();						// õ“G
 
 	m_enemyRender.Update();
 }
@@ -181,13 +181,13 @@ void Enemy_Normal::Update_OnDizzy()
 
 void Enemy_Normal::UpDate_OnListen()
 {
-	// éŸ³çˆ†å¼¾ã‚’ä½¿ã£ãŸã¨ã
+	// ‰¹”š’e‚ğg‚Á‚½‚Æ‚«
 	Enemy::Act_GoLocationListenSound(m_itemPos);
 }
 
 void Enemy_Normal::Render(RenderContext& rc)
 {
-	// æç”»
+	// •`‰æ
 	if (m_NotDrawFlag == false&&
 		m_activeFlag == false) {
 		m_enemyRender.Draw(rc);
