@@ -20,10 +20,10 @@ Enemy_Search::~Enemy_Search()
 }
 bool Enemy_Search::Start()
 {
-	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®èª­ã¿è¾¼ã¿
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
 	Animation();
 
-	// ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
 
 	Enemy::Start();
@@ -36,7 +36,7 @@ bool Enemy_Search::Start()
 }
 void Enemy_Search::Update()
 {
-	// è¡Œå‹•ã§ãã‚‹ã‹èª¿ã¹ã‚‹
+	// s“®‚Å‚«‚é‚©’²‚×‚é
 	if (m_activeFlag == true)
 	{
 		Vector3 move = m_position;
@@ -47,7 +47,7 @@ void Enemy_Search::Update()
 		return;
 	}
 
-	// ã‚¤ãƒ™ãƒ³ãƒˆå¾Œã®å‡¦ç†
+	// ƒCƒxƒ“ƒgŒã‚Ìˆ—
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
@@ -56,7 +56,7 @@ void Enemy_Search::Update()
 		return;
 	}
 
-	// é–ƒå…‰å¼¾ã«å½“ãŸã£ãŸã¨ã
+	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	if (m_HitFlashBulletFlag == true) {
 		m_ActState = m_ActState_Dizzy;
 	}
@@ -64,27 +64,27 @@ void Enemy_Search::Update()
 	switch (m_ActState) {
 	case m_ActState_Craw:
 	case m_ActState_Search:
-		// ç´¢æ•µ
+		// õ“G
 		Update_OnSearch();
 		break;
 	case m_ActState_Call_AroundEnemy:
-		// å‘¨ã‚Šã®ã‚¨ãƒãƒŸãƒ¼ã‚’å‘¼ã¶
+		// ü‚è‚ÌƒGƒlƒ~[‚ğŒÄ‚Ô
 		Update_OnCallAroundEnemy();
 		break;
 	case m_ActState_Search_MissingPlayer:
-		// è¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
+		// Œ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·
 		Update_OnMissingPlayer();
 		break;
 	case m_ActState_Dizzy:
-		// é–ƒå…‰å¼¾ã‚’ä½¿ç”¨ã•ã‚ŒãŸã¨ã
+		// ‘MŒõ’e‚ğg—p‚³‚ê‚½‚Æ‚«
 		Update_OnDizzy();
 		break;
 	}
 
-	Enemy::PlayAnimation();							// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	Enemy::PlayAnimation();							// ƒAƒjƒ[ƒVƒ‡ƒ“
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);	// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆ
-	Enemy::Act_SeachPlayer();						// ç´¢æ•µ
+	Enemy::SpotLight_Serch(m_rotation, m_position);	// ƒXƒ|ƒbƒgƒ‰ƒCƒg
+	Enemy::Act_SeachPlayer();						// õ“G
 
 	m_characterController.SetPosition(m_position);
 
@@ -105,19 +105,19 @@ void Enemy_Search::Update_OnSearch()
 
 void Enemy_Search::Update_OnCallAroundEnemy()
 {
-	// å‘¨ã‚Šã«ã„ã‚‹ã‚¨ãƒãƒŸãƒ¼ã‚’å‘¼ã¶
+	// ü‚è‚É‚¢‚éƒGƒlƒ~[‚ğŒÄ‚Ô
 	Enemy::Act_Call();
 }
 
 void Enemy_Search::Update_OnDizzy()
 {
-	// é–ƒå…‰å¼¾ã«å½“ãŸã£ãŸã¨ã
+	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	Enemy::Act_HitFlashBullet();
 }
 
 void Enemy_Search::Update_OnMissingPlayer()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸæ™‚
+	// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½
 	Enemy::Act_SearchMissingPlayer();
 }
 
