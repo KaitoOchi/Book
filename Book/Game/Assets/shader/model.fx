@@ -2,6 +2,9 @@
  * @brief	シンプルなモデルシェーダー。
  */
 
+#include "lighting_CB.h"
+#include "model_register.h"
+
 ////////////////////////////////////////////////
 // 定数バッファ。
 ////////////////////////////////////////////////
@@ -10,49 +13,6 @@ cbuffer ModelCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
-};
-
-//ディレクションライト用の構造体
-struct DirectionLig
-{
-	float3 dirDirection;	//ライトの方向
-	float3 dirColor;		//ライトのカラー
-	float3 eyePos;			//視点の位置
-	float3 ambient;			//環境光の強さ
-};
-
-//ポイントライト用の構造体
-struct PointLig
-{
-	float3 ptPosition;		//ポイントライトの位置
-	float3 ptColor;			//ポイントライトのカラー
-	float ptRange;			//ポイントライトの影響範囲
-};
-
-//スポットライト用の構造体
-struct SpotLig
-{
-	float3 spPosition;		//スポットライトの位置
-	float3 spColor;			//スポットライトのカラー
-	float spRange;			//スポットライトの影響範囲
-	float3 spDirection;		//スポットライトの方向
-	float spAngle;			//スポットライトの射出角度
-};
-
-//半球ライト用の構造体
-struct HemiLig
-{
-	float3 groundColor;		//照り返しのライト
-	float3 skyColor;		//天球ライト
-	float3 groundNormal;	//地面の法線
-};
-
-//シャドウ用の構造体
-struct Shadow
-{
-	float3 lightPos;		//ライトの座標
-	float4x4 mLVP;			//ライトビュープロジェクション行列
-	int playerAnim2D;		//2Dプレイヤーアニメーションの番号
 };
 
 //ライト用の定数バッファ
@@ -104,43 +64,21 @@ struct SPSIn{
 	float4 outlineColor : COLOR0;		//輪郭線の色
 };
 
-////////////////////////////////////////////////
-// グローバル変数。
-////////////////////////////////////////////////
-Texture2D<float4> g_albedo : register(t0);					//アルベドマップ
-Texture2D<float4> g_normalMap : register(t1);				//法線マップ
-Texture2D<float4> g_specularMap : register(t2);				//スペキュラマップ
-Texture2D<float4> g_shadowMap : register(t10); 				// シャドウマップ
-Texture2D<float4> g_depthTexture : register(t11);			//深度テクスチャ
-
-StructuredBuffer<float4x4> g_boneMatrix : register(t3);		//ボーン行列。
-sampler g_sampler : register(s0);							//サンプラステート。
-SamplerComparisonState g_shadowMapSampler : register(s1);	//シャドウマップサンプリング用のサンプラーステート
-
-//ディザパターン
-static const int pattern[4][4] = {
-    { 0, 32,  8, 40},
-    { 48, 16, 56, 24},
-    { 12, 44,  4, 36},
-    { 60, 28, 52, 20},
-};
-static const int anim_array_max = 4;		//アニメーション正方形の配列の数
-
 ///////////////////////////////////////////
 // 関数宣言
 ///////////////////////////////////////////
 float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 normal);
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
-float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal);
-float3 CalcLigFromPointLight(SPSIn psIn, float3 normal);
-float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal);
+float3 CalcLigFromDirectionLight(float3 worldPos, float3 normal);
+float3 CalcLigFromPointLight(float3 worldPos, float3 normal);
+float3 CalcLigFromSpotLight(float3 worldPos, float3 normal);
 float CalcLim(float3 dirDirection, float3 normal, float3 normalInView);
 float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, float3 groundNormal);
-float3 CalcNormal(SPSIn psIn);
+float3 CalcNormal(float2 uv, float3 normal, float3 tangent, float3 biNormal);
 float3 CalcSpecular(float3 normal, float3 worldPos);
-float4 ShadowMap(SPSIn psIn, float4 albedo);
-float4 Outline(SPSIn psIn, float4 albedo);
-void Dithering(SPSIn psIn);
+float4 ShadowMap(float4 posInLVP, float4 albedo);
+float4 Outline(float4 pos, float4 posInProj, float4 color, float4 albedo);
+void Dithering(float3 pos);
 
 /// <summary>
 //スキン行列を計算する。
@@ -252,16 +190,16 @@ SPSIn VSSkinEnemyClear( SVSIn vsIn )
 float4 PSMainCore(SPSIn In, uniform bool hasShadow, float4 albedo)
 {
 	//ノーマルマップを求める
-    float3 normal = CalcNormal(In);
+    float3 normal = CalcNormal(In.uv, In.normal, In.tangent, In.biNormal);
 
 	//ディレクションライトを求める
-	float3 directionLight = CalcLigFromDirectionLight(In, normal);
+	float3 directionLight = CalcLigFromDirectionLight(In.worldPos, normal);
 
 	//ポイントライトを求める
-	float3 pointLight = CalcLigFromPointLight(In, normal);
+	float3 pointLight = CalcLigFromPointLight(In.worldPos, normal);
 
 	//スポットライトを求める
-	float3 spotLight = CalcLigFromSpotLight(In, normal);
+	float3 spotLight = CalcLigFromSpotLight(In.worldPos, normal);
 
 	//半球ライトを求める
 	float3 hemiLight = CalcHemiSphereLight(normal, hemiLig.groundColor, hemiLig.skyColor, hemiLig.groundNormal);
@@ -286,14 +224,14 @@ float4 PSMainCore(SPSIn In, uniform bool hasShadow, float4 albedo)
 
 	//シャドウマップを求める
 	if(hasShadow){
-		albedo = ShadowMap(In, albedo);
+		albedo = ShadowMap(In.posInLVP, albedo);
 	}
 
 	//光を乗算
 	albedo.xyz *= lig;
 
 	//輪郭線を求める
-	albedo = Outline(In, albedo);
+	albedo = Outline(In.pos, In.posInProj, In.outlineColor, albedo);
 
 	return albedo;
 }
@@ -388,16 +326,16 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 /// <summary>
 /// ディレクションライトを計算する
 /// </summary>
-float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromDirectionLight(float3 worldPos, float3 normal)
 {
 	//拡散反射光を求める
 	float3 diffDirection = CalcLambertDiffuse(dirLig.dirDirection, dirLig.dirColor, normal);
 
 	//鏡面反射光を求める
-	float3 specDirection = CalcPhongSpecular(dirLig.dirDirection, dirLig.dirColor, psIn.worldPos, normal);
+	float3 specDirection = CalcPhongSpecular(dirLig.dirDirection, dirLig.dirColor, worldPos, normal);
 
 	//スペキュラマップを求める
-	specDirection += CalcSpecular(normal, psIn.worldPos);
+	specDirection += CalcSpecular(normal, worldPos);
 
 	return diffDirection + specDirection;
 }
@@ -405,14 +343,14 @@ float3 CalcLigFromDirectionLight(SPSIn psIn, float3 normal)
 /// <summary>
 /// ポイントライトを計算する
 /// </summary>
-float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromPointLight(float3 worldPos, float3 normal)
 {
 	float3 finalPtLig = (0.0f, 0.0f, 0.0f);
 
 	for(int i = 0; i < ptNum; i++){
 
 		//サーフェイスに入射するポイントライトの光の向きを計算
-		float3 ligDir = psIn.worldPos - ptLig[i].ptPosition;
+		float3 ligDir = worldPos - ptLig[i].ptPosition;
 		//正規化する
 		ligDir = normalize(ligDir);
 
@@ -427,20 +365,20 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 		float3 specPoint = CalcPhongSpecular(
 			ligDir,
 			ptLig[i].ptColor,
-			psIn.worldPos,
+			worldPos,
 			normal
 		);
 
 		//距離による影響率を計算する
 		//ポイントライトとの距離を計算する
-		float distance = length(psIn.worldPos - ptLig[i].ptPosition);
+		float distance = length(worldPos - ptLig[i].ptPosition);
 
 		//影響率は距離に比例して小さくなっていく
 		float affect = 1.0f - 1.0f / ptLig[i].ptRange * distance;
 
-		//影響率がマイナスにならないように補正をかける
+		//影響力がマイナスなら当たらない
 		if (affect < 0.0f) {
-			affect = 0.0f;
+			continue;
 		}
 
 		//影響を指数関数的にする
@@ -460,14 +398,14 @@ float3 CalcLigFromPointLight(SPSIn psIn, float3 normal)
 /// <summary>
 /// スポットライトを計算する
 /// </summary>
-float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
+float3 CalcLigFromSpotLight(float3 worldPos, float3 normal)
 {
 	float3 finalspLig = (0.0f, 0.0f, 0.0f);
 
 	for(int i = 0; i < spNum; i++){
 
 		//ピクセルの座標 - スポットライトの座標を計算
-		float3 ligDir = psIn.worldPos - spLig[i].spPosition;
+		float3 ligDir = worldPos - spLig[i].spPosition;
 		//正規化して大きさ1のベクトルにする
 		ligDir = normalize(ligDir);
 
@@ -482,17 +420,17 @@ float3 CalcLigFromSpotLight(SPSIn psIn, float3 normal)
 		float3 specSpotLight = CalcPhongSpecular(
 			ligDir,
 			spLig[i].spColor,
-			psIn.worldPos,
+			worldPos,
 			normal
 		);
 
 		//スポットライトとの距離を計算する
-		float3 distance = length(psIn.worldPos - spLig[i].spPosition);
+		float3 distance = length(worldPos - spLig[i].spPosition);
 
 		//影響率は距離に比例して小さくなっていく
 		float affect = 1.0f - 1.0f / spLig[i].spRange * distance;
 
-		//影響力がマイナスにならないように補正をかける
+		//影響力がマイナスなら当たらない
 		if (affect < 0.0f) {
 			continue;
 		}
@@ -568,18 +506,18 @@ float3 CalcHemiSphereLight(float3 normal, float3 groundColor, float3 skyColor, f
 /// <summary>
 /// 法線を計算する
 /// </summary>
-float3 CalcNormal(SPSIn psIn)
+float3 CalcNormal(float2 uv, float3 normal, float3 tangent, float3 biNormal)
 {
 	//法線マップからタンジェントスペースの法線をサンプリングする
-	float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+	float3 localNormal = g_normalMap.Sample(g_sampler, uv).xyz;
 
 	//タンジェントスペース法線を0~1の範囲から-1~1の範囲に復元する
 	localNormal = (localNormal - 0.5f) * 2.0f;
 
 	//タンジェントスペースの法線をワールドスペースに変換する
-	float3 newNormal = psIn.tangent * localNormal.x
-					+ psIn.biNormal * localNormal.y
-					+ psIn.normal * localNormal.z;
+	float3 newNormal = tangent * localNormal.x
+					+ biNormal * localNormal.y
+					+ normal * localNormal.z;
 
 	if(isnan(newNormal.x)){
 		newNormal = (0.0f, 0.0f, 0.0f);
@@ -608,15 +546,15 @@ float3 CalcSpecular(float3 normal, float3 worldPos)
 /// <summary>
 /// シャドウを計算
 /// </summary>
-float4 ShadowMap(SPSIn psIn, float4 albedo)
+float4 ShadowMap(float4 posInLVP, float4 albedo)
 {
     //ライトビュースクリーン空間からUV空間に座標変換
-    float2 shadowMapUV = psIn.posInLVP.xy / psIn.posInLVP.w;
+    float2 shadowMapUV = posInLVP.xy / posInLVP.w;
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
 
     //ライトビュースクリーン空間でのZ値を計算する
-    float zInLVP = psIn.posInLVP.z;
+    float zInLVP = posInLVP.z;
 
     if(shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
         && shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f)
@@ -654,15 +592,15 @@ float4 ShadowMap(SPSIn psIn, float4 albedo)
 /// <summary>
 /// 輪郭線を計算
 /// </summary>
-float4 Outline(SPSIn psIn, float4 albedo)
+float4 Outline(float4 pos, float4 posInProj, float4 color, float4 albedo)
 {
-	if(psIn.outlineColor.w == 0.0f){
+	if(color.w == 0.0f){
 		return albedo;
 	}
 
     // 近傍8テクセルの深度値を計算して、エッジを抽出する
     // 正規化スクリーン座標系からUV座標系に変換する
-    float2 uv = (psIn.posInProj.xy / psIn.posInProj.w) * float2( 0.5f, -0.5f) + 0.5f;
+    float2 uv = (posInProj.xy / posInProj.w) * float2( 0.5f, -0.5f) + 0.5f;
 
     // 近傍8テクセルへのUVオフセット
     float2 uvOffset[8] = {
@@ -691,13 +629,13 @@ float4 Outline(SPSIn psIn, float4 albedo)
     if(abs(depth - depth2) > 0.2f)
     {
         // 深度値が結構違う場合はピクセルカラーを黒にする
-        return psIn.outlineColor;
+        return color;
     }
 
 	//半透明の敵は透過させる
-	if(abs(psIn.outlineColor.w - 0.9f) < 0.001f ) {
+	if(abs(color.w - 0.9f) < 0.001f ) {
 		//ディザリングを行う
-		Dithering(psIn);
+		Dithering(pos.xyz);
 	}
 
     // 普通のテクスチャ
@@ -707,11 +645,11 @@ float4 Outline(SPSIn psIn, float4 albedo)
 /// <summary>
 /// ディザリングを計算
 /// </summary>
-void Dithering(SPSIn psIn)
+void Dithering(float3 pos)
 {
 	//スクリーン座標系でのxy座標を4で割った余りを求める
-	int x = (int)fmod(psIn.pos.x, 4.0f);
-	int y = (int)fmod(psIn.pos.y, 4.0f);
+	int x = (int)fmod(pos.x, 4.0f);
+	int y = (int)fmod(pos.y, 4.0f);
 
 	//上で求めたxyを利用して、このピクセルのディザリング閾値を取得する
 	int dither = pattern[y][x];

@@ -23,9 +23,9 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Init()
 	{
-		InitLight();
-
 		InitMainRenderTarget();
+
+		InitLight();
 
 		Init2DRenderTarget();
 
@@ -164,7 +164,7 @@ namespace nsBookEngine {
 
 	void RenderingEngine::InitViewPort()
 	{
-		//通常画面の描画
+		//通常画面の描画。
 		m_viewPorts[0].Width = FRAME_BUFFER_W;   //画面の横サイズ
 		m_viewPorts[0].Height = FRAME_BUFFER_H;   //画面の縦サイズ
 		m_viewPorts[0].TopLeftX = 0;   //画面左上のx座標
@@ -172,7 +172,7 @@ namespace nsBookEngine {
 		m_viewPorts[0].MinDepth = 0.0f;   //深度値の最小値
 		m_viewPorts[0].MaxDepth = 1.0f;   //深度値の最大値
 		
-		//ワイプ画面の描画
+		//ワイプ画面の描画。
 		m_viewPorts[1].Width = 960 / 4 + 3;   //画面の横サイズ
 		m_viewPorts[1].Height = 540 / 4 + 3;   //画面の縦サイズ
 		m_viewPorts[1].TopLeftX = -290;   //画面左上のx座標
@@ -190,23 +190,23 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
-		//視点の位置を設定する
+		//視点の位置を設定する。
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
-		//ZPrepassの描画
+		//ZPrepassの描画。
 		ZPrepass(rc);
 
-		//シャドウマップの描画
+		//シャドウマップの描画。
 		RenderShadowMap(rc);
 
-		//フォワードレンダリングの描画
+		//フォワードレンダリングの描画。
 		ForwardRendering(rc);
 
-		//ブルームの描画
+		//ブルームの描画。
 		m_bloom.Render(rc, m_mainRenderTarget);
 
-		//2Dスプライトの描画
+		//2Dスプライトの描画。
 		Render2D(rc);
 
 		m_renderObjects.clear();
@@ -214,7 +214,7 @@ namespace nsBookEngine {
 
 	void RenderingEngine::RenderShadowMap(RenderContext& rc)
 	{
-		// カメラの位置を設定
+		// カメラの位置を設定。
 		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget() + SHADOW_CAMERA_POS));
 		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget() + SHADOW_CAMERA_TAR));
 		m_lightCamera.Update();
@@ -222,12 +222,12 @@ namespace nsBookEngine {
 		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 		m_lightCB.shadowCB.lightPos = m_lightCamera.GetPosition();
 
-		//シャドウマップ用のレンダーターゲットの書き込み待ち
+		//シャドウマップ用のレンダーターゲットの書き込み待ち。
 		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMapRenderTarget);
 		rc.SetRenderTargetAndViewport(m_shadowMapRenderTarget);
 		rc.ClearRenderTargetView(m_shadowMapRenderTarget);
 
-		//描画処理
+		//描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnRenderShadowMap(rc, m_lightCamera);
 		}
@@ -239,13 +239,13 @@ namespace nsBookEngine {
 
 	void RenderingEngine::ZPrepass(RenderContext& rc)
 	{
-		// レンダリングターゲットとして設定できるようになるまで待つ
+		// レンダリングターゲットとして設定できるようになるまで待つ。
 		rc.WaitUntilToPossibleSetRenderTarget(m_zprepassRenderTarget);
 
-		// レンダリングターゲットを設定
+		// レンダリングターゲットを設定。
 		rc.SetRenderTargetAndViewport(m_zprepassRenderTarget);
 
-		// レンダリングターゲットをクリア
+		// レンダリングターゲットをクリア。
 		rc.ClearRenderTargetView(m_zprepassRenderTarget);
 
 		for (auto& renderObj : m_renderObjects) {
@@ -259,21 +259,21 @@ namespace nsBookEngine {
 	{
 		BeginGPUEvent("ForwardRendering");
 
-		//メインレンダーターゲットの書き込み待ち
+		//メインレンダーターゲットの書き込み待ち。
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTarget(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 
-		//ビューポートを設定
+		//ビューポートを設定。
 		rc.SetViewportAndScissor(m_viewPorts[0]);
-		//通常描画処理
+		//通常描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnForwardRender(rc);
 		}
 
-		//ビューポートを設定
+		//ビューポートを設定。
 		rc.SetViewPort(m_viewPorts[1]);
-		//ワイプ描画処理
+		//ワイプ描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnWipeForwardRender(rc, m_wipeCamera);
 		}
@@ -285,13 +285,13 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Render2D(RenderContext& rc)
 	{
-		//レンダリングターゲット書き込み待ち
+		//レンダリングターゲット書き込み待ち。
 		rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
 
-		//レンダリングターゲットの設定
+		//レンダリングターゲットの設定。
 		rc.SetRenderTargetAndViewport(m_2DRenderTarget);
 
-		//レンダリングターゲットをクリア
+		//レンダリングターゲットをクリア。
 		rc.ClearRenderTargetView(m_2DRenderTarget);
 
 		m_mainSprite.Draw(rc);
@@ -302,7 +302,7 @@ namespace nsBookEngine {
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
 
-		//レンダーターゲットの切り替え
+		//レンダーターゲットの切り替え。
 		rc.SetRenderTarget(
 			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
 			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
@@ -310,7 +310,7 @@ namespace nsBookEngine {
 
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 
-		//最終2Dスプライトの描画
+		//最終2Dスプライトの描画。
 		m_2DSprite.Draw(rc);
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
