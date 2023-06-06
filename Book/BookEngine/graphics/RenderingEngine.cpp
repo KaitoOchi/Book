@@ -1,14 +1,13 @@
 ﻿#include "BookEnginePreCompile.h"
 #include "RenderingEngine.h"
 
-namespace
-{
-	const Vector3 SHADOW_CAMERA_POS = Vector3(1024.0f, 2192.0f, 1024.0f);
-	const Vector3 SHADOW_CAMERA_TAR = Vector3(0.0f, -100.0f, 0.0f);
-}
-
-
 namespace nsBookEngine {
+
+	namespace
+	{
+		const Vector3 SHADOW_CAMERA_POS = Vector3(1024.0f, 2192.0f, 1024.0f);
+		const Vector3 SHADOW_CAMERA_TAR = Vector3(0.0f, -100.0f, 0.0f);
+	}
 
 	RenderingEngine* RenderingEngine::m_instance = nullptr;
 
@@ -24,6 +23,21 @@ namespace nsBookEngine {
 
 	void RenderingEngine::Init()
 	{
+		InitLight();
+
+		InitMainRenderTarget();
+
+		Init2DRenderTarget();
+
+		InitShadowMapRenderTarget();
+
+		InitZPrepassRenderTarget();
+
+		InitViewPort();
+	}
+
+	void RenderingEngine::InitLight()
+	{
 		//ディレクショナルライトの設定
 		SetDirectionLight(Vector3(1, -1, 1), Vector3(0.2f, 0.2f, 0.2f));
 
@@ -37,11 +51,17 @@ namespace nsBookEngine {
 			Vector3(0.0f, 1.0f, 0.0f)
 		);
 
+		//ディレクショナルライト、半球ライトの取得
 		m_lightCB.directionLig = m_directionLig.GetDirectionLig();
 		m_lightCB.hemiSphereLig = m_hemiSphereLig.GetHemiSphereLig();
 
+		//ブルームを設定
+		SetBloomThreshold(0.2f);
+		m_bloom.Init(m_mainRenderTarget);
+	}
 
-
+	void RenderingEngine::InitMainRenderTarget()
+	{
 		//メインレンダーターゲットを設定
 		float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 		m_mainRenderTarget.Create(
@@ -53,24 +73,11 @@ namespace nsBookEngine {
 			DXGI_FORMAT_D32_FLOAT,
 			clearColor
 		);
-
-		//ブルームを設定
-		SetBloomThreshold(0.2f);
-		m_bloom.Init(m_mainRenderTarget);
-
-		Init2DRenderTarget();
-
-		InitShadowMapRenderTarget();
-
-		InitZPrepassRenderTarget();
-
-		InitViewPort();
 	}
 
 	void RenderingEngine::Init2DRenderTarget()
 	{
 		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
-
 		m_2DRenderTarget.Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -110,17 +117,16 @@ namespace nsBookEngine {
 	void RenderingEngine::InitShadowMapRenderTarget()
 	{
 		// カメラの位置を設定。これはライトの位置
-		m_lightCamera.SetPosition(Vector3(g_camera3D->GetTarget().x + 50.0f, g_camera3D->GetTarget().y + 600.0f, g_camera3D->GetTarget().z + 50.0f));
+		m_lightCamera.SetPosition(g_camera3D->GetTarget() + SHADOW_CAMERA_POS);
 
 		// カメラの注視点を設定。これがライトが照らしている場所
-		m_lightCamera.SetTarget(Vector3(g_camera3D->GetTarget().x, g_camera3D->GetTarget().y - 100.0f, g_camera3D->GetTarget().z));
+		m_lightCamera.SetTarget(g_camera3D->GetTarget() + SHADOW_CAMERA_TAR);
 
-		// 上方向を設定。今回はライトが真下を向いているので、X方向を上にしている
+		// 上方向を設定。
 		m_lightCamera.SetUp(0, 1, 0);
 
 		//画角を設定
 		m_lightCamera.SetViewAngle(g_camera3D->GetViewAngle());
-
 		m_lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Perspective);
 		m_lightCamera.Update();
 
@@ -188,14 +194,19 @@ namespace nsBookEngine {
 		m_lightCB.directionLig.eyePos = g_camera3D->GetPosition();
 		m_lightCB.directionLig.eyePos.y += 2000.0f;
 
+		//ZPrepassの描画
 		ZPrepass(rc);
 
+		//シャドウマップの描画
 		RenderShadowMap(rc);
 
+		//フォワードレンダリングの描画
 		ForwardRendering(rc);
 
+		//ブルームの描画
 		m_bloom.Render(rc, m_mainRenderTarget);
 
+		//2Dスプライトの描画
 		Render2D(rc);
 
 		m_renderObjects.clear();
@@ -211,7 +222,6 @@ namespace nsBookEngine {
 		m_lightCB.shadowCB.mLVP = m_lightCamera.GetViewProjectionMatrix();
 		m_lightCB.shadowCB.lightPos = m_lightCamera.GetPosition();
 
-
 		//シャドウマップ用のレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMapRenderTarget);
 		rc.SetRenderTargetAndViewport(m_shadowMapRenderTarget);
@@ -225,7 +235,6 @@ namespace nsBookEngine {
 		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMapRenderTarget);
 
 		m_shadowBlur.ExecuteOnGPU(rc, 5.0f);
-
 	}
 
 	void RenderingEngine::ZPrepass(RenderContext& rc)
@@ -252,7 +261,6 @@ namespace nsBookEngine {
 
 		//メインレンダーターゲットの書き込み待ち
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
-		//rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 		rc.SetRenderTarget(m_mainRenderTarget);
 		rc.ClearRenderTargetView(m_mainRenderTarget);
 
@@ -265,7 +273,7 @@ namespace nsBookEngine {
 
 		//ビューポートを設定
 		rc.SetViewPort(m_viewPorts[1]);
-		//ワイプ描画処理。
+		//ワイプ描画処理
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnWipeForwardRender(rc, m_wipeCamera);
 		}
@@ -294,7 +302,7 @@ namespace nsBookEngine {
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
 
-
+		//レンダーターゲットの切り替え
 		rc.SetRenderTarget(
 			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
 			g_graphicsEngine->GetCurrentFrameBuffuerDSV()
@@ -302,6 +310,7 @@ namespace nsBookEngine {
 
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 
+		//最終2Dスプライトの描画
 		m_2DSprite.Draw(rc);
 
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);

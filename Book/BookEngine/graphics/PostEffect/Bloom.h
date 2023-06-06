@@ -2,6 +2,9 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// ブルームクラス。
+	/// </summary>
 	class Bloom
 	{
 	public:
@@ -22,6 +25,7 @@ namespace nsBookEngine {
 		{
 			m_luminanceCB.threshold = threshold;
 		}
+
 		/// <summary>
 		/// ブルームが発生する閾値を取得。
 		/// </summary>
@@ -52,13 +56,11 @@ namespace nsBookEngine {
 		void Render(RenderContext& rc, RenderTarget& mainRenderTarget);
 
 	private:
-		RenderTarget m_luminanceRenderTarget;
-		Sprite m_luminanceSprite;
-		GaussianBlur m_gaussianBlur[4];
-		Sprite m_finalSprite;
-
-		LuminanceCB m_luminanceCB;
-
-		Sprite m_copyMainRtSprite;	// メインレンダリングターゲットに描画するためのスプライト。
+		RenderTarget	m_luminanceRenderTarget;	//ブルーム用レンダーターゲット
+		GaussianBlur	m_gaussianBlur[4];			//ガウシアンブラー
+		LuminanceCB		m_luminanceCB;				//ブルーム用定数バッファ
+		Sprite			m_luminanceSprite;			//ブルーム用スプライト
+		Sprite			m_finalSprite;				//最終合成用のスプライト
+		Sprite			m_copyMainRtSprite;			//メインレンダリングターゲットに描画するためのスプライト
 	};
 }

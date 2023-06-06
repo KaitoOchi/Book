@@ -3,7 +3,6 @@
 
 #include "graphics/light/DirectionLight.h"
 
-
 namespace nsBookEngine {
 
 	ModelRender::ModelRender()
@@ -114,56 +113,73 @@ namespace nsBookEngine {
 			modelInitData.m_psEntryPointFunc = "PSPlayer2D";
 		}
 
+		//通常モデルの初期化
 		m_model.Init(modelInitData);
 
 		if (useWipe) {
+			//ワイプ用モデルの初期化
 			m_wipeModel.Init(modelInitData);
 		}
 
-
 		if (isShadow) {
-			//シャドウ用のモデルを初期化
-			ModelInitData shadowModelInitData;
-			shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
-			shadowModelInitData.m_tkmFilePath = tkmFilePath;
-			shadowModelInitData.m_modelUpAxis = modelUpAxis;
-			shadowModelInitData.m_cullMode = cullMode;
-			shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
-			shadowModelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetShadowCB();
-			shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetShadowCB());
-
-			if (m_skeleton.IsInited()) {
-				//スケルトンを指定する。
-				shadowModelInitData.m_skeleton = &m_skeleton;
-				shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
-			}
-
-			//2Dプレイヤーなら
-			if (outlineMode == 4) {
-				shadowModelInitData.m_psEntryPointFunc = "PSPlayer2D";
-			}
-
-			m_shadowModel.Init(shadowModelInitData);
+			//シャドウ用モデルの初期化
+			InitShadowModel(tkmFilePath, modelUpAxis, outlineMode, cullMode);
 		}
 
 		if (outlineMode != 0) {
-			//ZPrepassモデルを初期化
-			ModelInitData modelInitData;
-			modelInitData.m_fxFilePath = "Assets/shader/zprepass.fx";
-			modelInitData.m_tkmFilePath = tkmFilePath;
-			modelInitData.m_modelUpAxis = modelUpAxis;
-			modelInitData.m_cullMode = cullMode;
-			modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
-
-
-			if (m_skeleton.IsInited()) {
-				//スケルトンを指定する。
-				modelInitData.m_skeleton = &m_skeleton;
-				modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
-			}
-
-			m_zprepassModel.Init(modelInitData);
+			//ZPrepass用モデルの初期化
+			InitZPrepassModel(tkmFilePath, modelUpAxis, cullMode);
 		}
+	}
+
+	void ModelRender::InitShadowModel(const char* tkmFilePath,
+		EnModelUpAxis modelUpAxis,
+		const int outlineMode,
+		D3D12_CULL_MODE cullMode)
+	{
+		ModelInitData shadowModelInitData;
+		shadowModelInitData.m_fxFilePath = "Assets/shader/shadowMap.fx";
+		shadowModelInitData.m_tkmFilePath = tkmFilePath;
+		shadowModelInitData.m_modelUpAxis = modelUpAxis;
+		shadowModelInitData.m_cullMode = cullMode;
+		shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+		shadowModelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetShadowCB();
+		shadowModelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetShadowCB());
+
+		if (m_skeleton.IsInited()) {
+			//スケルトンを指定する。
+			shadowModelInitData.m_skeleton = &m_skeleton;
+			shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
+
+		//2Dプレイヤーなら
+		if (outlineMode == 4) {
+			shadowModelInitData.m_psEntryPointFunc = "PSPlayer2D";
+		}
+
+		m_shadowModel.Init(shadowModelInitData);
+	}
+
+	void ModelRender::InitZPrepassModel(
+		const char* tkmFilePath,
+		EnModelUpAxis modelUpAxis,
+		D3D12_CULL_MODE cullMode )
+	{
+		ModelInitData modelInitData;
+		modelInitData.m_fxFilePath = "Assets/shader/zprepass.fx";
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_modelUpAxis = modelUpAxis;
+		modelInitData.m_cullMode = cullMode;
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+
+
+		if (m_skeleton.IsInited()) {
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
+
+		m_zprepassModel.Init(modelInitData);
 	}
 
 	void ModelRender::InitModelData(ModelInitData& initData)
@@ -177,6 +193,7 @@ namespace nsBookEngine {
 
 	void ModelRender::UpdateWorldMatrixInModes()
 	{
+		//モデルの更新処理
 		if (m_model.IsInited()) {
 			m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		}

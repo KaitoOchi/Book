@@ -47,6 +47,14 @@ struct HemiLig
 	float3 groundNormal;	//地面の法線
 };
 
+//シャドウ用の構造体
+struct Shadow
+{
+	float3 lightPos;		//ライトの座標
+	float4x4 mLVP;			//ライトビュープロジェクション行列
+	int playerAnim2D;		//2Dプレイヤーアニメーションの番号
+};
+
 //ライト用の定数バッファ
 cbuffer LightCb : register(b1) {
 
@@ -58,9 +66,7 @@ cbuffer LightCb : register(b1) {
 		
 	HemiLig hemiLig;		//半球ライト用の定数バッファ
 
-	float3 lightPos;		//ライトの座標
-	float4x4 mLVP;			//ライトビュープロジェクション行列
-	int playerAnim2D;		//2Dプレイヤーアニメーションの番号
+	Shadow shadow;			//シャドウ用の定数バッファ
 
 	int ptNum;				//ポイントライトの数
 	int spNum;				//スポットライトの数
@@ -184,10 +190,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin, uniform float4 olColor)
 	psIn.normalInView = mul(mView, psIn.normal);
 
     //ライトビュースクリーン空間の座標を計算する
-    psIn.posInLVP = mul(mLVP, worldPos);
+    psIn.posInLVP = mul(shadow.mLVP, worldPos);
 
     //頂点のライトから見た深度値を計算する
-    psIn.posInLVP.z = length(worldPos.xyz - lightPos) / 1000.0f;
+    psIn.posInLVP.z = length(worldPos.xyz - shadow.lightPos) / 1000.0f;
 
 	//頂点の正規化スクリーン座標系の座標をピクセルシェーダーにわたす
 	psIn.posInProj = psIn.pos;
@@ -323,8 +329,8 @@ float4 PSPlayer2D( SPSIn psIn ) : SV_Target0
 {
 	float2 uv;
 	int x, y;
-	x = playerAnim2D % anim_array_max;
-	y = playerAnim2D / anim_array_max;
+	x = shadow.playerAnim2D % anim_array_max;
+	y = shadow.playerAnim2D / anim_array_max;
 	uv.x = (psIn.uv.x / 4) + (x * 0.25);
 	uv.y = (psIn.uv.y / 4) + (y * 0.25);
 	float4 albedo = g_albedo.Sample(g_sampler, uv);

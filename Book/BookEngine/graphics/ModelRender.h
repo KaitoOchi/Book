@@ -5,7 +5,7 @@
 namespace nsBookEngine {
 
 	/// <summary>
-	/// ãƒ¢ãƒ‡ãƒ«ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¯ãƒ©ã‚¹ã€‚
+	/// ƒ‚ƒfƒ‹ƒŒƒ“ƒ_[ƒNƒ‰ƒXB
 	/// </summary>
 	class ModelRender : public IRenderer
 	{
@@ -14,17 +14,17 @@ namespace nsBookEngine {
 		~ModelRender();
 
 		/// <summary>
-		/// åˆæœŸåŒ–å‡¦ç†ã€‚
+		/// ‰Šú‰»ˆ—B
 		/// </summary>
-		/// <param name="filePath">ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã€‚</param>
-		/// <param name="animationClip">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¯ãƒªãƒƒãƒ—ã€‚</param>
-		/// <param name="numAnimationClip">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ•°ã€‚</param>
-		/// <param name="enModelUpAxis">ãƒ¢ãƒ‡ãƒ«ã®ä¸Šæ–¹å‘ã€‚</param>
-		/// <param name="isShadow">trueãªã‚‰å½±ã‚’ä¸ãˆã‚‹ã€‚</param>
-		/// <param name="isShadowReceiver">trueãªã‚‰å½±ã‚’è½ã¨ã™ã€‚</param>
-		/// <param name="outlineMode">1ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã€2ã§æ•µã®è¼ªéƒ­ç·š</param>
-		/// <param name="isFrontCullingOnDrawShadowMap">ã‚«ãƒªãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã€‚</param>
-		/// <param name="useWipe">ãƒ¯ã‚¤ãƒ—ãƒ¢ãƒ‡ãƒ«ã‚’ä½¿ç”¨ã™ã‚‹ã€‚</param>
+		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒXB</param>
+		/// <param name="animationClip">ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒvB</param>
+		/// <param name="numAnimationClip">ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”B</param>
+		/// <param name="enModelUpAxis">ƒ‚ƒfƒ‹‚Ìã•ûŒüB</param>
+		/// <param name="isShadow">true‚È‚ç‰e‚ğ—^‚¦‚éB</param>
+		/// <param name="isShadowReceiver">true‚È‚ç‰e‚ğ—‚Æ‚·B</param>
+		/// <param name="outlineMode">1‚ÅƒvƒŒƒCƒ„[A2‚Å“G‚Ì—ÖŠsü</param>
+		/// <param name="isFrontCullingOnDrawShadowMap">ƒJƒŠƒ“ƒOƒ‚[ƒhB</param>
+		/// <param name="useWipe">ƒƒCƒvƒ‚ƒfƒ‹‚ğg—p‚·‚éB</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationClip = nullptr,
@@ -37,33 +37,33 @@ namespace nsBookEngine {
 			const bool useWipe = false);
 
 		/// <summary>
-		/// ModelInitDataã‚’ä½¿ç”¨ã—ãŸåˆæœŸåŒ–å‡¦ç†ã€‚
+		/// ModelInitData‚ğg—p‚µ‚½‰Šú‰»ˆ—B
 		/// </summary>
 		void InitModelData(ModelInitData& initData);
 
 		/// <summary>
-		/// æ›´æ–°å‡¦ç†ã€‚
+		/// XVˆ—B
 		/// </summary>
 		void Update();
 
 		/// <summary>
-		/// æç”»å‡¦ç†ã€‚
+		/// •`‰æˆ—B
 		/// </summary>
 		/// <param name="rc"></param>
 		void Draw(RenderContext& rc);
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œã€‚
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌÀsB
 		/// </summary>
-		/// <param name="animNo">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç•ªå·ã€‚</param>
-		/// <param name="interpolateTime">å®Ÿè¡Œé€Ÿåº¦ã€‚</param>
+		/// <param name="animNo">ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”Ô†B</param>
+		/// <param name="interpolateTime">Às‘¬“xB</param>
 		void PlayAnimation(int animNo, float interpolateTime = 0.0f)
 		{
 			m_animation.Play(animNo, interpolateTime);
 		}
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿã—ã¦ã„ã‚‹ã‹ï¼Ÿ
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶‚µ‚Ä‚¢‚é‚©H
 		/// </summary>
 		/// <returns></returns>
 		bool IsPlayingAniamtion()
@@ -72,7 +72,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ãƒ¢ãƒ‡ãƒ«ã®å–å¾—ã€‚
+		/// ƒ‚ƒfƒ‹‚Ìæ“¾B
 		/// </summary>
 		/// <returns></returns>
 		Model& GetModel()
@@ -85,7 +85,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// åº§æ¨™ã®è¨­å®šã€‚
+		/// À•W‚Ìİ’èB
 		/// </summary>
 		/// <param name="pos"></param>
 		void SetPosition(const Vector3& pos)
@@ -94,7 +94,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// åº§æ¨™ã®å–å¾—ã€‚
+		/// À•W‚Ìæ“¾B
 		/// </summary>
 		const Vector3& GetPosition()
 		{
@@ -102,7 +102,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// å›è»¢ã®è¨­å®šã€‚
+		/// ‰ñ“]‚Ìİ’èB
 		/// </summary>
 		/// <param name="rot"></param>
 		void SetRotation(const Quaternion& rot)
@@ -111,7 +111,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// æ‹¡å¤§ç‡ã®è¨­å®šã€‚
+		/// Šg‘å—¦‚Ìİ’èB
 		/// </summary>
 		/// <param name="scale"></param>
 		void SetScale(const Vector3& scale)
@@ -120,7 +120,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¤ãƒ™ãƒ³ãƒˆã®è¿½åŠ ã€‚
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“ƒCƒxƒ“ƒg‚Ì’Ç‰ÁB
 		/// </summary>
 		/// <param name="eventListener"></param>
 		void AddAnimationEvent(AnimationEventListener eventListener)
@@ -129,7 +129,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®é€Ÿåº¦ã‚’è¨­å®šã€‚
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘¬“x‚ğİ’èB
 		/// </summary>
 		/// <param name="animationSpeed"></param>
 		void SetAnimationSpeed(const float animationSpeed)
@@ -138,7 +138,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ãƒœãƒ¼ãƒ³IDã®å–å¾—ã€‚
+		/// ƒ{[ƒ“ID‚Ìæ“¾B
 		/// </summary>
 		/// <param name="boneName"></param>
 		/// <returns></returns>
@@ -148,7 +148,7 @@ namespace nsBookEngine {
 		}
 
 		/// <summary>
-		/// ãƒœãƒ¼ãƒ³ã®å–å¾—ã€‚
+		/// ƒ{[ƒ“‚Ìæ“¾B
 		/// </summary>
 		/// <param name="boneNo"></param>
 		/// <returns></returns>
@@ -159,14 +159,13 @@ namespace nsBookEngine {
 
 	private:
 		/// <summary>
-		/// ã‚¹ã‚±ãƒ«ãƒˆãƒ³ã®åˆæœŸåŒ–ã€‚
+		/// ƒXƒPƒ‹ƒgƒ“‚Ì‰Šú‰»B
 		/// </summary>
 		/// <param name="filePath">X</param>
 		void InitSkeleton(const char* filePath);
 
-
 		/// <summary>
-		/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–ã€‚
+		/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»B
 		/// </summary>
 		/// <param name="animationClips"></param>
 		/// <param name="numAnimationClips"></param>
@@ -176,12 +175,12 @@ namespace nsBookEngine {
 			EnModelUpAxis enModelUpAxis);
 
 		/// <summary>
-		/// ãƒ¢ãƒ‡ãƒ«ã®æ›´æ–°å‡¦ç†ã€‚
+		/// ƒ‚ƒfƒ‹‚ÌXVˆ—B
 		/// </summary>
 		void UpdateWorldMatrixInModes();
 
 		/// <summary>
-		/// ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–ã€‚
+		/// ƒ‚ƒfƒ‹‚Ì‰Šú‰»B
 		/// </summary>
 		/// <param name="renderingEngine"></param>
 		/// <param name="tkmFilePath"></param>
@@ -195,40 +194,66 @@ namespace nsBookEngine {
 			const bool useWipe
 		);
 
+		/// <summary>
+		/// ƒVƒƒƒhƒE—pƒ‚ƒfƒ‹‚Ì‰Šú‰»B
+		/// </summary>
+		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒXB</param>
+		/// <param name="enModelUpAxis">ƒ‚ƒfƒ‹‚Ìã•ûŒüB</param>
+		/// <param name="outlineMode">1‚ÅƒvƒŒƒCƒ„[A2‚Å“G‚Ì—ÖŠsü</param>
+		/// <param name="isFrontCullingOnDrawShadowMap">ƒJƒŠƒ“ƒOƒ‚[ƒhB</param>
+		void InitShadowModel(
+			const char* tkmFilePath,
+			EnModelUpAxis modelUpAxis,
+			const int outlineMode,
+			D3D12_CULL_MODE cullMode
+		);
+
+		/// <summary>
+		/// ZPrepass—pƒ‚ƒfƒ‹‚Ì‰Šú‰»B
+		/// </summary>
+		/// <param name="filePath">ƒtƒ@ƒCƒ‹ƒpƒXB</param>
+		/// <param name="enModelUpAxis">ƒ‚ƒfƒ‹‚Ìã•ûŒüB</param>
+		/// <param name="isFrontCullingOnDrawShadowMap">ƒJƒŠƒ“ƒOƒ‚[ƒhB</param>
+		void InitZPrepassModel(
+			const char* tkmFilePath,
+			EnModelUpAxis modelUpAxis,
+			D3D12_CULL_MODE cullMode
+		);
+
 	private:
 		/// <summary>
-		/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®æç”»å‡¦ç†ã€‚
+		/// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ì•`‰æˆ—B
 		/// </summary>
 		/// <param name="rc"></param>
 		void OnRenderShadowMap(RenderContext& rc, Camera& camera) override;
 		/// <summary>
-		/// ZPrepassã®æç”»å‡¦ç†ã€‚
+		/// ZPrepass‚Ì•`‰æˆ—B
 		/// </summary>
 		void OnRenderToZPrepass(RenderContext& rc) override;
 		/// <summary>
-		/// ãƒ•ã‚©ãƒ¯ãƒ¼ãƒ‰ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã®æç”»å‡¦ç†ã€‚
+		/// ƒtƒHƒ[ƒhƒŒƒ“ƒ_ƒŠƒ“ƒO‚Ì•`‰æˆ—B
 		/// </summary>
 		void OnForwardRender(RenderContext& rc) override;
 		/// <summary>
-		/// ãƒ¯ã‚¤ãƒ—è¶Šã—ã®ãƒ•ã‚©ãƒ¯ãƒ¼ãƒ‰ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã®æç”»å‡¦ç†ã€‚
+		/// ƒƒCƒv‰z‚µ‚ÌƒtƒHƒ[ƒhƒŒƒ“ƒ_ƒŠƒ“ƒO‚Ì•`‰æˆ—B
 		/// </summary>
 		void OnWipeForwardRender(RenderContext& rc, Camera& camera) override;
 
 	private:
-		AnimationClip* m_animationClips = nullptr;			//
-		int				m_numAnimationClips = 0;			//
-		Vector3			m_position = Vector3::Zero;			//
-		Quaternion		m_rotation = Quaternion::Identity;	//
-		Vector3			m_scale = Vector3::One;				//
-		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;		//
-		Animation		m_animation;						//
-		Model			m_model;							//
-		Model			m_shadowModel;						//
-		Model			m_zprepassModel;					//
-		Model			m_wipeModel;						//
-		bool			m_isUpdateAnimation = true;			//
-		Skeleton		m_skeleton;							//
-		bool			m_isUseWipeCamera = false;			//
-		float			m_animationSpeed = 1.0f;
+		AnimationClip*	m_animationClips = nullptr;			//ƒAƒjƒ[ƒVƒ‡ƒ“ƒNƒŠƒbƒv
+		int				m_numAnimationClips = 0;			//ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”
+		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;		/* ƒ‚ƒfƒ‹‚Ìã•ûŒü */
+		Animation		m_animation;						//ƒAƒjƒ[ƒVƒ‡ƒ“
+		Skeleton		m_skeleton;							//ƒXƒPƒ‹ƒgƒ“
+		Model			m_model;							//’Êíƒ‚ƒfƒ‹
+		Model			m_shadowModel;						//ƒVƒƒƒhƒEƒ‚ƒfƒ‹
+		Model			m_zprepassModel;					//ZPrepassƒ‚ƒfƒ‹
+		Model			m_wipeModel;						//ƒƒCƒv—pƒ‚ƒfƒ‹
+		Vector3			m_position;							//À•W
+		Quaternion		m_rotation;							//‰ñ“]
+		Vector3			m_scale = Vector3::One;				//Šg‘å—¦
+		bool			m_isUpdateAnimation = true;			//ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV
+		bool			m_isUseWipeCamera = false;			//ƒƒCƒvƒJƒƒ‰‚ÉÊ‚·‚©‚Ç‚¤‚©
+		float			m_animationSpeed = 1.0f;			//ƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
 	};
 }
