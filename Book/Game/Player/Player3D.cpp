@@ -12,9 +12,9 @@
 
 namespace
 {
-	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//・ｽ{・ｽb・ｽN・ｽX・ｽR・ｽ・ｽ・ｽC・ｽ_・ｽ[・ｽﾌ大き・ｽ・ｽ
-	const float		SPEEDDOWN = 0.8;									//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
-	const float		PLAYERSTAMINA = 10.0f;								//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽﾌス・ｽ^・ｽ~・ｽi
+	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//ボックスコライダーの大きさ
+	const float		SPEEDDOWN = 0.8;									//速度の減少量
+	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーの体力
 }
 
 Player3D::Player3D()
@@ -39,16 +39,16 @@ bool Player3D::Start()
 	m_characon = new CharacterController;
 	Player::Start();
 	
-	//・ｽM・ｽ・ｽ・ｽe・ｽﾌ呼び出・ｽ・ｽ
+	//閃光弾を生成
 	m_flashBom = NewGO<FlashBom>(0, "flashBom");
-	//・ｽ・ｽ・ｽ・ｽ・ｽe・ｽﾌ呼び出・ｽ・ｽ
+	//音爆弾を生成
 	m_soundBom = NewGO<SoundBom>(0, "soundBom");
 
 
 	//3Dアニメーションの読み込み
 	Player::Animation3D();
 	
-	//・ｽL・ｽ・ｽ・ｽ・ｽ・ｽR・ｽ・ｽ・ｽ・ｽR・ｽ・ｽ・ｽW・ｽ・ｽ・ｽ・ｽ・ｽﾌ作成
+	//キャラコンの作成
 	m_characon->Init(BOXSIZE, m_position);
 	m_collisionObject->CreateBox(
 	    Vector3(m_position.x,m_position.y+70.0f,m_position.z),
@@ -59,11 +59,11 @@ bool Player3D::Start()
 
 	m_modelRender= new ModelRender;
 	
-	//・ｽ}・ｽl・ｽW・ｽ・ｽ・ｽ・ｽ・ｽg・ｽﾌ呼び出・ｽ・ｽ
+	//PlayerManagementを呼び出す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_playerManagement->SetCharacon(m_characon);
 	
-	//・ｽ・ｽ・ｽf・ｽ・ｽ・ｽ・ｽﾇみ搾ｿｽ・ｽ・ｽ
+	//モデルの設定
 	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, 1, D3D12_CULL_MODE_BACK);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
@@ -87,17 +87,17 @@ void Player3D::Update()
 	{
 		return;
 	}
-	//・ｽﾇに厄ｿｽ・ｽﾜゑｿｽ・ｽﾄゑｿｽ・ｽﾈゑｿｽ・ｽﾈゑｿｽ
+	//壁に当たっていないなら
 	if (m_ghostHit)
 	{
-		//atn2・ｽﾅ３D・ｽﾌ会ｿｽ]・ｽ・ｽ・ｽ・ｽﾟゑｿｽ
+		//atn2を使って角度を求める
 		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 		//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽﾄび出・ｽ・ｽ
 		Player::Update();
 		
 
-		//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽﾌ移難ｿｽ・ｽ・ｽp・ｽ・ｽ・ｽ・ｽ・ｽ・ｽB
-		//・ｽL・ｽ・ｽ・ｽ・ｽ・ｽR・ｽ・ｽ・ｽﾅ搾ｿｽ・ｽW・ｽ・ｽﾚ難ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽB
+		//キャラコンを使用して
+		//プレイヤーの座標とモデルの座標を更新する
 		m_characon->SetPosition(m_position);
 		m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
 		m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
@@ -106,7 +106,7 @@ void Player3D::Update()
 		m_modelRender->Update();
 		m_collisionObject->Update();
 	}
-	//・ｽﾇに厄ｿｽ・ｽﾜゑｿｽ・ｽﾄゑｿｽ・ｽ・ｽﾈゑｿｽ
+	//壁に埋まっているなら
 	else
 	{
 		PlayerPush();
@@ -117,22 +117,26 @@ void Player3D::Update()
 void Player3D::PlayerPush()
 {
 	m_Player_Act = false;
-
+	//線形補完量を求める
 	senkeiPos += g_gameTime->GetFrameDeltaTime() * 1.5f;
+	//プレイヤーを線形補完を利用して移動させる
 	m_position.Lerp(senkeiPos, GetPushPosition(), GetGhostPosition());
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->Update();
 	m_characon->SetPosition(m_position);
 	m_characon->GetRigidBody()->SetPositionAndRotation(m_position, m_rotation);
-	//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽo・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾉ会ｿｽ]・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	//押し出された方向に回転させる
 	m_pushRotPos = GetPushPosition()-GetGhostPosition();
 	m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 	m_rotation.SetRotationY(m_pushRot);
 	m_modelRender->SetRotation(m_rotation);
+	//線形補完量が最大なら
 	if (senkeiPos >= 1.0f)
 	{
+
 		senkeiPos = 0.0f;
 		m_ghostHit = true;
+		//プレイヤーを気絶させる
 		m_playerState = m_enPlayer_Down;
 	}
 }
@@ -145,12 +149,12 @@ void Player3D::PlayerChang()
 {
 	delete(m_characon);
 	m_characon = nullptr;
-	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+	//ステートの遷移
 	ProcessCommonStateTransition();
 	Deactivate();
 	
 }
-//・ｽL・ｽ・ｽ・ｽ・ｽ・ｽR・ｽ・ｽ・ｽﾌ作成・ｽﾖ撰ｿｽ
+//キャラコンの生成
 void Player3D::CreatCharcon()
 {
 	m_characon = new CharacterController;
@@ -158,7 +162,7 @@ void Player3D::CreatCharcon()
 }
 void Player3D::Animation()
 {
-	//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽﾌス・ｽe・ｽ[・ｽg・ｽﾉゑｿｽ・ｽ・ｽﾄ変ゑｿｽ・ｽ・ｽ
+	//プレイヤーのステートごとのアニメーションを再生する
 	switch (m_playerState)
 	{
 	case Player::m_enPlayer_Idle:
@@ -183,7 +187,7 @@ void Player3D::Animation()
 		m_modelRender->PlayAnimation(m_enAnimationClip_Throw, 0.5f);
 		break;
 	case Player::m_enPlayer_Down:
-		//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽo・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾉ会ｿｽ]・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+		//押し出された方向に回転させる
 		m_pushRotPos = GetPushPosition() - GetGhostPosition();
 		m_pushRot = atan2(-m_pushRotPos.x, -m_pushRotPos.z);
 		m_rotation.SetRotationY(m_pushRot);
@@ -205,26 +209,26 @@ void Player3D::Animation()
 void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 {
 	(void)clipName;
-	//・ｽL・ｽ[・ｽﾌ厄ｿｽ・ｽO・ｽ・ｽAttack_Start・ｽﾌ趣ｿｽ
+	//イベントなら
 	if (wcscmp(eventName, L"Attack_Start") == 0)
 	{
 		switch (m_enItemState)
 		{
-		//・ｽM・ｽ・ｽ・ｽe・ｽ鰍・ｽ・ｽ・ｽ
+		//フラッシュをアクティブにする
 		case Player::m_enItem_Flash:
 			if (m_flashBom->m_flashCount > 0&&
 				m_flashBom->m_FlashState==m_flashBom->m_enFlash_No)
 			{
 				m_flashBom->m_FlashState = m_flashBom->m_enFlash_Start;
 				m_flashBom->SetItemPosition(m_position);
-				//SE・ｽ・ｽﾂらす
+				//SE鳴らす
 				SoundSource* se = NewGO<SoundSource>(0);
 				se->Init(9);
 				se->SetVolume(GameManager::GetInstance()->GetSFX());
 				se->Play(false);
 			}
 			break;
-		//・ｽ・ｽ・ｽ・ｽ・ｽe・ｽ鰍・ｽ・ｽ・ｽ
+		//音爆弾を鳴らす
 		case Player::m_enItem_SoundBom:
 			if (m_soundBom->m_soundState == m_soundBom->m_enSoundState_End&&
 				m_soundBom->GetSoundBomNumber()>0)
@@ -266,17 +270,17 @@ void Player3D::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNam
 
 void Player3D::ProcessIdleStateTransition()
 {
-	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+	//ステートの遷移
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessWalkStateTransition()
 {
-	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+	//ステートの遷移
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessRunStateTransition()
 {
-	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+	//ステートの遷移
 	ProcessCommonStateTransition();
 }
 void Player3D::ProcessJumpStateTransition()
@@ -292,7 +296,7 @@ void Player3D::ProcessJumpendStateTransition()
 
 	if (m_modelRender->IsPlayingAniamtion() == false && m_characon->IsOnGround())
 	{
-		//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+		//ステートの遷移
 		ProcessCommonStateTransition();
 	}
 
@@ -300,20 +304,20 @@ void Player3D::ProcessJumpendStateTransition()
 void Player3D::ProcessChangeStateTransition()
 {
 
-	//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+	//ステートの遷移
 	ProcessCommonStateTransition();
 }
 
 void Player3D::ProcessDownStateTransition()
 {
 	
-	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	//移動速度を無くす
 	m_moveSpeed.x = 0;
 	m_moveSpeed.z = 0;
 	auto laststar = m_game->GetEnemyList().size();
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//・ｽX・ｽe・ｽ[・ｽg・ｽﾌ遷・ｽ・ｽ
+		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
 		m_modelRender->SetAnimationSpeed(1.0f);
@@ -321,13 +325,13 @@ void Player3D::ProcessDownStateTransition()
 }
 void Player3D::ProcessThrowStateTransition()
 {
-	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	//移動速度を無くす
 	m_moveSpeed.x *= SPEEDDOWN;
 	m_moveSpeed.z *= SPEEDDOWN;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//・ｽX・ｽe・ｽ[・ｽg・ｽ・ｽJ・ｽﾚゑｿｽ・ｽ・ｽB
+		//ステートの遷移
 		ProcessCommonStateTransition();
 		m_Player_Act = true;
 	}
@@ -344,7 +348,7 @@ void Player3D::ProcessFoundStateTransition()
 
 void Player3D::ProcessCaughtStateTransition()
 {
-	//・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+	//移動速度を無くす
 	m_moveSpeed.x *= 0.0f;
 	m_moveSpeed.z *= 0.0f;
 	m_Player_Act = false;

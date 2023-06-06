@@ -18,27 +18,27 @@ public:
 	
 public:
 	/// <summary>
-	/// 座標を設定。
+	/// 注視点を設定。
 	/// </summary>
 	/// <param name="m_pos"></param>
-	void SetPosition(const Vector3& m_pos)
+	void SetTarget(const Vector3& target)
 	{
-		m_target = m_pos;
+		m_target = target;
 	}
 
 	/// <summary>
-	/// 座標を取得。
+	/// プレイヤーが切替中の座標を取得。
 	/// </summary>
 	/// <returns></returns>
 	const Vector3 GetCameraPosition()
 	{
-		return m_cameraposition;
+		return m_playerChangeCameraPosition;
 	}
 
-	//カメラの座標
+	//プレイヤーが切替中の座標
 	void SetCameraPositio(const Vector3& camerapos)
 	{
-		m_cameraposition = camerapos;
+		m_playerChangeCameraPosition = camerapos;
 	}
 
 	/// <summary>
@@ -74,9 +74,9 @@ private:
 	Vector3				m_toCameraPosOld;				//注視点から視点に向かうベクトル変更前座標
 	Vector3				m_target;						//注視点
 	Vector3				axisX;							//X軸周りの回転
-	Vector3				m_cameraposition;
-	Vector3				m_cameraPosition;
-	Vector3				m_camePos;
+	Vector3				m_playerChangeCameraPosition;	//プレイヤーが切替中のカメラ座標
+	Vector3				m_caughtCameraPosition;			//プレイヤーが捕まった時の座標
+	Vector3				m_camePos;						//カメラ座標
 	Quaternion			qRot;							//カメラの回転
 	bool				m_pushState = true;
 	float				m_cameraMove = 0.0f;
