@@ -205,7 +205,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(objData.number);
+			enemyNormal->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -227,7 +227,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(objData.number);
+			enemyCharge->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -269,7 +269,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(objData.number);
+			enemyClear->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			// エネミーのリストに追加する
@@ -291,7 +291,7 @@ void Game::LevelDesign()
 			enemyNormal->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyNormal->Pass(objData.number);
+			enemyNormal->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加する前なので描画しない
@@ -313,7 +313,7 @@ void Game::LevelDesign()
 			enemyCharge->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyCharge->Pass(objData.number);
+			enemyCharge->SpecifyPath(objData.number);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);
 			//追加前なので描画しない
@@ -337,7 +337,7 @@ void Game::LevelDesign()
 			enemyClear->SetSpotLigNum(m_spotLigNum);
 			m_spotLigNum++;
 			// パス移動の順路を指定
-			enemyClear->Pass(objData.number);
+			enemyClear->SpecifyPath(objData.number);
 			enemyClear->SetActiveFlag(true);
 			// 初期座標を記憶する
 			m_enemyFirstPositions.push_back(objData.position);

@@ -6,46 +6,45 @@
 #include "Game.h"
 #include "GameManager.h"
 
-#define SEACH_DECISION	100.0f * 100.0f									// ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä½œæˆã™ã‚‹ç¯„å›²
+#define SEACH_DECISION	100.0f * 100.0f						// ƒxƒNƒgƒ‹‚ğì¬‚·‚é”ÍˆÍ
 
 namespace
 {
-	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerã®ã‚µã‚¤ã‚º
-	const Vector3	MODEL_SCALE = { 2.0f,2.0f,2.0f };		// ãƒ¢ãƒ‡ãƒ«ã®ã‚¹ã‚±ãƒ¼ãƒ«
+	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterController‚ÌƒTƒCƒY
 
-	const float		LINEAR_COMPLETION = 1.0f;				// ç·šå½¢è£œå®Œ
+	const float		LINEAR_COMPLETION = 1.0f;				// üŒ`•âŠ®
 
-	const float		MOVE_SPEED = 3.0f;						// ç§»å‹•é€Ÿåº¦
-	const float		ADD_SPEED = 1.3f;						// ä¹—ç®—é€Ÿåº¦
+	const float		MOVE_SPEED = 3.0f;						// ˆÚ“®‘¬“x
+	const float		ADD_SPEED = 1.3f;						// æZ‘¬“x
 
-	const float		MOVING_DISTANCE = 600.0f;				// çªé€²ã™ã‚‹ç§»å‹•è·é›¢
+	const float		MOVING_DISTANCE = 600.0f;				// “Ëi‚·‚éˆÚ“®‹——£
 
-	const float		CALL_DISTANCE_MAX = 400.0f;				// å‘¼ã¶ã“ã¨ãŒã§ãã‚‹æœ€å¤§å€¤
-	const float		CALL_DISTANCE_MIN = 190.0f;				// å‘¼ã¶ã“ã¨ãŒã§ãã‚‹æœ€å°å€¤
+	const float		CALL_DISTANCE_MAX = 400.0f;				// ŒÄ‚Ô‚±‚Æ‚ª‚Å‚«‚éÅ‘å’l
+	const float		CALL_DISTANCE_MIN = 190.0f;				// ŒÄ‚Ô‚±‚Æ‚ª‚Å‚«‚éÅ¬’l
 
-	const float		CHANGING_DISTANCE = 20.0f;				// ç›®çš„åœ°ã‚’å¤‰æ›´ã™ã‚‹è·é›¢
+	const float		CHANGING_DISTANCE = 20.0f;				// –Ú“I’n‚ğ•ÏX‚·‚é‹——£
 
-	const float		CANMOVE_TIMER = 5.5f;					// å†åº¦è¡Œå‹•ã§ãã‚‹ã¾ã§ã®å¾…æ©Ÿæ™‚é–“
-	const float		WAITING_TIMER = 3.0f;					// ãƒ‘ã‚¹ç§»å‹•æ™‚ã®å¾…æ©Ÿæ™‚é–“
-	const float		SEARCHPLAYER_TIMER = 7.0f;				// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹å¤±ã£ãŸæ™‚ã®å¾…æ©Ÿæ™‚é–“
+	const float		CANMOVE_TIMER = 5.5f;					// Ä“xs“®‚Å‚«‚é‚Ü‚Å‚Ì‘Ò‹@ŠÔ
+	const float		WAITING_TIMER = 3.0f;					// ƒpƒXˆÚ“®‚Ì‘Ò‹@ŠÔ
+	const float		SEARCHPLAYER_TIMER = 7.0f;				// ƒvƒŒƒCƒ„[‚ğŒ©¸‚Á‚½‚Ì‘Ò‹@ŠÔ
 
-	const float		ADD_MOVE_MIN = 250.0f;					// ãƒ‘ã‚¹ç§»å‹•
-	const float		ADD_MOVE_LONG = 400.0f;					// ãƒ‘ã‚¹ç§»å‹•
+	const float		ADD_MOVE_MIN = 250.0f;					// ƒpƒXˆÚ“®
+	const float		ADD_MOVE_LONG = 400.0f;					// ƒpƒXˆÚ“®
 
-	const float		AI_RADIUS = 50.0f;						// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®åŠå¾„
-	const float		AI_HIGH = 200.0f;						// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®é«˜ã•
-	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’å†åº¦è¨ˆç®—ã™ã‚‹ã‚¿ã‚¤ãƒãƒ¼
+	const float		AI_RADIUS = 50.0f;						// AIƒG[ƒWƒFƒ“ƒg‚Ì”¼Œa
+	const float		AI_HIGH = 200.0f;						// AIƒG[ƒWƒFƒ“ƒg‚Ì‚‚³
+	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ƒiƒrƒƒbƒVƒ…‚ğÄ“xŒvZ‚·‚éƒ^ƒCƒ}[
 
-	const float		CATCH_DECISION = 60.0f;					// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã—ãŸã“ã¨ã«ãªã‚‹ç¯„å›²
+	const float		CATCH_DECISION = 60.0f;					// ƒvƒŒƒCƒ„[‚ğŠm•Û‚µ‚½‚±‚Æ‚É‚È‚é”ÍˆÍ
 
-	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };					// çªé€²æ™‚ã«è¿½åŠ ã™ã‚‹é•·ã•
+	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };	// “Ëi‚É’Ç‰Á‚·‚é’·‚³
 
-	const float     VIGILANCETIME = 0.3f;					// è­¦æˆ’åº¦UPæ™‚é–“
+	const float     VIGILANCETIME = 0.3f;					// Œx‰ú“xUPŠÔ
 
-	const float		ANGLE = 45.0f;							//ï¿½ï¿½]ï¿½pï¿½x
-	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			//ï¿½ï¿½ï¿½Cï¿½gï¿½ÌƒJï¿½ï¿½ï¿½[
-	const float		LIGHTRANGE = 600.0f;					//ï¿½ï¿½ï¿½Cï¿½gï¿½Ì‰eï¿½ï¿½ï¿½Íˆï¿½
-	const float		LIGHTPOSITION = 80.0f;					//ï¿½ï¿½ï¿½Cï¿½gï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½
+	const float		ANGLE = 45.0f;							// Šp“x
+	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			// ƒJƒ‰[
+	const float		LIGHTRANGE = 600.0f;					// ‰e‹¿”ÍˆÍ
+	const float		LIGHTPOSITION = 80.0f;					// À•W
 	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
 }
 
@@ -60,6 +59,7 @@ Enemy::~Enemy()
 	m_pointList.shrink_to_fit();
 
 	if (m_Effect != nullptr) {
+		// ƒGƒtƒFƒNƒg‚Ì’â~‚Æíœ
 		m_Effect->Stop();
 		DeleteGO(m_Effect);
 	}
@@ -67,45 +67,45 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
-	// ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®š
-	SetScale(MODEL_SCALE);
+	// ƒXƒP[ƒ‹‚ğİ’è
+	SetScale({ 2.0f,2.0f,2.0f });
 
-	// è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’åˆæœŸåŒ–
+	// s“®ƒpƒ^[ƒ“‚ğ‰Šú‰»
 	if (m_enemyType == TYPE_SEARCH) {
-		m_ActState = SEARCH;
+		m_ActState = m_ActState_Search;
 	}
 	else {
-		m_ActState = CRAW;
+		m_ActState = m_ActState_Craw;
 	}
 
-	//è­¦æˆ’åº¦æ™‚é–“ã‚’ä»£å…¥
+	//Œx‰ú“xŠÔ‚ğ‘ã“ü
 	m_Vicount = VIGILANCETIME;
 
-	// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’åˆæœŸåŒ–ã™ã‚‹
+	// ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ğ‰Šú‰»‚·‚é
 	m_characterController.Init(BOXSIZE, m_position);
 
-	// ã‚¹ãƒ•ã‚£ã‚¢ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’è¨­å®š
+	// ƒXƒtƒBƒAƒRƒ‰ƒCƒ_[‚ğİ’è
 	m_sphereCollider.Create(20.0f);
 
-	// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’æ§‹ç¯‰
+	// ƒiƒrƒƒbƒVƒ…‚ğ\’z
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
 
-	// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ¢ã™
+	// ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’T‚·
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
 
-	// å„ã‚¿ã‚¤ãƒãƒ¼ã®ãƒªã‚»ãƒƒãƒˆ
+	// ƒ^ƒCƒ}[‚ÌƒŠƒZƒbƒg
 	for (int i = 0; i < 4; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
-	// ãƒ•ãƒ©ã‚°ã®ãƒªã‚»ãƒƒãƒˆ
+	// ƒGƒtƒFƒNƒg‚ğ¶¬‚·‚éƒtƒ‰ƒO‚ÌƒŠƒZƒbƒg
 	for (int i = 0; i < 3; i++) {
 		m_efectDrawFlag[i] = false;
 	}
 
-	// è¦–é‡ã‚’ä½œæˆ
+	// ‹–ì‚ğì¬
 	SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
@@ -118,7 +118,7 @@ bool Enemy::Start()
 
 void Enemy::Animation()
 {
-	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®èª­ã¿è¾¼ã¿
+	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì“Ç‚İ‚İ
 	m_enAnimationClips[m_enAnimation_Idle].Load("Assets/animData/enemy/idle.tka");
 	m_enAnimationClips[m_enAnimation_Idle].SetLoopFlag(true);
 
@@ -131,8 +131,8 @@ void Enemy::Animation()
 	m_enAnimationClips[m_enAnimation_Attack].Load("Assets/animData/enemy/attack.tka");
 	m_enAnimationClips[m_enAnimation_Attack].SetLoopFlag(false);
 
-	m_enAnimationClips[m_enAnimation_Damege].Load("Assets/animData/enemy/damege.tka");
-	m_enAnimationClips[m_enAnimation_Damege].SetLoopFlag(false);
+	m_enAnimationClips[m_enAnimation_Damage].Load("Assets/animData/enemy/damege.tka");
+	m_enAnimationClips[m_enAnimation_Damage].SetLoopFlag(false);
 
 	m_enAnimationClips[m_enAnimation_Dizzy].Load("Assets/animData/enemy/dizzy.tka");
 	m_enAnimationClips[m_enAnimation_Dizzy].SetLoopFlag(true);
@@ -146,31 +146,31 @@ void Enemy::Animation()
 
 void Enemy::PlayAnimation()
 {
-	// è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã§å†ç”Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¤‰å‹•
+	// s“®ƒpƒ^[ƒ“‚ÅÄ¶ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ•Ï“®
 	switch (m_enAnimationState)
 	{
-	case IDLE:
+	case m_enAnimationState_Idle:
 		m_enemyRender.PlayAnimation(m_enAnimation_Idle, LINEAR_COMPLETION);
 		break;
-	case WALK:
+	case m_enAnimationState_Walk:
 		m_enemyRender.PlayAnimation(m_enAnimation_Walk, LINEAR_COMPLETION);
 		break;
-	case RUN:
+	case m_enAnimationState_Run:
 		m_enemyRender.PlayAnimation(m_enAnimation_Run, LINEAR_COMPLETION);
 		break;
-	case ATTACK:
+	case m_enAnimationState_Attack:
 		m_enemyRender.PlayAnimation(m_enAnimation_Attack, LINEAR_COMPLETION);
 		break;
-	case DAMEGE:
-		m_enemyRender.PlayAnimation(m_enAnimation_Damege, LINEAR_COMPLETION);
+	case m_enAnimationState_Damage:
+		m_enemyRender.PlayAnimation(m_enAnimation_Damage, LINEAR_COMPLETION);
 		break;
-	case DIZZY:
+	case m_enAnimationState_Dizzy:
 		m_enemyRender.PlayAnimation(m_enAnimation_Dizzy, LINEAR_COMPLETION);
 		break;
-	case LOSS:
+	case m_enAnimationState_Loss:
 		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
 		break;
-	case CALL:
+	case m_enAnimationState_Call:
 		m_enemyRender.PlayAnimation(m_enAnimation_Call, LINEAR_COMPLETION);
 		break;
 	}
@@ -180,12 +180,12 @@ void Enemy::Efect_Dizzy()
 {
 	if (m_efectDrawFlag[0] == false) {
 
-		// â˜†ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+		// ™‚ÌƒGƒtƒFƒNƒg‚ğ¶¬
 		m_Effect = NewGO<EffectEmitter>(2);
 		m_Effect->Init(2);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å¤§ãã•ã‚’æŒ‡å®šã™ã‚‹
+		// ƒGƒtƒFƒNƒg‚Ì‘å‚«‚³‚ğw’è‚·‚é
 		m_Effect->SetScale(Vector3::One * 1.0f);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åº§æ¨™ã®è¨­å®š
+		// ƒGƒtƒFƒNƒg‚ÌÀ•W‚Ìİ’è
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
@@ -198,12 +198,12 @@ void Enemy::Efect_Dizzy()
 void Enemy::Efect_FindPlayer()
 {
 	if (m_efectDrawFlag[1] == false) {
-		// !ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+		// !‚ÌƒGƒtƒFƒNƒg‚ğ¶¬
 		m_Effect = NewGO<EffectEmitter>(3);
 		m_Effect->Init(3);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å¤§ãã•ã‚’æŒ‡å®šã™ã‚‹
+		// ƒGƒtƒFƒNƒg‚Ì‘å‚«‚³‚ğw’è‚·‚é
 		m_Effect->SetScale(Vector3::One * 1.2f);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åº§æ¨™ã®è¨­å®š
+		// ƒGƒtƒFƒNƒg‚ÌÀ•W‚Ìİ’è
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
@@ -216,12 +216,12 @@ void Enemy::Efect_FindPlayer()
 void Enemy::Efect_MissingPlayer()
 {
 	if (m_efectDrawFlag[2] == false) {
-		// ?ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+		// ?‚ÌƒGƒtƒFƒNƒg‚ğ¶¬
 		m_Effect = NewGO<EffectEmitter>(4);
 		m_Effect->Init(4);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å¤§ãã•ã‚’æŒ‡å®šã™ã‚‹
+		// ƒGƒtƒFƒNƒg‚Ì‘å‚«‚³‚ğw’è‚·‚é
 		m_Effect->SetScale(Vector3::One * 1.5f);
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åº§æ¨™ã®è¨­å®š
+		// ƒGƒtƒFƒNƒg‚ÌÀ•W‚Ìİ’è
 		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
@@ -233,109 +233,166 @@ void Enemy::Efect_MissingPlayer()
 
 void Enemy::Rotation(Vector3 rot)
 {
-	// å›è»¢
+	// ‰ñ“]
 	m_rotation.SetRotationYFromDirectionXZ(rot);
 	m_enemyRender.SetRotation(m_rotation);
 
 	//---------------------------------------------
-	//ã‚¨ãƒãƒŸãƒ¼ã®å‰ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ±‚ã‚ã‚‹
+	//ƒGƒlƒ~[‚Ì‘OƒxƒNƒgƒ‹‚ğ‹‚ß‚é
 	m_forward = Vector3::AxisZ;
 	m_rotation.Apply(m_forward);
 	//---------------------------------------------
 
 }
 
+void Enemy::SpecifyPath(int pathNumber)
+{
+	// ƒpƒX‚ğw’è
+	switch (pathNumber)
+	{
+		// c
+	case 0:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
+		break;
+		// ‰¡
+	case 1:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
+		break;
+		// ‰E‰ñ‚è(³•ûŒ`)
+	case 2:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_MIN),4 });
+		break;
+		// ¶‰ñ‚è(³•ûŒ`)
+	case 3:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z),2 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),4 });
+		break;
+		// (‰E‚É)’¼Šp
+	case 4:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
+		break;
+		// (¶‚É)’¼Šp
+	case 5:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
+		break;
+		// ‰E‰ñ‚è(’·•ûŒ`)
+	case 6:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
+		break;
+		// ¶‰ñ‚è(’·•ûŒ`)
+	case 7:
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
+		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
+		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),4 });
+	}
+}
+
 void Enemy::CreateNavimesh(Vector3 pos)
 {
-	// ã‚¿ã‚¤ãƒãƒ¼ã‚’åŠ ç®—
+	// ƒ^ƒCƒ}[‚ğ‰ÁZ
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 diff = pos - m_position;
 
 	diff.Normalize();
 	Rotation(diff);
 
-	// ä¸€å®šæ™‚é–“ä»¥ä¸‹ã®ã¨ãreturn
+	// ˆê’èŠÔˆÈ‰º‚Ì‚Æ‚«return
 	if (CALCULATIONNAVI_TIMER >= m_NaviTimer) {
 		return;
 	}
 
-	// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥
-	bool isEnd;							// ãƒ•ãƒ©ã‚°
+	// ƒiƒrƒƒbƒVƒ…
+	bool isEnd;							// ƒtƒ‰ƒO
 
-	// ãƒ‘ã‚¹æ¤œç´¢
+	// ƒpƒXŒŸõ
 	m_pathFiding.Execute(
-		m_path,							// æ§‹ç¯‰ã•ã‚ŒãŸãƒ‘ã‚¹ã®æ ¼ç´å…ˆ
-		m_nvmMesh,						// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥
-		m_position,						// é–‹å§‹åº§æ¨™
-		pos,							// ç§»å‹•ç›®æ¨™åº§æ¨™
-		PhysicsWorld::GetInstance(),	// ç‰©ç†ã‚¨ãƒ³ã‚¸ãƒ³
-		AI_RADIUS,						// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®åŠå¾„
-		AI_HIGH							// AIã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®é«˜ã•
+		m_path,							// \’z‚³‚ê‚½ƒpƒX‚ÌŠi”[æ
+		m_nvmMesh,						// ƒiƒrƒƒbƒVƒ…
+		m_position,						// ŠJnÀ•W
+		pos,							// ˆÚ“®–Ú•WÀ•W
+		PhysicsWorld::GetInstance(),	// •¨—ƒGƒ“ƒWƒ“
+		AI_RADIUS,						// AIƒG[ƒWƒFƒ“ƒg‚Ì”¼Œa
+		AI_HIGH							// AIƒG[ƒWƒFƒ“ƒg‚Ì‚‚³
 	);
 
-	// ãƒ‘ã‚¹ä¸Šã‚’èµ°ã£ã¦ç§»å‹•ã™ã‚‹
+	// ƒpƒXã‚ğ‘–‚Á‚ÄˆÚ“®‚·‚é
 	m_position = m_path.Move(
-		m_position,						// åº§æ¨™
-		MOVE_SPEED * ADD_SPEED,			// ç§»å‹•é€Ÿåº¦ï¼ˆãƒ‘ã‚¹ç§»å‹•ã‚ˆã‚Šã‚‚é€Ÿã‚ï¼‰
-		isEnd							// ç§»å‹•ã—ãŸã¨ãtrue
+		m_position,						// À•W
+		MOVE_SPEED * ADD_SPEED,			// ˆÚ“®‘¬“xiƒpƒXˆÚ“®‚æ‚è‚à‘¬‚ßj
+		isEnd							// ˆÚ“®‚µ‚½‚Æ‚«true
 	);
 }
 
 void Enemy::Act_SeachPlayer()
 {
-	// æ··ä¹±æ™‚ã¯ä½•ã‚‚ã—ãªã„
-	if (m_ActState == CONFUSION) {
+	// ¬—‚Í‰½‚à‚µ‚È‚¢
+	if (m_ActState == m_ActState_Dizzy) {
 		return;
 	}
 
-	// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®ä¸­ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚‹ã¨ã
+	// ’ÇÕ‚µ‚Ä‚¢‚éÅ’†
+	if (m_TrackingPlayerFlag == true) {
+		// Õ“Ë”»’è‚ğs‚¤
+		if (WallAndHit(m_playerManagement->GetPosition()) == false) {
+			// •Ç‚ÉÕ“Ë‚µ‚½‚Æ‚«
+			m_TrackingPlayerFlag = false;
+			return;
+		}
+	}
+
+	// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì’†‚ÉƒvƒŒƒCƒ„[‚ª‚¢‚é‚Æ‚«
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
-
-		m_playerPos = m_playerManagement->GetPosition();
-
-		// è¡çªåˆ¤å®šã‚’è¡Œã†
-		if (WallAndHit(m_playerPos) == false) {
-			// å£ã«è¡çªã—ãŸã¨ã
+		// Õ“Ë”»’è‚ğs‚¤
+		if (WallAndHit(m_playerManagement->GetPosition()) == false) {
+			// •Ç‚ÉÕ“Ë‚µ‚½‚Æ‚«
 			m_TrackingPlayerFlag = false;
 			return;
 		}
 
-		// è¿½è·¡ãƒ•ãƒ©ã‚°ã‚’trueã«ã™ã‚‹
+		// ’ÇÕƒtƒ‰ƒO‚ğtrue‚É‚·‚é
 		m_TrackingPlayerFlag = true;
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+		// ƒGƒtƒFƒNƒg‚ğ¶¬
 		Efect_FindPlayer();
 		return;
 	}
-
-	if (m_TrackingPlayerFlag == true) {
-		m_playerPos = m_playerManagement->GetPosition();
-
-		// è¡çªåˆ¤å®šã‚’è¡Œã†
-		if (WallAndHit(m_playerPos) == false) {
-			// å£ã«è¡çªã—ãŸã¨ã
-			m_TrackingPlayerFlag = false;
-			return;
-		}
-	}
 }
 
-// è¡çªã—ãŸã¨ãã«å‘¼ã°ã‚Œã‚‹é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(å£ç”¨)
+// Õ“Ë‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éŠÖ”ƒIƒuƒWƒFƒNƒg(•Ç—p)
 struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 {
-	bool isHit = false;		// è¡çªãƒ•ãƒ©ã‚°
+	bool isHit = false;		// Õ“Ëƒtƒ‰ƒO
 
 	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
-		// å£ã¨ã¶ã¤ã‹ã£ã¦ã„ãªã‹ã£ãŸã‚‰
+		// •Ç‚Æ‚Ô‚Â‚©‚Á‚Ä‚¢‚È‚©‚Á‚½‚ç
 		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
-			// è¡çªã—ãŸã®ã¯å£ã§ã¯ãªã„
+			// Õ“Ë‚µ‚½‚Ì‚Í•Ç‚Å‚Í‚È‚¢
 			return 0.0f;
 		}
 
-		// å£ã¨ã¶ã¤ã‹ã£ãŸã‚‰
-		// ãƒ•ãƒ©ã‚°ã‚’trueã«ã™ã‚‹
+		// •Ç‚Æ‚Ô‚Â‚©‚Á‚½‚ç
+		// ƒtƒ‰ƒO‚ğtrue‚É‚·‚é
 		isHit = true;
 		return 0.0f;
 	}
@@ -348,52 +405,52 @@ bool Enemy::WallAndHit(Vector3 pos)
 	start.setIdentity();
 	end.setIdentity();
 
-	// å§‹ç‚¹ã¯ã‚¨ãƒãƒŸãƒ¼ã®åº§æ¨™
+	// n“_‚ÍƒGƒlƒ~[‚ÌÀ•W
 	start.setOrigin(btVector3(m_position.x,  25.0f, m_position.z));
 
-	// çµ‚ç‚¹ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ (çªé€²æ™‚ã¯å§‹ç‚¹ã®å°‘ã—å‰)
+	// I“_‚ÍƒvƒŒƒCƒ„[‚ÌÀ•W (“Ëi‚Ín“_‚Ì­‚µ‘O)
 	end.setOrigin(btVector3(pos.x, 25.0f, pos.z));
 
 	SweepResultWall callback;
 
-	// ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’å§‹ç‚¹ã‹ã‚‰çµ‚ç‚¹ã¾ã§å‹•ã‹ã—ã¦ã€
-	// è¡çªã™ã‚‹ã‹ã©ã†ã‹èª¿ã¹ã‚‹
+	// ƒRƒ‰ƒCƒ_[‚ğn“_‚©‚çI“_‚Ü‚Å“®‚©‚µ‚ÄA
+	// Õ“Ë‚·‚é‚©‚Ç‚¤‚©’²‚×‚é
 	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(),
 		start, end, callback);
 
-	// å£ã¨è¡çªã—ãŸ
+	// •Ç‚ÆÕ“Ë‚µ‚½
 	if (callback.isHit == true) {
 		return false;
 	}
 
-	// å£ã¨è¡çªã—ã¦ã„ãªã„
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã¤ã‘ãŸ
+	// •Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚È‚¢
+	// ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½
 	return true;
 
 }
 
 bool Enemy::Act_CatchPlayer()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ•ã¾ãˆã‚‹å‡¦ç†
-	// trueã®ã¨ããƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ•ã¾ãˆãŸ
+	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚éˆ—
+	// true‚Ì‚Æ‚«ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½
 
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// é•·ã•ã‚’è¨ˆç®—ã™ã‚‹
+	// ’·‚³‚ğŒvZ‚·‚é
 	float length = diff.Length();
 
-	// ä¸€å®šã®é•·ã•ã®ã¨ã
+	// ˆê’è‚Ì’·‚³‚Ì‚Æ‚«
 	if (length <= CATCH_DECISION) {
 
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã‚’å‘ã
+		// ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ğŒü‚­
 		diff.Normalize();
 		Rotation(diff);
-		// æ•ã¾ãˆã‚‹
-		m_enAnimationState = ATTACK;
+		// •ß‚Ü‚¦‚é
+		m_enAnimationState = m_enAnimationState_Attack;
 
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-			// ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰å‹•ã•ã›ã‚‹
-			m_game->GetEnemyList()[i]->m_ActState = CATCH;
+			// ƒXƒe[ƒg‚ğ•Ï“®‚³‚¹‚é
+			m_game->GetEnemyList()[i]->m_ActState = m_ActState_CatchPlayer;
 		}
 
 		return true;
@@ -404,197 +461,197 @@ bool Enemy::Act_CatchPlayer()
 
 void Enemy::Act_MoveMissingPosition()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç™ºè¦‹ã—ãŸã¨ã
+	// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚µ‚½‚Æ‚«
 	if (m_TrackingPlayerFlag == true) {
-		// å†åº¦è¿½è·¡ã™ã‚‹
+		// Ä“x’ÇÕ‚·‚é
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
-		m_addTimer[3] = 0.0f;			// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
+		m_addTimer[3] = 0.0f;			// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
 
-		// ç´¢æ•µã™ã‚‹ã‚¿ã‚¤ãƒ—ãªã‚‰
+		// õ“G‚·‚éƒ^ƒCƒv‚È‚ç
 		if (m_enemyType == TYPE_SEARCH) {
-			// å‘¨ã‚Šã®æ•µã‚’å‘¼ã¶
-			m_ActState = CALLING_AROUND_ENEMY;
+			// ü‚è‚Ì“G‚ğŒÄ‚Ô
+			m_ActState = m_ActState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
-			// çªé€²ã™ã‚‹
-			m_ActState = CHARGE;
+			// “Ëi‚·‚é
+			m_ActState = m_ActState_Charge;
 			return;
 		}
 
-		m_ActState = TRACKING;
+		m_ActState = m_ActState_Tracking;
 		return;
 	}
 
-	// ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä½œæˆ
+	// ƒxƒNƒgƒ‹‚ğì¬
 	Vector3 diff = m_playerMissiongPosition - m_position;
 
-	// é•·ã•ã‚’è¨ˆç®—
+	// ’·‚³‚ğŒvZ
 	float length = diff.Length();
 
-	// ç§»å‹•ã™ã‚‹
+	// ˆÚ“®‚·‚é
 	diff.Normalize();
 
-	// ç§»å‹•é€Ÿåº¦ã«åŠ ç®—
+	// ˆÚ“®‘¬“x‚É‰ÁZ
 	Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
 	m_position += moveSpeed * m_Chargemove;
 
-	// èµ°ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-	m_enAnimationState = RUN;
+	// ‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+	m_enAnimationState = m_enAnimationState_Run;
 
 	if (length < 10.0f) {
-		m_ActState = MISSING_SEARCHPLAYER;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		return;
 	}
 
-	// å›è»¢ã‚’æ•™ãˆã‚‹
+	// ‰ñ“]‚ğ‹³‚¦‚é
 	Rotation(moveSpeed);
 }
 
 void Enemy::Act_SearchMissingPlayer()
 {
-	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+	// ƒGƒtƒFƒNƒg‚ğ¶¬
 	Efect_MissingPlayer();
 
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç™ºè¦‹ã—ãŸã¨ã
+	// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚µ‚½‚Æ‚«
 	if (m_TrackingPlayerFlag == true) {
-		// å†åº¦è¿½è·¡ã™ã‚‹
+		// Ä“x’ÇÕ‚·‚é
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
-		m_addTimer[3] = 0.0f;			// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
+		m_addTimer[3] = 0.0f;			// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
 
-		// ç´¢æ•µã™ã‚‹ã‚¿ã‚¤ãƒ—ãªã‚‰
+		// õ“G‚·‚éƒ^ƒCƒv‚È‚ç
 		if (m_enemyType == TYPE_SEARCH) {
-			// å‘¨ã‚Šã®æ•µã‚’å‘¼ã¶
-			m_ActState = CALLING_AROUND_ENEMY;
+			// ü‚è‚Ì“G‚ğŒÄ‚Ô
+			m_ActState = m_ActState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
-			// çªé€²ã™ã‚‹
-			m_ActState = CHARGE;
+			// “Ëi‚·‚é
+			m_ActState = m_ActState_Charge;
 			return;
 		}
 
-		m_ActState = TRACKING;
+		m_ActState = m_ActState_Tracking;
 		return;
 	}
 
-	// è¦‹æ¸¡ã™ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-	m_enAnimationState = LOSS;
+	// Œ©“n‚·ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
+	m_enAnimationState = m_enAnimationState_Loss;
 
-	// ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
+	// ƒ‚[ƒVƒ‡ƒ“‚ğÄ¶
 	if (Act_Stop(SEARCHPLAYER_TIMER, 3) == true) {
 
-		m_efectDrawFlag[1] = false;		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»ãƒ•ãƒ©ã‚°
+		m_efectDrawFlag[1] = false;		// ƒGƒtƒFƒNƒg‚Ì•`‰æƒtƒ‰ƒO
 		m_efectDrawFlag[2] = false;
 
-		m_addTimer[3] = 0.0f;			// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
-		m_sumPos = Vector3::Zero;		// ç§»å‹•è·é›¢ã‚’ãƒªã‚»ãƒƒãƒˆ
+		m_addTimer[3] = 0.0f;			// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+		m_sumPos = Vector3::Zero;		// ˆÚ“®‹——£‚ğƒŠƒZƒbƒg
 
-		// ç´¢æ•µã™ã‚‹ã‚¿ã‚¤ãƒ—ãªã‚‰
+		// õ“G‚·‚éƒ^ƒCƒv‚È‚ç
 		if (m_enemyType == TYPE_SEARCH) {
-			// ç´¢æ•µçŠ¶æ…‹ã«æˆ»ã™
-			m_ActState = SEARCH;
+			// õ“Gó‘Ô‚É–ß‚·
+			m_ActState = m_ActState_Search;
 			return;
 		}
 
-		m_ActState = BACKBASEDON;
+		m_ActState = m_ActState_BackBasedOn;
 	}
 }
 
 void Enemy::Act_HitFlashBullet()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½è·¡ã™ã‚‹ãƒ•ãƒ©ã‚°ãŒtrueã«ãªã£ãŸã‚‰
+	// ƒvƒŒƒCƒ„[‚ğ’ÇÕ‚·‚éƒtƒ‰ƒO‚ªtrue‚É‚È‚Á‚½‚ç
 	if (m_TrackingPlayerFlag == true) {
-		// falseã«ã™ã‚‹
+		// false‚É‚·‚é
 		m_TrackingPlayerFlag = false;
 	}
 
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã—ãŸãƒ•ãƒ©ã‚°ãŒtrueã«ãªã£ãŸã‚‰
+	// ƒvƒŒƒCƒ„[‚ğŠm•Û‚µ‚½ƒtƒ‰ƒO‚ªtrue‚É‚È‚Á‚½‚ç
 	if (m_ChachPlayerFlag == true) {
-		// falseã«ã™ã‚‹
+		// false‚É‚·‚é
 		m_ChachPlayerFlag = false;
 	}
 
-	// ã‚ã¾ã„ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-	m_enAnimationState = DIZZY;
+	// ‚ß‚Ü‚¢‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+	m_enAnimationState = m_enAnimationState_Dizzy;
 
 	Efect_Dizzy();
 
-	// ã‚¿ã‚¤ãƒãƒ¼ãŒtrueã®ã¨ã
+	// ƒ^ƒCƒ}[‚ªtrue‚Ì‚Æ‚«
 	if (Act_Stop(CANMOVE_TIMER,0) == true) {
-		// ç”Ÿæˆãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
+		// ¶¬ƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
 		m_efectDrawFlag[0] = false;
 
-		// ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+		// ƒtƒ‰ƒO‚ğ~‚ë‚·
 		m_TrackingPlayerFlag = false;
 		m_HitFlashBulletFlag = false;
 
-		// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
+		// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
 		m_addTimer[0] = 0.0f;
 
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
+		// ƒGƒtƒFƒNƒg‚ğ¶¬
 		Efect_MissingPlayer();
 
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
-		m_ActState = MISSING_SEARCHPLAYER;
+		// ƒvƒŒƒCƒ„[‚ğ’T‚·
+		m_ActState = m_ActState_Search_MissingPlayer;
 
 	}
 	else {
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç”Ÿæˆãƒ•ãƒ©ã‚°ã‚’falseã«ã—ã¦ãŠã
+		// ƒGƒtƒFƒNƒg‚Ì¶¬ƒtƒ‰ƒO‚ğfalse‚É‚µ‚Ä‚¨‚­
 		m_efectDrawFlag[2] = false;
 	}
 }
 
 void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç™ºè¦‹ã—ãŸã¨ã
+	// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚µ‚½‚Æ‚«
 	if (m_TrackingPlayerFlag == true) {
 
-		// çªé€²ã‚¿ã‚¤ãƒ—ã®ã¨ã
+		// “Ëiƒ^ƒCƒv‚Ì‚Æ‚«
 		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = CHARGE;
+			m_ActState = m_ActState_Charge;
 			return;
 		}
 		else {
-			m_ActState = TRACKING;
+			m_ActState = m_ActState_Tracking;
 			return;
 		}
 	}
 
 	Efect_FindPlayer();
 
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ã‚¢ã‚¤ãƒ†ãƒ ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«ã‚’ä½œæˆ
+	// ƒGƒlƒ~[‚©‚çƒAƒCƒeƒ€‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹‚ğì¬
 	Vector3 diff = tergetPos - m_position;
 	float length = diff.Length();
 
-	// é•·ã•ãŒä¸€å®šä»¥ä¸Šã®ã¨ã
+	// ’·‚³‚ªˆê’èˆÈã‚Ì‚Æ‚«
 	if (length >= CALL_DISTANCE_MIN) {
-		// ã‚¢ã‚¤ãƒ†ãƒ ã®åº§æ¨™ã‚’åŸºã«ã—ã¦ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œæˆ
+		// ƒAƒCƒeƒ€‚ÌÀ•W‚ğŠî‚É‚µ‚ÄƒiƒrƒƒbƒVƒ…‚ğì¬
 		CreateNavimesh(tergetPos);
 
-		// çµŒéæ™‚é–“ã‚’è¨ˆæ¸¬
+		// Œo‰ßŠÔ‚ğŒv‘ª
 		m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
 
-		// èµ°ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = RUN;
-		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å†ç”Ÿãƒ•ãƒ©ã‚°ã‚’falseã«ã—ã¦ãŠã
+		// ‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Run;
+		// ƒGƒtƒFƒNƒg‚ÌÄ¶ƒtƒ‰ƒO‚ğfalse‚É‚µ‚Ä‚¨‚­
 		m_efectDrawFlag[2] = false;
 	}
 	else if (m_addTimer[4] > 10.0f) {
-		// ä¸€å®šæ™‚é–“ãŒçµŒéã—ãŸã¨ã
-		// ç§»å‹•ã‚’ä¸­æ–­ã—ã¦è¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
-		m_ActState = MISSING_SEARCHPLAYER;
+		// ˆê’èŠÔ‚ªŒo‰ß‚µ‚½‚Æ‚«
+		// ˆÚ“®‚ğ’†’f‚µ‚ÄŒ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·
+		m_ActState = m_ActState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
-		// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
+		// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
 		m_addTimer[4] = 0.0f;
 		m_efectDrawFlag[1] = false;
 		return;
 	}
 	else {
-		// è¦‹å¤±ã£ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ¢ã™
-		m_ActState = MISSING_SEARCHPLAYER;
+		// Œ©¸‚Á‚½ƒvƒŒƒCƒ„[‚ğ’T‚·
+		m_ActState = m_ActState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 		return;
@@ -603,278 +660,215 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 
 void Enemy::Act_Craw()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç™ºè¦‹ã—ãŸã¨ã
+	// ƒvƒŒƒCƒ„[‚ğ”­Œ©‚µ‚½‚Æ‚«
 	if (m_TrackingPlayerFlag == true) {
-		// çªé€²ã‚¿ã‚¤ãƒ—ã®ã¨ã
+		// “Ëiƒ^ƒCƒv‚Ì‚Æ‚«
 		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = CHARGE;
+			m_ActState = m_ActState_Charge;
 			return;
 		}
-		// ãã‚Œä»¥å¤–
-		m_ActState = TRACKING;
+		// ‚»‚êˆÈŠO
+		m_ActState = m_ActState_Tracking;
 		return;
 	}
 	
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ‘ã‚¹ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒpƒX‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 diff = m_point->s_position - m_position;
 
-	// é•·ã•ãŒä¸€å®šã®ã¨ã
+	// ’·‚³‚ªˆê’è‚Ì‚Æ‚«
 	if (diff.Length() <= CHANGING_DISTANCE) {
 
-		// ãƒ‘ã‚¹ãŒæœ€å¾Œã®ã¨ã
+		// ƒpƒX‚ªÅŒã‚Ì‚Æ‚«
 		if (m_point->s_number == m_pointList.size()) {
-			// æœ€åˆã®å€¤ã‚’æ¸¡ã™
+			// Å‰‚Ì’l‚ğ“n‚·
 			m_point = &m_pointList[0];
 		}
-		// ãã†ã§ãªã„ã¨ã
+		// ‚»‚¤‚Å‚È‚¢‚Æ‚«
 		else {
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		m_addTimer[1] = 0.0f;	// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
+		m_addTimer[1] = 0.0f;	// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
 	}
 
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 moveSpeed = m_point->s_position - m_position;
-	// æ­£è¦åŒ–
+	// ³‹K‰»
 	moveSpeed.Normalize();
-	// å›è»¢ã‚’æ•™ãˆã‚‹
+	// ‰ñ“]‚ğ‹³‚¦‚é
 	moveSpeed *= MOVE_SPEED;
 	Rotation(moveSpeed);
 
-	// ã‚¿ã‚¤ãƒãƒ¼ãŒtrueã®ã¨ã
+	// ƒ^ƒCƒ}[‚ªtrue‚Ì‚Æ‚«
 	if (Act_Stop(WAITING_TIMER,1) == true) {
-		// æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = WALK;
-		// åº§æ¨™ã«åŠ ç®—
+		// •à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Walk;
+		// À•W‚É‰ÁZ
 		m_position += moveSpeed;
 	}
 	else {
-		// å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = IDLE;
+		// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Idle;
 	}
 }
 
 void Enemy::Act_Tracking()
 {
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™
-	m_playerPos = m_playerManagement->GetPosition();
-	// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œæˆ
-	CreateNavimesh(m_playerPos);
+	// ƒiƒrƒƒbƒVƒ…‚ğì¬
+	CreateNavimesh(m_playerManagement->GetPosition());
 
 	if (m_ChachPlayerFlag == false) {
-		// èµ°ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = RUN;
+		// ‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Run;
 	}
 
-	// è¦‹å¤±ã£ãŸæ™‚
+	// Œ©¸‚Á‚½
 	if (m_TrackingPlayerFlag == false) {
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã‚’å‚ç…§ã™ã‚‹
+		// ƒvƒŒƒCƒ„[‚ÌÀ•W‚ğQÆ‚·‚é
 		m_playerMissiongPosition = m_playerManagement->GetPosition();
-		m_ActState = MISSING_MOVEPOSITON;
-	}
-}
-
-void Enemy::Pass(int PassState)
-{
-	switch (PassState)
-	{
-		// ç¸¦
-	case LINE_VERTICAL:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		break;
-		// æ¨ª
-	case LINE_HORIZONTAL:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
-		break;
-		// å³å›ã‚Š(æ­£æ–¹å½¢)
-	case SQUARE_RIGHT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_MIN),4 });
-		break;
-		// å·¦å›ã‚Š(æ­£æ–¹å½¢)
-	case SQUARE_LEFT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z+ ADD_MOVE_MIN),4 });
-		break;
-		// (å³ã«)ç›´è§’
-	case ANGLE_RIGHT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
-		break;
-		// (å·¦ã«)ç›´è§’
-	case ANGLE_LEFT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
-		break;
-		// å³å›ã‚Š(é•·æ–¹å½¢)
-	case RECTANGLE_RIGHT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
-		break;
-		// å·¦å›ã‚Š(é•·æ–¹å½¢)
-	case RECTANGLE_LEFT:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),4 });
+		m_ActState = m_ActState_Move_MissingPositon;
 	}
 }
 
 void Enemy::Act_Access()
 {
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// é•·ã•ã‚’è¨ˆç®—
+	// ’·‚³‚ğŒvZ
 	float length = diff.Length();
-	// å›è»¢ã‚’æ•™ãˆã‚‹
+	// ‰ñ“]‚ğ‹³‚¦‚é
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 	Rotation(rot);
 
-	// é•·ã•ãŒä¸€å®šã®ã¨ã
+	// ’·‚³‚ªˆê’è‚Ì‚Æ‚«
 	if (length <= SEACH_DECISION) {
-		// æ­£è¦åŒ–
+		// ³‹K‰»
 		diff.Normalize();
-		// ç§»å‹•é€Ÿåº¦ã«åŠ ç®—
+		// ˆÚ“®‘¬“x‚É‰ÁZ
 		Vector3 moveSpeed = diff * MOVE_SPEED;
 		m_position += moveSpeed;
 
-		// æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = WALK;
+		// •à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Walk;
 	}
 }
 
 void Enemy::Act_Charge(float time)
 {
-	// ç§»å‹•è·é›¢ã®é•·ã•ãŒä¸€å®šä»¥ä¸Šã®ã¨ã
+	// ˆÚ“®‹——£‚Ì’·‚³‚ªˆê’èˆÈã‚Ì‚Æ‚«
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
-		// çªé€²ã‚’çµ‚äº†ã™ã‚‹
-		m_ActState = CHARGEEND;
+		// “Ëi‚ğI—¹‚·‚é
+		m_ActState = m_ActState_ChargeEnd;
 
-		// ç·ç§»å‹•è·é›¢ã‚’ãƒªã‚»ãƒƒãƒˆ
+		// ‘ˆÚ“®‹——£‚ğƒŠƒZƒbƒg
 		m_sumPos = Vector3::Zero;
 		return;
 	}
 
-	// ã‚¿ã‚¤ãƒãƒ¼ãŒtrueã®ã¨ã
+	// ƒ^ƒCƒ}[‚ªtrue‚Ì‚Æ‚«
 	if (Act_Stop(time,2) == true) {
 
-		// ä¸€åº¦ã ã‘å®Ÿè¡Œã™ã‚‹
+		// ˆê“x‚¾‚¯Às‚·‚é
 		if (m_CalculatedFlag == false) {
-			// åº§æ¨™ã‚’å‚ç…§
+			// À•W‚ğQÆ
 			m_chargeTergetPosition = m_playerManagement->GetPosition();
 
-			// ä½•åº¦ã‚‚å®Ÿè¡Œã—ãªã„ã‚ˆã†ã«trueã«ã™ã‚‹
+			// ‰½“x‚àÀs‚µ‚È‚¢‚æ‚¤‚Étrue‚É‚·‚é
 			m_CalculatedFlag = true;
 
-			// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+			// ƒGƒlƒ~[‚©‚çƒvƒŒƒCƒ„[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 			m_chargeDiff = m_chargeTergetPosition - m_position;
 			m_chargeDiff.y = 0.0f;
 			m_chargeDiff.Normalize();
 		}
 
-		// ç§»å‹•é€Ÿåº¦ã«åŠ ç®—
+		// ˆÚ“®‘¬“x‚É‰ÁZ
 		Vector3 moveSpeed = m_chargeDiff * (MOVE_SPEED * ADD_SPEED);
 		m_position += moveSpeed * m_Chargemove;
 
-		// ç·ç§»å‹•è·é›¢ã‚’è¨ˆç®—
+		// ‘ˆÚ“®‹——£‚ğŒvZ
 		m_sumPos += moveSpeed;
-		// èµ°ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = RUN;
+		// ‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Run;
 
-		// è¡çªåˆ¤å®š
+		// Õ“Ë”»’è
 		Act_Charge_HitWall();
 	}
 	else {
-		// å›è»¢ã®ã¿ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½å°¾ã•ã›ã‚‹
+		// ‰ñ“]‚Ì‚İƒvƒŒƒCƒ„[‚ğ’Ç”ö‚³‚¹‚é
 		m_chargeDiff = m_playerManagement->GetPosition() - m_position;
 		m_chargeDiff.Normalize();
 
-		// å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-		m_enAnimationState = IDLE;
+		// ‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+		m_enAnimationState = m_enAnimationState_Idle;
 	}
 
-	// å›è»¢ã‚’æ•™ãˆã‚‹
+	// ‰ñ“]‚ğ‹³‚¦‚é
 	Rotation(m_chargeDiff);
 }
 
 void Enemy::Act_ChargeEnd()
 {
-	m_position = m_position;		// åº§æ¨™ã‚’å›ºå®š
+	m_position = m_position;		// À•W‚ğŒÅ’è
 
-	m_addTimer[2] = 0.0f;			// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
-	m_sumPos = Vector3::Zero;		// ç§»å‹•è·é›¢ã‚’ãƒªã‚»ãƒƒãƒˆ
-	m_CalculatedFlag = false;		// ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+	m_addTimer[2] = 0.0f;			// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+	m_sumPos = Vector3::Zero;		// ˆÚ“®‹——£‚ğƒŠƒZƒbƒg
+	m_CalculatedFlag = false;		// ƒtƒ‰ƒO‚ğ~‚ë‚·
 
-	m_efectDrawFlag[2] = false;		//ã€€!ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+	m_efectDrawFlag[2] = false;		//@!‚ÌƒGƒtƒFƒNƒg‚Ìƒtƒ‰ƒO‚ğ~‚ë‚·
 	m_efectDrawFlag[1] = false;
 
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¦–é‡è§’å†…ã«ã„ã‚‹ã¨ã
+	// ƒvƒŒƒCƒ„[‚ª‹–ìŠp“à‚É‚¢‚é‚Æ‚«
 	if (m_TrackingPlayerFlag == true) {
 		Efect_FindPlayer();
-		// å†åº¦çªé€²ã™ã‚‹
-		m_ActState = CHARGE;
+		// Ä“x“Ëi‚·‚é
+		m_ActState = m_ActState_Charge;
 		return;
 	}
 	else {
-		// ã„ãªã„ã¨ãã¯å·¡å›çŠ¶æ…‹ã«æˆ»ã‚‹
-		m_ActState = MISSING_SEARCHPLAYER;
+		// ‚¢‚È‚¢‚Æ‚«‚Í„‰ñó‘Ô‚É–ß‚é
+		m_ActState = m_ActState_Search_MissingPlayer;
 	}
 }
 
 void Enemy::Act_Charge_HitWall()
 {
-	// å£ã«è¡çªã™ã‚‹åˆ¤å®š
+	// •Ç‚ÉÕ“Ë‚·‚é”»’è
 
-	// å£ã«è¡çªã—ãŸã‹ã©ã†ã‹
-	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã¸å‘ã‹ã†å˜ä½ãƒ™ã‚¯ãƒˆãƒ«ã«ã‚¹ã‚«ãƒ©ãƒ¼ã‚’ä¹—ç®—ã—ãŸã‚‚ã®ã‚’åŠ ç®—ã—ã¦æ¸¡ã™
+	// •Ç‚ÉÕ“Ë‚µ‚½‚©‚Ç‚¤‚©
+	// ƒvƒŒƒCƒ„[‚Ì•ûŒü‚ÖŒü‚©‚¤’PˆÊƒxƒNƒgƒ‹‚ÉƒXƒJƒ‰[‚ğæZ‚µ‚½‚à‚Ì‚ğ‰ÁZ‚µ‚Ä“n‚·
 	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
-		// è¡çªã—ãŸã¨ã
-		m_Chargemove = 0.0f;
+		// Õ“Ë‚µ‚½‚Æ‚«
+		m_Chargemove = 0.0f;			// æZ‚µ‚Ä‚¢‚é’l‚ğ0‚É‚µ‚Ä“®‚©‚È‚¢‚æ‚¤‚É‚·‚é
 		
-		m_addTimer[2] = 0.0f;			// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
-		m_sumPos = Vector3::Zero;		// ç§»å‹•è·é›¢ã‚’ãƒªã‚»ãƒƒãƒˆ
-		m_CalculatedFlag = false;		// ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™jj
+		m_addTimer[2] = 0.0f;			// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+		m_sumPos = Vector3::Zero;		// ˆÚ“®‹——£‚ğƒŠƒZƒbƒg
+		m_CalculatedFlag = false;		// ƒtƒ‰ƒO‚ğ~‚ë‚·jj
 
-		m_efectDrawFlag[2] = false;		//ã€€!ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+		m_efectDrawFlag[2] = false;		// !‚ÌƒGƒtƒFƒNƒg‚Ìƒtƒ‰ƒO‚ğ~‚ë‚·
 
-		// è¡Œå‹•ã‚’æ··ä¹±çŠ¶æ…‹ã«ã™ã‚‹
-		m_ActState = CONFUSION;
+		// s“®‚ğ¬—ó‘Ô‚É‚·‚é
+		m_ActState = m_ActState_Dizzy;
 		return;
 	}
 
-	// è¡çªã—ã¦ã„ãªã„ã¨ãã¯ç¶šè¡Œã™ã‚‹
+	// Õ“Ë‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Í‘±s‚·‚é
 	m_Chargemove = 1.0f;
 }
 
 void Enemy::Act_Call()
 {
-	// seã‚’é³´ã‚‰ã™
+	// se‚ğ–Â‚ç‚·
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(17);
 	se->SetVolume(GameManager::GetInstance()->GetSFX() * 0.1f);
 	se->Play(false);
 
-	// ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½Éƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½
 	if (m_TrackingPlayerFlag == false) {
-		// ãƒ•ãƒ©ã‚°ã‚’é™ã‚ã™
+		// ƒtƒ‰ƒO‚ğ~‚ë‚·
 		m_efectDrawFlag[1] = false;
-		m_ActState = MISSING_SEARCHPLAYER;
+		m_ActState = m_ActState_Search_MissingPlayer;
 		se->Stop();
 
 		return;
@@ -883,86 +877,86 @@ void Enemy::Act_Call()
 	Vector3 rot = m_playerManagement->GetPosition() - m_position;
 	rot.Normalize();
 
-	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒªã‚¹ãƒˆã‚’æ¤œç´¢
+	// ƒGƒlƒ~[‚ÌƒŠƒXƒg‚ğŒŸõ
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
-		// æ··ä¹±ä¸­ã ã£ãŸã¨ãã¯ãã‚Œä»¥é™ã¯å®Ÿè¡Œã—ãªã„
-		if (m_game->GetEnemyList()[i]->m_ActState == CONFUSION) {
+		// ¬—’†‚¾‚Á‚½‚Æ‚«‚Í‚»‚êˆÈ~‚ÍÀs‚µ‚È‚¢
+		if (m_game->GetEnemyList()[i]->m_ActState == m_ActState_Dizzy) {
 			return;
 		}
 
-		// å„ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰è©²å½“ã‚¨ãƒãƒŸãƒ¼ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+		// ŠeƒGƒlƒ~[‚©‚çŠY“–ƒGƒlƒ~[‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
 		float length = diff.Length();
 
-		// é•·ã•ãŒä¸€å®šä»¥å†…ã®ã¨ã ã‹ã¤ ã¾ã å‘¼ã‚“ã§ã„ãªã„ã¨ã
+		// ’·‚³‚ªˆê’èˆÈ“à‚Ì‚Æ‚« ‚©‚Â ‚Ü‚¾ŒÄ‚ñ‚Å‚¢‚È‚¢‚Æ‚«
 		if (length > CALL_DISTANCE_MIN &&
 			length < CALL_DISTANCE_MAX &&
-			m_game->GetEnemyList()[i]->m_ActState != CALLED) {
+			m_game->GetEnemyList()[i]->m_ActState != m_ActState_Called) {
 
-			m_game->GetEnemyList()[i]->m_ActState = CALLED;				// è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
-			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;	// è‡ªèº«ã®åº§æ¨™-ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’ç›®æ¨™åœ°ç‚¹ã¨ã—ã¦æ¸¡ã™
+			m_game->GetEnemyList()[i]->m_ActState = m_ActState_Called;		// s“®ƒpƒ^[ƒ“‚ğ•ÏX‚·‚é
+			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;		// ©g‚ÌÀ•W-ƒLƒƒƒ‰ƒRƒ“‚ğ–Ú•W’n“_‚Æ‚µ‚Ä“n‚·
 		}
 	}
 
 	Rotation(rot);
 
-	m_enAnimationState = CALL;
+	m_enAnimationState = m_enAnimationState_Call;
 }
 
 void Enemy::Act_Loss()
 {
-	m_addTimer[1] = 0.0f;	// ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
-	m_addTimer[2] = 0.0f;	// çªé€²ã‹ã‚‰ã®ç§»è¡Œæ™‚ã«ã“ã¡ã‚‰ã®ã‚¿ã‚¤ãƒãƒ¼ã‚‚ãƒªã‚»ãƒƒãƒˆ
+	m_addTimer[1] = 0.0f;	// ƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+	m_addTimer[2] = 0.0f;	// “Ëi‚©‚ç‚ÌˆÚs‚É‚±‚¿‚ç‚Ìƒ^ƒCƒ}[‚àƒŠƒZƒbƒg
 
-	// ç›´è¿‘ã®ãƒ‘ã‚¹ã‚’æ¤œç´¢
-	// floatã«æœ€å¤§å€¤ã‚’æ ¼ç´
+	// ’¼‹ß‚ÌƒpƒX‚ğŒŸõ
+	// float‚ÉÅ‘å’l‚ğŠi”[
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
 	int NowTargetNum = -1;
 
-	// ãƒ‘ã‚¹ã®å€‹æ•°æ–‡å›ã™
+	// ƒpƒX‚ÌŒÂ”•¶‰ñ‚·
 	for (int i = 0; i < m_pointList.size(); i++) {
 
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
 		float length = diff.Length();
 
-		// å†åº¦è¨ˆç®—ã—ãŸé•·ã•ãŒç¾åœ¨ä¿å­˜ã—ã¦ã„ã‚‹é•·ã•ã‚ˆã‚ŠçŸ­ã„ã¨ã
+		// Ä“xŒvZ‚µ‚½’·‚³‚ªŒ»İ•Û‘¶‚µ‚Ä‚¢‚é’·‚³‚æ‚è’Z‚¢‚Æ‚«
 		if (NowTargetDiff > length) {
-			// å€¤ã‚’æ›´æ–°ã™ã‚‹
+			// ’l‚ğXV‚·‚é
 			NowTargetNum = i;
 			NowTargetDiff = length;
 		}
 	}
 
-	// æœ€çŸ­ã®ãƒ‘ã‚¹ã®æƒ…å ±ã‚’æ¸¡ã™
+	// Å’Z‚ÌƒpƒX‚Ìî•ñ‚ğ“n‚·
 	m_point = &m_pointList[NowTargetNum];
 
-	// ãƒŠãƒ“ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ä½œæˆ
+	// ƒiƒrƒƒbƒVƒ…‚ğì¬
 	CreateNavimesh(m_point->s_position);
 
-	// èµ°ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†ç”Ÿ
-	m_enAnimationState = RUN;
+	// ‘–‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄ¶
+	m_enAnimationState = m_enAnimationState_Run;
 
 
-	// ã‚¨ãƒãƒŸãƒ¼ã‹ã‚‰ãƒ‘ã‚¹ã¸å‘ã‹ã†ãƒ™ã‚¯ãƒˆãƒ«
+	// ƒGƒlƒ~[‚©‚çƒpƒX‚ÖŒü‚©‚¤ƒxƒNƒgƒ‹
 	Vector3 diff = m_point->s_position - m_position;
 	float length = diff.Length();
 
-	// é•·ã•ãŒä¸€å®šã®ã¨ã
+	// ’·‚³‚ªˆê’è‚Ì‚Æ‚«
 	if (length <= CHANGING_DISTANCE) {
 		m_NaviTimer = 0.0f;
-		m_ActState = CRAW;
+		m_ActState = m_ActState_Craw;
 	}
 }
 
-bool Enemy::Act_Stop(float time,int i)
+bool Enemy::Act_Stop(float time,int timerNumber)
 {
-	// ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’åŠ ç®—
-	m_addTimer[i] += g_gameTime->GetFrameDeltaTime();
+	// ƒtƒŒ[ƒ€‚ğ‰ÁZ
+	m_addTimer[timerNumber] += g_gameTime->GetFrameDeltaTime();
 
-	// ã‚¿ã‚¤ãƒãƒ¼ãŒä¸€å®šä»¥ä¸Šã«ãªã£ãŸã‚‰
-	if (time <= m_addTimer[i]) {
+	// ƒ^ƒCƒ}[‚ªˆê’èˆÈã‚É‚È‚Á‚½‚ç
+	if (time <= m_addTimer[timerNumber]) {
 		return true;
 	}
 
@@ -983,41 +977,41 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
-	// æ··ä¹±çŠ¶æ…‹ã®æ™‚ã¯å®Ÿè¡Œã—ãªã„
-	if (m_ActState == CONFUSION) {
+	// ¬—ó‘Ô‚Ì‚ÍÀs‚µ‚È‚¢
+	if (m_ActState == m_ActState_Dizzy) {
 		return;
 	}
 
 	lightpos.y = LIGHTPOSITION;
-	//Yï¿½ï¿½
+	//YÀ•W‚ğİ’è
 	Vector3 m_Yup = Vector3(0.0f, 1.0f, 0.0f);
-	//ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½ï¿½
+	//‘O•û‚ÌÀ•W‚ğİ’è
 	Vector3 m_front = Vector3(0.0f, -0.3f, 0.9f);
 	lightrotaition.Apply(m_front);
-	//ï¿½ï¿½ï¿½Ì“ï¿½Â‚Ìï¿½ï¿½ï¿½ï¿½Èƒxï¿½Nï¿½gï¿½ï¿½
+	//ã‹L‚ÌÀ•W‚ÌŠOÏ‚ğŒvZ
 	Vector3 m_vertical = Cross(m_Yup, m_front);
 	Quaternion m_SitenRot;
-	//ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Èƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒNï¿½Hï¿½[ï¿½^ï¿½jï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//ŒvZ‚µ‚½ŠOÏ‚ğ²‚É‰ñ“]‚³‚¹‚é
 	m_SitenRot.SetRotationDeg(m_vertical, ANGLE);
-	//ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ÉƒNï¿½Hï¿½[ï¿½^ï¿½jï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ï¿½
+	//ƒNƒH[ƒ^ƒjƒIƒ“‚ğ“K‰
 	m_SitenRot.Apply(m_front);
 	m_spotLight.SetDirection(m_front);
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true)
 	{
 		VigilanceCount();
 
-		// ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹ãƒ•ãƒ©ã‚°ãŒfalseã®ã¨ã
+		// ƒJƒEƒ“ƒg‚·‚éƒtƒ‰ƒO‚ªfalse‚Ì‚Æ‚«
 		if (m_CountFlag == false) {
-			// ç™ºè¦‹å›æ•°ã«1ã‚’åŠ ç®—
+			// ”­Œ©‰ñ”‚É1‚ğ‰ÁZ
 			GameManager::GetInstance()->AddSearchNum();
-			// ãƒ•ãƒ©ã‚°ã‚’trueã«ã—ã¦å†åº¦è¡Œã‚ãªã„ã‚ˆã†ã«ã™ã‚‹
+			// ƒtƒ‰ƒO‚ğtrue‚É‚µ‚ÄÄ“xs‚í‚È‚¢‚æ‚¤‚É‚·‚é
 			m_CountFlag = true;
 		}
 	}
 	else {
-		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç¢ºä¿ã—ã¦ã„ãªã„ã¨ã
+		// ƒvƒŒƒCƒ„[‚ğŠm•Û‚µ‚Ä‚¢‚È‚¢‚Æ‚«
 		if (m_ChachPlayerFlag == false) {
-			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå­˜åœ¨ã—ãªã„ã¨ãã¯ãƒ•ãƒ©ã‚°ã‚’æˆ»ã™
+			// ƒvƒŒƒCƒ„[‚ª‘¶İ‚µ‚È‚¢‚Æ‚«‚Íƒtƒ‰ƒO‚ğ–ß‚·
 			m_CountFlag = false;
 		}
 	}
@@ -1029,7 +1023,7 @@ void Enemy::VigilanceCount()
 	m_Vicount -= g_gameTime->GetFrameDeltaTime();
 	if (m_Vicount <= 0.0f)
 	{
-		//ã‚¹ãƒ†ãƒ¼ãƒˆã®é·ç§»
+		//ƒXƒe[ƒg‚Ì‘JˆÚ
 		m_gage->GageUp(1, true);
 		m_Vicount = VIGILANCETIME;
 	}

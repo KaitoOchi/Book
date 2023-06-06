@@ -16,8 +16,6 @@ public:
 	void Update_OnMoveMissingPosition();// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
 	void Update_OnSearchMissingPlayer();// Œ©¸‚Á‚½ˆÊ’u‚Ü‚ÅˆÚ“®‚·‚é
 	void Update_OnBackBasedOn();		// „‰ñó‘Ô‚É–ß‚é
-	void Update_OnConfusion();			// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
+	void Update_OnDizzy();			// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
 	void UpDate_OnListen();				// ‰¹”š’e‚ğg—p‚µ‚½‚Æ‚«
-
-private:
 };

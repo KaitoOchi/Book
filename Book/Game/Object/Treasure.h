@@ -76,4 +76,5 @@ private:
 	
 	Player2D*				m_player2d = nullptr;
 	GameCamera* m_gameCamera = nullptr;
+	bool  m_drawState = true;
 };

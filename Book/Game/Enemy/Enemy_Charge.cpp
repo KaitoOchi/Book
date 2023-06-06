@@ -33,7 +33,7 @@ bool Enemy_Charge::Start()
 	m_enemyRender.SetPosition(m_position);
 	m_enemyRender.SetRotation(m_rotation);
 
-	// パス移動
+	// パスの初期座標を渡す
 	m_point = &m_pointList[0];
 
 	return true;
@@ -41,7 +41,7 @@ bool Enemy_Charge::Start()
 
 void Enemy_Charge::Update()
 {
-	//行動できるか調べる
+	// 行動できるか調べる
 	if (m_activeFlag == true)
 	{
 		Vector3 move = m_position;
@@ -52,7 +52,7 @@ void Enemy_Charge::Update()
 		return;
 	}
 
-	// 描画しないフラグがtrueのとき
+	// イベント後の処理
 	if (m_NotDrawFlag == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
@@ -62,66 +62,68 @@ void Enemy_Charge::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActState == CATCH) {
-		m_enAnimationState = IDLE;
+	if (m_ActState == m_ActState_CatchPlayer) {
+		// 待機状態にする
+		m_enAnimationState = m_enAnimationState_Idle;
 		return;
 	}
 
 	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+		// 追跡を優先する
 		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_ActState == TRACKING && m_HearedSoundBulletFlag == true) {
+	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
+		// 閃光弾を優先する
 		m_HearedSoundBulletFlag = false;
 	}
 
 	// 閃光弾に当たった
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = CONFUSION;
+		m_ActState = m_ActState_Dizzy;
 	}
 	// 音爆弾を使用した
 	if (m_HearedSoundBulletFlag == true) {
-		m_ActState = LISTEN;
+		m_ActState = m_ActState_Listen;
 	}
 
 	switch (m_ActState) {
-		// 巡回
-	case CRAW:
+		// 一定の場所を巡回する
+	case m_ActState_Craw:
 		Update_OnCraw();
 		break;
-		// 突進
-	case CHARGE:
+		// プレイヤーに向かって突進する
+	case m_ActState_Charge:
 		Update_OnCharge();
 		break;
-		// 突進終了
-	case CHARGEEND:
+		// 突進終了する
+	case m_ActState_ChargeEnd:
 		Update_OnChargeEnd();
 		break;
-		// プレイヤーを探す
-	case MISSING_SEARCHPLAYER:
+		// 見失ったプレイヤーを探す
+	case m_ActState_Search_MissingPlayer:
 		Update_OnSearchMissingPlayer();
 		break;
-		// 呼ばれたとき
-	case CALLED:
+		// Searchの座標近くに向かう
+	case m_ActState_Called:
 		Update_OnCalled();
 		break;
-		// 巡回状態に戻る
-	case BACKBASEDON:
+		// 元のパスに戻る
+	case m_ActState_BackBasedOn:
 		Update_OnBackBasedOn();
 		break;
-		// 閃光弾に当たった
-	case CONFUSION:
-		Update_OnConfusion();
+		// 混乱
+	case m_ActState_Dizzy:
+		Update_OnDizzy();
 		break;
-		// 音爆弾を使用したとき
-	case LISTEN:
+		// 音が聞こえた場所に向かう
+	case m_ActState_Listen:
 		UpDate_OnListen();
 		break;
 	}
 
-	Enemy::PlayAnimation();		// アニメーション
+	Enemy::PlayAnimation();							// アニメーション
 
-	// 更新
 	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
@@ -129,50 +131,43 @@ void Enemy_Charge::Update()
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	// スポットライト
-	Enemy::SpotLight_Serch(m_rotation, m_position);
-	// 視野角
-	Enemy::Act_SeachPlayer();
+	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
+	Enemy::Act_SeachPlayer();						// 索敵
 
 	m_enemyRender.Update();
 }
 
 void Enemy_Charge::Update_OnCraw()
 {
-	// プレイヤーを捕まえたとき
 	if (Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
-	Enemy::Act_Craw();					// 巡回行動
+	Enemy::Act_Craw();
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
-	// プレイヤーを捕まえたとき
 	if (Enemy::Act_CatchPlayer() == true) {
-		m_ActState = CATCH;
+		m_ActState = m_ActState_CatchPlayer;
 	}
 
-	Enemy::Act_Charge(STOP_TIMER);		// 突進攻撃
-										// 関数内で巡回状態に戻る処理を記述
+	Enemy::Act_Charge(STOP_TIMER);
 }
 
 void Enemy_Charge::Update_OnChargeEnd()
 {
-	Enemy::Act_ChargeEnd();		// 突進をやめる
+	Enemy::Act_ChargeEnd();
 }
 
 void Enemy_Charge::Update_OnSearchMissingPlayer()
 {
-	// プレイヤーを探す
 	Enemy::Act_SearchMissingPlayer();
 }
 
 void Enemy_Charge::Update_OnBackBasedOn()
 {
-	// 突進⇒巡回への切り替え
-	Enemy::Act_Loss();					// 追跡行動からの切り替え
+	Enemy::Act_Loss();
 }
 
 void Enemy_Charge::Update_OnCalled()
@@ -180,14 +175,13 @@ void Enemy_Charge::Update_OnCalled()
 	Enemy::Act_GoLocationListenSound(m_setPos);
 }
 
-void Enemy_Charge::Update_OnConfusion()
+void Enemy_Charge::Update_OnDizzy()
 {
 	Enemy::Act_HitFlashBullet();
 }
 
 void Enemy_Charge::UpDate_OnListen()
 {
-	// 音爆弾を使ったとき
 	Enemy::Act_GoLocationListenSound(m_itemPos);
 }
 
