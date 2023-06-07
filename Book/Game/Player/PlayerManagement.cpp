@@ -5,14 +5,13 @@
 #include "Player3D.h"
 #include "Enemy.h"
 #include "Game.h"
-#include "PhysicsGhost.h"
 #include "GameCamera.h"
 #include "GameManager.h"
 
 namespace
 {
-	const float CHANGE_TIME = 1.0f;
-	const float EFFECTSIZE = 1.5f;
+	const float CHANGE_TIME = 1.0f;		//変身時間
+	const float EFFECTSIZE = 1.5f;		//エフェクトサイズ
 }
 
 
@@ -26,7 +25,6 @@ PlayerManagement::~PlayerManagement()
 }
 bool PlayerManagement::Start()
 {
-	m_physicsghost = FindGO<PhysicsGhost>("physicsGhost");
 	m_player2D = FindGO<Player2D>("player2d");
 	m_player3D = FindGO<Player3D>("player3d");
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
@@ -36,14 +34,12 @@ bool PlayerManagement::Start()
 }
 void PlayerManagement::Update()
 {
-	if (!m_GameStartState) {
+	if (!m_GameStartState && 
+		m_enMananagementState == m_enPlayer_Stop
+		) {
 		return;
 	}
 
-	if (m_enMananagementState == m_enPlayer_Stop) {
-		return;
-	}
-	
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
 		if (m_game->GetEnemyList()[i]->GetChachPlayerFlag() == true) 
@@ -89,14 +85,12 @@ void PlayerManagement::Update()
 void PlayerManagement::Input()
 {
 	if (g_pad[0]->IsTrigger(enButtonLB1)) {
+
+		//煙エフェクトを再生
 		m_smokeEffect = NewGO<EffectEmitter>(0);
 		m_smokeEffect->Init(0);
-		//エフェクトの大きさを指定する
 		m_smokeEffect->SetScale(Vector3::One * EFFECTSIZE);
-		//エフェクトの再生速度を指定する
 		m_smokeEffect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
-		
-		
 
 		switch (m_enMananagementState)
 		{
@@ -105,7 +99,6 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_3DChanging;
 			m_player2D->m_Player_Act = false;
 			m_player2D->SetMoveSpeed(Vector3::Zero);
-			SetPosition(m_player2D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player2D->GetPosition());
 			//エフェクトの座標の設定
@@ -118,7 +111,6 @@ void PlayerManagement::Input()
 			m_manageStateTmp = m_enPlayer_2DChanging;
 			m_player3D->m_Player_Act = false;
 			m_player3D->SetMoveSpeed(Vector3::Zero);
-			SetPosition(m_player3D->GetPosition());
 			//�J�����̈ʒu�̐ݒ�
 			m_gamecamera->SetCameraPositio(m_player3D->GetPosition());
 			//エフェクトの座標の設定

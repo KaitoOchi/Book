@@ -1,21 +1,14 @@
 #pragma once
 #include "Item.h"
+
 class Game;
 
-class FlashBom:public Item
+/// <summary>
+/// 閃光弾クラス。
+/// </summary>
+class FlashBom : public Item
 {
 public:
-	FlashBom();
-	~FlashBom()override;
-	bool Start()override;
-	void Update();
-	void ItemHit()override;
-	void Render(RenderContext& rc);
-	/// <summary>
-	/// α値と影響率を設定する
-	/// </summary>
-	void SetFlashEffect();
-
 	enum EnFlashState
 	{
 		m_enFlash_No,				//フラッシュしていない
@@ -23,8 +16,22 @@ public:
 		m_enFlash_Flashing,			//フラッシュ中
 		m_enFlash_End				//フラッシュエンド
 	};
-
 	EnFlashState m_FlashState = m_enFlash_No;
+
+public:
+	FlashBom();
+	~FlashBom()override;
+	bool Start()override;
+	void Update();
+	void ItemHit()override;
+	void Render(RenderContext& rc);
+
+public:
+	/// <summary>
+	/// α値と影響率を設定する
+	/// </summary>
+	void SetFlashEffect();
+
 	int m_flashCount = 0;						//フラッシュボムの所持数
 private:
 	/// <summary>
@@ -39,25 +46,22 @@ private:
 	/// 開始時の遷移
 	/// </summary>
 	void ProcessStartState();
-
 	/// <summary>
 	/// フラッシュ中の遷移
 	/// </summary>
 	void ProcessFlashingState();
 
-	
-
 private:
-	SpriteRender m_flashRender;
+	SpriteRender m_flashRender;			//
 
 	SphereCollider m_sphereCollider;					//スフィアコライダー
 	RigidBody m_rigidBody;								//動態
 
 	PointLight m_pointLight;							//ポイントライトの座標
-	float m_range=0;
-	float m_alpha=0;
-	float m_ambient=0;
-	float m_color = 0;
+	float m_range=0;					//
+	float m_alpha=0;					//
+	float m_ambient=0;					//
+	float m_color = 0;					//
 
 };
 

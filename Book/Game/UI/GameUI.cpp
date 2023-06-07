@@ -6,7 +6,7 @@
 #include "Treasure.h"
 namespace
 {
-	const Vector2	SET_TIME_POSITION = { -100.0f, 600.0f };			//タイムの移動先座標
+	const Vector2	SET_TIME_POSITION = { -100.0f, 500.0f };			//タイムの移動先座標
 	const Vector3	GAGE_SPRITE_POSITION = { -900.0f, 300.0f, 0.0f };	//ゲージ画像の位置
 	const Vector3	TIME_FONT_POSITION = { -100.0f, 500.0f, 0.0f };		//タイムの位置
 	const Vector3	ITEM_BASE_POSITION = { 580.0f,250.0f,0.0f };		//アイテムの背景画像の座標

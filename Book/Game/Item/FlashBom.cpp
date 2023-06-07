@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "FlashBom.h"
+
 #include "Enemy.h"
 #include "Game.h"
 #include "PlayerManagement.h"
 #include "GameManager.h"
 #include "GameUI.h"
+
 namespace
 {
 	const Vector3 LIGHTNO = Vector3::Zero;
@@ -15,14 +17,17 @@ namespace
 	const float MAXCOLOR = 10.0f;
 	const int	FLASHNUMBER = 2;
 }
+
 FlashBom::FlashBom()
 {
 
 }
+
 FlashBom::~FlashBom()
 {
 
 }
+
 bool FlashBom::Start()
 {
 	Item::Start();
