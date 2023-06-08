@@ -31,9 +31,9 @@ namespace
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
 
-	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
+	const float		AI_RADIUS = 150.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
-	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
+	const float		CALCULATIONNAVI_TIMER = 0.5f;			// ナビメッシュを再度計算するタイマー
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
@@ -43,7 +43,7 @@ namespace
 
 	const float		ANGLE = 45.0f;							// 角度
 	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			// カラー
-	const float		LIGHTRANGE = 600.0f;					// 影響範囲
+	const float		LIGHTRANGE = 600.0f;					// 範囲
 	const float		LIGHTPOSITION = 80.0f;					// 座標
 	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
 }
