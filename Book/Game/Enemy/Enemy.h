@@ -297,8 +297,8 @@ public:
 	/// スポットライトの番号を教える
 	/// </summary>
 	/// <returns></returns>
-	void SetSpotLigNum(int num) {
-		m_spotNum = num;
+	void SetSpotLigNum(int number) {
+		m_spotNum = number;
 	}
 
 	const int GetSpotLigNum()
@@ -442,16 +442,6 @@ protected:
 
 	SpotLight					m_spotLight;						//スポットライト
 
-	bool						m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool						m_HearedSoundBulletFlag = false;	// 音爆弾が		〃
-	bool						m_CountFlag = false;				// 発見回数をカウントするかどうか決定する
-	bool						m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
-	bool						m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
-	bool						m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
-	bool						m_NotDrawFlag = false;				// 描画するかどうか
-	bool						m_activeFlag = false;				// 最初から動けるかそうか
-	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
-
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
 	/// </summary>
@@ -468,6 +458,16 @@ protected:
 	/// <param name="3">	：プレイヤーを見失った時の待機時間	</param>
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
 	std::array<float, 5>		m_addTimer;
+
+	bool						m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool						m_HearedSoundBulletFlag = false;	// 音爆弾が		〃
+	bool						m_CountFlag = false;				// 発見回数をカウントするかどうか決定する
+	bool						m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
+	bool						m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
+	bool						m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
+	bool						m_NotDrawFlag = false;				// 描画するかどうか
+	bool						m_activeFlag = false;				// 最初から動けるかそうか
+	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
 	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
