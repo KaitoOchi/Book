@@ -222,7 +222,7 @@ public:
 	/// <summary>
 	/// 座標を設定する
 	/// </summary>
-	void SetPosition(Vector3 position) {
+	void SetPosition(const Vector3& position) {
 		m_position = position;
 	}
 
@@ -236,7 +236,7 @@ public:
 	/// <summary>
 	/// 回転を設定する
 	/// </summary>
-	void SetRotation(Quaternion rotation) {
+	void SetRotation(const Quaternion& rotation) {
 		m_rotation = rotation;
 	}
 
@@ -250,7 +250,7 @@ public:
 	/// <summary>
 	/// スケールを設定する
 	/// </summary>
-	void SetScale(Vector3 scale) {
+	void SetScale(const Vector3& scale) {
 		m_scale = scale;
 	}
 
@@ -289,7 +289,7 @@ public:
 	/// アイテムの座標を渡す
 	/// </summary>
 	/// <returns></returns>
-	void SetItemPos(Vector3 position) {
+	void SetItemPos(const Vector3& position) {
 		m_itemPos = position;
 	}
 
