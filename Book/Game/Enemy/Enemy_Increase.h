@@ -65,9 +65,6 @@ public:
 	/// </summary>
 	void Enemy_Open();
 private:
-	
-
-private:
 	Vector3						m_position = Vector3::Zero;				//ç¿ïW
 	float						m_nearposition =FLT_MIN;
 	Vector3						m_ifPosition=Vector3::Zero;
