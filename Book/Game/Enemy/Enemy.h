@@ -399,7 +399,6 @@ public:
 	}
 
 protected:
-
 	// パス移動用のポイント構造体
 	struct Point {
 		Vector3					s_position;							// ポイントの座標
@@ -442,6 +441,7 @@ protected:
 
 	SpotLight					m_spotLight;						//スポットライト
 
+protected:
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
 	/// </summary>
@@ -469,6 +469,7 @@ protected:
 	bool						m_activeFlag = false;				// 最初から動けるかそうか
 	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
+private:
 	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
 	float						m_Vicount;							// 警戒度を一定回数増やす
