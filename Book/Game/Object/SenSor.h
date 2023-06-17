@@ -3,6 +3,9 @@
 
 class Gage;
 
+/// <summary>
+/// センサークラス。
+/// </summary>
 class Sensor : public Object
 {
 public:

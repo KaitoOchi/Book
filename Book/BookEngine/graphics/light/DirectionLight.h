@@ -58,7 +58,6 @@ namespace nsBookEngine {
 		}
 
 	private:
-		directionLight m_directionLig;
-
+		directionLight m_directionLig;		//ディレクショナルライト
 	};
 }

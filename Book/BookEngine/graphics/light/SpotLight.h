@@ -11,12 +11,12 @@ namespace nsBookEngine {
 		/// </summary>
 		struct spotLight
 		{
-			Vector3 spPosition = Vector3::Zero;		//座標
+			Vector3 spPosition;		//座標
 			float pad0 = 0.0f;				
-			Vector3 spColor = Vector3::Zero;		//カラー
-			float spRange = 0.0f;			//影響範囲
-			Vector3 spDirection = Vector3::Zero;	//方向
-			float spAngle = 0.0f;			//射出角度
+			Vector3 spColor;		//カラー
+			float spRange = 0.0f;	//影響範囲
+			Vector3 spDirection;	//方向
+			float spAngle = 0.0f;	//射出角度
 		};
 
 	public:
@@ -163,8 +163,8 @@ namespace nsBookEngine {
 		const bool IsHit(const Vector3& playerPos);
 
 	private:
-		spotLight m_spotLig;
-		int m_spNum = 0;
+		spotLight	m_spotLig;		//スポットライト
+		int			m_spNum = 0;	//番号
 	};
 
 }

@@ -10,7 +10,6 @@
 namespace
 {
 	const int		CURSOR_VERTICAL_MAX = 3;							//メニュー画面の縦カーソル最大値
-
 	const Vector3	CURSOR_POS_MENU[4] = { { 0.0f,  0.0f, 0.0f },
 										{ -725.0f,  80.0f, 0.0f},
 										{ -725.0f,  -120.0f, 0.0f},
@@ -24,17 +23,14 @@ Title::Title()
 
 Title::~Title()
 {
-	for (auto& sprites : m_sprites)
-	{
-		m_sprites.pop_back();
-	}
+	//画像のリストを解放
 	m_sprites.clear();
 	m_sprites.shrink_to_fit();
 }
 
 bool Title::Start()
 {
-
+	//ライトを変更
 	RenderingEngine::GetInstance()->SetDirectionLight(Vector3(-1.5f, -1, 1), Vector3(3.0f,3.0f,0.8f));
 	RenderingEngine::GetInstance()->SetAmbient(0.0f);
 
@@ -245,6 +241,7 @@ void Title::Input()
 
 		//タイトルとメニュー画面なら
 		if (m_titleState_tmp <= 1) {
+
 			//ヒント画像を非表示
 			m_fade->SetEnableTips(false);
 			m_titleState_tmp = m_cursor + 1;
@@ -308,8 +305,7 @@ void Title::ValueUpdate(bool vertical)
 	if (m_titleState_tmp == 1) {
 
 		//音を鳴らす
-		if (m_cursor == cursor_v)
-		{
+		if (m_cursor == cursor_v) {
 			Sound(2);
 			m_cursorTimer = 0.0f;
 		}

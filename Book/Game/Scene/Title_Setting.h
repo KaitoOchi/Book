@@ -4,6 +4,9 @@
 
 class Fade;
 
+/// <summary>
+/// 設定画面クラス。
+/// </summary>
 class Title_Setting : public IGameObject
 {
 public:
@@ -54,6 +57,11 @@ private:
 	void StateChange();
 
 private:
+	/// <summary>
+	/// 画像を初期化。
+	/// </summary>
+	void InitSprite();
+
 	/// <summary>
 	/// データ配列にセーブデータを入れて保存する処理。
 	/// </summary>
@@ -117,8 +125,8 @@ private:
 	std::array< SpriteRender, 3 >	m_buttonSpriteRender;			//ボタン画像
 	std::vector<SpriteRender*>		m_sprites;						//SpriteRenderのベクター型
 	FontRender						m_percentFontRender;			//パーセント文字
-	Fade* m_fade = nullptr;
-	Title* m_title = nullptr;
+	Fade*							m_fade = nullptr;
+	Title*							m_title = nullptr;
 	GameManager::SaveData			m_saveData;						//セーブデータの構造体
 	std::array< int, 3 >			m_saveDataArray;				//セーブデータの一時的な配列
 	Vector3							m_cursorPos;					//カーソル座標

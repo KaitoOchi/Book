@@ -1,6 +1,11 @@
 #pragma once
 #include "Object.h"
+
 class Gage;
+
+/// <summary>
+/// センサー用のライトクラス。
+/// </summary>
 class LightSensor : public Object
 {
 public:

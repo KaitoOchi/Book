@@ -52,7 +52,6 @@ namespace nsBookEngine {
 		void SetPosition(const Vector3& pos)
 		{
 			m_pointLig.ptPosition = pos;
-			//g_camera3D->GetViewMatrix().Apply(m_pointLig.ptPosition);
 		}
 
 		/// <summary>
@@ -111,7 +110,7 @@ namespace nsBookEngine {
 		void Update();
 
 	private:
-		pointLight m_pointLig;
-		int m_ptNum = 0;
+		pointLight	m_pointLig;		//ポイントライト
+		int			m_ptNum = 0;	//番号
 	};
 }

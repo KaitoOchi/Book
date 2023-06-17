@@ -4,10 +4,6 @@
 #include "GameManager.h"
 #include "PlayerManagement.h"
 #include "Gage.h"
-namespace
-{
-	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
-}
 
 Enemy_Clear::Enemy_Clear()
 {

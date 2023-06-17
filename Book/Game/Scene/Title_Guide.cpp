@@ -158,6 +158,7 @@ void Title_Guide::StateChange()
 
 void Title_Guide::Animation()
 {
+	//ベジェ曲線を用いて画像を移動させる
 	m_bezierPos[0].Lerp(m_timer, BEZIER_POS[0], BEZIER_POS[1]);
 	m_bezierPos[1].Lerp(m_timer, BEZIER_POS[1], BEZIER_POS[2]);
 	m_bezierPos[2].Lerp(m_timer, BEZIER_POS[2], BEZIER_POS[3]);
@@ -168,6 +169,7 @@ void Title_Guide::Animation()
 	m_bezierPos[6].Lerp(m_timer, BEZIER_POS[0], BEZIER_POS[3]);
 	m_bezierPos[7].Lerp(m_timer, BEZIER_POS[3], BEZIER_POS[2]);
 
+	//移動させる画像の座標
 	m_guidePos[0].Lerp(m_timer, m_bezierPos[0], m_bezierPos[1]);
 	m_guidePos[1].Lerp(m_timer, m_bezierPos[2], m_bezierPos[3]);
 	m_guidePos[2].Lerp(m_timer, m_bezierPos[4], m_bezierPos[5]);

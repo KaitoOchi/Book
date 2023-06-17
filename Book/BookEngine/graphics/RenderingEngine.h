@@ -10,6 +10,9 @@
 
 namespace nsBookEngine {
 
+	/// <summary>
+	/// レンダリングエンジン。
+	/// </summary>
 	class RenderingEngine
 	{
 	public:
@@ -48,16 +51,6 @@ namespace nsBookEngine {
 		~RenderingEngine();
 
 	public:
-
-		const void Setm_directionLig(Vector3 light,float ambi,Vector3 color)
-		{
-			m_directionLig.SetDirection(light);
-			m_directionLig.SetAmbientLight(ambi);
-			m_directionLig.SetColor(color);
-		}
-
-
-
 		/// <summary>
 		/// インスタンスの生成。
 		/// </summary>
@@ -161,6 +154,7 @@ namespace nsBookEngine {
 		/// 画像加工の設定。
 		/// </summary>
 		/// <param name="mode">1でセピア調</param>
+		/// <param name="mode">2でモノクローム</param>
 		void SetScreenProcess(const int mode)
 		{
 			m_spriteCB.processMode = mode;
@@ -241,6 +235,16 @@ namespace nsBookEngine {
 
 	private:
 		/// <summary>
+		/// ライトを初期化。
+		/// </summary>
+		void InitLight();
+
+		/// <summary>
+		/// メインレンダーターゲットを初期化。
+		/// </summary>
+		void InitMainRenderTarget();
+
+		/// <summary>
 		/// 2Dレンダーターゲットを初期化。
 		/// </summary>
 		void Init2DRenderTarget();
@@ -291,19 +295,17 @@ namespace nsBookEngine {
 		DirectionLight			m_directionLig;						//ディレクショナルライトの構造体
 		HemiSphereLight			m_hemiSphereLig;					//半球ライトの構造体
 		Bloom					m_bloom;							//ブルーム
-
 		RenderTarget			m_mainRenderTarget;					//メインレンダーターゲット
 		RenderTarget			m_2DRenderTarget;					//2Dレンダーターゲット
 		Sprite					m_2DSprite;                         //2Dスプライト
-		Sprite					m_mainSprite;
+		Sprite					m_mainSprite;						//メインスプライト
 		Sprite					m_copyMainRtToFrameBufferSprite;    //メインレンダーターゲットのスプライト
 		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
 		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 		Camera					m_lightCamera;						//ライトカメラ
-		Camera					m_wipeCamera;						//ワイプカメラ。
-
+		Camera					m_wipeCamera;						//ワイプカメラ
 		D3D12_VIEWPORT			m_viewPorts[2];						//ビューポート
 	};
 }

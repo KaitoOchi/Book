@@ -26,7 +26,6 @@ namespace nsBookEngine {
 
 		//輝度抽出用のスプライトを初期化
 		SpriteInitData spriteInitData;
-
 		spriteInitData.m_fxFilePath = "Assets/shader/postEffect.fx";
 		spriteInitData.m_vsEntryPointFunc = "VSMain";
 		spriteInitData.m_psEntryPoinFunc = "PSLuminance";
@@ -40,6 +39,7 @@ namespace nsBookEngine {
 		spriteInitData.m_textures[0] = &mainRenderTarget.GetRenderTargetTexture();
 		// 描き込むレンダリングターゲットのフォーマットを指定する
 		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+
 		m_luminanceSprite.Init(spriteInitData);
 
 
@@ -66,12 +66,13 @@ namespace nsBookEngine {
 
 		//アルファブレンディングモードを加算にする
 		finalSpriteInitData.m_alphaBlendMode = AlphaBlendMode_Add;
-		
 		finalSpriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 
 		//加算合成用のスプライトを初期化
 		m_finalSprite.Init(finalSpriteInitData);
 
+
+		//メインレンダリングターゲットに合成用のスプライトを初期化
 		SpriteInitData initData;
 		initData.m_width = mainRenderTarget.GetWidth();
 		initData.m_height = mainRenderTarget.GetHeight();

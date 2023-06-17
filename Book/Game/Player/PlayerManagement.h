@@ -1,11 +1,15 @@
 ﻿#pragma once
 #include "Player2D.h"
 #include "Player3D.h"
+
 class Player2D;
 class Player3D;
-class PhysicsGhost;
 class GameCamera;
 class Game;
+
+/// <summary>
+/// プレイヤーマネジメントクラス。
+/// </summary>
 class PlayerManagement:public IGameObject
 {
 public:
@@ -14,14 +18,14 @@ public:
 	/// </summary>
 	enum EnManagementState
 	{
-		m_enPlayer_GhostHit,  //透明なブロックに当たっている間
-		m_enPlayer_Changing,  //切替中
-		m_enPlayer_Stop,  //停止中
-		m_enPlayer_2DChanging,//2Dプレイヤー
-		m_enPlayer_3DChanging,//3Dプレイヤー
+		m_enPlayer_GhostHit,	//透明なブロックに当たっている間
+		m_enPlayer_Changing,	//切替中
+		m_enPlayer_Stop,		//停止中
+		m_enPlayer_2DChanging,	//2Dプレイヤー
+		m_enPlayer_3DChanging,	//3Dプレイヤー
 	};
-	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;//３D状態
-	float m_startTime = 2.0f;									//ゲームが始まるまでの時間
+	EnManagementState m_enMananagementState = m_enPlayer_3DChanging;
+
 public:
 	PlayerManagement();
 	~PlayerManagement();
@@ -29,15 +33,6 @@ public:
 	void Update();
 
 public:
-	/// <summary>
-	/// 座標の設定。
-	/// </summary>
-	/// <param name="m_pos"></param>
-	void  SetPosition(const Vector3& m_pos)
-	{
-		m_position = m_pos;
-	}
-
 	/// <summary>
 	/// 座標の取得。
 	/// </summary>
@@ -60,14 +55,13 @@ public:
 		}
 	}
 
-
 	/// <summary>
-	/// 今アクティブなプレイヤーの速度を返す
+	/// 移動速度を取得。
 	/// </summary>
 	/// <returns></returns>
 	const Vector3 GetMoveSpeed()
 	{
-	
+		// 今アクティブなプレイヤーの座標を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetMoveSpeed();
 		}
@@ -149,9 +143,13 @@ public:
 	/// </summary>
 	void SetChange(EnManagementState manaState);
 
+	/// <summary>
+	/// ステートを取得。
+	/// </summary>
+	/// <returns></returns>
 	const Player::EnPlayerState& GetEnPlayerState()
 	{
-		// 今アクティブなプレイヤーのステートを返す
+		// 今アクティブなプレイヤーの座標を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPlayerState();
 		}
@@ -161,12 +159,12 @@ public:
 	}
 
 	/// <summary>
-	/// プレイヤーのスタミナ量
+	/// スタミナを取得。
 	/// </summary>
 	/// <returns></returns>
 	const float GetStamina()const
 	{
-		// 今アクティブなプレイヤーのスタミナ
+		// 今アクティブなプレイヤーの座標を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetStamina();
 		}
@@ -184,12 +182,12 @@ public:
 	}
 
 	/// <summary>
-	/// 走れるかどうかの取得
+	/// 走れるかどうかの取得。
 	/// </summary>
 	/// <returns></returns>
 	const bool GetRunState()
 	{
-		// 今アクティブなプレイヤーの走れるかどうかの判定を返す
+		// 今アクティブなプレイヤーの座標を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetRunState();
 		}
@@ -205,13 +203,6 @@ public:
 			return m_player3D->GetRunState();
 		}
 	}
-
-
-
-private:
-	
-	bool RestartState = true;									//プレイヤーを再開させるかどうか
-	bool ChangeStart = true;
 
 private:
 	/// <summary>
@@ -235,22 +226,14 @@ private:
 	void IsChanging();
 
 private:
-	
-	CharacterController*	m_characon = nullptr;
-	Player2D*				m_player2D = nullptr;
-	Player3D*				m_player3D = nullptr;
-	GameCamera*				m_gamecamera = nullptr;
-	PhysicsGhost*			m_physicsghost = nullptr;
-	Game*					m_game = nullptr;
-	Vector3					m_ghostPosition = Vector3::Zero;
-	Vector3					m_position = Vector3::Zero;
-	EnManagementState		m_manageStateTmp = m_enPlayer_3DChanging;		//遷移するステートの一時変数
-	bool					m_GameStartState = false;						//ゲームが始まっているかどうか
-	float					m_changeTime = 0.0f;							//プレイヤーを切り替える時間
-
-	EffectEmitter*			m_smokeEffect = nullptr;
-
-	bool					m_chachState = false;
-
+	CharacterController*	m_characon = nullptr;						//
+	Player2D*				m_player2D = nullptr;						//
+	Player3D*				m_player3D = nullptr;						//
+	GameCamera*				m_gamecamera = nullptr;						//
+	Game*					m_game = nullptr;							//ゲームクラス。
+	EffectEmitter*			m_smokeEffect = nullptr;					//煙エフェクト
+	EnManagementState		m_manageStateTmp = m_enPlayer_3DChanging;	//遷移するステートの一時変数
+	bool					m_GameStartState = false;					//ゲームが始まっているかどうか
+	float					m_changeTime = 0.0f;						//プレイヤーを切り替える時間
 };
 

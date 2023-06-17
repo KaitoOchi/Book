@@ -24,16 +24,19 @@ namespace
 
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 
+	const float		LENGTH_LOWESTVALUE = 10.0f;				// 移動する距離の限度
+
 	const float		CANMOVE_TIMER = 5.5f;					// 再度行動できるまでの待機時間
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		SEARCHPLAYER_TIMER = 7.0f;				// プレイヤーを見失った時の待機時間
+	const float		PLAYER_LOSTUPTO_TIMER = 10.0f;			// プレイヤーを見失うまでの時間
 
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
 
-	const float		AI_RADIUS = 50.0f;						// AIエージェントの半径
+	const float		AI_RADIUS = 150.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
-	const float		CALCULATIONNAVI_TIMER = 1.0f;			// ナビメッシュを再度計算するタイマー
+	const float		CALCULATIONNAVI_TIMER = 0.5f;			// ナビメッシュを再度計算するタイマー
 
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
 
@@ -43,9 +46,13 @@ namespace
 
 	const float		ANGLE = 45.0f;							// 角度
 	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			// カラー
-	const float		LIGHTRANGE = 600.0f;					// 影響範囲
+	const float		LIGHTRANGE = 600.0f;					// 範囲
 	const float		LIGHTPOSITION = 80.0f;					// 座標
 	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
+
+	const float		Z_UP_EFFECTPOSITON = 10.0f;				// エフェクトの表示座標(m_playerに加算する値)
+
+	const float		DOWN_VOLUME = 0.1f;						// 音量を下げる値
 }
 
 Enemy::Enemy()
@@ -186,7 +193,7 @@ void Enemy::Efect_Dizzy()
 		// エフェクトの大きさを指定する
 		m_Effect->SetScale(Vector3::One * 1.0f);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
@@ -204,7 +211,7 @@ void Enemy::Efect_FindPlayer()
 		// エフェクトの大きさを指定する
 		m_Effect->SetScale(Vector3::One * 1.2f);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
@@ -222,7 +229,7 @@ void Enemy::Efect_MissingPlayer()
 		// エフェクトの大きさを指定する
 		m_Effect->SetScale(Vector3::One * 1.5f);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + 10.0f));
+		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
@@ -267,42 +274,6 @@ void Enemy::SpecifyPath(int pathNumber)
 		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_MIN),4 });
 		break;
-		// 左回り(正方形)
-	case 3:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_MIN,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),4 });
-		break;
-		// (右に)直角
-	case 4:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),4 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
-		break;
-		// (左に)直角
-	case 5:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_LONG),4 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),5 });
-		break;
-		// 右回り(長方形)
-	case 6:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_LONG,m_position.y,m_position.z),4 });
-		break;
-		// 左回り(長方形)
-	case 7:
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
-		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z + ADD_MOVE_MIN),2 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG ,m_position.y,m_position.z + ADD_MOVE_MIN),3 });
-		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),4 });
 	}
 }
 
@@ -500,7 +471,9 @@ void Enemy::Act_MoveMissingPosition()
 	// 走るアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Run;
 
-	if (length < 10.0f) {
+	// 長さが一定以下だったら
+	if (length < LENGTH_LOWESTVALUE) {
+		// ステートを移行
 		m_ActState = m_ActState_Search_MissingPlayer;
 		return;
 	}
@@ -639,7 +612,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[2] = false;
 	}
-	else if (m_addTimer[4] > 10.0f) {
+	else if (m_addTimer[4] > PLAYER_LOSTUPTO_TIMER) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
 		m_ActState = m_ActState_Search_MissingPlayer;
@@ -816,7 +789,7 @@ void Enemy::Act_ChargeEnd()
 	m_sumPos = Vector3::Zero;		// 移動距離をリセット
 	m_CalculatedFlag = false;		// フラグを降ろす
 
-	m_efectDrawFlag[2] = false;		//　!のエフェクトのフラグを降ろす
+	m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
 	m_efectDrawFlag[1] = false;
 
 	// プレイヤーが視野角内にいるとき
@@ -844,7 +817,7 @@ void Enemy::Act_Charge_HitWall()
 		
 		m_addTimer[2] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
-		m_CalculatedFlag = false;		// フラグを降ろすjj
+		m_CalculatedFlag = false;		// フラグを降ろす
 
 		m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
 
@@ -862,7 +835,7 @@ void Enemy::Act_Call()
 	// seを鳴らす
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(17);
-	se->SetVolume(GameManager::GetInstance()->GetSFX() * 0.1f);
+	se->SetVolume(GameManager::GetInstance()->GetSFX() * DOWN_VOLUME);	// 音量を下げる
 	se->Play(false);
 
 	if (m_TrackingPlayerFlag == false) {

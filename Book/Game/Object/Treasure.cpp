@@ -7,6 +7,7 @@
 #include "Player2D.h"
 #include "Player3D.h"
 #include "GameCamera.h"
+
 namespace
 {
 	const Vector3	BOXSIZE = { 80.0f, 80.0f, 80.0f };		//コリジョンのサイズ
@@ -19,15 +20,18 @@ Treasure::Treasure()
 
 Treasure::~Treasure()
 {
+	//座標リストの解放
 	m_treasurePositions.clear();
 	m_treasurePositions.shrink_to_fit();
 
+	//エフェクトの削除
 	if (m_kirakiraEffect != nullptr) {
 		m_kirakiraEffect->SetDeleteState(false);
 		m_kirakiraEffect->Stop();
 	}
 	DeleteGO(m_kirakiraEffect);
 
+	//コリジョンの削除
 	DeleteGO(m_collisionObject);
 }
 
@@ -36,6 +40,7 @@ bool Treasure::Start()
 	m_gameUI = FindGO<GameUI>("gameUI");
 	m_player2d = FindGO<Player2D>("player2d");
 	m_gameCamera = FindGO<GameCamera>("gameCamera");
+
 	Object::Start();
 
 	//モデルの読み込み
@@ -134,8 +139,7 @@ void Treasure::Hit()
 
 void Treasure::Render(RenderContext& rc)
 {
-	if (m_drewState)
-	{
+	if (m_drewState) {
 		m_modelRender.Draw(rc);
 	}
 	

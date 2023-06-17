@@ -1,7 +1,11 @@
 #pragma once
 #include "Object.h"
+
 class LightSensor;
 
+/// <summary>
+/// 監視カメラクラス。
+/// </summary>
 class SecurityCamera : public Object
 {
 public:
@@ -58,8 +62,8 @@ private:
 	}
 
 private:
-	ModelRender		m_cameraModelRender;
-	LightSensor*	m_lightSensor = nullptr;
-	int				m_lightNumber = 0;
-	int				m_type = 0;
+	ModelRender		m_cameraModelRender;		//カメラモデル。
+	LightSensor*	m_lightSensor = nullptr;	//ライトセンサー。
+	int				m_lightNumber = 0;			//ライトの番号。
+	int				m_type = 0;					//種類。
 };

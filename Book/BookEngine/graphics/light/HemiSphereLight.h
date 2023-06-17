@@ -8,12 +8,13 @@ namespace nsBookEngine{
 		/// <summary>
 		/// 半球ライトの構造体
 		/// </summary>
-		struct hemiSphereLight {
-			Vector3 groundColor = Vector3::Zero;	//地面の色
+		struct hemiSphereLight
+		{
+			Vector3 groundColor;	//地面の色
 			float pad0 = 0.0f;
-			Vector3 skyColor = Vector3::Zero;		//空の色
+			Vector3 skyColor;		//空の色
 			float pad1 = 0.0f;
-			Vector3 groundNormal = Vector3::Zero;	//地面の法線
+			Vector3 groundNormal;	//地面の法線
 			float pad2 = 0.0f;
 		};
 
@@ -57,6 +58,6 @@ namespace nsBookEngine{
 		}
 
 	private:
-		hemiSphereLight m_hemiSphereLight;
+		hemiSphereLight m_hemiSphereLight;	//半球ライト
 	};
 }
