@@ -201,7 +201,7 @@ public:
 	};
 
 	/// <summary>
-	/// エネミーの行動パターン。switchで管理してください
+	/// エネミーの行動パターン
 	/// </summary>
 	/// <param name="CRAW">					：巡回							</param>
 	/// <param name="TRACKING">				：追跡							</param>
