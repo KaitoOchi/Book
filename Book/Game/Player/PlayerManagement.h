@@ -61,7 +61,7 @@ public:
 	/// <returns></returns>
 	const Vector3 GetMoveSpeed()
 	{
-		// 今アクティブなプレイヤーの座標を返す
+		// 今アクティブなプレイヤーの速度を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetMoveSpeed();
 		}
@@ -149,7 +149,7 @@ public:
 	/// <returns></returns>
 	const Player::EnPlayerState& GetEnPlayerState()
 	{
-		// 今アクティブなプレイヤーの座標を返す
+		// 今アクティブなプレイヤーのステート
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetPlayerState();
 		}
@@ -164,7 +164,7 @@ public:
 	/// <returns></returns>
 	const float GetStamina()const
 	{
-		// 今アクティブなプレイヤーの座標を返す
+		// 今アクティブなプレイヤーのスタミナ量を返す
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetStamina();
 		}
@@ -187,7 +187,7 @@ public:
 	/// <returns></returns>
 	const bool GetRunState()
 	{
-		// 今アクティブなプレイヤーの座標を返す
+		// 今アクティブなプレイヤーの走れるかどうかの判定
 		if (m_enMananagementState == m_enPlayer_3DChanging) {
 			return m_player3D->GetRunState();
 		}
