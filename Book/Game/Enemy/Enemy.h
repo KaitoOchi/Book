@@ -301,11 +301,6 @@ public:
 		m_spotNum = number;
 	}
 
-	const int GetSpotLigNum()
-	{
-		return m_spotNum;
-	}
-
 	/// <summary>
 	/// 描画するかどうか決定する。trueのとき描画しない
 	/// </summary>
@@ -367,17 +362,18 @@ public:
 	}
 
 	//--------------------------------------------
+
+	/// <summary>
+	/// キャラクターコントローラーを取得
+	/// </summary>
 	CharacterController& GetCharCon()
 	{
 		return m_characterController;
 	}
 
-	const int GetNumber()
-	{
-		return m_spotNum;
-	}
-
-
+	/// <summary>
+	/// モデルレンダーを取得する
+	/// </summary>
 	ModelRender& GetModelRender()
 	{
 		return m_enemyRender;
