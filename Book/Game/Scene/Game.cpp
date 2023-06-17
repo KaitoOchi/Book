@@ -479,7 +479,7 @@ void Game::LevelDesign()
 		}
 		if (objData.EqualObjectName(L"push") == true) {
 			//プレイヤーを押し出す先の座標を与える
-			m_player3D->m_ghostpositions.push_back(objData.position);
+			m_player3D->m_playerPushPositions.push_back(objData.position);
 			return true;
 		}
 		if (objData.EqualObjectName(L"otakara") == true) {

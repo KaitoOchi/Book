@@ -45,7 +45,7 @@ public:
 
 	bool m_Player_Act = true;									//trueだったら行動可能falseだったら行動できない
 
-	std::vector<Vector3> m_ghostpositions;
+	std::vector<Vector3> m_playerPushPositions;					//プレイヤーが押し出される座標
 	
 public:
 
@@ -155,7 +155,7 @@ public:
 	/// <returns></returns>
 	const void SetRunState(const bool run)
 	{
-		m_runState = run;
+		m_runFlag = run;
 	}
 
 	/// <summary>
@@ -164,7 +164,7 @@ public:
 	/// <returns></returns>
 	const bool GetRunState()
 	{
-		return m_runState;
+		return m_runFlag;
 	}
 	/// <summary>
 	/// プレイヤーの回転の設定
@@ -354,7 +354,7 @@ protected:
 	Vector3				m_position = Vector3::Zero;				//初期座標
 	Vector3				m_forward = Vector3::AxisZ;				//プレイヤーの正面ベクトル
 	
-	float angle=0;												//回転角度
+	float				angle=0;								//回転角度
 	
 	ModelRender *m_modelRender=nullptr;							//3Dモデル
 	std::array<nsK2EngineLow::Texture,14> m_player2D;			//テクスチャ
@@ -376,9 +376,9 @@ protected:
 
 	float				m_downTime = 3.0f;						//気絶時間
 
-	bool				m_playerCaught = true;
+	bool				m_playerCaught = false;					//捕まったかの判定
 
-	bool				m_runState = true;
+	bool				m_runFlag = true;						//走れるかの判定
 
 	float				m_stamina = 0.0f;						//プレイヤーのスタミナ
 	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム

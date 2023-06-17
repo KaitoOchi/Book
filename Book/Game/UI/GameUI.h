@@ -93,6 +93,7 @@ public:
 	/// <summary>
 	/// ゲージステートの設定。
 	/// </summary>
+	/// <param name="state"></param>
 	void SetChangeGaugeState(const bool state)
 	{
 		m_changeGaugeState = state;

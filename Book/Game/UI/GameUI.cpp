@@ -213,14 +213,17 @@ void GameUI::ChangeGage()
 		m_gage = max(m_gage, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
+	//もし２D の状態で
 	else if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
+		//プレイヤーが捕まってないなら
 		if (m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Caught &&
 			m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Catching)
 		{
-			if (m_changeGaugeState)
+			//プレイヤーが疲れていないなら
+			if (m_playerManagement->GetRunState()==false)
 			{
-
+				//3Dに戻す
 				m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
 			}
 		}

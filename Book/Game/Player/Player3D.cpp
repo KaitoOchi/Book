@@ -13,8 +13,8 @@
 namespace
 {
 	const Vector3	BOXSIZE{ 50.0f,120.0f,50.0f };						//ボックスコライダーの大きさ
-	const float		SPEEDDOWN = 0.8;									//速度の減少量
-	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーの体力
+	const float		SPEED_DOWN = 0.8;									//速度の減少量
+	const float		PLAYER_STAMINA = 10.0f;								//プレイヤーの体力
 }
 
 Player3D::Player3D()
@@ -326,8 +326,8 @@ void Player3D::ProcessDownStateTransition()
 void Player3D::ProcessThrowStateTransition()
 {
 	//移動速度を無くす
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
+	m_moveSpeed.x *= SPEED_DOWN;
+	m_moveSpeed.z *= SPEED_DOWN;
 	m_Player_Act = false;
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
