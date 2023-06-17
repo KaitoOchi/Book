@@ -222,7 +222,7 @@ public:
 	/// <summary>
 	/// 座標を設定する
 	/// </summary>
-	void SetPosition(Vector3 position) {
+	void SetPosition(const Vector3& position) {
 		m_position = position;
 	}
 
@@ -236,7 +236,7 @@ public:
 	/// <summary>
 	/// 回転を設定する
 	/// </summary>
-	void SetRotation(Quaternion rotation) {
+	void SetRotation(const Quaternion& rotation) {
 		m_rotation = rotation;
 	}
 
@@ -250,7 +250,7 @@ public:
 	/// <summary>
 	/// スケールを設定する
 	/// </summary>
-	void SetScale(Vector3 scale) {
+	void SetScale(const Vector3& scale) {
 		m_scale = scale;
 	}
 
@@ -289,7 +289,7 @@ public:
 	/// アイテムの座標を渡す
 	/// </summary>
 	/// <returns></returns>
-	void SetItemPos(Vector3 position) {
+	void SetItemPos(const Vector3& position) {
 		m_itemPos = position;
 	}
 
@@ -297,8 +297,8 @@ public:
 	/// スポットライトの番号を教える
 	/// </summary>
 	/// <returns></returns>
-	void SetSpotLigNum(int num) {
-		m_spotNum = num;
+	void SetSpotLigNum(int number) {
+		m_spotNum = number;
 	}
 
 	const int GetSpotLigNum()
@@ -399,7 +399,6 @@ public:
 	}
 
 protected:
-
 	// パス移動用のポイント構造体
 	struct Point {
 		Vector3					s_position;							// ポイントの座標
@@ -442,16 +441,7 @@ protected:
 
 	SpotLight					m_spotLight;						//スポットライト
 
-	bool						m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool						m_HearedSoundBulletFlag = false;	// 音爆弾が		〃
-	bool						m_CountFlag = false;				// 発見回数をカウントするかどうか決定する
-	bool						m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
-	bool						m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
-	bool						m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
-	bool						m_NotDrawFlag = false;				// 描画するかどうか
-	bool						m_activeFlag = false;				// 最初から動けるかそうか
-	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
-
+protected:
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
 	/// </summary>
@@ -469,6 +459,17 @@ protected:
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
 	std::array<float, 5>		m_addTimer;
 
+	bool						m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
+	bool						m_HearedSoundBulletFlag = false;	// 音爆弾が		〃
+	bool						m_CountFlag = false;				// 発見回数をカウントするかどうか決定する
+	bool						m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
+	bool						m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
+	bool						m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
+	bool						m_NotDrawFlag = false;				// 描画するかどうか
+	bool						m_activeFlag = false;				// 最初から動けるかそうか
+	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
+
+private:
 	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
 	float						m_Vicount;							// 警戒度を一定回数増やす

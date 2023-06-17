@@ -7,7 +7,6 @@
 
 namespace 
 {
-	const float		LINEAR_COMPLETION = 0.2f;		// üŒ`•âŠ®‚ÌƒtƒŒ[ƒ€”
 	const float		STOP_TIMER = 1.5f;				// —­‚ßŠÔ
 }
 
