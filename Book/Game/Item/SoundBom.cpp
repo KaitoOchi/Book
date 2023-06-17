@@ -21,9 +21,9 @@ SoundBom::~SoundBom()
 bool SoundBom::Start()
 {
 	Item::Start();
+	//アイテムの数を代入する
 	m_soundCount = SOUNDNUMBER;
 	m_gameUI->SetSoundSlot(m_soundCount);
-	m_soundCount = SOUNDNUMBER;
 	//ディアクティブ
 	Deactivate();
 	return true;
@@ -39,6 +39,7 @@ void SoundBom::Update()
 
 void SoundBom::ItemHit()
 {
+	//持ち物数を減らす
 	m_soundCount -= 1;
 	
 	m_soundEffect = NewGO<EffectEmitter>(1);
@@ -60,6 +61,7 @@ void SoundBom::ItemHit()
 			Vector3 diff = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
 			if (diff.LengthSq() < pow(SOUNDRANGE, 2.0f))
 			{
+				//エネミーに当たった判定と座標を与える
 				m_game->GetEnemyList()[i]->SetHearedSoundBullet(true);
 				m_game->GetEnemyList()[i]->SetItemPos(m_position);
 			}
@@ -74,14 +76,17 @@ void SoundBom::ItemHit()
 
 void SoundBom::Sounding()
 {
+	//エフェクトが出ていないなら
 	if (m_soundEffect->IsPlay() == false)
 	{
+		//終わりを告げる
 		NotifySoundEnd();
 	}
 }
 
 void SoundBom::SoundEnd()
 {
+	//ディアクティブにする
 	Deactivate();
 }
 

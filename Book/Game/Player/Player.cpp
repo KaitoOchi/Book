@@ -10,15 +10,15 @@
 #include "Stage/Wall/Wall.h"
 namespace
 {
-	const float		m_enAnimationState_Walk = 30.0f;										//歩き時の乗算量
-	const float		m_enAnimationState_Run = 60.0f;										//走り時の乗算量
-	const float		JUMPVOLUM = 200.0f;									//ジャンプ量
+	const float		PLAYER_WALKING = 30.0f;								//歩き時の乗算量
+	const float		PLAYER_RUNING = 60.0f;								//走り時の乗算量
+	const float		JUMP_VOLUM = 200.0f;								//ジャンプ量
 	const float		GRAVITY = 400.0f;									//重力
-	const float		SPEEDDOWN = 0.8;									//速度減速率
-	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
-	const float		STAMINAHEAL = 2.0f;									//スタミナの回復
-	const float		STAMINASTOPHEAL = 3.0f;
-	const float		STAMINADOWN = 2.0f;									//スタミナの減少
+	const float		SPEED_DOWN = 0.8;									//速度減速率
+	const float		PLAYER_STAMINA = 10.0f;								//プレイヤーのスタミナ
+	const float		STAMINA_HEAL = 2.0f;								//スタミナの回復
+	const float		STAMINA_STOPING_HEAL = 3.0f;						//プレイヤーが止まっているときの回復量
+	const float		STAMINA_DOWN = 2.0f;								//スタミナの減少
 	const float		STAMINA_BASE_POSITION = 60.0f;						//スタミナベース画像の座標
 	const float		STAMINA_GAGE_POSITION = 0.0f;						//スタミナゲージ画像の座標
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
@@ -42,7 +42,7 @@ bool Player::Start()
 {
 
 	
-	m_stamina = PLAYERSTAMINA;
+	m_stamina = PLAYER_STAMINA;
 	
 	m_gamecamera = FindGO<GameCamera>("gameCamera");
 	m_playerManagement=FindGO<PlayerManagement>("playerManagement");
@@ -108,9 +108,9 @@ void Player::Update()
 		Move();
 		ItemChange();
 		//2Dならお宝の近くに居てもジャンプさせる
-		//スタミナがない時はジャンプできない
+		//スタミナがない時はジャンプできないようにする
 		if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging&&
-			m_runState != false)
+			m_runFlag != false)
 		{
 			Jump();
 		}
@@ -119,15 +119,16 @@ void Player::Update()
 			//お宝のコリジョンがない時は普通にジャンプさせる
 			if (m_treasure->GetCollision() == nullptr ||
 				m_collisionObject->IsHit(m_treasure->GetCollision()) == false&&
-				m_runState != false)
+				m_runFlag != false)
 			{
 				Jump();
 			}
 		}
+		//プレイヤーが動けるて、ジャンプしてなくて走れる状態ならRボタンが押されたときに
 		if (g_pad[0]->IsTrigger(enButtonRB1)&& 
 			m_Player_Act&&
 			m_playerState!=m_enPlayer_Jump&&
-			m_runState==true)
+			m_runFlag==true)
 		{
 			Throw();
 		}
@@ -162,8 +163,8 @@ void Player::Move()
 	m_Lstic.x = 0.0f;
 	m_Lstic.z = 0.0f;
 	//速度を初期化
-	m_moveSpeed.x *= SPEEDDOWN;
-	m_moveSpeed.z *= SPEEDDOWN;
+	m_moveSpeed.x *= SPEED_DOWN;
+	m_moveSpeed.z *= SPEED_DOWN;
 	//左ステックの情報を取得
 	m_Lstic.x = g_pad[0]->GetLStickXF();
 	m_Lstic.y = g_pad[0]->GetLStickYF();
@@ -176,14 +177,18 @@ void Player::Move()
 	cameraFoward.Normalize();
 	cameraRight.y = 0.0f;
 	cameraRight.Normalize();
-	if (m_runState == true)
+	if (m_runFlag == true)
 	{
 		//もしAボタンが押されているなら
 		if (g_pad[0]->IsPress(enButtonA) &&
 			m_characon->IsOnGround() == true)
 		{
+			//プレイヤーが動いているなら
 			if (m_Lstic.x != 0 || m_Lstic.y != 0)
+			{
 				PlayerRun();
+			}
+				
 		}
 		else
 		{
@@ -197,20 +202,20 @@ void Player::Move()
 					m_moveSpeed.z >= 0.0f)
 				{
 					//スタミナの回復量を1.5にする
-					m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
-					m_stamina = min(m_stamina, PLAYERSTAMINA);
+					m_stamina += STAMINA_STOPING_HEAL * g_gameTime->GetFrameDeltaTime();
+					m_stamina = min(m_stamina, PLAYER_STAMINA);
 				}
 				else
 				{
 					//スタミナの回復量を1にする
-					m_stamina += STAMINAHEAL * g_gameTime->GetFrameDeltaTime();
-					m_stamina = min(m_stamina, PLAYERSTAMINA);
+					m_stamina += STAMINA_HEAL * g_gameTime->GetFrameDeltaTime();
+					m_stamina = min(m_stamina, PLAYER_STAMINA);
 				}
 
 			}
 			//左ステックと歩く速度を乗算させる
-			m_moveSpeed += cameraFoward * m_Lstic.y * m_enAnimationState_Walk;
-			m_moveSpeed += cameraRight * m_Lstic.x * m_enAnimationState_Walk;
+			m_moveSpeed += cameraFoward * m_Lstic.y * PLAYER_WALKING;
+			m_moveSpeed += cameraRight * m_Lstic.x * PLAYER_WALKING;
 		}
 	}
 	else
@@ -223,14 +228,14 @@ void Player::Move()
 		//スタミナがない場合行動できないようにする
 		m_moveSpeed *=0.9;
 		//スタミナの回復する
-		m_stamina += STAMINASTOPHEAL * g_gameTime->GetFrameDeltaTime();
-		m_stamina = min(m_stamina, PLAYERSTAMINA);
+		m_stamina += STAMINA_STOPING_HEAL * g_gameTime->GetFrameDeltaTime();
+		m_stamina = min(m_stamina, PLAYER_STAMINA);
 		
 		//スタミナが全快したなら
-		if (m_stamina == PLAYERSTAMINA)
+		if (m_stamina == PLAYER_STAMINA)
 		{
 			//走れるようにする
-			m_runState = true;
+			m_runFlag = true;
 			m_tireEffect->Stop();
 		}
 	}
@@ -240,11 +245,11 @@ void Player::Move()
 
 void Player::PlayerRun()
 {
-	m_stamina -= STAMINADOWN * g_gameTime->GetFrameDeltaTime();
+	m_stamina -= STAMINA_DOWN * g_gameTime->GetFrameDeltaTime();
 	m_stamina = max(m_stamina, 0.0f);
 	if (m_stamina <= 0.0f)
 	{
-		m_runState = false;
+		m_runFlag = false;
 	}
 	//カメラの前方向と、右方向の取得
 	Vector3 cameraFoward = g_camera3D->GetForward();
@@ -256,8 +261,8 @@ void Player::PlayerRun()
 	cameraRight.Normalize();
 	//ダッシュをさせる
 	//左ステックと走る速度を乗算する
-	m_moveSpeed += cameraFoward * m_Lstic.y * m_enAnimationState_Run;
-	m_moveSpeed += cameraRight * m_Lstic.x * m_enAnimationState_Run;
+	m_moveSpeed += cameraFoward * m_Lstic.y * PLAYER_RUNING;
+	m_moveSpeed += cameraRight * m_Lstic.x * PLAYER_RUNING;
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
 
@@ -267,21 +272,16 @@ void Player::TireEffect()
 	m_tireEffect->Init(7);
 
 	Vector3 effectPos = m_position;
-	Vector3 effectfoward = m_forward;
-	
-
-
-	Vector3 cameraFoward = g_camera3D->GetForward();
-	Vector3 pos =m_position-m_gamecamera->GetPosition();
 	Vector3 move = m_moveSpeed;
 	move.y = 0.0f;
 	
 	Quaternion rot = Quaternion::Identity;
+	//反転させる
 	move *= -1.0f;
-
 	move.Normalize();
+	//反転した速度をY軸周りの回転に適用する
 	rot.SetRotationYFromDirectionXZ(move);
-	
+	//少し後ろにする
 	effectPos +=move * 10.0f;
 	effectPos.y = 120.0f;
 
@@ -309,7 +309,7 @@ void Player::Jump()
 		if (g_pad[0]->IsTrigger(enButtonB))
 		{
 			//ジャンプをする
-			m_moveSpeed.y = JUMPVOLUM;
+			m_moveSpeed.y = JUMP_VOLUM;
 			m_Player_Act = false;
 
 		}
@@ -351,13 +351,15 @@ void Player::Throw()
 void Player::GhostHit()
 {
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
-	for (const auto& ghostposition : m_ghostpositions)
+	for (const auto& ghostposition : m_playerPushPositions)
 	{
+		//最も近い座標を求める
 		Vector3 diff = ghostposition - GetPosition();
 		float lenght = diff.Length();
 		if (NowTargetDiff > lenght)
 		{
 			NowTargetDiff = lenght;
+			//最も近い座標を与える
 			SetGhostPosition(ghostposition);
 		}
 	}
@@ -369,9 +371,11 @@ void Player::PlayerCatch()
 {
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
+		//エネミーのステートが捕まえたなら
 		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->m_ActState_CatchPlayer)
 		{
 			m_playerState = m_enPlayer_Caught;
+			//捕まった時の座標を返す
 			m_gamecamera->SetCameraPositio(m_position);
 		}
 	}
@@ -382,10 +386,13 @@ void Player::ProcessCommonStateTransition()
 
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
+		//エネミーのステートが捕まえたなら
 		if (m_game->GetEnemyList()[i]->m_ActState == m_game->GetEnemyList()[i]->m_ActState_CatchPlayer && m_playerCaught)
 		{
+			//捕まったステートにする
 			m_playerState = m_enPlayer_Caught;
-			m_playerCaught = false;
+			//捕まった判定にする
+			m_playerCaught = true;
 			m_gamecamera->SetCameraPositio(m_position);
 			return;
 		}
@@ -402,7 +409,7 @@ void Player::ProcessCommonStateTransition()
 	else if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
 	{
 		if (g_pad[0]->IsPress(enButtonA)&&
-			m_runState == true)
+			m_runFlag == true)
 		{
 			//ダッシュ中にする
 			m_playerState = m_enPlayer_Run;
@@ -505,18 +512,22 @@ void Player::ManageState()
 	case m_enPlayer_Down:
 		ProcessDownStateTransition();
 		break;
+		//捕まった時
 	case m_enPlayer_Caught:
+		//エフェクトが存在しないなら
 		if (m_tireEffect == nullptr)
 		{
 			ProcessCaughtStateTransition();
 			break;
 		}
+		//エフェクトが流れている時は止める
 		if (m_tireEffect->IsPlay() == true)
 		{
 			m_tireEffect->Stop();
 		}
 		ProcessCaughtStateTransition();
 		break;
+		//捕まっているとき
 	case m_enPlayer_Catching:
 		ProcessCatchingStateTransition();
 		break;

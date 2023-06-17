@@ -39,8 +39,7 @@ private:
 	SoundBom* m_soundBom = nullptr;
 	
 
-	//アニメーションイベント用の関数
-	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
+	
 	bool m_isThrowing = false;
 
 	//透明座標に動かす
@@ -48,13 +47,15 @@ private:
 	Vector3 m_pushRotPos = Vector3::Zero;
 
 	float m_pushRot;
-	float senkeiPos = 0.0f;
-	float senkeiTime = 1.0f;
+	float m_senkeiPos = 0.0f;
+	float m_senkeiTime = 1.0f;
 
 	float m_catchTime = 2.0f;
 
 	
 private:
+	//アニメーションイベント用の関数
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 	/// <summary>
 	/// プレイヤーの押し出し
 	/// </summary>
