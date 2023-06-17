@@ -29,6 +29,7 @@ namespace
 	const float		CANMOVE_TIMER = 5.5f;					// 再度行動できるまでの待機時間
 	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
 	const float		SEARCHPLAYER_TIMER = 7.0f;				// プレイヤーを見失った時の待機時間
+	const float		PLAYER_LOSTUPTO_TIMER = 10.0f;			// プレイヤーを見失うまでの時間
 
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
@@ -611,7 +612,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[2] = false;
 	}
-	else if (m_addTimer[4] > 10.0f) {
+	else if (m_addTimer[4] > PLAYER_LOSTUPTO_TIMER) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
 		m_ActState = m_ActState_Search_MissingPlayer;
@@ -816,7 +817,7 @@ void Enemy::Act_Charge_HitWall()
 		
 		m_addTimer[2] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;		// 移動距離をリセット
-		m_CalculatedFlag = false;		// フラグを降ろすjj
+		m_CalculatedFlag = false;		// フラグを降ろす
 
 		m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
 
