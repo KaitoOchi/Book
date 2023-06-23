@@ -186,7 +186,8 @@ void Game::LevelDesign()
 		//名前がプレイヤーの時
 		if (objData.EqualObjectName(L"Player") == true)
 		{
-			m_player3D->SetPosition(objData.position);
+			//m_player3D->SetPosition(objData.position);
+			m_player3D->SetPosition(Vector3(-11200.0f, 50.0f, 0.0f));
 			m_player3D->SetRotation(objData.rotation);
 			return true;
 		}
