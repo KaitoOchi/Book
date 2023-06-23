@@ -23,6 +23,8 @@ namespace
 	const float		STAMINA_COOL_TIME = 1.0f;							//ƒXƒ^ƒ~ƒi‚ª‰ñ•œ‚·‚é‚Ü‚Å‚ÌŽžŠÔ
 	const float		CIRCLE_SIZE_MAX = 0.0f;								//‰~Œ`ƒQ[ƒWÅ‘å
 	const float		CIRCLE_SIZE_MIN = 360.0f;							//‰~Œ`ƒQ[ƒWÅ’á
+	const float		GAUGE_PRESS_ADD = 120.0f;							//‰~Œ`ƒQ[ƒW‚Ì‘‰Á’l
+	const float		GAUGE_RELEASE_SUB = 36.0f;							//‰~Œ`ƒQ[ƒW‚ÌŒ¸­’l
 	const double	PI = 3.14159;										//‰~Žü—¦
 }
 
@@ -341,13 +343,13 @@ void GameUI::CircleChange()
 	//ƒQ[ƒW‚Ì•ÏX
 	if (m_circleState)
 	{
-		m_degree -= 120.0f*g_gameTime->GetFrameDeltaTime();
+		m_degree -= GAUGE_PRESS_ADD *g_gameTime->GetFrameDeltaTime();
 		m_degree = max(m_degree, CIRCLE_SIZE_MAX);
 	}
 	else if(m_degree!= CIRCLE_SIZE_MAX)
 	{
-		m_degree += 36.0f * g_gameTime->GetFrameDeltaTime();
-		m_degree = min(m_degree, 360.0f);
+		m_degree += GAUGE_RELEASE_SUB * g_gameTime->GetFrameDeltaTime();
+		m_degree = min(m_degree, CIRCLE_SIZE_MIN);
 	}
 
 	if (m_degree - CIRCLE_SIZE_MAX <= 0.000001f)

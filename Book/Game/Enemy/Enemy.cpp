@@ -397,7 +397,6 @@ bool Enemy::WallAndHit(Vector3 pos)
 	// •Ç‚ÆÕ“Ë‚µ‚Ä‚¢‚È‚¢
 	// ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚½
 	return true;
-
 }
 
 bool Enemy::Action_CatchPlayer()
