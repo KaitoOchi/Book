@@ -23,6 +23,8 @@ namespace
 	const float		STAMINA_COOL_TIME = 1.0f;							//スタミナが回復するまでの時間
 	const float		CIRCLE_SIZE_MAX = 0.0f;								//円形ゲージ最大
 	const float		CIRCLE_SIZE_MIN = 360.0f;							//円形ゲージ最低
+	const float		GAUGE_PRESS_ADD = 120.0f;							//円形ゲージの増加値
+	const float		GAUGE_RELEASE_SUB = 36.0f;							//円形ゲージの減少値
 	const double	PI = 3.14159;										//円周率
 }
 
@@ -213,14 +215,17 @@ void GameUI::ChangeGage()
 		m_gage = max(m_gage, 0.0f);
 		RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 	}
+	//もし２D の状態で
 	else if (m_playerManagement->m_enMananagementState == m_playerManagement->m_enPlayer_2DChanging)
 	{
+		//プレイヤーが捕まってないなら
 		if (m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Caught &&
 			m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Catching)
 		{
-			if (m_changeGaugeState)
+			//プレイヤーが疲れていないなら
+			if (m_playerManagement->GetRunState()==false)
 			{
-
+				//3Dに戻す
 				m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
 			}
 		}
@@ -338,13 +343,13 @@ void GameUI::CircleChange()
 	//ゲージの変更
 	if (m_circleState)
 	{
-		m_degree -= 120.0f*g_gameTime->GetFrameDeltaTime();
+		m_degree -= GAUGE_PRESS_ADD *g_gameTime->GetFrameDeltaTime();
 		m_degree = max(m_degree, CIRCLE_SIZE_MAX);
 	}
 	else if(m_degree!= CIRCLE_SIZE_MAX)
 	{
-		m_degree += 36.0f * g_gameTime->GetFrameDeltaTime();
-		m_degree = min(m_degree, 360.0f);
+		m_degree += GAUGE_RELEASE_SUB * g_gameTime->GetFrameDeltaTime();
+		m_degree = min(m_degree, CIRCLE_SIZE_MIN);
 	}
 
 	if (m_degree - CIRCLE_SIZE_MAX <= 0.000001f)

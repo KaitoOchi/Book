@@ -45,10 +45,6 @@ public:
 	/// <param name="1">	：横				</param>
 	/// <param name="2">	：右回り(正方形)	</param>
 	/// <param name="3">	：左回り(正方形)	</param>
-	/// <param name="4">	：右に直角			</param>
-	/// <param name="6">	：右に直角			</param>
-	/// <param name="7">	：右回り(長方形)	</param>
-	/// <param name="8">	：左回り(長方形)	</param>
 	void SpecifyPath(int pathNumber);
 
 	/// <summary>
@@ -59,58 +55,54 @@ public:
 	/// <summary>
 	/// 巡回行動
 	/// </summary>
-	void Act_Craw();
+	void Action_CrawPath();
 	/// <summary>
 	/// 追跡行動
 	/// </summary>
-	void Act_Tracking();
-	/// <summary>
-	/// 接近行動
-	/// </summary>
-	void Act_Access();
+	void Action_TrackingPlayer();
 	/// <summary>
 	/// 突進行動
 	/// </summary>
 	/// <param name="time">突進するまでのチャージ時間</param>
-	void Act_Charge(float time);
+	void Action_ChargeStart(float time);
 	/// <summary>
 	/// 突進した後の行動処理
 	/// </summary>
-	void Act_ChargeEnd();
+	void Action_ChargeEnd();
 	/// <summary>
 	/// 壁との衝突判定
 	/// </summary>
-	void Act_Charge_HitWall();
+	void Action_ChargeHitWall();
 	/// <summary>
 
 	/// 敵を呼ぶ行動
 	/// </summary>
-	void Act_Call();
+	void Action_CallAroundEnemy();
 
 	/// <summary>
 	/// 見失ったときの処理
 	/// </summary>
-	void Act_Loss();
+	void Action_MissingPlayer();
 	/// <summary>
 	/// プレイヤーを見失った後の処理
 	/// 見失った位置まで位置を移動する
 	/// </summary>
-	void Act_MoveMissingPosition();
+	void Action_MoveMissingPosition();
 	/// <summary>
 	/// プレイヤーを見失った後の処理
 	/// プレイヤーを探す
 	/// </summary>
-	void Act_SearchMissingPlayer();
+	void Action_SearchMissingPlayer();
 
 	/// <summary>
 	/// 閃光弾が当たったときの処理
 	/// </summary>
-	void Act_HitFlashBullet();
+	void Action_HitFlashBullet();
 	/// <summary>
 	/// 音が聞こえた場所に行く処理
 	/// </summary>
 	/// <param name="pos">目標地点</param>
-	void Act_GoLocationListenSound(Vector3 tergetPos);
+	void Action_GoLocationListenSound(Vector3 tergetPos);
 
 	/// <summary>
 	/// 行動停止
@@ -118,18 +110,18 @@ public:
 	/// <param name="time">停止する時間</param>
 	/// <param name="timerNumber">使用するタイマーを指定</param>
 	/// <returns></returns>
-	bool Act_Stop(float time,int timerNumber);
+	bool Action_StopMove(float time,int timerNumber);
 
 	/// <summary>
 	/// プレイヤーを発見する処理
 	/// </summary>
 	/// <returns></returns>
-	void Act_SeachPlayer();
+	void Action_SeachPlayer();
 	/// <summary>
 	/// プレイヤーを確保する処理
 	/// </summary>
 	/// <returns></returns>
-	bool Act_CatchPlayer();
+	bool Action_CatchPlayer();
 
 	void SpotLight_New(Vector3 position,int num);
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
@@ -183,21 +175,21 @@ public:
 	EnAnimationState m_enAnimationState;
 
 	// エネミーの行動パターン
-	enum EnEnemyActState
+	enum EnEnemyActionState
 	{
-		m_ActState_Craw,					// 巡回
-		m_ActState_Tracking,				// 追跡
-		m_ActState_Search,					// 索敵
-		m_ActState_Move_MissingPositon,		// 見失った座標まで移動する
-		m_ActState_Search_MissingPlayer,	// 見失ったプレイヤーを探す
-		m_ActState_Call_AroundEnemy,		// 周りの敵を呼ぶ
-		m_ActState_Called,					// CALL時にSearch以外が実行
-		m_ActState_Charge,					// 突進
-		m_ActState_ChargeEnd,				// 突進終了
-		m_ActState_BackBasedOn,				// 巡回状態に戻る
-		m_ActState_Dizzy,					// 閃光弾にあたったとき
-		m_ActState_Listen,					// 音爆弾を使用したとき
-		m_ActState_CatchPlayer,				// 捕獲した
+		m_ActionState_Craw,					// 巡回
+		m_ActionState_Tracking,				// 追跡
+		m_ActionState_Search,				// 索敵
+		m_ActionState_Move_MissingPositon,		// 見失った座標まで移動する
+		m_ActionState_Search_MissingPlayer,	// 見失ったプレイヤーを探す
+		m_ActionState_Call_AroundEnemy,		// 周りの敵を呼ぶ
+		m_ActionState_Called,					// CALL時にSearch以外が実行
+		m_ActionState_Charge,					// 突進
+		m_ActionState_ChargeEnd,				// 突進終了
+		m_ActionState_BackBasedOn,				// 巡回状態に戻る
+		m_ActionState_Dizzy,					// 閃光弾にあたったとき
+		m_ActionState_Listen,					// 音爆弾を使用したとき
+		m_ActionState_CatchPlayer,				// 捕獲した
 	};
 
 	/// <summary>
@@ -215,7 +207,7 @@ public:
 	/// <param name="CONFUSION">			：閃光弾にあたったとき			</param>
 	/// <param name="LISTEN">				：音爆弾を使用したとき			</param>
 	/// <param name="CATCH">				：捕獲							</param>
-	EnEnemyActState m_ActState;
+	EnEnemyActionState m_ActionState;
 
 	// ----------------------------------------------------------
 
@@ -319,7 +311,7 @@ public:
 		m_ChachPlayerFlag = false;
 
 		// ステートを巡回状態に戻す
-		m_ActState = m_ActState_Craw;
+		m_ActionState = m_ActionState_Craw;
 
 		m_NaviTimer = 0.0f;
 		m_addTimer[1] = 0.0f;

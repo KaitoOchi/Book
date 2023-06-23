@@ -61,7 +61,7 @@ void Enemy_Charge::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActState == m_ActState_CatchPlayer) {
+	if (m_ActionState == m_ActionState_CatchPlayer) {
 		// 待機状態にする
 		m_enAnimationState = m_enAnimationState_Idle;
 		return;
@@ -72,51 +72,51 @@ void Enemy_Charge::Update()
 		m_HearedSoundBulletFlag = false;
 	}
 
-	if (m_ActState == m_ActState_Tracking && m_HearedSoundBulletFlag == true) {
+	if (m_ActionState == m_ActionState_Tracking && m_HearedSoundBulletFlag == true) {
 		// 閃光弾を優先する
 		m_HearedSoundBulletFlag = false;
 	}
 
 	// 閃光弾に当たった
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = m_ActState_Dizzy;
+		m_ActionState = m_ActionState_Dizzy;
 	}
 	// 音爆弾を使用した
 	if (m_HearedSoundBulletFlag == true) {
-		m_ActState = m_ActState_Listen;
+		m_ActionState = m_ActionState_Listen;
 	}
 
-	switch (m_ActState) {
+	switch (m_ActionState) {
 		// 一定の場所を巡回する
-	case m_ActState_Craw:
+	case m_ActionState_Craw:
 		Update_OnCraw();
 		break;
 		// プレイヤーに向かって突進する
-	case m_ActState_Charge:
+	case m_ActionState_Charge:
 		Update_OnCharge();
 		break;
 		// 突進終了する
-	case m_ActState_ChargeEnd:
+	case m_ActionState_ChargeEnd:
 		Update_OnChargeEnd();
 		break;
 		// 見失ったプレイヤーを探す
-	case m_ActState_Search_MissingPlayer:
+	case m_ActionState_Search_MissingPlayer:
 		Update_OnSearchMissingPlayer();
 		break;
 		// Searchの座標近くに向かう
-	case m_ActState_Called:
+	case m_ActionState_Called:
 		Update_OnCalled();
 		break;
 		// 元のパスに戻る
-	case m_ActState_BackBasedOn:
+	case m_ActionState_BackBasedOn:
 		Update_OnBackBasedOn();
 		break;
 		// 混乱
-	case m_ActState_Dizzy:
+	case m_ActionState_Dizzy:
 		Update_OnDizzy();
 		break;
 		// 音が聞こえた場所に向かう
-	case m_ActState_Listen:
+	case m_ActionState_Listen:
 		UpDate_OnListen();
 		break;
 	}
@@ -131,62 +131,62 @@ void Enemy_Charge::Update()
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
-	Enemy::Act_SeachPlayer();						// 索敵
+	Enemy::Action_SeachPlayer();						// 索敵
 
 	m_enemyRender.Update();
 }
 
 void Enemy_Charge::Update_OnCraw()
 {
-	if (Act_CatchPlayer() == true) {
-		m_ActState = m_ActState_CatchPlayer;
+	if (Action_CatchPlayer() == true) {
+		m_ActionState = m_ActionState_CatchPlayer;
 	}
 
-	Enemy::Act_Craw();
+	Enemy::Action_CrawPath();
 }
 
 void Enemy_Charge::Update_OnCharge()
 {
-	if (Enemy::Act_CatchPlayer() == true) {
-		m_ActState = m_ActState_CatchPlayer;
+	if (Enemy::Action_CatchPlayer() == true) {
+		m_ActionState = m_ActionState_CatchPlayer;
 	}
 
-	Enemy::Act_Charge(STOP_TIMER);
+	Enemy::Action_ChargeStart(STOP_TIMER);
 }
 
 void Enemy_Charge::Update_OnChargeEnd()
 {
-	Enemy::Act_ChargeEnd();
+	Enemy::Action_ChargeEnd();
 }
 
 void Enemy_Charge::Update_OnSearchMissingPlayer()
 {
-	Enemy::Act_SearchMissingPlayer();
+	Enemy::Action_SearchMissingPlayer();
 }
 
 void Enemy_Charge::Update_OnBackBasedOn()
 {
-	Enemy::Act_Loss();
+	Enemy::Action_MissingPlayer();
 }
 
 void Enemy_Charge::Update_OnCalled()
 {
-	Enemy::Act_GoLocationListenSound(m_setPos);
+	Enemy::Action_GoLocationListenSound(m_setPos);
 }
 
 void Enemy_Charge::Update_OnDizzy()
 {
-	Enemy::Act_HitFlashBullet();
+	Enemy::Action_HitFlashBullet();
 }
 
 void Enemy_Charge::UpDate_OnListen()
 {
-	Enemy::Act_GoLocationListenSound(m_itemPos);
+	Enemy::Action_GoLocationListenSound(m_itemPos);
 }
 
 void Enemy_Charge::Update_OnCatch()
 {
-	Enemy::Act_CatchPlayer();
+	Enemy::Action_CatchPlayer();
 }
 
 void Enemy_Charge::Render(RenderContext& rc)

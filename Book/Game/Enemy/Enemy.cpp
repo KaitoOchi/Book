@@ -79,10 +79,10 @@ bool Enemy::Start()
 
 	// 行動パターンを初期化
 	if (m_enemyType == TYPE_SEARCH) {
-		m_ActState = m_ActState_Search;
+		m_ActionState = m_ActionState_Search;
 	}
 	else {
-		m_ActState = m_ActState_Craw;
+		m_ActionState = m_ActionState_Craw;
 	}
 
 	//警戒度時間を代入
@@ -315,10 +315,10 @@ void Enemy::CreateNavimesh(Vector3 pos)
 	);
 }
 
-void Enemy::Act_SeachPlayer()
+void Enemy::Action_SeachPlayer()
 {
 	// 混乱時は何もしない
-	if (m_ActState == m_ActState_Dizzy) {
+	if (m_ActionState == m_ActionState_Dizzy) {
 		return;
 	}
 
@@ -397,10 +397,9 @@ bool Enemy::WallAndHit(Vector3 pos)
 	// 壁と衝突していない
 	// プレイヤーを見つけた
 	return true;
-
 }
 
-bool Enemy::Act_CatchPlayer()
+bool Enemy::Action_CatchPlayer()
 {
 	// プレイヤーを捕まえる処理
 	// trueのときプレイヤーを捕まえた
@@ -421,7 +420,7 @@ bool Enemy::Act_CatchPlayer()
 
 		for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 			// ステートを変動させる
-			m_game->GetEnemyList()[i]->m_ActState = m_ActState_CatchPlayer;
+			m_game->GetEnemyList()[i]->m_ActionState = m_ActionState_CatchPlayer;
 		}
 
 		return true;
@@ -430,7 +429,7 @@ bool Enemy::Act_CatchPlayer()
 	return false;
 }
 
-void Enemy::Act_MoveMissingPosition()
+void Enemy::Action_MoveMissingPosition()
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
@@ -442,16 +441,16 @@ void Enemy::Act_MoveMissingPosition()
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 周りの敵を呼ぶ
-			m_ActState = m_ActState_Call_AroundEnemy;
+			m_ActionState = m_ActionState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
 			// 突進する
-			m_ActState = m_ActState_Charge;
+			m_ActionState = m_ActionState_Charge;
 			return;
 		}
 
-		m_ActState = m_ActState_Tracking;
+		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
 
@@ -474,7 +473,7 @@ void Enemy::Act_MoveMissingPosition()
 	// 長さが一定以下だったら
 	if (length < LENGTH_LOWESTVALUE) {
 		// ステートを移行
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 		return;
 	}
 
@@ -482,7 +481,7 @@ void Enemy::Act_MoveMissingPosition()
 	Rotation(moveSpeed);
 }
 
-void Enemy::Act_SearchMissingPlayer()
+void Enemy::Action_SearchMissingPlayer()
 {
 	// エフェクトを生成
 	Efect_MissingPlayer();
@@ -497,16 +496,16 @@ void Enemy::Act_SearchMissingPlayer()
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 周りの敵を呼ぶ
-			m_ActState = m_ActState_Call_AroundEnemy;
+			m_ActionState = m_ActionState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
 			// 突進する
-			m_ActState = m_ActState_Charge;
+			m_ActionState = m_ActionState_Charge;
 			return;
 		}
 
-		m_ActState = m_ActState_Tracking;
+		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
 
@@ -514,7 +513,7 @@ void Enemy::Act_SearchMissingPlayer()
 	m_enAnimationState = m_enAnimationState_Loss;
 
 	// モーションを再生
-	if (Act_Stop(SEARCHPLAYER_TIMER, 3) == true) {
+	if (Action_StopMove(SEARCHPLAYER_TIMER, 3) == true) {
 
 		m_efectDrawFlag[1] = false;		// エフェクトの描画フラグ
 		m_efectDrawFlag[2] = false;
@@ -525,15 +524,15 @@ void Enemy::Act_SearchMissingPlayer()
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 索敵状態に戻す
-			m_ActState = m_ActState_Search;
+			m_ActionState = m_ActionState_Search;
 			return;
 		}
 
-		m_ActState = m_ActState_BackBasedOn;
+		m_ActionState = m_ActionState_BackBasedOn;
 	}
 }
 
-void Enemy::Act_HitFlashBullet()
+void Enemy::Action_HitFlashBullet()
 {
 	// プレイヤーを追跡するフラグがtrueになったら
 	if (m_TrackingPlayerFlag == true) {
@@ -553,7 +552,7 @@ void Enemy::Act_HitFlashBullet()
 	Efect_Dizzy();
 
 	// タイマーがtrueのとき
-	if (Act_Stop(CANMOVE_TIMER,0) == true) {
+	if (Action_StopMove(CANMOVE_TIMER,0) == true) {
 		// 生成フラグをリセット
 		m_efectDrawFlag[0] = false;
 
@@ -568,7 +567,7 @@ void Enemy::Act_HitFlashBullet()
 		Efect_MissingPlayer();
 
 		// プレイヤーを探す
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 
 	}
 	else {
@@ -577,18 +576,18 @@ void Enemy::Act_HitFlashBullet()
 	}
 }
 
-void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
+void Enemy::Action_GoLocationListenSound(Vector3 tergetPos)
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 
 		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = m_ActState_Charge;
+			m_ActionState = m_ActionState_Charge;
 			return;
 		}
 		else {
-			m_ActState = m_ActState_Tracking;
+			m_ActionState = m_ActionState_Tracking;
 			return;
 		}
 	}
@@ -615,7 +614,7 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	else if (m_addTimer[4] > PLAYER_LOSTUPTO_TIMER) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		// タイマーをリセット
 		m_addTimer[4] = 0.0f;
@@ -624,24 +623,24 @@ void Enemy::Act_GoLocationListenSound(Vector3 tergetPos)
 	}
 	else {
 		// 見失ったプレイヤーを探す
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[1] = false;
 		return;
 	}
 }
 
-void Enemy::Act_Craw()
+void Enemy::Action_CrawPath()
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
-			m_ActState = m_ActState_Charge;
+			m_ActionState = m_ActionState_Charge;
 			return;
 		}
 		// それ以外
-		m_ActState = m_ActState_Tracking;
+		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
 	
@@ -673,7 +672,7 @@ void Enemy::Act_Craw()
 	Rotation(moveSpeed);
 
 	// タイマーがtrueのとき
-	if (Act_Stop(WAITING_TIMER,1) == true) {
+	if (Action_StopMove(WAITING_TIMER,1) == true) {
 		// 歩きアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Walk;
 		// 座標に加算
@@ -685,7 +684,7 @@ void Enemy::Act_Craw()
 	}
 }
 
-void Enemy::Act_Tracking()
+void Enemy::Action_TrackingPlayer()
 {
 	// ナビメッシュを作成
 	CreateNavimesh(m_playerManagement->GetPosition());
@@ -699,40 +698,16 @@ void Enemy::Act_Tracking()
 	if (m_TrackingPlayerFlag == false) {
 		// プレイヤーの座標を参照する
 		m_playerMissiongPosition = m_playerManagement->GetPosition();
-		m_ActState = m_ActState_Move_MissingPositon;
+		m_ActionState = m_ActionState_Move_MissingPositon;
 	}
 }
 
-void Enemy::Act_Access()
-{
-	// エネミーからプレイヤーへ向かうベクトル
-	Vector3 diff = m_playerManagement->GetPosition() - m_position;
-	// 長さを計算
-	float length = diff.Length();
-	// 回転を教える
-	Vector3 rot = m_playerManagement->GetPosition() - m_position;
-	rot.Normalize();
-	Rotation(rot);
-
-	// 長さが一定のとき
-	if (length <= SEACH_DECISION) {
-		// 正規化
-		diff.Normalize();
-		// 移動速度に加算
-		Vector3 moveSpeed = diff * MOVE_SPEED;
-		m_position += moveSpeed;
-
-		// 歩きアニメーションを再生
-		m_enAnimationState = m_enAnimationState_Walk;
-	}
-}
-
-void Enemy::Act_Charge(float time)
+void Enemy::Action_ChargeStart(float time)
 {
 	// 移動距離の長さが一定以上のとき
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
 		// 突進を終了する
-		m_ActState = m_ActState_ChargeEnd;
+		m_ActionState = m_ActionState_ChargeEnd;
 
 		// 総移動距離をリセット
 		m_sumPos = Vector3::Zero;
@@ -740,7 +715,7 @@ void Enemy::Act_Charge(float time)
 	}
 
 	// タイマーがtrueのとき
-	if (Act_Stop(time,2) == true) {
+	if (Action_StopMove(time,2) == true) {
 
 		// 一度だけ実行する
 		if (m_CalculatedFlag == false) {
@@ -766,7 +741,7 @@ void Enemy::Act_Charge(float time)
 		m_enAnimationState = m_enAnimationState_Run;
 
 		// 衝突判定
-		Act_Charge_HitWall();
+		Action_ChargeHitWall();
 	}
 	else {
 		// 回転のみプレイヤーを追尾させる
@@ -781,7 +756,7 @@ void Enemy::Act_Charge(float time)
 	Rotation(m_chargeDiff);
 }
 
-void Enemy::Act_ChargeEnd()
+void Enemy::Action_ChargeEnd()
 {
 	m_position = m_position;		// 座標を固定
 
@@ -796,16 +771,16 @@ void Enemy::Act_ChargeEnd()
 	if (m_TrackingPlayerFlag == true) {
 		Efect_FindPlayer();
 		// 再度突進する
-		m_ActState = m_ActState_Charge;
+		m_ActionState = m_ActionState_Charge;
 		return;
 	}
 	else {
 		// いないときは巡回状態に戻る
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 	}
 }
 
-void Enemy::Act_Charge_HitWall()
+void Enemy::Action_ChargeHitWall()
 {
 	// 壁に衝突する判定
 
@@ -822,7 +797,7 @@ void Enemy::Act_Charge_HitWall()
 		m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
 
 		// 行動を混乱状態にする
-		m_ActState = m_ActState_Dizzy;
+		m_ActionState = m_ActionState_Dizzy;
 		return;
 	}
 
@@ -830,7 +805,7 @@ void Enemy::Act_Charge_HitWall()
 	m_Chargemove = 1.0f;
 }
 
-void Enemy::Act_Call()
+void Enemy::Action_CallAroundEnemy()
 {
 	// seを鳴らす
 	SoundSource* se = NewGO<SoundSource>(0);
@@ -841,7 +816,7 @@ void Enemy::Act_Call()
 	if (m_TrackingPlayerFlag == false) {
 		// フラグを降ろす
 		m_efectDrawFlag[1] = false;
-		m_ActState = m_ActState_Search_MissingPlayer;
+		m_ActionState = m_ActionState_Search_MissingPlayer;
 		se->Stop();
 
 		return;
@@ -854,7 +829,7 @@ void Enemy::Act_Call()
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
 
 		// 混乱中だったときはそれ以降は実行しない
-		if (m_game->GetEnemyList()[i]->m_ActState == m_ActState_Dizzy) {
+		if (m_game->GetEnemyList()[i]->m_ActionState == m_ActionState_Dizzy) {
 			return;
 		}
 
@@ -865,9 +840,9 @@ void Enemy::Act_Call()
 		// 長さが一定以内のとき かつ まだ呼んでいないとき
 		if (length > CALL_DISTANCE_MIN &&
 			length < CALL_DISTANCE_MAX &&
-			m_game->GetEnemyList()[i]->m_ActState != m_ActState_Called) {
+			m_game->GetEnemyList()[i]->m_ActionState != m_ActionState_Called) {
 
-			m_game->GetEnemyList()[i]->m_ActState = m_ActState_Called;		// 行動パターンを変更する
+			m_game->GetEnemyList()[i]->m_ActionState = m_ActionState_Called;		// 行動パターンを変更する
 			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;		// 自身の座標-キャラコンを目標地点として渡す
 		}
 	}
@@ -877,7 +852,7 @@ void Enemy::Act_Call()
 	m_enAnimationState = m_enAnimationState_Call;
 }
 
-void Enemy::Act_Loss()
+void Enemy::Action_MissingPlayer()
 {
 	m_addTimer[1] = 0.0f;	// タイマーをリセット
 	m_addTimer[2] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
@@ -919,11 +894,11 @@ void Enemy::Act_Loss()
 	// 長さが一定のとき
 	if (length <= CHANGING_DISTANCE) {
 		m_NaviTimer = 0.0f;
-		m_ActState = m_ActState_Craw;
+		m_ActionState = m_ActionState_Craw;
 	}
 }
 
-bool Enemy::Act_Stop(float time,int timerNumber)
+bool Enemy::Action_StopMove(float time,int timerNumber)
 {
 	// フレームを加算
 	m_addTimer[timerNumber] += g_gameTime->GetFrameDeltaTime();
@@ -951,7 +926,7 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
 	// 混乱状態の時は実行しない
-	if (m_ActState == m_ActState_Dizzy) {
+	if (m_ActionState == m_ActionState_Dizzy) {
 		return;
 	}
 

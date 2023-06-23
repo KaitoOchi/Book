@@ -58,24 +58,24 @@ void Enemy_Search::Update()
 
 	// 閃光弾に当たったとき
 	if (m_HitFlashBulletFlag == true) {
-		m_ActState = m_ActState_Dizzy;
+		m_ActionState = m_ActionState_Dizzy;
 	}
 
-	switch (m_ActState) {
-	case m_ActState_Craw:
-	case m_ActState_Search:
+	switch (m_ActionState) {
+	case m_ActionState_Craw:
+	case m_ActionState_Search:
 		// 索敵
 		Update_OnSearch();
 		break;
-	case m_ActState_Call_AroundEnemy:
+	case m_ActionState_Call_AroundEnemy:
 		// 周りのエネミーを呼ぶ
 		Update_OnCallAroundEnemy();
 		break;
-	case m_ActState_Search_MissingPlayer:
+	case m_ActionState_Search_MissingPlayer:
 		// 見失ったプレイヤーを探す
 		Update_OnMissingPlayer();
 		break;
-	case m_ActState_Dizzy:
+	case m_ActionState_Dizzy:
 		// 閃光弾を使用されたとき
 		Update_OnDizzy();
 		break;
@@ -84,7 +84,7 @@ void Enemy_Search::Update()
 	Enemy::PlayAnimation();							// アニメーション
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
-	Enemy::Act_SeachPlayer();						// 索敵
+	Enemy::Action_SeachPlayer();						// 索敵
 
 	m_characterController.SetPosition(m_position);
 
@@ -99,26 +99,26 @@ void Enemy_Search::Update_OnSearch()
 
 	if (m_TrackingPlayerFlag == true) {
 		m_efectDrawFlag[2] = false;
-		m_ActState = m_ActState_Call_AroundEnemy;
+		m_ActionState = m_ActionState_Call_AroundEnemy;
 	}
 }
 
 void Enemy_Search::Update_OnCallAroundEnemy()
 {
 	// 周りにいるエネミーを呼ぶ
-	Enemy::Act_Call();
+	Enemy::Action_CallAroundEnemy();
 }
 
 void Enemy_Search::Update_OnDizzy()
 {
 	// 閃光弾に当たったとき
-	Enemy::Act_HitFlashBullet();
+	Enemy::Action_HitFlashBullet();
 }
 
 void Enemy_Search::Update_OnMissingPlayer()
 {
 	// プレイヤーを見失った時
-	Enemy::Act_SearchMissingPlayer();
+	Enemy::Action_SearchMissingPlayer();
 }
 
 void Enemy_Search::Rotaition()

@@ -42,12 +42,12 @@ private:
 	/// </summary>
 	void ClearChange();
 
-	ModelRender m_clearModelRender;				//半透明時のモデル
+	ModelRender			m_clearModelRender;						//半透明時のモデル
 
 	//透明化を切り替える
-	bool m_clearFlag=true;						//trueなら透明化falseなら解除
-	EnEnemyActState m_SetActState=m_ActState;	//どちらの状態化を記憶する
+	bool				m_clearFlag = true;						//trueなら透明化falseなら解除
+	EnEnemyActionState	m_SetActionState = m_ActionState;		//どちらの状態化を記憶する
 
-	float m_clearChangeTime = 0.0f;				//切り替わるまでの時間
+	float				m_clearChangeTime = 0.0f;				//切り替わるまでの時間
 };
 

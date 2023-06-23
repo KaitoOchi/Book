@@ -13,8 +13,8 @@ namespace
 	int				WALKVALUE = 30;
 	int				JUMPVALUE = 90;
 	float			RUBVALUM = 3.0f;
-	const float		SPEEDDOWN = 0.8;									//速度減速率
-	const float		PLAYERSTAMINA = 10.0f;								//プレイヤーのスタミナ
+	const float		SPEED_DOWN = 0.8;									//速度減速率
+	const float		PLAYER_STAMINA = 10.0f;								//プレイヤーのスタミナ
 	const float EFFECTSIZE = 1.5f;
 }
 Player2D::Player2D()
@@ -70,14 +70,18 @@ void Player2D::Update()
 	{
 		return;
 	}
+	//キャラコンを動かす
 	m_characon->SetPosition(m_position);
+	//キャラコンを回転させる
 	m_characon->SetRotaition(m_rotation);
+	//キャラコンを利用してプレイヤーを動かす
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
+	//モデルの座標と回転を更新する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();	
 
-	if (!m_runState)
+	if (!m_runFlag)
 	{
 		m_gameUI->SetChangeGaugeState(false);
 	}
@@ -96,6 +100,7 @@ void Player2D::PlayerChang()
 	ProcessCommonStateTransition();
 	Deactivate();
 }
+
 //キャラコンの作成関数
 void Player2D::CreatCharcon()
 {
@@ -118,6 +123,7 @@ void Player2D::Animation()
 		}
 		break;
 	case Player::m_enPlayer_walk:
+		//歩くアニメーションの切り替え
 		JUMPVALUE = 90;
 		WALKVALUE++;
 		j = WALKVALUE / 10;
@@ -140,6 +146,7 @@ void Player2D::Animation()
 		break;
 	case Player::m_enPlayer_Jump:
 	case Player::m_enPlayer_Jumpend:
+		//ジャンプアニメーション切り替え
 		j = JUMPVALUE / 10;
 		JUMPVALUE++;
 		if (JUMPVALUE >= 130)
@@ -147,24 +154,8 @@ void Player2D::Animation()
 			JUMPVALUE = 130;
 		}
 		break;
-	
-		break;
 	case Player::m_enPlayer_Change:
-		
 		m_modelRender->PlayAnimation(enAnimationClip_Change, 0.0f);
-		break;
-	case Player::m_enPlayer_2DChanging:
-		break;
-	case Player::m_enPlayer_3DChanging:
-		break;
-	case Player::m_enPlayer_Found:
-		break;
-	case Player::m_enPlayer_Caught:
-		
-		break;
-	case Player::m_enPlayer_Clear:
-		break;
-	case Player::m_enPlayer_GameOver:
 		break;
 	default:
 		break;
@@ -248,7 +239,6 @@ void Player2D::ProcessGameOverStateTransition()
 
 void Player2D::Render(RenderContext& rc)
 {
-	
 	m_modelRender->Draw(rc);
 }
 
