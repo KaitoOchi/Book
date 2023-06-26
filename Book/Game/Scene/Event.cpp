@@ -8,8 +8,10 @@
 namespace
 {
 	const int		SCENE_MAX = 5;													//シーンの最大数
-	const float		CIRCLE_MAX = 360.0f;											//円形ゲージの最大数
+	const float		CIRCLE_MAX = 360.0f;											//円形ゲージの最大値
+	const float		CIRCLE_MIN = 0.0f;												//円形ゲージの最小値
 	const float		CIRCLE_SPEED = 280.0f;											//ゲージの進む速さ
+	const float		CIRCLE_DECREASE = 60.0f;										//ゲージの減少量
 	const double	PI = 3.14159;													//円周率
 
 	const bool		PLAYER_ENABLE[SCENE_MAX] = { true, true, true, false, true };	//プレイヤーの表示状態
@@ -223,7 +225,7 @@ void Event::Input()
 		m_degree -= CIRCLE_SPEED * g_gameTime->GetFrameDeltaTime();
 
 		//ゲージが最大になったらスキップ
-		if (m_degree < 0.0f) {
+		if (m_degree < CIRCLE_MIN) {
 			m_isWaitFadeOut = true;
 			m_fade->SetEnableTips(false);
 			m_fade->StartFadeOut();
@@ -231,7 +233,7 @@ void Event::Input()
 	}
 	else {
 		//押されてない時、徐々に減少
-		m_degree += 60.0f * g_gameTime->GetFrameDeltaTime();
+		m_degree += CIRCLE_DECREASE * g_gameTime->GetFrameDeltaTime();
 		m_degree = min(m_degree, CIRCLE_MAX);
 	}
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_degree * PI) / 180.0f;
