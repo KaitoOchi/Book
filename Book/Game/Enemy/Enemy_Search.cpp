@@ -37,7 +37,7 @@ bool Enemy_Search::Start()
 void Enemy_Search::Update()
 {
 	// 行動できるか調べる
-	if (m_activeFlag == true)
+	if (GetActiveFlag() == true)
 	{
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
@@ -48,7 +48,7 @@ void Enemy_Search::Update()
 	}
 
 	// イベント後の処理
-	if (m_NotDrawFlag == true) {
+	if (GetNotDrawFlag() == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -57,11 +57,11 @@ void Enemy_Search::Update()
 	}
 
 	// 閃光弾に当たったとき
-	if (m_HitFlashBulletFlag == true) {
-		m_ActionState = m_ActionState_Dizzy;
+	if (GetHitFlashBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Dizzy);
 	}
 
-	switch (m_ActionState) {
+	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
 	case m_ActionState_Search:
 		// 索敵
@@ -84,7 +84,7 @@ void Enemy_Search::Update()
 	Enemy::PlayAnimation();							// アニメーション
 
 	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
-	Enemy::Action_SeachPlayer();						// 索敵
+	Enemy::Action_SeachPlayer();					// 索敵
 
 	m_characterController.SetPosition(m_position);
 
@@ -97,9 +97,9 @@ void Enemy_Search::Update_OnSearch()
 {
 	Rotaition();
 
-	if (m_TrackingPlayerFlag == true) {
-		m_efectDrawFlag[2] = false;
-		m_ActionState = m_ActionState_Call_AroundEnemy;
+	if (GetTrackingPlayerFlag() == true) {
+		SetEffectDrawFlag(false, 2);
+		SetEnemyActionState(m_ActionState_Call_AroundEnemy);
 	}
 }
 
@@ -151,12 +151,12 @@ void Enemy_Search::Rotaition()
 		break;
 	}
 	
-	m_enAnimationState = m_enAnimationState_Idle;
+	SetEnemyAnimationState(m_enAnimationState_Idle);
 }
 void Enemy_Search::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false&&
-		m_activeFlag==false) {
+	if (GetNotDrawFlag() == false &&
+		GetActiveFlag() == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

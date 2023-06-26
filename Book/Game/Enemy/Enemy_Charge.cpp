@@ -41,7 +41,7 @@ bool Enemy_Charge::Start()
 void Enemy_Charge::Update()
 {
 	// s“®‚Å‚«‚é‚©’²‚×‚é
-	if (m_activeFlag == true)
+	if (GetActiveFlag() == true)
 	{
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
@@ -52,7 +52,7 @@ void Enemy_Charge::Update()
 	}
 
 	// ƒCƒxƒ“ƒgŒã‚Ìˆ—
-	if (m_NotDrawFlag == true) {
+	if (GetNotDrawFlag() == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -61,32 +61,32 @@ void Enemy_Charge::Update()
 	}
 
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
-	if (m_ActionState == m_ActionState_CatchPlayer) {
+	if (GetEnemyActionState() == m_ActionState_CatchPlayer) {
 		// ‘Ò‹@ó‘Ô‚É‚·‚é
-		m_enAnimationState = m_enAnimationState_Idle;
+		SetEnemyAnimationState(m_enAnimationState_Idle);
 		return;
 	}
 
-	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+	if (GetHearedSoundBulletFlag() == true && GetHitFlashBulletFlag() == true) {
 		// ’ÇÕ‚ğ—Dæ‚·‚é
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
-	if (m_ActionState == m_ActionState_Tracking && m_HearedSoundBulletFlag == true) {
+	if (GetEnemyActionState() == m_ActionState_Tracking && GetHearedSoundBulletFlag() == true) {
 		// ‘MŒõ’e‚ğ—Dæ‚·‚é
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½
-	if (m_HitFlashBulletFlag == true) {
-		m_ActionState = m_ActionState_Dizzy;
+	if (GetHitFlashBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Dizzy);
 	}
 	// ‰¹”š’e‚ğg—p‚µ‚½
-	if (m_HearedSoundBulletFlag == true) {
-		m_ActionState = m_ActionState_Listen;
+	if (GetHearedSoundBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Listen);
 	}
 
-	switch (m_ActionState) {
+	switch (GetEnemyActionState()) {
 		// ˆê’è‚ÌêŠ‚ğ„‰ñ‚·‚é
 	case m_ActionState_Craw:
 		Update_OnCraw();
@@ -139,7 +139,7 @@ void Enemy_Charge::Update()
 void Enemy_Charge::Update_OnCraw()
 {
 	if (Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_CrawPath();
@@ -148,7 +148,7 @@ void Enemy_Charge::Update_OnCraw()
 void Enemy_Charge::Update_OnCharge()
 {
 	if (Enemy::Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_ChargeStart(STOP_TIMER);
@@ -191,8 +191,8 @@ void Enemy_Charge::Update_OnCatch()
 
 void Enemy_Charge::Render(RenderContext& rc)
 {
-	if (m_NotDrawFlag == false&&
-		m_activeFlag == false) {
+	if (GetNotDrawFlag() == false&&
+		GetActiveFlag() == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

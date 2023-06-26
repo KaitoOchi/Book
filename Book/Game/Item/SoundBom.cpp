@@ -62,7 +62,7 @@ void SoundBom::ItemHit()
 			if (diff.LengthSq() < pow(SOUNDRANGE, 2.0f))
 			{
 				//エネミーに当たった判定と座標を与える
-				m_game->GetEnemyList()[i]->SetHearedSoundBullet(true);
+				m_game->GetEnemyList()[i]->SetHearedSoundBulletFlag(true);
 				m_game->GetEnemyList()[i]->SetItemPos(m_position);
 			}
       

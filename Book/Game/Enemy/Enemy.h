@@ -139,7 +139,13 @@ public:
 		TYPE_SEARCH,
 		TYPE_CLEAR
 	};
-	EnemyType m_enemyType;
+	/// <summary>
+	/// 種類を設定する
+	/// </summary>
+	void SetEnemyType(EnemyType type)
+	{
+		m_enemyType = type;
+	}
 
 	// エネミーのアニメーションステート
 	// 継承した派生クラスでアニメーションを読み込み、関数を呼ぶと再生されます。
@@ -155,8 +161,6 @@ public:
 		m_enAnimation_Call,					// 他のエネミーを呼ぶ
 		m_enAnimation_Num
 	};
-	// アニメーションステート
-	AnimationClip m_enAnimationClips[m_enAnimation_Num];
 	
 	// アニメーション再生用ステート
 	enum EnAnimationState
@@ -170,7 +174,14 @@ public:
 		m_enAnimationState_Loss,			// プレイヤーを見失った時
 		m_enAnimationState_Call				// 他のエネミーを呼ぶ
 	};
-	EnAnimationState m_enAnimationState;
+
+	/// <summary>
+	/// 再生するアニメーションを設定する
+	/// </summary>
+	void SetEnemyAnimationState(const EnAnimationState state)
+	{
+		m_enAnimationState = state;
+	}
 
 	// エネミーの行動パターン
 	enum EnEnemyActionState
@@ -191,21 +202,20 @@ public:
 	};
 
 	/// <summary>
-	/// エネミーの行動パターン
+	/// 現在の行動パターンを設定する
 	/// </summary>
-	/// <param name="CRAW">					：巡回							</param>
-	/// <param name="TRACKING">				：追跡							</param>
-	/// <param name="SEARCH">				：待機							</param>
-	/// <param name="MISSING_MOVEPOSITON">	：見失った座標まで移動した		</param>
-	/// <param name="MISSING_SEARCHPLAYER">	：見失ったプレイヤーを探す		</param>
-	/// <param name="CALL">					：周りの敵を呼ぶ				</param>
-	/// <param name="CALLED">				：CALL時にSearch以外が実行		</param>
-	/// <param name="CHARGE">				：突進							</param>
-	/// <param name="BACKBASEDON">			：巡回状態に戻る				</param>
-	/// <param name="CONFUSION">			：閃光弾にあたったとき			</param>
-	/// <param name="LISTEN">				：音爆弾を使用したとき			</param>
-	/// <param name="CATCH">				：捕獲							</param>
-	EnEnemyActionState m_ActionState;
+	/// <param name="state"></param>
+	void SetEnemyActionState(const EnEnemyActionState state) {
+		m_ActionState = state;
+	}
+
+	/// <summary>
+	/// 現在の行動パターンを取得する
+	/// </summary>
+	/// <returns></returns>
+	const EnEnemyActionState GetEnemyActionState() const {
+		return m_ActionState;
+	}
 
 	// ----------------------------------------------------------
 
@@ -260,20 +270,53 @@ public:
 	}
 
 	/// <summary>
+	/// プレイヤーを発見しているかどうか返す
+	/// </summary>
+	/// <returns></returns>
+	const bool GetTrackingPlayerFlag() const {
+		return m_TrackingPlayerFlag;
+	}
+
+	/// <summary>
+	/// エフェクトの描画をするかどうかのフラグを設定する
+	/// </summary>
+	/// <param name="flag">trueなら描画した</param>
+	/// <param name="number">配列番号</param>
+	void SetEffectDrawFlag(const bool flag,const int number) {
+		m_efectDrawFlag[number] = flag;
+	}
+
+	/// <summary>
 	/// 閃光弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
-	void SetHitFlashBullet(bool flag) {
+	void SetHitFlashBulletFlag(bool flag) {
 		m_HitFlashBulletFlag = flag;
 	};
+
+	/// <summary>
+	/// 閃光弾に当たったどうかのフラグを取得する
+	/// </summary>
+	/// <returns>trueなら当たった</returns>
+	const bool GetHitFlashBulletFlag() const {
+		return m_HearedSoundBulletFlag;
+	}
 
 	/// <summary>
 	/// 音爆弾の被弾フラグを設定
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
-	void SetHearedSoundBullet(bool flag) {
+	void SetHearedSoundBulletFlag(bool flag) {
 		m_HearedSoundBulletFlag = flag;
 	};
+
+	/// <summary>
+	/// 音を聞いたかどうかのフラグを取得する
+	/// </summary>
+	/// <returns>trueなら聞いた</returns>
+	const bool GetHearedSoundBulletFlag()const {
+		return m_HearedSoundBulletFlag;
+	}
 
 	/// <summary>
 	/// アイテムの座標を渡す
@@ -284,17 +327,9 @@ public:
 	}
 
 	/// <summary>
-	/// スポットライトの番号を教える
+	/// 描画するかどうか決定する
 	/// </summary>
-	/// <returns></returns>
-	void SetSpotLigNum(int number) {
-		m_spotNum = number;
-	}
-
-	/// <summary>
-	/// 描画するかどうか決定する。trueのとき描画しない
-	/// </summary>
-	/// <param name="flag"></param>
+	/// <param name="flag">trueのとき描画しない</param>
 	void SetNotDrawFlag(bool flag) {
 		m_NotDrawFlag = flag;
 
@@ -318,6 +353,14 @@ public:
 		m_efectDrawFlag[0] = false;
 		m_efectDrawFlag[1] = false;
 		m_efectDrawFlag[2] = false;
+	}
+
+	/// <summary>
+	/// 描画するかどうかのフラグを取得する
+	/// </summary>
+	/// <returns>trueなら描画しない</returns>
+	const bool GetNotDrawFlag() const {
+		return m_NotDrawFlag;
 	}
 
 	//エネミーの前方向を求める
@@ -349,6 +392,14 @@ public:
 	// スポットライトを渡す
 	SpotLight GetSpotLight() {
 		return m_spotLight;
+	}
+
+	/// <summary>
+	/// スポットライトの番号を教える
+	/// </summary>
+	/// <returns></returns>
+	void SetSpotLigNum(int number) {
+		m_spotNum = number;
 	}
 
 	//--------------------------------------------
@@ -427,7 +478,32 @@ protected:
 
 	SpotLight					m_spotLight;						//スポットライト
 
-protected:
+	// アニメーションステート
+	AnimationClip m_enAnimationClips[m_enAnimation_Num];
+
+private:
+	// 再生するアニメーションを指定するステート
+	EnAnimationState m_enAnimationState;
+	/// <summary>
+	/// エネミーの行動パターン
+	/// </summary>
+	/// <param name="CRAW">					：巡回							</param>
+	/// <param name="TRACKING">				：追跡							</param>
+	/// <param name="SEARCH">				：待機							</param>
+	/// <param name="MISSING_MOVEPOSITON">	：見失った座標まで移動した		</param>
+	/// <param name="MISSING_SEARCHPLAYER">	：見失ったプレイヤーを探す		</param>
+	/// <param name="CALL">					：周りの敵を呼ぶ				</param>
+	/// <param name="CALLED">				：CALL時にSearch以外が実行		</param>
+	/// <param name="CHARGE">				：突進							</param>
+	/// <param name="BACKBASEDON">			：巡回状態に戻る				</param>
+	/// <param name="CONFUSION">			：閃光弾にあたったとき			</param>
+	/// <param name="LISTEN">				：音爆弾を使用したとき			</param>
+	/// <param name="CATCH">				：捕獲							</param>
+	EnEnemyActionState m_ActionState;
+
+	// エネミーの種類
+	EnemyType m_enemyType;
+
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した
 	/// </summary>
@@ -455,7 +531,7 @@ protected:
 	bool						m_activeFlag = false;				// 最初から動けるかそうか
 	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
-private:
+
 	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
 	float						m_Vicount;							// 警戒度を一定回数増やす

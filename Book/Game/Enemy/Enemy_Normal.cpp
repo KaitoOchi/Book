@@ -36,7 +36,7 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// s“®‚Å‚«‚é‚©’²‚×‚é
-	if (m_activeFlag == true)
+	if (GetActiveFlag() == true)
 	{
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
@@ -48,7 +48,7 @@ void Enemy_Normal::Update()
 	}
 
 	// ƒCƒxƒ“ƒgŒã‚Ìˆ—
-	if (m_NotDrawFlag == true) {
+	if (GetNotDrawFlag() == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -57,31 +57,31 @@ void Enemy_Normal::Update()
 	}
 
 	// ƒvƒŒƒCƒ„[‚ğ•ß‚Ü‚¦‚½‚Æ‚«
-	if (m_ActionState == m_ActionState_CatchPlayer) {
-		m_enAnimationState = m_enAnimationState_Idle;
+	if (GetEnemyActionState() == m_ActionState_CatchPlayer) {
+		SetEnemyAnimationState(m_enAnimationState_Idle);
 		return;
 	}
 
-	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+	if (GetHearedSoundBulletFlag() == true && GetHitFlashBulletFlag() == true) {
 		// ‘MŒõ’e‚ğ—Dæ‚·‚é
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
-	if (m_ActionState == m_ActionState_Tracking && m_HearedSoundBulletFlag == true) {
+	if (GetEnemyActionState() == m_ActionState_Tracking && GetHearedSoundBulletFlag() == true) {
 		// ’ÇÕ‚ğ—Dæ‚·‚é
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
 	// ‘MŒõ’e‚É“–‚½‚Á‚½‚Æ‚«
-	if (m_HitFlashBulletFlag == true) {
-		m_ActionState = m_ActionState_Dizzy;
+	if (GetHitFlashBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Dizzy);
 	}
 	// ‰¹”š’e‚ªg—p‚³‚ê‚½‚Æ‚«
-	if (m_HearedSoundBulletFlag == true) {
-		m_ActionState = m_ActionState_Listen;
+	if (GetHearedSoundBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Listen);
 	}
 
-	switch (m_ActionState) {
+	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
 		// w’è‚³‚ê‚½”ÍˆÍ‚Ì„‰ñ
 		Update_OnCraw();
@@ -134,7 +134,7 @@ void Enemy_Normal::Update()
 void Enemy_Normal::Update_OnCraw()
 {
 	if (Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_CrawPath();
@@ -143,7 +143,7 @@ void Enemy_Normal::Update_OnCraw()
 void Enemy_Normal::Update_OnTracking()
 {
 	if (Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_TrackingPlayer();
@@ -184,8 +184,8 @@ void Enemy_Normal::UpDate_OnListen()
 void Enemy_Normal::Render(RenderContext& rc)
 {
 	// •`‰æ
-	if (m_NotDrawFlag == false&&
-		m_activeFlag == false) {
+	if (GetNotDrawFlag() == false &&
+		GetActiveFlag() == false) {
 		m_enemyRender.Draw(rc);
 	}
 }

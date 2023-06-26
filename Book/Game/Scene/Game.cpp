@@ -196,7 +196,7 @@ void Game::LevelDesign()
 			 //エネミーを生成
 			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
-			enemyNormal->m_enemyType = Enemy::TYPE_NORMAL;
+			enemyNormal->SetEnemyType(Enemy::TYPE_NORMAL);
 			// 座標・回転・スケールを教える
 			enemyNormal->SetPosition(objData.position);
 			enemyNormal->SetRotation(objData.rotation);
@@ -218,7 +218,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			// 自身の属性を教える
-			enemyCharge->m_enemyType = Enemy::TYPE_CHARGE;
+			enemyCharge->SetEnemyType(Enemy::TYPE_CHARGE);
 			// 座標・回転・スケールを教える
 			enemyCharge->SetPosition(objData.position);
 			enemyCharge->SetRotation(objData.rotation);
@@ -240,7 +240,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Search* enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
 			// 自身の属性を教える
-			enemySearch->m_enemyType = Enemy::TYPE_SEARCH;
+			enemySearch->SetEnemyType(Enemy::TYPE_SEARCH);
 			// 座標・回転・スケールを教える
 			enemySearch->SetPosition(objData.position);
 			enemySearch->SetRotation(objData.rotation);
@@ -260,7 +260,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			// 自身の属性を教える
-			enemyClear->m_enemyType = Enemy::TYPE_CLEAR;
+			enemyClear->SetEnemyType(Enemy::TYPE_CLEAR);
 			// 座標・回転・スケールを教える
 			enemyClear->SetPosition(objData.position);
 			enemyClear->SetRotation(objData.rotation);
@@ -282,7 +282,7 @@ void Game::LevelDesign()
 			//エネミーを生成
 			Enemy_Normal* enemyNormal = NewGO<Enemy_Normal>(0, "enemyNormal");
 			// 自身の属性を教える
-			enemyNormal->m_enemyType = Enemy::TYPE_NORMAL;
+			enemyNormal->SetEnemyType(Enemy::TYPE_NORMAL);
 			// 座標・回転・スケールを教える
 			enemyNormal->SetPosition(objData.position);
 			enemyNormal->SetRotation(objData.rotation);
@@ -305,7 +305,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Charge* enemyCharge = NewGO<Enemy_Charge>(0, "enemyCharge");
 			// 自身の属性を教える
-			enemyCharge->m_enemyType = Enemy::TYPE_CHARGE;
+			enemyCharge->SetEnemyType(Enemy::TYPE_CHARGE);
 			// 座標・回転・スケールを教える
 			enemyCharge->SetPosition(objData.position);
 			enemyCharge->SetRotation(objData.rotation);
@@ -328,7 +328,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Clear* enemyClear = NewGO<Enemy_Clear>(0, "enemyClear");
 			// 自身の属性を教える
-			enemyClear->m_enemyType = Enemy::TYPE_CLEAR;
+			enemyClear->SetEnemyType(Enemy::TYPE_CLEAR);
 			// 座標・回転・スケールを教える
 			enemyClear->SetPosition(objData.position);
 			enemyClear->SetRotation(objData.rotation);
@@ -350,7 +350,7 @@ void Game::LevelDesign()
 			// エネミーを生成
 			Enemy_Search* enemySearch = NewGO<Enemy_Search>(0, "enemySearch");
 			// 自身の属性を教える
-			enemySearch->m_enemyType = Enemy::TYPE_SEARCH;
+			enemySearch->SetEnemyType(Enemy::TYPE_SEARCH);
 			// 座標・回転・スケールを教える
 			enemySearch->SetPosition(objData.position);
 			enemySearch->SetRotation(objData.rotation);

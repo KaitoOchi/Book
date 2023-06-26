@@ -372,7 +372,7 @@ void Player::PlayerCatch()
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
 		//エネミーのステートが捕まえたなら
-		if (m_game->GetEnemyList()[i]->m_ActionState == m_game->GetEnemyList()[i]->m_ActionState_CatchPlayer)
+		if (m_game->GetEnemyList()[i]->GetEnemyActionState() == m_game->GetEnemyList()[i]->m_ActionState_CatchPlayer)
 		{
 			m_playerState = m_enPlayer_Caught;
 			//捕まった時の座標を返す
@@ -387,7 +387,7 @@ void Player::ProcessCommonStateTransition()
 	for (int i = 0; i < m_game->GetEnemyList().size(); i++)
 	{
 		//エネミーのステートが捕まえたなら
-		if (m_game->GetEnemyList()[i]->m_ActionState == m_game->GetEnemyList()[i]->m_ActionState_CatchPlayer && m_playerCaught)
+		if (m_game->GetEnemyList()[i]->GetEnemyActionState() == m_game->GetEnemyList()[i]->m_ActionState_CatchPlayer && m_playerCaught)
 		{
 			//捕まったステートにする
 			m_playerState = m_enPlayer_Caught;

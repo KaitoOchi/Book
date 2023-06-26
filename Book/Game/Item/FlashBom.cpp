@@ -117,7 +117,7 @@ void FlashBom::ItemHit()
 					if (angle <= (Math::PI / 180.0f) * 90.0f)
 					{
 						//エネミーフラグをtrueに。
-						m_game->GetEnemyList()[i]->SetHitFlashBullet(true);
+						m_game->GetEnemyList()[i]->SetHitFlashBulletFlag(true);
 					}
 				}
 

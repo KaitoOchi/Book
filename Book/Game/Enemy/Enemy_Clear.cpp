@@ -40,7 +40,7 @@ bool Enemy_Clear::Start()
 void Enemy_Clear::Update()
 {
 	//行動できるか調べる
-	if (m_activeFlag == true)
+	if (GetActiveFlag() == true)
 	{
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
@@ -50,7 +50,7 @@ void Enemy_Clear::Update()
 		return;
 	}
 	// イベント後の処理
-	if (m_NotDrawFlag == true) {
+	if (GetNotDrawFlag() == true) {
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -59,32 +59,32 @@ void Enemy_Clear::Update()
 	}
 
 	// プレイヤーを捕まえたとき
-	if (m_ActionState == m_ActionState_CatchPlayer) {
-		m_enAnimationState = m_enAnimationState_Idle;
+	if (GetEnemyActionState() == m_ActionState_CatchPlayer) {
+		SetEnemyAnimationState(m_enAnimationState_Idle);
 		return;
 	}
 
-	if (m_HearedSoundBulletFlag == true && m_HitFlashBulletFlag == true) {
+	if (GetHearedSoundBulletFlag() == true && GetHitFlashBulletFlag() == true) {
 		// 閃光弾を優先する
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
-	if (m_ActionState == m_ActionState_Tracking && m_HearedSoundBulletFlag == true) {
+	if (GetActiveFlag() == m_ActionState_Tracking && GetHearedSoundBulletFlag() == true) {
 		// 追跡を優先する
-		m_HearedSoundBulletFlag = false;
+		SetHearedSoundBulletFlag(false);
 	}
 
 	// 閃光弾に当たったとき
-	if (m_HitFlashBulletFlag == true) {
-		m_ActionState = m_ActionState_Dizzy;
+	if (GetHitFlashBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Dizzy);
 	}
 	// 音爆弾が使用されたとき
-	if (m_HearedSoundBulletFlag == true) {
-		m_ActionState = m_ActionState_Listen;
+	if (GetHearedSoundBulletFlag() == true) {
+		SetEnemyActionState(m_ActionState_Listen);
 	}
 
 	// 行動パターン
-	switch (m_ActionState) {
+	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
 		// 指定された範囲の巡回
 		Update_OnCraw();
@@ -149,7 +149,7 @@ void Enemy_Clear::Update()
 void Enemy_Clear::Update_OnCraw()
 {
 	if (Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_CrawPath();
@@ -158,7 +158,7 @@ void Enemy_Clear::Update_OnCraw()
 void Enemy_Clear::Update_OnTracking()
 {
 	if (Action_CatchPlayer() == true) {
-		m_ActionState = m_ActionState_CatchPlayer;
+		SetEnemyActionState(m_ActionState_CatchPlayer);
 	}
 
 	Enemy::Action_TrackingPlayer();
@@ -196,20 +196,20 @@ void Enemy_Clear::UpDate_OnListen()
 
 void Enemy_Clear::ClearChange()
 {
-	if (m_SetActionState != m_ActionState&&m_clearChangeTime>=0.0f)
+	if (m_SetActionState != GetEnemyActionState () && m_clearChangeTime >= 0.0f)
 	{
 		m_clearChangeTime -= g_gameTime->GetFrameDeltaTime();
 		return;
 	}
 
-	if (m_ActionState == m_ActionState_Craw)
+	if (GetEnemyActionState() == m_ActionState_Craw)
 	{
 		// 透明化
 		m_clearFlag = true;
 		m_SetActionState = m_ActionState_Craw;
 		m_clearChangeTime = 0.0f;
 	}
-	else if (m_ActionState == m_ActionState_Tracking)
+	else if (GetEnemyActionState() == m_ActionState_Tracking)
 	{
 		// 透明化解除
 		m_clearFlag = false;
@@ -221,13 +221,13 @@ void Enemy_Clear::ClearChange()
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
-	if (m_activeFlag == true)
+	if (GetActiveFlag() == true)
 	{
 		Vector3 move{ 0.0f,-300.0f,0.0f };
 		m_characterController.Execute(move, 1.0f);
 		return;
 	}
-	if (m_NotDrawFlag == true) {
+	if (GetNotDrawFlag() == true) {
 		return;
 	}
 
