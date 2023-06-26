@@ -576,7 +576,7 @@ void Enemy::Action_HitFlashBullet()
 	}
 }
 
-void Enemy::Action_GoLocationListenSound(Vector3 tergetPos)
+void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 {
 	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
@@ -595,13 +595,13 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPos)
 	Efect_FindPlayer();
 
 	// エネミーからアイテムへ向かうベクトルを作成
-	Vector3 diff = tergetPos - m_position;
+	Vector3 diff = tergetPosition - m_position;
 	float length = diff.Length();
 
 	// 長さが一定以上のとき
 	if (length >= CALL_DISTANCE_MIN) {
 		// アイテムの座標を基にしてナビメッシュを作成
-		CreateNavimesh(tergetPos);
+		CreateNavimesh(tergetPosition);
 
 		// 経過時間を計測
 		m_addTimer[4] += g_gameTime->GetFrameDeltaTime();

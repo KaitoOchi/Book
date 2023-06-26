@@ -73,8 +73,8 @@ public:
 	/// 壁との衝突判定
 	/// </summary>
 	void Action_ChargeHitWall();
-	/// <summary>
 
+	/// <summary>
 	/// 敵を呼ぶ行動
 	/// </summary>
 	void Action_CallAroundEnemy();
@@ -85,12 +85,10 @@ public:
 	void Action_MissingPlayer();
 	/// <summary>
 	/// プレイヤーを見失った後の処理
-	/// 見失った位置まで位置を移動する
 	/// </summary>
 	void Action_MoveMissingPosition();
 	/// <summary>
 	/// プレイヤーを見失った後の処理
-	/// プレイヤーを探す
 	/// </summary>
 	void Action_SearchMissingPlayer();
 
@@ -102,7 +100,7 @@ public:
 	/// 音が聞こえた場所に行く処理
 	/// </summary>
 	/// <param name="pos">目標地点</param>
-	void Action_GoLocationListenSound(Vector3 tergetPos);
+	void Action_GoLocationListenSound(Vector3 tergetPosition);
 
 	/// <summary>
 	/// 行動停止
