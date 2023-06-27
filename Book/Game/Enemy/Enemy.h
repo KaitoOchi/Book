@@ -125,9 +125,18 @@ public:
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
 	void VigilanceCount();				//
 
-	void Efect_Dizzy();				// ☆のエフェクトを生成
-	void Efect_FindPlayer();		// ！のエフェクトを生成
-	void Efect_MissingPlayer();		// ？のエフェクトを生成
+	/// <summary>
+	/// ☆のエフェクトを生成
+	/// </summary>
+	void Efect_Dizzy();
+	/// <summary>
+	/// ！のエフェクトを生成
+	/// </summary>
+	void Efect_FindPlayer();
+	/// <summary>
+	/// ？のエフェクトを生成
+	/// </summary>
+	void Efect_MissingPlayer();
 
 	// ----------------------------------------------------------
 
@@ -189,16 +198,16 @@ public:
 		m_ActionState_Craw,					// 巡回
 		m_ActionState_Tracking,				// 追跡
 		m_ActionState_Search,				// 索敵
-		m_ActionState_Move_MissingPositon,		// 見失った座標まで移動する
+		m_ActionState_Move_MissingPositon,	// 見失った座標まで移動する
 		m_ActionState_Search_MissingPlayer,	// 見失ったプレイヤーを探す
 		m_ActionState_Call_AroundEnemy,		// 周りの敵を呼ぶ
-		m_ActionState_Called,					// CALL時にSearch以外が実行
-		m_ActionState_Charge,					// 突進
-		m_ActionState_ChargeEnd,				// 突進終了
-		m_ActionState_BackBasedOn,				// 巡回状態に戻る
-		m_ActionState_Dizzy,					// 閃光弾にあたったとき
-		m_ActionState_Listen,					// 音爆弾を使用したとき
-		m_ActionState_CatchPlayer,				// 捕獲した
+		m_ActionState_Called,				// CALL時にSearch以外が実行
+		m_ActionState_Charge,				// 突進
+		m_ActionState_ChargeEnd,			// 突進終了
+		m_ActionState_BackBasedOn,			// 巡回状態に戻る
+		m_ActionState_Dizzy,				// 閃光弾にあたったとき
+		m_ActionState_Listen,				// 音爆弾を使用したとき
+		m_ActionState_CatchPlayer,			// 捕獲した
 	};
 
 	/// <summary>
