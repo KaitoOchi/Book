@@ -200,7 +200,7 @@ private:
 	MiniMap*						m_miniMap = nullptr;
 
 
-	std::vector<Enemy*>				m_enemyList;
+	std::vector<Enemy*>				m_enemyList;					// エネミーのリスト
 	std::vector<Vector3>			m_enemyFirstPositions;			// エネミーの初期座標
 	std::vector<Wall*>				m_wallList;
 	std::vector<PhysicsGhost*>		m_physicsGhostList;
