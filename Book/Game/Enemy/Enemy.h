@@ -540,7 +540,6 @@ private:
 	bool						m_activeFlag = false;				// 最初から動けるかそうか
 	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
 
-
 	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
 	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
 	float						m_Vicount;							// 警戒度を一定回数増やす
