@@ -221,7 +221,7 @@ void GameUI::ChangeGage()
 			m_playerManagement->GetEnPlayerState() != Player::m_enPlayer_Catching)
 		{
 			//ƒvƒŒƒCƒ„[‚ª”æ‚ê‚Ä‚¢‚È‚¢‚È‚ç
-			if (m_playerManagement->GetRunState()==false)
+			if (m_playerManagement->GetRunState()==true)
 			{
 				//3D‚É–ß‚·
 				m_playerManagement->SetChange(m_playerManagement->m_enPlayer_3DChanging);
