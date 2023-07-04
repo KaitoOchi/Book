@@ -308,7 +308,7 @@ public:
 	/// </summary>
 	/// <returns>true‚È‚ç“–‚½‚Á‚½</returns>
 	const bool GetHitFlashBulletFlag() const {
-		return m_HearedSoundBulletFlag;
+		return m_HitFlashBulletFlag;
 	}
 
 	/// <summary>
