@@ -6,7 +6,8 @@ namespace nsBookEngine {
 	/// <summary>
 	/// レンダラーの基底クラス。
 	/// </summary>
-	class IRenderer {
+	class IRenderer
+	{
 	public:
 		/// <summary>
 		/// シャドウマップへの描画パスから呼ばれる処理。

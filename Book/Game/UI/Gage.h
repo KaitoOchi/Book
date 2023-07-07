@@ -1,10 +1,12 @@
 #pragma once
+#include "Wipe.h"
+
 class Game;
 class Enemy;
 class Fade;
-#include "Wipe.h"
 class Enemy_Increase;
 class Player3D;
+
 class Gage:public IGameObject
 {
 public:
@@ -15,7 +17,7 @@ public:
 	void Render(RenderContext& rc);
 
 	/// <summary>
-	/// �x���x��グ��
+	/// ゲージの上昇処理。
 	/// </summary>
 	/// <param name="GageUp">�x���x�𑝂₷��</param>
 	void GageUp(const int GageUp, const bool isEnemy);
@@ -31,10 +33,10 @@ public:
 
 	enum EnLeverState
 	{
-		m_enLever_1,		//�x���x���x���P
-		m_enLever_2,		//�x���x���x���Q
-		m_enLever_3,		//�x���x���x���R
-		m_enLever_MAX,		//�x���x���x��MAX
+		m_enLever_1,		
+		m_enLever_2,		
+		m_enLever_3,		
+		m_enLever_MAX,		
 	};
 
 	EnLeverState m_leverState = m_enLever_1;
@@ -42,49 +44,49 @@ public:
 private:
 	
 	/// <summary>
-	/// �x���x�������
+	/// ゲージの減少処理。
 	/// </summary>
 	void GageDown();
 
 	/// <summary>
-	/// �x���x���x����؂�ւ���
+	/// 警戒度レベルの変更処理。
 	/// </summary>
 	void VigilaceLeverChange();
 	
+	/// <summary>
+	/// ゲージの色を変更する。
+	/// </summary>
 	void Gage_ColorChange(); 
 
 	/// <summary>
-	/// �x���x��MAX�̎��̏���
+	/// ゲージをMAXにする。
 	/// </summary>
 	void Gage_MAX();
 
+	/// <summary>
+	/// ゲージの移動処理。
+	/// </summary>
 	void Gauge_Move();
 
 public:
-	EnLeverState m_GetState = m_leverState;
-
-	std::array<SpriteRender,4>m_LeverUPRender;					//�x���x���x���摜
-	SpriteRender m_maxLeverRender;
-
-	SpriteRender m_baseRender;									//���ɒu���摜
-	std::array<SpriteRender,10>m_vigilanceRender;				//�x���x�摜
-	bool m_isFind = false;										//�������ꂽ���ǂ���
-	bool m_MaxEnd=true;
-	int m_vigilanceGage = 0;									//�x���x�Q�[�W��
-	float m_vigilanceTime = 2.0f;								//�x���x�ɓ���N�[���^�C��
-
-	float m_Color=0.7f;											//�x���x�J���[						
-
-	float m_HitTime = 5.0f;
-	float m_vigilaceDownTime = 2.0f;							//�x���x�������N�[���^�C��]
-
-	float m_gaugeScale = 0.0f;
-	float m_gaugeTimer = 0.0f;
-
-	Game* m_game = nullptr;
-	Wipe* m_wipe = nullptr;
-	Fade* m_fade = nullptr;
-	Player3D* m_player3D = nullptr;
-	Enemy_Increase* m_enemy_Increase = nullptr;					//エネミーの増加
+	SpriteRender					m_maxLeverRender;				//最大レベル画像。
+	SpriteRender					m_baseRender;					//ベース画像。
+	std::array< SpriteRender, 4 >	m_LeverUPRender;				//レベル画像。
+	std::array< SpriteRender,10 >	m_vigilanceRender;				//警戒度ゲージ画像。
+	Game*							m_game = nullptr;
+	Wipe*							m_wipe = nullptr;
+	Fade*							m_fade = nullptr;
+	Player3D*						m_player3D = nullptr;
+	Enemy_Increase*					m_enemy_Increase = nullptr;
+	EnLeverState					m_GetState = m_leverState;		//レベルステート。
+	bool							m_isFind = false;				//見つかったかどうか。
+	bool							m_MaxEnd = true;				// ?
+	int								m_vigilanceGage = 0;			//警戒度ゲージ。
+	float							m_vigilanceTime = 2.0f;			//警戒度の増加のクールダウンタイム。
+	float							m_vigilaceDownTime = 2.0f;		//警戒度の減少のクールダウンタイム。
+	float							m_HitTime = 5.0f;				//ヒットタイマー。
+	float							m_gaugeTimer = 0.0f;			//ゲージタイマー。
+	float							m_Color = 0.7f;					//ゲージ変更の色。
+	float							m_gaugeScale = 0.0f;			//ゲージの拡大率。
 };
 

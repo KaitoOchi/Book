@@ -7,10 +7,19 @@
 #include "Pause.h"
 #include "GoalSprite.h"
 
+namespace
+{
+	const Vector3 SPRITE_POS = Vector3(0.0f, 150.0f, 0.0f);		//画像の座標
+	const int COUNT_MAX = 3;									//最大カウント数
+	const float MOVE_MAX_TIME = 0.5f;							//移動時間
+	const float TIMER_MAX = 1.0f;								//最大時間
+}
+
 
 CountDown::CountDown()
 {
-
+	m_count = COUNT_MAX;
+	m_timer = TIMER_MAX;
 }
 
 CountDown::~CountDown()
@@ -26,7 +35,7 @@ bool CountDown::Start()
 	m_countDownSpriteRender[3].Init("Assets/sprite/UI/countDown/3.dds", 166.0f, 255.0f);
 
 	for (int i = 0; i < 4; i++) {
-		m_countDownSpriteRender[i].SetPosition(Vector3(0.0f, 150.0f, 0.0f));
+		m_countDownSpriteRender[i].SetPosition(SPRITE_POS);
 		m_countDownSpriteRender[i].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 0.0f));
 		m_countDownSpriteRender[i].Update();
 	}
@@ -43,14 +52,14 @@ void CountDown::Update()
 
 		//カウントを進めてタイムをリセットする
 		m_count--;
-		m_timer = 1.0f;
+		m_timer = TIMER_MAX;
 
 		CountEnd();
 		return;
 	}
 
 	//カウント画像の設定
-	if (m_timer > 0.5f) {
+	if (m_timer > MOVE_MAX_TIME) {
 		m_countDownSpriteRender[m_count].SetScale(Vector3(m_timer, m_timer, 0.0f));
 		m_countDownSpriteRender[m_count].SetMulColor(Vector4(1.0f, 1.0f, 1.0f, 2.0f - (m_timer * 2.0f)));
 		m_countDownSpriteRender[m_count].Update();

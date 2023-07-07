@@ -297,12 +297,12 @@ namespace nsBookEngine {
 		Bloom					m_bloom;							//ブルーム
 		RenderTarget			m_mainRenderTarget;					//メインレンダーターゲット
 		RenderTarget			m_2DRenderTarget;					//2Dレンダーターゲット
+		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
+		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		Sprite					m_2DSprite;                         //2Dスプライト
 		Sprite					m_mainSprite;						//メインスプライト
 		Sprite					m_copyMainRtToFrameBufferSprite;    //メインレンダーターゲットのスプライト
-		RenderTarget			m_shadowMapRenderTarget;			//シャドウマップ用のレンダーターゲット
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
-		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 		Camera					m_lightCamera;						//ライトカメラ
 		Camera					m_wipeCamera;						//ワイプカメラ

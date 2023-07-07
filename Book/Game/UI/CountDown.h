@@ -35,6 +35,6 @@ private:
 
 private:
 	std::array< SpriteRender, 4 >	m_countDownSpriteRender;		//カウントダウン画像
-	int								m_count = 3;					//カウント
-	float							m_timer = 2.0f;					//タイマー
+	int								m_count = 0;					//カウント
+	float							m_timer = 0.0f;					//タイマー
 };

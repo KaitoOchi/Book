@@ -9,8 +9,7 @@
 namespace
 {
 	const Vector3 BEKUTORU(0.0f, 400.0f, -300.0f);	//カメラのベクトル
-
-	const float TAGETUP = 10.0f;					//注視点を上げる量
+	const float TARGET_UP = 10.0f;					//注視点を上げる量
 
 }
 
@@ -28,10 +27,12 @@ bool GameCamera::Start()
 {
 	//カメラの現在の座標
 	m_toCameraPos = { 0.0f ,BEKUTORU.y, BEKUTORU.z };
+
 	//インスタンスを探す
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
 	m_game = FindGO<Game>("game");
+
 	g_camera3D->SetNear(150.0f);
 	g_camera3D->SetFar(12000.0f);
 
@@ -50,6 +51,7 @@ void GameCamera::Update()
 	{
 		CatchMove();
 	}
+
 	//更新
 	g_camera3D->Update();
 }
@@ -65,7 +67,7 @@ void GameCamera::UpdatePositionAndTarget()
 
 	SetTarget({ m_playerManagement->GetPosition() .x,m_playerManagement->GetPosition().y+100.0f,m_playerManagement->GetPosition().z});
 	//注視点のY座標を上げる
-	m_target += Vector3(0.0f, TAGETUP, 0.0f);
+	m_target += Vector3(0.0f, TARGET_UP, 0.0f);
 	//ステックの入力量を求める
 	float x = g_pad[0]->GetRStickXF();
 	float y = g_pad[0]->GetRStickYF();

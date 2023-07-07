@@ -344,7 +344,7 @@ namespace nsBookEngine {
 		}
 
 	private:
-		static CollisionObjectManager* m_instance;
+		static CollisionObjectManager*		m_instance;
 
 		std::vector<CollisionObject*>		m_collisionObjectVector = {};
 		std::vector<CollisionObject*>		m_findsCollisionObjectVector = {};

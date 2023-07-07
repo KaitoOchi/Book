@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "Fade.h"
 
+
+namespace
+{
+	const Vector3 LOADING_FONT_POS = Vector3(550.0f, -425.0f, 0.0f);
+	const Vector3 LOADING_SPRITE_POS = Vector3(280.0f, -425.0f, 0.0f);
+}
+
 Fade::Fade()
 {
 	//乱数を初期化。
@@ -19,18 +26,18 @@ bool Fade::Start()
 
 	//ローディング文字画像の設定
 	m_nowLoadingSpriteRender.Init("Assets/sprite/UI/tips/now_loading.DDS", 455.0f, 53.0f);
-	m_nowLoadingSpriteRender.SetPosition(Vector3(550.0f, -425.0f, 0.0f));
+	m_nowLoadingSpriteRender.SetPosition(LOADING_FONT_POS);
 	m_nowLoadingSpriteRender.Update();
 
 	//ローディング画像の設定
 	m_loadingSpriteRender.Init("Assets/sprite/UI/tips/loading.DDS", 148.0f, 148.0f);
+	m_loadingSpriteRender.SetPosition(LOADING_SPRITE_POS);
 	m_loadingSpriteRender.SetScale(Vector3(0.3f, 0.3f, 0.0f));
-	m_loadingSpriteRender.SetPosition(Vector3(280.0f, -425.0f, 0.0f));
 	m_loadingSpriteRender.Update();
 
 	//tip画像1～15を設定
-	wchar_t path[255];
-	char finalFilePath[100];
+	wchar_t path[32];
+	char finalFilePath[32];
 	for (int i = 1; i < TIPS_MAX + 1; i++) {
 		
 		swprintf_s(path, 255, L"Assets/sprite/UI/tips/%d.DDS", i);

@@ -172,7 +172,8 @@ namespace nsBookEngine {
 		/// <param name="enModelUpAxis"></param>
 		void InitAnimation(AnimationClip* animationClips,
 			int numAnimationClips,
-			EnModelUpAxis enModelUpAxis);
+			EnModelUpAxis enModelUpAxis
+		);
 
 		/// <summary>
 		/// モデルの更新処理。
