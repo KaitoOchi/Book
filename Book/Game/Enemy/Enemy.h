@@ -352,7 +352,7 @@ public:
 	/// •`‰æ‚·‚é‚©‚Ç‚¤‚©Œˆ’è‚·‚é
 	/// </summary>
 	/// <param name="flag">true‚Ì‚Æ‚«•`‰æ‚µ‚È‚¢</param>
-	void SetNotDrawFlag(bool flag) :SetNotDrawFlag(bool flag) {
+	void SetNotDrawFlag(bool flag) {
 		m_NotDrawFlag = flag;
 
 		if (flag == false) {
