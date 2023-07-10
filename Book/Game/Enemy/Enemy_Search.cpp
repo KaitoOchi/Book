@@ -21,7 +21,7 @@ Enemy_Search::~Enemy_Search()
 bool Enemy_Search::Start()
 {
 	// アニメーションの読み込み
-	Animation();
+	LoadAnimation();
 
 	// モデルの読み込み
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);

@@ -21,7 +21,7 @@ Enemy_Charge::~Enemy_Charge()
 bool Enemy_Charge::Start()
 {
 	// アニメーションの読み込み
-	Animation();
+	LoadAnimation();
 
 	// モデルの読み込み
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_charge.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
