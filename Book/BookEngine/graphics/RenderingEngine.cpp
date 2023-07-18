@@ -266,6 +266,7 @@ namespace nsBookEngine {
 
 		//ビューポートを設定。
 		rc.SetViewportAndScissor(m_viewPorts[0]);
+
 		//通常描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnForwardRender(rc);
@@ -273,6 +274,7 @@ namespace nsBookEngine {
 
 		//ビューポートを設定。
 		rc.SetViewPort(m_viewPorts[1]);
+
 		//ワイプ描画処理。
 		for (auto& renderObj : m_renderObjects) {
 			renderObj->OnWipeForwardRender(rc, m_wipeCamera);
