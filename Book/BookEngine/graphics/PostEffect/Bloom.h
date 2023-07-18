@@ -5,7 +5,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// ブルームクラス。
 	/// </summary>
-	class Bloom
+	class Bloom : Noncopyable
 	{
 	public:
 		struct LuminanceCB {

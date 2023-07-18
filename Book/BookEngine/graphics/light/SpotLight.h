@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	class SpotLight
+	class SpotLight : Noncopyable
 	{
 	public:
 		/// <summary>

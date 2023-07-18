@@ -2,7 +2,7 @@
 
 namespace nsBookEngine{
 
-	class HemiSphereLight
+	class HemiSphereLight : Noncopyable
 	{
 	public:
 		/// <summary>

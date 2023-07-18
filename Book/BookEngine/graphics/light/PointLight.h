@@ -5,7 +5,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// ポイントライト。
 	/// </summary>
-	class PointLight
+	class PointLight : Noncopyable
 	{
 	public:
 		/// <summary>

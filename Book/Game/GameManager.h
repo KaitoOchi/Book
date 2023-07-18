@@ -3,7 +3,7 @@
 /// <summary>
 /// ゲームマネージャークラス。
 /// </summary>
-class GameManager
+class GameManager : Noncopyable
 {
 public:
 	/// <summary>

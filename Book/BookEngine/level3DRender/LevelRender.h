@@ -39,7 +39,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// レベルレンダークラス。
 	/// </summary>
-	class LevelRender
+	class LevelRender : Noncopyable
 	{
 	public:
 		LevelRender();

@@ -5,7 +5,8 @@ namespace nsBookEngine {
 	/// <summary>
 	/// 自作エンジンクラス。
 	/// </summary>
-	class BookEngine {
+	class BookEngine : Noncopyable 
+	{
 	private:
 		/// <summary>
 		/// コンストラクタ。

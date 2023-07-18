@@ -44,7 +44,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// レベル2Dレンダークラス。
 	/// </summary>
-	class Level2DRender
+	class Level2DRender : Noncopyable
 	{
 	public:
 		/// <summary>

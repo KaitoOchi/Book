@@ -13,7 +13,7 @@ namespace nsBookEngine {
 	/// <summary>
 	/// レンダリングエンジン。
 	/// </summary>
-	class RenderingEngine
+	class RenderingEngine : Noncopyable
 	{
 	public:
 		//シャドウマップ用の構造体

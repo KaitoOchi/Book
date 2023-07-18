@@ -2,7 +2,7 @@
 
 namespace nsBookEngine {
 
-	class DirectionLight
+	class DirectionLight : Noncopyable
 	{
 	public:
 		//ディレクションライト用の構造体
