@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// アニメーション
 	/// </summary>
-	void Animation();
+	void LoadAnimation();
 	/// <summary>
 	/// アニメーションの再生
 	/// </summary>
@@ -121,9 +121,22 @@ public:
 	/// <returns></returns>
 	bool Action_CatchPlayer();
 
+	/// <summary>
+	/// スポットライトを生成
+	/// </summary>
+	/// <param name="position">座標</param>
+	/// <param name="num">スポットライトの番号</param>
 	void SpotLight_New(Vector3 position,int num);
+	/// <summary>
+	/// 索敵処理
+	/// </summary>
+	/// <param name="lightrotaition">回転</param>
+	/// <param name="lightpos">座標</param>
 	void SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos);
-	void VigilanceCount();				//
+	/// <summary>
+	/// 警戒度の増加処理
+	/// </summary>
+	void VigilanceCount();
 
 	/// <summary>
 	/// ☆のエフェクトを生成
@@ -488,11 +501,12 @@ protected:
 	SpotLight					m_spotLight;						//スポットライト
 
 	// アニメーションステート
-	AnimationClip m_enAnimationClips[m_enAnimation_Num];
+	AnimationClip				m_enAnimationClips[m_enAnimation_Num];
 
 private:
 	// 再生するアニメーションを指定するステート
-	EnAnimationState m_enAnimationState;
+	EnAnimationState			m_enAnimationState;
+
 	/// <summary>
 	/// エネミーの行動パターン
 	/// </summary>
@@ -508,10 +522,10 @@ private:
 	/// <param name="CONFUSION">			：閃光弾にあたったとき			</param>
 	/// <param name="LISTEN">				：音爆弾を使用したとき			</param>
 	/// <param name="CATCH">				：捕獲							</param>
-	EnEnemyActionState m_ActionState;
+	EnEnemyActionState			m_ActionState;
 
 	// エネミーの種類
-	EnemyType m_enemyType;
+	EnemyType					m_enemyType;
 
 	/// <summary>
 	/// エフェクトを描画したかどうかのフラグ。trueのとき描画した

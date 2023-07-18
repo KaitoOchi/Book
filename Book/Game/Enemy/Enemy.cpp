@@ -123,7 +123,7 @@ bool Enemy::Start()
 	return true;
 }
 
-void Enemy::Animation()
+void Enemy::LoadAnimation()
 {
 	// アニメーションの読み込み
 	m_enAnimationClips[m_enAnimation_Idle].Load("Assets/animData/enemy/idle.tka");
@@ -401,9 +401,6 @@ bool Enemy::WallAndHit(Vector3 pos)
 
 bool Enemy::Action_CatchPlayer()
 {
-	// プレイヤーを捕まえる処理
-	// trueのときプレイヤーを捕まえた
-
 	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = m_playerManagement->GetPosition() - m_position;
 	// 長さを計算する
@@ -422,10 +419,8 @@ bool Enemy::Action_CatchPlayer()
 			// ステートを変動させる
 			m_game->GetEnemyList()[i]->m_ActionState = m_ActionState_CatchPlayer;
 		}
-
 		return true;
 	}
-
 	return false;
 }
 
@@ -449,7 +444,6 @@ void Enemy::Action_MoveMissingPosition()
 			m_ActionState = m_ActionState_Charge;
 			return;
 		}
-
 		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
@@ -504,7 +498,6 @@ void Enemy::Action_SearchMissingPlayer()
 			m_ActionState = m_ActionState_Charge;
 			return;
 		}
-
 		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
@@ -527,7 +520,6 @@ void Enemy::Action_SearchMissingPlayer()
 			m_ActionState = m_ActionState_Search;
 			return;
 		}
-
 		m_ActionState = m_ActionState_BackBasedOn;
 	}
 }
@@ -568,7 +560,6 @@ void Enemy::Action_HitFlashBullet()
 
 		// プレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
-
 	}
 	else {
 		// エフェクトの生成フラグをfalseにしておく

@@ -16,7 +16,7 @@ Enemy_Clear::~Enemy_Clear()
 bool Enemy_Clear::Start()
 {
 	// アニメーションの読み込み
-	Animation();
+	LoadAnimation();
 
 	// モデルを読み込む
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
