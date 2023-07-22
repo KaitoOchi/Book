@@ -6,8 +6,6 @@
 #include "Game.h"
 #include "GameManager.h"
 
-#define SEACH_DECISION	100.0f * 100.0f						// ベクトルを作成する範囲
-
 namespace
 {
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
@@ -16,14 +14,10 @@ namespace
 
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		ADD_SPEED = 1.3f;						// 乗算速度
-
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
-
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 190.0f;				// 呼ぶことができる最小値
-
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
-
 	const float		LENGTH_LOWESTVALUE = 10.0f;				// 移動する距離の限度
 
 	const float		CANMOVE_TIMER = 5.5f;					// 再度行動できるまでの待機時間
@@ -33,7 +27,6 @@ namespace
 
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
-
 	const float		AI_RADIUS = 150.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
 	const float		CALCULATIONNAVI_TIMER = 0.5f;			// ナビメッシュを再度計算するタイマー
@@ -50,9 +43,16 @@ namespace
 	const float		LIGHTPOSITION = 80.0f;					// 座標
 	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
 
-	const float		Z_UP_EFFECTPOSITON = 10.0f;				// エフェクトの表示座標(m_playerに加算する値)
+	const float		EFFECT_Z = 10.0f;						// エフェクトのZ座標加算値
+	const float		EFFECT_X = 5.0f;						// エフェクトのX座標加算値
+	const float		EFFECT_Y = 100.0f;						// エフェクトのY座標
+	const float		EFFECT_SIZE_STAR = 1.0f;				// エフェクトのサイズ
+	const float		EFFECT_SIZE_EXCLAMATION = 1.2f;			// エフェクトのサイズ
+	const float		EFFECT_SIZE_QUESTION = 1.5f;			// エフェクトのサイズ
 
 	const float		DOWN_VOLUME = 0.1f;						// 音量を下げる値
+
+	const float		SEACH_DECISION = 100.0f * 100.0f;		// ベクトルを作成する範囲
 }
 
 Enemy::Enemy()
@@ -103,12 +103,12 @@ bool Enemy::Start()
 	m_game = FindGO<Game>("game");
 
 	// タイマーのリセット
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < m_TimerState_Num; i++) {
 		m_addTimer[i] = 0.0f;
 	}
 
 	// エフェクトを生成するフラグのリセット
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < m_EffectState_Num; i++) {
 		m_efectDrawFlag[i] = false;
 	}
 
@@ -185,56 +185,56 @@ void Enemy::PlayAnimation()
 
 void Enemy::Efect_Dizzy()
 {
-	if (m_efectDrawFlag[0] == false) {
+	if (m_efectDrawFlag[m_EffectState_Star] == false) {
 
 		// ☆のエフェクトを生成
 		m_Effect = NewGO<EffectEmitter>(2);
 		m_Effect->Init(2);
 		// エフェクトの大きさを指定する
-		m_Effect->SetScale(Vector3::One * 1.0f);
+		m_Effect->SetScale(Vector3::One * EFFECT_SIZE_STAR);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
+		m_Effect->SetPosition(Vector3(m_position.x + EFFECT_X, EFFECT_Y, m_position.z + EFFECT_Z));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 
-		m_efectDrawFlag[0] = true;
+		m_efectDrawFlag[m_EffectState_Star] = true;
 	}
 }
 
 void Enemy::Efect_FindPlayer()
 {
-	if (m_efectDrawFlag[1] == false) {
+	if (m_efectDrawFlag[m_EffectState_ExclamationPoint] == false) {
 		// !のエフェクトを生成
 		m_Effect = NewGO<EffectEmitter>(3);
 		m_Effect->Init(3);
 		// エフェクトの大きさを指定する
-		m_Effect->SetScale(Vector3::One * 1.2f);
+		m_Effect->SetScale(Vector3::One * EFFECT_SIZE_EXCLAMATION);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
+		m_Effect->SetPosition(Vector3(m_position.x + EFFECT_X, EFFECT_Y, m_position.z + EFFECT_Z));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 
-		m_efectDrawFlag[1] = true;
+		m_efectDrawFlag[m_EffectState_ExclamationPoint] = true;
 	}
 }
 
 void Enemy::Efect_MissingPlayer()
 {
-	if (m_efectDrawFlag[2] == false) {
+	if (m_efectDrawFlag[m_EffectState_QuestionMark] == false) {
 		// ?のエフェクトを生成
 		m_Effect = NewGO<EffectEmitter>(4);
 		m_Effect->Init(4);
 		// エフェクトの大きさを指定する
-		m_Effect->SetScale(Vector3::One * 1.5f);
+		m_Effect->SetScale(Vector3::One * EFFECT_SIZE_QUESTION);
 		// エフェクトの座標の設定
-		m_Effect->SetPosition(Vector3(m_position.x + 5.0f, 100.0f, m_position.z + Z_UP_EFFECTPOSITON));
+		m_Effect->SetPosition(Vector3(m_position.x + EFFECT_X, EFFECT_Y, m_position.z + EFFECT_Z));
 		m_Effect->SetTime(g_gameTime->GetFrameDeltaTime() * 60.0f);
 		m_Effect->Play();
 		m_Effect->Update();
 
-		m_efectDrawFlag[2] = true;
+		m_efectDrawFlag[m_EffectState_QuestionMark] = true;
 	}
 }
 
@@ -249,26 +249,21 @@ void Enemy::Rotation(Vector3 rot)
 	m_forward = Vector3::AxisZ;
 	m_rotation.Apply(m_forward);
 	//---------------------------------------------
-
 }
 
 void Enemy::SpecifyPath(int pathNumber)
 {
 	// パスを指定
-	switch (pathNumber)
-	{
-		// 縦
-	case 0:
+	switch (pathNumber){
+	case m_PathState_VerticalMovement:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z - ADD_MOVE_LONG),2 });
 		break;
-		// 横
-	case 1:
+	case m_PathState_MoveSideways:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x + ADD_MOVE_LONG,m_position.y,m_position.z),2 });
 		break;
-		// 右回り(正方形)
-	case 2:
+	case m_PathState_ClockwiseRotation:
 		m_pointList.push_back({ Vector3(m_position.x,m_position.y,m_position.z),1 });
 		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z),2 });
 		m_pointList.push_back({ Vector3(m_position.x - ADD_MOVE_MIN,m_position.y,m_position.z - ADD_MOVE_MIN),3 });
@@ -279,13 +274,12 @@ void Enemy::SpecifyPath(int pathNumber)
 
 void Enemy::CreateNavimesh(Vector3 pos)
 {
-	// タイマーを加算
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
-	// エネミーからプレイヤーへ向かうベクトル
 	Vector3 diff = pos - m_position;
-
 	diff.Normalize();
+
+	// 回転
 	Rotation(diff);
 
 	// 一定時間以下のときreturn
@@ -431,7 +425,7 @@ void Enemy::Action_MoveMissingPosition()
 		// 再度追跡する
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
-		m_addTimer[3] = 0.0f;			// タイマーをリセット
+		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
 
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
@@ -485,7 +479,7 @@ void Enemy::Action_SearchMissingPlayer()
 		// 再度追跡する
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
-		m_addTimer[3] = 0.0f;			// タイマーをリセット
+		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
 
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
@@ -506,13 +500,13 @@ void Enemy::Action_SearchMissingPlayer()
 	m_enAnimationState = m_enAnimationState_Loss;
 
 	// モーションを再生
-	if (Action_StopMove(SEARCHPLAYER_TIMER, 3) == true) {
+	if (Action_StopMove(SEARCHPLAYER_TIMER, m_TimerState_MissingPlayer) == true) {
 
-		m_efectDrawFlag[1] = false;		// エフェクトの描画フラグ
-		m_efectDrawFlag[2] = false;
+		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;// エフェクトの描画フラグ
+		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
 
-		m_addTimer[3] = 0.0f;			// タイマーをリセット
-		m_sumPos = Vector3::Zero;		// 移動距離をリセット
+		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
+		m_sumPos = Vector3::Zero;								// 移動距離をリセット
 
 		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
@@ -544,16 +538,16 @@ void Enemy::Action_HitFlashBullet()
 	Efect_Dizzy();
 
 	// タイマーがtrueのとき
-	if (Action_StopMove(CANMOVE_TIMER,0) == true) {
+	if (Action_StopMove(CANMOVE_TIMER, m_TimerState_HitByaFlashbang) == true) {
 		// 生成フラグをリセット
-		m_efectDrawFlag[0] = false;
+		m_efectDrawFlag[m_EffectState_Star] = false;
 
 		// フラグを降ろす
 		m_TrackingPlayerFlag = false;
 		m_HitFlashBulletFlag = false;
 
 		// タイマーをリセット
-		m_addTimer[0] = 0.0f;
+		m_addTimer[m_TimerState_HitByaFlashbang] = 0.0f;
 
 		// エフェクトを生成
 		Efect_MissingPlayer();
@@ -563,7 +557,7 @@ void Enemy::Action_HitFlashBullet()
 	}
 	else {
 		// エフェクトの生成フラグをfalseにしておく
-		m_efectDrawFlag[2] = false;
+		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
 	}
 }
 
@@ -595,28 +589,28 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 		CreateNavimesh(tergetPosition);
 
 		// 経過時間を計測
-		m_addTimer[4] += g_gameTime->GetFrameDeltaTime();
+		m_addTimer[m_TimerState_HitByaSoundbang] += g_gameTime->GetFrameDeltaTime();
 
 		// 走るアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Run;
 		// エフェクトの再生フラグをfalseにしておく
-		m_efectDrawFlag[2] = false;
+		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
 	}
-	else if (m_addTimer[4] > PLAYER_LOSTUPTO_TIMER) {
+	else if (m_addTimer[m_TimerState_HitByaSoundbang] > PLAYER_LOSTUPTO_TIMER) {
 		// 一定時間が経過したとき
 		// 移動を中断して見失ったプレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		// タイマーをリセット
-		m_addTimer[4] = 0.0f;
-		m_efectDrawFlag[1] = false;
+		m_addTimer[m_TimerState_HitByaSoundbang] = 0.0f;
+		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
 		return;
 	}
 	else {
 		// 見失ったプレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
-		m_efectDrawFlag[1] = false;
+		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
 		return;
 	}
 }
@@ -651,7 +645,7 @@ void Enemy::Action_CrawPath()
 			m_point = &m_pointList[m_point->s_number];
 		}
 
-		m_addTimer[1] = 0.0f;	// タイマーをリセット
+		m_addTimer[m_TimerState_StayOnThePath] = 0.0f;	// タイマーをリセット
 	}
 
 	// エネミーからプレイヤーへ向かうベクトル
@@ -663,7 +657,7 @@ void Enemy::Action_CrawPath()
 	Rotation(moveSpeed);
 
 	// タイマーがtrueのとき
-	if (Action_StopMove(WAITING_TIMER,1) == true) {
+	if (Action_StopMove(WAITING_TIMER, m_TimerState_StayOnThePath) == true) {
 		// 歩きアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Walk;
 		// 座標に加算
@@ -706,7 +700,7 @@ void Enemy::Action_ChargeStart(float time)
 	}
 
 	// タイマーがtrueのとき
-	if (Action_StopMove(time,2) == true) {
+	if (Action_StopMove(time, m_TimerState_UntilTheCharge) == true) {
 
 		// 一度だけ実行する
 		if (m_CalculatedFlag == false) {
@@ -749,14 +743,14 @@ void Enemy::Action_ChargeStart(float time)
 
 void Enemy::Action_ChargeEnd()
 {
-	m_position = m_position;		// 座標を固定
+	m_position = m_position;								// 座標を固定
 
-	m_addTimer[2] = 0.0f;			// タイマーをリセット
-	m_sumPos = Vector3::Zero;		// 移動距離をリセット
-	m_CalculatedFlag = false;		// フラグを降ろす
+	m_addTimer[m_TimerState_UntilTheCharge] = 0.0f;			// タイマーをリセット
+	m_sumPos = Vector3::Zero;								// 移動距離をリセット
+	m_CalculatedFlag = false;								// フラグを降ろす
 
-	m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
-	m_efectDrawFlag[1] = false;
+	m_efectDrawFlag[m_EffectState_QuestionMark] = false;	// !のエフェクトのフラグを降ろす
+	m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
 
 	// プレイヤーが視野角内にいるとき
 	if (m_TrackingPlayerFlag == true) {
@@ -779,13 +773,13 @@ void Enemy::Action_ChargeHitWall()
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
 	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
 		// 衝突したとき
-		m_Chargemove = 0.0f;			// 乗算している値を0にして動かないようにする
+		m_Chargemove = 0.0f;									// 乗算している値を0にして動かないようにする
 		
-		m_addTimer[2] = 0.0f;			// タイマーをリセット
-		m_sumPos = Vector3::Zero;		// 移動距離をリセット
-		m_CalculatedFlag = false;		// フラグを降ろす
+		m_addTimer[m_TimerState_UntilTheCharge] = 0.0f;			// タイマーをリセット
+		m_sumPos = Vector3::Zero;								// 移動距離をリセット
+		m_CalculatedFlag = false;								// フラグを降ろす
 
-		m_efectDrawFlag[2] = false;		// !のエフェクトのフラグを降ろす
+		m_efectDrawFlag[m_EffectState_QuestionMark] = false;	// !のエフェクトのフラグを降ろす
 
 		// 行動を混乱状態にする
 		m_ActionState = m_ActionState_Dizzy;
@@ -806,7 +800,7 @@ void Enemy::Action_CallAroundEnemy()
 
 	if (m_TrackingPlayerFlag == false) {
 		// フラグを降ろす
-		m_efectDrawFlag[1] = false;
+		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		se->Stop();
 
@@ -834,10 +828,11 @@ void Enemy::Action_CallAroundEnemy()
 			m_game->GetEnemyList()[i]->m_ActionState != m_ActionState_Called) {
 
 			m_game->GetEnemyList()[i]->m_ActionState = m_ActionState_Called;		// 行動パターンを変更する
-			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;		// 自身の座標-キャラコンを目標地点として渡す
+			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;				// 自身の座標-キャラコンを目標地点として渡す
 		}
 	}
 
+	// 回転
 	Rotation(rot);
 
 	m_enAnimationState = m_enAnimationState_Call;
@@ -845,8 +840,8 @@ void Enemy::Action_CallAroundEnemy()
 
 void Enemy::Action_MissingPlayer()
 {
-	m_addTimer[1] = 0.0f;	// タイマーをリセット
-	m_addTimer[2] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
+	m_addTimer[m_TimerState_StayOnThePath] = 0.0f;	// タイマーをリセット
+	m_addTimer[m_TimerState_UntilTheCharge] = 0.0f;	// 突進からの移行時にこちらのタイマーもリセット
 
 	// 直近のパスを検索
 	// floatに最大値を格納
@@ -877,7 +872,6 @@ void Enemy::Action_MissingPlayer()
 	// 走るアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Run;
 
-
 	// エネミーからパスへ向かうベクトル
 	Vector3 diff = m_point->s_position - m_position;
 	float length = diff.Length();
@@ -898,7 +892,6 @@ bool Enemy::Action_StopMove(float time,int timerNumber)
 	if (time <= m_addTimer[timerNumber]) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -957,6 +950,7 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	m_spotLight.SetPosition(lightpos);
 	m_spotLight.Update();
 }
+
 void Enemy::VigilanceCount()
 {
 	m_Vicount -= g_gameTime->GetFrameDeltaTime();

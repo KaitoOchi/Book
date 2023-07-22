@@ -19,7 +19,6 @@ public:
 	/// <summary>
 	/// ゲージの上昇処理。
 	/// </summary>
-	/// <param name="GageUp">�x���x�𑝂₷��</param>
 	void GageUp(const int GageUp, const bool isEnemy);
 
 	/// <summary>
