@@ -458,6 +458,28 @@ public:
 	}
 
 protected:
+	enum EnPathState {
+		m_PathState_VerticalMovement,				// 縦移動
+		m_PathState_MoveSideways,					// 横移動
+		m_PathState_ClockwiseRotation,				// 右回り
+	};
+
+	enum EnTimerState {
+		m_TimerState_HitByaFlashbang,				// 閃光弾を受けたときの再行動時間
+		m_TimerState_StayOnThePath,					// 巡回時のパスに留まる時間
+		m_TimerState_UntilTheCharge,				// 突進を行うまでの待機時間
+		m_TimerState_MissingPlayer,					// プレイヤーを見失った時の待機時間
+		m_TimerState_HitByaSoundbang,				// 音爆弾を使用された時の到達を諦めるまでの時間
+		m_TimerState_Num
+	};
+
+	enum EnEffectState {
+		m_EffectState_Star,							// ☆
+		m_EffectState_ExclamationPoint,				// ！(感嘆符)
+		m_EffectState_QuestionMark,					// ？(疑問符)
+		m_EffectState_Num
+	};
+
 	// パス移動用のポイント構造体
 	struct Point {
 		Vector3					s_position;							// ポイントの座標
