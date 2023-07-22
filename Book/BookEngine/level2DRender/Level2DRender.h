@@ -5,6 +5,7 @@ namespace nsBookEngine {
 	struct CaslData;
 
 	struct Level2DObjectData {
+
 		Vector3		position = Vector3::Zero;			//座標。
 		Quaternion	rotation = Quaternion::Identity;	//回転。
 		Vector3		scale = Vector3::One;				//拡大率。

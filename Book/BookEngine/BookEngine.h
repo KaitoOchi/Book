@@ -34,6 +34,10 @@ namespace nsBookEngine {
 		/// </summary>
 		static void CreateInstance(const InitData& initData)
 		{
+			if (m_instance != nullptr) {
+				std::abort();
+			}
+
 			m_instance = new BookEngine;
 			m_instance->Init(initData);
 		}

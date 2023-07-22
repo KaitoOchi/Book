@@ -25,6 +25,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.CreateBox(pos, rot, size);
 		}
+
 		/// <summary>
 		/// カプセル形状のゴーストオブジェクトを作成。
 		/// </summary>
@@ -36,6 +37,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.CreateCapsule(pos, rot, radius, height);
 		}
+
 		/// <summary>
 		/// 球形状のゴーストオブジェクトを作成。
 		/// </summary>
@@ -46,6 +48,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.CreateSphere(pos, rot, radius);
 		}
+
 		/// <summary>
 		/// メッシュ形状のゴーストオブジェクトを作成。
 		/// </summary>
@@ -57,6 +60,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.CreateMesh(pos, rot, model, worldMatrix);
 		}
+
 		/// <summary>
 		/// 設定した時間(秒)が経過すると自動で削除されます。0.0fを設定したら1フレーム経過で削除されます。
 		/// </summary>
@@ -65,6 +69,7 @@ namespace nsBookEngine {
 		{
 			m_timeLimit = timeLimit;
 		}
+
 		/// <summary>
 		/// 名前を設定。
 		/// </summary>
@@ -73,6 +78,7 @@ namespace nsBookEngine {
 		{
 			m_name = name;
 		}
+
 		/// <summary>
 		/// 名前を取得。
 		/// </summary>
@@ -81,6 +87,7 @@ namespace nsBookEngine {
 		{
 			return m_name;
 		}
+
 		/// <summary>
 		/// 座標を設定。
 		/// </summary>
@@ -89,6 +96,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.SetPosition(position);
 		}
+
 		/// <summary>
 		/// 回転を設定。
 		/// </summary>
@@ -97,6 +105,7 @@ namespace nsBookEngine {
 		{
 			m_physicsGhostObject.SetRotation(rotation);
 		}
+
 		/// <summary>
 		/// 行列を設定。
 		/// </summary>
@@ -112,6 +121,7 @@ namespace nsBookEngine {
 			rotation.SetRotation(matrix);
 			SetRotation(rotation);
 		}
+
 		/// <summary>
 		/// 自動で削除するかどうかを設定する。
 		/// </summary>
@@ -120,6 +130,7 @@ namespace nsBookEngine {
 		{
 			m_isEnableAutoDelete = isFlag;
 		}
+
 		/// <summary>
 		/// コリジョンオブジェクト同士の当たり判定。
 		/// </summary>
@@ -150,6 +161,7 @@ namespace nsBookEngine {
 				});
 			return isCollision;
 		}
+
 		/// <summary>
 		/// ゴーストオブジェクトを取得。
 		/// </summary>
@@ -158,6 +170,7 @@ namespace nsBookEngine {
 		{
 			return m_physicsGhostObject;
 		}
+
 		/// <summary>
 		/// btコリジョンオブジェクトを取得。
 		/// </summary>
@@ -166,6 +179,7 @@ namespace nsBookEngine {
 		{
 			return m_physicsGhostObject.GetbtCollisionObject();
 		}
+
 		/// <summary>
 		/// 当たり判定が有効かどうかを設定する。
 		/// </summary>
@@ -174,6 +188,7 @@ namespace nsBookEngine {
 		{
 			m_isEnable = isEnable;
 		}
+
 		/// <summary>
 		/// 当たり判定が有効かどうかを取得する。
 		/// </summary>
@@ -182,6 +197,7 @@ namespace nsBookEngine {
 		{
 			return m_isEnable;
 		}
+
 	private:
 		PhysicsGhostObject			m_physicsGhostObject;				//ゴーストオブジェクト。
 		const char*					m_name = nullptr;					//名前。
@@ -204,6 +220,10 @@ namespace nsBookEngine {
 		/// </summary>
 		static void CreateInstance()
 		{
+			if (m_instance != nullptr) {
+				std::abort();
+			}
+
 			m_instance = new CollisionObjectManager;
 		}
 		/// <summary>
@@ -222,7 +242,10 @@ namespace nsBookEngine {
 			return m_instance;
 		}
 
-
+		/// <summary>
+		/// コリジョンを追加。
+		/// </summary>
+		/// <param name="collisionObject"></param>
 		void AddCollisionObject(CollisionObject* collisionObject)
 		{
 			m_collisionObjectVector.push_back(collisionObject);

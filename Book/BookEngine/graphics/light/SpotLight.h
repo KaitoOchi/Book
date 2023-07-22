@@ -65,7 +65,7 @@ namespace nsBookEngine {
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition()
+		const Vector3& GetPosition() const
 		{
 			return m_spotLig.spPosition;
 		}
@@ -83,7 +83,7 @@ namespace nsBookEngine {
 		/// カラーを取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetColor()
+		const Vector3& GetColor() const
 		{
 			return m_spotLig.spColor;
 		}
@@ -101,7 +101,7 @@ namespace nsBookEngine {
 		/// 影響範囲を取得。
 		/// </summary>
 		/// <returns></returns>
-		const float GetRange()
+		const float GetRange() const
 		{
 			return m_spotLig.spRange;
 		}
@@ -120,7 +120,7 @@ namespace nsBookEngine {
 		/// 方向を取得。
 		/// </summary>
 		/// <returns></returns>
-		Vector3& GetDirection()
+		const Vector3& GetDirection() const
 		{
 			return m_spotLig.spDirection;
 		}
@@ -138,7 +138,7 @@ namespace nsBookEngine {
 		/// 射出角度を取得。
 		/// </summary>
 		/// <returns></returns>
-		const float GetAngle()
+		const float GetAngle() const
 		{
 			return m_spotLig.spAngle;
 		}

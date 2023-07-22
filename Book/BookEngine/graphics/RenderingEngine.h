@@ -10,6 +10,10 @@
 
 namespace nsBookEngine {
 
+
+	static const int POINTLIGHT_MAX = 4;
+	static const int SPOTLIGHT_MAX = 48;
+
 	/// <summary>
 	/// レンダリングエンジン。
 	/// </summary>
@@ -29,8 +33,8 @@ namespace nsBookEngine {
 		struct LightCB
 		{
 			DirectionLight::directionLight directionLig;
-			PointLight::pointLight pointLig[4];
-			SpotLight::spotLight spotLig[48];
+			PointLight::pointLight pointLig[POINTLIGHT_MAX];
+			SpotLight::spotLight spotLig[SPOTLIGHT_MAX];
 			HemiSphereLight::hemiSphereLight hemiSphereLig;
 			ShadowParamCB shadowCB;	
 			int ptNum;											//ポイントライトの数

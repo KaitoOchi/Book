@@ -17,6 +17,7 @@ namespace nsBookEngine {
 		for (int i = 0; i < casl.GetNumCaslData(); i++) {
 
 			auto caslData = casl.GetCaslData(i);
+
 			Level2DObjectData objData;
 			objData.scale.x = caslData->scale.x;
 			objData.scale.y = caslData->scale.y;

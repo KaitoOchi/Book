@@ -30,7 +30,7 @@ namespace nsBookEngine {
 		/// ブルームが発生する閾値を取得。
 		/// </summary>
 		/// <returns></returns>
-		float GetThreshold() const
+		const float GetThreshold() const
 		{
 			return m_luminanceCB.threshold;
 		}

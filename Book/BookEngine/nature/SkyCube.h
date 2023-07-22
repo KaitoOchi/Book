@@ -35,7 +35,7 @@ namespace nsBookEngine {
 		/// À•W‚ğæ“¾B
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition() 
+		const Vector3& GetPosition() const
 		{
 			return m_position;
 		}
@@ -53,7 +53,7 @@ namespace nsBookEngine {
 		/// Šg‘å—¦‚ğæ“¾B
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetScale()
+		const Vector3& GetScale() const 
 		{
 			return m_scale;
 		}

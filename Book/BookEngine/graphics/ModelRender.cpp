@@ -122,19 +122,22 @@ namespace nsBookEngine {
 			break;
 		}
 
-		//通常モデルの初期化
+		//通常モデルの初期化。
 		m_model.Init(modelInitData);
 
+		//ワイプを使用するなら。
 		if (useWipe) {
 			//ワイプ用モデルの初期化
 			m_wipeModel.Init(modelInitData);
 		}
 
+		//シャドウを使用するなら。
 		if (isShadow) {
 			//シャドウ用モデルの初期化
 			InitShadowModel(tkmFilePath, modelUpAxis, outlineMode, cullMode);
 		}
 
+		//アウトラインを利用するなら。
 		if (outlineMode != 0) {
 			//ZPrepass用モデルの初期化
 			InitZPrepassModel(tkmFilePath, modelUpAxis, cullMode);
@@ -143,7 +146,7 @@ namespace nsBookEngine {
 
 	void ModelRender::InitShadowModel(const char* tkmFilePath,
 		EnModelUpAxis modelUpAxis,
-		const int outlineMode,
+		const OutlineMode outlineMode,
 		D3D12_CULL_MODE cullMode)
 	{
 		ModelInitData shadowModelInitData;
@@ -162,7 +165,7 @@ namespace nsBookEngine {
 		}
 
 		//2Dプレイヤーなら
-		if (outlineMode == 4) {
+		if (outlineMode == enOutlineMode_2DPlayer) {
 			shadowModelInitData.m_psEntryPointFunc = "PSPlayer2D";
 		}
 

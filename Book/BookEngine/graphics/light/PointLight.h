@@ -58,7 +58,7 @@ namespace nsBookEngine {
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition()
+		const Vector3& GetPosition() const 
 		{
 			return m_pointLig.ptPosition;
 		}
@@ -75,7 +75,7 @@ namespace nsBookEngine {
 		/// カラーを取得。
 		/// </summary>
 		/// <param name="range"></param>
-		const Vector3& GetColor()
+		const Vector3& GetColor() const
 		{
 			return m_pointLig.ptColor;
 		}
@@ -91,7 +91,7 @@ namespace nsBookEngine {
 		/// <summary>
 		/// 影響範囲を取得。
 		/// </summary>
-		const float& GetRange()
+		const float GetRange() const
 		{
 			return m_pointLig.ptRange;
 		}

@@ -3,10 +3,9 @@
 
 
 namespace nsBookEngine {
-	class MapChipRender;
-
 
 	struct LevelObjectData {
+
 		Vector3			position;		//座標。
 		Quaternion		rotation;		//回転。
 		Vector3			scale;			//拡大率。

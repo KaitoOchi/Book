@@ -10,13 +10,16 @@ namespace nsBookEngine {
 	class ModelRender : public IRenderer
 	{
 	public:
+		/// <summary>
+		/// アウトラインモード。
+		/// </summary>
 		enum OutlineMode
 		{
-			enOutlineMode_None,
-			enOutlineMode_3DPlayer,
-			enOutlineMode_Enemy,
-			enOutlineMode_TranslucentEnemy,
-			enOutlineMode_2DPlayer,
+			enOutlineMode_None,				//アウトラインなし。
+			enOutlineMode_3DPlayer,			//3Dプレイヤー用。
+			enOutlineMode_Enemy,			//エネミー用。
+			enOutlineMode_TranslucentEnemy,	//半透明エネミー用。
+			enOutlineMode_2DPlayer,			//2Dプレイヤー用。
 		};
 
 	public:
@@ -208,7 +211,7 @@ namespace nsBookEngine {
 		void InitShadowModel(
 			const char* tkmFilePath,
 			EnModelUpAxis modelUpAxis,
-			const int outlineMode,
+			const OutlineMode outlineMode,
 			D3D12_CULL_MODE cullMode
 		);
 

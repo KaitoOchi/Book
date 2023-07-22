@@ -121,7 +121,6 @@ namespace nsBookEngine {
 
 			wchar_t boneName[256];
 
-
 			//tklオブジェクト名の型をワイド文字に変換
 			mbstowcs(boneName, tklObj.name.get(), 256);
 			BonePtr bone = std::make_unique<Bone>(
