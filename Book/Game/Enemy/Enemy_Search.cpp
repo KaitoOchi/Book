@@ -24,7 +24,7 @@ bool Enemy_Search::Start()
 	LoadAnimation();
 
 	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_search.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
 
 	Enemy::Start();
 

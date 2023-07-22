@@ -14,7 +14,7 @@ Wall_Gap::~Wall_Gap()
 bool Wall_Gap::Start()
 {
 	// ÉÇÉfÉãÇì«Ç›çûÇﬁ
-	m_wallRender.Init("Assets/modelData/level_test/tkm/wall_gap.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
+	m_wallRender.Init("Assets/modelData/level_test/tkm/wall_gap.tkm", 0, 0, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK, true);
 
 	Wall::Start();
 

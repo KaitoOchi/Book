@@ -102,7 +102,7 @@ void Opening::InitModel()
 	m_animationClips[animationClip_Put].SetLoopFlag(false);
 
 	//プレイヤーモデルの設定
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK);
 
 	//アニメーションイベントを設定
 	m_playerModelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName)
@@ -116,7 +116,7 @@ void Opening::InitModel()
 	m_wallModelRender.Update();
 
 	//床モデルの設定
-	m_backGroundModelRender.Init("Assets/modelData/level_test/tkm/base.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_backGroundModelRender.Init("Assets/modelData/level_test/tkm/base.tkm", 0, 0, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK);
 }
 
 void Opening::InitSprite()

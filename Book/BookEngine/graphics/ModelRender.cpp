@@ -20,7 +20,7 @@ namespace nsBookEngine {
 		EnModelUpAxis enModelUpAxis,
 		const bool isShadow,
 		const bool isShadowReceiver,
-		const int outlineMode,
+		const OutlineMode outlineMode,
 		D3D12_CULL_MODE cullMode,
 		const bool useWipe)
 	{
@@ -63,7 +63,7 @@ namespace nsBookEngine {
 		EnModelUpAxis modelUpAxis,
 		const bool isShadow,
 		const bool isShadowReceiver,
-		const int outlineMode,
+		const OutlineMode outlineMode,
 		D3D12_CULL_MODE cullMode,
 		const bool useWipe
 	)
@@ -96,21 +96,30 @@ namespace nsBookEngine {
 		}
 		
 		//輪郭線を設定
+		switch (outlineMode)
+		{
+		case enOutlineMode_None:
+			break;
+
 		//プレイヤーモデルなら
-		if (outlineMode == 1) {
+		case enOutlineMode_3DPlayer:
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinPlayer";
-		}
+			break;
+
 		//敵モデルなら
-		else if (outlineMode == 2) {
+		case enOutlineMode_Enemy:
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemy";
-		}
+			break;
+
 		//半透明敵モデルなら
-		else if (outlineMode == 3) {
+		case enOutlineMode_TranslucentEnemy:
 			modelInitData.m_vsSkinEntryPointFunc = "VSSkinEnemyClear";
-		}
+			break;
+
 		//2Dプレイヤーなら
-		else if (outlineMode == 4) {
+		case enOutlineMode_2DPlayer:
 			modelInitData.m_psEntryPointFunc = "PSPlayer2D";
+			break;
 		}
 
 		//通常モデルの初期化

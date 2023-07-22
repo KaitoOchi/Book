@@ -89,7 +89,7 @@ private:
 		m_saveData.bgm = (float)m_saveDataArray[0] / 100.0f;
 		m_saveData.sfx = (float)m_saveDataArray[1] / 100.0f;
 		m_saveData.frameRate = 60 + (m_saveDataArray[2] * 30);
-		GameManager::GetInstance()->DataSave(m_saveData);
+		GameManager::GetInstance()->Save(m_saveData);
 	}
 
 	/// <summary>
@@ -100,7 +100,7 @@ private:
 		//SaveData構造体にデフォルトの値を入れてセーブ
 		GameManager::SaveData defaultSaveData;
 		m_saveData = defaultSaveData;
-		GameManager::GetInstance()->DataSave(m_saveData);
+		GameManager::GetInstance()->Save(m_saveData);
 
 		//配列に初期化したセーブデータを入れる
 		SetDataArray();

@@ -64,7 +64,7 @@ bool Player3D::Start()
 	m_playerManagement->SetCharacon(m_characon);
 	
 	//ƒ‚ƒfƒ‹‚ÌÝ’è
-	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, 1, D3D12_CULL_MODE_BACK);
+	m_modelRender->Init("Assets/modelData/player/player.tkm", m_animationClips, m_enAnimationClip_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_3DPlayer, D3D12_CULL_MODE_BACK);
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(Quaternion::Identity);
 	m_modelRender->SetScale(Vector3::One);

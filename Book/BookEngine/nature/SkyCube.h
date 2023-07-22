@@ -35,7 +35,7 @@ namespace nsBookEngine {
 		/// À•W‚ğæ“¾B
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition()
+		const Vector3& GetPosition() 
 		{
 			return m_position;
 		}

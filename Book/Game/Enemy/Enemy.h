@@ -412,7 +412,7 @@ public:
 	}
 
 	// スポットライトを渡す
-	SpotLight GetSpotLight() {
+	SpotLight& GetSpotLight() {
 		return m_spotLight;
 	}
 

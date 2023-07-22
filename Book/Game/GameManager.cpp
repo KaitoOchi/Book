@@ -60,7 +60,7 @@ GameManager::GameManager()
 	g_soundEngine->ResistWaveFileBank(26, "Assets/sound/bgm/bgm_opening.wav");
 
 	//データのロード
-	DataLoad();
+	Load();
 }
 
 GameManager::~GameManager()

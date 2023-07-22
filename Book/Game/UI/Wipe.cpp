@@ -71,7 +71,7 @@ bool Wipe::Start()
 
 	//“G‚Ì‰Šú‰»
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
-		m_enemy[i].modelRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnim, 1, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK, true);
+		m_enemy[i].modelRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnim, 1, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK, true);
 		m_enemy[i].modelRender.SetPosition(Vector3(10000.0f, 0.0f, 0.0f));
 		m_enemy[i].modelRender.SetScale(Vector3(2.0f, 2.0f, 2.0f));
 		m_enemy[i].modelRender.Update();

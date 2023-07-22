@@ -10,6 +10,16 @@ namespace nsBookEngine {
 	class ModelRender : public IRenderer
 	{
 	public:
+		enum OutlineMode
+		{
+			enOutlineMode_None,
+			enOutlineMode_3DPlayer,
+			enOutlineMode_Enemy,
+			enOutlineMode_TranslucentEnemy,
+			enOutlineMode_2DPlayer,
+		};
+
+	public:
 		ModelRender();
 		~ModelRender();
 
@@ -32,9 +42,10 @@ namespace nsBookEngine {
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
 			const bool isShadow = false,
 			const bool isShadowReceiver = false,
-			const int outlineMode = 0,
+			const OutlineMode outlineMode = enOutlineMode_None,
 			D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK,
-			const bool useWipe = false);
+			const bool useWipe = false
+		);
 
 		/// <summary>
 		/// ModelInitDataを使用した初期化処理。
@@ -66,7 +77,7 @@ namespace nsBookEngine {
 		/// アニメーションを再生しているか？
 		/// </summary>
 		/// <returns></returns>
-		bool IsPlayingAniamtion()
+		const bool IsPlayingAniamtion() const
 		{
 			return m_animation.IsPlaying();
 		}
@@ -91,14 +102,6 @@ namespace nsBookEngine {
 		void SetPosition(const Vector3& pos)
 		{
 			m_position = pos;
-		}
-
-		/// <summary>
-		/// 座標の取得。
-		/// </summary>
-		const Vector3& GetPosition()
-		{
-			return m_position;
 		}
 
 		/// <summary>
@@ -190,7 +193,7 @@ namespace nsBookEngine {
 			EnModelUpAxis modelUpAxis,
 			const bool isShadow,
 			const bool isShadowReceiver,
-			const int outlineMode,
+			const OutlineMode outlineMode,
 			D3D12_CULL_MODE cullMode,
 			const bool useWipe
 		);

@@ -19,7 +19,7 @@ bool Enemy_Normal::Start()
 	LoadAnimation();
 
 	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, 2);
+	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
 
 	Enemy::Start();
 

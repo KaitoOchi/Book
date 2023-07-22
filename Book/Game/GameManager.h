@@ -34,6 +34,13 @@ public:
 	/// </summary>
 	static void CreateInstance()
 	{
+		// シングルトンパターン
+		// 1. グローバルなアクセスポイント
+		//     ちょっとマシなグローバル変数
+		// 2. インスタンスの数をひとつに制限する
+		if (m_instance != nullptr) {
+			std::abort();
+		}
 		m_instance = new GameManager;
 	}
 
@@ -43,6 +50,7 @@ public:
 	static void DeleteInstance()
 	{
 		delete m_instance;
+		m_instance = nullptr;
 	}
 
 	/// <summary>
@@ -59,13 +67,13 @@ public:
 	/// データのセーブ。
 	/// </summary>
 	/// <param name="data"></param>
-	void DataSave(const SaveData& data)
+	void Save(const SaveData& data)
 	{
 		//セーブする
 		FILE* fp = fopen("saveData.bin", "wb");
 		fwrite((void*)&data, sizeof(data), 1, fp);
 		fclose(fp);
-
+		
 		m_saveData = data;
 
 		//フレームレートの設定
@@ -76,7 +84,7 @@ public:
 	/// データのロード。
 	/// </summary>
 	/// <returns></returns>
-	SaveData& DataLoad()
+	SaveData& Load()
 	{
 		FILE* fp = fopen("saveData.bin", "rb");
 		if (fp != NULL) {
@@ -131,7 +139,7 @@ public:
 	/// BGMが削除されたかどうか
 	/// </summary>
 	/// <returns></returns>
-	const bool IsDeleteBGM()
+	const bool IsDeleteBGM() const
 	{
 		if (m_timer <= 0.0f) {
 			return true;
@@ -143,7 +151,7 @@ public:
 	/// SFXの音量を取得。
 	/// </summary>
 	/// <returns></returns>
-	const float& GetSFX()
+	const float GetSFX() const
 	{
 		return m_saveData.sfx;
 	}
@@ -152,7 +160,7 @@ public:
 	/// フレームレートを取得。
 	/// </summary>
 	/// <returns></returns>
-	const int GetFrameRate()
+	const int GetFrameRate() const
 	{
 		return m_saveData.frameRate;
 	}
@@ -169,7 +177,7 @@ public:
 	/// 発見された数を取得。
 	/// </summary>
 	/// <returns></returns>
-	const int GetSearchNum()
+	const int GetSearchNum() const
 	{
 		return m_searchNum;
 	}
@@ -194,7 +202,7 @@ public:
 	/// <summary>
 	/// ステートの取得。
 	/// </summary>
-	EnGameState GetGameState()
+	EnGameState GetGameState()const
 	{
 		return m_gameState;
 	}
@@ -214,7 +222,7 @@ private:
 	static GameManager*		m_instance;						//インスタンス
 	SoundSource*			m_bgm = nullptr;				//BGM
 	SaveData				m_saveData;						//セーブデータの構造体
-	EnGameState				m_gameState = enState_Game;	//ゲームステート
+	EnGameState				m_gameState = enState_Game;		//ゲームステート
 	bool					m_isDeleteBGM = false;			//BGMの削除中かどうか
 	int						m_searchNum = 0;				//敵に見つかった回数
 	float					m_timer = 0.0f;					//タイマー

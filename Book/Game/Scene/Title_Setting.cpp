@@ -35,7 +35,7 @@ Title_Setting::~Title_Setting()
 bool Title_Setting::Start()
 {
 	//セーブデータのロード
-	m_saveData = GameManager::GetInstance()->DataLoad();
+	m_saveData = GameManager::GetInstance()->Load();
 	SetDataArray();
 	m_cursor_horizontal = m_saveDataArray[m_cursor_vertical];
 

@@ -31,7 +31,7 @@ namespace nsBookEngine {
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition()
+		const Vector3& GetPosition() const
 		{
 			return m_position;
 		}
@@ -49,7 +49,7 @@ namespace nsBookEngine {
 		/// 拡大率を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetScale()
+		const Vector3& GetScale() const
 		{
 			return m_scale;
 		}
@@ -67,7 +67,7 @@ namespace nsBookEngine {
 		/// 回転を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Quaternion& GetRotation()
+		const Quaternion& GetRotation() const
 		{
 			return m_rotation;
 		}
@@ -85,7 +85,7 @@ namespace nsBookEngine {
 		/// ピボットを取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector2& GetPivot()
+		const Vector2& GetPivot() const
 		{
 			return m_pivot;
 		}
@@ -103,7 +103,7 @@ namespace nsBookEngine {
 		/// 乗算カラーを取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector4& GetMulColor()
+		const Vector4& GetMulColor() const
 		{
 			return m_sprite.GetMulColor();
 		}

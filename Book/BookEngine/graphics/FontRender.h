@@ -29,7 +29,7 @@ namespace nsBookEngine {
 		/// 表示する文字を取得。
 		/// </summary>
 		/// <returns></returns>
-		const wchar_t* GetText()
+		const wchar_t* GetText() const
 		{
 			return m_text;
 		}
@@ -47,7 +47,7 @@ namespace nsBookEngine {
 		/// 座標を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector3& GetPosition()
+		const Vector3& GetPosition() const
 		{
 			return m_position;
 		}
@@ -65,7 +65,7 @@ namespace nsBookEngine {
 		/// 大きさを取得。
 		/// </summary>
 		/// <returns></returns>
-		const float GetScale()
+		const float GetScale() const
 		{
 			return m_scale;
 		}
@@ -83,7 +83,7 @@ namespace nsBookEngine {
 		/// 色を取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector4& GetColor()
+		const Vector4& GetColor() const
 		{
 			return m_color;
 		}
@@ -101,7 +101,7 @@ namespace nsBookEngine {
 		/// 回転を取得。
 		/// </summary>
 		/// <returns></returns>
-		const float GetRotation()
+		const float GetRotation() const
 		{
 			return m_rotation;
 		}
@@ -120,7 +120,7 @@ namespace nsBookEngine {
 		/// ピボットを取得。
 		/// </summary>
 		/// <returns></returns>
-		const Vector2& GetPivot()
+		const Vector2& GetPivot() const
 		{
 			return m_pivot;
 		}

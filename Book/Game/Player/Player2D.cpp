@@ -43,7 +43,7 @@ bool Player2D::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
 	//モデルの読み込み
-	m_modelRender->Init("Assets/modelData/player/player2D.tkm", m_changeAnimation, enAnimationClip_Num, enModelUpAxisZ, true, true, 4, D3D12_CULL_MODE_NONE);
+	m_modelRender->Init("Assets/modelData/player/player2D.tkm", m_changeAnimation, enAnimationClip_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_3DPlayer, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetScale(MODELSIZE);
 	m_modelRender->PlayAnimation(enAnimationClip_Idle, 0.0f);
 	m_modelRender->Update();

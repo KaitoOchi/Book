@@ -56,7 +56,7 @@ Event::~Event()
 bool Event::Start()
 {
 	//Ç®ïÛÉÇÉfÉãÇÃê›íË
-	m_treasureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_treasureModelRender.Init("Assets/modelData/object/takara/treasure.tkm", 0, 0, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK);
 	m_treasureModelRender.SetPosition(m_treasurePos);
 	m_treasureModelRender.SetScale(Vector3(3.0f, 3.0f, 3.0f));
 	m_treasureModelRender.Update();
@@ -81,7 +81,7 @@ bool Event::Start()
 	m_animationClips[animationClip_HeadDown].SetLoopFlag(false);
 	m_animationClips[animationClip_RunAway].Load("Assets/animData/player/event/run_away.tka");
 	m_animationClips[animationClip_RunAway].SetLoopFlag(false);
-	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, 0, D3D12_CULL_MODE_BACK);
+	m_playerModelRender.Init("Assets/modelData/player/player.tkm", m_animationClips, animationClip_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK);
 	m_playerModelRender.SetPosition(playerPos);
 	m_playerModelRender.Update();
 
