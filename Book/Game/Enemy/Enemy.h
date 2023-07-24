@@ -24,20 +24,17 @@ public:
 	/// アニメーションの再生
 	/// </summary>
 	void PlayAnimation();
-
 	/// <summary>
 	/// 壁と衝突したかどうかの処理
 	/// </summary>
 	/// <param name="pos">座標</param>
 	/// <returns></returns>
 	bool WallAndHit(Vector3 pos);
-
 	/// <summary>
 	/// 回転処理
 	/// </summary>
 	/// <param name="rot">自身が向かうベクトル</param>
 	void Rotation(Vector3 rot);
-
 	/// <summary>
 	/// エネミーの巡回パターンを指定
 	/// </summary>
@@ -46,12 +43,10 @@ public:
 	/// <param name="2">	：右回り(正方形)	</param>
 	/// <param name="3">	：左回り(正方形)	</param>
 	void SpecifyPath(int pathNumber);
-
 	/// <summary>
 	/// ナビメッシュを作成する処理
 	/// </summary>
 	void CreateNavimesh(Vector3 pos);
-
 	/// <summary>
 	/// 巡回行動
 	/// </summary>
@@ -73,12 +68,10 @@ public:
 	/// 壁との衝突判定
 	/// </summary>
 	void Action_ChargeHitWall();
-
 	/// <summary>
 	/// 敵を呼ぶ行動
 	/// </summary>
 	void Action_CallAroundEnemy();
-
 	/// <summary>
 	/// 見失ったときの処理
 	/// </summary>
@@ -91,7 +84,6 @@ public:
 	/// プレイヤーを見失った後の処理
 	/// </summary>
 	void Action_SearchMissingPlayer();
-
 	/// <summary>
 	/// 閃光弾が当たったときの処理
 	/// </summary>
@@ -101,7 +93,6 @@ public:
 	/// </summary>
 	/// <param name="pos">目標地点</param>
 	void Action_GoLocationListenSound(Vector3 tergetPosition);
-
 	/// <summary>
 	/// 行動停止
 	/// </summary>
@@ -109,7 +100,6 @@ public:
 	/// <param name="timerNumber">使用するタイマーを指定</param>
 	/// <returns></returns>
 	bool Action_StopMove(float time,int timerNumber);
-
 	/// <summary>
 	/// プレイヤーを発見する処理
 	/// </summary>
@@ -120,7 +110,6 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool Action_CatchPlayer();
-
 	/// <summary>
 	/// スポットライトを生成
 	/// </summary>
@@ -137,7 +126,6 @@ public:
 	/// 警戒度の増加処理
 	/// </summary>
 	void VigilanceCount();
-
 	/// <summary>
 	/// ☆のエフェクトを生成
 	/// </summary>
@@ -156,10 +144,10 @@ public:
 	// エネミーの種類
 	enum EnemyType
 	{
-		TYPE_NORMAL,
-		TYPE_CHARGE,
-		TYPE_SEARCH,
-		TYPE_CLEAR
+		TYPE_NORMAL,	// 通常
+		TYPE_CHARGE,	// 突進
+		TYPE_SEARCH,	// 索敵
+		TYPE_CLEAR		// 透明
 	};
 	/// <summary>
 	/// 種類を設定する
@@ -369,12 +357,12 @@ public:
 		m_ActionState = m_ActionState_Craw;
 
 		m_NaviTimer = 0.0f;
-		m_addTimer[1] = 0.0f;
-		m_addTimer[3] = 0.0f;
+		m_addTimer[m_TimerState_StayOnThePath] = 0.0f;
+		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;
 
-		m_efectDrawFlag[0] = false;
-		m_efectDrawFlag[1] = false;
-		m_efectDrawFlag[2] = false;
+		for (int i = 0; i < m_EffectState_Num; i++) {
+			m_efectDrawFlag[i] = false;
+		}
 	}
 
 	/// <summary>
@@ -457,37 +445,14 @@ public:
 		return nullptr;
 	}
 
-protected:
-	enum EnPathState {
-		m_PathState_VerticalMovement,				// 縦移動
-		m_PathState_MoveSideways,					// 横移動
-		m_PathState_ClockwiseRotation,				// 右回り
-	};
-
-	enum EnTimerState {
-		m_TimerState_HitByaFlashbang,				// 閃光弾を受けたときの再行動時間
-		m_TimerState_StayOnThePath,					// 巡回時のパスに留まる時間
-		m_TimerState_UntilTheCharge,				// 突進を行うまでの待機時間
-		m_TimerState_MissingPlayer,					// プレイヤーを見失った時の待機時間
-		m_TimerState_HitByaSoundbang,				// 音爆弾を使用された時の到達を諦めるまでの時間
-		m_TimerState_Num
-	};
-
-	enum EnEffectState {
-		m_EffectState_Star,							// ☆
-		m_EffectState_ExclamationPoint,				// ！(感嘆符)
-		m_EffectState_QuestionMark,					// ？(疑問符)
-		m_EffectState_Num
-	};
+private:
+	SphereCollider				m_sphereCollider;					// スフィアコライダー
 
 	// パス移動用のポイント構造体
 	struct Point {
 		Vector3					s_position;							// ポイントの座標
 		int						s_number;							// ポイントの番号
 	};
-	// パス
-	std::vector<Point>			m_pointList;						// ポイント構造体の配列
-	Point*						m_point = nullptr;					// ポイント構造体のポインタ、現在の目的地になる
 
 	// ナビメッシュ
 	TknFile						m_tknFile;							// tknファイル
@@ -499,10 +464,15 @@ protected:
 	PlayerManagement*			m_playerManagement = nullptr;		// プレイヤーマネジメント
 	Gage*						m_gage = nullptr;					// 警戒度ゲージ
 	Game*						m_game = nullptr;					// ゲーム
-	EffectEmitter*				m_Effect = nullptr;					// エフェクト
+
+protected:
+	EffectEmitter*				m_Effect = nullptr;				// エフェクト
+
+	// パス
+	std::vector<Point>			m_pointList;						// ポイント構造体の配列
+	Point*						m_point = nullptr;					// ポイント構造体のポインタ、現在の目的地になる
 
 	CharacterController			m_characterController;				// キャラクターコントローラー
-	SphereCollider				m_sphereCollider;					// スフィアコライダー
 
 	Vector3						m_position = Vector3::Zero;			// エネミーの座標
 	Vector3						m_forward = Vector3::AxisZ;			// エネミーの前方向
@@ -526,6 +496,28 @@ protected:
 	AnimationClip				m_enAnimationClips[m_enAnimation_Num];
 
 private:
+	enum EnPathState {
+		m_PathState_VerticalMovement,				// 縦移動
+		m_PathState_MoveSideways,					// 横移動
+		m_PathState_ClockwiseRotation,				// 右回り
+	};
+
+	enum EnTimerState {
+		m_TimerState_HitByaFlashbang,				// 閃光弾を受けたときの再行動時間
+		m_TimerState_StayOnThePath,					// 巡回時のパスに留まる時間
+		m_TimerState_UntilTheCharge,				// 突進を行うまでの待機時間
+		m_TimerState_MissingPlayer,					// プレイヤーを見失った時の待機時間
+		m_TimerState_HitByaSoundbang,				// 音爆弾を使用された時の到達を諦めるまでの時間
+		m_TimerState_Num
+	};
+
+	enum EnEffectState {
+		m_EffectState_Star,							// ☆
+		m_EffectState_ExclamationPoint,				// ！(感嘆符)
+		m_EffectState_QuestionMark,					// ？(疑問符)
+		m_EffectState_Num
+	};
+
 	// 再生するアニメーションを指定するステート
 	EnAnimationState			m_enAnimationState;
 

@@ -9,9 +9,10 @@
 namespace
 {
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
-
+	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };	// 突進時に追加する長さ
+	const Vector3	SCALE = { 2.0f,2.0f,2.0f };				// スケール
 	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
-
+	const float		COLLIDER_SIZE = 20.0f;					// スフィアコライダーのサイズ
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		ADD_SPEED = 1.3f;						// 乗算速度
 	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
@@ -19,40 +20,30 @@ namespace
 	const float		CALL_DISTANCE_MIN = 190.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
 	const float		LENGTH_LOWESTVALUE = 10.0f;				// 移動する距離の限度
-
-	const float		CANMOVE_TIMER = 5.5f;					// 再度行動できるまでの待機時間
-	const float		WAITING_TIMER = 3.0f;					// パス移動時の待機時間
-	const float		SEARCHPLAYER_TIMER = 7.0f;				// プレイヤーを見失った時の待機時間
-	const float		PLAYER_LOSTUPTO_TIMER = 10.0f;			// プレイヤーを見失うまでの時間
-
+	const float		TIMER_CANMOVE = 5.5f;					// 再度行動できるまでの待機時間
+	const float		TIMER_WAITING = 3.0f;					// パス移動時の待機時間
+	const float		TIMER_SEARCHPLAYER = 7.0f;				// プレイヤーを見失った時の待機時間
+	const float		TIMER_PLAYER_LOSTUPTO = 10.0f;			// プレイヤーを見失うまでの時間
 	const float		ADD_MOVE_MIN = 250.0f;					// パス移動
 	const float		ADD_MOVE_LONG = 400.0f;					// パス移動
 	const float		AI_RADIUS = 150.0f;						// AIエージェントの半径
 	const float		AI_HIGH = 200.0f;						// AIエージェントの高さ
 	const float		CALCULATIONNAVI_TIMER = 0.5f;			// ナビメッシュを再度計算するタイマー
-
 	const float		CATCH_DECISION = 60.0f;					// プレイヤーを確保したことになる範囲
-
-	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };	// 突進時に追加する長さ
-
+	const float		SEACH_DECISION = 100.0f * 100.0f;		// 索敵範囲
 	const float     VIGILANCETIME = 0.3f;					// 警戒度UP時間
-
-	const float		ANGLE = 45.0f;							// 角度
-	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			// カラー
-	const float		LIGHTRANGE = 600.0f;					// 範囲
-	const float		LIGHTPOSITION = 80.0f;					// 座標
-	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };
-
+	const Vector3	LIGHT_DIRECTION = { 0.0f, 1.0f, 1.0f };	// スポットライトの方向
+	const Vector3   LIGHTCOLOR(1.5f, 0.3f, 0.0f);			// スポットライトのカラー
+	const float		ANGLE = 45.0f;							// スポットライトの角度
+	const float		LIGHTRANGE = 600.0f;					// スポットライトの範囲
+	const float		LIGHTPOSITION = 80.0f;					// スポットライトの座標
 	const float		EFFECT_Z = 10.0f;						// エフェクトのZ座標加算値
 	const float		EFFECT_X = 5.0f;						// エフェクトのX座標加算値
 	const float		EFFECT_Y = 100.0f;						// エフェクトのY座標
 	const float		EFFECT_SIZE_STAR = 1.0f;				// エフェクトのサイズ
 	const float		EFFECT_SIZE_EXCLAMATION = 1.2f;			// エフェクトのサイズ
 	const float		EFFECT_SIZE_QUESTION = 1.5f;			// エフェクトのサイズ
-
-	const float		DOWN_VOLUME = 0.1f;						// 音量を下げる値
-
-	const float		SEACH_DECISION = 100.0f * 100.0f;		// ベクトルを作成する範囲
+	const float		DOWN_VOLUME = 0.1f;						// 音量
 }
 
 Enemy::Enemy()
@@ -75,7 +66,7 @@ Enemy::~Enemy()
 bool Enemy::Start()
 {
 	// スケールを設定
-	SetScale({ 2.0f,2.0f,2.0f });
+	SetScale(SCALE);
 
 	// 行動パターンを初期化
 	if (m_enemyType == TYPE_SEARCH) {
@@ -92,7 +83,7 @@ bool Enemy::Start()
 	m_characterController.Init(BOXSIZE, m_position);
 
 	// スフィアコライダーを設定
-	m_sphereCollider.Create(20.0f);
+	m_sphereCollider.Create(COLLIDER_SIZE);
 
 	// ナビメッシュを構築
 	m_nvmMesh.Init("Assets/nvm/nvm1.tkn");
@@ -320,7 +311,6 @@ void Enemy::Action_SeachPlayer()
 	if (m_TrackingPlayerFlag == true) {
 		// 衝突判定を行う
 		if (WallAndHit(m_playerManagement->GetPosition()) == false) {
-			// 壁に衝突したとき
 			m_TrackingPlayerFlag = false;
 			return;
 		}
@@ -330,14 +320,11 @@ void Enemy::Action_SeachPlayer()
 	if (m_spotLight.IsHit(m_playerManagement->GetPosition()) == true) {
 		// 衝突判定を行う
 		if (WallAndHit(m_playerManagement->GetPosition()) == false) {
-			// 壁に衝突したとき
 			m_TrackingPlayerFlag = false;
 			return;
 		}
 
-		// 追跡フラグをtrueにする
 		m_TrackingPlayerFlag = true;
-		// エフェクトを生成
 		Efect_FindPlayer();
 		return;
 	}
@@ -427,14 +414,11 @@ void Enemy::Action_MoveMissingPosition()
 		m_NaviTimer = 0.0f;
 		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
 
-		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
-			// 周りの敵を呼ぶ
 			m_ActionState = m_ActionState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
-			// 突進する
 			m_ActionState = m_ActionState_Charge;
 			return;
 		}
@@ -471,24 +455,19 @@ void Enemy::Action_MoveMissingPosition()
 
 void Enemy::Action_SearchMissingPlayer()
 {
-	// エフェクトを生成
 	Efect_MissingPlayer();
 
-	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
 		// 再度追跡する
 		Efect_FindPlayer();
 		m_NaviTimer = 0.0f;
 		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
 
-		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
-			// 周りの敵を呼ぶ
 			m_ActionState = m_ActionState_Call_AroundEnemy;
 			return;
 		}
 		else if (m_enemyType == TYPE_CHARGE) {
-			// 突進する
 			m_ActionState = m_ActionState_Charge;
 			return;
 		}
@@ -496,11 +475,10 @@ void Enemy::Action_SearchMissingPlayer()
 		return;
 	}
 
-	// 見渡すモーションを再生
 	m_enAnimationState = m_enAnimationState_Loss;
 
 	// モーションを再生
-	if (Action_StopMove(SEARCHPLAYER_TIMER, m_TimerState_MissingPlayer) == true) {
+	if (Action_StopMove(TIMER_SEARCHPLAYER, m_TimerState_MissingPlayer) == true) {
 
 		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;// エフェクトの描画フラグ
 		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
@@ -508,7 +486,6 @@ void Enemy::Action_SearchMissingPlayer()
 		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
 		m_sumPos = Vector3::Zero;								// 移動距離をリセット
 
-		// 索敵するタイプなら
 		if (m_enemyType == TYPE_SEARCH) {
 			// 索敵状態に戻す
 			m_ActionState = m_ActionState_Search;
@@ -520,25 +497,18 @@ void Enemy::Action_SearchMissingPlayer()
 
 void Enemy::Action_HitFlashBullet()
 {
-	// プレイヤーを追跡するフラグがtrueになったら
 	if (m_TrackingPlayerFlag == true) {
-		// falseにする
 		m_TrackingPlayerFlag = false;
 	}
 
-	// プレイヤーを確保したフラグがtrueになったら
 	if (m_ChachPlayerFlag == true) {
-		// falseにする
 		m_ChachPlayerFlag = false;
 	}
 
-	// めまいのアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Dizzy;
-
 	Efect_Dizzy();
 
-	// タイマーがtrueのとき
-	if (Action_StopMove(CANMOVE_TIMER, m_TimerState_HitByaFlashbang) == true) {
+	if (Action_StopMove(TIMER_CANMOVE, m_TimerState_HitByaFlashbang) == true) {
 		// 生成フラグをリセット
 		m_efectDrawFlag[m_EffectState_Star] = false;
 
@@ -549,10 +519,7 @@ void Enemy::Action_HitFlashBullet()
 		// タイマーをリセット
 		m_addTimer[m_TimerState_HitByaFlashbang] = 0.0f;
 
-		// エフェクトを生成
 		Efect_MissingPlayer();
-
-		// プレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 	}
 	else {
@@ -563,10 +530,7 @@ void Enemy::Action_HitFlashBullet()
 
 void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 {
-	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
-
-		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
 			m_ActionState = m_ActionState_Charge;
 			return;
@@ -596,9 +560,8 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 		// エフェクトの再生フラグをfalseにしておく
 		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
 	}
-	else if (m_addTimer[m_TimerState_HitByaSoundbang] > PLAYER_LOSTUPTO_TIMER) {
+	else if (m_addTimer[m_TimerState_HitByaSoundbang] > TIMER_PLAYER_LOSTUPTO) {
 		// 一定時間が経過したとき
-		// 移動を中断して見失ったプレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		// タイマーをリセット
@@ -607,7 +570,6 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 		return;
 	}
 	else {
-		// 見失ったプレイヤーを探す
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		m_HearedSoundBulletFlag = false;
 		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
@@ -617,14 +579,11 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 
 void Enemy::Action_CrawPath()
 {
-	// プレイヤーを発見したとき
 	if (m_TrackingPlayerFlag == true) {
-		// 突進タイプのとき
 		if (m_enemyType == TYPE_CHARGE) {
 			m_ActionState = m_ActionState_Charge;
 			return;
 		}
-		// それ以外
 		m_ActionState = m_ActionState_Tracking;
 		return;
 	}
@@ -656,15 +615,11 @@ void Enemy::Action_CrawPath()
 	moveSpeed *= MOVE_SPEED;
 	Rotation(moveSpeed);
 
-	// タイマーがtrueのとき
-	if (Action_StopMove(WAITING_TIMER, m_TimerState_StayOnThePath) == true) {
-		// 歩きアニメーションを再生
+	if (Action_StopMove(TIMER_WAITING, m_TimerState_StayOnThePath) == true) {
 		m_enAnimationState = m_enAnimationState_Walk;
-		// 座標に加算
 		m_position += moveSpeed;
 	}
 	else {
-		// 待機アニメーションを再生
 		m_enAnimationState = m_enAnimationState_Idle;
 	}
 }
@@ -675,7 +630,6 @@ void Enemy::Action_TrackingPlayer()
 	CreateNavimesh(m_playerManagement->GetPosition());
 
 	if (m_ChachPlayerFlag == false) {
-		// 走るアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Run;
 	}
 
@@ -693,8 +647,6 @@ void Enemy::Action_ChargeStart(float time)
 	if (m_sumPos.Length() >= MOVING_DISTANCE) {
 		// 突進を終了する
 		m_ActionState = m_ActionState_ChargeEnd;
-
-		// 総移動距離をリセット
 		m_sumPos = Vector3::Zero;
 		return;
 	}
@@ -722,7 +674,6 @@ void Enemy::Action_ChargeStart(float time)
 
 		// 総移動距離を計算
 		m_sumPos += moveSpeed;
-		// 走るアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Run;
 
 		// 衝突判定
@@ -732,8 +683,6 @@ void Enemy::Action_ChargeStart(float time)
 		// 回転のみプレイヤーを追尾させる
 		m_chargeDiff = m_playerManagement->GetPosition() - m_position;
 		m_chargeDiff.Normalize();
-
-		// 待機アニメーションを再生
 		m_enAnimationState = m_enAnimationState_Idle;
 	}
 
@@ -755,7 +704,6 @@ void Enemy::Action_ChargeEnd()
 	// プレイヤーが視野角内にいるとき
 	if (m_TrackingPlayerFlag == true) {
 		Efect_FindPlayer();
-		// 再度突進する
 		m_ActionState = m_ActionState_Charge;
 		return;
 	}
@@ -780,8 +728,6 @@ void Enemy::Action_ChargeHitWall()
 		m_CalculatedFlag = false;								// フラグを降ろす
 
 		m_efectDrawFlag[m_EffectState_QuestionMark] = false;	// !のエフェクトのフラグを降ろす
-
-		// 行動を混乱状態にする
 		m_ActionState = m_ActionState_Dizzy;
 		return;
 	}
@@ -792,7 +738,6 @@ void Enemy::Action_ChargeHitWall()
 
 void Enemy::Action_CallAroundEnemy()
 {
-	// seを鳴らす
 	SoundSource* se = NewGO<SoundSource>(0);
 	se->Init(17);
 	se->SetVolume(GameManager::GetInstance()->GetSFX() * DOWN_VOLUME);	// 音量を下げる
@@ -803,7 +748,6 @@ void Enemy::Action_CallAroundEnemy()
 		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
 		m_ActionState = m_ActionState_Search_MissingPlayer;
 		se->Stop();
-
 		return;
 	}
 
@@ -832,9 +776,7 @@ void Enemy::Action_CallAroundEnemy()
 		}
 	}
 
-	// 回転
 	Rotation(rot);
-
 	m_enAnimationState = m_enAnimationState_Call;
 }
 
@@ -848,9 +790,7 @@ void Enemy::Action_MissingPlayer()
 	float NowTargetDiff = D3D12_FLOAT32_MAX;
 	int NowTargetNum = -1;
 
-	// パスの個数文回す
 	for (int i = 0; i < m_pointList.size(); i++) {
-
 		m_point = &m_pointList[i];
 		Vector3 diff = m_point->s_position - m_position;
 		float length = diff.Length();
@@ -866,10 +806,7 @@ void Enemy::Action_MissingPlayer()
 	// 最短のパスの情報を渡す
 	m_point = &m_pointList[NowTargetNum];
 
-	// ナビメッシュを作成
 	CreateNavimesh(m_point->s_position);
-
-	// 走るアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Run;
 
 	// エネミーからパスへ向かうベクトル
@@ -885,7 +822,6 @@ void Enemy::Action_MissingPlayer()
 
 bool Enemy::Action_StopMove(float time,int timerNumber)
 {
-	// フレームを加算
 	m_addTimer[timerNumber] += g_gameTime->GetFrameDeltaTime();
 
 	// タイマーが一定以上になったら
@@ -909,7 +845,6 @@ void Enemy::SpotLight_New(Vector3 position, int num)
 
 void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 {
-	// 混乱状態の時は実行しない
 	if (m_ActionState == m_ActionState_Dizzy) {
 		return;
 	}
@@ -932,7 +867,6 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 	{
 		VigilanceCount();
 
-		// カウントするフラグがfalseのとき
 		if (m_CountFlag == false) {
 			// 発見回数に1を加算
 			GameManager::GetInstance()->AddSearchNum();
@@ -941,7 +875,6 @@ void Enemy::SpotLight_Serch(Quaternion lightrotaition, Vector3 lightpos)
 		}
 	}
 	else {
-		// プレイヤーを確保していないとき
 		if (m_ChachPlayerFlag == false) {
 			// プレイヤーが存在しないときはフラグを戻す
 			m_CountFlag = false;
