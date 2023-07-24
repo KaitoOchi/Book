@@ -61,10 +61,6 @@ bool Player2D::Start()
 }
 void Player2D::Update()
 {
-	
-	//atan2を使用して回転角度を求める
-	angle = atan2(-m_moveSpeed.z, -m_moveSpeed.x);
-
 	Player::Update();
 	if (GetCharacon() == nullptr)
 	{
@@ -76,12 +72,16 @@ void Player2D::Update()
 	m_characon->SetRotaition(m_rotation);
 	//キャラコンを利用してプレイヤーを動かす
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
+
+	//atan2を使用して回転角度を求める
+	Rotation();
+
 	//モデルの座標と回転を更新する
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();	
 
-	if (!m_runFlag)
+	if (!GetRunState())
 	{
 		m_gameUI->SetChangeGaugeState(false);
 	}

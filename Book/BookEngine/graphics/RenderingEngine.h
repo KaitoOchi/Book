@@ -11,8 +11,8 @@
 namespace nsBookEngine {
 
 
-	static const int POINTLIGHT_MAX = 4;
-	static const int SPOTLIGHT_MAX = 48;
+	static const int POINTLIGHT_MAX = 4;		//ポイントライトの最大数。
+	static const int SPOTLIGHT_MAX = 48;		//スポットライトの最大数。
 
 	/// <summary>
 	/// レンダリングエンジン。

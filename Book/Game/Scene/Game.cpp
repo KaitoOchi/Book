@@ -651,7 +651,7 @@ void Game::NotifyEventEnd()
 	m_miniMap->SetTreasurePos(m_clearPos);
 
 	//警戒度レベルをMAXにする
-	m_gage->m_leverState = m_gage->m_enLever_MAX;
+	m_gage->SetLeverMax();
 
 	//隙間エフェクトを表示
 	PlayWallEffect();

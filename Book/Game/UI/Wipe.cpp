@@ -10,9 +10,13 @@
 
 namespace
 {
-	const float	MOVE_TIME = 1.3f;		//移動時間
-	const float MOVE_SPEED = 0.3f;		//移動速度
-	const float ENEMY_DURATION = 0.1f;	//敵の間隔
+	const Vector3 SPRITE_POS = Vector3(-675.0f, -125.0f, 0.0f);		//画像の座標。
+	const Vector3 ENEMY_POS = Vector3(10000.0f, 0.0f, 0.0f);		//敵の座標。
+	const float	MOVE_TIME = 1.3f;									//移動時間
+	const float MOVE_SPEED = 0.3f;									//移動速度
+	const float ENEMY_DURATION = 0.1f;								//敵の間隔
+	const float TIMER_MIN = 0.0f;									//タイマーの最小値。
+	const float TIMER_MAX = 1.0f;									//タイマーの最大値。
 }
 
 Wipe::Wipe()
@@ -60,7 +64,7 @@ bool Wipe::Start()
 
 	//警告画像
 	m_warningSpriteRender.Init("Assets/sprite/UI/Gauge/image_warning.DDS", 414.0f, 121.0f);
-	m_warningSpriteRender.SetPosition(Vector3(-675.0f, -125.0f, 0.0f));
+	m_warningSpriteRender.SetPosition(SPRITE_POS);
 	m_warningSpriteRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_warningSpriteRender.Update();
 
@@ -72,7 +76,7 @@ bool Wipe::Start()
 	//敵の初期化
 	for (int i = 0; i < ENEMY_NUM_WIPE; i++) {
 		m_enemy[i].modelRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enemyAnim, 1, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK, true);
-		m_enemy[i].modelRender.SetPosition(Vector3(10000.0f, 0.0f, 0.0f));
+		m_enemy[i].modelRender.SetPosition(ENEMY_POS);
 		m_enemy[i].modelRender.SetScale(Vector3(2.0f, 2.0f, 2.0f));
 		m_enemy[i].modelRender.Update();
 		m_enemy[i].moveSpeed[0] = m_bezierPos[0];
@@ -195,24 +199,24 @@ void Wipe::WipeOutline()
 {
 	if (!m_isWipe) {
 		//時間が経過したら、ワイプの移動を止める
-		if (m_outlineTimer <= 0.0f) {
-			m_timer = 0.0f;
+		if (m_outlineTimer <= TIMER_MIN) {
+			m_timer = TIMER_MIN;
 			return;
 		}
 
 		//時間を計測
 		m_outlineTimer -= g_gameTime->GetFrameDeltaTime();
-		m_outlineTimer = max(m_outlineTimer, 0.0f);
+		m_outlineTimer = max(m_outlineTimer, TIMER_MIN);
 	}
 	else {
 		//時間が経過したら、ワイプの移動を止める
-		if (m_outlineTimer > 1.0f) {
+		if (m_outlineTimer > TIMER_MAX) {
 			return;
 		}
 
 		//時間を計測
 		m_outlineTimer += g_gameTime->GetFrameDeltaTime();
-		m_outlineTimer = min(m_outlineTimer, 1.0f);
+		m_outlineTimer = min(m_outlineTimer, TIMER_MAX);
 	}
 
 	//ワイプを移動
@@ -241,7 +245,7 @@ void Wipe::WipeOutline()
 
 void Wipe::Render(RenderContext& rc)
 {
-	if (m_timer <= 0.0f) {
+	if (m_timer <= TIMER_MIN) {
 		return;
 	}
 

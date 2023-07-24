@@ -10,6 +10,18 @@ class Player3D;
 class Gage:public IGameObject
 {
 public:
+	/// <summary>
+	/// レベルステート。
+	/// </summary>
+	enum EnLeverState
+	{
+		m_enLever_1,
+		m_enLever_2,
+		m_enLever_3,
+		m_enLever_MAX,
+	};
+
+public:
 	Gage();
 	~Gage();
 	bool Start();
@@ -30,15 +42,13 @@ public:
 		m_leverState = m_enLever_MAX;
 	}
 
-	enum EnLeverState
+	/// <summary>
+	/// レベルをMAXにする。
+	/// </summary>
+	void SetLeverMax()
 	{
-		m_enLever_1,		
-		m_enLever_2,		
-		m_enLever_3,		
-		m_enLever_MAX,		
-	};
-
-	EnLeverState m_leverState = m_enLever_1;
+		m_leverState = m_enLever_MAX;
+	}
 
 private:
 	
@@ -67,7 +77,7 @@ private:
 	/// </summary>
 	void Gauge_Move();
 
-public:
+private:
 	SpriteRender					m_maxLeverRender;				//最大レベル画像。
 	SpriteRender					m_baseRender;					//ベース画像。
 	std::array< SpriteRender, 4 >	m_LeverUPRender;				//レベル画像。
@@ -77,6 +87,7 @@ public:
 	Fade*							m_fade = nullptr;
 	Player3D*						m_player3D = nullptr;
 	Enemy_Increase*					m_enemy_Increase = nullptr;
+	EnLeverState					m_leverState = m_enLever_1;
 	EnLeverState					m_GetState = m_leverState;		//レベルステート。
 	bool							m_isFind = false;				//見つかったかどうか。
 	bool							m_MaxEnd = true;				// ?

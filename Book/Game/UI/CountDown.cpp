@@ -9,10 +9,10 @@
 
 namespace
 {
-	const Vector3 SPRITE_POS = Vector3(0.0f, 150.0f, 0.0f);		//画像の座標
-	const int COUNT_MAX = 3;									//最大カウント数
-	const float MOVE_MAX_TIME = 0.5f;							//移動時間
-	const float TIMER_MAX = 1.0f;								//最大時間
+	const Vector3	SPRITE_POS = Vector3(0.0f, 150.0f, 0.0f);		//画像の座標
+	const int		COUNT_MAX = 3;									//最大カウント数
+	const float		MOVE_MAX_TIME = 0.5f;							//移動時間
+	const float		TIMER_MAX = 1.0f;								//最大時間
 }
 
 

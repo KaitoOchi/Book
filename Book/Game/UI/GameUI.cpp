@@ -25,6 +25,8 @@ namespace
 	const float		CIRCLE_SIZE_MIN = 360.0f;							//円形ゲージ最低
 	const float		GAUGE_PRESS_ADD = 120.0f;							//円形ゲージの増加値
 	const float		GAUGE_RELEASE_SUB = 36.0f;							//円形ゲージの減少値
+	const float		GAUGE_TIMER_MIN = 0.0f;								//ゲージタイマーの最小値。
+	const float		GAUGE_TIMER_MAX = 1.0f;								//ゲージタイマーの最大値。
 	const double	PI = 3.14159;										//円周率
 }
 
@@ -164,7 +166,7 @@ void GameUI::Time()
 	m_vigilanceTime -= g_gameTime->GetFrameDeltaTime();
 }
 
-void GameUI::TimeMove(const int& m, const int& s)
+void GameUI::TimeMove(const int m, const int s)
 {
 	if (m_isTimerEnable) {
 		//タイマーを非表示
@@ -195,11 +197,11 @@ void GameUI::ChangeGage()
 	//ゲージが満タンなら
 	if (m_gage != GAGE_MAX) {
 		m_gaugeTimer += g_gameTime->GetFrameDeltaTime();
-		m_gaugeTimer = min(m_gaugeTimer, 1.0f);
+		m_gaugeTimer = min(m_gaugeTimer, GAUGE_TIMER_MAX);
 	}
 	else {
 		m_gaugeTimer -= g_gameTime->GetFrameDeltaTime();
-		m_gaugeTimer = max(m_gaugeTimer, 0.0f);
+		m_gaugeTimer = max(m_gaugeTimer, GAUGE_TIMER_MIN);
 	}
 
 	//ゲージ画像を移動
@@ -262,7 +264,7 @@ void GameUI::ItemScaleUp()
 	case Player::m_enItem_Flash:
 		if (m_falshState) {
 			//拡大する
-			m_flashScale += 0.2f*g_gameTime->GetFrameDeltaTime();
+			m_flashScale += 0.2f * g_gameTime->GetFrameDeltaTime();
 			m_flashScale = min(m_flashScale, FLASH_SCALE_MAX);
 			if (m_flashScale == FLASH_SCALE_MAX)
 			{

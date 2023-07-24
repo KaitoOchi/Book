@@ -90,9 +90,6 @@ void Player3D::Update()
 	//壁に当たっていないなら
 	if (m_ghostHit)
 	{
-		//atn2を使って角度を求める
-		angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-		//・ｽv・ｽ・ｽ・ｽC・ｽ・ｽ・ｽ[・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽﾄび出・ｽ・ｽ
 		Player::Update();
 		
 
@@ -101,6 +98,12 @@ void Player3D::Update()
 		m_characon->SetPosition(m_position);
 		m_collisionObject->SetPosition(Vector3(m_position.x, m_position.y + 70.0f, m_position.z));
 		m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+
+		//atn2を使って角度を求める
+		Rotation();
+		//float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+		//SetAngle(angle);
+
 		m_modelRender->SetPosition(m_position);
 		m_modelRender->SetRotation(m_rotation);
 		m_modelRender->Update();

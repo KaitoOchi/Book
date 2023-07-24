@@ -73,6 +73,46 @@ void GameManager::Update()
 	DeletingBGM();
 }
 
+void GameManager::Save(const SaveData& data)
+{
+	//セーブする
+	FILE* fp = fopen("saveData.bin", "wb");
+	fwrite((void*)&data, sizeof(data), 1, fp);
+	fclose(fp);
+
+	m_saveData = data;
+
+	//フレームレートの設定
+	g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
+}
+
+GameManager::SaveData& GameManager::Load()
+{
+	FILE* fp = fopen("saveData.bin", "rb");
+	if (fp != NULL) {
+		fread((void*)&m_saveData, sizeof(m_saveData), 1, fp);
+		fclose(fp);
+	}
+
+	//フレームレートの設定
+	g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
+
+	return m_saveData;
+}
+
+void GameManager::SetBGM(const int num)
+{
+	if (m_bgm != nullptr) {
+		m_bgm->Stop();
+	}
+	else {
+		m_bgm = NewGO<SoundSource>(0);
+	}
+	m_bgm->Init(num);
+	m_bgm->SetVolume(m_saveData.bgm * 0.5f);
+	m_bgm->Play(true);
+}
+
 void GameManager::DeletingBGM()
 {
 	//BGMの削除中なら

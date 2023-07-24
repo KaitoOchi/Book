@@ -34,10 +34,6 @@ public:
 	/// </summary>
 	static void CreateInstance()
 	{
-		// シングルトンパターン
-		// 1. グローバルなアクセスポイント
-		//     ちょっとマシなグローバル変数
-		// 2. インスタンスの数をひとつに制限する
 		if (m_instance != nullptr) {
 			std::abort();
 		}
@@ -67,53 +63,19 @@ public:
 	/// データのセーブ。
 	/// </summary>
 	/// <param name="data"></param>
-	void Save(const SaveData& data)
-	{
-		//セーブする
-		FILE* fp = fopen("saveData.bin", "wb");
-		fwrite((void*)&data, sizeof(data), 1, fp);
-		fclose(fp);
-		
-		m_saveData = data;
-
-		//フレームレートの設定
-		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
-	}
+	void Save(const SaveData& data);
 
 	/// <summary>
 	/// データのロード。
 	/// </summary>
 	/// <returns></returns>
-	SaveData& Load()
-	{
-		FILE* fp = fopen("saveData.bin", "rb");
-		if (fp != NULL) {
-			fread((void*)&m_saveData, sizeof(m_saveData), 1, fp);
-			fclose(fp);
-		}
-
-		//フレームレートの設定
-		g_engine->SetFrameRateMode(K2EngineLow::enFrameRateMode_Variable, m_saveData.frameRate);
-
-		return m_saveData;
-	}
+	SaveData& Load();
 
 	/// <summary>
 	/// BGMを鳴らす。
 	/// </summary>
 	/// <param name="num">鳴らしたい音の番号</param>
-	void SetBGM(const int num)
-	{
-		if (m_bgm != nullptr) {
-			m_bgm->Stop();
-		}
-		else {
-			m_bgm = NewGO<SoundSource>(0);
-		}
-		m_bgm->Init(num);
-		m_bgm->SetVolume(m_saveData.bgm * 0.5f);
-		m_bgm->Play(true);
-	}
+	void SetBGM(const int num);
 
 	/// <summary>
 	/// 音量を変更する。

@@ -126,7 +126,7 @@ private:
 	/// <summary>
 	/// 時間の移動処理。
 	/// </summary>
-	void TimeMove(const int& m, const int& s);
+	void TimeMove(const int m, const int s);
 
 	/// <summary>
 	/// アイテムの所持数の処理。

@@ -207,9 +207,23 @@ public:
 		return m_tireEffect;
 	}
 
-protected:
-	
+	/// <summary>
+	/// 回転角度を設定
+	/// </summary>
+	void Angle(const float angle)  
+	{
+		m_angle = angle;
+	}
 
+	/// <summary>
+	/// 走れるかどうか判定するフラグを取得する
+	/// </summary>
+	const bool GetRunFlag() const 
+	{
+		return m_runFlag;
+	}
+
+protected:
 	virtual void Update();
 	void Move();
 	void PlayerRun();
@@ -300,7 +314,6 @@ protected:
 	/// </summary>
 	virtual void ProcessCatchingStateTransition() = 0;
 
-
 	/// <summary>
 	/// ゲームクリアステートの遷移処理
 	/// </summary>
@@ -311,20 +324,12 @@ protected:
 	/// </summary>
 	virtual void ProcessGameOverStateTransition()=0;
 
-
 	/// <summary>
-	/// つれた時のエフェクトの処理
+	/// 疲れた時のエフェクトの処理
 	/// </summary>
 	void TireEffect();
 
-
-
-
 protected:
-
-
-
-
 	//アニメーション
 	enum EnAnimationClip {
 		m_enAnimationClip_Idle,				//待機アニメーション
@@ -339,27 +344,17 @@ protected:
 		m_enAnimationClip_Caught,			//捕まった時のアニメーション
 		m_enAnimationClip_Num,				//アニメーションの数
 	};
-	AnimationClip m_animationClips[m_enAnimationClip_Num];
-
-	
-
-	
-	
-	
-protected:
-	bool				m_characonState = true;					//キャラコンを作るかどうか
+	AnimationClip		m_animationClips[m_enAnimationClip_Num];
 
 	Vector3				m_moveSpeed=Vector3::Zero;				//移動速度
 	Vector3				m_Lstic = Vector3::Zero;				//左ステック
 	Vector3				m_position = Vector3::Zero;				//初期座標
 	Vector3				m_forward = Vector3::AxisZ;				//プレイヤーの正面ベクトル
 	
-	float				angle=0;								//回転角度
-	
-	ModelRender *m_modelRender=nullptr;							//3Dモデル
+	ModelRender *		m_modelRender=nullptr;					//3Dモデル
 	std::array<nsK2EngineLow::Texture,14> m_player2D;			//テクスチャ
 	
-	Quaternion m_rotation;										//回転
+	Quaternion			m_rotation;								//回転
 	
 	CharacterController*m_characon;								//キャラコン
 	CollisionObject*	m_collisionObject = nullptr;			//コリジョン
@@ -370,18 +365,18 @@ protected:
 	Game*				m_game = nullptr;
 	GameUI*				m_gameUI = nullptr;
 
-
 	Vector3				m_ghostPosition = Vector3::Zero;
 	Vector3				m_setGhostpos=Vector3::Zero;
 
+private:
+	EffectEmitter* m_tireEffect;
+
 	float				m_downTime = 3.0f;						//気絶時間
+	float				m_angle = 0.0f;							//回転角度
 
 	bool				m_playerCaught = false;					//捕まったかの判定
-
 	bool				m_runFlag = true;						//走れるかの判定
 
 	float				m_stamina = 0.0f;						//プレイヤーのスタミナ
 	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム
-
-	EffectEmitter*		m_tireEffect;
 };	

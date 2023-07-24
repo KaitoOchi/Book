@@ -226,10 +226,10 @@ private:
 	void IsChanging();
 
 private:
-	CharacterController*	m_characon = nullptr;						//
-	Player2D*				m_player2D = nullptr;						//
-	Player3D*				m_player3D = nullptr;						//
-	GameCamera*				m_gamecamera = nullptr;						//
+	CharacterController*	m_characon = nullptr;						//キャラクターコントローラー
+	Player2D*				m_player2D = nullptr;						//プレイヤー2D
+	Player3D*				m_player3D = nullptr;						//プレイヤー3D
+	GameCamera*				m_gamecamera = nullptr;						//ゲームカメラ
 	Game*					m_game = nullptr;							//ゲームクラス。
 	EffectEmitter*			m_smokeEffect = nullptr;					//煙エフェクト
 	EnManagementState		m_manageStateTmp = m_enPlayer_3DChanging;	//遷移するステートの一時変数

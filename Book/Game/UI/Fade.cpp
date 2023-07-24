@@ -4,8 +4,11 @@
 
 namespace
 {
-	const Vector3 LOADING_FONT_POS = Vector3(550.0f, -425.0f, 0.0f);
-	const Vector3 LOADING_SPRITE_POS = Vector3(280.0f, -425.0f, 0.0f);
+	const Vector3 LOADING_FONT_POS = Vector3(550.0f, -425.0f, 0.0f);		//ロード中文字の座標。
+	const Vector3 LOADING_SPRITE_POS = Vector3(280.0f, -425.0f, 0.0f);		//ロード中画像の座標。
+	const float FADE_MAX = 1.0f;											//フェードの最大値。
+	const float FADE_TIPS_MAX = 2.0f;										//ヒント付きフェードの最大値。
+	const float FADE_MIN = 0.0f;											//フェードの最小値。
 }
 
 Fade::Fade()
@@ -55,24 +58,28 @@ void Fade::Update()
 	{
 		//フェードイン中なら
 	case enState_FadeIn:
+
 		m_alpha -= 1.0f * g_gameTime->GetFrameDeltaTime();
-		if (m_alpha <= 0.0f)
+
+		if (m_alpha <= FADE_MIN)
 		{
-			m_alpha = 0.0f;
+			m_alpha = FADE_MIN;
 			m_state = enState_Idle;
 		}
 		break;
 
 		//フェードアウト中なら
 	case enState_FadeOut:
+
 		m_alpha += 1.0f * g_gameTime->GetFrameDeltaTime();
-		if (m_alpha >= 2.0f)
+
+		if (m_alpha >= FADE_TIPS_MAX)
 		{
 			if (m_enableTips) {
-				m_alpha = 2.0f;
+				m_alpha = FADE_TIPS_MAX;
 			}
 			else {
-				m_alpha = 1.0f;
+				m_alpha = FADE_MAX;
 			}
 			m_state = enState_Idle;
 		}
@@ -82,7 +89,7 @@ void Fade::Update()
 		break;
 	}
 
-	if (m_alpha < 0.0f) {
+	if (m_alpha < FADE_MIN) {
 		return;
 	}
 
@@ -123,7 +130,7 @@ void Fade::SpriteUpdate()
 void Fade::Render(RenderContext& rc)
 {
 	//フェードが終了しているなら
-	if (m_alpha < 0.0f) {
+	if (m_alpha < FADE_MIN) {
 		return;
 	}
 

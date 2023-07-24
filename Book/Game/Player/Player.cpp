@@ -103,8 +103,7 @@ void Player::Update()
 	if (m_Player_Act&&
 		m_playerManagement->GetGameState()
 		) {
-		
-		Rotation();
+
 		Move();
 		ItemChange();
 		//2Dならお宝の近くに居てもジャンプさせる
@@ -323,10 +322,11 @@ void Player::Rotation()
 		&& fabsf(m_moveSpeed.z) < 0.001f) {
 		return;
 	}
-
 	
+	atan2(-m_moveSpeed.z, -m_moveSpeed.x);
+
 	//SetRotationを使用する
-	m_rotation.SetRotationY(-angle);
+	m_rotation.SetRotationY(-m_angle);
 }
 
 void Player::ItemChange()
