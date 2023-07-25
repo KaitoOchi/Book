@@ -62,6 +62,6 @@ public:
 	void Update_OnCatch();
 
 private:
-	bool						m_CalculatedFlag = false;			// 突進用フラグ。一度だけ参照を行う
-	float						m_Chargemove = 1.0f;				// 突進ステート時に乗算しているスカラー
+	bool						m_canCharge = false;			// 突進用フラグ。一度だけ参照を行う
+	float						m_chargeMove = 1.0f;				// 突進ステート時に乗算しているスカラー
 };

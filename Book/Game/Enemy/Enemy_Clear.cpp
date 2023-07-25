@@ -193,7 +193,7 @@ void Enemy_Clear::UpDate_OnListen()
 
 void Enemy_Clear::ClearChange()
 {
-	if (m_SetActionState != GetEnemyActionState () && m_clearChangeTime >= 0.0f)
+	if (m_setActionState != GetEnemyActionState () && m_clearChangeTime >= 0.0f)
 	{
 		m_clearChangeTime -= g_gameTime->GetFrameDeltaTime();
 		return;
@@ -203,14 +203,14 @@ void Enemy_Clear::ClearChange()
 	{
 		// ìßñæâª
 		m_clearFlag = true;
-		m_SetActionState = m_ActionState_Craw;
+		m_setActionState = m_ActionState_Craw;
 		m_clearChangeTime = 0.0f;
 	}
 	else if (GetEnemyActionState() == m_ActionState_Tracking)
 	{
 		// ìßñæâªâèú
 		m_clearFlag = false;
-		m_SetActionState = m_ActionState_Tracking;
+		m_setActionState = m_ActionState_Tracking;
 		m_clearChangeTime = 1.0f;
 	}
 }

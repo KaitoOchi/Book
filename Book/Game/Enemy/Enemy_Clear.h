@@ -70,7 +70,7 @@ private:
 
 	ModelRender			m_clearModelRender;							//”¼“§–¾‚Ìƒ‚ƒfƒ‹
 
-	EnEnemyActionState	m_SetActionState = GetEnemyActionState();	//Œ»İ‚Ìó‘Ô‚ğ‹L˜^‚·‚é
+	EnEnemyActionState	m_setActionState = GetEnemyActionState();	//Œ»İ‚Ìó‘Ô‚ğ‹L˜^‚·‚é
 
 	float				m_clearChangeTime = 0.0f;					//Ø‚è‘Ö‚í‚é‚Ü‚Å‚ÌŠÔ
 	bool				m_clearFlag = true;							//true‚È‚ç“§–¾‰»false‚È‚ç‰ğœ

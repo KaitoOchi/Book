@@ -199,7 +199,7 @@ public:
 	/// </summary>
 	/// <param name="state"></param>
 	void SetEnemyActionState(const EnEnemyActionState state) {
-		m_ActionState = state;
+		m_enActionState = state;
 	}
 
 	/// <summary>
@@ -207,7 +207,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const EnEnemyActionState GetEnemyActionState() const {
-		return m_ActionState;
+		return m_enActionState;
 	}
 
 	// ----------------------------------------------------------
@@ -259,7 +259,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool GetChachPlayerFlag() {
-		return m_ChachPlayerFlag;
+		return m_isChachPlayer;
 	}
 
 	/// <summary>
@@ -267,7 +267,7 @@ public:
 	/// </summary>
 	/// <returns>trueなら追跡している</returns>
 	const bool GetTrackingPlayerFlag() const {
-		return m_TrackingPlayerFlag;
+		return m_isTrackingPlayer;
 	}
 
 	/// <summary>
@@ -276,7 +276,7 @@ public:
 	/// <param name="flag">trueなら描画した</param>
 	/// <param name="number">配列番号</param>
 	void SetEffectDrawFlag(const bool flag,const int number) {
-		m_efectDrawFlag[number] = flag;
+		m_existsEfectDraw[number] = flag;
 	}
 
 	/// <summary>
@@ -284,7 +284,7 @@ public:
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHitFlashBulletFlag(bool flag) {
-		m_HitFlashBulletFlag = flag;
+		m_hitFlashBullet = flag;
 	};
 
 	/// <summary>
@@ -292,7 +292,7 @@ public:
 	/// </summary>
 	/// <returns>trueなら当たった</returns>
 	const bool GetHitFlashBulletFlag() const {
-		return m_HitFlashBulletFlag;
+		return m_hitFlashBullet;
 	}
 
 	/// <summary>
@@ -300,7 +300,7 @@ public:
 	/// </summary>
 	/// <param name="">被弾したかどうかどうか判定する。trueなら被弾したと判定</param>
 	void SetHearedSoundBulletFlag(bool flag) {
-		m_HearedSoundBulletFlag = flag;
+		m_hearedSoundBullet = flag;
 	};
 
 	/// <summary>
@@ -308,7 +308,7 @@ public:
 	/// </summary>
 	/// <returns>trueなら聞いた</returns>
 	const bool GetHearedSoundBulletFlag()const {
-		return m_HearedSoundBulletFlag;
+		return m_hearedSoundBullet;
 	}
 
 	/// <summary>
@@ -324,27 +324,27 @@ public:
 	/// </summary>
 	/// <param name="flag">trueのとき描画しない</param>
 	void SetNotDrawFlag(bool flag) {
-		m_NotDrawFlag = flag;
+		m_canDraw = flag;
 
 		if (flag == false) {
 			return;
 		}
 
 		// フラグをfalseにする
-		m_HitFlashBulletFlag = false;
-		m_HearedSoundBulletFlag = false;
-		m_TrackingPlayerFlag = false;
-		m_ChachPlayerFlag = false;
+		m_hitFlashBullet = false;
+		m_hearedSoundBullet = false;
+		m_isTrackingPlayer = false;
+		m_isChachPlayer = false;
 
 		// ステートを巡回状態に戻す
-		m_ActionState = m_ActionState_Craw;
+		m_enActionState = m_ActionState_Craw;
 
-		m_NaviTimer = 0.0f;
+		m_naviTimer = 0.0f;
 		m_addTimer[m_TimerState_StayOnThePath] = 0.0f;
 		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;
 
 		for (int i = 0; i < m_EffectState_Num; i++) {
-			m_efectDrawFlag[i] = false;
+			m_existsEfectDraw[i] = false;
 		}
 	}
 
@@ -353,7 +353,7 @@ public:
 	/// </summary>
 	/// <returns>trueなら描画しない</returns>
 	const bool GetNotDrawFlag() const {
-		return m_NotDrawFlag;
+		return m_canDraw;
 	}
 
 	//エネミーの前方向を求める
@@ -370,7 +370,7 @@ public:
 	/// <param name="active">trueなら動けない</param>
 	void SetActiveFlag(bool active)
 	{
-		m_activeFlag = active;
+		m_canActive = active;
 	}
 
 	/// <summary>
@@ -379,7 +379,7 @@ public:
 	/// <param name="m_activeFlag">trueなら動けない</param>	
 	bool GetActiveFlag()
 	{
-		return m_activeFlag;
+		return m_canActive;
 	}
 
 	// スポットライトを渡す
@@ -442,7 +442,7 @@ public:
 	/// <param name="number">設定するフラグ</param>
 	/// <param name="flag">trueなら描画した</param>
 	void SetEffectDrawFlag(const int number,const bool flag) {
-		m_efectDrawFlag[number] = flag;
+		m_existsEfectDraw[number] = flag;
 	}
 
 	/// <summary>
@@ -487,9 +487,8 @@ protected:
 
 	Vector3						m_chargeTergetPosition = Vector3::Zero;		// 突進用。プレイヤーの座標
 	Vector3						m_playerMissiongPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
-
 	Vector3						m_sumPosition = Vector3::Zero;				// 総移動距離
-	Vector3						m_gatherPosition = Vector3::Zero;				// 集合する座標
+	Vector3						m_gatherPosition = Vector3::Zero;			// 集合する座標
 	Vector3						m_itemPosition = Vector3::Zero;				// アイテムの座標
 	Vector3						m_chargeDiff = Vector3::Zero;				// 突進の移動量
 
@@ -543,7 +542,7 @@ private:
 	/// <param name="CONFUSION">			：閃光弾にあたったとき			</param>
 	/// <param name="LISTEN">				：音爆弾を使用したとき			</param>
 	/// <param name="CATCH">				：捕獲							</param>
-	EnEnemyActionState			m_ActionState;
+	EnEnemyActionState			m_enActionState;
 
 	// エネミーの種類
 	EnemyType					m_enemyType;
@@ -554,7 +553,7 @@ private:
 	/// <param name="0">	：☆のエフェクト	</param>
 	/// <param name="1">	：!のエフェクト		</param>
 	/// <param name="2">	：?のエフェクト		</param>
-	std::array<bool, 3>			m_efectDrawFlag;
+	std::array<bool, 3>			m_existsEfectDraw;
 
 	/// <summary>
 	/// </summary>
@@ -565,17 +564,14 @@ private:
 	/// <param name="4">	：音爆弾を使用された時の到達を諦めるまでの時間	</param>
 	std::array<float, 5>		m_addTimer;
 
-	bool						m_HitFlashBulletFlag = false;		// 閃光弾が当たったかどうか
-	bool						m_HearedSoundBulletFlag = false;	// 音爆弾が		〃
-	bool						m_CountFlag = false;				// 発見回数をカウントするかどうか決定する
-	bool						m_TrackingPlayerFlag = false;		// プレイヤーを追いかけるフラグ
-	bool						m_ChachPlayerFlag = false;			// プレイヤーを確保したかどうか
-	bool						m_NotDrawFlag = false;				// 描画するかどうか
-	bool						m_activeFlag = false;				// 最初から動けるかそうか
-	bool						m_SearchFlag = false;				// 警戒度が最大の時に一度だけ実行する
-
-	float						m_NaviTimer = 0.0f;					// ナビメッシュ用のタイマー
-	float						m_Vicount;							// 警戒度を一定回数増やす
-
+	bool						m_hitFlashBullet = false;			// 閃光弾が当たったかどうか
+	bool						m_hearedSoundBullet = false;		// 音爆弾が		〃
+	bool						m_shouldCount = false;				// 発見回数をカウントするかどうか
+	bool						m_isTrackingPlayer = false;			// プレイヤーを追跡しているかどうか
+	bool						m_isChachPlayer = false;			// プレイヤーを確保したかどうか
+	bool						m_canDraw = false;					// 描画するかどうか
+	bool						m_canActive = false;				// 最初から動けるかそうか
+	float						m_naviTimer = 0.0f;					// ナビメッシュ用のタイマー
+	float						m_addVicount = 0.0f;				// 警戒度を一定回数増やす
 	int							m_spotNum = 0;						// スポットライトの個数
 };

@@ -153,12 +153,12 @@ void Enemy_Charge::Action_ChargeStart(float time)
 	if (Action_StopMove(time, m_TimerState_UntilTheCharge) == true) {
 
 		// 一度だけ実行する
-		if (m_CalculatedFlag == false) {
+		if (m_canCharge == false) {
 			// 座標を参照
 			m_chargeTergetPosition = m_playerManagement->GetPosition();
 
 			// 何度も実行しないようにtrueにする
-			m_CalculatedFlag = true;
+			m_canCharge = true;
 
 			// エネミーからプレイヤーへ向かうベクトル
 			m_chargeDiff = m_chargeTergetPosition - m_position;
@@ -168,7 +168,7 @@ void Enemy_Charge::Action_ChargeStart(float time)
 
 		// 移動速度に加算
 		Vector3 moveSpeed = m_chargeDiff * (MOVE_SPEED * ADD_SPEED);
-		m_position += moveSpeed * m_Chargemove;
+		m_position += moveSpeed * m_chargeMove;
 
 		// 総移動距離を計算
 		m_sumPosition += moveSpeed;
@@ -194,7 +194,7 @@ void Enemy_Charge::Action_ChargeEnd()
 	
 	ReSetAddTimer(m_TimerState_UntilTheCharge);				// タイマーをリセット
 	m_sumPosition = Vector3::Zero;							// 移動距離をリセット
-	m_CalculatedFlag = false;								// フラグを降ろす
+	m_canCharge = false;								// フラグを降ろす
 
 	SetEffectDrawFlag(m_EffectState_QuestionMark,false);	// エフェクトのフラグを降ろす
 	SetEffectDrawFlag(m_EffectState_ExclamationPoint, false);
@@ -219,11 +219,11 @@ void Enemy_Charge::Action_ChargeHitWall()
 	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
 	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
 		// 衝突したとき
-		m_Chargemove = 0.0f;									// 乗算している値を0にして動かないようにする
+		m_chargeMove = 0.0f;									// 乗算している値を0にして動かないようにする
 
 		ReSetAddTimer(m_TimerState_UntilTheCharge);				// タイマーをリセット
 		m_sumPosition = Vector3::Zero;							// 移動距離をリセット
-		m_CalculatedFlag = false;								// フラグを降ろす
+		m_canCharge = false;								// フラグを降ろす
 
 		SetEffectDrawFlag(m_EffectState_QuestionMark,false);	// !のエフェクトのフラグを降ろす
 		SetEnemyActionState(m_ActionState_Dizzy);
@@ -231,7 +231,7 @@ void Enemy_Charge::Action_ChargeHitWall()
 	}
 
 	// 衝突していないときは続行する
-	m_Chargemove = 1.0f;
+	m_chargeMove = 1.0f;
 }
 
 void Enemy_Charge::Update_OnCraw()
