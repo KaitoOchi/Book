@@ -146,14 +146,16 @@ void Player::Update()
 
 void Player::Move()
 {
-	m_Lstick.x = 0.0f;
-	m_Lstick.z = 0.0f;
+	Vector3 stickL = Vector3::Zero;
+
 	//速度を初期化
 	m_moveSpeed.x *= SPEED_DOWN;
 	m_moveSpeed.z *= SPEED_DOWN;
+
 	//左ステックの情報を取得
-	m_Lstick.x = g_pad[0]->GetLStickXF();
-	m_Lstick.y = g_pad[0]->GetLStickYF();
+	stickL.x = g_pad[0]->GetLStickXF();
+	stickL.y = g_pad[0]->GetLStickYF();
+
 	//カメラの前方向と、右方向の取得
 	Vector3 cameraFoward = g_camera3D->GetForward();
 	Vector3 cameraRight = g_camera3D->GetRight();
@@ -170,9 +172,12 @@ void Player::Move()
 			m_characon->IsOnGround() == true)
 		{
 			//プレイヤーが動いているなら
-			if (m_Lstick.x != 0 || m_Lstick.y != 0)
+			if (stickL.x != 0.0f || stickL.y != 0.0f)
 			{
 				PlayerRun();
+
+				m_moveSpeed += cameraFoward * stickL.y * PLAYER_RUNING;
+				m_moveSpeed += cameraRight * stickL.x * PLAYER_RUNING;
 			}
 				
 		}
@@ -200,8 +205,8 @@ void Player::Move()
 
 			}
 			//左ステックと歩く速度を乗算させる
-			m_moveSpeed += cameraFoward * m_Lstick.y * PLAYER_WALKING;
-			m_moveSpeed += cameraRight * m_Lstick.x * PLAYER_WALKING;
+			m_moveSpeed += cameraFoward * stickL.y * PLAYER_WALKING;
+			m_moveSpeed += cameraRight * stickL.x * PLAYER_WALKING;
 		}
 	}
 	else
@@ -237,18 +242,7 @@ void Player::PlayerRun()
 	{
 		m_runFlag = false;
 	}
-	//カメラの前方向と、右方向の取得
-	Vector3 cameraFoward = g_camera3D->GetForward();
-	Vector3 cameraRight = g_camera3D->GetRight();
-	//XZ平面での前方方向と右方向を取得
-	cameraFoward.y = 0.0f;
-	cameraFoward.Normalize();
-	cameraRight.y = 0.0f;
-	cameraRight.Normalize();
-	//ダッシュをさせる
-	//左ステックと走る速度を乗算する
-	m_moveSpeed += cameraFoward * m_Lstick.y * PLAYER_RUNING;
-	m_moveSpeed += cameraRight * m_Lstick.x * PLAYER_RUNING;
+
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
 

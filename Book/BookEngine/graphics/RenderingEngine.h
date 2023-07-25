@@ -10,7 +10,6 @@
 
 namespace nsBookEngine {
 
-
 	static const int POINTLIGHT_MAX = 4;		//ポイントライトの最大数。
 	static const int SPOTLIGHT_MAX = 48;		//スポットライトの最大数。
 
@@ -60,6 +59,9 @@ namespace nsBookEngine {
 		/// </summary>
 		static void CreateInstance()
 		{
+			if (m_instance != nullptr) {
+				abort();
+			}
 			m_instance = new RenderingEngine;
 			m_instance->Init();
 		}
@@ -93,7 +95,7 @@ namespace nsBookEngine {
 		/// </summary>
 		/// <param name="dir">ライトの方向。</param>
 		/// <param name="color">ライトのカラー。[</param>
-		void SetDirectionLight(const Vector3& dir, const Vector3 color)
+		void SetDirectionLight(const Vector3& dir, const Vector3& color)
 		{
 			m_directionLig.SetDirection(dir);
 			m_directionLig.SetColor(color);
