@@ -7,19 +7,21 @@
 
 Enemy_Clear::Enemy_Clear()
 {
-
 }
+
 Enemy_Clear::~Enemy_Clear()
 {
-	m_clearFlag = true;
 }
+
 bool Enemy_Clear::Start()
 {
-	// アニメーションの読み込み
-	LoadAnimation();
+	m_clearFlag = true;
 
-	// モデルを読み込む
+	Enemy::LoadAnimation();
+
+	// 通常のモデルを読み込む
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
+	// 半透明描画用のモデルを読み込む
 	m_clearModelRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_TranslucentEnemy);
 
 	Enemy::Start();
@@ -37,6 +39,7 @@ bool Enemy_Clear::Start()
 
 	return true;
 }
+
 void Enemy_Clear::Update()
 {
 	//行動できるか調べる
@@ -86,49 +89,43 @@ void Enemy_Clear::Update()
 	// 行動パターン
 	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
-		// 指定された範囲の巡回
 		Update_OnCraw();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 	case m_ActionState_Tracking:
-		// プレイヤーを追跡する
 		Update_OnTracking();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 	case m_ActionState_Move_MissingPositon:
-		// プレイヤーを最後に見た座標まで移動する
 		Update_OnMoveMissingPosition();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 	case m_ActionState_Search_MissingPlayer:
-		// 見失ったプレイヤーを探す
 		Update_OnSearchMissingPlayer();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Loss, 1.0f);
 		break;
 	case m_ActionState_Called:
-		// Searchの座標近くまで移動する
 		Update_OnCalled();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 	case m_ActionState_BackBasedOn:
-		// 元のパスに戻る
 		Update_OnBackBasedOn();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Walk, 1.0f);
 		break;
 	case m_ActionState_Dizzy:
-		// 混乱
 		Update_OnDizzy();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Dizzy, 1.0f);
 		break;
 	case m_ActionState_Listen:
-		// 音が聞こえた場所に向かう
 		UpDate_OnListen();
 		m_clearModelRender.PlayAnimation(m_enAnimation_Run, 1.0f);
 		break;
 	}
 
-	Enemy::PlayAnimation();			// アニメーション
+	Enemy::PlayAnimation();
+
 	ClearChange();
+
 	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
@@ -136,8 +133,8 @@ void Enemy_Clear::Update()
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
-	Enemy::Action_SeachPlayer();						// 索敵
+	Enemy::SpotLight_Serch(m_rotation, m_position);
+	Enemy::Action_SeachPlayer();
 
 	m_enemyRender.Update();
 
@@ -166,7 +163,7 @@ void Enemy_Clear::Update_OnTracking()
 
 void Enemy_Clear::Update_OnCalled()
 {
-	Enemy::Action_GoLocationListenSound(m_setPos);
+	Enemy::Action_GoLocationListenSound(m_gatherPosition);
 }
 
 void Enemy_Clear::Update_OnMoveMissingPosition()
@@ -191,7 +188,7 @@ void Enemy_Clear::Update_OnDizzy()
 
 void Enemy_Clear::UpDate_OnListen()
 {
-	Enemy::Action_GoLocationListenSound(m_itemPos);
+	Enemy::Action_GoLocationListenSound(m_itemPosition);
 }
 
 void Enemy_Clear::ClearChange()
@@ -215,28 +212,28 @@ void Enemy_Clear::ClearChange()
 		m_clearFlag = false;
 		m_SetActionState = m_ActionState_Tracking;
 		m_clearChangeTime = 1.0f;
-	
 	}
 }
 
 void Enemy_Clear::Render(RenderContext& rc)
 {
+	// 描画
 	if (GetActiveFlag() == true)
 	{
 		Vector3 move{ 0.0f,-300.0f,0.0f };
 		m_characterController.Execute(move, 1.0f);
 		return;
 	}
+
 	if (GetNotDrawFlag() == true) {
 		return;
 	}
 
+	// モデルの切り替え
 	if (m_clearFlag) {
 		m_clearModelRender.Draw(rc);
 	}
 	else {
 		m_enemyRender.Draw(rc);
 	}
-
-	
 }

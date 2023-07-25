@@ -6,9 +6,9 @@ class Enemy_Increase :public IGameObject
 public:
 	Enemy_Increase();
 	~Enemy_Increase();
+
 	bool Start();
-	void Update();
-public:
+
 	/// <summary>
 	/// 座標の設定
 	/// </summary>
@@ -64,18 +64,18 @@ public:
 	/// エネミーを起動させる
 	/// </summary>
 	void Enemy_Open();
+
 private:
 	Vector3						m_position = Vector3::Zero;				//座標
-	float						m_nearposition =FLT_MIN;
 	Vector3						m_ifPosition=Vector3::Zero;
 	Vector3						m_scale = Vector3::Zero;				//大きさ
-	Quaternion					m_rotation;								//回転
+	Quaternion					m_rotation=Quaternion::Identity;		//回転
 
 	Game*						m_game = nullptr;						//ゲーム
 	Gage*						m_gage = nullptr;						//ゲージ
 	PlayerManagement*			m_playerManagement = nullptr;			//プレイヤーマネジメント
 
-	int m_increaseEnemy = 0;
-
+	float						m_nearposition = FLT_MIN;
+	int							m_increaseEnemy = 0;
 };
 

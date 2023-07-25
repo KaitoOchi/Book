@@ -9,13 +9,11 @@
 namespace
 {
 	const Vector3	BOXSIZE = { 60.0f, 80.0f,60.0f };		// CharacterControllerのサイズ
-	const Vector3	ADD_LENGTH = { 50.0f, 0.0f, 50.0f };	// 突進時に追加する長さ
 	const Vector3	SCALE = { 2.0f,2.0f,2.0f };				// スケール
 	const float		LINEAR_COMPLETION = 1.0f;				// 線形補完
 	const float		COLLIDER_SIZE = 20.0f;					// スフィアコライダーのサイズ
 	const float		MOVE_SPEED = 3.0f;						// 移動速度
 	const float		ADD_SPEED = 1.3f;						// 乗算速度
-	const float		MOVING_DISTANCE = 600.0f;				// 突進する移動距離
 	const float		CALL_DISTANCE_MAX = 400.0f;				// 呼ぶことができる最大値
 	const float		CALL_DISTANCE_MIN = 190.0f;				// 呼ぶことができる最小値
 	const float		CHANGING_DISTANCE = 20.0f;				// 目的地を変更する距離
@@ -43,7 +41,6 @@ namespace
 	const float		EFFECT_SIZE_STAR = 1.0f;				// エフェクトのサイズ
 	const float		EFFECT_SIZE_EXCLAMATION = 1.2f;			// エフェクトのサイズ
 	const float		EFFECT_SIZE_QUESTION = 1.5f;			// エフェクトのサイズ
-	const float		DOWN_VOLUME = 0.1f;						// 音量
 }
 
 Enemy::Enemy()
@@ -267,6 +264,7 @@ void Enemy::CreateNavimesh(Vector3 pos)
 {
 	m_NaviTimer += g_gameTime->GetFrameDeltaTime();
 
+	// 目標地点へ向かうベクトル
 	Vector3 diff = pos - m_position;
 	diff.Normalize();
 
@@ -437,7 +435,7 @@ void Enemy::Action_MoveMissingPosition()
 
 	// 移動速度に加算
 	Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
-	m_position += moveSpeed * m_Chargemove;
+	m_position += moveSpeed /** m_Chargemove*/;
 
 	// 走るアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Run;
@@ -484,7 +482,7 @@ void Enemy::Action_SearchMissingPlayer()
 		m_efectDrawFlag[m_EffectState_QuestionMark] = false;
 
 		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
-		m_sumPos = Vector3::Zero;								// 移動距離をリセット
+		m_sumPosition = Vector3::Zero;								// 移動距離をリセット
 
 		if (m_enemyType == TYPE_SEARCH) {
 			// 索敵状態に戻す
@@ -639,145 +637,6 @@ void Enemy::Action_TrackingPlayer()
 		m_playerMissiongPosition = m_playerManagement->GetPosition();
 		m_ActionState = m_ActionState_Move_MissingPositon;
 	}
-}
-
-void Enemy::Action_ChargeStart(float time)
-{
-	// 移動距離の長さが一定以上のとき
-	if (m_sumPos.Length() >= MOVING_DISTANCE) {
-		// 突進を終了する
-		m_ActionState = m_ActionState_ChargeEnd;
-		m_sumPos = Vector3::Zero;
-		return;
-	}
-
-	// タイマーがtrueのとき
-	if (Action_StopMove(time, m_TimerState_UntilTheCharge) == true) {
-
-		// 一度だけ実行する
-		if (m_CalculatedFlag == false) {
-			// 座標を参照
-			m_chargeTergetPosition = m_playerManagement->GetPosition();
-
-			// 何度も実行しないようにtrueにする
-			m_CalculatedFlag = true;
-
-			// エネミーからプレイヤーへ向かうベクトル
-			m_chargeDiff = m_chargeTergetPosition - m_position;
-			m_chargeDiff.y = 0.0f;
-			m_chargeDiff.Normalize();
-		}
-
-		// 移動速度に加算
-		Vector3 moveSpeed = m_chargeDiff * (MOVE_SPEED * ADD_SPEED);
-		m_position += moveSpeed * m_Chargemove;
-
-		// 総移動距離を計算
-		m_sumPos += moveSpeed;
-		m_enAnimationState = m_enAnimationState_Run;
-
-		// 衝突判定
-		Action_ChargeHitWall();
-	}
-	else {
-		// 回転のみプレイヤーを追尾させる
-		m_chargeDiff = m_playerManagement->GetPosition() - m_position;
-		m_chargeDiff.Normalize();
-		m_enAnimationState = m_enAnimationState_Idle;
-	}
-
-	// 回転を教える
-	Rotation(m_chargeDiff);
-}
-
-void Enemy::Action_ChargeEnd()
-{
-	m_position = m_position;								// 座標を固定
-
-	m_addTimer[m_TimerState_UntilTheCharge] = 0.0f;			// タイマーをリセット
-	m_sumPos = Vector3::Zero;								// 移動距離をリセット
-	m_CalculatedFlag = false;								// フラグを降ろす
-
-	m_efectDrawFlag[m_EffectState_QuestionMark] = false;	// !のエフェクトのフラグを降ろす
-	m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
-
-	// プレイヤーが視野角内にいるとき
-	if (m_TrackingPlayerFlag == true) {
-		Efect_FindPlayer();
-		m_ActionState = m_ActionState_Charge;
-		return;
-	}
-	else {
-		// いないときは巡回状態に戻る
-		m_ActionState = m_ActionState_Search_MissingPlayer;
-	}
-}
-
-void Enemy::Action_ChargeHitWall()
-{
-	// 壁に衝突する判定
-
-	// 壁に衝突したかどうか
-	// プレイヤーの方向へ向かう単位ベクトルにスカラーを乗算したものを加算して渡す
-	if (Enemy::WallAndHit(m_position + (m_chargeDiff * ADD_LENGTH.x)) == false) {
-		// 衝突したとき
-		m_Chargemove = 0.0f;									// 乗算している値を0にして動かないようにする
-		
-		m_addTimer[m_TimerState_UntilTheCharge] = 0.0f;			// タイマーをリセット
-		m_sumPos = Vector3::Zero;								// 移動距離をリセット
-		m_CalculatedFlag = false;								// フラグを降ろす
-
-		m_efectDrawFlag[m_EffectState_QuestionMark] = false;	// !のエフェクトのフラグを降ろす
-		m_ActionState = m_ActionState_Dizzy;
-		return;
-	}
-
-	// 衝突していないときは続行する
-	m_Chargemove = 1.0f;
-}
-
-void Enemy::Action_CallAroundEnemy()
-{
-	SoundSource* se = NewGO<SoundSource>(0);
-	se->Init(17);
-	se->SetVolume(GameManager::GetInstance()->GetSFX() * DOWN_VOLUME);	// 音量を下げる
-	se->Play(false);
-
-	if (m_TrackingPlayerFlag == false) {
-		// フラグを降ろす
-		m_efectDrawFlag[m_EffectState_ExclamationPoint] = false;
-		m_ActionState = m_ActionState_Search_MissingPlayer;
-		se->Stop();
-		return;
-	}
-
-	Vector3 rot = m_playerManagement->GetPosition() - m_position;
-	rot.Normalize();
-
-	// エネミーのリストを検索
-	for (int i = 0; i < m_game->GetEnemyList().size(); i++) {
-
-		// 混乱中だったときはそれ以降は実行しない
-		if (m_game->GetEnemyList()[i]->m_ActionState == m_ActionState_Dizzy) {
-			return;
-		}
-
-		// 各エネミーから該当エネミーへ向かうベクトル
-		Vector3 diff = m_position - m_game->GetEnemyList()[i]->m_position;
-		float length = diff.Length();
-
-		// 長さが一定以内のとき かつ まだ呼んでいないとき
-		if (length > CALL_DISTANCE_MIN &&
-			length < CALL_DISTANCE_MAX &&
-			m_game->GetEnemyList()[i]->m_ActionState != m_ActionState_Called) {
-
-			m_game->GetEnemyList()[i]->m_ActionState = m_ActionState_Called;		// 行動パターンを変更する
-			m_game->GetEnemyList()[i]->m_setPos = m_position - BOXSIZE;				// 自身の座標-キャラコンを目標地点として渡す
-		}
-	}
-
-	Rotation(rot);
-	m_enAnimationState = m_enAnimationState_Call;
 }
 
 void Enemy::Action_MissingPlayer()

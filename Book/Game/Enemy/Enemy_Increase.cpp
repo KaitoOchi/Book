@@ -7,16 +7,13 @@
 #include "PlayerManagement.h"
 #include "Game.h"
 #include "Gage.h"
-namespace
-{
-}
+
 Enemy_Increase::Enemy_Increase()
 {
-
 }
+
 Enemy_Increase::~Enemy_Increase()
 {
-
 }
 
 bool Enemy_Increase::Start()
@@ -25,10 +22,6 @@ bool Enemy_Increase::Start()
 	m_gage = FindGO<Gage>("gage");
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	return	true;
-}
-
-void Enemy_Increase::Update()
-{	
 }
 
 void Enemy_Increase::Enemy_Open()
