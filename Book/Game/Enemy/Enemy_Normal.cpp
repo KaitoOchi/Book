@@ -10,13 +10,11 @@ Enemy_Normal::Enemy_Normal()
 
 Enemy_Normal::~Enemy_Normal()
 {
-
 }
 
 bool Enemy_Normal::Start()
 {
-	// アニメーションの読み込み
-	LoadAnimation();
+	Enemy::LoadAnimation();
 
 	// モデルの読み込み
 	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
@@ -83,40 +81,32 @@ void Enemy_Normal::Update()
 
 	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
-		// 指定された範囲の巡回
 		Update_OnCraw();
 		break;
 	case m_ActionState_Tracking:
-		// プレイヤーを追跡する
 		Update_OnTracking();
 		break;
 	case m_ActionState_Move_MissingPositon:
-		// プレイヤーを最後に見た座標まで移動する
 		Update_OnMoveMissingPosition();
 		break;
 	case m_ActionState_Search_MissingPlayer:
-		// 見失ったプレイヤーを探す
 		Update_OnSearchMissingPlayer();
 		break;
 	case m_ActionState_Called:
-		// Searchの座標近くまで移動する
 		Update_OnCalled();
 		break;
 	case m_ActionState_BackBasedOn:
-		// 元のパスに戻る
 		Update_OnBackBasedOn();
 		break;
 	case m_ActionState_Dizzy:
-		// 混乱
 		Update_OnDizzy();
 		break;
 	case m_ActionState_Listen:
-		// 音が聞こえた場所に向かう
 		UpDate_OnListen();
 		break;
 	}
 
-	Enemy::PlayAnimation();							// アニメーション
+	Enemy::PlayAnimation();
 
 	m_enemyRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
@@ -125,8 +115,8 @@ void Enemy_Normal::Update()
 	Vector3 move = Vector3::Zero;
 	m_position = m_characterController.Execute(move, g_gameTime->GetFrameDeltaTime());
 
-	Enemy::SpotLight_Serch(m_rotation, m_position);	// スポットライト
-	Enemy::Action_SeachPlayer();						// 索敵
+	Enemy::SpotLight_Serch(m_rotation, m_position);
+	Enemy::Action_SeachPlayer();
 
 	m_enemyRender.Update();
 }
@@ -151,7 +141,7 @@ void Enemy_Normal::Update_OnTracking()
 
 void Enemy_Normal::Update_OnCalled()
 {
-	Enemy::Action_GoLocationListenSound(m_setPos);
+	Enemy::Action_GoLocationListenSound(m_gatherPosition);
 }
 
 void Enemy_Normal::Update_OnMoveMissingPosition()
@@ -174,11 +164,9 @@ void Enemy_Normal::Update_OnDizzy()
 	Enemy::Action_HitFlashBullet();
 }
 
-
 void Enemy_Normal::UpDate_OnListen()
 {
-	// 音爆弾を使ったとき
-	Enemy::Action_GoLocationListenSound(m_itemPos);
+	Enemy::Action_GoLocationListenSound(m_itemPosition);
 }
 
 void Enemy_Normal::Render(RenderContext& rc)

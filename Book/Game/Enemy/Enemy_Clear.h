@@ -10,14 +10,38 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
-	void Update_OnCraw();					// 巡回
-	void Update_OnTracking();				// 追跡
-	void Update_OnMoveMissingPosition();	// 見失った位置まで移動する
-	void Update_OnSearchMissingPlayer();	// 見失った位置まで移動する
-	void Update_OnCalled();					// CALL時に実行
-	void Update_OnBackBasedOn();			// 巡回状態に戻る
-	void Update_OnDizzy();					// 閃光弾に当たったとき
-	void UpDate_OnListen();					// 音爆弾を使用したとき
+	/// <summary>
+	/// 巡回
+	/// </summary>
+	void Update_OnCraw();
+	/// <summary>
+	/// 追跡
+	/// </summary>
+	void Update_OnTracking();
+	/// <summary>
+	/// 見失った位置まで移動する
+	/// </summary>
+	void Update_OnMoveMissingPosition();
+	/// <summary>
+	/// 見失ったプレイヤーを探す
+	/// </summary>
+	void Update_OnSearchMissingPlayer();
+	/// <summary>
+	/// Searchに呼ばれた時の処理
+	/// </summary>
+	void Update_OnCalled();
+	/// <summary>
+	/// 巡回状態に戻る
+	/// </summary>
+	void Update_OnBackBasedOn();
+	/// <summary>
+	/// 閃光弾に当たったときの処理
+	/// </summary>
+	void Update_OnDizzy();
+	/// <summary>
+	/// 音爆弾が使用された時の処理
+	/// </summary>
+	void UpDate_OnListen();
 
 	/// <summary>
 	/// 透明化するか設定できる
@@ -28,6 +52,7 @@ public:
 	{
 		m_clearFlag = cle;
 	}
+
 	/// <summary>
 	/// 透明化しているか情報を得られる
 	/// </summary>
@@ -36,6 +61,7 @@ public:
 	{
 		return m_clearFlag;
 	}
+
 private:
 	/// <summary>
 	/// 透明化を切り替える
@@ -44,10 +70,9 @@ private:
 
 	ModelRender			m_clearModelRender;							//半透明時のモデル
 
-	//透明化を切り替える
-	bool				m_clearFlag = true;							//trueなら透明化falseなら解除
-	EnEnemyActionState	m_SetActionState = GetEnemyActionState();	//どちらの状態化を記憶する
+	EnEnemyActionState	m_setActionState = GetEnemyActionState();	//現在の状態を記録する
 
 	float				m_clearChangeTime = 0.0f;					//切り替わるまでの時間
+	bool				m_clearFlag = true;							//trueなら透明化falseなら解除
 };
 
