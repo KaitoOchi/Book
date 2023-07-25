@@ -26,14 +26,21 @@ public:
 	void Animation()override;
 	void Render(RenderContext& rc)override;
 private:
-	int i = 0;
-	int j = 0;
-	Vector3 m_InputRot=Vector3::Zero;
-	bool m_chactState2D = false;
-	Quaternion m_rot;
-	PlayerManagement* m_playerManagement = nullptr;
-	Player3D* m_player3D = nullptr;
-	EffectEmitter* m_smokeEffect = nullptr;
+	int					m_addValue = 0;
+	int					m_playAnimationSpeed = 0;
+	int					m_walkAnimationSpeed = 30;								//歩くときのアニメーション速度
+	int					m_jumpAnimationSpeed = 90;								//ジャンプ時のアニメーション速度
+	float				m_runAnimationSpeed = 3.0f;								//ダッシュ時のアニメーション速度
+
+	bool				m_chactState2D = false;
+
+	Vector3				m_InputRot=Vector3::Zero;
+	Quaternion			m_rot = Quaternion::Identity;
+
+	PlayerManagement*	m_playerManagement = nullptr;
+	Player3D*			m_player3D = nullptr;
+	EffectEmitter*		m_smokeEffect = nullptr;
+
 private:
 	/// <summary>
 	/// 待機ステートの遷移処理
@@ -94,7 +101,5 @@ private:
 	/// ゲームオーバーステートの遷移処理
 	/// </summary>
 	void ProcessGameOverStateTransition()override;
-
-	
 };
 

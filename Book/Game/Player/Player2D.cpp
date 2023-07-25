@@ -8,14 +8,11 @@
 #include "GameUI.h"
 namespace
 {
-	const Vector3	BOXSIZE{ 20.0f,120.0f,2.0f };						//ãƒœãƒƒã‚¯ã‚¹ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®å¤§ãã•
-	const Vector3	MODELSIZE{ 1.0f,1.0f,1.0f };
-	int				WALKVALUE = 30;
-	int				JUMPVALUE = 90;
-	float			RUBVALUM = 3.0f;
-	const float		SPEED_DOWN = 0.8;									//é€Ÿåº¦æ¸›é€Ÿç‡
-	const float		PLAYER_STAMINA = 10.0f;								//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ã‚¿ãƒŸãƒŠ
-	const float EFFECTSIZE = 1.5f;
+	const Vector3	BOXSIZE{ 20.0f,120.0f,2.0f };						//ƒ{ƒbƒNƒXƒRƒ‰ƒCƒ_[‚Ì‘å‚«‚³
+	const Vector3	MODELSIZE{ 1.0f,1.0f,1.0f };						//ƒ‚ƒfƒ‹ƒTƒCƒY
+	const float		SPEED_DOWN = 0.8;									//‘¬“xŒ¸‘¬—¦
+	const float		PLAYER_STAMINA = 10.0f;								//ƒvƒŒƒCƒ„[‚ÌƒXƒ^ƒ~ƒi
+	const float		EFFECT_SIZE = 1.5f;									//ƒGƒtƒFƒNƒgƒTƒCƒY
 }
 Player2D::Player2D()
 {
@@ -37,12 +34,11 @@ bool Player2D::Start()
 	m_changeAnimation[enAnimationClip_Change].Load("Assets/animData/player_2D/player2D_change.tka");
 	m_changeAnimation[enAnimationClip_Change].SetLoopFlag(false);
 
-	
 	m_characon = new CharacterController;
 	m_modelRender = new ModelRender;
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_player3D = FindGO<Player3D>("player3d");
-	//ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelRender->Init("Assets/modelData/player/player2D.tkm", m_changeAnimation, enAnimationClip_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_2DPlayer, D3D12_CULL_MODE_NONE);
 	m_modelRender->SetScale(MODELSIZE);
 	m_modelRender->PlayAnimation(enAnimationClip_Idle, 0.0f);
@@ -66,17 +62,18 @@ void Player2D::Update()
 	{
 		return;
 	}
-	//ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’å‹•ã‹ã™
+
+	//ƒLƒƒƒ‰ƒRƒ“‚ğ“®‚©‚·
 	m_characon->SetPosition(m_position);
-	//ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’å›è»¢ã•ã›ã‚‹
+	//ƒLƒƒƒ‰ƒRƒ“‚ğ‰ñ“]‚³‚¹‚é
 	m_characon->SetRotaition(m_rotation);
-	//ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã‚’åˆ©ç”¨ã—ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‹•ã‹ã™
+	//ƒLƒƒƒ‰ƒRƒ“‚ğ—˜—p‚µ‚ÄƒvƒŒƒCƒ„[‚ğ“®‚©‚·
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
 
-	//atan2ã‚’ä½¿ç”¨ã—ã¦å›è»¢è§’åº¦ã‚’æ±‚ã‚ã‚‹
+	//atan2‚ğg—p‚µ‚Ä‰ñ“]Šp“x‚ğ‹‚ß‚é
 	Player::Rotation2D();
 
-	//ãƒ¢ãƒ‡ãƒ«ã®åº§æ¨™ã¨å›è»¢ã‚’æ›´æ–°ã™ã‚‹
+	//ƒ‚ƒfƒ‹‚ÌÀ•W‚Æ‰ñ“]‚ğXV‚·‚é
 	m_modelRender->SetPosition(m_position);
 	m_modelRender->SetRotation(m_rotation);
 	m_modelRender->Update();	
@@ -89,19 +86,16 @@ void Player2D::Update()
 	{
 		m_gameUI->SetChangeGaugeState(true);
 	}
-
-
 }
 void Player2D::PlayerChang()
 {
 	delete(m_characon);
 	m_characon = nullptr;
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 	Deactivate();
 }
 
-//ã‚­ãƒ£ãƒ©ã‚³ãƒ³ã®ä½œæˆé–¢æ•°
 void Player2D::CreatCharcon()
 {
 	m_characon = new CharacterController;
@@ -113,45 +107,40 @@ void Player2D::Animation()
 	switch (m_playerState)
 	{
 	case Player::m_enPlayer_Idle:
-		JUMPVALUE = 90;
-		i++;
-		j = i / 10;
-		if (i >= 29)
+		m_addValue++;
+		m_playAnimationSpeed = m_addValue / 10;
+		if (m_addValue >= 29)
 		{
-			i = 0;
-			
+			m_addValue = 0;
 		}
 		break;
 	case Player::m_enPlayer_walk:
-		//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆ‡ã‚Šæ›¿ãˆ
-		JUMPVALUE = 90;
-		WALKVALUE++;
-		j = WALKVALUE / 10;
-		if (WALKVALUE >= 89)
+		//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌØ‚è‘Ö‚¦
+		m_walkAnimationSpeed++;
+		m_playAnimationSpeed = m_walkAnimationSpeed / 10;
+		if (m_walkAnimationSpeed >= 89)
 		{
-			WALKVALUE = 30;
-			
+			m_walkAnimationSpeed = 30;
 		}
 		break;
 	case Player::m_enPlayer_Run:
-		//æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ—©ãã™ã‚‹
-		j = RUBVALUM;
+		//•à‚­ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‘‚­‚·‚é
+		m_playAnimationSpeed = m_runAnimationSpeed;
 
-		RUBVALUM += 0.2;
-		if (RUBVALUM >= 8.8)
+		m_runAnimationSpeed += 0.2;
+		if (m_runAnimationSpeed >= 8.8)
 		{
-			RUBVALUM = 3;
-			
+			m_runAnimationSpeed = 3.0f;
 		}
 		break;
 	case Player::m_enPlayer_Jump:
 	case Player::m_enPlayer_Jumpend:
-		//ã‚¸ãƒ£ãƒ³ãƒ—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ‡ã‚Šæ›¿ãˆ
-		j = JUMPVALUE / 10;
-		JUMPVALUE++;
-		if (JUMPVALUE >= 130)
+		//ƒWƒƒƒ“ƒvƒAƒjƒ[ƒVƒ‡ƒ“Ø‚è‘Ö‚¦
+		m_playAnimationSpeed = m_jumpAnimationSpeed / 10;
+		m_jumpAnimationSpeed++;
+		if (m_jumpAnimationSpeed >= 130)
 		{
-			JUMPVALUE = 130;
+			m_jumpAnimationSpeed = 130;
 		}
 		break;
 	case Player::m_enPlayer_Change:
@@ -161,22 +150,22 @@ void Player2D::Animation()
 		break;
 	}
 
-	RenderingEngine::GetInstance()->GetLightCB().shadowCB.playerAnim2D = j;
+	RenderingEngine::GetInstance()->GetLightCB().shadowCB.playerAnim2D = m_playAnimationSpeed;
 }
 
 void Player2D::ProcessIdleStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 void Player2D::ProcessWalkStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 void Player2D::ProcessRunStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 void Player2D::ProcessJumpStateTransition()
@@ -187,7 +176,7 @@ void Player2D::ProcessJumpendStateTransition()
 {
 	if (m_characon->IsOnGround())
 	{
-		//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+		//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 		ProcessCommonStateTransition();
 	}
 
@@ -196,7 +185,7 @@ void Player2D::ProcessChangeStateTransition()
 {
 	if (m_modelRender->IsPlayingAniamtion() == false)
 	{
-		//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+		//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 		ProcessCommonStateTransition();
 		m_modelRender->PlayAnimation(enAnimationClip_Idle, 0.0f);
 		m_modelRender->Update();
@@ -204,13 +193,13 @@ void Player2D::ProcessChangeStateTransition()
 }
 void Player2D::ProcessFoundStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 
 void Player2D::ProcessStealStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 
@@ -227,13 +216,13 @@ void Player2D::ProcessCaughtStateTransition()
 
 void Player2D::ProcessClearStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 
 void Player2D::ProcessGameOverStateTransition()
 {
-	//ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é·ç§»ã™ã‚‹ã€‚
+	//ƒXƒe[ƒg‚ğ‘JˆÚ‚·‚éB
 	ProcessCommonStateTransition();
 }
 
@@ -253,5 +242,4 @@ void Player2D::ProcessThrowStateTransition()
 }
 void Player2D::ProcessCatchingStateTransition()
 {
-
 }
