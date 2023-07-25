@@ -208,14 +208,6 @@ public:
 	}
 
 	/// <summary>
-	/// 回転角度を設定
-	/// </summary>
-	void Angle(const float angle)  
-	{
-		m_angle = angle;
-	}
-
-	/// <summary>
 	/// 走れるかどうか判定するフラグを取得する
 	/// </summary>
 	const bool GetRunFlag() const 
@@ -228,7 +220,8 @@ protected:
 	void Move();
 	void PlayerRun();
 	void Jump();
-	void Rotation();
+	void Rotation2D();
+	void Rotation3D();
 	/// <summary>
 	/// 捕まった判定
 	/// </summary>
@@ -347,13 +340,11 @@ protected:
 	AnimationClip		m_animationClips[m_enAnimationClip_Num];
 
 	Vector3				m_moveSpeed=Vector3::Zero;				//移動速度
-	Vector3				m_Lstic = Vector3::Zero;				//左ステック
+	Vector3				m_Lstick = Vector3::Zero;				//左ステック
 	Vector3				m_position = Vector3::Zero;				//初期座標
 	Vector3				m_forward = Vector3::AxisZ;				//プレイヤーの正面ベクトル
 	
-	ModelRender *		m_modelRender=nullptr;					//3Dモデル
-	std::array<nsK2EngineLow::Texture,14> m_player2D;			//テクスチャ
-	
+	ModelRender*		m_modelRender = nullptr;					//3Dモデル	
 	Quaternion			m_rotation;								//回転
 	
 	CharacterController*m_characon;								//キャラコン
@@ -369,14 +360,9 @@ protected:
 	Vector3				m_setGhostpos=Vector3::Zero;
 
 private:
-	EffectEmitter* m_tireEffect;
-
-	float				m_downTime = 3.0f;						//気絶時間
-	float				m_angle = 0.0f;							//回転角度
-
+	EffectEmitter*		m_tireEffect;
 	bool				m_playerCaught = false;					//捕まったかの判定
 	bool				m_runFlag = true;						//走れるかの判定
-
 	float				m_stamina = 0.0f;						//プレイヤーのスタミナ
 	float				m_staminaCoolTime = 0.0f;				//スタミナが回復するまでのクールタイム
 };	

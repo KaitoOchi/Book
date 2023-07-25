@@ -10,14 +10,16 @@
 
 namespace
 {
-	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心
-	const float		MAP_RADIUS = 140.0f;									// マップの半径
-	const float		LIMITED_RANGE_IMAGE = 650.0f;							// マップの範囲
+	const Vector3	OUTLINE_SPRITE_POS = Vector3(640.0f, -210.0f, 0.0f);	// 枠組み画像の座標。
+	const Vector3	CENTER_POSITION = Vector3(635.0f, -290.0f, 0.0f);		// マップの中心。
+	const float		MAP_RADIUS = 140.0f;									// マップの半径。
+	const float		LIMITED_RANGE_IMAGE = 650.0f;							// マップの範囲。
+	const float		RANGE_OUT = 100000.0f;									// 範囲外。
 }
 
 MiniMap::MiniMap()
 {
-	//vector型のリストはリサーブする
+	//vector型のリストはリザーブする
 	m_enemyList.reserve(ENEMY_NUM);
 	m_physicsGhostList.reserve(WALL_NUM);
 }
@@ -137,7 +139,7 @@ bool MiniMap::DrawMap(const Vector3& enemyPos, float& alpha)
 
 		Vector3 diff = enemyPos - m_playerPos;
 		diff.y = 0.0f;
-		alpha = (pow(LIMITED_RANGE_IMAGE, 2.0f) - diff.LengthSq()) / 100000.0f;
+		alpha = (pow(LIMITED_RANGE_IMAGE, 2.0f) - diff.LengthSq()) / RANGE_OUT;
 
 		return true;
 	}

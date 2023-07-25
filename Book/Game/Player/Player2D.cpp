@@ -74,7 +74,7 @@ void Player2D::Update()
 	m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime()/2.0f);
 
 	//atan2を使用して回転角度を求める
-	Rotation();
+	Player::Rotation2D();
 
 	//モデルの座標と回転を更新する
 	m_modelRender->SetPosition(m_position);

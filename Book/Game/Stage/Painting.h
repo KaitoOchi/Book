@@ -61,5 +61,5 @@ public:
 private:
 	ModelRender m_modelRender;			//絵画モデル
 	ModelRender m_frameModelRender;		//額縁モデル
-	Texture m_texture;					//絵画のテクスチャ
+	Texture		m_texture;				//絵画のテクスチャ
 };

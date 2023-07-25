@@ -100,9 +100,7 @@ void Player3D::Update()
 		m_position = m_characon->Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
 
 		//atn2‚ðŽg‚Á‚ÄŠp“x‚ð‹‚ß‚é
-		Rotation();
-		//float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-		//SetAngle(angle);
+		Player::Rotation3D();
 
 		m_modelRender->SetPosition(m_position);
 		m_modelRender->SetRotation(m_rotation);

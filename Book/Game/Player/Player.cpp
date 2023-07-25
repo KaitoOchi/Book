@@ -82,20 +82,7 @@ void Player::Animation3D()
 }
 void Player::Animation2D()
 {
-	m_player2D[0].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_1.DDS");
-	m_player2D[1].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_2.DDS");
-	m_player2D[2].InitFromDDSFile(L"Assets/animData/player_2D/idle/idle_3.DDS");
-	m_player2D[3].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_1.DDS");
-	m_player2D[4].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_2.DDS");
-	m_player2D[5].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_3.DDS");
-	m_player2D[6].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_4.DDS");
-	m_player2D[7].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_5.DDS");
-	m_player2D[8].InitFromDDSFile(L"Assets/animData/player_2D/walk/walk_6.DDS");
-	m_player2D[9].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_1.DDS");
-	m_player2D[10].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_2.DDS");
-	m_player2D[11].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_3.DDS");
-	m_player2D[12].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_4.DDS");
-	m_player2D[13].InitFromDDSFile(L"Assets/animData/player_2D/jump/jump_5.DDS");
+
 }
 void Player::Update()
 {
@@ -159,14 +146,14 @@ void Player::Update()
 
 void Player::Move()
 {
-	m_Lstic.x = 0.0f;
-	m_Lstic.z = 0.0f;
+	m_Lstick.x = 0.0f;
+	m_Lstick.z = 0.0f;
 	//速度を初期化
 	m_moveSpeed.x *= SPEED_DOWN;
 	m_moveSpeed.z *= SPEED_DOWN;
 	//左ステックの情報を取得
-	m_Lstic.x = g_pad[0]->GetLStickXF();
-	m_Lstic.y = g_pad[0]->GetLStickYF();
+	m_Lstick.x = g_pad[0]->GetLStickXF();
+	m_Lstick.y = g_pad[0]->GetLStickYF();
 	//カメラの前方向と、右方向の取得
 	Vector3 cameraFoward = g_camera3D->GetForward();
 	Vector3 cameraRight = g_camera3D->GetRight();
@@ -183,7 +170,7 @@ void Player::Move()
 			m_characon->IsOnGround() == true)
 		{
 			//プレイヤーが動いているなら
-			if (m_Lstic.x != 0 || m_Lstic.y != 0)
+			if (m_Lstick.x != 0 || m_Lstick.y != 0)
 			{
 				PlayerRun();
 			}
@@ -213,8 +200,8 @@ void Player::Move()
 
 			}
 			//左ステックと歩く速度を乗算させる
-			m_moveSpeed += cameraFoward * m_Lstic.y * PLAYER_WALKING;
-			m_moveSpeed += cameraRight * m_Lstic.x * PLAYER_WALKING;
+			m_moveSpeed += cameraFoward * m_Lstick.y * PLAYER_WALKING;
+			m_moveSpeed += cameraRight * m_Lstick.x * PLAYER_WALKING;
 		}
 	}
 	else
@@ -260,8 +247,8 @@ void Player::PlayerRun()
 	cameraRight.Normalize();
 	//ダッシュをさせる
 	//左ステックと走る速度を乗算する
-	m_moveSpeed += cameraFoward * m_Lstic.y * PLAYER_RUNING;
-	m_moveSpeed += cameraRight * m_Lstic.x * PLAYER_RUNING;
+	m_moveSpeed += cameraFoward * m_Lstick.y * PLAYER_RUNING;
+	m_moveSpeed += cameraRight * m_Lstick.x * PLAYER_RUNING;
 	m_staminaCoolTime = STAMINA_COOL_TIME;
 }
 
@@ -315,7 +302,22 @@ void Player::Jump()
 	}
 	
 }
-void Player::Rotation()
+
+void Player::Rotation2D()
+{
+	//もし少しも動いていないなら
+	if (fabsf(m_moveSpeed.x) < 0.001f
+		&& fabsf(m_moveSpeed.z) < 0.001f) {
+		return;
+	}
+
+	float angle = atan2(-m_moveSpeed.z, -m_moveSpeed.x);
+
+	//SetRotationを使用する
+	m_rotation.SetRotationY(-angle);
+}
+
+void Player::Rotation3D()
 {
 	//もし少しも動いていないなら
 	if (fabsf(m_moveSpeed.x) < 0.001f
@@ -323,10 +325,10 @@ void Player::Rotation()
 		return;
 	}
 	
-	atan2(-m_moveSpeed.z, -m_moveSpeed.x);
+	float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
 
 	//SetRotationを使用する
-	m_rotation.SetRotationY(-m_angle);
+	m_rotation.SetRotationY(-angle);
 }
 
 void Player::ItemChange()

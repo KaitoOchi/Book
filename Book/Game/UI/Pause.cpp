@@ -10,6 +10,13 @@ namespace
 	const Vector3	CURSOR_POS_MENU[3] = { Vector3(-250.0f, 125.0f, 0.0f),
 										Vector3(-250.0f, -110.0f, 0.0f),
 										Vector3(-250.0f, -345.0f, 0.0f) };	//メニュー画面のカーソル座標
+	const int		CURSOR_MIN = 0;											//カーソルの最小値。
+	const int		CURSOR_MAX = 2;											//カーソルの最大値。
+	const float		CURSOR_MOVESPEED = -235.0f;								//カーソル速度。
+	const float		CURSOR_TIMER_SPEED = 4.0f;								//カーソルタイマーの速度。
+	const float		CURSOR_TIMER_MAX = 1.0f;								//カーソルタイマーの最大値。
+	const float		FADEOUT_TIME = 0.25f;									//フェードアウトの時間。
+	const float		FADE_SPEED = 4.0f;										//フェード速度。
 }
 
 Pause::Pause()
@@ -36,7 +43,7 @@ bool Pause::Start()
 
 	//カーソル画像の設定
 	m_cursorSpriteRender.Init("Assets/sprite/UI/button/tryangle.DDS", 131.0f, 135.0f);
-	m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * -235.0f), 0.0f));
+	m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * CURSOR_MOVESPEED), 0.0f));
 	m_cursorSpriteRender.Update();
 
 	return true;
@@ -74,7 +81,7 @@ void Pause::PauseUpdate()
 void Pause::PauseScreen()
 {
 	//カーソルの移動中は、入力を受け付けない
-	if (m_cursorTimer < 1.0f) {
+	if (m_cursorTimer < CURSOR_TIMER_MAX) {
 		CursorMove();
 		return;
 	}
@@ -116,7 +123,7 @@ void Pause::PauseScreen()
 		m_cursor--;
 
 		int cursor = m_cursor;
-		m_cursor = min(max(m_cursor, 0), 2);
+		m_cursor = min(max(m_cursor, CURSOR_MIN), CURSOR_MAX);
 
 		if (m_cursor == cursor) {
 			//選択音を出す
@@ -130,7 +137,7 @@ void Pause::PauseScreen()
 		m_cursor++;
 
 		int cursor = m_cursor;
-		m_cursor = min(max(m_cursor, 0), 2);
+		m_cursor = min(max(m_cursor, CURSOR_MIN), CURSOR_MAX);
 
 		if (m_cursor == cursor) {
 			//選択音を出す
@@ -143,11 +150,11 @@ void Pause::PauseScreen()
 
 void Pause::CursorMove()
 {
-	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * 4.0f;
+	m_cursorTimer += g_gameTime->GetFrameDeltaTime() * CURSOR_TIMER_SPEED;
 
 	// -t^2 + 2t
 	float rate = ((pow(m_cursorTimer, 2.0f) * -1.0f) + (2.0f * m_cursorTimer));
-	rate = min(rate, 1.0f);
+	rate = min(rate, CURSOR_TIMER_MAX);
 
 	//カーソルを移動
 	m_cursorPos.Lerp(rate, CURSOR_POS_MENU[m_cursor + m_nextCursor], CURSOR_POS_MENU[m_cursor]);
@@ -165,7 +172,7 @@ void Pause::FadeIn()
 	if (m_timer < 0.0f) {
 		//カーソルの初期化
 		m_cursor = 0;
-		m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * -235.0f), 0.0f));
+		m_cursorSpriteRender.SetPosition(Vector3(-250.0f, 125.0f + (m_cursor * CURSOR_MOVESPEED), 0.0f));
 		m_cursorSpriteRender.Update();
 
 		m_pauseState = enState_Game;
@@ -183,7 +190,7 @@ void Pause::FadeOut()
 
 	SetSprite();
 
-	if (m_timer > 0.25f) {
+	if (m_timer > FADEOUT_TIME) {
 		m_pauseState = enState_Pause;
 	}
 }
@@ -191,11 +198,11 @@ void Pause::FadeOut()
 void Pause::SetSprite()
 {
 	//透明度を設定
-	m_backGroundSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * 2.0f));
+	m_backGroundSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * (FADE_SPEED / 2.0f)));
 	m_backGroundSpriteRender.Update();
-	m_pauseSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * 4.0f));
+	m_pauseSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * FADE_SPEED));
 	m_pauseSpriteRender.Update();
-	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * 4.0f));
+	m_cursorSpriteRender.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_timer * FADE_SPEED));
 	m_cursorSpriteRender.Update();
 }
 

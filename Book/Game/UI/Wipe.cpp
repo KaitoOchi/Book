@@ -17,6 +17,8 @@ namespace
 	const float ENEMY_DURATION = 0.1f;								//敵の間隔
 	const float TIMER_MIN = 0.0f;									//タイマーの最小値。
 	const float TIMER_MAX = 1.0f;									//タイマーの最大値。
+	const float ALPHA_MIN = -0.5f;									//透明度の最小値。
+	const float ALPHA_MAX = 1.0f;									//透明度の最大値。
 }
 
 Wipe::Wipe()
@@ -230,8 +232,8 @@ void Wipe::WipeOutline()
 
 	//透明度を求める
 	m_alpha += g_gameTime->GetFrameDeltaTime();
-	if (m_alpha > 1.0f)
-		m_alpha = -0.5f;
+	if (m_alpha > ALPHA_MAX)
+		m_alpha = -ALPHA_MIN;
 	float alpha = fabsf(-pow(m_alpha, 2.0f) + (2 * m_alpha));
 
 	Vector3 warningPos = m_outlinePos;
