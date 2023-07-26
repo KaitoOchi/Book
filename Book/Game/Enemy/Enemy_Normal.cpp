@@ -17,13 +17,13 @@ bool Enemy_Normal::Start()
 	Enemy::LoadAnimation();
 
 	// モデルの読み込み
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
+	m_enemyModelRender.Init("Assets/modelData/enemy/enemy_normal.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
 
 	Enemy::Start();
 
-	m_enemyRender.SetScale(m_scale);
-	m_enemyRender.SetPosition(m_position);
-	m_enemyRender.SetRotation(m_rotation);
+	m_enemyModelRender.SetScale(m_scale);
+	m_enemyModelRender.SetPosition(m_position);
+	m_enemyModelRender.SetRotation(m_rotation);
 
 	// パスの初期座標を渡す
 	m_point = &m_pointList[0];
@@ -34,8 +34,8 @@ bool Enemy_Normal::Start()
 void Enemy_Normal::Update()
 {
 	// 行動できるか調べる
-	if (GetActiveFlag() == true)
-	{
+	if (GetActiveFlag() == true) {
+		// イベント時の処理
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
 		m_characterController.Execute(move, 1.0f);
@@ -45,8 +45,9 @@ void Enemy_Normal::Update()
 		return;
 	}
 
-	// イベント後の処理
+	// 描画しない状態なら
 	if (GetNotDrawFlag() == true) {
+		// エフェクトを削除する
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -108,7 +109,7 @@ void Enemy_Normal::Update()
 
 	Enemy::PlayAnimation();
 
-	m_enemyRender.SetPosition(m_position);
+	m_enemyModelRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
 	// キャラクターコントローラーを自身の座標と同期
@@ -118,7 +119,7 @@ void Enemy_Normal::Update()
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	Enemy::Action_SeachPlayer();
 
-	m_enemyRender.Update();
+	m_enemyModelRender.Update();
 }
 
 void Enemy_Normal::Update_OnCraw()
@@ -174,6 +175,6 @@ void Enemy_Normal::Render(RenderContext& rc)
 	// 描画
 	if (GetNotDrawFlag() == false &&
 		GetActiveFlag() == false) {
-		m_enemyRender.Draw(rc);
+		m_enemyModelRender.Draw(rc);
 	}
 }

@@ -20,15 +20,15 @@ bool Enemy_Clear::Start()
 	Enemy::LoadAnimation();
 
 	// 通常のモデルを読み込む
-	m_enemyRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
+	m_enemyModelRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_Enemy);
 	// 半透明描画用のモデルを読み込む
 	m_clearModelRender.Init("Assets/modelData/enemy/enemy_clear.tkm", m_enAnimationClips, m_enAnimation_Num, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_TranslucentEnemy);
 
 	Enemy::Start();
 
-	m_enemyRender.SetScale(m_scale);
-	m_enemyRender.SetPosition(m_position);
-	m_enemyRender.SetRotation(m_rotation);
+	m_enemyModelRender.SetScale(m_scale);
+	m_enemyModelRender.SetPosition(m_position);
+	m_enemyModelRender.SetRotation(m_rotation);
 
 	m_clearModelRender.SetScale(m_scale);
 	m_clearModelRender.SetPosition(m_position);
@@ -43,8 +43,8 @@ bool Enemy_Clear::Start()
 void Enemy_Clear::Update()
 {
 	//行動できるか調べる
-	if (GetActiveFlag() == true)
-	{
+	if (GetActiveFlag() == true) {
+		// イベント時の処理
 		Vector3 move = m_position;
 		move.y -= 30000.0f;
 		m_characterController.Execute(move, 1.0f);
@@ -52,8 +52,10 @@ void Enemy_Clear::Update()
 		m_spotLight.Update();
 		return;
 	}
-	// イベント後の処理
+
+	// 描画しない状態なら
 	if (GetNotDrawFlag() == true) {
+		// エフェクトを削除する
 		if (m_Effect != nullptr) {
 			m_Effect->Stop();
 			DeleteGO(m_Effect);
@@ -126,7 +128,7 @@ void Enemy_Clear::Update()
 
 	ClearChange();
 
-	m_enemyRender.SetPosition(m_position);
+	m_enemyModelRender.SetPosition(m_position);
 	m_characterController.SetPosition(m_position);
 
 	// キャラクターコントローラーを自身の座標と同期
@@ -136,7 +138,7 @@ void Enemy_Clear::Update()
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	Enemy::Action_SeachPlayer();
 
-	m_enemyRender.Update();
+	m_enemyModelRender.Update();
 
 	m_clearModelRender.SetPosition(m_position);
 	m_clearModelRender.SetRotation(m_rotation);
@@ -193,21 +195,19 @@ void Enemy_Clear::UpDate_OnListen()
 
 void Enemy_Clear::ClearChange()
 {
-	if (m_setActionState != GetEnemyActionState () && m_clearChangeTime >= 0.0f)
-	{
+	// 記憶している状態と現在の状態が異なる　かつ　切り替わるまでの時間が 0.0f のとき
+	if (m_setActionState != GetEnemyActionState () && m_clearChangeTime >= 0.0f) {
 		m_clearChangeTime -= g_gameTime->GetFrameDeltaTime();
 		return;
 	}
 
-	if (GetEnemyActionState() == m_ActionState_Craw)
-	{
+	if (GetEnemyActionState() == m_ActionState_Craw) {
 		// 透明化
 		m_clearFlag = true;
 		m_setActionState = m_ActionState_Craw;
 		m_clearChangeTime = 0.0f;
 	}
-	else if (GetEnemyActionState() == m_ActionState_Tracking)
-	{
+	else if (GetEnemyActionState() == m_ActionState_Tracking) {
 		// 透明化解除
 		m_clearFlag = false;
 		m_setActionState = m_ActionState_Tracking;
@@ -218,8 +218,7 @@ void Enemy_Clear::ClearChange()
 void Enemy_Clear::Render(RenderContext& rc)
 {
 	// 描画
-	if (GetActiveFlag() == true)
-	{
+	if (GetActiveFlag() == true) {
 		Vector3 move{ 0.0f,-300.0f,0.0f };
 		m_characterController.Execute(move, 1.0f);
 		return;
@@ -234,6 +233,6 @@ void Enemy_Clear::Render(RenderContext& rc)
 		m_clearModelRender.Draw(rc);
 	}
 	else {
-		m_enemyRender.Draw(rc);
+		m_enemyModelRender.Draw(rc);
 	}
 }
