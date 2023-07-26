@@ -62,6 +62,7 @@ public:
 	void Update_OnCatch();
 
 private:
-	bool						m_canCharge = false;			// 突進用フラグ。一度だけ参照を行う
+	Vector3						m_chargeDiff = Vector3::Zero;		// 突進の移動量
+	bool						m_canCharge = false;				// 突進用フラグ。一度だけ参照を行う
 	float						m_chargeMove = 1.0f;				// 突進ステート時に乗算しているスカラー
 };

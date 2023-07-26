@@ -145,28 +145,28 @@ void Enemy::PlayAnimation()
 	switch (m_enAnimationState)
 	{
 	case m_enAnimationState_Idle:
-		m_enemyRender.PlayAnimation(m_enAnimation_Idle, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Idle, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Walk:
-		m_enemyRender.PlayAnimation(m_enAnimation_Walk, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Walk, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Run:
-		m_enemyRender.PlayAnimation(m_enAnimation_Run, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Run, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Attack:
-		m_enemyRender.PlayAnimation(m_enAnimation_Attack, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Attack, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Damage:
-		m_enemyRender.PlayAnimation(m_enAnimation_Damage, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Damage, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Dizzy:
-		m_enemyRender.PlayAnimation(m_enAnimation_Dizzy, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Dizzy, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Loss:
-		m_enemyRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Loss, LINEAR_COMPLETION);
 		break;
 	case m_enAnimationState_Call:
-		m_enemyRender.PlayAnimation(m_enAnimation_Call, LINEAR_COMPLETION);
+		m_enemyModelRender.PlayAnimation(m_enAnimation_Call, LINEAR_COMPLETION);
 		break;
 	}
 }
@@ -174,7 +174,6 @@ void Enemy::PlayAnimation()
 void Enemy::Efect_Dizzy()
 {
 	if (m_existsEfectDraw[m_EffectState_Star] == false) {
-
 		// ☆のエフェクトを生成
 		m_Effect = NewGO<EffectEmitter>(2);
 		m_Effect->Init(2);
@@ -230,7 +229,7 @@ void Enemy::Rotation(Vector3 rot)
 {
 	// 回転
 	m_rotation.SetRotationYFromDirectionXZ(rot);
-	m_enemyRender.SetRotation(m_rotation);
+	m_enemyModelRender.SetRotation(m_rotation);
 
 	//---------------------------------------------
 	//エネミーの前ベクトルを求める
@@ -356,6 +355,7 @@ bool Enemy::WallAndHit(Vector3 pos)
 	end.setIdentity();
 
 	// 始点はエネミーの座標
+	// Y軸は少し上に配置する
 	start.setOrigin(btVector3(m_position.x,  25.0f, m_position.z));
 
 	// 終点はプレイヤーの座標 (突進時は始点の少し前)
@@ -385,7 +385,7 @@ bool Enemy::Action_CatchPlayer()
 	// 長さを計算する
 	float length = diff.Length();
 
-	// 一定の長さのとき
+	// プレイヤーを捕まえられる長さのとき
 	if (length <= CATCH_DECISION) {
 
 		// プレイヤーの方向を向く
@@ -435,9 +435,8 @@ void Enemy::Action_MoveMissingPosition()
 
 	// 移動速度に加算
 	Vector3 moveSpeed = diff * (MOVE_SPEED * ADD_SPEED);
-	m_position += moveSpeed /** m_Chargemove*/;
+	m_position += moveSpeed;
 
-	// 走るアニメーションを再生
 	m_enAnimationState = m_enAnimationState_Run;
 
 	// 長さが一定以下だったら
@@ -478,10 +477,10 @@ void Enemy::Action_SearchMissingPlayer()
 	// モーションを再生
 	if (Action_StopMove(TIMER_SEARCHPLAYER, m_TimerState_MissingPlayer) == true) {
 
-		m_existsEfectDraw[m_EffectState_ExclamationPoint] = false;// エフェクトの描画フラグ
+		m_existsEfectDraw[m_EffectState_ExclamationPoint] = false;	// エフェクトの描画フラグ
 		m_existsEfectDraw[m_EffectState_QuestionMark] = false;
 
-		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;			// タイマーをリセット
+		m_addTimer[m_TimerState_MissingPlayer] = 0.0f;				// タイマーをリセット
 		m_sumPosition = Vector3::Zero;								// 移動距離をリセット
 
 		if (m_enemyType == TYPE_SEARCH) {
@@ -496,10 +495,12 @@ void Enemy::Action_SearchMissingPlayer()
 void Enemy::Action_HitFlashBullet()
 {
 	if (m_isTrackingPlayer == true) {
+		// 閃光弾が当たっているときはプレイヤーを追いかけない
 		m_isTrackingPlayer = false;
 	}
 
 	if (m_isChachPlayer == true) {
+		// 閃光弾が当たっているときはプレイヤーを捕まえない
 		m_isChachPlayer = false;
 	}
 
@@ -507,7 +508,7 @@ void Enemy::Action_HitFlashBullet()
 	Efect_Dizzy();
 
 	if (Action_StopMove(TIMER_CANMOVE, m_TimerState_HitByaFlashbang) == true) {
-		// 生成フラグをリセット
+		// エフェクトの生成フラグをfalseにしておく
 		m_existsEfectDraw[m_EffectState_Star] = false;
 
 		// フラグを降ろす
@@ -552,9 +553,8 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 
 		// 経過時間を計測
 		m_addTimer[m_TimerState_HitByaSoundbang] += g_gameTime->GetFrameDeltaTime();
-
-		// 走るアニメーションを再生
 		m_enAnimationState = m_enAnimationState_Run;
+
 		// エフェクトの再生フラグをfalseにしておく
 		m_existsEfectDraw[m_EffectState_QuestionMark] = false;
 	}
@@ -569,6 +569,7 @@ void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
 	}
 	else {
 		m_enActionState = m_ActionState_Search_MissingPlayer;
+		// フラグをリセット
 		m_hearedSoundBullet = false;
 		m_existsEfectDraw[m_EffectState_ExclamationPoint] = false;
 		return;

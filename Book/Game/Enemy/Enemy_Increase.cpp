@@ -37,9 +37,9 @@ void Enemy_Increase::Enemy_Open()
 				//プレイヤーとエネミーの距離を求める
 				Vector3 pos = m_playerManagement->GetPosition() - m_game->GetEnemyList()[i]->GetPosition();
 				//最も距離のある値を求める
-				if (pos.LengthSq() > m_nearposition)
+				if (pos.LengthSq() > m_nearPosition)
 				{
-					m_nearposition = pos.LengthSq();
+					m_nearPosition = pos.LengthSq();
 					m_ifPosition = m_game->GetEnemyList()[i]->GetPosition();
 				}
 			}
@@ -66,7 +66,7 @@ void Enemy_Increase::Enemy_Open()
 					m_game->GetEnemyList()[i]->GetModelRender().SetPosition(pos);
 					m_game->GetEnemyList()[i]->GetModelRender().Update();
 
-					m_nearposition = FLT_MIN;
+					m_nearPosition = FLT_MIN;
 					m_game->GetEnemyList()[i]->Update();
 				}
 			}

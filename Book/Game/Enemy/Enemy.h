@@ -410,7 +410,7 @@ public:
 	/// </summary>
 	ModelRender& GetModelRender()
 	{
-		return m_enemyRender;
+		return m_enemyModelRender;
 	}
 
 
@@ -446,7 +446,7 @@ public:
 	}
 
 	/// <summary>
-	/// 集合する座標を渡す
+	/// call実行時の集合する座標を渡す
 	/// </summary>
 	void SetGatherPosition(const Vector3 position) {
 		m_gatherPosition = position;
@@ -484,22 +484,17 @@ protected:
 	Vector3						m_position = Vector3::Zero;					// エネミーの座標
 	Vector3						m_forward = Vector3::AxisZ;					// エネミーの前方向
 	Vector3						m_scale = Vector3::One;						// エネミーのスケール
-
 	Vector3						m_chargeTergetPosition = Vector3::Zero;		// 突進用。プレイヤーの座標
 	Vector3						m_playerMissiongPosition = Vector3::Zero;	// 見失った時用。プレイヤーの座標
 	Vector3						m_sumPosition = Vector3::Zero;				// 総移動距離
 	Vector3						m_gatherPosition = Vector3::Zero;			// 集合する座標
 	Vector3						m_itemPosition = Vector3::Zero;				// アイテムの座標
-	Vector3						m_chargeDiff = Vector3::Zero;				// 突進の移動量
 
 	Quaternion					m_rotation = Quaternion::Identity;			// エネミーの回転
+	ModelRender					m_enemyModelRender;							// エネミーモデル
+	SpotLight					m_spotLight;								// スポットライト
 
-	ModelRender					m_enemyRender;								//エネミーモデル
-
-	SpotLight					m_spotLight;								//スポットライト
-
-	// アニメーションステート
-	AnimationClip				m_enAnimationClips[m_enAnimation_Num];
+	AnimationClip				m_enAnimationClips[m_enAnimation_Num];		// アニメーションステート
 
 	enum EnTimerState {
 		m_TimerState_HitByaFlashbang,				// 閃光弾を受けたときの再行動時間
@@ -565,7 +560,7 @@ private:
 	std::array<float, 5>		m_addTimer;
 
 	bool						m_hitFlashBullet = false;			// 閃光弾が当たったかどうか
-	bool						m_hearedSoundBullet = false;		// 音爆弾が		〃
+	bool						m_hearedSoundBullet = false;		// 音爆弾が当たったかどうか
 	bool						m_shouldCount = false;				// 発見回数をカウントするかどうか
 	bool						m_isTrackingPlayer = false;			// プレイヤーを追跡しているかどうか
 	bool						m_isChachPlayer = false;			// プレイヤーを確保したかどうか
