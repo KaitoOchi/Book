@@ -75,7 +75,7 @@ private:
 	Gage*						m_gage = nullptr;						//ゲージ
 	PlayerManagement*			m_playerManagement = nullptr;			//プレイヤーマネジメント
 
-	float						m_nearposition = FLT_MIN;
+	float						m_nearPosition = FLT_MIN;
 	int							m_increaseEnemy = 0;
 };
 
