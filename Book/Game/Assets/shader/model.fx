@@ -654,6 +654,6 @@ void Dithering(float3 pos)
 	//上で求めたxyを利用して、このピクセルのディザリング閾値を取得する
 	int dither = pattern[y][x];
 
-	//40以下ならピクセルキル
+	//50以下ならピクセルキル
 	clip(dither - 50);
 }

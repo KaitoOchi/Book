@@ -131,7 +131,7 @@ private:
 	std::vector< SpriteRender* >	m_sprites;						//SpriteRenderのベクター型
 	Level2DRender*					m_level2DRender = nullptr;		//レベルレンダー
 	Fade*							m_fade = nullptr;				//フェードクラス
-	Vector3							m_cursorPos;					//カーソル座標
+	Vector3							m_cursorPos = Vector3::Zero;	//カーソル座標
 	bool							m_isWaitState = false;			//ステートの遷移中かどうか
 	bool							m_isWaitFadeOut = false;		//フェード状態かどうか
 	bool							m_active = true;				//アクティブ状態

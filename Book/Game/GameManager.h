@@ -34,9 +34,11 @@ public:
 	/// </summary>
 	static void CreateInstance()
 	{
+		//Šù‚É¶¬‚³‚ê‚Ä‚¢‚é‚È‚çB
 		if (m_instance != nullptr) {
 			std::abort();
 		}
+
 		m_instance = new GameManager;
 	}
 

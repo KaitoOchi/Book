@@ -354,7 +354,7 @@ protected:
 	Quaternion				m_rotation;								//回転
 
 private:
-	EffectEmitter*			m_tireEffect;							//疲れエフェクト。
+	EffectEmitter*			m_tireEffect = nullptr;					//疲れエフェクト。
 	bool					m_playerCaught = false;					//捕まったかの判定
 	bool					m_runFlag = true;						//走れるかの判定
 	float					m_stamina = 0.0f;						//プレイヤーのスタミナ

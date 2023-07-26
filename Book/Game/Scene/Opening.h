@@ -72,7 +72,7 @@ private:
 	LevelRender						m_levelRender;					//レベルレンダー
 
 	Fade*							m_fade = nullptr;
-	SkyCube* m_skyCube = nullptr;
+	SkyCube*						m_skyCube = nullptr;
 
 	Vector3							m_cameraPos;					//カメラ座標
 	Vector3							m_cameraTarget;					//カメラ注視点

@@ -247,20 +247,20 @@ namespace nsBookEngine {
 		void OnWipeForwardRender(RenderContext& rc, Camera& camera) override;
 
 	private:
-		AnimationClip*	m_animationClips = nullptr;			//アニメーションクリップ
-		int				m_numAnimationClips = 0;			//アニメーションの数
-		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;		/* モデルの上方向 */
-		Animation		m_animation;						//アニメーション
-		Skeleton		m_skeleton;							//スケルトン
-		Model			m_model;							//通常モデル
-		Model			m_shadowModel;						//シャドウモデル
-		Model			m_zprepassModel;					//ZPrepassモデル
-		Model			m_wipeModel;						//ワイプ用モデル
-		Vector3			m_position;							//座標
-		Quaternion		m_rotation;							//回転
-		Vector3			m_scale = Vector3::One;				//拡大率
-		bool			m_isUpdateAnimation = true;			//アニメーションの更新
-		bool			m_isUseWipeCamera = false;			//ワイプカメラに写すかどうか
-		float			m_animationSpeed = 1.0f;			//アニメーション速度
+		AnimationClip*	m_animationClips = nullptr;			//アニメーションクリップ。
+		int				m_numAnimationClips = 0;			//アニメーションの数。
+		EnModelUpAxis	m_enFbxUpAxis = enModelUpAxisZ;		//モデルの上方向。
+		Animation		m_animation;						//アニメーション。
+		Skeleton		m_skeleton;							//スケルトン。
+		Model			m_model;							//通常モデル。
+		Model			m_shadowModel;						//シャドウモデル。
+		Model			m_zprepassModel;					//ZPrepassモデル。
+		Model			m_wipeModel;						//ワイプ用モデル。
+		Vector3			m_position;							//座標。
+		Quaternion		m_rotation;							//回転。
+		Vector3			m_scale = Vector3::One;				//拡大率。
+		bool			m_isUpdateAnimation = true;			//アニメーションの更新。
+		bool			m_isUseWipeCamera = false;			//ワイプカメラに写すかどうか。
+		float			m_animationSpeed = 1.0f;			//アニメーション速度。
 	};
 }

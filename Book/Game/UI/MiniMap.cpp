@@ -19,6 +19,15 @@ namespace
 
 MiniMap::MiniMap()
 {
+	//配列の初期化。
+	for (int i = 0; i < ENEMY_NUM; i++) {
+		m_enableEnemySprites[i] = false;
+	}
+
+	for (int i = 0; i < WALL_NUM; i++) {
+		m_enableWallSprites[i] = false;
+	}
+
 	//vector型のリストはリザーブする
 	m_enemyList.reserve(ENEMY_NUM);
 	m_physicsGhostList.reserve(WALL_NUM);
