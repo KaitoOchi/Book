@@ -446,7 +446,7 @@ public:
 	}
 
 	/// <summary>
-	/// 集合する座標を渡す
+	/// call実行時の集合する座標を渡す
 	/// </summary>
 	void SetGatherPosition(const Vector3 position) {
 		m_gatherPosition = position;
