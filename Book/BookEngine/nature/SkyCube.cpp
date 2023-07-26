@@ -3,6 +3,11 @@
 
 namespace nsBookEngine {
 
+	namespace
+	{
+		const float SKYCUBE_ROTATION_X = -90.0f;	//スカイキューブの回転。
+	}
+
 	SkyCube::SkyCube()
 	{
 
@@ -20,7 +25,7 @@ namespace nsBookEngine {
 		//テクスチャの初期化
 		if (m_number == 0) {
 			m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMapNight_Toon.dds");
-			rot.AddRotationX(Math::DegToRad(-90.0f));
+			rot.AddRotationX(Math::DegToRad(SKYCUBE_ROTATION_X));
 		}
 		else if (m_number == 1) {
 			m_texture.InitFromDDSFile(L"Assets/modelData/preset/skyCubeMapNight.dds");

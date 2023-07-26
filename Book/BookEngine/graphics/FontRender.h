@@ -137,7 +137,7 @@ namespace nsBookEngine {
 		/// <param name="isDrawShadow">影を描画するかどうか。</param>
 		/// <param name="shadowOffset">ピクセルのオフセット量。</param>
 		/// <param name="shadowColor">影の色。</param>
-		void SetShadowParam(bool isDrawShadow, float shadowOffset, const Vector4& shadowColor)
+		void SetShadowParam(const bool isDrawShadow, const float shadowOffset, const Vector4& shadowColor)
 		{
 			m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
 		}
@@ -162,7 +162,6 @@ namespace nsBookEngine {
 		wchar_t		m_text[MAX_TEXT_SIZE];				//文字
 		float		m_scale = 1.0f;						//大きさ
 		float		m_rotation = 0.0f;					//回転
-
 	};
 }
 

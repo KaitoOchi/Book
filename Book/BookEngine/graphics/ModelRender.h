@@ -259,7 +259,6 @@ namespace nsBookEngine {
 		Vector3			m_position;							//座標。
 		Quaternion		m_rotation;							//回転。
 		Vector3			m_scale = Vector3::One;				//拡大率。
-		bool			m_isUpdateAnimation = true;			//アニメーションの更新。
 		bool			m_isUseWipeCamera = false;			//ワイプカメラに写すかどうか。
 		float			m_animationSpeed = 1.0f;			//アニメーション速度。
 	};

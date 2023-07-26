@@ -1,8 +1,6 @@
 #include "BookEnginePreCompile.h"
 #include "ModelRender.h"
 
-#include "graphics/light/DirectionLight.h"
-
 namespace nsBookEngine {
 
 	ModelRender::ModelRender()
