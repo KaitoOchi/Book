@@ -307,7 +307,6 @@ namespace nsBookEngine {
 		RenderTarget			m_zprepassRenderTarget;				//ZPrepass用のレンダーターゲット
 		Sprite					m_2DSprite;                         //2Dスプライト
 		Sprite					m_mainSprite;						//メインスプライト
-		Sprite					m_copyMainRtToFrameBufferSprite;    //メインレンダーターゲットのスプライト
 		GaussianBlur			m_shadowBlur;						//シャドウ用のガウシアンブラー
 		std::vector<IRenderer*> m_renderObjects;					//レンダリングするオブジェクト
 		Camera					m_lightCamera;						//ライトカメラ

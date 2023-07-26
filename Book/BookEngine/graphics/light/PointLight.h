@@ -83,7 +83,7 @@ namespace nsBookEngine {
 		/// <summary>
 		/// ‰e‹¿”ÍˆÍ‚ğİ’èB
 		/// </summary>
-		void SetRange(float range)
+		void SetRange(const float range)
 		{
 			m_pointLig.ptRange = range;
 		}

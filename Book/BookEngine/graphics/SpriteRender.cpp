@@ -3,7 +3,7 @@
 
 namespace nsBookEngine {
 
-	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha, const int clipMode)
+	void SpriteRender::Init(const char* filePath, const float w, const float h, AlphaBlendMode alpha, const SpriteClipMode clipMode)
 	{
 		SpriteInitData initData;
 		///DDSファイルのファイルパスを指定する
@@ -21,12 +21,12 @@ namespace nsBookEngine {
 		m_sprite.Init(initData);
 	}
 
-	void SpriteRender::ClipMode(SpriteInitData& initData, const int clipMode)
+	void SpriteRender::ClipMode(SpriteInitData& initData, const SpriteClipMode clipMode)
 	{
 		switch (clipMode)
 		{
 		//2Dゲージのクリップ
-		case 1:
+		case enMode_2DGauge:
 			initData.m_vsEntryPointFunc = "VSMain1";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
@@ -35,7 +35,7 @@ namespace nsBookEngine {
 			break;
 
 		//BGMのクリップ
-		case 2:
+		case enMode_SettingBGM:
 			initData.m_vsEntryPointFunc = "VSMain2";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
@@ -44,7 +44,7 @@ namespace nsBookEngine {
 			break;
 
 		//SFXのクリップ
-		case 3:
+		case enMode_SettingSFX:
 			initData.m_vsEntryPointFunc = "VSMain3";
 			initData.m_psEntryPoinFunc = "PSClip";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
@@ -53,14 +53,14 @@ namespace nsBookEngine {
 			break;
 
 		//UVスクロール
-		case 4:
+		case enMode_UVScroll:
 			initData.m_psEntryPoinFunc = "PSMainUVScroll";
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();
 			initData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetSpriteCB());
 			break;
 
 		//円形ゲージ
-		case 5:
+		case enMode_CircleGauge:
 			initData.m_psEntryPoinFunc = "PSCircleGauge";
 			RenderingEngine::GetInstance()->GetSpriteCB().clipMode = clipMode;
 			initData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetSpriteCB();

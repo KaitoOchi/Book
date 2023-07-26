@@ -21,7 +21,7 @@ namespace nsBookEngine {
 		/// <param name="pos">座標。</param>
 		/// <param name="rot">回転。</param>
 		/// <param name="size">サイズ。</param>
-		void CreateBox(Vector3 pos, Quaternion rot, Vector3 size)
+		void CreateBox(const Vector3& pos, const Quaternion& rot, const Vector3& size)
 		{
 			m_physicsGhostObject.CreateBox(pos, rot, size);
 		}
@@ -33,7 +33,7 @@ namespace nsBookEngine {
 		/// <param name="rot">回転。</param>
 		/// <param name="radius">カプセルの半径。</param>
 		/// <param name="height">カプセルの高さ。</param>
-		void CreateCapsule(Vector3 pos, Quaternion rot, float radius, float height)
+		void CreateCapsule(const Vector3& pos, const Quaternion& rot, const float radius, const float height)
 		{
 			m_physicsGhostObject.CreateCapsule(pos, rot, radius, height);
 		}
@@ -44,7 +44,7 @@ namespace nsBookEngine {
 		/// <param name="pos">座標。</param>
 		/// <param name="rot">回転。</param>
 		/// <param name="radius">球形の半径。</param>
-		void CreateSphere(Vector3 pos, Quaternion rot, float radius)
+		void CreateSphere(const Vector3& pos, const Quaternion& rot, const float radius)
 		{
 			m_physicsGhostObject.CreateSphere(pos, rot, radius);
 		}
@@ -56,7 +56,7 @@ namespace nsBookEngine {
 		/// <param name="rot">回転。</param>
 		/// <param name="model">モデル。</param>
 		/// <param name="worldMatrix">ワールド行列。</param>
-		void CreateMesh(Vector3 pos, Quaternion rot, const Model& model, const Matrix& worldMatrix)
+		void CreateMesh(const Vector3& pos, const Quaternion& rot, const Model& model, const Matrix& worldMatrix)
 		{
 			m_physicsGhostObject.CreateMesh(pos, rot, model, worldMatrix);
 		}
@@ -126,7 +126,7 @@ namespace nsBookEngine {
 		/// 自動で削除するかどうかを設定する。
 		/// </summary>
 		/// <param name="isFlag">trueなら自動で削除される。falseなら自動で削除されないので、DeleteGOをする必要がある。</param>
-		void SetIsEnableAutoDelete(bool isFlag)
+		void SetIsEnableAutoDelete(const bool isFlag)
 		{
 			m_isEnableAutoDelete = isFlag;
 		}
@@ -184,7 +184,7 @@ namespace nsBookEngine {
 		/// 当たり判定が有効かどうかを設定する。
 		/// </summary>
 		/// <param name="isEnable">有効にしたいならtrue。</param>
-		void SetIsEnable(bool isEnable)
+		void SetIsEnable(const bool isEnable)
 		{
 			m_isEnable = isEnable;
 		}
@@ -256,7 +256,7 @@ namespace nsBookEngine {
 		/// </summary>
 		/// <param name="name">名前。</param>
 		/// <returns>コリジョンオブジェクト。見つからなかった場合はnullptr。</returns>
-		CollisionObject* FindCollisionObject(const char* name)
+		const CollisionObject* FindCollisionObject(const char* name) const
 		{
 			for (auto collisionObject : m_collisionObjectVector)
 			{
@@ -303,7 +303,7 @@ namespace nsBookEngine {
 		/// </summary>
 		/// <param name="name">名前。</param>
 		/// <returns>コリジョンオブジェクトの配列。</returns>
-		const std::vector<CollisionObject*>& FindCollisionObjects(const char* name)
+		const std::vector<CollisionObject*>& FindCollisionObjects(const char* name) 
 		{
 			m_findMatchForwardNameCollisionObjectVector.clear();
 			for (auto collisionObject : m_collisionObjectVector)

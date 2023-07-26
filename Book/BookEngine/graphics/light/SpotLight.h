@@ -120,7 +120,7 @@ namespace nsBookEngine {
 		/// •ûŒü‚ğæ“¾B
 		/// </summary>
 		/// <returns></returns>
-		Vector3& GetDirection()
+		const Vector3& GetDirection() const
 		{
 			return m_spotLig.spDirection;
 		}

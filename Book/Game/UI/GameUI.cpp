@@ -58,7 +58,7 @@ bool GameUI::Start()
 	m_gageFrameSpriteRender.Update();
 
 	//ゲージ画像の設定
-	m_gageSpriteRender.Init("Assets/sprite/UI/gage_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans, 1);
+	m_gageSpriteRender.Init("Assets/sprite/UI/gage_player.dds", 256.0f, 256.0f, AlphaBlendMode_Trans, SpriteRender::enMode_2DGauge);
 	m_gageSpriteRender.SetPosition(GAGE_SPRITE_POSITION);
 	m_gageSpriteRender.Update();
 
@@ -90,7 +90,7 @@ bool GameUI::Start()
 	m_staminaBaseRender.Update();
 
 	//スタミナゲージ画像の設定
-	m_staminaGageRender.Init("Assets/sprite/UI/stamina/stamina.DDS", 162.0f, 183.0f,AlphaBlendMode_Trans, 5);
+	m_staminaGageRender.Init("Assets/sprite/UI/stamina/stamina.DDS", 162.0f, 183.0f,AlphaBlendMode_Trans, SpriteRender::enMode_CircleGauge);
 	m_staminaGageRender.SetScale(Vector3(0.5f, 0.5f, 0.0f));
 	m_staminaGageRender.Update();
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.y = (m_staminaDegree * PI) / 180.0f;
@@ -101,7 +101,7 @@ bool GameUI::Start()
 	m_circleBaseSpriteRender.Update();
 
 	//円形ゲージのゲージ画像
-	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS",157.0f, 178.0f, AlphaBlendMode_Trans, 5);
+	m_circleSpriteRender.Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS",157.0f, 178.0f, AlphaBlendMode_Trans, SpriteRender::enMode_CircleGauge);
 	m_circleSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
 	m_circleSpriteRender.Update();
 

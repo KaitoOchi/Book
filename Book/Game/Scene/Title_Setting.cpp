@@ -85,10 +85,11 @@ void Title_Setting::InitSprite()
 	m_sprites.push_back(&m_fpsCursorSpriteRender);
 
 	//ƒQ[ƒW‰æ‘œ‚Ìİ’è
+	m_gaugeSpriteRender[0].Init("Assets/sprite/UI/setting/gauge.DDS", 750.0f, 67.0f, AlphaBlendMode_Trans, SpriteRender::enMode_SettingBGM);
 	m_gaugeSpriteRender[0].SetPosition(Vector3(-210.2, 166.4f, 0.0f));
+	m_gaugeSpriteRender[1].Init("Assets/sprite/UI/setting/gauge.DDS", 750.0f, 67.0f, AlphaBlendMode_Trans, SpriteRender::enMode_SettingSFX);
 	m_gaugeSpriteRender[1].SetPosition(Vector3(-211.3, -33.0f, 0.0f));
 	for (int i = 0; i < 2; i++) {
-		m_gaugeSpriteRender[i].Init("Assets/sprite/UI/setting/gauge.DDS", 750.0f, 67.0f, AlphaBlendMode_Trans, 2 + i);
 		m_gaugeSpriteRender[i].SetPivot(Vector2(0.0f, 0.5f));
 		m_gaugeSpriteRender[i].Update();
 		m_sprites.push_back(&m_gaugeSpriteRender[i]);

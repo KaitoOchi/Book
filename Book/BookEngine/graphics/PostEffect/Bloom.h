@@ -2,6 +2,11 @@
 
 namespace nsBookEngine {
 
+	namespace
+	{
+		const int GAUSSIANBLUR_NUM = 4;		//ガウシアンブラーの数。
+	}
+
 	/// <summary>
 	/// ブルームクラス。
 	/// </summary>
@@ -56,11 +61,11 @@ namespace nsBookEngine {
 		void Render(RenderContext& rc, RenderTarget& mainRenderTarget);
 
 	private:
-		RenderTarget	m_luminanceRenderTarget;	//ブルーム用レンダーターゲット
-		GaussianBlur	m_gaussianBlur[4];			//ガウシアンブラー
-		LuminanceCB		m_luminanceCB;				//ブルーム用定数バッファ
-		Sprite			m_luminanceSprite;			//ブルーム用スプライト
-		Sprite			m_finalSprite;				//最終合成用のスプライト
-		Sprite			m_copyMainRtSprite;			//メインレンダリングターゲットに描画するためのスプライト
+		RenderTarget	m_luminanceRenderTarget;			//ブルーム用レンダーターゲット
+		GaussianBlur	m_gaussianBlur[GAUSSIANBLUR_NUM];	//ガウシアンブラー
+		LuminanceCB		m_luminanceCB;						//ブルーム用定数バッファ
+		Sprite			m_luminanceSprite;					//ブルーム用スプライト
+		Sprite			m_finalSprite;						//最終合成用のスプライト
+		Sprite			m_copyMainRtSprite;					//メインレンダリングターゲットに描画するためのスプライト
 	};
 }

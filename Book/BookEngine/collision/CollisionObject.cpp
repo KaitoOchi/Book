@@ -29,7 +29,7 @@ namespace nsBookEngine {
 		}
 
 
-		if (m_time > m_timeLimit + 0.1f)
+		if (m_time > m_timeLimit)
 		{
 			DeleteGO(this);
 		}

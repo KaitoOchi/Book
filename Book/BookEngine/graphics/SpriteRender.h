@@ -10,13 +10,27 @@ namespace nsBookEngine {
 	{
 	public:
 		/// <summary>
+		/// クリップモード。
+		/// </summary>
+		enum SpriteClipMode
+		{
+			enMode_None,
+			enMode_2DGauge,
+			enMode_SettingBGM,
+			enMode_SettingSFX,
+			enMode_UVScroll,
+			enMode_CircleGauge,
+		};
+
+	public:
+		/// <summary>
 		/// 初期化。
 		/// </summary>
 		/// <param name="filePath">ファイルパス。</param>
 		/// <param name="w">画像の横幅。</param>
 		/// <param name="h">画像の縦幅。</param>
 		/// <param name="alpha">デフォルトは半透明合成。</param>
-		void Init(const char* filePath, const float w, const float h, const AlphaBlendMode alpha = AlphaBlendMode_Trans, const int clipMode = 0);
+		void Init(const char* filePath, const float w, const float h, const AlphaBlendMode alpha = AlphaBlendMode_Trans, const SpriteClipMode clipMode = enMode_None);
 
 		/// <summary>
 		/// 座標を設定。zは0.0f固定。
@@ -129,7 +143,7 @@ namespace nsBookEngine {
 		/// <summary>
 		/// クリップボードの設定処理。
 		/// </summary>
-		void ClipMode(SpriteInitData& initData, const int clipMode);
+		void ClipMode(SpriteInitData& initData, const SpriteClipMode clipMode = enMode_None);
 
 		/// <summary>
 		/// 2D描画パスから呼ばれる処理。

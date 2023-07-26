@@ -3,6 +3,11 @@
 
 namespace nsBookEngine {
 
+	namespace
+	{
+		const float BLUR_POWER = 20.0f;		//ブラーの力。
+	}
+
 	Bloom::Bloom()
 	{
 
@@ -101,10 +106,10 @@ namespace nsBookEngine {
 		// レンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_luminanceRenderTarget);
 
-		m_gaussianBlur[0].ExecuteOnGPU(rc, 20);
-		m_gaussianBlur[1].ExecuteOnGPU(rc, 20);
-		m_gaussianBlur[2].ExecuteOnGPU(rc, 20);
-		m_gaussianBlur[3].ExecuteOnGPU(rc, 20);
+		m_gaussianBlur[0].ExecuteOnGPU(rc, BLUR_POWER);
+		m_gaussianBlur[1].ExecuteOnGPU(rc, BLUR_POWER);
+		m_gaussianBlur[2].ExecuteOnGPU(rc, BLUR_POWER);
+		m_gaussianBlur[3].ExecuteOnGPU(rc, BLUR_POWER);
 
 		// 4枚のボケ画像を合成してメインレンダリングターゲットに加算合成
 		// レンダリングターゲットとして利用できるまで待つ

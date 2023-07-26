@@ -124,8 +124,8 @@ void Opening::InitSprite()
 	//フィルム画像の設定
 	m_filmSpriteRender[0].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
 	m_filmSpriteRender[1].Init("Assets/sprite/UI/event/event_outline3.DDS", 200.0f, 960.0f, AlphaBlendMode_Trans);
-	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
-	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, 4);
+	m_filmSpriteRender[2].Init("Assets/sprite/UI/event/event_outline.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, SpriteRender::enMode_UVScroll);
+	m_filmSpriteRender[3].Init("Assets/sprite/UI/event/event_outline2.DDS", 2000.0f, 80.0f, AlphaBlendMode_Trans, SpriteRender::enMode_UVScroll);
 	for (int i = 0; i < 4; i++) {
 		m_filmSpriteRender[i].SetPosition(FILM_POS[i]);
 		m_filmSpriteRender[i].Update();
@@ -133,7 +133,7 @@ void Opening::InitSprite()
 
 	//スキップ画像の設定
 	m_skipSpriteRender[0].Init("Assets/sprite/UI/PressAndHoldGauge/skip_base.DDS", 157.0f, 178.0f);
-	m_skipSpriteRender[1].Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 178.0f, AlphaBlendMode_Trans, 5);
+	m_skipSpriteRender[1].Init("Assets/sprite/UI/PressAndHoldGauge/gauge.DDS", 157.0f, 178.0f, AlphaBlendMode_Trans, SpriteRender::enMode_CircleGauge);
 	for (int i = 0; i < 2; i++) {
 		m_skipSpriteRender[i].SetPosition(Vector3(700.0f, -350.0f, 0.0f));
 		m_skipSpriteRender[i].Update();
