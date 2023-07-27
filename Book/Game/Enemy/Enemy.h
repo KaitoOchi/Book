@@ -411,16 +411,6 @@ protected:
 	}
 
 	/// <summary>
-	/// エフェクトを描画したかどうかのフラグを設定する
-	/// </summary>
-	/// <param name="number">設定するフラグ</param>
-	/// <param name="flag">trueなら描画した</param>
-	void SetEffectDrawFlag(const int number, const bool flag)
-	{
-		m_existsEfectDraw[number] = flag;
-	}
-
-	/// <summary>
 	/// 再生するアニメーションを設定する
 	/// </summary>
 	void SetEnemyAnimationState(const EnAnimationState state)
