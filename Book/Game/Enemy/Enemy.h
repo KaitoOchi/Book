@@ -314,7 +314,8 @@ public:
 	/// スポットライトの番号を教える
 	/// </summary>
 	/// <returns></returns>
-	void SetSpotLigNum(int number) {
+	void SetSpotLigNum(int number)
+	{
 		m_spotNum = number;
 	}
 
@@ -372,6 +373,23 @@ public:
 	/// <param name="3">	：左回り(正方形)	</param>
 	void SpecifyPath(int pathNumber);
 
+	/// <summary>
+	/// call実行時の集合する座標を渡す
+	/// </summary>
+	void SetGatherPosition(const Vector3& position)
+	{
+		m_gatherPosition = position;
+	}
+
+	/// <summary>
+	/// 現在の行動パターンを設定する
+	/// </summary>
+	/// <param name="state"></param>
+	void SetEnemyActionState(const EnEnemyActionState state)
+	{
+		m_enActionState = state;
+	}
+
 protected:
 	/// <summary>
 	/// エフェクトの描画をするかどうかのフラグを設定する
@@ -403,23 +421,6 @@ protected:
 	}
 
 	/// <summary>
-	/// call実行時の集合する座標を渡す
-	/// </summary>
-	void SetGatherPosition(const Vector3 position)
-	{
-		m_gatherPosition = position;
-	}
-
-	/// <summary>
-	/// 現在の行動パターンを設定する
-	/// </summary>
-	/// <param name="state"></param>
-	void SetEnemyActionState(const EnEnemyActionState state)
-	{
-		m_enActionState = state;
-	}
-
-	/// <summary>
 	/// 再生するアニメーションを設定する
 	/// </summary>
 	void SetEnemyAnimationState(const EnAnimationState state)
@@ -441,16 +442,16 @@ protected:
 	/// </summary>
 	/// <param name="pos">座標</param>
 	/// <returns></returns>
-	bool WallAndHit(Vector3 pos);
+	bool WallAndHit(const Vector3& pos);
 	/// <summary>
 	/// 回転処理
 	/// </summary>
 	/// <param name="rot">自身が向かうベクトル</param>
-	void Rotation(Vector3 rot);
+	void Rotation(const Vector3& rot);
 	/// <summary>
 	/// ナビメッシュを作成する処理
 	/// </summary>
-	void CreateNavimesh(Vector3 pos);
+	void CreateNavimesh(const Vector3& pos);
 	/// <summary>
 	/// 巡回行動
 	/// </summary>
@@ -479,14 +480,14 @@ protected:
 	/// 音が聞こえた場所に行く処理
 	/// </summary>
 	/// <param name="pos">目標地点</param>
-	void Action_GoLocationListenSound(Vector3 tergetPosition);
+	void Action_GoLocationListenSound(const Vector3& tergetPosition);
 	/// <summary>
 	/// 行動停止
 	/// </summary>
 	/// <param name="time">停止する時間</param>
 	/// <param name="timerNumber">使用するタイマーを指定</param>
 	/// <returns></returns>
-	bool Action_StopMove(float time,int timerNumber);
+	bool Action_StopMove(const float time, const int timerNumber);
 	/// <summary>
 	/// プレイヤーを発見する処理
 	/// </summary>

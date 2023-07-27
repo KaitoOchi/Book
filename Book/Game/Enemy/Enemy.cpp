@@ -45,7 +45,18 @@ namespace
 
 Enemy::Enemy()
 {
-	//m_point = new Point;
+	// タイマーのリセット
+	for (int i = 0; i < m_TimerState_Num; i++) {
+		m_addTimer[i] = 0.0f;
+	}
+
+	// エフェクトを生成するフラグのリセット
+	for (int i = 0; i < m_EffectState_Num; i++) {
+		m_existsEfectDraw[i] = false;
+	}
+
+	//警戒度時間を代入
+	m_addVicount = VIGILANCETIME;
 }
 
 Enemy::~Enemy()
@@ -73,9 +84,6 @@ bool Enemy::Start()
 		m_enActionState = m_ActionState_Craw;
 	}
 
-	//警戒度時間を代入
-	m_addVicount = VIGILANCETIME;
-
 	// キャラクターコントローラーを初期化する
 	m_characterController.Init(BOXSIZE, m_position);
 
@@ -89,16 +97,6 @@ bool Enemy::Start()
 	m_playerManagement = FindGO<PlayerManagement>("playerManagement");
 	m_gage = FindGO<Gage>("gage");
 	m_game = FindGO<Game>("game");
-
-	// タイマーのリセット
-	for (int i = 0; i < m_TimerState_Num; i++) {
-		m_addTimer[i] = 0.0f;
-	}
-
-	// エフェクトを生成するフラグのリセット
-	for (int i = 0; i < m_EffectState_Num; i++) {
-		m_existsEfectDraw[i] = false;
-	}
 
 	// 視野を作成
 	SpotLight_New(m_position, m_spotNum);
@@ -225,7 +223,7 @@ void Enemy::Efect_MissingPlayer()
 	}
 }
 
-void Enemy::Rotation(Vector3 rot)
+void Enemy::Rotation(const Vector3& rot)
 {
 	// 回転
 	m_rotation.SetRotationYFromDirectionXZ(rot);
@@ -259,7 +257,7 @@ void Enemy::SpecifyPath(int pathNumber)
 	}
 }
 
-void Enemy::CreateNavimesh(Vector3 pos)
+void Enemy::CreateNavimesh(const Vector3& pos)
 {
 	m_naviTimer += g_gameTime->GetFrameDeltaTime();
 
@@ -347,7 +345,7 @@ struct SweepResultWall :public btCollisionWorld::ConvexResultCallback
 	}
 };
 
-bool Enemy::WallAndHit(Vector3 pos)
+bool Enemy::WallAndHit(const Vector3& pos)
 {
 	btTransform start, end;
 
@@ -527,7 +525,7 @@ void Enemy::Action_HitFlashBullet()
 	}
 }
 
-void Enemy::Action_GoLocationListenSound(Vector3 tergetPosition)
+void Enemy::Action_GoLocationListenSound(const Vector3& tergetPosition)
 {
 	if (m_isTrackingPlayer == true) {
 		if (m_enemyType == TYPE_CHARGE) {
