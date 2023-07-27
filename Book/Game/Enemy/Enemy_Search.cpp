@@ -48,7 +48,7 @@ void Enemy_Search::Action_CallAroundEnemy()
 
 	if (GetTrackingPlayerFlag() == false) {
 		// フラグを降ろす
-		SetEffectDrawFlag(m_EffectState_ExclamationPoint, false);
+		SetEffectDrawFlag(false, m_EffectState_ExclamationPoint);
 		SetEnemyActionState(m_ActionState_Search_MissingPlayer);
 		se->Stop();
 		return;
@@ -74,11 +74,11 @@ void Enemy_Search::Action_CallAroundEnemy()
 			length < CALL_DISTANCE_MAX &&
 			m_game->GetEnemyList()[i]->GetEnemyActionState() != m_ActionState_Called) {
 
-			// 目標地点
+			// 自身の座標-キャラコン分の座標を目標地点にする
 			Vector3 position = m_position - BOXSIZE;
 
 			m_game->GetEnemyList()[i]->SetEnemyActionState(m_ActionState_Called);		// 行動パターンを変更する
-			m_game->GetEnemyList()[i]->SetGatherPosition(position);						// 自身の座標-キャラコンを目標地点として渡す
+			m_game->GetEnemyList()[i]->SetGatherPosition(position);						// 目標地点を渡す
 		}
 	}
 
@@ -115,6 +115,7 @@ void Enemy_Search::Update()
 		SetEnemyActionState(m_ActionState_Dizzy);
 	}
 
+	// 行動パターン
 	switch (GetEnemyActionState()) {
 	case m_ActionState_Craw:
 	case m_ActionState_Search:
@@ -132,7 +133,6 @@ void Enemy_Search::Update()
 	}
 
 	Enemy::PlayAnimation();
-
 	Enemy::SpotLight_Serch(m_rotation, m_position);
 	Enemy::Action_SeachPlayer();
 
@@ -147,8 +147,9 @@ void Enemy_Search::Update_OnSearch()
 {
 	Rotaition();
 
+	// プレイヤーが視野角内に存在するとき
 	if (GetTrackingPlayerFlag() == true) {
-		SetEffectDrawFlag(false, 2);
+		SetEffectDrawFlag(false, m_EffectState_QuestionMark);
 		SetEnemyActionState(m_ActionState_Call_AroundEnemy);
 	}
 }

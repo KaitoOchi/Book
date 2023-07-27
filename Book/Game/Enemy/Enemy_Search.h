@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
+private:
 	/// <summary>
 	/// ‰ñ“]ˆ—
 	/// </summary>
@@ -35,7 +36,6 @@ public:
 	/// </summary>
 	void Update_OnMissingPlayer();
 
-private:
 	bool	m_rotState = true;				// ‰ñ“]‚ÌŒü‚«‚ÌØ‘Ö
 	float	m_rotTime = 2.0f;				// ‰ñ“]‚ğØ‚è‘Ö‚¦‚éƒ^ƒCƒ}[
 };

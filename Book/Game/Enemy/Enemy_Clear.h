@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
+private:
 	/// <summary>
 	/// „‰ñ
 	/// </summary>
@@ -43,6 +44,7 @@ public:
 	/// </summary>
 	void UpDate_OnListen();
 
+public:
 	/// <summary>
 	/// “§–¾‰»‚·‚é‚©İ’è‚Å‚«‚é
 	/// </summary>

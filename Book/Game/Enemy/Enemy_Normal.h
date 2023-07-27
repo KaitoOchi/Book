@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
+private:
 	/// <summary>
 	/// „‰ñ
 	/// </summary>
