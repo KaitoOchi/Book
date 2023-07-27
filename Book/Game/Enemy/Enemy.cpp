@@ -104,8 +104,8 @@ bool Enemy::Start()
 	SpotLight_New(m_position, m_spotNum);
 
 	//----------------------------------------------
-	m_foward = Vector3::AxisZ;
-	m_rotation.Apply(m_foward);
+	m_forward = Vector3::AxisZ;
+	m_rotation.Apply(m_forward);
 	//----------------------------------------------
 
 	return true;
