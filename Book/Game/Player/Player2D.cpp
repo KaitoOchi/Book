@@ -30,7 +30,7 @@ Player2D::~Player2D()
 bool Player2D::Start()
 {
 	m_changeAnimation[enAnimationClip_Idle].Load("Assets/animData/player_2D/player2D_idle.tka");
-	m_changeAnimation[enAnimationClip_Idle].SetLoopFlag(true);
+	m_changeAnimation[enAnimationClip_Idle].SetLoopFlag(false);
 	m_changeAnimation[enAnimationClip_Change].Load("Assets/animData/player_2D/player2D_change.tka");
 	m_changeAnimation[enAnimationClip_Change].SetLoopFlag(false);
 
