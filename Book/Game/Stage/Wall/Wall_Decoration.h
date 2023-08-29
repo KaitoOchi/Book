@@ -31,7 +31,15 @@ public:
 		case 4:
 			m_wallRender.Init("Assets/modelData/level_test/tkm/decoration_4.tkm", 0, 0, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK, true);
 			break;
+		case 5:
+			m_wallRender.Init("Assets/modelData/level_test/tkm/cage.tkm", 0, 0, enModelUpAxisZ, true, true, ModelRender::enOutlineMode_None, D3D12_CULL_MODE_BACK, true);
+			m_isCreate = true;
+			break;
 		}
 		m_wallRender.SetScale({ 50.0f, 50.0f, 50.0f });
 	}
+
+private:
+	PhysicsStaticObject		m_physicsStaticObj;
+	bool					m_isCreate = false;
 };

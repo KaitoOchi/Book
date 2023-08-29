@@ -4,6 +4,7 @@
 #include "Title.h"
 #include "Fade.h"
 #include "PlayerManagement.h"
+#include "Stage/Wall/Wall_Decoration.h"
 
 class Player3D;
 class Player2D;
@@ -198,6 +199,7 @@ private:
 	GameUI*							m_gameUI = nullptr;
 	Gage*							m_gage = nullptr;
 	MiniMap*						m_miniMap = nullptr;
+	Wall_Decoration*				m_cage = nullptr;
 
 
 	std::vector<Enemy*>				m_enemyList;					// エネミーのリスト
