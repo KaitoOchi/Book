@@ -4,6 +4,7 @@
 namespace
 {
 	const Vector3 LENGTH_MIN = Vector3(1000000.0f, 1000000.0f, 1000000.0f);
+	const float LENGTH = 100.0f;
 }
 
 Ghost::Ghost()
@@ -79,6 +80,35 @@ Vector3& Ghost::CreateGhostBox()
 
 	return boxSize;
 }
+
+bool Ghost::IsHit(const Vector3& playerPosition)
+{
+	// スケールを考慮した判定
+	Vector3 distace = RangeWithTarget(playerPosition);
+	distace.x /= m_scale.x;
+	distace.y /= m_scale.y;
+	distace.z /= m_scale.z;
+
+	// 座標方向において一定以下の場合
+	if (distace.x <= LENGTH && distace.y <= LENGTH && distace.z <= LENGTH) {
+		return true;
+	}
+
+	return false;
+}
+
+Vector3 Ghost::RangeWithTarget(const Vector3& playerPosition)
+{
+	// 差分を計算
+	Vector3 diff = m_position - playerPosition;
+	// 実際の距離を計算して返す
+	diff.x = std::sqrt(diff.x * diff.x);
+	diff.y = std::sqrt(diff.y * diff.y);
+	diff.z = std::sqrt(diff.z * diff.z);
+
+	return diff;
+}
+
 void Ghost::Update()
 {
 	m_modelRender.Update();

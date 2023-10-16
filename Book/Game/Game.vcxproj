@@ -256,7 +256,6 @@
     <ClCompile Include="Stage\Wall\Wall_Gap.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Normal.cpp" />
     <ClCompile Include="Stage\Wall\Wall_Post.cpp" />
-    <ClCompile Include="UI\CountDown.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Item\FlashBom.cpp" />
@@ -273,10 +272,6 @@
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Item\SoundBom.cpp" />
     <ClCompile Include="Stage\Ghost.cpp" />
-    <ClCompile Include="UI\Gage.cpp" />
-    <ClCompile Include="UI\GoalSprite.cpp" />
-    <ClCompile Include="UI\Logo.cpp" />
-    <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -284,9 +279,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="UI\CountDown.cpp" />
     <ClCompile Include="UI\Fade.cpp" />
+    <ClCompile Include="UI\Gage.cpp" />
     <ClCompile Include="UI\GameUI.cpp" />
+    <ClCompile Include="UI\GoalSprite.cpp" />
+    <ClCompile Include="UI\Logo.cpp" />
     <ClCompile Include="UI\MiniMap.cpp" />
+    <ClCompile Include="UI\Pause.cpp" />
+    <ClCompile Include="UI\TutorialUI.cpp" />
     <ClCompile Include="UI\Wipe.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -316,7 +317,6 @@
     <ClInclude Include="Stage\Wall\Wall_Gap.h" />
     <ClInclude Include="Stage\Wall\Wall_Normal.h" />
     <ClInclude Include="Stage\Wall\Wall_Post.h" />
-    <ClInclude Include="UI\CountDown.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Item\FlashBom.h" />
@@ -332,15 +332,17 @@
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Item\SoundBom.h" />
     <ClInclude Include="Stage\Ghost.h" />
-    <ClInclude Include="UI\Gage.h" />
-    <ClInclude Include="UI\GoalSprite.h" />
-    <ClInclude Include="UI\Logo.h" />
-    <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="UI\CountDown.h" />
     <ClInclude Include="UI\Fade.h" />
+    <ClInclude Include="UI\Gage.h" />
     <ClInclude Include="UI\GameUI.h" />
+    <ClInclude Include="UI\GoalSprite.h" />
+    <ClInclude Include="UI\Logo.h" />
     <ClInclude Include="UI\MiniMap.h" />
+    <ClInclude Include="UI\Pause.h" />
+    <ClInclude Include="UI\TutorialUI.h" />
     <ClInclude Include="UI\Wipe.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

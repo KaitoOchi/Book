@@ -153,6 +153,7 @@ private:
 	SpriteRender		m_staminaGageRender;			//スタミナゲージ画像
 	SpriteRender		m_circleBaseSpriteRender;		//円形ゲージのベース画像
 	SpriteRender		m_circleSpriteRender;			//円形ゲージのゲージ画像
+	SpriteRender		m_guideItemSpriteRender;		//アイテム使用ガイドのテキスト画像
 	FontRender			m_timeFontRender;				//タイム文字
 	FontRender			m_itemFlashNumber;				//閃光弾の数
 	FontRender			m_itemSoundNumber;				//音爆弾の数

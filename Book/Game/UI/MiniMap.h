@@ -8,7 +8,7 @@ class PhysicsGhost;
 namespace
 {
 	const int ENEMY_NUM = 50;	//“G‚Ì”B­‚µ‘½‚ß‚É
-	const int WALL_NUM = 10;	//Œ„ŠÔ‚Ì”B­‚µ‘½‚ß‚É
+	const int WALL_NUM = 50;	//Œ„ŠÔ‚Ì”B­‚µ‘½‚ß‚É
 }
 
 /// <summary>

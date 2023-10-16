@@ -82,23 +82,14 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="UI\MiniMap.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Title.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Ghost.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="UI\Fade.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Result.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Pause.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Wall\Wall.cpp">
       <Filter>Stage\Wall</Filter>
@@ -124,18 +115,12 @@
     <ClCompile Include="Item\SoundBom.cpp">
       <Filter>Item</Filter>
     </ClCompile>
-    <ClCompile Include="UI\CountDown.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\GhostBox.cpp" />
     <ClCompile Include="Object\SecurityCamera.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Scene\Event.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Wipe.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Player\Player.cpp">
       <Filter>Player</Filter>
@@ -150,9 +135,6 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\Enemy_Increase.cpp" />
-    <ClCompile Include="UI\Gage.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Wall\Wall_Duct.cpp">
       <Filter>Stage\Wall</Filter>
     </ClCompile>
@@ -162,24 +144,25 @@
     <ClCompile Include="Scene\Title_Guide.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="UI\GoalSprite.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Opening.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\Logo.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Painting.cpp">
       <Filter>Stage</Filter>
     </ClCompile>
-    <ClCompile Include="UI\GameUI.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\BackGround.cpp">
       <Filter>Stage\Wall</Filter>
     </ClCompile>
+    <ClCompile Include="UI\CountDown.cpp" />
+    <ClCompile Include="UI\Fade.cpp" />
+    <ClCompile Include="UI\Gage.cpp" />
+    <ClCompile Include="UI\GameUI.cpp" />
+    <ClCompile Include="UI\GoalSprite.cpp" />
+    <ClCompile Include="UI\Logo.cpp" />
+    <ClCompile Include="UI\MiniMap.cpp" />
+    <ClCompile Include="UI\TutorialUI.cpp" />
+    <ClCompile Include="UI\Pause.cpp" />
+    <ClCompile Include="UI\Wipe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -224,12 +207,6 @@
     <ClInclude Include="Object\Object.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="UI\GameUI.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\MiniMap.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Title.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -242,14 +219,8 @@
     <ClInclude Include="Stage\Ghost.h">
       <Filter>Stage</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Fade.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Result.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Pause.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Wall\Wall.h">
       <Filter>Stage\Wall</Filter>
@@ -275,18 +246,12 @@
     <ClInclude Include="Item\SoundBom.h">
       <Filter>Item</Filter>
     </ClInclude>
-    <ClInclude Include="UI\CountDown.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\GhostBox.h" />
     <ClInclude Include="Object\SecurityCamera.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Event.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Wipe.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Game.h">
       <Filter>Scene</Filter>
@@ -301,23 +266,14 @@
       <Filter>Stage\Wall</Filter>
     </ClInclude>
     <ClInclude Include="Enemy\Enemy_Increase.h" />
-    <ClInclude Include="UI\Gage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\Wall\Wall_Duct.h">
       <Filter>Stage\Wall</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Title_Guide.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="UI\GoalSprite.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Opening.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\Logo.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Title_Setting.h">
       <Filter>Scene</Filter>
@@ -328,5 +284,15 @@
     <ClInclude Include="Stage\BackGround.h">
       <Filter>Stage\Wall</Filter>
     </ClInclude>
+    <ClInclude Include="UI\CountDown.h" />
+    <ClInclude Include="UI\Fade.h" />
+    <ClInclude Include="UI\Gage.h" />
+    <ClInclude Include="UI\GameUI.h" />
+    <ClInclude Include="UI\GoalSprite.h" />
+    <ClInclude Include="UI\Logo.h" />
+    <ClInclude Include="UI\MiniMap.h" />
+    <ClInclude Include="UI\Pause.h" />
+    <ClInclude Include="UI\TutorialUI.h" />
+    <ClInclude Include="UI\Wipe.h" />
   </ItemGroup>
 </Project>

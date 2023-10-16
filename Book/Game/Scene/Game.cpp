@@ -37,6 +37,8 @@
 #include "nature/SkyCube.h"
 #include "GoalSprite.h"
 #include "Painting.h"
+#include "UI/GameUI.h"
+#include "UI/TutorialUI.h"
 
 Game::Game()
 {
@@ -137,6 +139,7 @@ bool Game::Start()
 	m_gamecamera = NewGO<GameCamera>(0, "gameCamera");
 	m_playerManagement = NewGO<PlayerManagement>(0, "playerManagement");
 
+	NewGO<TutorialUI>(0, "turorialUI");
 	m_gameUI = NewGO<GameUI>(0, "gameUI");
 	m_gage = NewGO<Gage>(0,"gage");
 	NewGO<CountDown>(0, "countDown");
@@ -499,14 +502,19 @@ void Game::LevelDesign()
 			
 			return true;
 		}
-		if (objData.EqualObjectName(L"ghost") == true) {
-
+		if (objData.ForwardMatchName(L"ghost") == true) {
 			m_physicsGhost = NewGO<PhysicsGhost>(0, "physicsGhost");
 			m_physicsGhost->SetPosition(objData.position);
 			m_physicsGhost->SetScale(objData.scale);
 			m_physicsGhost->SetRotation(objData.rotation);
 			m_physicsGhostList.emplace_back(m_physicsGhost);
 			
+			// 設定した番号が1のとき
+			if (objData.number == 1) {
+				// エフェクトを描画するように設定する
+				m_physicsGhost->SetIsDraw(true);
+			}
+
 			return true;
 		}
 		if (objData.EqualObjectName(L"physics") == true) {
@@ -548,7 +556,6 @@ void Game::Update()
 			ExitGame();
 		}
 	}
-	
 
 }
 void Game::ClearableState()

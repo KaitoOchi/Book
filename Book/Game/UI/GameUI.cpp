@@ -4,6 +4,7 @@
 #include "Player3D.h"
 #include "Game.h"
 #include "Treasure.h"
+#include "GoalSprite.h"
 namespace
 {
 	const Vector2	SET_TIME_POSITION = { -100.0f, 500.0f };			//タイムの移動先座標
@@ -105,7 +106,11 @@ bool GameUI::Start()
 	m_circleSpriteRender.SetScale(Vector3(0.75f, 0.75f, 0.0f));
 	m_circleSpriteRender.Update();
 
-
+	//アイテム使用のテキスト画像
+	m_guideItemSpriteRender.Init("Assets/sprite/UI/Gauge/ItemGuide.DDS", 266.0f, 65.0f);
+	m_guideItemSpriteRender.SetScale(Vector3(0.45f, 0.45f, 0.0f));
+	m_guideItemSpriteRender.SetPosition(Vector3(720.0f, 230.0f, 0.0f));
+	m_guideItemSpriteRender.Update();
 
 	RenderingEngine::GetInstance()->GetSpriteCB().clipSize.x = GAGE_MAX - m_gage;
 
@@ -126,7 +131,7 @@ void GameUI::Update()
 	}
 
 	Time();
-	
+		
 	ChangeGage();
 	
 
@@ -388,6 +393,7 @@ void GameUI::Render(RenderContext& rc)
 	m_itemSoundRender.Draw(rc);
 	m_itemFlashNumber.Draw(rc);
 	m_itemSoundNumber.Draw(rc);
+	m_guideItemSpriteRender.Draw(rc);
 	
 	//円形ゲージの描画
 	if (m_circleDrawState &&
@@ -407,5 +413,4 @@ void GameUI::Render(RenderContext& rc)
 		m_staminaBaseRender.Draw(rc);
 
 	}
-
 }

@@ -43,7 +43,7 @@ bool Fade::Start()
 	char finalFilePath[32];
 	for (int i = 1; i < TIPS_MAX + 1; i++) {
 		
-		swprintf_s(path, 255, L"Assets/sprite/UI/tips/%d.DDS", i);
+		swprintf_s(path, 32, L"Assets/sprite/UI/tips/%d.DDS", i);
 		//wchar_t‚ðchar‚É•ÏŠ·
 		wcstombs(finalFilePath, path, sizeof(path));
 		//tips‰æ‘œ‚ÌÝ’è

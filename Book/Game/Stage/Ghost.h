@@ -10,6 +10,20 @@ public:
 	void Update();
 
 	/// <summary>
+	/// 接触判定
+	/// </summary>
+	bool IsHit(const Vector3& playerPosition);
+
+private:
+	/// <summary>
+	/// 距離を計算する
+	/// </summary>
+	/// <param name="playerPosition"></param>
+	/// <returns></returns>
+	Vector3 RangeWithTarget(const Vector3& playerPosition);
+
+public:
+	/// <summary>
 	/// どのオブジェクトを作成するか
 	/// </summary>
 	enum EnGhostObject
@@ -80,8 +94,8 @@ public:
 	
 protected:
 	ModelRender m_modelRender;
-	Vector3		m_position;
+	Vector3		m_position = Vector3::Zero;
 	Vector3		m_scale = Vector3::One;
-	Quaternion	m_rotation;
+	Quaternion	m_rotation = Quaternion::Identity;
 };
 
