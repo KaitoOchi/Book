@@ -423,18 +423,6 @@ void Game::LevelDesign()
 				m_wallList.emplace_back(decoration);
 				return true;
 			}
-			// 名前がcageのとき
-			if(objData.ForwardMatchName(L"cage") == true) {
-				// 障害物を生成
-				m_cage = NewGO<Wall_Decoration>(0, "wall_Decoration");
-				// モデルの番号を渡す
-				m_cage->Load_Model(objData.number);
-				m_cage->SetPosition(objData.position);
-				m_cage->SetRotation(objData.rotation);
-				m_cage->SetScale(objData.scale);
-				return true;
-			}
-
 			// 名前がphotoFrameのとき
 			if (objData.EqualObjectName(L"photoFrame") == true) {
 				// 絵画を生成
